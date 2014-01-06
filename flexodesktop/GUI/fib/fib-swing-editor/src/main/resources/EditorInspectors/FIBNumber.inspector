@@ -1,0 +1,22 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<Panel className="org.openflexo.fib.editor.controller.FIBInspector" layout="border" darkLevel="0" dataClassName="org.openflexo.fib.model.FIBNumber" name="Inspector">
+  <TabPanel name="Tab" constraints="border(location=center)">
+    <Tab title="Basic" layout="twocols" titleFont="SansSerif,0,11" darkLevel="0" index="0" font="SansSerif,0,11" useScrollBar="true" horizontalScrollbarPolicy="HORIZONTAL_SCROLLBAR_AS_NEEDED" verticalScrollbarPolicy="VERTICAL_SCROLLBAR_AS_NEEDED" name="BasicTab">
+      <Label label="type" constraints="twocols(location=left)" localize="true" />
+      <DropDown data="data.numberType" constraints="twocols(location=right)" localize="true" iteratorClassName="org.openflexo.fib.model.FIBNumber$NumberType" autoSelectFirstRow="false" />
+      <Label label="columns" constraints="twocols(location=left)" localize="true" />
+      <Number numberType="IntegerType" data="data.columns" constraints="twocols()" localize="true" />
+      <Label label="min" constraints="twocols(location=left)" localize="true" />
+      <Number numberType="IntegerType" data="data.minValueAsInteger" constraints="twocols()" localize="true" />
+      <Label label="max" constraints="twocols(location=left)" localize="true" />
+      <Number numberType="IntegerType" data="data.maxValueAsInteger" constraints="twocols()" localize="true" />
+      <Label label="increment" constraints="twocols(location=left)" localize="true" />
+      <Number numberType="IntegerType" data="data.incrementAsInteger" constraints="twocols()" localize="true" />
+      <Label label="allowsNull" constraints="twocols(location=left)" localize="true" />
+      <CheckBox selected="false" data="data.allowsNull" constraints="twocols()" localize="true" />
+      <Label label="validateOnReturn" constraints="twocols(location=left)" localize="true" />
+      <CheckBox selected="false" data="data.validateOnReturn" constraints="twocols()" localize="true" />
+    </Tab>
+  </TabPanel>
+  <Parameter name="title" value="Number" />
+</Panel>

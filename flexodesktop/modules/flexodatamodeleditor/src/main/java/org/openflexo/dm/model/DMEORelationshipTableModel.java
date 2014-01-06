@@ -34,7 +34,7 @@ import org.openflexo.components.tabular.model.ToggleIconColumn;
 import org.openflexo.dm.view.controller.DMController;
 import org.openflexo.foundation.dm.eo.DMEOEntity;
 import org.openflexo.foundation.dm.eo.DMEORelationship;
-import org.openflexo.foundation.rm.FlexoProject;
+import org.openflexo.foundation.FlexoProject;
 import org.openflexo.icon.DMEIconLibrary;
 import org.openflexo.localization.FlexoLocalization;
 import org.openflexo.toolbox.ReservedKeyword;

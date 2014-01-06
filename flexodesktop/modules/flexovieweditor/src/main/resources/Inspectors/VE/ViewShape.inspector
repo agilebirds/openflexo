@@ -1,10 +1,10 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<Panel className="org.openflexo.inspector.FIBInspector" layout="border" titleFont="SansSerif,0,12" darkLevel="0" dataClassName="org.openflexo.foundation.view.ViewShape" controllerClassName="org.openflexo.inspector.FIBInspectorController" font="SansSerif,0,12" name="Inspector">
+<Panel className="org.openflexo.inspector.FIBInspector" layout="border" titleFont="SansSerif,0,12" darkLevel="0" dataClassName="org.openflexo.foundation.view.diagram.model.DiagramShape" controllerClassName="org.openflexo.inspector.FIBInspectorController" font="SansSerif,0,12" name="Inspector">
   <TabPanel name="Tab" constraints="border(location=center)">
-    <Tab title="Basic" layout="twocols" titleFont="SansSerif,0,11" darkLevel="0" index="0" font="SansSerif,0,11" name="BasicTab">
+    <Tab title="Basic" layout="twocols" titleFont="SansSerif,0,11" darkLevel="0" index="0" font="SansSerif,0,11" useScrollBar="true" horizontalScrollbarPolicy="HORIZONTAL_SCROLLBAR_AS_NEEDED" verticalScrollbarPolicy="VERTICAL_SCROLLBAR_AS_NEEDED" name="BasicTab">
       <Label label="index" index="0" constraints="twocols(expandHorizontally=false;expandVertically=false;index=0;insetsBottom=0;insetsLeft=2;insetsRight=2;insetsTop=5;location=left)" localize="true" />
       <Number minValue="-2147483648" maxValue="2147483647" increment="1" numberType="IntegerType" columns="10" index="1" data="data.indexRelativeToEPType" constraints="twocols(expandHorizontally=false;expandVertically=false;index=1;insetsBottom=0;insetsLeft=2;insetsRight=2;insetsTop=0;location=right)" name="Layer_index" localize="true" />
-      <TabPanel name="GRTab" index="2" data="data.graphicalRepresentation" dataClassName="org.openflexo.fge.ShapeGraphicalRepresentation" constraints="twocols(expandHorizontally=true;expandVertically=true;index=2;insetsBottom=0;insetsLeft=2;insetsRight=2;insetsTop=0;location=center)">
+      <TabPanel name="GRTab" index="2" data="data.graphicalRepresentation" dataClassName="org.openflexo.fge.ShapeGraphicalRepresentation" constraints="twocols(expandHorizontally=true;expandVertically=true;index=2;insetsBottom=0;insetsLeft=2;insetsRight=2;insetsTop=0;location=center)" restrictPreferredSizeToSelectedComponent="true">
         <Tab title="Shape" layout="gridbag" titleFont="SansSerif,0,11" darkLevel="0" index="0" font="SansSerif,0,11" name="ShapeTab">
           <Custom componentClassName="org.openflexo.fge.view.widget.ShapePreviewPanel" localize="true" manageDynamicModel="true" index="0" data="GRTab.data.shape" constraints="gridbag(anchor=center;expandHorizontally=true;expandVertically=false;fill=none;gridHeight=1;gridWidth=0;gridX=-1;gridY=-1;index=0;insetsBottom=0;insetsLeft=2;insetsRight=2;insetsTop=0;location=center;padX=0;padY=0;weightX=0.0;weightY=0.0)">
             <Assignment variable="component.panelWidth" value="120" />
@@ -66,24 +66,20 @@
           <Label label="dimensions_constraints" index="8" constraints="twocols(expandHorizontally=false;expandVertically=false;index=8;insetsBottom=0;insetsLeft=2;insetsRight=2;insetsTop=5;location=left)" name="DimensionConstraintsLabel" localize="true" />
           <DropDown index="9" data="GRTab.data.dimensionConstraints" constraints="twocols(expandHorizontally=false;expandVertically=false;index=9;insetsBottom=0;insetsLeft=2;insetsRight=2;insetsTop=0;location=right)" width="150" name="DimensionConstraints" format="object.name.toLowerCase" localize="true" iteratorClassName="org.openflexo.fge.ShapeGraphicalRepresentation$DimensionConstraints" autoSelectFirstRow="false" />
           <Label label="x_constraints" index="10" constraints="twocols(expandVertically=false;index=10;insetsBottom=0;insetsLeft=2;insetsRight=2;insetsTop=5;location=left)" localize="true" />
-          <Custom componentClassName="org.openflexo.fib.utils.BindingSelector" localize="true" manageDynamicModel="true" valueChangedAction="GRTab.data.constraintChanged(GRTab.data.xConstraints)" index="11" data="GRTab.data.xConstraints.binding" constraints="twocols(expandHorizontally=true;expandVertically=false;index=11;insetsBottom=0;insetsLeft=2;insetsRight=2;insetsTop=0;location=right)">
-            <Assignment variable="component.bindable" value="data.graphicalRepresentation" />
-            <Assignment variable="component.bindingDefinition" value="GRTab.data.X_CONSTRAINTS" />
+          <Custom componentClassName="org.openflexo.fib.utils.BindingSelector" localize="true" manageDynamicModel="true" valueChangedAction="GRTab.data.notifiedBindingChanged(GRTab.data.xConstraints)" index="11" data="GRTab.data.xConstraints" constraints="twocols(expandHorizontally=true;expandVertically=false;index=11;insetsBottom=0;insetsLeft=2;insetsRight=2;insetsTop=0;location=right)">
+            <Assignment variable="component.bindable" value="GRTab.data" />
           </Custom>
           <Label label="y_constraints" index="12" constraints="twocols(expandVertically=false;index=12;insetsBottom=0;insetsLeft=2;insetsRight=2;insetsTop=5;location=left)" localize="true" />
-          <Custom componentClassName="org.openflexo.fib.utils.BindingSelector" localize="true" manageDynamicModel="true" valueChangedAction="GRTab.data.constraintChanged(GRTab.data.yConstraints)" index="13" data="GRTab.data.yConstraints.binding" constraints="twocols(expandHorizontally=true;expandVertically=false;index=13;insetsBottom=0;insetsLeft=2;insetsRight=2;insetsTop=0;location=right)">
-            <Assignment variable="component.bindable" value="data.graphicalRepresentation" />
-            <Assignment variable="component.bindingDefinition" value="GRTab.data.Y_CONSTRAINTS" />
+          <Custom componentClassName="org.openflexo.fib.utils.BindingSelector" localize="true" manageDynamicModel="true" valueChangedAction="GRTab.data.notifiedBindingChanged(GRTab.data.yConstraints)" index="13" data="GRTab.data.yConstraints" constraints="twocols(expandHorizontally=true;expandVertically=false;index=13;insetsBottom=0;insetsLeft=2;insetsRight=2;insetsTop=0;location=right)">
+            <Assignment variable="component.bindable" value="GRTab.data" />
           </Custom>
           <Label label="width_constraints" index="14" constraints="twocols(expandVertically=false;index=14;insetsBottom=0;insetsLeft=2;insetsRight=2;insetsTop=5;location=left)" localize="true" />
-          <Custom componentClassName="org.openflexo.fib.utils.BindingSelector" localize="true" manageDynamicModel="true" valueChangedAction="GRTab.data.constraintChanged(GRTab.data.widthConstraints)" index="15" data="GRTab.data.widthConstraints.binding" constraints="twocols(expandHorizontally=true;expandVertically=false;index=15;insetsBottom=0;insetsLeft=2;insetsRight=2;insetsTop=0;location=right)">
-            <Assignment variable="component.bindable" value="data.graphicalRepresentation" />
-            <Assignment variable="component.bindingDefinition" value="GRTab.data.WIDTH_CONSTRAINTS" />
+          <Custom componentClassName="org.openflexo.fib.utils.BindingSelector" localize="true" manageDynamicModel="true" valueChangedAction="GRTab.data.notifiedBindingChanged(GRTab.data.widthConstraints)" index="15" data="GRTab.data.widthConstraints" constraints="twocols(expandHorizontally=true;expandVertically=false;index=15;insetsBottom=0;insetsLeft=2;insetsRight=2;insetsTop=0;location=right)">
+            <Assignment variable="component.bindable" value="GRTab.data" />
           </Custom>
           <Label label="height_constraints" index="16" constraints="twocols(expandVertically=false;index=16;insetsBottom=0;insetsLeft=2;insetsRight=2;insetsTop=5;location=left)" localize="true" />
-          <Custom componentClassName="org.openflexo.fib.utils.BindingSelector" localize="true" manageDynamicModel="true" valueChangedAction="GRTab.data.constraintChanged(GRTab.data.heightConstraints)" index="17" data="GRTab.data.heightConstraints.binding" constraints="twocols(expandHorizontally=true;expandVertically=false;index=17;insetsBottom=0;insetsLeft=2;insetsRight=2;insetsTop=0;location=right)">
-            <Assignment variable="component.bindable" value="data.graphicalRepresentation" />
-            <Assignment variable="component.bindingDefinition" value="GRTab.data.HEIGHT_CONSTRAINTS" />
+          <Custom componentClassName="org.openflexo.fib.utils.BindingSelector" localize="true" manageDynamicModel="true" valueChangedAction="GRTab.data.notifiedBindingChanged(GRTab.data.heightConstraints)" index="17" data="GRTab.data.heightConstraints" constraints="twocols(expandHorizontally=true;expandVertically=false;index=17;insetsBottom=0;insetsLeft=2;insetsRight=2;insetsTop=0;location=right)">
+            <Assignment variable="component.bindable" value="GRTab.data" />
           </Custom>
           <Label label="border" index="18" constraints="twocols(expandHorizontally=false;expandVertically=false;index=18;insetsBottom=0;insetsLeft=2;insetsRight=2;insetsTop=5;location=left)" name="BorderLabel" localize="true" />
           <Panel layout="flow" hGap="5" vGap="0" flowAlignment="LEADING" titleFont="SansSerif,0,11" darkLevel="0" index="19" constraints="twocols(expandHorizontally=true;expandVertically=false;index=19;insetsBottom=0;insetsLeft=2;insetsRight=2;insetsTop=0;location=right)">

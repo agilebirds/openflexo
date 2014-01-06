@@ -28,9 +28,9 @@ import java.util.logging.Logger;
 import org.netbeans.lib.cvsclient.command.CommandException;
 import org.netbeans.lib.cvsclient.connection.AuthenticationException;
 import org.openflexo.foundation.FlexoEditor;
-import org.openflexo.foundation.FlexoModelObject;
+import org.openflexo.foundation.FlexoObject;
+import org.openflexo.foundation.FlexoProject;
 import org.openflexo.foundation.action.FlexoActionType;
-import org.openflexo.foundation.rm.FlexoProject;
 import org.openflexo.fps.CVSModule;
 import org.openflexo.fps.CVSRepository;
 import org.openflexo.fps.CVSRepositoryList;
@@ -67,9 +67,9 @@ public class ShareProject extends CVSAction<ShareProject, FPSObject> {
 	};
 
 	static {
-		FlexoModelObject.addActionForClass(actionType, CVSRepositoryList.class);
-		FlexoModelObject.addActionForClass(actionType, CVSRepository.class);
-		FlexoModelObject.addActionForClass(actionType, CVSModule.class);
+		FlexoObject.addActionForClass(actionType, CVSRepositoryList.class);
+		FlexoObject.addActionForClass(actionType, CVSRepository.class);
+		FlexoObject.addActionForClass(actionType, CVSModule.class);
 	}
 
 	private SharedProject _newProject;

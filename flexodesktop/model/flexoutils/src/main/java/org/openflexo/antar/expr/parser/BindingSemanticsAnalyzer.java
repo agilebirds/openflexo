@@ -3,7 +3,7 @@ package org.openflexo.antar.expr.parser;
 import java.util.ArrayList;
 import java.util.List;
 
-import org.openflexo.antar.expr.BindingValueAsExpression;
+import org.openflexo.antar.expr.BindingValue;
 import org.openflexo.antar.expr.Expression;
 import org.openflexo.antar.expr.parser.node.AAdditionalArg;
 import org.openflexo.antar.expr.parser.node.ABindingTerm;
@@ -15,6 +15,7 @@ import org.openflexo.antar.expr.parser.node.ATail1Binding;
 import org.openflexo.antar.expr.parser.node.ATail2Binding;
 import org.openflexo.antar.expr.parser.node.PAdditionalArg;
 import org.openflexo.antar.expr.parser.node.PArgList;
+import org.openflexo.antar.expr.parser.node.PBinding;
 import org.openflexo.antar.expr.parser.node.TIdentifier;
 
 /**
@@ -27,18 +28,19 @@ import org.openflexo.antar.expr.parser.node.TIdentifier;
  */
 class BindingSemanticsAnalyzer extends ExpressionSemanticsAnalyzer {
 
-	private ArrayList<BindingValueAsExpression.AbstractBindingPathElement> path;
+	private final ArrayList<BindingValue.AbstractBindingPathElement> path;
 
 	/**
 	 * This flag is used to escape binding processing that may happen in call args handling
 	 */
-	private boolean weAreDealingWithTheRightBinding = true;
+	// private boolean weAreDealingWithTheRightBinding = true;
 
-	public BindingSemanticsAnalyzer() {
-		path = new ArrayList<BindingValueAsExpression.AbstractBindingPathElement>();
+	public BindingSemanticsAnalyzer(PBinding node) {
+		path = new ArrayList<BindingValue.AbstractBindingPathElement>();
+		// System.out.println(">>>> node=" + node + " of " + node.getClass());
 	}
 
-	public List<BindingValueAsExpression.AbstractBindingPathElement> getPath() {
+	public List<BindingValue.AbstractBindingPathElement> getPath() {
 		return path;
 	};
 
@@ -56,14 +58,15 @@ class BindingSemanticsAnalyzer extends ExpressionSemanticsAnalyzer {
 	  {call} call |
 	  {tail} identifier dot binding;*/
 
-	protected BindingValueAsExpression.NormalBindingPathElement makeNormalBindingPathElement(TIdentifier identifier) {
-		BindingValueAsExpression.NormalBindingPathElement returned = new BindingValueAsExpression.NormalBindingPathElement(
-				identifier.getText());
-		path.add(0, returned);
+	protected BindingValue.NormalBindingPathElement makeNormalBindingPathElement(TIdentifier identifier) {
+		BindingValue.NormalBindingPathElement returned = new BindingValue.NormalBindingPathElement(identifier.getText());
+		if (weAreDealingWithTheRightBinding()) {
+			path.add(0, returned);
+		}
 		return returned;
 	}
 
-	public BindingValueAsExpression.MethodCallBindingPathElement makeMethodCallBindingPathElement(ACall node) {
+	public BindingValue.MethodCallBindingPathElement makeMethodCallBindingPathElement(ACall node) {
 		PArgList argList = node.getArgList();
 		ArrayList<Expression> args = new ArrayList<Expression>();
 		if (argList instanceof ANonEmptyListArgList) {
@@ -73,16 +76,18 @@ class BindingSemanticsAnalyzer extends ExpressionSemanticsAnalyzer {
 				args.add(getExpression(additionalArg.getExpr()));
 			}
 		}
-		BindingValueAsExpression.MethodCallBindingPathElement returned = new BindingValueAsExpression.MethodCallBindingPathElement(node
-				.getIdentifier().getText(), args);
-		path.add(0, returned);
+		BindingValue.MethodCallBindingPathElement returned = new BindingValue.MethodCallBindingPathElement(node.getIdentifier().getText(),
+				args);
+		if (weAreDealingWithTheRightBinding()) {
+			path.add(0, returned);
+		}
 		return returned;
 	}
 
 	@Override
 	public void outAIdentifierBinding(AIdentifierBinding node) {
 		super.outAIdentifierBinding(node);
-		if (weAreDealingWithTheRightBinding) {
+		if (weAreDealingWithTheRightBinding()) {
 			makeNormalBindingPathElement(node.getIdentifier());
 		}
 	}
@@ -90,7 +95,7 @@ class BindingSemanticsAnalyzer extends ExpressionSemanticsAnalyzer {
 	@Override
 	public void outACallBinding(ACallBinding node) {
 		super.outACallBinding(node);
-		if (weAreDealingWithTheRightBinding) {
+		if (weAreDealingWithTheRightBinding()) {
 			makeMethodCallBindingPathElement((ACall) node.getCall());
 		}
 	}
@@ -98,7 +103,7 @@ class BindingSemanticsAnalyzer extends ExpressionSemanticsAnalyzer {
 	@Override
 	public void outATail1Binding(ATail1Binding node) {
 		super.outATail1Binding(node);
-		if (weAreDealingWithTheRightBinding) {
+		if (weAreDealingWithTheRightBinding()) {
 			makeNormalBindingPathElement(node.getIdentifier());
 		}
 	}
@@ -106,23 +111,30 @@ class BindingSemanticsAnalyzer extends ExpressionSemanticsAnalyzer {
 	@Override
 	public void outATail2Binding(ATail2Binding node) {
 		super.outATail2Binding(node);
-		if (weAreDealingWithTheRightBinding) {
+		if (weAreDealingWithTheRightBinding()) {
 			makeMethodCallBindingPathElement((ACall) node.getCall());
 		}
 	}
+
+	private int depth = 0;
 
 	@Override
 	public void inABindingTerm(ABindingTerm node) {
 		super.inABindingTerm(node);
 		// System.out.println("IN binding " + node);
-		weAreDealingWithTheRightBinding = false;
+		// weAreDealingWithTheRightBinding = false;
+		depth++;
 	}
 
 	@Override
 	public void outABindingTerm(ABindingTerm node) {
 		super.outABindingTerm(node);
 		// System.out.println("OUT binding " + node);
-		weAreDealingWithTheRightBinding = true;
+		// weAreDealingWithTheRightBinding = true;
+		depth--;
 	}
 
+	private boolean weAreDealingWithTheRightBinding() {
+		return depth == 0;
+	}
 }

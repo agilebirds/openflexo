@@ -1,752 +1,117 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<ViewPoint id="1" uri="http://www.agilebirds.com/openflexo/ViewPoints/Archimate/Principle.owl" owlFile="Principle.owl">
-  <EditionPattern id="2" name="Goal" parentEditionPattern="http://www.agilebirds.com/openflexo/ViewPoints/Archimate/Principle.owl#InfluenceElements">
-    <DropScheme id="3" target="top" name="dropGoalAtTopLevel" label="dropGoalAtTopLevel" skipConfirmationPanel="true" definePopupDefaultSize="false" width="800" height="600">
-      <URIParameter id="4" base="&quot;Goal&quot;" name="uri" label="uri" usePaletteLabelAsDefaultValue="false" isRequired="true" />
-      <AddIndividual id="5" individualName="parameters.uri" assignation="goal">
-        <DataPropertyAssertion id="6" dataPropertyURI="http://www.bolton.ac.uk/archimate#name" value="&quot;Goal&quot;" />
-        <DataPropertyAssertion id="7" dataPropertyURI="http://www.bolton.ac.uk/archimate#documentation" value="&quot;Please add documentation&quot;" />
-      </AddIndividual>
-      <AddShape id="8" container="topLevel" extendParentBoundsToHostThisShape="false" assignation="shape" />
-      <AddShape id="9" extendParentBoundsToHostThisShape="false" assignation="icon" />
-    </DropScheme>
-    <DropScheme id="10" target="http://www.agilebirds.com/openflexo/ViewPoints/Archimate/Principle.owl#Goal" name="dropGoalInGoalAggregation" label="Aggregation Relationship" skipConfirmationPanel="true" definePopupDefaultSize="false" width="800" height="600">
-      <ContextShapePatternRole id="11" exampleLabel="Goal" patternRole="shape">
-        <ShapeGraphicalRepresentation id="12" className="org.openflexo.vpm.view.widget.EditionPatternPreviewShapeGR" x="0.0" y="0.0" width="105.0" height="50.0" minimalWidth="0.0" minimalHeight="0.0" maximalWidth="Infinity" maximalHeight="Infinity" relativeTextX="0.5" relativeTextY="0.5" lineWrap="true" locationConstraints="FREELY_MOVABLE" dimensionConstraints="FREELY_RESIZABLE" adjustMinimalWidthToLabelWidth="false" adjustMinimalHeightToLabelHeight="false" adjustMaximalWidthToLabelWidth="false" adjustMaximalHeightToLabelHeight="false" hasSelectedForeground="false" hasSelectedBackground="false" hasFocusedForeground="false" hasFocusedBackground="false" isFloatingLabel="false" allowToLeaveBounds="false" identifier="object_0" layer="1" hasText="true" text="Goal" isMultilineAllowed="true" continuousTextEditing="true" absoluteTextX="0.0" absoluteTextY="0.0" paragraphAlignment="CENTER" horizontalTextAlignment="CENTER" verticalTextAlignment="MIDDLE" isSelectable="true" isFocusable="true" drawControlPointsWhenFocused="true" drawControlPointsWhenSelected="true" isReadOnly="false" isLabelEditable="true" isVisible="true">
-          <ForegroundStyle id="13" noStroke="false" color="0,0,0" lineWidth="1.0" joinStyle="JOIN_MITER" capStyle="CAP_SQUARE" dashStyle="PLAIN_STROKE" useTransparency="false" transparencyLevel="0.5" />
-          <ColorGradientBackgroundStyle id="14" color1="175,175,255" color2="220,220,255" direction="NORTH_SOUTH" useTransparency="false" transparencyLevel="0.5" />
-          <SelectedForegroundStyle id="15" noStroke="false" color="0,0,0" lineWidth="1.0" joinStyle="JOIN_MITER" capStyle="CAP_SQUARE" dashStyle="PLAIN_STROKE" useTransparency="false" transparencyLevel="0.5" />
-          <SelectedColorBackgroundStyle id="16" color="254,247,217" useTransparency="false" transparencyLevel="0.5" />
-          <FocusedForegroundStyle id="17" noStroke="false" color="0,0,0" lineWidth="1.0" joinStyle="JOIN_MITER" capStyle="CAP_SQUARE" dashStyle="PLAIN_STROKE" useTransparency="false" transparencyLevel="0.5" />
-          <FocusedColorBackgroundStyle id="18" color="254,247,217" useTransparency="false" transparencyLevel="0.5" />
-          <Border id="19" top="20" bottom="20" left="20" right="20" />
-          <CustomPolygon id="20" className="org.openflexo.fge.shapes.RectangularOctogon">
-            <FGEPoint id="21" x="0.0" y="0.2" />
-            <FGEPoint id="22" x="0.0" y="0.8" />
-            <FGEPoint id="23" x="0.1" y="1.0" />
-            <FGEPoint id="24" x="0.9" y="1.0" />
-            <FGEPoint id="25" x="1.0" y="0.8" />
-            <FGEPoint id="26" x="1.0" y="0.2" />
-            <FGEPoint id="27" x="0.9" y="0.0" />
-            <FGEPoint id="28" x="0.1" y="0.0" />
-          </CustomPolygon>
-          <ShadowStyle id="29" drawShadow="true" shadowDarkness="150" shadowDepth="2" shadowBlur="4" />
-          <TextStyle id="30" font="Lucida Sans Unicode,0,11" color="0,0,0" orientation="0" isBackgroundColored="false" backgroundColor="255,255,255" />
-        </ShapeGraphicalRepresentation>
-        <GRSpec id="31" featureName="label" value="goal.name" readOnly="false" />
-      </ContextShapePatternRole>
-      <URIParameter id="32" base="&quot;Goal&quot;" name="uri" label="uri" usePaletteLabelAsDefaultValue="false" isRequired="true" />
-      <AddIndividual id="33" individualName="parameters.uri" assignation="goal">
-        <DataPropertyAssertion id="34" dataPropertyURI="http://www.bolton.ac.uk/archimate#name" value="&quot;Goal&quot;" />
-        <DataPropertyAssertion id="35" dataPropertyURI="http://www.bolton.ac.uk/archimate#documentation" value="&quot;Please add documentation&quot;" />
-      </AddIndividual>
-      <AddIndividual id="36" individualName="&quot;AggregationRelationship&quot;" ontologyClassURI="http://www.bolton.ac.uk/archimate#AggregationRelationship">
-        <ObjectPropertyAssertion id="37" objectPropertyURI="http://www.bolton.ac.uk/archimate#source" object="target.goal" />
-        <ObjectPropertyAssertion id="38" objectPropertyURI="http://www.bolton.ac.uk/archimate#target" object="goal" />
-      </AddIndividual>
-      <AddShape id="39" container="target.shape" extendParentBoundsToHostThisShape="false" assignation="shape" />
-      <AddShape id="40" extendParentBoundsToHostThisShape="false" assignation="icon" />
-      <GraphicalAction id="41" subject="target.shape" value="0.1" feature="relativeTextY" />
-    </DropScheme>
-    <DeletionScheme id="42" name="deletion" label="deletion" skipConfirmationPanel="false" definePopupDefaultSize="false" width="800" height="600">
-      <DeleteAction id="43" object="goal" />
-      <DeleteAction id="44" object="icon" />
-      <DeleteAction id="45" object="shape" />
-    </DeletionScheme>
-    <ContainedIndividualPatternRole id="46" ontologicType="http://www.bolton.ac.uk/archimate#Goal" patternRole="goal" />
-    <ContainedShapePatternRole idref="11" />
-    <ContainedShapePatternRole id="47" exampleLabel="" patternRole="icon">
-      <ShapeGraphicalRepresentation id="48" className="org.openflexo.vpm.view.widget.EditionPatternPreviewShapeGR" x="72.4" y="5.0" width="31.0" height="31.0" minimalWidth="0.0" minimalHeight="0.0" maximalWidth="Infinity" maximalHeight="Infinity" relativeTextX="0.5" relativeTextY="0.5" lineWrap="false" locationConstraints="UNMOVABLE" dimensionConstraints="CONSTRAINED_DIMENSIONS" adjustMinimalWidthToLabelWidth="true" adjustMinimalHeightToLabelHeight="true" adjustMaximalWidthToLabelWidth="false" adjustMaximalHeightToLabelHeight="false" hasSelectedForeground="false" hasSelectedBackground="false" hasFocusedForeground="false" hasFocusedBackground="false" isFloatingLabel="false" allowToLeaveBounds="false" xConstraints="((parent.width - (parent.width * 0.12)) - 20)" yConstraints="5" identifier="object_0_0" layer="2" hasText="true" isMultilineAllowed="false" continuousTextEditing="true" absoluteTextX="0.0" absoluteTextY="0.0" paragraphAlignment="CENTER" horizontalTextAlignment="CENTER" verticalTextAlignment="MIDDLE" isSelectable="false" isFocusable="false" drawControlPointsWhenFocused="true" drawControlPointsWhenSelected="true" isReadOnly="false" isLabelEditable="true" isVisible="true">
-        <ForegroundStyle id="49" noStroke="true" color="0,0,0" lineWidth="1.0" joinStyle="JOIN_MITER" capStyle="CAP_SQUARE" dashStyle="PLAIN_STROKE" useTransparency="false" transparencyLevel="0.5" />
-        <ImageBackgroundStyle id="50" imageFile="16-16/Goal copy.PNG" scaleX="1.0000000029802323" scaleY="1.0" deltaX="10.0" deltaY="0.0" imageBackgroundType="TRANSPARENT" imageBackgroundColor="255,255,255" fitToShape="false" useTransparency="false" transparencyLevel="0.5" />
-        <SelectedForegroundStyle id="51" noStroke="false" color="0,0,0" lineWidth="1.0" joinStyle="JOIN_MITER" capStyle="CAP_SQUARE" dashStyle="PLAIN_STROKE" useTransparency="false" transparencyLevel="0.5" />
-        <SelectedColorBackgroundStyle id="52" color="254,247,217" useTransparency="false" transparencyLevel="0.5" />
-        <FocusedForegroundStyle id="53" noStroke="false" color="0,0,0" lineWidth="1.0" joinStyle="JOIN_MITER" capStyle="CAP_SQUARE" dashStyle="PLAIN_STROKE" useTransparency="false" transparencyLevel="0.5" />
-        <FocusedColorBackgroundStyle id="54" color="254,247,217" useTransparency="false" transparencyLevel="0.5" />
-        <Border id="55" top="20" bottom="20" left="20" right="20" />
-        <RectangleShape id="56" isRounded="true" arcSize="20.0" />
-        <ShadowStyle id="57" drawShadow="false" shadowDarkness="150" shadowDepth="2" shadowBlur="4" />
-        <TextStyle id="58" font="Lucida Sans,0,11" color="0,0,0" orientation="0" isBackgroundColored="false" backgroundColor="255,255,255" />
-      </ShapeGraphicalRepresentation>
-      <ParentShapePatternRole idref="11" />
-    </ContainedShapePatternRole>
-    <PrimaryConceptIndividualPatternRole idref="46" />
-    <PrimaryRepresentationShapePatternRole idref="11" />
-    <Inspector id="59" inspectorTitle="Goal">
-      <TextField id="60" label="name" name="name" readOnly="false" data="goal.name" />
-      <TextArea id="61" label="documentation" name="documentation" readOnly="false" data="goal.documentation" />
-      <Individual id="62" conceptURI="http://www.bolton.ac.uk/archimate#ArchimateElement" renderer="individual.name" label="instance" name="instance" readOnly="false" data="goal" />
-    </Inspector>
-  </EditionPattern>
-  <EditionPattern id="63" name="Principle" parentEditionPattern="http://www.agilebirds.com/openflexo/ViewPoints/Archimate/Principle.owl#InfluenceElements">
-    <DropScheme id="64" target="top" name="dropPrincipleAtTopLevel" label="dropPrincipleAtTopLevel" skipConfirmationPanel="true" definePopupDefaultSize="false" width="800" height="600">
-      <URIParameter id="65" base="&quot;Principle&quot;" name="uri" label="uri" usePaletteLabelAsDefaultValue="false" isRequired="true" />
-      <AddIndividual id="66" individualName="parameters.uri" assignation="principle">
-        <DataPropertyAssertion id="67" dataPropertyURI="http://www.bolton.ac.uk/archimate#name" value="&quot;Principle&quot;" />
-        <DataPropertyAssertion id="68" dataPropertyURI="http://www.bolton.ac.uk/archimate#documentation" value="&quot;Please add documentation&quot;" />
-      </AddIndividual>
-      <AddShape id="69" container="topLevel" extendParentBoundsToHostThisShape="false" assignation="shape" />
-      <AddShape id="70" container="topLevel" extendParentBoundsToHostThisShape="false" assignation="icon" />
-    </DropScheme>
-    <DropScheme id="71" target="http://www.agilebirds.com/openflexo/ViewPoints/Archimate/Principle.owl#Principle" name="dropPrincipleInPrincipleAggregation" label="AggregationRelationship" skipConfirmationPanel="true" definePopupDefaultSize="false" width="800" height="600">
-      <ContextShapePatternRole id="72" exampleLabel="Principle" patternRole="shape">
-        <ShapeGraphicalRepresentation id="73" className="org.openflexo.vpm.view.widget.EditionPatternPreviewShapeGR" x="0.0" y="0.0" width="105.0" height="50.0" minimalWidth="0.0" minimalHeight="0.0" maximalWidth="Infinity" maximalHeight="Infinity" relativeTextX="0.5" relativeTextY="0.5" lineWrap="true" locationConstraints="FREELY_MOVABLE" dimensionConstraints="FREELY_RESIZABLE" adjustMinimalWidthToLabelWidth="false" adjustMinimalHeightToLabelHeight="false" adjustMaximalWidthToLabelWidth="false" adjustMaximalHeightToLabelHeight="false" hasSelectedForeground="false" hasSelectedBackground="false" hasFocusedForeground="false" hasFocusedBackground="false" isFloatingLabel="false" allowToLeaveBounds="false" identifier="object_0" layer="1" hasText="true" isMultilineAllowed="true" continuousTextEditing="true" absoluteTextX="0.0" absoluteTextY="0.0" paragraphAlignment="CENTER" horizontalTextAlignment="CENTER" verticalTextAlignment="MIDDLE" isSelectable="true" isFocusable="true" drawControlPointsWhenFocused="true" drawControlPointsWhenSelected="true" isReadOnly="false" isLabelEditable="true" isVisible="true">
-          <ForegroundStyle id="74" noStroke="false" color="0,0,0" lineWidth="1.0" joinStyle="JOIN_MITER" capStyle="CAP_SQUARE" dashStyle="PLAIN_STROKE" useTransparency="false" transparencyLevel="0.5" />
-          <ColorGradientBackgroundStyle id="75" color1="175,175,255" color2="220,220,255" direction="NORTH_SOUTH" useTransparency="false" transparencyLevel="0.5" />
-          <SelectedForegroundStyle id="76" noStroke="false" color="0,0,0" lineWidth="1.0" joinStyle="JOIN_MITER" capStyle="CAP_SQUARE" dashStyle="PLAIN_STROKE" useTransparency="false" transparencyLevel="0.5" />
-          <SelectedColorBackgroundStyle id="77" color="254,247,217" useTransparency="false" transparencyLevel="0.5" />
-          <FocusedForegroundStyle id="78" noStroke="false" color="0,0,0" lineWidth="1.0" joinStyle="JOIN_MITER" capStyle="CAP_SQUARE" dashStyle="PLAIN_STROKE" useTransparency="false" transparencyLevel="0.5" />
-          <FocusedColorBackgroundStyle id="79" color="254,247,217" useTransparency="false" transparencyLevel="0.5" />
-          <Border id="80" top="20" bottom="20" left="20" right="20" />
-          <CustomPolygon idref="20" />
-          <ShadowStyle id="81" drawShadow="true" shadowDarkness="150" shadowDepth="2" shadowBlur="4" />
-          <TextStyle id="82" font="Lucida Sans Unicode,0,11" color="0,0,0" orientation="0" isBackgroundColored="false" backgroundColor="255,255,255" />
-        </ShapeGraphicalRepresentation>
-        <GRSpec id="83" featureName="label" value="principle.name" readOnly="false" />
-      </ContextShapePatternRole>
-      <URIParameter id="84" base="&quot;Principle&quot;" name="uri" label="uri" usePaletteLabelAsDefaultValue="false" isRequired="true" />
-      <AddIndividual id="85" individualName="parameters.uri" assignation="principle">
-        <DataPropertyAssertion id="86" dataPropertyURI="http://www.bolton.ac.uk/archimate#name" value="&quot;Principle&quot;" />
-        <DataPropertyAssertion id="87" dataPropertyURI="http://www.bolton.ac.uk/archimate#documentation" value="&quot;Please add documentation&quot;" />
-      </AddIndividual>
-      <AddIndividual id="88" individualName="&quot;AggregationRelationship&quot;" ontologyClassURI="http://www.bolton.ac.uk/archimate#AggregationRelationship">
-        <ObjectPropertyAssertion id="89" objectPropertyURI="http://www.bolton.ac.uk/archimate#source" object="target.principle" />
-        <ObjectPropertyAssertion id="90" objectPropertyURI="http://www.bolton.ac.uk/archimate#target" object="principle" />
-      </AddIndividual>
-      <AddShape id="91" container="target.shape" extendParentBoundsToHostThisShape="false" assignation="shape" />
-      <AddShape id="92" container="topLevel" extendParentBoundsToHostThisShape="false" assignation="icon" />
-      <GraphicalAction id="93" subject="target.shape" value="0.1" feature="relativeTextY" />
-    </DropScheme>
-    <DeletionScheme id="94" name="deletion" label="deletion" skipConfirmationPanel="false" definePopupDefaultSize="false" width="800" height="600">
-      <DeleteAction id="95" object="principle" />
-      <DeleteAction id="96" object="icon" />
-      <DeleteAction id="97" object="shape" />
-    </DeletionScheme>
-    <ContainedIndividualPatternRole id="98" ontologicType="http://www.bolton.ac.uk/archimate#Principle" patternRole="principle" />
-    <ContainedShapePatternRole idref="72" />
-    <ContainedShapePatternRole id="99" exampleLabel="" patternRole="icon">
-      <ShapeGraphicalRepresentation id="100" className="org.openflexo.vpm.view.widget.EditionPatternPreviewShapeGR" x="65.4" y="5.0" width="33.0" height="35.0" minimalWidth="0.0" minimalHeight="0.0" maximalWidth="Infinity" maximalHeight="Infinity" relativeTextX="0.5" relativeTextY="0.5" lineWrap="false" locationConstraints="UNMOVABLE" dimensionConstraints="CONSTRAINED_DIMENSIONS" adjustMinimalWidthToLabelWidth="true" adjustMinimalHeightToLabelHeight="true" adjustMaximalWidthToLabelWidth="false" adjustMaximalHeightToLabelHeight="false" hasSelectedForeground="false" hasSelectedBackground="false" hasFocusedForeground="false" hasFocusedBackground="false" isFloatingLabel="false" allowToLeaveBounds="false" xConstraints="((parent.width - (parent.width * 0.12)) - 27)" yConstraints="5" identifier="object_0_0" layer="2" hasText="true" isMultilineAllowed="false" continuousTextEditing="true" absoluteTextX="0.0" absoluteTextY="0.0" paragraphAlignment="CENTER" horizontalTextAlignment="CENTER" verticalTextAlignment="MIDDLE" isSelectable="false" isFocusable="false" drawControlPointsWhenFocused="true" drawControlPointsWhenSelected="true" isReadOnly="false" isLabelEditable="true" isVisible="true">
-        <ForegroundStyle id="101" noStroke="true" color="0,0,0" lineWidth="1.0" joinStyle="JOIN_MITER" capStyle="CAP_SQUARE" dashStyle="PLAIN_STROKE" useTransparency="false" transparencyLevel="0.5" />
-        <ImageBackgroundStyle id="102" imageFile="16-16/Princip copy.PNG" scaleX="1.0" scaleY="1.0" deltaX="13.0" deltaY="3.0" imageBackgroundType="TRANSPARENT" imageBackgroundColor="255,255,255" fitToShape="false" useTransparency="false" transparencyLevel="0.5" />
-        <SelectedForegroundStyle id="103" noStroke="false" color="0,0,0" lineWidth="1.0" joinStyle="JOIN_MITER" capStyle="CAP_SQUARE" dashStyle="PLAIN_STROKE" useTransparency="false" transparencyLevel="0.5" />
-        <SelectedColorBackgroundStyle id="104" color="254,247,217" useTransparency="false" transparencyLevel="0.5" />
-        <FocusedForegroundStyle id="105" noStroke="false" color="0,0,0" lineWidth="1.0" joinStyle="JOIN_MITER" capStyle="CAP_SQUARE" dashStyle="PLAIN_STROKE" useTransparency="false" transparencyLevel="0.5" />
-        <FocusedColorBackgroundStyle id="106" color="254,247,217" useTransparency="false" transparencyLevel="0.5" />
-        <Border id="107" top="20" bottom="20" left="20" right="20" />
-        <RectangleShape id="108" isRounded="true" arcSize="20.0" />
-        <ShadowStyle id="109" drawShadow="false" shadowDarkness="150" shadowDepth="2" shadowBlur="4" />
-        <TextStyle id="110" font="Lucida Sans,0,11" color="0,0,0" orientation="0" isBackgroundColored="false" backgroundColor="255,255,255" />
-      </ShapeGraphicalRepresentation>
-      <ParentShapePatternRole idref="72" />
-    </ContainedShapePatternRole>
-    <PrimaryConceptIndividualPatternRole idref="98" />
-    <PrimaryRepresentationShapePatternRole idref="72" />
-    <Inspector id="111" inspectorTitle="Principle">
-      <TextField id="112" label="name" name="name" readOnly="false" data="principle.name" />
-      <TextArea id="113" label="documentation" name="documentation" readOnly="false" data="principle.documentation" />
-      <Individual id="114" conceptURI="http://www.bolton.ac.uk/archimate#ArchimateElement" renderer="individual.name" label="instance" name="instance" readOnly="false" data="principle" />
-    </Inspector>
-  </EditionPattern>
-  <EditionPattern id="115" name="RealisationRelationship">
-    <LinkScheme id="116" fromTarget="http://www.agilebirds.com/openflexo/ViewPoints/Archimate/Principle.owl#Principle" toTarget="http://www.agilebirds.com/openflexo/ViewPoints/Archimate/Principle.owl#Goal" isAvailableWithFloatingPalette="true" northDirectionSupported="true" eastDirectionSupported="true" southDirectionSupported="true" westDirectionSupported="true" name="linkPrincipleToGoalRealisation" label="RealisationRelationship" skipConfirmationPanel="true" definePopupDefaultSize="false" width="800" height="600">
-      <URIParameter id="117" base="&quot;RealisationRelationship&quot;" name="uri" label="uri" usePaletteLabelAsDefaultValue="false" isRequired="true" />
-      <AddIndividual id="118" individualName="parameters.uri" assignation="realisationRelationship">
-        <ObjectPropertyAssertion id="119" objectPropertyURI="http://www.bolton.ac.uk/archimate#source" object="fromTarget.principle" />
-        <ObjectPropertyAssertion id="120" objectPropertyURI="http://www.bolton.ac.uk/archimate#target" object="toTarget.goal" />
-      </AddIndividual>
-      <AddConnector id="121" fromShape="fromTarget.shape" toShape="toTarget.shape" assignation="connector" />
-    </LinkScheme>
-    <DeletionScheme id="122" name="deletion" label="deletion" skipConfirmationPanel="false" definePopupDefaultSize="false" width="800" height="600">
-      <DeleteAction id="123" object="realisationRelationship" />
-      <DeleteAction id="124" object="connector" />
-    </DeletionScheme>
-    <ContainedIndividualPatternRole id="125" ontologicType="http://www.bolton.ac.uk/archimate#RealisationRelationship" patternRole="realisationRelationship" />
-    <ContainedConnectorPatternRole id="126" exampleLabel="" patternRole="connector">
-      <ConnectorGraphicalRepresentation id="127" className="org.openflexo.vpm.view.widget.EditionPatternPreviewConnectorGR" hasSelectedForeground="false" hasFocusedForeground="false" startSymbol="NONE" endSymbol="PLAIN_ARROW" middleSymbol="NONE" startSymbolSize="10.0" endSymbolSize="10.0" middleSymbolSize="10.0" relativeMiddleSymbolLocation="0.5" applyForegroundToSymbols="true" identifier="object_2" layer="64" hasText="true" isMultilineAllowed="true" continuousTextEditing="true" absoluteTextX="0.0" absoluteTextY="0.0" paragraphAlignment="CENTER" horizontalTextAlignment="CENTER" verticalTextAlignment="MIDDLE" isSelectable="true" isFocusable="true" drawControlPointsWhenFocused="true" drawControlPointsWhenSelected="true" isReadOnly="false" isLabelEditable="true" isVisible="true">
-        <ForegroundStyle id="128" noStroke="false" color="0,0,0" lineWidth="1.0" joinStyle="JOIN_MITER" capStyle="CAP_SQUARE" dashStyle="DOTS_DASHES" useTransparency="false" transparencyLevel="0.5" />
-        <SelectedForegroundStyle id="129" noStroke="false" color="0,0,0" lineWidth="1.0" joinStyle="JOIN_MITER" capStyle="CAP_SQUARE" dashStyle="PLAIN_STROKE" useTransparency="false" transparencyLevel="0.5" />
-        <FocusedForegroundStyle id="130" noStroke="false" color="0,0,0" lineWidth="1.0" joinStyle="JOIN_MITER" capStyle="CAP_SQUARE" dashStyle="PLAIN_STROKE" useTransparency="false" transparencyLevel="0.5" />
-        <RectPolylinConnector id="131" rectPolylinConstraints="NONE" straightLineWhenPossible="true" adjustability="FULLY_ADJUSTABLE" startOrientation="EAST" endOrientation="WEST" isRounded="true" arcSize="10" isStartingLocationFixed="false" isEndingLocationFixed="false" isStartingLocationDraggable="true" isEndingLocationDraggable="true" crossedControlPoint="0.5589123867069486,0.4754098360655738" />
-        <TextStyle id="132" font="Lucida Sans,0,11" color="0,0,0" orientation="0" isBackgroundColored="false" backgroundColor="255,255,255" />
-      </ConnectorGraphicalRepresentation>
-      <ArtifactFromShapeGraphicalRepresentation id="133" className="org.openflexo.vpm.view.widget.EditionPatternConnectorFromArtefactGR" x="80.0" y="80.0" width="20.0" height="20.0" minimalWidth="0.0" minimalHeight="0.0" maximalWidth="Infinity" maximalHeight="Infinity" relativeTextX="0.5" relativeTextY="0.5" lineWrap="true" locationConstraints="FREELY_MOVABLE" dimensionConstraints="CONSTRAINED_DIMENSIONS" adjustMinimalWidthToLabelWidth="true" adjustMinimalHeightToLabelHeight="true" adjustMaximalWidthToLabelWidth="false" adjustMaximalHeightToLabelHeight="false" hasSelectedForeground="false" hasSelectedBackground="false" hasFocusedForeground="false" hasFocusedBackground="false" isFloatingLabel="true" allowToLeaveBounds="false" identifier="object_0" layer="1" hasText="true" isMultilineAllowed="true" continuousTextEditing="true" absoluteTextX="0.0" absoluteTextY="0.0" paragraphAlignment="CENTER" horizontalTextAlignment="CENTER" verticalTextAlignment="MIDDLE" isSelectable="false" isFocusable="true" drawControlPointsWhenFocused="true" drawControlPointsWhenSelected="true" isReadOnly="false" isLabelEditable="true" isVisible="true">
-        <ForegroundStyle id="134" noStroke="false" color="255,204,0" lineWidth="1.0" joinStyle="JOIN_MITER" capStyle="CAP_SQUARE" dashStyle="PLAIN_STROKE" useTransparency="false" transparencyLevel="0.5" />
-        <ColorBackgroundStyle id="135" color="255,255,204" useTransparency="false" transparencyLevel="0.5" />
-        <SelectedForegroundStyle id="136" noStroke="false" color="255,204,0" lineWidth="1.0" joinStyle="JOIN_MITER" capStyle="CAP_SQUARE" dashStyle="PLAIN_STROKE" useTransparency="false" transparencyLevel="0.5" />
-        <SelectedColorBackgroundStyle id="137" color="255,255,204" useTransparency="false" transparencyLevel="0.5" />
-        <FocusedForegroundStyle id="138" noStroke="false" color="255,204,0" lineWidth="1.0" joinStyle="JOIN_MITER" capStyle="CAP_SQUARE" dashStyle="PLAIN_STROKE" useTransparency="false" transparencyLevel="0.5" />
-        <FocusedColorBackgroundStyle id="139" color="255,255,204" useTransparency="false" transparencyLevel="0.5" />
-        <Border id="140" top="20" bottom="20" left="20" right="20" />
-        <CircleShape id="141" />
-        <ShadowStyle id="142" drawShadow="true" shadowDarkness="150" shadowDepth="2" shadowBlur="4" />
-        <TextStyle id="143" font="Lucida Sans,0,11" color="0,0,0" orientation="0" isBackgroundColored="false" backgroundColor="255,255,255" />
-      </ArtifactFromShapeGraphicalRepresentation>
-      <ArtifactToShapeGraphicalRepresentation id="144" className="org.openflexo.vpm.view.widget.EditionPatternConnectorToArtefactGR" x="350.0" y="80.0" width="20.0" height="20.0" minimalWidth="0.0" minimalHeight="0.0" maximalWidth="Infinity" maximalHeight="Infinity" relativeTextX="0.5" relativeTextY="0.5" lineWrap="true" locationConstraints="FREELY_MOVABLE" dimensionConstraints="CONSTRAINED_DIMENSIONS" adjustMinimalWidthToLabelWidth="true" adjustMinimalHeightToLabelHeight="true" adjustMaximalWidthToLabelWidth="false" adjustMaximalHeightToLabelHeight="false" hasSelectedForeground="false" hasSelectedBackground="false" hasFocusedForeground="false" hasFocusedBackground="false" isFloatingLabel="true" allowToLeaveBounds="false" identifier="object_1" layer="1" hasText="true" isMultilineAllowed="true" continuousTextEditing="true" absoluteTextX="0.0" absoluteTextY="0.0" paragraphAlignment="CENTER" horizontalTextAlignment="CENTER" verticalTextAlignment="MIDDLE" isSelectable="false" isFocusable="true" drawControlPointsWhenFocused="true" drawControlPointsWhenSelected="true" isReadOnly="false" isLabelEditable="true" isVisible="true">
-        <ForegroundStyle id="145" noStroke="false" color="255,204,0" lineWidth="1.0" joinStyle="JOIN_MITER" capStyle="CAP_SQUARE" dashStyle="PLAIN_STROKE" useTransparency="false" transparencyLevel="0.5" />
-        <ColorBackgroundStyle id="146" color="255,255,204" useTransparency="false" transparencyLevel="0.5" />
-        <SelectedForegroundStyle id="147" noStroke="false" color="255,204,0" lineWidth="1.0" joinStyle="JOIN_MITER" capStyle="CAP_SQUARE" dashStyle="PLAIN_STROKE" useTransparency="false" transparencyLevel="0.5" />
-        <SelectedColorBackgroundStyle id="148" color="255,255,204" useTransparency="false" transparencyLevel="0.5" />
-        <FocusedForegroundStyle id="149" noStroke="false" color="255,204,0" lineWidth="1.0" joinStyle="JOIN_MITER" capStyle="CAP_SQUARE" dashStyle="PLAIN_STROKE" useTransparency="false" transparencyLevel="0.5" />
-        <FocusedColorBackgroundStyle id="150" color="255,255,204" useTransparency="false" transparencyLevel="0.5" />
-        <Border id="151" top="20" bottom="20" left="20" right="20" />
-        <CircleShape idref="141" />
-        <ShadowStyle id="152" drawShadow="true" shadowDarkness="150" shadowDepth="2" shadowBlur="4" />
-        <TextStyle id="153" font="Lucida Sans,0,11" color="0,0,0" orientation="0" isBackgroundColored="false" backgroundColor="255,255,255" />
-      </ArtifactToShapeGraphicalRepresentation>
-      <GRSpec id="154" featureName="label" value="realisationRelationship.annotation" readOnly="false" />
-    </ContainedConnectorPatternRole>
-    <PrimaryConceptIndividualPatternRole idref="125" />
-    <PrimaryRepresentationConnectorPatternRole idref="126" />
-    <Inspector id="155" inspectorTitle="RealisationRelationship">
-      <TextArea id="156" label="documentation" name="documentation" readOnly="false" data="realisationRelationship.documentation" />
-      <TextField id="157" label="Annotation" name="Annotation" readOnly="false" data="realisationRelationship.annotation" />
-      <Individual id="158" conceptURI="http://www.bolton.ac.uk/archimate#ArchimateElement" renderer="individual.name" label="source" name="source" readOnly="false" data="realisationRelationship.source" />
-      <Individual id="159" conceptURI="http://www.bolton.ac.uk/archimate#ArchimateElement" renderer="individual.name" label="target" name="target" readOnly="false" data="realisationRelationship.target" />
-    </Inspector>
-  </EditionPattern>
-  <EditionPattern id="160" name="AggregationRelationship">
-    <LinkScheme id="161" fromTarget="http://www.agilebirds.com/openflexo/ViewPoints/Archimate/Principle.owl#Goal" toTarget="http://www.agilebirds.com/openflexo/ViewPoints/Archimate/Principle.owl#Goal" isAvailableWithFloatingPalette="true" northDirectionSupported="true" eastDirectionSupported="true" southDirectionSupported="true" westDirectionSupported="true" name="linkGoalToGoalAggregation" label="AggregationRealtionship" skipConfirmationPanel="true" definePopupDefaultSize="false" width="800" height="600">
-      <URIParameter id="162" base="&quot;Aggregation Relationship&quot;" name="uri" label="uri" usePaletteLabelAsDefaultValue="false" isRequired="true" />
-      <AddIndividual id="163" individualName="parameters.uri" assignation="aggregationRelationship">
-        <ObjectPropertyAssertion id="164" objectPropertyURI="http://www.bolton.ac.uk/archimate#source" object="fromTarget.goal" />
-        <ObjectPropertyAssertion id="165" objectPropertyURI="http://www.bolton.ac.uk/archimate#target" object="toTarget.goal" />
-      </AddIndividual>
-      <AddConnector id="166" fromShape="fromTarget.shape" toShape="toTarget.shape" assignation="connector" />
-    </LinkScheme>
-    <LinkScheme id="167" fromTarget="http://www.agilebirds.com/openflexo/ViewPoints/Archimate/Principle.owl#Principle" toTarget="http://www.agilebirds.com/openflexo/ViewPoints/Archimate/Principle.owl#Principle" isAvailableWithFloatingPalette="true" northDirectionSupported="true" eastDirectionSupported="true" southDirectionSupported="true" westDirectionSupported="true" name="linkPrincipleToPrincipleAggregation" label="AggregationRealtionship" skipConfirmationPanel="true" definePopupDefaultSize="false" width="800" height="600">
-      <URIParameter id="168" base="&quot;Aggregation Relationship&quot;" name="uri" label="uri" usePaletteLabelAsDefaultValue="false" isRequired="true" />
-      <AddIndividual id="169" individualName="parameters.uri" assignation="aggregationRelationship">
-        <ObjectPropertyAssertion id="170" objectPropertyURI="http://www.bolton.ac.uk/archimate#source" object="fromTarget.principle" />
-        <ObjectPropertyAssertion id="171" objectPropertyURI="http://www.bolton.ac.uk/archimate#target" object="toTarget.principle" />
-      </AddIndividual>
-      <AddConnector id="172" fromShape="fromTarget.shape" toShape="toTarget.shape" assignation="connector" />
-    </LinkScheme>
-    <DeletionScheme id="173" name="deletion" label="deletion" skipConfirmationPanel="false" definePopupDefaultSize="false" width="800" height="600">
-      <DeleteAction id="174" object="aggregationRelationship" />
-      <DeleteAction id="175" object="connector" />
-    </DeletionScheme>
-    <ContainedIndividualPatternRole id="176" ontologicType="http://www.bolton.ac.uk/archimate#AggregationRelationship" patternRole="aggregationRelationship" />
-    <ContainedConnectorPatternRole id="177" exampleLabel="label" patternRole="connector">
-      <ConnectorGraphicalRepresentation id="178" className="org.openflexo.vpm.view.widget.EditionPatternPreviewConnectorGR" hasSelectedForeground="false" hasFocusedForeground="false" startSymbol="NONE" endSymbol="PLAIN_DIAMOND" middleSymbol="NONE" startSymbolSize="10.0" endSymbolSize="10.0" middleSymbolSize="10.0" relativeMiddleSymbolLocation="0.5" applyForegroundToSymbols="true" identifier="object_2" layer="64" hasText="true" isMultilineAllowed="true" continuousTextEditing="true" absoluteTextX="0.0" absoluteTextY="0.0" paragraphAlignment="CENTER" horizontalTextAlignment="CENTER" verticalTextAlignment="MIDDLE" isSelectable="true" isFocusable="true" drawControlPointsWhenFocused="true" drawControlPointsWhenSelected="true" isReadOnly="false" isLabelEditable="true" isVisible="true">
-        <ForegroundStyle id="179" noStroke="false" color="0,0,0" lineWidth="1.0" joinStyle="JOIN_MITER" capStyle="CAP_SQUARE" dashStyle="PLAIN_STROKE" useTransparency="false" transparencyLevel="0.5" />
-        <SelectedForegroundStyle id="180" noStroke="false" color="0,0,0" lineWidth="1.0" joinStyle="JOIN_MITER" capStyle="CAP_SQUARE" dashStyle="PLAIN_STROKE" useTransparency="false" transparencyLevel="0.5" />
-        <FocusedForegroundStyle id="181" noStroke="false" color="0,0,0" lineWidth="1.0" joinStyle="JOIN_MITER" capStyle="CAP_SQUARE" dashStyle="PLAIN_STROKE" useTransparency="false" transparencyLevel="0.5" />
-        <RectPolylinConnector id="182" rectPolylinConstraints="NONE" straightLineWhenPossible="true" adjustability="FULLY_ADJUSTABLE" startOrientation="EAST" endOrientation="WEST" isRounded="true" arcSize="10" isStartingLocationFixed="false" isEndingLocationFixed="false" isStartingLocationDraggable="true" isEndingLocationDraggable="true" />
-        <TextStyle id="183" font="Lucida Sans,0,11" color="0,0,0" orientation="0" isBackgroundColored="false" backgroundColor="255,255,255" />
-      </ConnectorGraphicalRepresentation>
-      <ArtifactFromShapeGraphicalRepresentation id="184" className="org.openflexo.vpm.view.widget.EditionPatternConnectorFromArtefactGR" x="80.0" y="80.0" width="20.0" height="20.0" minimalWidth="0.0" minimalHeight="0.0" maximalWidth="Infinity" maximalHeight="Infinity" relativeTextX="0.5" relativeTextY="0.5" lineWrap="true" locationConstraints="FREELY_MOVABLE" dimensionConstraints="CONSTRAINED_DIMENSIONS" adjustMinimalWidthToLabelWidth="true" adjustMinimalHeightToLabelHeight="true" adjustMaximalWidthToLabelWidth="false" adjustMaximalHeightToLabelHeight="false" hasSelectedForeground="false" hasSelectedBackground="false" hasFocusedForeground="false" hasFocusedBackground="false" isFloatingLabel="true" allowToLeaveBounds="false" identifier="object_0" layer="1" hasText="true" isMultilineAllowed="true" continuousTextEditing="true" absoluteTextX="0.0" absoluteTextY="0.0" paragraphAlignment="CENTER" horizontalTextAlignment="CENTER" verticalTextAlignment="MIDDLE" isSelectable="false" isFocusable="true" drawControlPointsWhenFocused="true" drawControlPointsWhenSelected="true" isReadOnly="false" isLabelEditable="true" isVisible="true">
-        <ForegroundStyle id="185" noStroke="false" color="255,204,0" lineWidth="1.0" joinStyle="JOIN_MITER" capStyle="CAP_SQUARE" dashStyle="PLAIN_STROKE" useTransparency="false" transparencyLevel="0.5" />
-        <ColorBackgroundStyle id="186" color="255,255,204" useTransparency="false" transparencyLevel="0.5" />
-        <SelectedForegroundStyle id="187" noStroke="false" color="255,204,0" lineWidth="1.0" joinStyle="JOIN_MITER" capStyle="CAP_SQUARE" dashStyle="PLAIN_STROKE" useTransparency="false" transparencyLevel="0.5" />
-        <SelectedColorBackgroundStyle id="188" color="255,255,204" useTransparency="false" transparencyLevel="0.5" />
-        <FocusedForegroundStyle id="189" noStroke="false" color="255,204,0" lineWidth="1.0" joinStyle="JOIN_MITER" capStyle="CAP_SQUARE" dashStyle="PLAIN_STROKE" useTransparency="false" transparencyLevel="0.5" />
-        <FocusedColorBackgroundStyle id="190" color="255,255,204" useTransparency="false" transparencyLevel="0.5" />
-        <Border id="191" top="20" bottom="20" left="20" right="20" />
-        <CircleShape idref="141" />
-        <ShadowStyle id="192" drawShadow="true" shadowDarkness="150" shadowDepth="2" shadowBlur="4" />
-        <TextStyle id="193" font="Lucida Sans,0,11" color="0,0,0" orientation="0" isBackgroundColored="false" backgroundColor="255,255,255" />
-      </ArtifactFromShapeGraphicalRepresentation>
-      <ArtifactToShapeGraphicalRepresentation id="194" className="org.openflexo.vpm.view.widget.EditionPatternConnectorToArtefactGR" x="350.0" y="80.0" width="20.0" height="20.0" minimalWidth="0.0" minimalHeight="0.0" maximalWidth="Infinity" maximalHeight="Infinity" relativeTextX="0.5" relativeTextY="0.5" lineWrap="true" locationConstraints="FREELY_MOVABLE" dimensionConstraints="CONSTRAINED_DIMENSIONS" adjustMinimalWidthToLabelWidth="true" adjustMinimalHeightToLabelHeight="true" adjustMaximalWidthToLabelWidth="false" adjustMaximalHeightToLabelHeight="false" hasSelectedForeground="false" hasSelectedBackground="false" hasFocusedForeground="false" hasFocusedBackground="false" isFloatingLabel="true" allowToLeaveBounds="false" identifier="object_1" layer="1" hasText="true" isMultilineAllowed="true" continuousTextEditing="true" absoluteTextX="0.0" absoluteTextY="0.0" paragraphAlignment="CENTER" horizontalTextAlignment="CENTER" verticalTextAlignment="MIDDLE" isSelectable="false" isFocusable="true" drawControlPointsWhenFocused="true" drawControlPointsWhenSelected="true" isReadOnly="false" isLabelEditable="true" isVisible="true">
-        <ForegroundStyle id="195" noStroke="false" color="255,204,0" lineWidth="1.0" joinStyle="JOIN_MITER" capStyle="CAP_SQUARE" dashStyle="PLAIN_STROKE" useTransparency="false" transparencyLevel="0.5" />
-        <ColorBackgroundStyle id="196" color="255,255,204" useTransparency="false" transparencyLevel="0.5" />
-        <SelectedForegroundStyle id="197" noStroke="false" color="255,204,0" lineWidth="1.0" joinStyle="JOIN_MITER" capStyle="CAP_SQUARE" dashStyle="PLAIN_STROKE" useTransparency="false" transparencyLevel="0.5" />
-        <SelectedColorBackgroundStyle id="198" color="255,255,204" useTransparency="false" transparencyLevel="0.5" />
-        <FocusedForegroundStyle id="199" noStroke="false" color="255,204,0" lineWidth="1.0" joinStyle="JOIN_MITER" capStyle="CAP_SQUARE" dashStyle="PLAIN_STROKE" useTransparency="false" transparencyLevel="0.5" />
-        <FocusedColorBackgroundStyle id="200" color="255,255,204" useTransparency="false" transparencyLevel="0.5" />
-        <Border id="201" top="20" bottom="20" left="20" right="20" />
-        <CircleShape idref="141" />
-        <ShadowStyle id="202" drawShadow="true" shadowDarkness="150" shadowDepth="2" shadowBlur="4" />
-        <TextStyle id="203" font="Lucida Sans,0,11" color="0,0,0" orientation="0" isBackgroundColored="false" backgroundColor="255,255,255" />
-      </ArtifactToShapeGraphicalRepresentation>
-      <GRSpec id="204" featureName="label" value="aggregationRelationship.annotation" readOnly="false" />
-    </ContainedConnectorPatternRole>
-    <PrimaryConceptIndividualPatternRole idref="176" />
-    <PrimaryRepresentationConnectorPatternRole idref="177" />
-    <Inspector id="205" inspectorTitle="AggregationRelationship">
-      <TextArea id="206" label="documentation" name="documentation" readOnly="false" data="aggregationRelationship.documentation" />
-      <TextField id="207" label="Annotation" name="Annotation" readOnly="false" data="aggregationRelationship.annotation" />
-      <Individual id="208" conceptURI="http://www.bolton.ac.uk/archimate#ArchimateElement" renderer="individual.name" label="source" name="source" readOnly="false" data="aggregationRelationship.source" />
-      <Individual id="209" conceptURI="http://www.bolton.ac.uk/archimate#ArchimateElement" renderer="individual.name" label="target" name="target" readOnly="false" data="aggregationRelationship.target" />
-    </Inspector>
-  </EditionPattern>
-  <EditionPattern id="210" name="InfluenceRelationship">
-    <LinkScheme id="211" fromTarget="http://www.agilebirds.com/openflexo/ViewPoints/Archimate/Principle.owl#InfluenceElements" toTarget="http://www.agilebirds.com/openflexo/ViewPoints/Archimate/Principle.owl#InfluenceElements" isAvailableWithFloatingPalette="true" northDirectionSupported="true" eastDirectionSupported="true" southDirectionSupported="true" westDirectionSupported="true" name="linkInfluenceElementsToInfluenceElements" label="InfluenceRelationship" skipConfirmationPanel="true" definePopupDefaultSize="false" width="800" height="600">
-      <URIParameter id="212" base="&quot;Influence Relationship&quot;" name="uri" label="uri" usePaletteLabelAsDefaultValue="false" isRequired="true" />
-      <AddIndividual id="213" individualName="parameters.uri" assignation="influenceRelationship">
-        <ObjectPropertyAssertion id="214" objectPropertyURI="http://www.bolton.ac.uk/archimate#source" object="fromTarget.InfluenceElement" />
-        <ObjectPropertyAssertion id="215" objectPropertyURI="http://www.bolton.ac.uk/archimate#target" object="toTarget.InfluenceElement" />
-      </AddIndividual>
-      <AddConnector id="216" fromShape="fromTarget.shape" toShape="toTarget.shape" assignation="connector" />
-    </LinkScheme>
-    <ContainedIndividualPatternRole id="217" ontologicType="http://www.bolton.ac.uk/archimate#InfluenceRelationship" patternRole="influenceRelationship" />
-    <ContainedConnectorPatternRole id="218" exampleLabel="label" patternRole="connector">
-      <ConnectorGraphicalRepresentation id="219" className="org.openflexo.vpm.view.widget.EditionPatternPreviewConnectorGR" hasSelectedForeground="false" hasFocusedForeground="false" startSymbol="NONE" endSymbol="FILLED_ARROW" middleSymbol="NONE" startSymbolSize="10.0" endSymbolSize="10.0" middleSymbolSize="10.0" relativeMiddleSymbolLocation="0.5" applyForegroundToSymbols="true" identifier="object_2" layer="64" hasText="true" isMultilineAllowed="true" continuousTextEditing="true" absoluteTextX="0.0" absoluteTextY="0.0" paragraphAlignment="CENTER" horizontalTextAlignment="CENTER" verticalTextAlignment="MIDDLE" isSelectable="true" isFocusable="true" drawControlPointsWhenFocused="true" drawControlPointsWhenSelected="true" isReadOnly="false" isLabelEditable="true" isVisible="true">
-        <ForegroundStyle id="220" noStroke="false" color="0,0,0" lineWidth="1.0" joinStyle="JOIN_MITER" capStyle="CAP_SQUARE" dashStyle="MEDIUM_DASHES" useTransparency="false" transparencyLevel="0.5" />
-        <SelectedForegroundStyle id="221" noStroke="false" color="0,0,0" lineWidth="1.0" joinStyle="JOIN_MITER" capStyle="CAP_SQUARE" dashStyle="PLAIN_STROKE" useTransparency="false" transparencyLevel="0.5" />
-        <FocusedForegroundStyle id="222" noStroke="false" color="0,0,0" lineWidth="1.0" joinStyle="JOIN_MITER" capStyle="CAP_SQUARE" dashStyle="PLAIN_STROKE" useTransparency="false" transparencyLevel="0.5" />
-        <RectPolylinConnector id="223" rectPolylinConstraints="NONE" straightLineWhenPossible="true" adjustability="FULLY_ADJUSTABLE" startOrientation="EAST" endOrientation="WEST" isRounded="true" arcSize="15" isStartingLocationFixed="false" isEndingLocationFixed="false" isStartingLocationDraggable="true" isEndingLocationDraggable="true" />
-        <TextStyle id="224" font="Lucida Sans,0,11" color="0,0,0" orientation="0" isBackgroundColored="false" backgroundColor="255,255,255" />
-      </ConnectorGraphicalRepresentation>
-      <ArtifactFromShapeGraphicalRepresentation id="225" className="org.openflexo.vpm.view.widget.EditionPatternConnectorFromArtefactGR" x="80.0" y="80.0" width="20.0" height="20.0" minimalWidth="0.0" minimalHeight="0.0" maximalWidth="Infinity" maximalHeight="Infinity" relativeTextX="0.5" relativeTextY="0.5" lineWrap="true" locationConstraints="FREELY_MOVABLE" dimensionConstraints="CONSTRAINED_DIMENSIONS" adjustMinimalWidthToLabelWidth="true" adjustMinimalHeightToLabelHeight="true" adjustMaximalWidthToLabelWidth="false" adjustMaximalHeightToLabelHeight="false" hasSelectedForeground="false" hasSelectedBackground="false" hasFocusedForeground="false" hasFocusedBackground="false" isFloatingLabel="true" allowToLeaveBounds="false" identifier="object_0" layer="1" hasText="true" isMultilineAllowed="true" continuousTextEditing="true" absoluteTextX="0.0" absoluteTextY="0.0" paragraphAlignment="CENTER" horizontalTextAlignment="CENTER" verticalTextAlignment="MIDDLE" isSelectable="false" isFocusable="true" drawControlPointsWhenFocused="true" drawControlPointsWhenSelected="true" isReadOnly="false" isLabelEditable="true" isVisible="true">
-        <ForegroundStyle id="226" noStroke="false" color="255,204,0" lineWidth="1.0" joinStyle="JOIN_MITER" capStyle="CAP_SQUARE" dashStyle="PLAIN_STROKE" useTransparency="false" transparencyLevel="0.5" />
-        <ColorBackgroundStyle id="227" color="255,255,204" useTransparency="false" transparencyLevel="0.5" />
-        <SelectedForegroundStyle id="228" noStroke="false" color="255,204,0" lineWidth="1.0" joinStyle="JOIN_MITER" capStyle="CAP_SQUARE" dashStyle="PLAIN_STROKE" useTransparency="false" transparencyLevel="0.5" />
-        <SelectedColorBackgroundStyle id="229" color="255,255,204" useTransparency="false" transparencyLevel="0.5" />
-        <FocusedForegroundStyle id="230" noStroke="false" color="255,204,0" lineWidth="1.0" joinStyle="JOIN_MITER" capStyle="CAP_SQUARE" dashStyle="PLAIN_STROKE" useTransparency="false" transparencyLevel="0.5" />
-        <FocusedColorBackgroundStyle id="231" color="255,255,204" useTransparency="false" transparencyLevel="0.5" />
-        <Border id="232" top="20" bottom="20" left="20" right="20" />
-        <CircleShape idref="141" />
-        <ShadowStyle id="233" drawShadow="true" shadowDarkness="150" shadowDepth="2" shadowBlur="4" />
-        <TextStyle id="234" font="Lucida Sans,0,11" color="0,0,0" orientation="0" isBackgroundColored="false" backgroundColor="255,255,255" />
-      </ArtifactFromShapeGraphicalRepresentation>
-      <ArtifactToShapeGraphicalRepresentation id="235" className="org.openflexo.vpm.view.widget.EditionPatternConnectorToArtefactGR" x="350.0" y="80.0" width="20.0" height="20.0" minimalWidth="0.0" minimalHeight="0.0" maximalWidth="Infinity" maximalHeight="Infinity" relativeTextX="0.5" relativeTextY="0.5" lineWrap="true" locationConstraints="FREELY_MOVABLE" dimensionConstraints="CONSTRAINED_DIMENSIONS" adjustMinimalWidthToLabelWidth="true" adjustMinimalHeightToLabelHeight="true" adjustMaximalWidthToLabelWidth="false" adjustMaximalHeightToLabelHeight="false" hasSelectedForeground="false" hasSelectedBackground="false" hasFocusedForeground="false" hasFocusedBackground="false" isFloatingLabel="true" allowToLeaveBounds="false" identifier="object_1" layer="1" hasText="true" isMultilineAllowed="true" continuousTextEditing="true" absoluteTextX="0.0" absoluteTextY="0.0" paragraphAlignment="CENTER" horizontalTextAlignment="CENTER" verticalTextAlignment="MIDDLE" isSelectable="false" isFocusable="true" drawControlPointsWhenFocused="true" drawControlPointsWhenSelected="true" isReadOnly="false" isLabelEditable="true" isVisible="true">
-        <ForegroundStyle id="236" noStroke="false" color="255,204,0" lineWidth="1.0" joinStyle="JOIN_MITER" capStyle="CAP_SQUARE" dashStyle="PLAIN_STROKE" useTransparency="false" transparencyLevel="0.5" />
-        <ColorBackgroundStyle id="237" color="255,255,204" useTransparency="false" transparencyLevel="0.5" />
-        <SelectedForegroundStyle id="238" noStroke="false" color="255,204,0" lineWidth="1.0" joinStyle="JOIN_MITER" capStyle="CAP_SQUARE" dashStyle="PLAIN_STROKE" useTransparency="false" transparencyLevel="0.5" />
-        <SelectedColorBackgroundStyle id="239" color="255,255,204" useTransparency="false" transparencyLevel="0.5" />
-        <FocusedForegroundStyle id="240" noStroke="false" color="255,204,0" lineWidth="1.0" joinStyle="JOIN_MITER" capStyle="CAP_SQUARE" dashStyle="PLAIN_STROKE" useTransparency="false" transparencyLevel="0.5" />
-        <FocusedColorBackgroundStyle id="241" color="255,255,204" useTransparency="false" transparencyLevel="0.5" />
-        <Border id="242" top="20" bottom="20" left="20" right="20" />
-        <CircleShape idref="141" />
-        <ShadowStyle id="243" drawShadow="true" shadowDarkness="150" shadowDepth="2" shadowBlur="4" />
-        <TextStyle id="244" font="Lucida Sans,0,11" color="0,0,0" orientation="0" isBackgroundColored="false" backgroundColor="255,255,255" />
-      </ArtifactToShapeGraphicalRepresentation>
-      <GRSpec id="245" featureName="label" value="influenceRelationship.annotation" readOnly="false" />
-    </ContainedConnectorPatternRole>
-    <PrimaryConceptIndividualPatternRole idref="217" />
-    <PrimaryRepresentationConnectorPatternRole idref="218" />
-    <Inspector id="246" inspectorTitle="InfluenceRelationship">
-      <TextArea id="247" label="documentation" name="documentation" readOnly="false" data="influenceRelationship.documentation" />
-      <TextField id="248" label="annotation" name="annotation" readOnly="false" data="influenceRelationship.annotation" />
-      <Individual id="249" conceptURI="http://www.bolton.ac.uk/archimate#ArchimateElement" renderer="individual.name" label="source" name="source" readOnly="false" data="influenceRelationship.source" />
-      <Individual id="250" conceptURI="http://www.bolton.ac.uk/archimate#ArchimateElement" renderer="individual.name" label="target" name="target" readOnly="false" data="influenceRelationship.target" />
-    </Inspector>
-  </EditionPattern>
-  <EditionPattern id="251" name="ArchimateElements">
-    <ContainedShapePatternRole id="252" exampleLabel="label" patternRole="shape">
-      <ShapeGraphicalRepresentation id="253" className="org.openflexo.vpm.view.widget.EditionPatternPreviewShapeGR" x="160.0" y="40.0" width="80.0" height="50.0" minimalWidth="0.0" minimalHeight="0.0" maximalWidth="Infinity" maximalHeight="Infinity" relativeTextX="0.5" relativeTextY="0.5" lineWrap="true" locationConstraints="FREELY_MOVABLE" dimensionConstraints="FREELY_RESIZABLE" adjustMinimalWidthToLabelWidth="true" adjustMinimalHeightToLabelHeight="true" adjustMaximalWidthToLabelWidth="false" adjustMaximalHeightToLabelHeight="false" hasSelectedForeground="false" hasSelectedBackground="false" hasFocusedForeground="false" hasFocusedBackground="false" isFloatingLabel="false" allowToLeaveBounds="false" identifier="object_0" layer="1" hasText="true" isMultilineAllowed="true" continuousTextEditing="true" absoluteTextX="0.0" absoluteTextY="0.0" paragraphAlignment="CENTER" horizontalTextAlignment="CENTER" verticalTextAlignment="MIDDLE" isSelectable="true" isFocusable="true" drawControlPointsWhenFocused="true" drawControlPointsWhenSelected="true" isReadOnly="false" isLabelEditable="true" isVisible="true">
-        <ForegroundStyle id="254" noStroke="false" color="0,0,0" lineWidth="1.0" joinStyle="JOIN_MITER" capStyle="CAP_SQUARE" dashStyle="PLAIN_STROKE" useTransparency="false" transparencyLevel="0.5" />
-        <ColorBackgroundStyle id="255" color="192,192,192" useTransparency="false" transparencyLevel="0.5" />
-        <SelectedForegroundStyle id="256" noStroke="false" color="0,0,0" lineWidth="1.0" joinStyle="JOIN_MITER" capStyle="CAP_SQUARE" dashStyle="PLAIN_STROKE" useTransparency="false" transparencyLevel="0.5" />
-        <SelectedColorBackgroundStyle id="257" color="192,192,192" useTransparency="false" transparencyLevel="0.5" />
-        <FocusedForegroundStyle id="258" noStroke="false" color="0,0,0" lineWidth="1.0" joinStyle="JOIN_MITER" capStyle="CAP_SQUARE" dashStyle="PLAIN_STROKE" useTransparency="false" transparencyLevel="0.5" />
-        <FocusedColorBackgroundStyle id="259" color="192,192,192" useTransparency="false" transparencyLevel="0.5" />
-        <Border id="260" top="20" bottom="20" left="20" right="20" />
-        <RectangleShape id="261" isRounded="false" arcSize="30.0" />
-        <ShadowStyle id="262" drawShadow="true" shadowDarkness="150" shadowDepth="2" shadowBlur="4" />
-        <TextStyle id="263" font="SansSerif,1,11" color="0,0,0" orientation="0" isBackgroundColored="false" backgroundColor="255,255,255" />
-      </ShapeGraphicalRepresentation>
-    </ContainedShapePatternRole>
-    <ContainedIndividualPatternRole id="264" ontologicType="http://www.bolton.ac.uk/archimate#ArchimateElement" patternRole="ArchimateElement" />
-    <PrimaryConceptIndividualPatternRole idref="264" />
-    <PrimaryRepresentationShapePatternRole idref="252" />
-    <Inspector id="265" inspectorTitle="ArchimateElements" />
-  </EditionPattern>
-  <EditionPattern id="266" name="AssociationRelationship">
-    <LinkScheme id="267" fromTarget="http://www.agilebirds.com/openflexo/ViewPoints/Archimate/Principle.owl#ArchimateElements" toTarget="http://www.agilebirds.com/openflexo/ViewPoints/Archimate/Principle.owl#ArchimateElements" isAvailableWithFloatingPalette="true" northDirectionSupported="true" eastDirectionSupported="true" southDirectionSupported="true" westDirectionSupported="true" name="linkArchimateElementsToArchimateElementsAssociation" label="AssociationRelationship" skipConfirmationPanel="true" definePopupDefaultSize="false" width="800" height="600">
-      <URIParameter id="268" base="&quot;AsociationRelationship&quot;" name="uri" label="uri" usePaletteLabelAsDefaultValue="false" isRequired="true" />
-      <AddIndividual id="269" individualName="parameters.uri" assignation="associationRelationship">
-        <ObjectPropertyAssertion id="270" objectPropertyURI="http://www.bolton.ac.uk/archimate#source" object="fromTarget.ArchimateElement" />
-        <ObjectPropertyAssertion id="271" objectPropertyURI="http://www.bolton.ac.uk/archimate#target" object="toTarget.ArchimateElement" />
-      </AddIndividual>
-      <AddConnector id="272" fromShape="fromTarget.shape" toShape="toTarget.shape" assignation="connector" />
-    </LinkScheme>
-    <DeletionScheme id="273" name="deletion" label="deletion" skipConfirmationPanel="false" definePopupDefaultSize="false" width="800" height="600">
-      <DeleteAction id="274" object="associationRelationship" />
-      <DeleteAction id="275" object="connector" />
-    </DeletionScheme>
-    <ContainedIndividualPatternRole id="276" ontologicType="http://www.bolton.ac.uk/archimate#AssociationRelationship" patternRole="associationRelationship" />
-    <ContainedConnectorPatternRole id="277" exampleLabel="label" patternRole="connector">
-      <ConnectorGraphicalRepresentation id="278" className="org.openflexo.vpm.view.widget.EditionPatternPreviewConnectorGR" hasSelectedForeground="false" hasFocusedForeground="false" startSymbol="NONE" endSymbol="NONE" middleSymbol="NONE" startSymbolSize="10.0" endSymbolSize="10.0" middleSymbolSize="10.0" relativeMiddleSymbolLocation="0.5" applyForegroundToSymbols="true" identifier="object_2" layer="64" hasText="true" isMultilineAllowed="true" continuousTextEditing="true" absoluteTextX="0.0" absoluteTextY="0.0" paragraphAlignment="CENTER" horizontalTextAlignment="CENTER" verticalTextAlignment="MIDDLE" isSelectable="true" isFocusable="true" drawControlPointsWhenFocused="true" drawControlPointsWhenSelected="true" isReadOnly="false" isLabelEditable="true" isVisible="true">
-        <ForegroundStyle id="279" noStroke="false" color="0,0,0" lineWidth="1.0" joinStyle="JOIN_MITER" capStyle="CAP_SQUARE" dashStyle="PLAIN_STROKE" useTransparency="false" transparencyLevel="0.5" />
-        <SelectedForegroundStyle id="280" noStroke="false" color="0,0,0" lineWidth="1.0" joinStyle="JOIN_MITER" capStyle="CAP_SQUARE" dashStyle="PLAIN_STROKE" useTransparency="false" transparencyLevel="0.5" />
-        <FocusedForegroundStyle id="281" noStroke="false" color="0,0,0" lineWidth="1.0" joinStyle="JOIN_MITER" capStyle="CAP_SQUARE" dashStyle="PLAIN_STROKE" useTransparency="false" transparencyLevel="0.5" />
-        <RectPolylinConnector id="282" rectPolylinConstraints="NONE" straightLineWhenPossible="true" adjustability="FULLY_ADJUSTABLE" startOrientation="EAST" endOrientation="WEST" isRounded="true" arcSize="10" isStartingLocationFixed="false" isEndingLocationFixed="false" isStartingLocationDraggable="true" isEndingLocationDraggable="true" />
-        <TextStyle id="283" font="Lucida Sans,0,11" color="0,0,0" orientation="0" isBackgroundColored="false" backgroundColor="255,255,255" />
-      </ConnectorGraphicalRepresentation>
-      <ArtifactFromShapeGraphicalRepresentation id="284" className="org.openflexo.vpm.view.widget.EditionPatternConnectorFromArtefactGR" x="80.0" y="80.0" width="20.0" height="20.0" minimalWidth="0.0" minimalHeight="0.0" maximalWidth="Infinity" maximalHeight="Infinity" relativeTextX="0.5" relativeTextY="0.5" lineWrap="true" locationConstraints="FREELY_MOVABLE" dimensionConstraints="CONSTRAINED_DIMENSIONS" adjustMinimalWidthToLabelWidth="true" adjustMinimalHeightToLabelHeight="true" adjustMaximalWidthToLabelWidth="false" adjustMaximalHeightToLabelHeight="false" hasSelectedForeground="false" hasSelectedBackground="false" hasFocusedForeground="false" hasFocusedBackground="false" isFloatingLabel="true" allowToLeaveBounds="false" identifier="object_0" layer="1" hasText="true" isMultilineAllowed="true" continuousTextEditing="true" absoluteTextX="0.0" absoluteTextY="0.0" paragraphAlignment="CENTER" horizontalTextAlignment="CENTER" verticalTextAlignment="MIDDLE" isSelectable="false" isFocusable="true" drawControlPointsWhenFocused="true" drawControlPointsWhenSelected="true" isReadOnly="false" isLabelEditable="true" isVisible="true">
-        <ForegroundStyle id="285" noStroke="false" color="255,204,0" lineWidth="1.0" joinStyle="JOIN_MITER" capStyle="CAP_SQUARE" dashStyle="PLAIN_STROKE" useTransparency="false" transparencyLevel="0.5" />
-        <ColorBackgroundStyle id="286" color="255,255,204" useTransparency="false" transparencyLevel="0.5" />
-        <SelectedForegroundStyle id="287" noStroke="false" color="255,204,0" lineWidth="1.0" joinStyle="JOIN_MITER" capStyle="CAP_SQUARE" dashStyle="PLAIN_STROKE" useTransparency="false" transparencyLevel="0.5" />
-        <SelectedColorBackgroundStyle id="288" color="255,255,204" useTransparency="false" transparencyLevel="0.5" />
-        <FocusedForegroundStyle id="289" noStroke="false" color="255,204,0" lineWidth="1.0" joinStyle="JOIN_MITER" capStyle="CAP_SQUARE" dashStyle="PLAIN_STROKE" useTransparency="false" transparencyLevel="0.5" />
-        <FocusedColorBackgroundStyle id="290" color="255,255,204" useTransparency="false" transparencyLevel="0.5" />
-        <Border id="291" top="20" bottom="20" left="20" right="20" />
-        <CircleShape idref="141" />
-        <ShadowStyle id="292" drawShadow="true" shadowDarkness="150" shadowDepth="2" shadowBlur="4" />
-        <TextStyle id="293" font="Lucida Sans,0,11" color="0,0,0" orientation="0" isBackgroundColored="false" backgroundColor="255,255,255" />
-      </ArtifactFromShapeGraphicalRepresentation>
-      <ArtifactToShapeGraphicalRepresentation id="294" className="org.openflexo.vpm.view.widget.EditionPatternConnectorToArtefactGR" x="350.0" y="80.0" width="20.0" height="20.0" minimalWidth="0.0" minimalHeight="0.0" maximalWidth="Infinity" maximalHeight="Infinity" relativeTextX="0.5" relativeTextY="0.5" lineWrap="true" locationConstraints="FREELY_MOVABLE" dimensionConstraints="CONSTRAINED_DIMENSIONS" adjustMinimalWidthToLabelWidth="true" adjustMinimalHeightToLabelHeight="true" adjustMaximalWidthToLabelWidth="false" adjustMaximalHeightToLabelHeight="false" hasSelectedForeground="false" hasSelectedBackground="false" hasFocusedForeground="false" hasFocusedBackground="false" isFloatingLabel="true" allowToLeaveBounds="false" identifier="object_1" layer="1" hasText="true" isMultilineAllowed="true" continuousTextEditing="true" absoluteTextX="0.0" absoluteTextY="0.0" paragraphAlignment="CENTER" horizontalTextAlignment="CENTER" verticalTextAlignment="MIDDLE" isSelectable="false" isFocusable="true" drawControlPointsWhenFocused="true" drawControlPointsWhenSelected="true" isReadOnly="false" isLabelEditable="true" isVisible="true">
-        <ForegroundStyle id="295" noStroke="false" color="255,204,0" lineWidth="1.0" joinStyle="JOIN_MITER" capStyle="CAP_SQUARE" dashStyle="PLAIN_STROKE" useTransparency="false" transparencyLevel="0.5" />
-        <ColorBackgroundStyle id="296" color="255,255,204" useTransparency="false" transparencyLevel="0.5" />
-        <SelectedForegroundStyle id="297" noStroke="false" color="255,204,0" lineWidth="1.0" joinStyle="JOIN_MITER" capStyle="CAP_SQUARE" dashStyle="PLAIN_STROKE" useTransparency="false" transparencyLevel="0.5" />
-        <SelectedColorBackgroundStyle id="298" color="255,255,204" useTransparency="false" transparencyLevel="0.5" />
-        <FocusedForegroundStyle id="299" noStroke="false" color="255,204,0" lineWidth="1.0" joinStyle="JOIN_MITER" capStyle="CAP_SQUARE" dashStyle="PLAIN_STROKE" useTransparency="false" transparencyLevel="0.5" />
-        <FocusedColorBackgroundStyle id="300" color="255,255,204" useTransparency="false" transparencyLevel="0.5" />
-        <Border id="301" top="20" bottom="20" left="20" right="20" />
-        <CircleShape idref="141" />
-        <ShadowStyle id="302" drawShadow="true" shadowDarkness="150" shadowDepth="2" shadowBlur="4" />
-        <TextStyle id="303" font="Lucida Sans,0,11" color="0,0,0" orientation="0" isBackgroundColored="false" backgroundColor="255,255,255" />
-      </ArtifactToShapeGraphicalRepresentation>
-      <GRSpec id="304" featureName="label" value="associationRelationship.annotation" readOnly="false" />
-    </ContainedConnectorPatternRole>
-    <PrimaryConceptIndividualPatternRole idref="276" />
-    <PrimaryRepresentationConnectorPatternRole idref="277" />
-    <Inspector id="305" inspectorTitle="AssociationRelationship">
-      <TextField id="306" label="Annotation" name="Annotation" readOnly="false" data="associationRelationship.annotation" />
-      <TextArea id="307" label="documentation" name="documentation" readOnly="false" data="associationRelationship.documentation" />
-      <Individual id="308" conceptURI="http://www.bolton.ac.uk/archimate#ArchimateElement" renderer="individual.name" label="source" name="source" readOnly="false" data="associationRelationship.source" />
-      <Individual id="309" conceptURI="http://www.bolton.ac.uk/archimate#ArchimateElement" renderer="individual.name" label="target" name="target" readOnly="false" data="associationRelationship.target" />
-    </Inspector>
-  </EditionPattern>
-  <EditionPattern id="310" name="InfluenceElements" parentEditionPattern="http://www.agilebirds.com/openflexo/ViewPoints/Archimate/Principle.owl#ArchimateElements">
-    <ContainedShapePatternRole id="311" exampleLabel="label" patternRole="shape">
-      <ShapeGraphicalRepresentation id="312" className="org.openflexo.vpm.view.widget.EditionPatternPreviewShapeGR" x="160.0" y="40.0" width="80.0" height="50.0" minimalWidth="0.0" minimalHeight="0.0" maximalWidth="Infinity" maximalHeight="Infinity" relativeTextX="0.5" relativeTextY="0.5" lineWrap="true" locationConstraints="FREELY_MOVABLE" dimensionConstraints="FREELY_RESIZABLE" adjustMinimalWidthToLabelWidth="true" adjustMinimalHeightToLabelHeight="true" adjustMaximalWidthToLabelWidth="false" adjustMaximalHeightToLabelHeight="false" hasSelectedForeground="false" hasSelectedBackground="false" hasFocusedForeground="false" hasFocusedBackground="false" isFloatingLabel="false" allowToLeaveBounds="false" identifier="object_0" layer="1" hasText="true" isMultilineAllowed="true" continuousTextEditing="true" absoluteTextX="0.0" absoluteTextY="0.0" paragraphAlignment="CENTER" horizontalTextAlignment="CENTER" verticalTextAlignment="MIDDLE" isSelectable="true" isFocusable="true" drawControlPointsWhenFocused="true" drawControlPointsWhenSelected="true" isReadOnly="false" isLabelEditable="true" isVisible="true">
-        <ForegroundStyle id="313" noStroke="false" color="0,0,0" lineWidth="1.0" joinStyle="JOIN_MITER" capStyle="CAP_SQUARE" dashStyle="PLAIN_STROKE" useTransparency="false" transparencyLevel="0.5" />
-        <ColorBackgroundStyle id="314" color="192,192,192" useTransparency="false" transparencyLevel="0.5" />
-        <SelectedForegroundStyle id="315" noStroke="false" color="0,0,0" lineWidth="1.0" joinStyle="JOIN_MITER" capStyle="CAP_SQUARE" dashStyle="PLAIN_STROKE" useTransparency="false" transparencyLevel="0.5" />
-        <SelectedColorBackgroundStyle id="316" color="192,192,192" useTransparency="false" transparencyLevel="0.5" />
-        <FocusedForegroundStyle id="317" noStroke="false" color="0,0,0" lineWidth="1.0" joinStyle="JOIN_MITER" capStyle="CAP_SQUARE" dashStyle="PLAIN_STROKE" useTransparency="false" transparencyLevel="0.5" />
-        <FocusedColorBackgroundStyle id="318" color="192,192,192" useTransparency="false" transparencyLevel="0.5" />
-        <Border id="319" top="20" bottom="20" left="20" right="20" />
-        <RectangleShape idref="261" />
-        <ShadowStyle id="320" drawShadow="true" shadowDarkness="150" shadowDepth="2" shadowBlur="4" />
-        <TextStyle id="321" font="SansSerif,1,11" color="0,0,0" orientation="0" isBackgroundColored="false" backgroundColor="255,255,255" />
-      </ShapeGraphicalRepresentation>
-    </ContainedShapePatternRole>
-    <ContainedIndividualPatternRole id="322" ontologicType="http://www.bolton.ac.uk/archimate#ArchimateElement" patternRole="InfluenceElement" />
-    <PrimaryConceptIndividualPatternRole idref="322" />
-    <PrimaryRepresentationShapePatternRole idref="311" />
-    <Inspector id="323" inspectorTitle="InfluenceElements" />
-  </EditionPattern>
-  <EditionPattern id="324" name="PrinciplesViewPoint">
-    <DropScheme id="325" target="top" name="dropMotivationViewPointAtTopLevel" label="dropMotivationViewPointAtTopLevel" skipConfirmationPanel="true" definePopupDefaultSize="false" width="800" height="600">
-      <URIParameter id="326" base="&quot;PrinciplesViewPoint&quot;" name="uri" label="uri" usePaletteLabelAsDefaultValue="false" isRequired="true" />
-      <AddIndividual id="327" individualName="parameters.uri" assignation="principlesViewPoint">
-        <DataPropertyAssertion id="328" dataPropertyURI="http://www.bolton.ac.uk/archimate#viewpointTitle" value="&quot;Title of the view&quot;" />
-        <DataPropertyAssertion id="329" dataPropertyURI="http://www.bolton.ac.uk/archimate#documentation" value="&quot;Please define here the purpose of the view&quot;" />
-        <DataPropertyAssertion id="330" dataPropertyURI="http://www.bolton.ac.uk/archimate#viewpointVersion" value="&quot;0.1&quot;" />
-        <DataPropertyAssertion id="331" dataPropertyURI="http://www.bolton.ac.uk/archimate#author" value="&quot;Author&quot;" />
-      </AddIndividual>
-      <AddShape id="332" container="topLevel" extendParentBoundsToHostThisShape="false" assignation="shape" />
-      <AddShape id="333" container="topLevel" extendParentBoundsToHostThisShape="false" assignation="titleShape" />
-      <AddShape id="334" extendParentBoundsToHostThisShape="false" assignation="documentationShape" />
-      <AddShape id="335" extendParentBoundsToHostThisShape="false" assignation="versionShape" />
-      <AddShape id="336" extendParentBoundsToHostThisShape="false" assignation="authorShape" />
-      <AddShape id="337" container="topLevel" extendParentBoundsToHostThisShape="false" assignation="imageShape" />
-      <AddShape id="338" extendParentBoundsToHostThisShape="false" assignation="viewPointNameShape" />
-    </DropScheme>
-    <DeletionScheme id="339" name="deletion" label="deletion" skipConfirmationPanel="false" definePopupDefaultSize="false" width="800" height="600">
-      <DeleteAction id="340" object="principlesViewPoint" />
-      <DeleteAction id="341" object="imageShape" />
-      <DeleteAction id="342" object="titleShape" />
-      <DeleteAction id="343" object="authorShape" />
-      <DeleteAction id="344" object="versionShape" />
-      <DeleteAction id="345" object="documentationShape" />
-      <DeleteAction id="346" object="viewPointNameShape" />
-      <DeleteAction id="347" object="shape" />
-    </DeletionScheme>
-    <ContainedIndividualPatternRole id="348" ontologicType="http://www.bolton.ac.uk/archimate#PrinciplesViewPoint" patternRole="principlesViewPoint" />
-    <ContainedShapePatternRole id="349" exampleLabel="" patternRole="shape">
-      <ShapeGraphicalRepresentation id="350" className="org.openflexo.vpm.view.widget.EditionPatternPreviewShapeGR" x="10.0" y="7.001446873763314" width="409.9119270364426" height="233.86785219628024" minimalWidth="0.0" minimalHeight="0.0" maximalWidth="Infinity" maximalHeight="Infinity" relativeTextX="0.5" relativeTextY="0.5" lineWrap="false" locationConstraints="FREELY_MOVABLE" dimensionConstraints="FREELY_RESIZABLE" adjustMinimalWidthToLabelWidth="true" adjustMinimalHeightToLabelHeight="true" adjustMaximalWidthToLabelWidth="false" adjustMaximalHeightToLabelHeight="false" hasSelectedForeground="false" hasSelectedBackground="false" hasFocusedForeground="false" hasFocusedBackground="false" isFloatingLabel="false" allowToLeaveBounds="true" identifier="object_0" layer="1" hasText="true" isMultilineAllowed="false" continuousTextEditing="true" absoluteTextX="0.0" absoluteTextY="0.0" paragraphAlignment="JUSTIFY" horizontalTextAlignment="LEFT" verticalTextAlignment="MIDDLE" isSelectable="true" isFocusable="true" drawControlPointsWhenFocused="true" drawControlPointsWhenSelected="true" isReadOnly="false" isLabelEditable="true" isVisible="true">
-        <ForegroundStyle id="351" noStroke="false" color="102,102,102" lineWidth="1.2999999985098838" joinStyle="JOIN_MITER" capStyle="CAP_SQUARE" dashStyle="PLAIN_STROKE" useTransparency="false" transparencyLevel="0.5" />
-        <ColorGradientBackgroundStyle id="352" color1="225,225,225" color2="255,255,255" direction="NORTH_SOUTH" useTransparency="false" transparencyLevel="0.5" />
-        <SelectedForegroundStyle id="353" noStroke="false" color="0,0,0" lineWidth="1.0" joinStyle="JOIN_MITER" capStyle="CAP_SQUARE" dashStyle="PLAIN_STROKE" useTransparency="false" transparencyLevel="0.5" />
-        <SelectedColorBackgroundStyle id="354" color="254,247,217" useTransparency="false" transparencyLevel="0.5" />
-        <FocusedForegroundStyle id="355" noStroke="false" color="0,0,0" lineWidth="1.0" joinStyle="JOIN_MITER" capStyle="CAP_SQUARE" dashStyle="PLAIN_STROKE" useTransparency="false" transparencyLevel="0.5" />
-        <FocusedColorBackgroundStyle id="356" color="254,247,217" useTransparency="false" transparencyLevel="0.5" />
-        <Border id="357" top="20" bottom="20" left="20" right="20" />
-        <RectangleShape id="358" isRounded="true" arcSize="20.0" />
-        <ShadowStyle id="359" drawShadow="true" shadowDarkness="150" shadowDepth="2" shadowBlur="4" />
-        <TextStyle id="360" font="Lucida Sans,0,11" color="0,0,0" orientation="0" isBackgroundColored="false" backgroundColor="255,255,255" />
-      </ShapeGraphicalRepresentation>
-    </ContainedShapePatternRole>
-    <ContainedShapePatternRole id="361" exampleLabel="" patternRole="imageShape">
-      <ShapeGraphicalRepresentation id="362" className="org.openflexo.vpm.view.widget.EditionPatternPreviewShapeGR" x="299.9119270364426" y="10.0" width="100.0" height="100.0" minimalWidth="0.0" minimalHeight="0.0" maximalWidth="Infinity" maximalHeight="Infinity" relativeTextX="0.5" relativeTextY="0.5" lineWrap="false" locationConstraints="UNMOVABLE" dimensionConstraints="FREELY_RESIZABLE" adjustMinimalWidthToLabelWidth="true" adjustMinimalHeightToLabelHeight="true" adjustMaximalWidthToLabelWidth="false" adjustMaximalHeightToLabelHeight="false" hasSelectedForeground="false" hasSelectedBackground="false" hasFocusedForeground="false" hasFocusedBackground="false" isFloatingLabel="false" allowToLeaveBounds="true" xConstraints="(parent.width - 110)" yConstraints="10" identifier="object_0_0" layer="2" hasText="true" isMultilineAllowed="false" continuousTextEditing="true" absoluteTextX="0.0" absoluteTextY="0.0" paragraphAlignment="CENTER" horizontalTextAlignment="CENTER" verticalTextAlignment="MIDDLE" isSelectable="false" isFocusable="false" drawControlPointsWhenFocused="true" drawControlPointsWhenSelected="true" isReadOnly="false" isLabelEditable="true" isVisible="true">
-        <ForegroundStyle id="363" noStroke="true" color="0,0,0" lineWidth="1.0" joinStyle="JOIN_MITER" capStyle="CAP_SQUARE" dashStyle="PLAIN_STROKE" useTransparency="false" transparencyLevel="0.5" />
-        <ImageBackgroundStyle id="364" imageFile="Screenshot.png" scaleX="0.4830917874396135" scaleY="0.6024096385542169" deltaX="0.0" deltaY="0.0" imageBackgroundType="TRANSPARENT" imageBackgroundColor="255,255,255" fitToShape="true" useTransparency="false" transparencyLevel="0.5" />
-        <SelectedForegroundStyle id="365" noStroke="false" color="0,0,0" lineWidth="1.0" joinStyle="JOIN_MITER" capStyle="CAP_SQUARE" dashStyle="PLAIN_STROKE" useTransparency="false" transparencyLevel="0.5" />
-        <SelectedColorBackgroundStyle id="366" color="254,247,217" useTransparency="false" transparencyLevel="0.5" />
-        <FocusedForegroundStyle id="367" noStroke="false" color="0,0,0" lineWidth="1.0" joinStyle="JOIN_MITER" capStyle="CAP_SQUARE" dashStyle="PLAIN_STROKE" useTransparency="false" transparencyLevel="0.5" />
-        <FocusedColorBackgroundStyle id="368" color="254,247,217" useTransparency="false" transparencyLevel="0.5" />
-        <Border id="369" top="20" bottom="20" left="20" right="20" />
-        <RectangleShape idref="261" />
-        <ShadowStyle id="370" drawShadow="false" shadowDarkness="150" shadowDepth="2" shadowBlur="4" />
-        <TextStyle id="371" font="Lucida Sans,0,11" color="0,0,0" orientation="0" isBackgroundColored="false" backgroundColor="255,255,255" />
-      </ShapeGraphicalRepresentation>
-      <ParentShapePatternRole idref="349" />
-    </ContainedShapePatternRole>
-    <ContainedShapePatternRole id="372" exampleLabel="Title of the view" patternRole="titleShape">
-      <ShapeGraphicalRepresentation id="373" className="org.openflexo.vpm.view.widget.EditionPatternPreviewShapeGR" x="10.0" y="15.0" width="289.9119270364426" height="20.0" minimalWidth="0.0" minimalHeight="0.0" maximalWidth="Infinity" maximalHeight="Infinity" relativeTextX="0.0" relativeTextY="0.5" lineWrap="true" locationConstraints="UNMOVABLE" dimensionConstraints="UNRESIZABLE" adjustMinimalWidthToLabelWidth="false" adjustMinimalHeightToLabelHeight="false" adjustMaximalWidthToLabelWidth="false" adjustMaximalHeightToLabelHeight="false" hasSelectedForeground="false" hasSelectedBackground="false" hasFocusedForeground="false" hasFocusedBackground="false" isFloatingLabel="false" allowToLeaveBounds="true" xConstraints="10" yConstraints="15" widthConstraints="(parent.width - 120)" heightConstraints="20" identifier="object_0_1" layer="2" hasText="true" isMultilineAllowed="false" continuousTextEditing="true" absoluteTextX="0.0" absoluteTextY="0.0" paragraphAlignment="JUSTIFY" horizontalTextAlignment="LEFT" verticalTextAlignment="MIDDLE" isSelectable="false" isFocusable="false" drawControlPointsWhenFocused="true" drawControlPointsWhenSelected="true" isReadOnly="false" isLabelEditable="true" isVisible="true">
-        <ForegroundStyle id="374" noStroke="true" color="0,0,0" lineWidth="1.0" joinStyle="JOIN_MITER" capStyle="CAP_SQUARE" dashStyle="PLAIN_STROKE" useTransparency="false" transparencyLevel="0.5" />
-        <ColorBackgroundStyle id="375" color="200,255,200" useTransparency="true" transparencyLevel="0.0" />
-        <SelectedForegroundStyle id="376" noStroke="false" color="0,0,0" lineWidth="1.0" joinStyle="JOIN_MITER" capStyle="CAP_SQUARE" dashStyle="PLAIN_STROKE" useTransparency="false" transparencyLevel="0.5" />
-        <SelectedColorBackgroundStyle id="377" color="254,247,217" useTransparency="false" transparencyLevel="0.5" />
-        <FocusedForegroundStyle id="378" noStroke="false" color="0,0,0" lineWidth="1.0" joinStyle="JOIN_MITER" capStyle="CAP_SQUARE" dashStyle="PLAIN_STROKE" useTransparency="false" transparencyLevel="0.5" />
-        <FocusedColorBackgroundStyle id="379" color="254,247,217" useTransparency="false" transparencyLevel="0.5" />
-        <Border id="380" top="20" bottom="20" left="20" right="20" />
-        <RectangleShape idref="261" />
-        <ShadowStyle id="381" drawShadow="false" shadowDarkness="150" shadowDepth="2" shadowBlur="4" />
-        <TextStyle id="382" font="Lucida Sans Demibold,1,16" color="0,0,0" orientation="0" isBackgroundColored="false" backgroundColor="255,255,255" />
-      </ShapeGraphicalRepresentation>
-      <ParentShapePatternRole idref="349" />
-      <GRSpec id="383" featureName="label" value="principlesViewPoint.viewpointTitle" readOnly="false" />
-    </ContainedShapePatternRole>
-    <ContainedShapePatternRole id="384" exampleLabel="Author" patternRole="authorShape">
-      <ShapeGraphicalRepresentation id="385" className="org.openflexo.vpm.view.widget.EditionPatternPreviewShapeGR" x="10.0" y="70.0" width="289.9119270364426" height="15.0" minimalWidth="0.0" minimalHeight="0.0" maximalWidth="Infinity" maximalHeight="Infinity" relativeTextX="0.0" relativeTextY="0.5" lineWrap="true" locationConstraints="UNMOVABLE" dimensionConstraints="UNRESIZABLE" adjustMinimalWidthToLabelWidth="false" adjustMinimalHeightToLabelHeight="false" adjustMaximalWidthToLabelWidth="false" adjustMaximalHeightToLabelHeight="false" hasSelectedForeground="false" hasSelectedBackground="false" hasFocusedForeground="false" hasFocusedBackground="false" isFloatingLabel="false" allowToLeaveBounds="true" xConstraints="10" yConstraints="70" widthConstraints="(parent.width - 120)" heightConstraints="15" identifier="object_0_2" layer="2" hasText="true" isMultilineAllowed="false" continuousTextEditing="true" absoluteTextX="0.0" absoluteTextY="0.0" paragraphAlignment="JUSTIFY" horizontalTextAlignment="LEFT" verticalTextAlignment="MIDDLE" isSelectable="false" isFocusable="false" drawControlPointsWhenFocused="true" drawControlPointsWhenSelected="true" isReadOnly="false" isLabelEditable="true" isVisible="true">
-        <ForegroundStyle id="386" noStroke="true" color="0,0,0" lineWidth="1.0" joinStyle="JOIN_MITER" capStyle="CAP_SQUARE" dashStyle="PLAIN_STROKE" useTransparency="false" transparencyLevel="0.5" />
-        <ColorBackgroundStyle id="387" color="200,255,200" useTransparency="true" transparencyLevel="0.0" />
-        <SelectedForegroundStyle id="388" noStroke="false" color="0,0,0" lineWidth="1.0" joinStyle="JOIN_MITER" capStyle="CAP_SQUARE" dashStyle="PLAIN_STROKE" useTransparency="false" transparencyLevel="0.5" />
-        <SelectedColorBackgroundStyle id="389" color="254,247,217" useTransparency="false" transparencyLevel="0.5" />
-        <FocusedForegroundStyle id="390" noStroke="false" color="0,0,0" lineWidth="1.0" joinStyle="JOIN_MITER" capStyle="CAP_SQUARE" dashStyle="PLAIN_STROKE" useTransparency="false" transparencyLevel="0.5" />
-        <FocusedColorBackgroundStyle id="391" color="254,247,217" useTransparency="false" transparencyLevel="0.5" />
-        <Border id="392" top="20" bottom="20" left="20" right="20" />
-        <RectangleShape idref="261" />
-        <ShadowStyle id="393" drawShadow="false" shadowDarkness="150" shadowDepth="2" shadowBlur="4" />
-        <TextStyle id="394" font="Lucida Sans Demibold,0,13" color="0,0,0" orientation="0" isBackgroundColored="false" backgroundColor="255,255,255" />
-      </ShapeGraphicalRepresentation>
-      <ParentShapePatternRole idref="349" />
-      <GRSpec id="395" featureName="label" value="principlesViewPoint.author" readOnly="false" />
-    </ContainedShapePatternRole>
-    <ContainedShapePatternRole id="396" exampleLabel="Version" patternRole="versionShape">
-      <ShapeGraphicalRepresentation id="397" className="org.openflexo.vpm.view.widget.EditionPatternPreviewShapeGR" x="10.0" y="90.0" width="289.9119270364426" height="15.0" minimalWidth="0.0" minimalHeight="0.0" maximalWidth="Infinity" maximalHeight="Infinity" relativeTextX="0.0" relativeTextY="0.5" lineWrap="true" locationConstraints="UNMOVABLE" dimensionConstraints="UNRESIZABLE" adjustMinimalWidthToLabelWidth="false" adjustMinimalHeightToLabelHeight="false" adjustMaximalWidthToLabelWidth="false" adjustMaximalHeightToLabelHeight="false" hasSelectedForeground="false" hasSelectedBackground="false" hasFocusedForeground="false" hasFocusedBackground="false" isFloatingLabel="false" allowToLeaveBounds="true" xConstraints="10" yConstraints="90" widthConstraints="(parent.width - 120)" heightConstraints="15" identifier="object_0_3" layer="2" hasText="true" isMultilineAllowed="false" continuousTextEditing="true" absoluteTextX="0.0" absoluteTextY="0.0" paragraphAlignment="JUSTIFY" horizontalTextAlignment="LEFT" verticalTextAlignment="MIDDLE" isSelectable="false" isFocusable="false" drawControlPointsWhenFocused="true" drawControlPointsWhenSelected="true" isReadOnly="false" isLabelEditable="true" isVisible="true">
-        <ForegroundStyle id="398" noStroke="true" color="0,0,0" lineWidth="1.0" joinStyle="JOIN_MITER" capStyle="CAP_SQUARE" dashStyle="PLAIN_STROKE" useTransparency="false" transparencyLevel="0.5" />
-        <ColorBackgroundStyle id="399" color="200,255,200" useTransparency="true" transparencyLevel="0.0" />
-        <SelectedForegroundStyle id="400" noStroke="false" color="0,0,0" lineWidth="1.0" joinStyle="JOIN_MITER" capStyle="CAP_SQUARE" dashStyle="PLAIN_STROKE" useTransparency="false" transparencyLevel="0.5" />
-        <SelectedColorBackgroundStyle id="401" color="254,247,217" useTransparency="false" transparencyLevel="0.5" />
-        <FocusedForegroundStyle id="402" noStroke="false" color="0,0,0" lineWidth="1.0" joinStyle="JOIN_MITER" capStyle="CAP_SQUARE" dashStyle="PLAIN_STROKE" useTransparency="false" transparencyLevel="0.5" />
-        <FocusedColorBackgroundStyle id="403" color="254,247,217" useTransparency="false" transparencyLevel="0.5" />
-        <Border id="404" top="20" bottom="20" left="20" right="20" />
-        <RectangleShape idref="261" />
-        <ShadowStyle id="405" drawShadow="false" shadowDarkness="150" shadowDepth="2" shadowBlur="4" />
-        <TextStyle id="406" font="Lucida Sans Regular,2,11" color="0,0,0" orientation="0" isBackgroundColored="false" backgroundColor="255,255,255" />
-      </ShapeGraphicalRepresentation>
-      <ParentShapePatternRole idref="349" />
-      <GRSpec id="407" featureName="label" value="principlesViewPoint.viewpointVersion" readOnly="false" />
-    </ContainedShapePatternRole>
-    <ContainedShapePatternRole id="408" exampleLabel="chbdhcbd&#xA;cjdkc&#xA;cdkcndjk&#xA;kcdncnd&#xA;" patternRole="documentationShape">
-      <ShapeGraphicalRepresentation id="409" className="org.openflexo.vpm.view.widget.EditionPatternPreviewShapeGR" x="10.0" y="110.0" width="389.9119270364426" height="113.86785219628024" minimalWidth="0.0" minimalHeight="0.0" maximalWidth="Infinity" maximalHeight="Infinity" relativeTextX="0.0" relativeTextY="0.5" lineWrap="true" locationConstraints="UNMOVABLE" dimensionConstraints="UNRESIZABLE" adjustMinimalWidthToLabelWidth="true" adjustMinimalHeightToLabelHeight="true" adjustMaximalWidthToLabelWidth="false" adjustMaximalHeightToLabelHeight="false" hasSelectedForeground="false" hasSelectedBackground="false" hasFocusedForeground="false" hasFocusedBackground="false" isFloatingLabel="false" allowToLeaveBounds="true" xConstraints="10" yConstraints="110" widthConstraints="(parent.width - 20)" heightConstraints="(parent.height - 120)" identifier="object_0_4" layer="2" hasText="true" isMultilineAllowed="true" continuousTextEditing="true" absoluteTextX="0.0" absoluteTextY="0.0" paragraphAlignment="JUSTIFY" horizontalTextAlignment="LEFT" verticalTextAlignment="MIDDLE" isSelectable="false" isFocusable="false" drawControlPointsWhenFocused="true" drawControlPointsWhenSelected="true" isReadOnly="false" isLabelEditable="true" isVisible="true">
-        <ForegroundStyle id="410" noStroke="true" color="0,0,0" lineWidth="1.0" joinStyle="JOIN_MITER" capStyle="CAP_SQUARE" dashStyle="PLAIN_STROKE" useTransparency="false" transparencyLevel="0.5" />
-        <ColorBackgroundStyle id="411" color="200,255,200" useTransparency="true" transparencyLevel="0.0" />
-        <SelectedForegroundStyle id="412" noStroke="false" color="0,0,0" lineWidth="1.0" joinStyle="JOIN_MITER" capStyle="CAP_SQUARE" dashStyle="PLAIN_STROKE" useTransparency="false" transparencyLevel="0.5" />
-        <SelectedColorBackgroundStyle id="413" color="254,247,217" useTransparency="false" transparencyLevel="0.5" />
-        <FocusedForegroundStyle id="414" noStroke="false" color="0,0,0" lineWidth="1.0" joinStyle="JOIN_MITER" capStyle="CAP_SQUARE" dashStyle="PLAIN_STROKE" useTransparency="false" transparencyLevel="0.5" />
-        <FocusedColorBackgroundStyle id="415" color="254,247,217" useTransparency="false" transparencyLevel="0.5" />
-        <Border id="416" top="20" bottom="20" left="20" right="20" />
-        <RectangleShape idref="261" />
-        <ShadowStyle id="417" drawShadow="false" shadowDarkness="150" shadowDepth="2" shadowBlur="4" />
-        <TextStyle id="418" font="Lucida Sans,0,11" color="0,0,0" orientation="0" isBackgroundColored="false" backgroundColor="255,255,255" />
-      </ShapeGraphicalRepresentation>
-      <ParentShapePatternRole idref="349" />
-      <GRSpec id="419" featureName="label" value="principlesViewPoint.documentation" readOnly="false" />
-    </ContainedShapePatternRole>
-    <ContainedShapePatternRole id="420" exampleLabel="Principles ViewPoint" patternRole="viewPointNameShape">
-      <ShapeGraphicalRepresentation id="421" className="org.openflexo.vpm.view.widget.EditionPatternPreviewShapeGR" x="10.0" y="35.0" width="289.9119270364426" height="17.0" minimalWidth="0.0" minimalHeight="0.0" maximalWidth="Infinity" maximalHeight="Infinity" relativeTextX="0.0" relativeTextY="0.5" lineWrap="false" locationConstraints="UNMOVABLE" dimensionConstraints="UNRESIZABLE" adjustMinimalWidthToLabelWidth="true" adjustMinimalHeightToLabelHeight="true" adjustMaximalWidthToLabelWidth="false" adjustMaximalHeightToLabelHeight="false" hasSelectedForeground="false" hasSelectedBackground="false" hasFocusedForeground="false" hasFocusedBackground="false" isFloatingLabel="false" allowToLeaveBounds="true" xConstraints="10" yConstraints="35" widthConstraints="(parent.width - 120)" heightConstraints="15" identifier="object_0_5" layer="2" hasText="true" isMultilineAllowed="false" continuousTextEditing="true" absoluteTextX="0.0" absoluteTextY="0.0" paragraphAlignment="JUSTIFY" horizontalTextAlignment="LEFT" verticalTextAlignment="MIDDLE" isSelectable="false" isFocusable="false" drawControlPointsWhenFocused="true" drawControlPointsWhenSelected="true" isReadOnly="false" isLabelEditable="true" isVisible="true">
-        <ForegroundStyle id="422" noStroke="true" color="0,0,0" lineWidth="1.0" joinStyle="JOIN_MITER" capStyle="CAP_SQUARE" dashStyle="PLAIN_STROKE" useTransparency="false" transparencyLevel="0.5" />
-        <NoneBackgroundStyle id="423" useTransparency="false" transparencyLevel="0.5" />
-        <SelectedForegroundStyle id="424" noStroke="false" color="0,0,0" lineWidth="1.0" joinStyle="JOIN_MITER" capStyle="CAP_SQUARE" dashStyle="PLAIN_STROKE" useTransparency="false" transparencyLevel="0.5" />
-        <SelectedColorBackgroundStyle id="425" color="254,247,217" useTransparency="false" transparencyLevel="0.5" />
-        <FocusedForegroundStyle id="426" noStroke="false" color="0,0,0" lineWidth="1.0" joinStyle="JOIN_MITER" capStyle="CAP_SQUARE" dashStyle="PLAIN_STROKE" useTransparency="false" transparencyLevel="0.5" />
-        <FocusedColorBackgroundStyle id="427" color="254,247,217" useTransparency="false" transparencyLevel="0.5" />
-        <Border id="428" top="20" bottom="20" left="20" right="20" />
-        <RectangleShape idref="261" />
-        <ShadowStyle id="429" drawShadow="false" shadowDarkness="150" shadowDepth="2" shadowBlur="4" />
-        <TextStyle id="430" font="Lucida Sans Demibold,3,14" color="102,102,102" orientation="0" isBackgroundColored="false" backgroundColor="255,255,255" />
-      </ShapeGraphicalRepresentation>
-      <ParentShapePatternRole idref="349" />
-      <GRSpec id="431" featureName="label" value="&quot;Principles ViewPointt&quot;" readOnly="true" />
-    </ContainedShapePatternRole>
-    <PrimaryConceptIndividualPatternRole idref="348" />
-    <PrimaryRepresentationShapePatternRole idref="349" />
-    <Inspector id="432" inspectorTitle="MotivationViewPoint">
-      <Individual id="433" label="individual" name="individual" readOnly="false" data="principlesViewPoint" />
-      <TextField id="434" label="Title" name="Title" readOnly="false" data="principlesViewPoint.viewpointTitle" />
-      <TextField id="435" label="author" name="author" readOnly="false" data="principlesViewPoint.author" />
-      <TextField id="436" label="version" name="version" readOnly="false" data="principlesViewPoint.viewpointVersion" />
-      <TextArea id="437" label="documentation" name="documentation" readOnly="false" data="principlesViewPoint.documentation" />
-    </Inspector>
-  </EditionPattern>
-  <EditionPattern id="438" name="SpecializationRelationship">
-    <LinkScheme id="439" fromTarget="http://www.agilebirds.com/openflexo/ViewPoints/Archimate/Principle.owl#Goal" toTarget="http://www.agilebirds.com/openflexo/ViewPoints/Archimate/Principle.owl#Goal" isAvailableWithFloatingPalette="true" northDirectionSupported="true" eastDirectionSupported="true" southDirectionSupported="true" westDirectionSupported="true" name="linkGoalToGoalSpecialization" label="SpecializationRelationship" skipConfirmationPanel="true" definePopupDefaultSize="false" width="800" height="600">
-      <URIParameter id="440" base="&quot;Aggregation Relationship&quot;" name="uri" label="uri" usePaletteLabelAsDefaultValue="false" isRequired="true" />
-      <AddIndividual id="441" individualName="parameters.uri" assignation="SpecializationRelationship">
-        <ObjectPropertyAssertion id="442" objectPropertyURI="http://www.bolton.ac.uk/archimate#source" object="fromTarget.goal" />
-        <ObjectPropertyAssertion id="443" objectPropertyURI="http://www.bolton.ac.uk/archimate#target" object="toTarget.goal" />
-      </AddIndividual>
-      <AddConnector id="444" fromShape="fromTarget.shape" toShape="toTarget.shape" assignation="connector" />
-    </LinkScheme>
-    <LinkScheme id="445" fromTarget="http://www.agilebirds.com/openflexo/ViewPoints/Archimate/Principle.owl#Principle" toTarget="http://www.agilebirds.com/openflexo/ViewPoints/Archimate/Principle.owl#Principle" isAvailableWithFloatingPalette="true" northDirectionSupported="true" eastDirectionSupported="true" southDirectionSupported="true" westDirectionSupported="true" name="linkPrincipleToPrincipleSpecialization" label="SpecializationRelationship" skipConfirmationPanel="true" definePopupDefaultSize="false" width="800" height="600">
-      <URIParameter id="446" base="&quot;Aggregation Relationship&quot;" name="uri" label="uri" usePaletteLabelAsDefaultValue="false" isRequired="true" />
-      <AddIndividual id="447" individualName="parameters.uri" assignation="SpecializationRelationship">
-        <ObjectPropertyAssertion id="448" objectPropertyURI="http://www.bolton.ac.uk/archimate#source" object="fromTarget.principle" />
-        <ObjectPropertyAssertion id="449" objectPropertyURI="http://www.bolton.ac.uk/archimate#target" object="toTarget.principle" />
-      </AddIndividual>
-      <AddConnector id="450" fromShape="fromTarget.shape" toShape="toTarget.shape" assignation="connector" />
-    </LinkScheme>
-    <ContainedIndividualPatternRole id="451" ontologicType="http://www.bolton.ac.uk/archimate#SpecialisationRelationship" patternRole="SpecializationRelationship" />
-    <ContainedConnectorPatternRole id="452" exampleLabel="label" patternRole="connector">
-      <ConnectorGraphicalRepresentation id="453" className="org.openflexo.vpm.view.widget.EditionPatternPreviewConnectorGR" hasSelectedForeground="false" hasFocusedForeground="false" startSymbol="NONE" endSymbol="PLAIN_ARROW" middleSymbol="NONE" startSymbolSize="10.0" endSymbolSize="10.0" middleSymbolSize="10.0" relativeMiddleSymbolLocation="0.5" applyForegroundToSymbols="true" identifier="object_2" layer="64" hasText="true" isMultilineAllowed="true" continuousTextEditing="true" absoluteTextX="0.0" absoluteTextY="0.0" paragraphAlignment="CENTER" horizontalTextAlignment="CENTER" verticalTextAlignment="MIDDLE" isSelectable="true" isFocusable="true" drawControlPointsWhenFocused="true" drawControlPointsWhenSelected="true" isReadOnly="false" isLabelEditable="true" isVisible="true">
-        <ForegroundStyle id="454" noStroke="false" color="0,0,0" lineWidth="1.0" joinStyle="JOIN_MITER" capStyle="CAP_SQUARE" dashStyle="PLAIN_STROKE" useTransparency="false" transparencyLevel="0.5" />
-        <SelectedForegroundStyle id="455" noStroke="false" color="0,0,0" lineWidth="1.0" joinStyle="JOIN_MITER" capStyle="CAP_SQUARE" dashStyle="PLAIN_STROKE" useTransparency="false" transparencyLevel="0.5" />
-        <FocusedForegroundStyle id="456" noStroke="false" color="0,0,0" lineWidth="1.0" joinStyle="JOIN_MITER" capStyle="CAP_SQUARE" dashStyle="PLAIN_STROKE" useTransparency="false" transparencyLevel="0.5" />
-        <RectPolylinConnector id="457" rectPolylinConstraints="NONE" straightLineWhenPossible="true" adjustability="FULLY_ADJUSTABLE" startOrientation="EAST" endOrientation="WEST" isRounded="true" arcSize="10" isStartingLocationFixed="false" isEndingLocationFixed="false" isStartingLocationDraggable="true" isEndingLocationDraggable="true" />
-        <TextStyle id="458" font="Lucida Sans,0,11" color="0,0,0" orientation="0" isBackgroundColored="false" backgroundColor="255,255,255" />
-      </ConnectorGraphicalRepresentation>
-      <ArtifactFromShapeGraphicalRepresentation id="459" className="org.openflexo.vpm.view.widget.EditionPatternConnectorFromArtefactGR" x="7.0" y="1.0" width="20.0" height="20.0" minimalWidth="0.0" minimalHeight="0.0" maximalWidth="Infinity" maximalHeight="Infinity" relativeTextX="0.5" relativeTextY="0.5" lineWrap="true" locationConstraints="FREELY_MOVABLE" dimensionConstraints="CONSTRAINED_DIMENSIONS" adjustMinimalWidthToLabelWidth="true" adjustMinimalHeightToLabelHeight="true" adjustMaximalWidthToLabelWidth="false" adjustMaximalHeightToLabelHeight="false" hasSelectedForeground="false" hasSelectedBackground="false" hasFocusedForeground="false" hasFocusedBackground="false" isFloatingLabel="true" allowToLeaveBounds="false" identifier="object_0" layer="1" hasText="true" isMultilineAllowed="true" continuousTextEditing="true" absoluteTextX="0.0" absoluteTextY="0.0" paragraphAlignment="CENTER" horizontalTextAlignment="CENTER" verticalTextAlignment="MIDDLE" isSelectable="false" isFocusable="true" drawControlPointsWhenFocused="true" drawControlPointsWhenSelected="true" isReadOnly="false" isLabelEditable="true" isVisible="true">
-        <ForegroundStyle id="460" noStroke="false" color="255,204,0" lineWidth="1.0" joinStyle="JOIN_MITER" capStyle="CAP_SQUARE" dashStyle="PLAIN_STROKE" useTransparency="false" transparencyLevel="0.5" />
-        <ColorBackgroundStyle id="461" color="255,255,204" useTransparency="false" transparencyLevel="0.5" />
-        <SelectedForegroundStyle id="462" noStroke="false" color="255,204,0" lineWidth="1.0" joinStyle="JOIN_MITER" capStyle="CAP_SQUARE" dashStyle="PLAIN_STROKE" useTransparency="false" transparencyLevel="0.5" />
-        <SelectedColorBackgroundStyle id="463" color="255,255,204" useTransparency="false" transparencyLevel="0.5" />
-        <FocusedForegroundStyle id="464" noStroke="false" color="255,204,0" lineWidth="1.0" joinStyle="JOIN_MITER" capStyle="CAP_SQUARE" dashStyle="PLAIN_STROKE" useTransparency="false" transparencyLevel="0.5" />
-        <FocusedColorBackgroundStyle id="465" color="255,255,204" useTransparency="false" transparencyLevel="0.5" />
-        <Border id="466" top="20" bottom="20" left="20" right="20" />
-        <CircleShape idref="141" />
-        <ShadowStyle id="467" drawShadow="true" shadowDarkness="150" shadowDepth="2" shadowBlur="4" />
-        <TextStyle id="468" font="Lucida Sans,0,11" color="0,0,0" orientation="0" isBackgroundColored="false" backgroundColor="255,255,255" />
-      </ArtifactFromShapeGraphicalRepresentation>
-      <ArtifactToShapeGraphicalRepresentation id="469" className="org.openflexo.vpm.view.widget.EditionPatternConnectorToArtefactGR" x="296.0" y="2.0" width="20.0" height="20.0" minimalWidth="0.0" minimalHeight="0.0" maximalWidth="Infinity" maximalHeight="Infinity" relativeTextX="0.5" relativeTextY="0.5" lineWrap="true" locationConstraints="FREELY_MOVABLE" dimensionConstraints="CONSTRAINED_DIMENSIONS" adjustMinimalWidthToLabelWidth="true" adjustMinimalHeightToLabelHeight="true" adjustMaximalWidthToLabelWidth="false" adjustMaximalHeightToLabelHeight="false" hasSelectedForeground="false" hasSelectedBackground="false" hasFocusedForeground="false" hasFocusedBackground="false" isFloatingLabel="true" allowToLeaveBounds="false" identifier="object_1" layer="1" hasText="true" isMultilineAllowed="true" continuousTextEditing="true" absoluteTextX="0.0" absoluteTextY="0.0" paragraphAlignment="CENTER" horizontalTextAlignment="CENTER" verticalTextAlignment="MIDDLE" isSelectable="false" isFocusable="true" drawControlPointsWhenFocused="true" drawControlPointsWhenSelected="true" isReadOnly="false" isLabelEditable="true" isVisible="true">
-        <ForegroundStyle id="470" noStroke="false" color="255,204,0" lineWidth="1.0" joinStyle="JOIN_MITER" capStyle="CAP_SQUARE" dashStyle="PLAIN_STROKE" useTransparency="false" transparencyLevel="0.5" />
-        <ColorBackgroundStyle id="471" color="255,255,204" useTransparency="false" transparencyLevel="0.5" />
-        <SelectedForegroundStyle id="472" noStroke="false" color="255,204,0" lineWidth="1.0" joinStyle="JOIN_MITER" capStyle="CAP_SQUARE" dashStyle="PLAIN_STROKE" useTransparency="false" transparencyLevel="0.5" />
-        <SelectedColorBackgroundStyle id="473" color="255,255,204" useTransparency="false" transparencyLevel="0.5" />
-        <FocusedForegroundStyle id="474" noStroke="false" color="255,204,0" lineWidth="1.0" joinStyle="JOIN_MITER" capStyle="CAP_SQUARE" dashStyle="PLAIN_STROKE" useTransparency="false" transparencyLevel="0.5" />
-        <FocusedColorBackgroundStyle id="475" color="255,255,204" useTransparency="false" transparencyLevel="0.5" />
-        <Border id="476" top="20" bottom="20" left="20" right="20" />
-        <CircleShape idref="141" />
-        <ShadowStyle id="477" drawShadow="true" shadowDarkness="150" shadowDepth="2" shadowBlur="4" />
-        <TextStyle id="478" font="Lucida Sans,0,11" color="0,0,0" orientation="0" isBackgroundColored="false" backgroundColor="255,255,255" />
-      </ArtifactToShapeGraphicalRepresentation>
-      <GRSpec id="479" featureName="label" value="SpecializationRelationship.annotation" readOnly="false" />
-    </ContainedConnectorPatternRole>
-    <PrimaryConceptIndividualPatternRole idref="451" />
-    <PrimaryRepresentationConnectorPatternRole idref="452" />
-    <Inspector id="480" inspectorTitle="SpecializationRelationship">
-      <TextField id="481" label="Annotation" name="Annotation" readOnly="false" data="SpecializationRelationship.annotation" />
-      <TextArea id="482" label="documentation" name="documentation" readOnly="false" data="SpecializationRelationship.documentation" />
-      <Individual id="483" conceptURI="http://www.bolton.ac.uk/archimate#ArchimateElement" renderer="individual.name" label="source" name="source" readOnly="false" data="SpecializationRelationship.source" />
-      <Individual id="484" conceptURI="http://www.bolton.ac.uk/archimate#ArchimateElement" renderer="individual.name" label="target" name="target" readOnly="false" data="SpecializationRelationship.target" />
-    </Inspector>
-  </EditionPattern>
-  <LocalizedDictionary id="485">
-    <Localized id="486" key="Stakeholder" lang="English">Stakeholder</Localized>
-    <Localized id="487" key="Stakeholder" lang="French">Stakeholder</Localized>
-    <Localized id="488" key="Stakeholder" lang="Dutch">Stakeholder</Localized>
-    <Localized id="489" key="dropStakeholderAtTopLevel" lang="English">Drop Stakeholder At Top Level</Localized>
-    <Localized id="490" key="dropStakeholderAtTopLevel" lang="French">Drop Stakeholder At Top Level</Localized>
-    <Localized id="491" key="dropStakeholderAtTopLevel" lang="Dutch">Drop Stakeholder At Top Level</Localized>
-    <Localized id="492" key="uri" lang="English">URI</Localized>
-    <Localized id="493" key="uri" lang="French">URI</Localized>
-    <Localized id="494" key="uri" lang="Dutch">URI</Localized>
-    <Localized id="495" key="name" lang="English">Name</Localized>
-    <Localized id="496" key="name" lang="French">Nom</Localized>
-    <Localized id="497" key="name" lang="Dutch">Name</Localized>
-    <Localized id="498" key="documentation" lang="English">Documentation</Localized>
-    <Localized id="499" key="documentation" lang="French">Documentation</Localized>
-    <Localized id="500" key="documentation" lang="Dutch">Documentation</Localized>
-    <Localized id="501" key="individual" lang="English">Individual</Localized>
-    <Localized id="502" key="individual" lang="French">Individual</Localized>
-    <Localized id="503" key="individual" lang="Dutch">Individualdividual</Localized>
-    <Localized id="504" key="AggregationRelationship" lang="English">Aggregation Relationship</Localized>
-    <Localized id="505" key="AggregationRelationship" lang="French">AggregationRelationship</Localized>
-    <Localized id="506" key="AggregationRelationship" lang="Dutch">AggregationRelationship</Localized>
-    <Localized id="507" key="deletion" lang="English">Deletion</Localized>
-    <Localized id="508" key="deletion" lang="French">Effacement</Localized>
-    <Localized id="509" key="deletion" lang="Dutch">Deletion</Localized>
-    <Localized id="510" key="Driver" lang="English">Driver</Localized>
-    <Localized id="511" key="Driver" lang="French">Driver</Localized>
-    <Localized id="512" key="Driver" lang="Dutch">Driver</Localized>
-    <Localized id="513" key="dropDriverAtTopLevel" lang="English">Drop Driver At Top Level</Localized>
-    <Localized id="514" key="dropDriverAtTopLevel" lang="French">Drop Driver At Top Level</Localized>
-    <Localized id="515" key="dropDriverAtTopLevel" lang="Dutch">Drop Driver At Top Level</Localized>
-    <Localized id="516" key="Assessment" lang="English">Assessment</Localized>
-    <Localized id="517" key="Assessment" lang="French">Assessment</Localized>
-    <Localized id="518" key="Assessment" lang="Dutch">Assessment</Localized>
-    <Localized id="519" key="dropAssessmentAtTopLevel" lang="English">Drop Assessment At Top Level</Localized>
-    <Localized id="520" key="dropAssessmentAtTopLevel" lang="French">Drop Assessment At Top Level</Localized>
-    <Localized id="521" key="dropAssessmentAtTopLevel" lang="Dutch">Drop Assessment At Top Level</Localized>
-    <Localized id="522" key="Goal" lang="English">Goal</Localized>
-    <Localized id="523" key="Goal" lang="French">Goal</Localized>
-    <Localized id="524" key="Goal" lang="Dutch">Goal</Localized>
-    <Localized id="525" key="dropGoalAtTopLevel" lang="English">Drop Goal At Top Level</Localized>
-    <Localized id="526" key="dropGoalAtTopLevel" lang="French">Drop Goal At Top Level</Localized>
-    <Localized id="527" key="dropGoalAtTopLevel" lang="Dutch">Drop Goal At Top Level</Localized>
-    <Localized id="528" key="AggregationRelationship" lang="English">Aggregation Relationship</Localized>
-    <Localized id="529" key="AggregationRelationship" lang="French">Aggregation Relationship</Localized>
-    <Localized id="530" key="AggregationRelationship" lang="Dutch">Aggregation Relationship</Localized>
-    <Localized id="531" key="Requirement" lang="English">Requirement</Localized>
-    <Localized id="532" key="Requirement" lang="French">Requirement</Localized>
-    <Localized id="533" key="Requirement" lang="Dutch">Requirement</Localized>
-    <Localized id="534" key="dropRequirementAtTopLevel" lang="English">Drop Requirement At Top Level</Localized>
-    <Localized id="535" key="dropRequirementAtTopLevel" lang="French">Drop Requirement At Top Level</Localized>
-    <Localized id="536" key="dropRequirementAtTopLevel" lang="Dutch">Drop Requirement At Top Level</Localized>
-    <Localized id="537" key="Principle" lang="English">Principle</Localized>
-    <Localized id="538" key="Principle" lang="French">Principle</Localized>
-    <Localized id="539" key="Principle" lang="Dutch">Principle</Localized>
-    <Localized id="540" key="dropPrincipleAtTopLevel" lang="English">Drop Principle At Top Level</Localized>
-    <Localized id="541" key="dropPrincipleAtTopLevel" lang="French">Drop Principle At Top LevelpPrincipleAtTopLevel</Localized>
-    <Localized id="542" key="dropPrincipleAtTopLevel" lang="Dutch">Drop Principle At Top Level</Localized>
-    <Localized id="543" key="Constraint" lang="English">Constraint</Localized>
-    <Localized id="544" key="Constraint" lang="French">Constraint</Localized>
-    <Localized id="545" key="Constraint" lang="Dutch">Constraint</Localized>
-    <Localized id="546" key="dropConstraintAtTopLevel" lang="English">Drop Constraint At Top Level</Localized>
-    <Localized id="547" key="dropConstraintAtTopLevel" lang="French">Drop Constraint At Top Level</Localized>
-    <Localized id="548" key="dropConstraintAtTopLevel" lang="Dutch">Drop Constraint At Top Level</Localized>
-    <Localized id="549" key="RealisationRelationship" lang="English">Realisation Relationship</Localized>
-    <Localized id="550" key="RealisationRelationship" lang="French">Realisation Relationship</Localized>
-    <Localized id="551" key="RealisationRelationship" lang="Dutch">Realisation Relationship</Localized>
-    <Localized id="552" key="source" lang="English">Source</Localized>
-    <Localized id="553" key="source" lang="French">Source</Localized>
-    <Localized id="554" key="source" lang="Dutch">Source</Localized>
-    <Localized id="555" key="target" lang="English">Target</Localized>
-    <Localized id="556" key="target" lang="French">Environnement cible</Localized>
-    <Localized id="557" key="target" lang="Dutch">Target</Localized>
-    <Localized id="558" key="AggregationRealtionship" lang="English">Aggregation Realtionship</Localized>
-    <Localized id="559" key="AggregationRealtionship" lang="French">Aggregation Realtionship</Localized>
-    <Localized id="560" key="AggregationRealtionship" lang="Dutch">Aggregation Realtionship</Localized>
-    <Localized id="561" key="InfluenceRelationship" lang="English">Influence Relationship</Localized>
-    <Localized id="562" key="InfluenceRelationship" lang="French">Influence Relationship</Localized>
-    <Localized id="563" key="InfluenceRelationship" lang="Dutch">Influence Relationship</Localized>
-    <Localized id="564" key="ArchimateElements" lang="English">ArchimateElements</Localized>
-    <Localized id="565" key="ArchimateElements" lang="French">ArchimateElements</Localized>
-    <Localized id="566" key="ArchimateElements" lang="Dutch">ArchimateElements</Localized>
-    <Localized id="567" key="AssociationRelationship" lang="English">Association Relationship</Localized>
-    <Localized id="568" key="AssociationRelationship" lang="French">Association Relationship</Localized>
-    <Localized id="569" key="AssociationRelationship" lang="Dutch">Association Relationship</Localized>
-    <Localized id="570" key="InfluenceElements" lang="English">Influence Elements</Localized>
-    <Localized id="571" key="InfluenceElements" lang="French">Influence Elements</Localized>
-    <Localized id="572" key="InfluenceElements" lang="Dutch">Influence Elements</Localized>
-    <Localized id="573" key="Aggregation Relationship" lang="English">Aggregation Relationship</Localized>
-    <Localized id="574" key="Aggregation Relationship" lang="French">Aggregation Relationship</Localized>
-    <Localized id="575" key="Aggregation Relationship" lang="Dutch">Aggregation Relationship</Localized>
-    <Localized id="576" key="Annotation" lang="English">Annotation</Localized>
-    <Localized id="577" key="Annotation" lang="French">Annotation</Localized>
-    <Localized id="578" key="Annotation" lang="Dutch">Annotation</Localized>
-    <Localized id="579" key="annotation" lang="English">Annotation</Localized>
-    <Localized id="580" key="annotation" lang="French">Annotation</Localized>
-    <Localized id="581" key="annotation" lang="Dutch">Annotation</Localized>
-    <Localized id="582" key="MotivationViewPoint" lang="English">Motivation ViewPoint</Localized>
-    <Localized id="583" key="MotivationViewPoint" lang="French">Motivation ViewPoint</Localized>
-    <Localized id="584" key="MotivationViewPoint" lang="Dutch">Motivation ViewPoint</Localized>
-    <Localized id="585" key="dropMotivationViewPointAtTopLevel" lang="English">Drop MotivationViewPoint At Top Level</Localized>
-    <Localized id="586" key="dropMotivationViewPointAtTopLevel" lang="French">Drop MotivationViewPoint At Top Level</Localized>
-    <Localized id="587" key="dropMotivationViewPointAtTopLevel" lang="Dutch">Drop MotivationViewPoint At Top LevelpMotivationViewPointAtTopLevel</Localized>
-    <Localized id="588" key="Title" lang="English">Title</Localized>
-    <Localized id="589" key="Title" lang="French">Titre</Localized>
-    <Localized id="590" key="Title" lang="Dutch">Title</Localized>
-    <Localized id="591" key="author" lang="English">Author</Localized>
-    <Localized id="592" key="author" lang="French">Auteur</Localized>
-    <Localized id="593" key="author" lang="Dutch">Author</Localized>
-    <Localized id="594" key="version" lang="English">Version</Localized>
-    <Localized id="595" key="version" lang="French">Version</Localized>
-    <Localized id="596" key="version" lang="Dutch">Version</Localized>
-    <Localized id="597" key="instance" lang="English">Instance</Localized>
-    <Localized id="598" key="instance" lang="French">Instance</Localized>
-    <Localized id="599" key="instance" lang="Dutch">Instance</Localized>
-    <Localized id="600" key="PrinciplesViewPoint" lang="English">Principles ViewPoint</Localized>
-    <Localized id="601" key="PrinciplesViewPoint" lang="French">Principles ViewPoint</Localized>
-    <Localized id="602" key="PrinciplesViewPoint" lang="Dutch">Principles ViewPoint</Localized>
-    <Localized id="603" key="SpecializationRelationship" lang="English">Specialization Relationship</Localized>
-    <Localized id="604" key="SpecializationRelationship" lang="French">Specialization Relationship</Localized>
-    <Localized id="605" key="SpecializationRelationship" lang="Dutch">Specialization Relationship</Localized>
+<ViewPoint id="1" uri="http://www.agilebirds.com/openflexo/ViewPoints/Archimate/Principle.owl" modelVersion="1.0">
+  <LocalizedDictionary id="2">
+    <Localized id="3" key="Stakeholder" lang="English">Stakeholder</Localized>
+    <Localized id="4" key="Stakeholder" lang="French">Stakeholder</Localized>
+    <Localized id="5" key="Stakeholder" lang="Dutch">Stakeholder</Localized>
+    <Localized id="6" key="dropStakeholderAtTopLevel" lang="English">drop Stakeholder At Top Level</Localized>
+    <Localized id="7" key="dropStakeholderAtTopLevel" lang="French">dropStakeholderAtTopLevel</Localized>
+    <Localized id="8" key="dropStakeholderAtTopLevel" lang="Dutch">dropStakeholderAtTopLevel</Localized>
+    <Localized id="9" key="uri" lang="English">URI</Localized>
+    <Localized id="10" key="uri" lang="French">URI</Localized>
+    <Localized id="11" key="uri" lang="Dutch">URI</Localized>
+    <Localized id="12" key="name" lang="English">Name</Localized>
+    <Localized id="13" key="name" lang="French">Nom</Localized>
+    <Localized id="14" key="name" lang="Dutch">Name</Localized>
+    <Localized id="15" key="documentation" lang="English">Documentation</Localized>
+    <Localized id="16" key="documentation" lang="French">Documentation</Localized>
+    <Localized id="17" key="documentation" lang="Dutch">Documentation</Localized>
+    <Localized id="18" key="individual" lang="English">individual</Localized>
+    <Localized id="19" key="individual" lang="French">individu</Localized>
+    <Localized id="20" key="individual" lang="Dutch">individual</Localized>
+    <Localized id="21" key="AggregationRelationship" lang="English">Aggregation Relationship</Localized>
+    <Localized id="22" key="AggregationRelationship" lang="French">AggregationRelationship</Localized>
+    <Localized id="23" key="AggregationRelationship" lang="Dutch">AggregationRelationship</Localized>
+    <Localized id="24" key="deletion" lang="English">deletion</Localized>
+    <Localized id="25" key="deletion" lang="French">deletion</Localized>
+    <Localized id="26" key="deletion" lang="Dutch">deletion</Localized>
+    <Localized id="27" key="Driver" lang="English">Driver</Localized>
+    <Localized id="28" key="Driver" lang="French">Driver</Localized>
+    <Localized id="29" key="Driver" lang="Dutch">Driver</Localized>
+    <Localized id="30" key="dropDriverAtTopLevel" lang="English">drop Driver At Top Level</Localized>
+    <Localized id="31" key="dropDriverAtTopLevel" lang="French">dropDriverAtTopLevel</Localized>
+    <Localized id="32" key="dropDriverAtTopLevel" lang="Dutch">dropDriverAtTopLevel</Localized>
+    <Localized id="33" key="Assessment" lang="English">Assessment</Localized>
+    <Localized id="34" key="Assessment" lang="French">Assessment</Localized>
+    <Localized id="35" key="Assessment" lang="Dutch">Assessment</Localized>
+    <Localized id="36" key="dropAssessmentAtTopLevel" lang="English">drop Assessment At Top Level</Localized>
+    <Localized id="37" key="dropAssessmentAtTopLevel" lang="French">dropAssessmentAtTopLevel</Localized>
+    <Localized id="38" key="dropAssessmentAtTopLevel" lang="Dutch">dropAssessmentAtTopLevel</Localized>
+    <Localized id="39" key="Goal" lang="English">Goal</Localized>
+    <Localized id="40" key="Goal" lang="French">Goal</Localized>
+    <Localized id="41" key="Goal" lang="Dutch">Goal</Localized>
+    <Localized id="42" key="dropGoalAtTopLevel" lang="English">drop Goal At Top Level</Localized>
+    <Localized id="43" key="dropGoalAtTopLevel" lang="French">dropGoalAtTopLevel</Localized>
+    <Localized id="44" key="dropGoalAtTopLevel" lang="Dutch">dropGoalAtTopLevel</Localized>
+    <Localized id="45" key="AggregationRelationship" lang="English">Aggregation Relationship</Localized>
+    <Localized id="46" key="AggregationRelationship" lang="French">Aggregation Relationship</Localized>
+    <Localized id="47" key="AggregationRelationship" lang="Dutch">Aggregation Relationship</Localized>
+    <Localized id="48" key="Requirement" lang="English">Requirement</Localized>
+    <Localized id="49" key="Requirement" lang="French">Requirement</Localized>
+    <Localized id="50" key="Requirement" lang="Dutch">Requirement</Localized>
+    <Localized id="51" key="dropRequirementAtTopLevel" lang="English">drop Requirement At Top Level</Localized>
+    <Localized id="52" key="dropRequirementAtTopLevel" lang="French">dropRequirementAtTopLevel</Localized>
+    <Localized id="53" key="dropRequirementAtTopLevel" lang="Dutch">dropRequirementAtTopLevel</Localized>
+    <Localized id="54" key="Principle" lang="English">Principle</Localized>
+    <Localized id="55" key="Principle" lang="French">Principle</Localized>
+    <Localized id="56" key="Principle" lang="Dutch">Principle</Localized>
+    <Localized id="57" key="dropPrincipleAtTopLevel" lang="English">drop Principle At Top Level</Localized>
+    <Localized id="58" key="dropPrincipleAtTopLevel" lang="French">dropPrincipleAtTopLevel</Localized>
+    <Localized id="59" key="dropPrincipleAtTopLevel" lang="Dutch">dropPrincipleAtTopLevel</Localized>
+    <Localized id="60" key="Constraint" lang="English">Constraint</Localized>
+    <Localized id="61" key="Constraint" lang="French">Constraint</Localized>
+    <Localized id="62" key="Constraint" lang="Dutch">Constraint</Localized>
+    <Localized id="63" key="dropConstraintAtTopLevel" lang="English">drop Constraint At Top Level</Localized>
+    <Localized id="64" key="dropConstraintAtTopLevel" lang="French">dropConstraintAtTopLevel</Localized>
+    <Localized id="65" key="dropConstraintAtTopLevel" lang="Dutch">dropConstraintAtTopLevel</Localized>
+    <Localized id="66" key="RealisationRelationship" lang="English">Realisation Relationship</Localized>
+    <Localized id="67" key="RealisationRelationship" lang="French">RealisationRelationship</Localized>
+    <Localized id="68" key="RealisationRelationship" lang="Dutch">RealisationRelationship</Localized>
+    <Localized id="69" key="source" lang="English">Source</Localized>
+    <Localized id="70" key="source" lang="French">Source</Localized>
+    <Localized id="71" key="source" lang="Dutch">Source</Localized>
+    <Localized id="72" key="target" lang="English">Target</Localized>
+    <Localized id="73" key="target" lang="French">Environnement cible</Localized>
+    <Localized id="74" key="target" lang="Dutch">Target</Localized>
+    <Localized id="75" key="AggregationRealtionship" lang="English">Aggregation Realtionship</Localized>
+    <Localized id="76" key="AggregationRealtionship" lang="French">AggregationRealtionship</Localized>
+    <Localized id="77" key="AggregationRealtionship" lang="Dutch">AggregationRealtionship</Localized>
+    <Localized id="78" key="InfluenceRelationship" lang="English">Influence Relationship</Localized>
+    <Localized id="79" key="InfluenceRelationship" lang="French">InfluenceRelationship</Localized>
+    <Localized id="80" key="InfluenceRelationship" lang="Dutch">InfluenceRelationship</Localized>
+    <Localized id="81" key="ArchimateElements" lang="English">ArchimateElements</Localized>
+    <Localized id="82" key="ArchimateElements" lang="French">ArchimateElements</Localized>
+    <Localized id="83" key="ArchimateElements" lang="Dutch">ArchimateElements</Localized>
+    <Localized id="84" key="AssociationRelationship" lang="English">Association Relationship</Localized>
+    <Localized id="85" key="AssociationRelationship" lang="French">AssociationRelationship</Localized>
+    <Localized id="86" key="AssociationRelationship" lang="Dutch">AssociationRelationship</Localized>
+    <Localized id="87" key="InfluenceElements" lang="English">Influence Elements</Localized>
+    <Localized id="88" key="InfluenceElements" lang="French">InfluenceElements</Localized>
+    <Localized id="89" key="InfluenceElements" lang="Dutch">InfluenceElements</Localized>
+    <Localized id="90" key="Aggregation Relationship" lang="English">Aggregation Relationship</Localized>
+    <Localized id="91" key="Aggregation Relationship" lang="French">Aggregation Relationship</Localized>
+    <Localized id="92" key="Aggregation Relationship" lang="Dutch">Aggregation Relationship</Localized>
+    <Localized id="93" key="Annotation" lang="English">Annotation</Localized>
+    <Localized id="94" key="Annotation" lang="French">Annotation</Localized>
+    <Localized id="95" key="Annotation" lang="Dutch">Annotation</Localized>
+    <Localized id="96" key="annotation" lang="English">Annotation</Localized>
+    <Localized id="97" key="annotation" lang="French">Annotation</Localized>
+    <Localized id="98" key="annotation" lang="Dutch">Annotation</Localized>
+    <Localized id="99" key="MotivationViewPoint" lang="English">MotivationViewPoint</Localized>
+    <Localized id="100" key="MotivationViewPoint" lang="French">MotivationViewPoint</Localized>
+    <Localized id="101" key="MotivationViewPoint" lang="Dutch">MotivationViewPoint</Localized>
+    <Localized id="102" key="dropMotivationViewPointAtTopLevel" lang="English">dropMotivationViewPointAtTopLevel</Localized>
+    <Localized id="103" key="dropMotivationViewPointAtTopLevel" lang="French">dropMotivationViewPointAtTopLevel</Localized>
+    <Localized id="104" key="dropMotivationViewPointAtTopLevel" lang="Dutch">dropMotivationViewPointAtTopLevel</Localized>
+    <Localized id="105" key="Title" lang="English">Title</Localized>
+    <Localized id="106" key="Title" lang="French">Titre</Localized>
+    <Localized id="107" key="Title" lang="Dutch">Title</Localized>
+    <Localized id="108" key="author" lang="English">Author</Localized>
+    <Localized id="109" key="author" lang="French">Auteur</Localized>
+    <Localized id="110" key="author" lang="Dutch">Author</Localized>
+    <Localized id="111" key="version" lang="English">Version</Localized>
+    <Localized id="112" key="version" lang="French">Version</Localized>
+    <Localized id="113" key="version" lang="Dutch">Version</Localized>
   </LocalizedDictionary>
+  <OWLModelSlot id="114" isRequired="false" isReadOnly="false" metaModelURI="http://www.bolton.ac.uk/archimate" name="owl" />
 </ViewPoint>

@@ -29,6 +29,7 @@ import javax.swing.ImageIcon;
 import javax.swing.SwingUtilities;
 
 import org.openflexo.fge.GraphicalRepresentation;
+import org.openflexo.fge.TextStyle;
 import org.openflexo.fge.controller.DrawingController;
 import org.openflexo.fge.controller.MouseClickControl;
 import org.openflexo.fge.controller.MouseClickControlAction;
@@ -37,8 +38,7 @@ import org.openflexo.fge.geom.FGEPoint;
 import org.openflexo.fge.geom.FGERectangle;
 import org.openflexo.fge.graphics.FGEShapeGraphics;
 import org.openflexo.fge.graphics.ShapePainter;
-import org.openflexo.fge.graphics.TextStyle;
-import org.openflexo.fge.shapes.Shape.ShapeType;
+import org.openflexo.fge.shapes.ShapeSpecification.ShapeType;
 import org.openflexo.fge.view.ShapeView;
 import org.openflexo.foundation.DataModification;
 import org.openflexo.foundation.FlexoObservable;
@@ -221,7 +221,7 @@ public class SubProcessNodeGR extends NormalAbstractActivityNodeGR<SubProcessNod
 			super("SWL-Process opener", MouseButton.LEFT, 1, new MouseClickControlAction() {
 
 				@Override
-				public boolean handleClick(GraphicalRepresentation<?> graphicalRepresentation, DrawingController<?> controller,
+				public boolean handleClick(GraphicalRepresentation graphicalRepresentation, DrawingController controller,
 						MouseEvent event) {
 					logger.info("Opening process");
 					OpenEmbeddedProcess.actionType.makeNewAction(getSubProcessNode(), null, getDrawing().getEditor()).doAction();
@@ -230,14 +230,14 @@ public class SubProcessNodeGR extends NormalAbstractActivityNodeGR<SubProcessNod
 				}
 
 				@Override
-				public MouseClickControlActionType getActionType() {
-					return MouseClickControlActionType.CUSTOM;
+				public PredefinedMouseClickControlActionType getActionType() {
+					return PredefinedMouseClickControlActionType.CUSTOM;
 				}
 			}, false, false, false, false);
 		}
 
 		@Override
-		public boolean isApplicable(GraphicalRepresentation<?> graphicalRepresentation, DrawingController<?> controller, MouseEvent e) {
+		public boolean isApplicable(GraphicalRepresentation graphicalRepresentation, DrawingController controller, MouseEvent e) {
 			return super.isApplicable(graphicalRepresentation, controller, e) && isInsideClosingBox(graphicalRepresentation, controller, e);
 		}
 
@@ -248,9 +248,9 @@ public class SubProcessNodeGR extends NormalAbstractActivityNodeGR<SubProcessNod
 
 	}
 
-	protected boolean isInsideClosingBox(GraphicalRepresentation<?> graphicalRepresentation, DrawingController<?> controller,
+	protected boolean isInsideClosingBox(GraphicalRepresentation graphicalRepresentation, DrawingController controller,
 			MouseEvent event) {
-		ShapeView view = (ShapeView) controller.getDrawingView().viewForObject(graphicalRepresentation);
+		ShapeView view = (ShapeView) controller.getDrawingView().viewForNode(graphicalRepresentation);
 		FGERectangle expandingRect = getExpandingRect();
 		java.awt.Rectangle scaledExpandingRect = convertNormalizedRectangleToViewCoordinates(expandingRect, controller.getScale());
 		Point clickLocation = SwingUtilities.convertPoint((Component) event.getSource(), event.getPoint(), view);

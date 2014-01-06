@@ -1,0 +1,891 @@
+/*
+ * (c) Copyright 2010-2011 AgileBirds
+ *
+ * This file is part of OpenFlexo.
+ *
+ * OpenFlexo is free software: you can redistribute it and/or modify
+ * it under the terms of the GNU General Public License as published by
+ * the Free Software Foundation, either version 3 of the License, or
+ * (at your option) any later version.
+ *
+ * OpenFlexo is distributed in the hope that it will be useful,
+ * but WITHOUT ANY WARRANTY; without even the implied warranty of
+ * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE. See the
+ * GNU General Public License for more details.
+ *
+ * You should have received a copy of the GNU General Public License
+ * along with OpenFlexo. If not, see <http://www.gnu.org/licenses/>.
+ *
+ */
+package org.openflexo.foundation.ie.cl;
+
+import java.util.ArrayList;
+import java.util.Arrays;
+import java.util.Comparator;
+import java.util.Enumeration;
+import java.util.Iterator;
+import java.util.List;
+import java.util.StringTokenizer;
+import java.util.Vector;
+import java.util.logging.Level;
+import java.util.logging.Logger;
+
+import javax.naming.InvalidNameException;
+
+import org.jdom2.Document;
+import org.jdom2.Element;
+import org.jdom2.filter.ElementFilter;
+import org.openflexo.foundation.AttributeDataModification;
+import org.openflexo.foundation.AgileBirdsObject;
+import org.openflexo.foundation.ie.IEObject;
+import org.openflexo.foundation.ie.IObject;
+import org.openflexo.foundation.ie.cl.dm.ComponentFolderDeleted;
+import org.openflexo.foundation.ie.cl.dm.ComponentFolderInserted;
+import org.openflexo.foundation.ie.dm.ComponentInserted;
+import org.openflexo.foundation.ie.dm.ComponentRemoved;
+import org.openflexo.foundation.ie.dm.IEDataModification;
+import org.openflexo.foundation.ie.util.FolderType;
+import org.openflexo.foundation.rm.DuplicateResourceException;
+import org.openflexo.foundation.rm.FlexoFileResource;
+import org.openflexo.foundation.rm.FlexoResource;
+import org.openflexo.foundation.rm.XMLStorageResourceData;
+import org.openflexo.foundation.utils.FlexoIndexManager;
+import org.openflexo.foundation.utils.Sortable;
+import org.openflexo.foundation.validation.ValidationError;
+import org.openflexo.foundation.validation.ValidationIssue;
+import org.openflexo.foundation.validation.ValidationModel;
+import org.openflexo.foundation.validation.ValidationReport;
+import org.openflexo.foundation.validation.ValidationRule;
+import org.openflexo.foundation.wkf.dm.ChildrenOrderChanged;
+import org.openflexo.foundation.xml.FlexoComponentLibraryBuilder;
+import org.openflexo.foundation.xml.XMLUtils2;
+import org.openflexo.inspector.InspectableObject;
+import org.openflexo.localization.FlexoLocalization;
+import org.openflexo.toolbox.FileUtils;
+import org.openflexo.toolbox.ToolBox;
+
+/**
+ * @author bmangez <B>Class Description</B>
+ */
+public class FlexoComponentFolder extends IECLObject implements InspectableObject, Sortable {
+
+	public static final FolderComparator COMPARATOR = new FolderComparator();
+
+	protected static final Logger logger = Logger.getLogger(FlexoComponentFolder.class.getPackage().getName());
+
+	private String _name;
+
+	// private transient FlexoComponentLibrary _componentLibrary;
+	private Vector<FlexoComponentFolder> _subFolders;
+
+	private Vector<ComponentDefinition> _components;
+
+	private FlexoComponentFolder _fatherFolder;
+
+	private String componentPrefix;
+
+	private FolderType folderType;
+
+	private String generationRelativePath;
+
+	private int index = -1;
+
+	public FlexoComponentFolder(FlexoComponentLibrary componentLibrary) {
+		super(componentLibrary);
+		_subFolders = new Vector<FlexoComponentFolder>();
+		_components = new Vector<ComponentDefinition>();
+	}
+
+	@Override
+	public IEObject getParent() {
+		return _fatherFolder;
+	}
+
+	@Override
+	public void finalizeDeserialization(Object builder) {
+		super.finalizeDeserialization(builder);
+		if (getComponents().size() > 0 && !getComponents().firstElement().isIndexed()) {
+			ComponentDefinition[] cd = new ComponentDefinition[getComponents().size()];
+			cd = getComponents().toArray(cd);
+			Arrays.sort(cd, ComponentDefinition.COMPARATOR);
+			for (int i = 0; i < cd.length; i++) {
+				cd[i].setIndexValue(i + 1);
+			}
+		}
+		if (getSubFolders().size() > 0 && !getSubFolders().firstElement().isIndexed()) {
+			FlexoComponentFolder[] folder = new FlexoComponentFolder[getSubFolders().size()];
+			folder = getSubFolders().toArray(folder);
+			Arrays.sort(folder, FlexoComponentFolder.COMPARATOR);
+			for (int i = 0; i < folder.length; i++) {
+				folder[i].setIndexValue(i + 1);
+			}
+		}
+	}
+
+	private static Vector<FlexoComponentFolder> getAllSubFoldersForFolder(FlexoComponentFolder folder) {
+		Vector<FlexoComponentFolder> v = new Vector<FlexoComponentFolder>();
+		if (folder != null) {
+			v.add(folder);
+			Enumeration en = folder.getSubFolders().elements();
+			while (en.hasMoreElements()) {
+				FlexoComponentFolder f = (FlexoComponentFolder) en.nextElement();
+				v.addAll(getAllSubFoldersForFolder(f));
+			}
+		}
+		return v;
+	}
+
+	/**
+	 * Creates a new FlexoComponentFolder with default values (public API outside XML serialization)
+	 * 
+	 * @param workflow
+	 * @throws DuplicateResourceException
+	 */
+	public FlexoComponentFolder(String folderName, FlexoComponentLibrary componentLibrary) {
+		this(componentLibrary);
+		_name = folderName;
+		generationRelativePath = "src/main/java/" + folderName;
+		// setComponentLibrary(lib);
+	}
+
+	public FlexoComponentFolder(FlexoComponentLibraryBuilder builder) {
+		this(builder.componentLibrary);
+		initializeDeserialization(builder);
+		// setComponentLibrary(builder.componentLibrary);
+		// builder.currentFolder = this;
+	}
+
+	/**
+	 * Creates and returns a newly created root process
+	 * 
+	 * @return a newly created workflow
+	 */
+	public static FlexoComponentFolder createNewRootFolder(FlexoComponentLibrary library) {
+		if (!library.hasRootFolder()) {
+			return createNewFolder(library, null, library.getProject().getProject().getProjectName());
+
+		} else {
+			if (logger.isLoggable(Level.WARNING)) {
+				logger.warning("Cannot create root folder: a root folder is already declared");
+			}
+			return null;
+		}
+	}
+
+	public boolean containsComponents() {
+		if (getComponents().size() > 0) {
+			return true;
+		}
+		for (FlexoComponentFolder folder : getSubFolders()) {
+			if (folder.containsComponents()) {
+				return true;
+			}
+		}
+		return false;
+	}
+
+	/**
+	 * Creates and returns a newly created folder
+	 * 
+	 * @return a newly created folder
+	 * @throws DuplicateResourceException
+	 */
+	public static FlexoComponentFolder createNewFolder(FlexoComponentLibrary library, FlexoComponentFolder parentFolder, String folderName) {
+		FlexoComponentFolder newFolder = new FlexoComponentFolder(folderName, library);
+		newFolder.setFatherFolder(parentFolder);
+		if (parentFolder != null) {
+			parentFolder.addToSubFolders(newFolder);
+		} else {
+			if (logger.isLoggable(Level.INFO)) {
+				logger.info("NEW ROOT FOLDER");
+			}
+			library.setRootFolder(newFolder);
+		}
+		/*
+		 * library.notifyObservers(new DataModification( DataModification.COMPONENT_FOLDER_ADDED_TO_LIBRARY, null, newFolder)); if
+		 * (parentFolder != null) { parentFolder.setChanged(); parentFolder.notifyObservers(new ComponentFolderInserted( parentFolder,
+		 * newFolder)); }
+		 */
+		return newFolder;
+	}
+
+	public Vector<FlexoComponentFolder> getAllSubFolders() {
+		Vector<FlexoComponentFolder> v = new Vector<FlexoComponentFolder>();
+		v.addAll(getAllSubFoldersForFolder(this));
+		v.remove(this);
+		return v;
+	}
+
+	public FlexoComponentFolder getFlexoComponentFolderWithName(String folderName) {
+		for (FlexoComponentFolder folder : getAllSubFolders()) {
+			if (folder.getName().equals(folderName)) {
+				return folder;
+			}
+		}
+		if (logger.isLoggable(Level.FINE)) {
+			logger.fine("Could not find folder named " + folderName);
+		}
+		return null;
+	}
+
+	public Vector<AgileBirdsObject> getAllChilds() {
+		Vector<AgileBirdsObject> answer = new Vector<AgileBirdsObject>();
+		answer.addAll(getSubFolders());
+		answer.addAll(getComponents());
+		return answer;
+	}
+
+	/**
+	 * Overrides delete
+	 * 
+	 * @see org.openflexo.foundation.AgileBirdsObject#delete()
+	 */
+	@Override
+	public boolean delete() {
+		getFatherFolder().removeFromSubFolders(this);
+		super.delete();
+		deleteObservers();
+		return true;
+	}
+
+	public boolean isValidForANewComponentName(String value) {
+		if (value == null) {
+			return false;
+		}
+		return getComponentNamed(value) == null;
+	}
+
+	public ComponentDefinition getComponentNamed(String value) {
+		if (value == null) {
+			return null;
+		}
+
+		String searchedName = value;
+
+		// Petite bidouille pour que la notation avec les thumbnails marche
+		// quand meme !
+		// Ben, il faudrait que tu solutionnes le pb a la source !
+		if (value.lastIndexOf("#") > -1) {
+			if (logger.isLoggable(Level.WARNING)) {
+				logger.warning("Tab notation with '#' is deprecated and should be replaced by tab_name only ! See Ben to do it !");
+			}
+			StringTokenizer st = new StringTokenizer(value, "#");
+			String newValue = null;
+			while (st.hasMoreTokens()) {
+				newValue = st.nextToken();
+			}
+			searchedName = newValue;
+		}
+
+		for (ComponentDefinition temp : getComponents()) {
+			if (searchedName.toLowerCase().equals(temp.getName().toLowerCase())) {
+				return temp;
+			}
+		}
+		for (FlexoComponentFolder folder : getSubFolders()) {
+			ComponentDefinition cur = folder.getComponentNamed(searchedName);
+			if (cur != null) {
+				return cur;
+			}
+		}
+		return null;
+	}
+
+	/**
+	 * Returns reference to the main object in which this XML-serializable object is contained relating to storing scheme: here it's the
+	 * component library
+	 * 
+	 * @return the component library object
+	 */
+	@Override
+	public XMLStorageResourceData getXMLResourceData() {
+		return getComponentLibrary();
+	}
+
+	public List<? extends ComponentDefinition> getComponents(Class<? extends ComponentDefinition> kl) {
+		return getComponentsOfType(kl);
+	}
+
+	public List<? extends ComponentDefinition> getComponents(Class<? extends ComponentDefinition> kl, boolean recursive) {
+		return getComponentsOfType(kl, recursive);
+	}
+
+	public <CD extends ComponentDefinition> List<CD> getComponentsOfType(Class<CD> type) {
+		return getComponentsOfType(type, true);
+	}
+
+	@SuppressWarnings("unchecked")
+	public <CD extends ComponentDefinition> List<CD> getComponentsOfType(Class<CD> type, boolean recursive) {
+		List<CD> answer = new ArrayList<CD>();
+		for (ComponentDefinition cur : getComponents()) {
+			if (type.isAssignableFrom(cur.getClass())) {
+				answer.add((CD) cur);
+			}
+		}
+		if (recursive) {
+			for (FlexoComponentFolder folder : getSubFolders()) {
+				answer.addAll(folder.getComponentsOfType(type));
+			}
+		}
+		return answer;
+	}
+
+	public List<OperationComponentDefinition> getOperationsComponentList() {
+		return getComponentsOfType(OperationComponentDefinition.class);
+	}
+
+	public List<TabComponentDefinition> getTabComponentList() {
+		return getComponentsOfType(TabComponentDefinition.class);
+	}
+
+	public List<PopupComponentDefinition> getPopupsComponentList() {
+		return getComponentsOfType(PopupComponentDefinition.class);
+	}
+
+	public Vector<ComponentDefinition> getComponents() {
+		return _components;
+	}
+
+	public void setComponents(Vector<ComponentDefinition> value) {
+		_components = value;
+	}
+
+	public Vector<ComponentDefinition> getAllComponents() {
+		Vector<ComponentDefinition> v = new Vector<ComponentDefinition>();
+		Enumeration<FlexoComponentFolder> en = getSortedSubFolders();
+		while (en.hasMoreElements()) {
+			FlexoComponentFolder f = en.nextElement();
+			v.addAll(f.getAllComponents());
+		}
+		Enumeration<ComponentDefinition> en1 = getSortedComponents();
+		while (en1.hasMoreElements()) {
+			v.add(en1.nextElement());
+		}
+		return v;
+	}
+
+	public Enumeration<ComponentDefinition> getSortedComponents() {
+		disableObserving();
+		ComponentDefinition[] o = FlexoIndexManager.sortArray(getComponents().toArray(new ComponentDefinition[0]));
+		enableObserving();
+		return ToolBox.getEnumeration(o);
+	}
+
+	public void addToComponents(ComponentDefinition cd) {
+		if (cd.getFolder() != null && cd.getFolder() != this) {
+			if (logger.isLoggable(Level.WARNING)) {
+				logger.warning("UNEXPECTEDELY Move component " + cd + " from folder " + cd.getFolder().getName() + " to folder "
+						+ getName());
+			}
+			cd.getFolder().removeFromComponents(cd);
+		}
+		_components.add(cd);
+		cd.setFolder(this);
+		if (!isDeserializing()) {
+			int i = 0;
+			for (Enumeration<ComponentDefinition> en = getSortedComponents(); en.hasMoreElements(); i++) {
+				ComponentDefinition cd1 = en.nextElement();
+				if (ComponentDefinition.COMPARATOR.compare(cd1, cd) > 0) {
+					cd.setIndex(i + 1);
+					break;
+				}
+			}
+			FlexoIndexManager.reIndexObjectOfArray(getComponents().toArray(new ComponentDefinition[0]));
+		}
+		setChanged();
+		notifyObservers(new ComponentInserted(cd, this));
+	}
+
+	public void removeFromComponents(ComponentDefinition sub) {
+		_components.remove(sub);
+		sub.setFolder(null);
+		FlexoIndexManager.reIndexObjectOfArray(getComponents().toArray(new ComponentDefinition[0]));
+		setChanged();
+		notifyObservers(new ComponentRemoved(sub, this));
+	}
+
+	public Enumeration<FlexoComponentFolder> getSortedSubFolders() {
+		disableObserving();
+		FlexoComponentFolder[] o = FlexoIndexManager.sortArray(getSubFolders().toArray(new FlexoComponentFolder[0]));
+		enableObserving();
+		return ToolBox.getEnumeration(o);
+	}
+
+	public Vector<FlexoComponentFolder> getSubFolders() {
+		return _subFolders;
+	}
+
+	public void setSubFolders(Vector<FlexoComponentFolder> value) {
+		_subFolders = value;
+		setChanged();
+	}
+
+	public void addToSubFolders(FlexoComponentFolder sub) {
+		if (!_subFolders.contains(sub)) {
+			_subFolders.add(sub);
+			sub.setFatherFolder(this);
+			if (!isDeserializing()) {
+				if (getSubFolders().size() > 0) {
+					int i = 0;
+					for (Enumeration<FlexoComponentFolder> en = getSortedSubFolders(); en.hasMoreElements() && i < getSubFolders().size(); i++) {
+						FlexoComponentFolder f = getSubFolders().get(i);
+						if (FlexoComponentFolder.COMPARATOR.compare(f, sub) > 0) {
+							sub.setIndex(i + 1);
+							break;
+						}
+					}
+					// We don't care if no index has been set, it will then keep its current one which is the last one.
+				} else {
+					sub.setIndex(1);
+				}
+				FlexoIndexManager.reIndexObjectOfArray(getSubFolders().toArray(new FlexoComponentFolder[0]));
+			}
+			sub.setComponentLibrary(getComponentLibrary());
+			setChanged();
+			notifyObservers(new ComponentFolderInserted(sub));
+		}
+	}
+
+	public void removeFromSubFolders(FlexoComponentFolder sub) {
+		if (_subFolders.contains(sub)) {
+			_subFolders.remove(sub);
+			sub.setFatherFolder(null);
+			FlexoIndexManager.reIndexObjectOfArray(getSubFolders().toArray(new FlexoComponentFolder[0]));
+			setChanged();
+			notifyObservers(new ComponentFolderDeleted(sub));
+		}
+	}
+
+	@Override
+	public String getName() {
+		return _name;
+	}
+
+	@Override
+	public void setName(String name) throws DuplicateFolderNameException, InvalidNameException {
+		if (getFatherFolder() != null && getFatherFolder().getFolderNamed(name) != null) {
+			throw new DuplicateFolderNameException(this, name);
+		}
+		if (!isDeserializing() && !name.matches(FileUtils.GOOD_CHARACTERS_REG_EXP + "+")) {
+			throw new InvalidNameException(name);
+		}
+		String old = _name;
+		_name = name;
+		setChanged();
+		notifyObservers(new IEDataModification("name", old, name));
+	}
+
+	public FlexoComponentFolder getFatherFolder() {
+		return _fatherFolder;
+	}
+
+	public void setFatherFolder(FlexoComponentFolder folder) {
+		if (this._fatherFolder != folder) {
+			if (folder != null) {
+				folder.removeFromSubFolders(this);
+			}
+			this._fatherFolder = folder;
+			if (folder != null) {
+				folder.addToSubFolders(this);
+			}
+		}
+	}
+
+	public String getComponentPrefix() {
+		if (componentPrefix == null) {
+			if (getProject().getProjectName().length() > 2) {
+				componentPrefix = getProject().getProjectName().substring(0, 3).toUpperCase();
+			} else {
+				componentPrefix = getProject().getProjectName().toUpperCase();
+			}
+		}
+		return componentPrefix;
+	}
+
+	public void setComponentPrefix(String componentPrefix) {
+		this.componentPrefix = componentPrefix;
+		setChanged();
+	}
+
+	public void convertAllComponent() {
+		for (ComponentDefinition cur : getComponents()) {
+			convertComponent(cur);
+		}
+		for (FlexoComponentFolder folder : getSubFolders()) {
+			folder.convertAllComponent();
+		}
+	}
+
+	public static void convertComponent(ComponentDefinition def) {
+		ComponentConverter2 converter = new ComponentConverter2(def.getComponentResource());
+		if (converter.conversionWasSucessfull) {
+			System.out.println("SUCCES IN converting " + def.getComponentName() + " in resource :"
+					+ def.getComponentResource().getResourceIdentifier());
+
+		} else {
+			System.out.println("FAILURE IN converting " + def.getComponentName() + " in resource :"
+					+ def.getComponentResource().getResourceIdentifier());
+		}
+	}
+
+	public static void convertComponent(FlexoResource res) {
+		if (res instanceof FlexoFileResource) {
+			System.out.println("converting  resource :" + res.getResourceIdentifier());
+			ComponentConverter2 converter = new ComponentConverter2((FlexoFileResource) res);
+			if (converter.conversionWasSucessfull) {
+				System.out.println("SUCCES IN converting  resource :" + res.getResourceIdentifier());
+
+			} else {
+				System.out.println("FAILURE IN converting resource :" + res.getResourceIdentifier());
+			}
+		} else {
+			System.out.println("FAILURE IN converting resource :" + res.getResourceIdentifier() + " NOT A FILE RESOURCE");
+
+		}
+	}
+
+	protected static class ComponentConverter2 {
+
+		protected boolean conversionWasSucessfull = false;
+
+		protected Document document;
+
+		protected Element rootElement;
+
+		protected FlexoFileResource res;
+
+		protected ComponentConverter2(FlexoFileResource _res) {
+			super();
+			res = _res;
+			try {
+				document = XMLUtils2.getJDOMDocument(res.getFile());
+				convert();
+				conversionWasSucessfull = save();
+
+			} catch (Exception e) {
+				// Warns about the exception
+				if (logger.isLoggable(Level.WARNING)) {
+					logger.warning("Exception raised: " + e.getClass().getName() + ". See console for details.");
+				}
+				e.printStackTrace();
+			}
+		}
+
+		private Element createComponentInstanceElement(String prefix, String aName) {
+			Element answer = new Element(prefix + "ComponentInstance");
+			answer.setAttribute("componentName", aName);
+			return answer;
+		}
+
+		private void convert() {
+			Iterator tableElementIterator = document.getDescendants(new ElementFilter("IEButton"));
+			Vector temp = new Vector();
+			while (tableElementIterator.hasNext()) {
+				temp.add(tableElementIterator.next());
+			}
+			System.out.println("convert " + temp.size() + " IEButtons");
+			Enumeration en = temp.elements();
+			while (en.hasMoreElements()) {
+				Element nextElement = (Element) en.nextElement();
+				if (nextElement.getAttributeValue("popupName") != null) {
+					nextElement.addContent(createComponentInstanceElement("Popup", nextElement.getAttributeValue("popupName")));
+					nextElement.removeAttribute("popupName");
+				} else if (nextElement.getAttributeValue("pageName") != null) {
+					nextElement.addContent(createComponentInstanceElement("Operation", nextElement.getAttributeValue("pageName")));
+					nextElement.removeAttribute("pageName");
+				}
+			}
+
+			tableElementIterator = document.getDescendants(new ElementFilter("IEHyperlink"));
+			temp = new Vector();
+			while (tableElementIterator.hasNext()) {
+				temp.add(tableElementIterator.next());
+			}
+			System.out.println("convert " + temp.size() + " IEHyperlink");
+			en = temp.elements();
+			while (en.hasMoreElements()) {
+				Element nextElement = (Element) en.nextElement();
+				if (nextElement.getAttributeValue("pageName") != null) {
+					nextElement.addContent(createComponentInstanceElement("Operation", nextElement.getAttributeValue("pageName")));
+					nextElement.removeAttribute("pageName");
+				} else if (nextElement.getAttributeValue("pageName") != null) {
+					nextElement.addContent(createComponentInstanceElement("Operation", nextElement.getAttributeValue("pageName")));
+					nextElement.removeAttribute("pageName");
+				}
+			}
+			tableElementIterator = document.getDescendants(new ElementFilter("IEThumbnail"));
+			temp = new Vector();
+			while (tableElementIterator.hasNext()) {
+				temp.add(tableElementIterator.next());
+			}
+			System.out.println("convert " + temp.size() + " Thumbnails");
+			en = temp.elements();
+			while (en.hasMoreElements()) {
+				Element nextElement = (Element) en.nextElement();
+				if (nextElement.getAttributeValue("woComponentName") != null) {
+					nextElement.addContent(createComponentInstanceElement("Thumbnail", nextElement.getAttributeValue("woComponentName")));
+					nextElement.removeAttribute("woComponentName");
+				}
+			}
+		}
+
+		private boolean save() {
+			return XMLUtils2.saveXMLFile(document, res.getFile());
+		}
+	}
+
+	@Override
+	public String getInspectorName() {
+		return "Folder.inspector";
+	}
+
+	public String getGenerationRelativePath() {
+		return this.generationRelativePath;
+	}
+
+	public void setGenerationRelativePath(String relPath) {
+		this.generationRelativePath = relPath;
+	}
+
+	/**
+	 * Return a Vector of embedded IEObjects at this level. NOTE that this is NOT a recursive method
+	 * 
+	 * @return a Vector of IEObject instances
+	 */
+	@Override
+	public Vector<IObject> getEmbeddedIEObjects() {
+		Vector answer = new Vector();
+		answer.addAll(getSubFolders());
+		answer.addAll(getComponents());
+		return answer;
+	}
+
+	@Override
+	public String getFullyQualifiedName() {
+		return "Folder:" + getName();
+	}
+
+	/**
+	 * Returns a flag indicating if this object is valid according to default validation model
+	 * 
+	 * @return boolean
+	 */
+	@Override
+	public boolean isValid() {
+		return isValid(getDefaultValidationModel());
+	}
+
+	/**
+	 * Returns a flag indicating if this object is valid according to specified validation model
+	 * 
+	 * @return boolean
+	 */
+	@Override
+	public boolean isValid(ValidationModel validationModel) {
+		return validationModel.isValid(this);
+	}
+
+	/**
+	 * Validates this object by building new ValidationReport object Default validation model is used to perform this validation.
+	 */
+	@Override
+	public ValidationReport validate() {
+		return validate(getDefaultValidationModel());
+	}
+
+	/**
+	 * Validates this object by building new ValidationReport object Supplied validation model is used to perform this validation.
+	 */
+	@Override
+	public ValidationReport validate(ValidationModel validationModel) {
+		return validationModel.validate(this);
+	}
+
+	/**
+	 * Validates this object by appending eventual issues to supplied ValidationReport. Default validation model is used to perform this
+	 * validation.
+	 * 
+	 * @param report
+	 *            , a ValidationReport object on which found issues are appened
+	 */
+	@Override
+	public void validate(ValidationReport report) {
+		validate(report, getDefaultValidationModel());
+	}
+
+	/**
+	 * Validates this object by appending eventual issues to supplied ValidationReport. Supplied validation model is used to perform this
+	 * validation.
+	 * 
+	 * @param report
+	 *            , a ValidationReport object on which found issues are appened
+	 */
+	@Override
+	public void validate(ValidationReport report, ValidationModel validationModel) {
+		validationModel.validate(this, report);
+	}
+
+	public static class RootFolderMustHaveAPrefix extends ValidationRule<RootFolderMustHaveAPrefix, FlexoComponentFolder> {
+		public RootFolderMustHaveAPrefix() {
+			super(FlexoComponentFolder.class, "root_folder_must_have_prefix");
+		}
+
+		@Override
+		public ValidationIssue<RootFolderMustHaveAPrefix, FlexoComponentFolder> applyValidation(final FlexoComponentFolder folder) {
+			if (folder.getFatherFolder() == null && (folder.getComponentPrefix() == null || folder.getComponentPrefix().equals(""))) {
+				ValidationError<RootFolderMustHaveAPrefix, FlexoComponentFolder> error = new ValidationError<RootFolderMustHaveAPrefix, FlexoComponentFolder>(
+						this, folder, "folder_($object.name)_has_no_component_prefix");
+				return error;
+			}
+			return null;
+		}
+	}
+
+	/**
+	 * Search in the direct sub-folders of this folder for a folder named <code>name</code> (case insensitive).
+	 * 
+	 * @param name
+	 *            - the name of the direct sub-folder to find
+	 * @return the direct sub-folder named <code>name</code> or null if it cannot be found.
+	 */
+	public FlexoComponentFolder getFolderNamed(String name) {
+		name = name.toLowerCase();
+		Enumeration<FlexoComponentFolder> en = getSubFolders().elements();
+		while (en.hasMoreElements()) {
+			FlexoComponentFolder folder = en.nextElement();
+			if (folder.getName().toLowerCase().equals(name)) {
+				return folder;
+			}
+		}
+		return null;
+	}
+
+	public boolean isFatherOf(FlexoComponentFolder folder) {
+		FlexoComponentFolder f = folder.getFatherFolder();
+		while (f != null) {
+			if (f.equals(this)) {
+				return true;
+			}
+			f = f.getFatherFolder();
+		}
+		return false;
+	}
+
+	public static class FolderComparator implements Comparator<FlexoComponentFolder> {
+		protected FolderComparator() {
+		}
+
+		/**
+		 * Overrides compare
+		 * 
+		 * @see java.util.Comparator#compare(java.lang.Object, java.lang.Object)
+		 */
+		@Override
+		public int compare(FlexoComponentFolder o1, FlexoComponentFolder o2) {
+			return o1.getName().compareTo(o2.getName());
+		}
+	}
+
+	public FlexoComponentFolder getFolderTyped(FolderType type) {
+		FlexoComponentFolder retval = null;
+		for (FlexoComponentFolder f : getAllSubFolders()) {
+			if (f.getFolderType() == type) {
+				return f;
+			} else {
+				retval = f.getFolderTyped(type);
+			}
+		}
+		if (isRootFolder() && retval == null) {
+			retval = createNewFolder(getComponentLibrary(), this, FlexoLocalization.localizedForKey(type.getName().toLowerCase()));
+			retval.setFolderType(type);
+		}
+		return retval;
+	}
+
+	public boolean isRootFolder() {
+		return getParent() == null;
+	}
+
+	public FolderType getFolderType() {
+		return folderType;
+	}
+
+	public void setFolderType(FolderType folderType) {
+		this.folderType = folderType;
+	}
+
+	/**
+	 * Overrides getClassNameKey
+	 * 
+	 * @see org.openflexo.foundation.AgileBirdsObject#getClassNameKey()
+	 */
+	@Override
+	public String getClassNameKey() {
+		return "component_folder";
+	}
+
+	public boolean isIndexed() {
+		return this.index > -1;
+	}
+
+	@Override
+	public int getIndex() {
+		if (isBeingCloned()) {
+			return -1;
+		}
+		if (index == -1 && getCollection() != null) {
+			index = getCollection().length;
+			FlexoIndexManager.reIndexObjectOfArray(getCollection());
+		}
+		return index;
+	}
+
+	@Override
+	public void setIndex(int index) {
+		if (isDeserializing() || isCreatedByCloning()) {
+			setIndexValue(index);
+			return;
+		}
+		FlexoIndexManager.switchIndexForKey(this.index, index, this);
+		if (getIndex() != index) {
+			setChanged();
+			AttributeDataModification dm = new AttributeDataModification("index", null, getIndex());
+			dm.setReentrant(true);
+			notifyObservers(dm);
+		}
+	}
+
+	@Override
+	public int getIndexValue() {
+		return getIndex();
+	}
+
+	@Override
+	public void setIndexValue(int index) {
+		if (this.index == index) {
+			return;
+		}
+		int old = this.index;
+		this.index = index;
+		setChanged();
+		notifyModification("index", old, index);
+		if (!isDeserializing() && !isCreatedByCloning() && getFatherFolder() != null) {
+			getFatherFolder().setChanged();
+			getFatherFolder().notifyObservers(new ChildrenOrderChanged());
+		}
+	}
+
+	/**
+	 * Overrides getCollection
+	 * 
+	 * @see org.openflexo.foundation.utils.Sortable#getCollection()
+	 */
+	@Override
+	public FlexoComponentFolder[] getCollection() {
+		if (getFatherFolder() == null) {
+			return new FlexoComponentFolder[] { this };
+		}
+		return getFatherFolder().getSubFolders().toArray(new FlexoComponentFolder[0]);
+	}
+
+}

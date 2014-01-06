@@ -33,7 +33,7 @@ import org.openflexo.foundation.validation.ValidationModel;
 public class DRMValidationModel extends ValidationModel {
 
 	public DRMValidationModel() {
-		super(null, null);
+		super(null);
 
 		DocResourceCenter drc = DocResourceManager.instance().getDocResourceCenter();
 		for (Enumeration en = drc.getLanguages().elements(); en.hasMoreElements();) {

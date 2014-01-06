@@ -23,47 +23,74 @@ import java.lang.reflect.Type;
 import java.util.Vector;
 import java.util.logging.Logger;
 
-import org.openflexo.antar.binding.BindingDefinition;
-import org.openflexo.antar.binding.BindingDefinition.BindingDefinitionType;
-import org.openflexo.foundation.Inspectors;
+import org.openflexo.antar.binding.DataBinding;
+import org.openflexo.foundation.ontology.IFlexoOntologyClass;
+import org.openflexo.foundation.ontology.IFlexoOntologyIndividual;
 import org.openflexo.foundation.ontology.IndividualOfClass;
-import org.openflexo.foundation.ontology.OntologyClass;
-import org.openflexo.foundation.ontology.OntologyIndividual;
+import org.openflexo.foundation.technologyadapter.TypeAwareModelSlot;
 import org.openflexo.foundation.validation.FixProposal;
 import org.openflexo.foundation.validation.ValidationError;
 import org.openflexo.foundation.validation.ValidationIssue;
 import org.openflexo.foundation.validation.ValidationRule;
-import org.openflexo.foundation.viewpoint.ViewPoint.ViewPointBuilder;
-import org.openflexo.foundation.viewpoint.binding.ViewPointDataBinding;
+import org.openflexo.foundation.viewpoint.FMLRepresentationContext.FMLRepresentationOutput;
+import org.openflexo.foundation.viewpoint.annotations.FIBPanel;
 import org.openflexo.logging.FlexoLogger;
 import org.openflexo.toolbox.StringUtils;
 
-public class AddIndividual extends AddConcept {
+@FIBPanel("Fib/AddIndividualPanel.fib")
+public abstract class AddIndividual<MS extends TypeAwareModelSlot<?, ?>, T extends IFlexoOntologyIndividual> extends AddConcept<MS, T> {
 
 	protected static final Logger logger = FlexoLogger.getLogger(AddIndividual.class.getPackage().getName());
 
 	private Vector<DataPropertyAssertion> dataAssertions;
 	private Vector<ObjectPropertyAssertion> objectAssertions;
-	private String ontologyClassURI = null;
+	protected String ontologyClassURI = null;
 
-	public AddIndividual(ViewPointBuilder builder) {
-		super(builder);
+	private DataBinding<String> individualName;
+
+	public AddIndividual() {
+		super();
 		dataAssertions = new Vector<DataPropertyAssertion>();
 		objectAssertions = new Vector<ObjectPropertyAssertion>();
 	}
 
 	@Override
-	public EditionActionType getEditionActionType() {
-		return EditionActionType.AddIndividual;
+	public String getFMLRepresentation(FMLRepresentationContext context) {
+		FMLRepresentationOutput out = new FMLRepresentationOutput(context);
+		if (getAssignation().isSet()) {
+			out.append(getAssignation().toString() + " = (", context);
+		}
+		out.append(getClass().getSimpleName() + (getOntologyClass() != null ? " conformTo " + getOntologyClass().getName() : "") + " from "
+				+ getModelSlot().getName() + " {" + StringUtils.LINE_SEPARATOR, context);
+		out.append(getAssertionsFMLRepresentation(context), context);
+		out.append("}", context);
+		if (getAssignation().isSet()) {
+			out.append(")", context);
+		}
+		return out.toString();
 	}
 
-	/*@Override
-	public List<IndividualPatternRole> getAvailablePatternRoles() {
-		if (getEditionPattern() != null) {
-			return getEditionPattern().getPatternRoles(IndividualPatternRole.class);
+	protected String getAssertionsFMLRepresentation(FMLRepresentationContext context) {
+		if (getDataAssertions().size() > 0) {
+			StringBuffer sb = new StringBuffer();
+			for (DataPropertyAssertion a : getDataAssertions()) {
+				if (a.getOntologyProperty() != null) {
+					sb.append("  " + a.getOntologyProperty().getName() + " = " + a.getValue().toString() + ";" + StringUtils.LINE_SEPARATOR);
+				}
+			}
+			return sb.toString();
+		}
+		if (getObjectAssertions().size() > 0) {
+			StringBuffer sb = new StringBuffer();
+			for (ObjectPropertyAssertion a : getObjectAssertions()) {
+				sb.append("  " + a.getOntologyProperty().getName() + " = " + a.getObject().toString() + ";" + StringUtils.LINE_SEPARATOR);
+			}
+			return sb.toString();
 		}
 		return null;
-	}*/
+	}
+
+	public abstract Class<T> getOntologyIndividualClass();
 
 	@Override
 	public IndividualPatternRole getPatternRole() {
@@ -77,21 +104,25 @@ public class AddIndividual extends AddConcept {
 		return null;
 	}
 
+	public IFlexoOntologyClass getType() {
+		return getOntologyClass();
+	}
+
+	public void setType(IFlexoOntologyClass type) {
+		setOntologyClass(type);
+	}
+
 	@Override
-	public OntologyClass getOntologyClass() {
-		// System.out.println("On me redemande la classe, ontologyClassURI=" + ontologyClassURI);
-		if (getViewPoint() != null) {
-			getViewPoint().loadWhenUnloaded();
-		}
-		if (StringUtils.isNotEmpty(ontologyClassURI)) {
-			if (getViewPoint().getViewpointOntology() != null) {
-				// System.out.println("Je reponds avec " + ontologyClassURI);
-				return getViewPoint().getViewpointOntology().getClass(ontologyClassURI);
-			}
+	public IFlexoOntologyClass getOntologyClass() {
+		// System.out.println("AddIndividual: ontologyClassURI=" + ontologyClassURI);
+		if (StringUtils.isNotEmpty(ontologyClassURI) && getVirtualModel() != null) {
+			return getVirtualModel().getOntologyClass(ontologyClassURI);
 		} else {
 			if (getPatternRole() != null) {
 				// System.out.println("Je reponds avec le pattern role " + getPatternRole());
-				return getPatternRole().getOntologicType();
+				IFlexoOntologyClass t = getPatternRole().getOntologicType();
+				setOntologyClass(t);
+				return t;
 			}
 		}
 		// System.out.println("Je reponds null");
@@ -99,8 +130,7 @@ public class AddIndividual extends AddConcept {
 	}
 
 	@Override
-	public void setOntologyClass(OntologyClass ontologyClass) {
-		// System.out.println("!!!!!!!! Je sette la classe avec " + ontologyClass);
+	public void setOntologyClass(IFlexoOntologyClass ontologyClass) {
 		if (ontologyClass != null) {
 			if (getPatternRole() instanceof IndividualPatternRole) {
 				if (getPatternRole().getOntologicType().isSuperConceptOf(ontologyClass)) {
@@ -114,6 +144,7 @@ public class AddIndividual extends AddConcept {
 		} else {
 			ontologyClassURI = null;
 		}
+		System.out.println("ontologyClassURI=" + ontologyClassURI);
 	}
 
 	public String _getOntologyClassURI() {
@@ -150,7 +181,7 @@ public class AddIndividual extends AddConcept {
 	}
 
 	public DataPropertyAssertion createDataPropertyAssertion() {
-		DataPropertyAssertion newDataPropertyAssertion = new DataPropertyAssertion(null);
+		DataPropertyAssertion newDataPropertyAssertion = new DataPropertyAssertion();
 		addToDataAssertions(newDataPropertyAssertion);
 		return newDataPropertyAssertion;
 	}
@@ -180,7 +211,7 @@ public class AddIndividual extends AddConcept {
 	}
 
 	public ObjectPropertyAssertion createObjectPropertyAssertion() {
-		ObjectPropertyAssertion newObjectPropertyAssertion = new ObjectPropertyAssertion(null);
+		ObjectPropertyAssertion newObjectPropertyAssertion = new ObjectPropertyAssertion();
 		addToObjectAssertions(newObjectPropertyAssertion);
 		return newObjectPropertyAssertion;
 	}
@@ -191,46 +222,28 @@ public class AddIndividual extends AddConcept {
 		return assertion;
 	}
 
-	@Override
-	public String getInspectorName() {
-		return Inspectors.VPM.ADD_INDIVIDUAL_INSPECTOR;
-	}
-
-	/*@Override
-	protected void updatePatternRoleType()
-	{
-		if (getPatternRole() == null) {
-			return;
-		}
-	}*/
-
-	private ViewPointDataBinding individualName;
-
-	private BindingDefinition INDIVIDUAL_NAME = new BindingDefinition("individualName", String.class, BindingDefinitionType.GET, true);
-
-	public BindingDefinition getIndividualNameBindingDefinition() {
-		return INDIVIDUAL_NAME;
-	}
-
-	public ViewPointDataBinding getIndividualName() {
+	public DataBinding<String> getIndividualName() {
 		if (individualName == null) {
-			individualName = new ViewPointDataBinding(this, EditionActionBindingAttribute.individualName,
-					getIndividualNameBindingDefinition());
+			individualName = new DataBinding<String>(this, String.class, DataBinding.BindingDefinitionType.GET);
+			individualName.setBindingName("individualName");
 		}
 		return individualName;
 	}
 
-	public void setIndividualName(ViewPointDataBinding individualName) {
-		individualName.setOwner(this);
-		individualName.setBindingAttribute(EditionActionBindingAttribute.individualName);
-		individualName.setBindingDefinition(getIndividualNameBindingDefinition());
+	public void setIndividualName(DataBinding<String> individualName) {
+		if (individualName != null) {
+			individualName.setOwner(this);
+			individualName.setDeclaredType(String.class);
+			individualName.setBindingDefinitionType(DataBinding.BindingDefinitionType.GET);
+			individualName.setBindingName("individualName");
+		}
 		this.individualName = individualName;
 	}
 
 	@Override
 	public Type getAssignableType() {
 		if (getOntologyClass() == null) {
-			return OntologyIndividual.class;
+			return IFlexoOntologyIndividual.class;
 		}
 		return IndividualOfClass.getIndividualOfClass(getOntologyClass());
 	}
@@ -256,21 +269,21 @@ public class AddIndividual extends AddConcept {
 
 		protected static class SetsPatternRole extends FixProposal<AddIndividualActionMustDefineAnOntologyClass, AddIndividual> {
 
-			private IndividualPatternRole patternRole;
+			private final IndividualPatternRole patternRole;
 
 			public SetsPatternRole(IndividualPatternRole patternRole) {
 				super("assign_action_to_pattern_role_($patternRole.patternRoleName)");
 				this.patternRole = patternRole;
 			}
 
-			public IndividualPatternRole getPatternRole() {
+			public IndividualPatternRole<?> getPatternRole() {
 				return patternRole;
 			}
 
 			@Override
 			protected void fixAction() {
-				AddIndividual action = getObject();
-				action.setAssignation(new ViewPointDataBinding(patternRole.getPatternRoleName()));
+				AddIndividual<?, ?> action = getObject();
+				action.setAssignation(new DataBinding<Object>(patternRole.getPatternRoleName()));
 			}
 
 		}
@@ -282,13 +295,8 @@ public class AddIndividual extends AddConcept {
 		}
 
 		@Override
-		public ViewPointDataBinding getBinding(AddIndividual object) {
+		public DataBinding<String> getBinding(AddIndividual object) {
 			return object.getIndividualName();
-		}
-
-		@Override
-		public BindingDefinition getBindingDefinition(AddIndividual object) {
-			return object.getIndividualNameBindingDefinition();
 		}
 
 	}

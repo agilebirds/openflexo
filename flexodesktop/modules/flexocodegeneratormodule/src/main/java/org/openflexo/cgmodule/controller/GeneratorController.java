@@ -52,6 +52,7 @@ import org.openflexo.components.ProgressWindow;
 import org.openflexo.foundation.DataModification;
 import org.openflexo.foundation.FlexoEditor;
 import org.openflexo.foundation.FlexoModelObject;
+import org.openflexo.foundation.FlexoObject;
 import org.openflexo.foundation.FlexoObservable;
 import org.openflexo.foundation.GraphicalFlexoObserver;
 import org.openflexo.foundation.cg.CGFile;
@@ -65,7 +66,7 @@ import org.openflexo.foundation.cg.templates.CGTemplateFile;
 import org.openflexo.foundation.param.CheckboxParameter;
 import org.openflexo.foundation.param.RadioButtonListParameter;
 import org.openflexo.foundation.rm.FlexoGeneratedResource;
-import org.openflexo.foundation.rm.FlexoProject;
+import org.openflexo.foundation.FlexoProject;
 import org.openflexo.foundation.rm.ResourceUpdateHandler.GeneratedResourceModifiedHook;
 import org.openflexo.foundation.rm.cg.CGRepositoryFileResource;
 import org.openflexo.foundation.rm.cg.ContentSource;
@@ -259,7 +260,7 @@ public class GeneratorController extends FlexoController implements GCAction.Pro
 	 *            : the object to focus on
 	 */
 	@Override
-	public void selectAndFocusObject(FlexoModelObject object) {
+	public void selectAndFocusObject(FlexoObject object) {
 		if (object instanceof CGFile) {
 			setCurrentEditedObjectAsModuleView(object);
 		}
@@ -267,7 +268,7 @@ public class GeneratorController extends FlexoController implements GCAction.Pro
 	}
 
 	public GenerationRepository getCurrentGeneratedCodeRepository() {
-		FlexoModelObject object = getCurrentDisplayedObjectAsModuleView();
+		FlexoObject object = getCurrentDisplayedObjectAsModuleView();
 		if (object instanceof CGObject) {
 			return AbstractGCAction.repositoryForObject((CGObject) object);
 		}
@@ -605,7 +606,7 @@ public class GeneratorController extends FlexoController implements GCAction.Pro
 	}
 
 	@Override
-	public String getWindowTitleforObject(FlexoModelObject object) {
+	public String getWindowTitleforObject(FlexoObject object) {
 		if (object instanceof GeneratedOutput) {
 			return FlexoLocalization.localizedForKey("generated_code");
 		} else if (object instanceof CGRepository) {

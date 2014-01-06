@@ -50,9 +50,10 @@
     <property name="name" xmlTag="name" attribute="YES"/> 	
   </entity>
 
-  <entity name="org.openflexo.foundation.rm.FlexoOEShemaResource" xmlTag="Shema">
+  <!--  <entity name="org.openflexo.foundation.rm.ViewResource" xmlTag="View">
 	 <property name="name" xmlTag="name" attribute="YES"/> 	
-  </entity>
+  </entity> -->
+
 
   <entity name="org.openflexo.foundation.rm.ScreenshotResource" xmlTag="Screenshot">
   </entity>

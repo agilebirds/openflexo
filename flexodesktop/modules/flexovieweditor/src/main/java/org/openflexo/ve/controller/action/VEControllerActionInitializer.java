@@ -50,6 +50,7 @@ public class VEControllerActionInitializer extends ControllerActionInitializer {
 
 	@Override
 	public void initializeActions() {
+
 		super.initializeActions();
 
 		new VESetPropertyInitializer(this);
@@ -63,29 +64,31 @@ public class VEControllerActionInitializer extends ControllerActionInitializer {
 			new VESelectAllInitializer(this);
 		}
 
-		// Shema library perspective
-		new AddViewInitializer(this);
-		new AddViewFolderInitializer(this);
+		// View library perspective
+		new CreateViewInitializer(this);
+		new MoveViewInitializer(this);
+
 		new DeleteViewInitializer(this);
-		new DeleteViewFolderInitializer(this);
-		new ResetGraphicalRepresentationInitializer(this);
+		new CreateVirtualModelInstanceInitializer(this);
+		new DeleteVirtualModelInstanceInitializer(this);
 
 		// Diagram perspective
+		new CreateDiagramInitializer(this);
+		new DeleteDiagramInitializer(this);
 		new AddShapeInitializer(this);
 		new AddConnectorInitializer(this);
-		new DeleteViewElementsInitializer(this);
+		new DeleteDiagramElementsInitializer(this);
 		new DropSchemeActionInitializer(this);
 		new LinkSchemeActionInitializer(this);
 		new ActionSchemeActionInitializer(this);
+		new SynchronizationSchemeActionInitializer(this);
 		new NavigationSchemeActionInitializer(this);
+		new ResetGraphicalRepresentationInitializer(this);
+		new DeclareShapeInEditionPatternInitializer(this);
+		new DeclareConnectorInEditionPatternInitializer(this);
+		new PushToPaletteInitializer(this);
+		new ExportDiagramToImageInitializer(this);
 
-		// Ontology perspective
-		new CreateOntologyClassInitializer(this);
-		new CreateOntologyIndividualInitializer(this);
-		new CreateObjectPropertyInitializer(this);
-		new CreateDataPropertyInitializer(this);
-		new DeleteOntologyObjectsInitializer(this);
-		new AddAnnotationStatementInitializer(this);
 	}
 
 }

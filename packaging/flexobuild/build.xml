@@ -1,12 +1,6 @@
 <project name="project" default="package" basedir="." xmlns:artifact="antlib:org.apache.maven.artifact.ant">
-	<path id="classpath">
-		<fileset dir="lib">
-			<include name="*.jar" />
-		</fileset>
-	</path>
 
 	<taskdef resource="net/sf/antcontrib/antcontrib.properties"/>
-	
 	<typedef resource="org/apache/maven/artifact/ant/antlib.xml" uri="antlib:org.apache.maven.artifact.ant" />
 
 	<target name="defineProperties">
@@ -37,7 +31,7 @@
 		<property name="deploy" value="true" />
 		<property name="deployment.root.folder" value="~/downloads/openflexo"/>
 		<property name="deployment.user.name" value="${user.name}" />
-		<property name="deployment.server.name" value="downloads.openflexo.com" />
+		<property name="deployment.server.name" value="downloads.openflexo.org" />
 		<property name="ssh.private.keyfile" value="${user.home}/.ssh/id_dsa" />
 		<property name="ssh.passphrase" value="" />
 		<tstamp>
@@ -61,7 +55,7 @@
 		<loadproperties srcfile="lite.properties" />
 		<antcall target="createPackage" />
 	</target>
-	
+
 	<target name="packageSemantics">
 		<loadproperties srcfile="semantics.properties" />
 		<antcall target="createPackage" />

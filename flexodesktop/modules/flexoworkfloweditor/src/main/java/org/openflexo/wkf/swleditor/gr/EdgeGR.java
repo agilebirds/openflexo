@@ -22,24 +22,24 @@ package org.openflexo.wkf.swleditor.gr;
 import java.awt.Color;
 import java.util.logging.Logger;
 
+import org.openflexo.fge.ForegroundStyle;
 import org.openflexo.fge.GraphicalRepresentation;
-import org.openflexo.fge.connectors.Connector;
-import org.openflexo.fge.connectors.Connector.ConnectorType;
+import org.openflexo.fge.TextStyle;
+import org.openflexo.fge.connectors.ConnectorSpecification;
+import org.openflexo.fge.connectors.RectPolylinConnectorSpecification;
+import org.openflexo.fge.connectors.ConnectorSpecification.ConnectorType;
 import org.openflexo.fge.connectors.ConnectorSymbol.EndSymbolType;
 import org.openflexo.fge.connectors.ConnectorSymbol.MiddleSymbolType;
 import org.openflexo.fge.connectors.ConnectorSymbol.StartSymbolType;
-import org.openflexo.fge.connectors.CurveConnector;
-import org.openflexo.fge.connectors.rpc.RectPolylinConnector;
-import org.openflexo.fge.connectors.rpc.RectPolylinConnector.RectPolylinAdjustability;
-import org.openflexo.fge.connectors.rpc.RectPolylinConnector.RectPolylinConstraints;
+import org.openflexo.fge.connectors.RectPolylinConnectorSpecification.RectPolylinAdjustability;
+import org.openflexo.fge.connectors.RectPolylinConnectorSpecification.RectPolylinConstraints;
+import org.openflexo.fge.connectors.CurveConnectorSpecification;
 import org.openflexo.fge.controller.CustomClickControlAction;
 import org.openflexo.fge.controller.DrawingController;
 import org.openflexo.fge.controller.MouseClickControl;
 import org.openflexo.fge.geom.FGEGeometricObject.SimplifiedCardinalDirection;
 import org.openflexo.fge.geom.FGEPoint;
 import org.openflexo.fge.geom.FGERectPolylin;
-import org.openflexo.fge.graphics.ForegroundStyle;
-import org.openflexo.fge.graphics.TextStyle;
 import org.openflexo.foundation.DataModification;
 import org.openflexo.foundation.FlexoObservable;
 import org.openflexo.foundation.NameChanged;
@@ -116,11 +116,11 @@ public abstract class EdgeGR<O extends WKFEdge<?, ?>> extends WKFConnectorGR<O> 
 		return declaredEndObject;
 	}
 
-	private Connector makeConnector(ConnectorType connectorType) {
-		Connector returned = Connector.makeConnector(connectorType, this);
+	private ConnectorSpecification makeConnector(ConnectorType connectorType) {
+		ConnectorSpecification returned = ConnectorSpecification.makeConnector(connectorType, this);
 
-		if (returned instanceof RectPolylinConnector) {
-			RectPolylinConnector connector = (RectPolylinConnector) returned;
+		if (returned instanceof RectPolylinConnectorSpecification) {
+			RectPolylinConnectorSpecification connector = (RectPolylinConnectorSpecification) returned;
 			// connector.setAdjustability(RectPolylinAdjustability.FULLY_ADJUSTABLE);
 			connector.setAdjustability(WKFPreferences.getConnectorAdjustability());
 			// logger.info("Post: "+getPostCondition().getName()+" hasGraphicalPropertyForKey("+getStoredPolylinKey()+"): "+getPostCondition().hasGraphicalPropertyForKey(getStoredPolylinKey()));
@@ -147,10 +147,10 @@ public abstract class EdgeGR<O extends WKFEdge<?, ?>> extends WKFConnectorGR<O> 
 			connector.setIsRounded(true);
 			connector.setIsStartingLocationDraggable(true);
 			connector.setIsEndingLocationDraggable(true);
-		} else if (returned instanceof CurveConnector) {
+		} else if (returned instanceof CurveConnectorSpecification) {
 			ensurePointConverterIsRegistered();
-			CurveConnector connector = (CurveConnector) returned;
-			connector._setCpPosition((FGEPoint) getEdge()._graphicalPropertyForKey(getStoredCurveCPKey()));
+			CurveConnectorSpecification connector = (CurveConnectorSpecification) returned;
+			connector.setCpPosition((FGEPoint) getEdge()._graphicalPropertyForKey(getStoredCurveCPKey()));
 		}
 
 		return returned;
@@ -171,8 +171,8 @@ public abstract class EdgeGR<O extends WKFEdge<?, ?>> extends WKFConnectorGR<O> 
 	@Override
 	public void notifyObjectHierarchyHasBeenUpdated() {
 		super.notifyObjectHierarchyHasBeenUpdated();
-		if (polylinIWillBeAdustedTo != null && getConnector() instanceof RectPolylinConnector && !getEdge().isDeleted()) {
-			((RectPolylinConnector) getConnector()).manuallySetPolylin(polylinIWillBeAdustedTo);
+		if (polylinIWillBeAdustedTo != null && getConnectorSpecification() instanceof RectPolylinConnectorSpecification && !getEdge().isDeleted()) {
+			((RectPolylinConnectorSpecification) getConnectorSpecification()).manuallySetPolylin(polylinIWillBeAdustedTo);
 			polylinIWillBeAdustedTo = null;
 			refreshConnector();
 		}
@@ -278,14 +278,14 @@ public abstract class EdgeGR<O extends WKFEdge<?, ?>> extends WKFConnectorGR<O> 
 	}
 
 	public void resetLayout() {
-		if (getConnector() instanceof RectPolylinConnector) {
+		if (getConnectorSpecification() instanceof RectPolylinConnectorSpecification) {
 			getEdge().setLocationConstraintFlag(true);
-			((RectPolylinConnector) getConnector()).setIsStartingLocationFixed(false);
-			((RectPolylinConnector) getConnector()).setIsEndingLocationFixed(false);
+			((RectPolylinConnectorSpecification) getConnectorSpecification()).setIsStartingLocationFixed(false);
+			((RectPolylinConnectorSpecification) getConnectorSpecification()).setIsEndingLocationFixed(false);
 			if (WKFPreferences.getConnectorAdjustability() == RectPolylinAdjustability.FULLY_ADJUSTABLE) {
-				((RectPolylinConnector) getConnector()).setWasManuallyAdjusted(false);
+				((RectPolylinConnectorSpecification) getConnectorSpecification()).setWasManuallyAdjusted(false);
 			} else if (WKFPreferences.getConnectorAdjustability() == RectPolylinAdjustability.BASICALLY_ADJUSTABLE) {
-				((RectPolylinConnector) getConnector()).setCrossedControlPoint(null);
+				((RectPolylinConnectorSpecification) getConnectorSpecification()).setCrossedControlPoint(null);
 				refreshConnector();
 			}
 		}
@@ -303,7 +303,7 @@ public abstract class EdgeGR<O extends WKFEdge<?, ?>> extends WKFConnectorGR<O> 
 			// during big model restructurations (for example during a multiple delete)
 			return;
 		}
-		if (getConnector() instanceof RectPolylinConnector && getEndObject() instanceof PreConditionGR) {
+		if (getConnectorSpecification() instanceof RectPolylinConnectorSpecification && getEndObject() instanceof PreConditionGR) {
 			PreConditionGR preGR = (PreConditionGR) getEndObject();
 			AbstractNodeGR<?> nodeGR = (AbstractNodeGR<?>) preGR.getContainerGraphicalRepresentation();
 			FGEPoint preLocationInNode = GraphicalRepresentation.convertNormalizedPoint(preGR, new FGEPoint(0.5, 0.5), nodeGR);
@@ -319,7 +319,7 @@ public abstract class EdgeGR<O extends WKFEdge<?, ?>> extends WKFConnectorGR<O> 
 			 * FGEPoint(0.5+0.5*Math.cos(orientation.getRadians()),0.5-0.5*Math.sin(orientation.getRadians())));
 			 */
 		}
-		if (getConnector() instanceof RectPolylinConnector) {
+		if (getConnectorSpecification() instanceof RectPolylinConnectorSpecification) {
 			if (getStartObject() instanceof AnnotationGR) {
 				startOrientationFixed = true;
 				double d = getStartObject().getLocationInDrawing().x + getStartObject().getWidth() / 2;
@@ -342,8 +342,8 @@ public abstract class EdgeGR<O extends WKFEdge<?, ?>> extends WKFConnectorGR<O> 
 			}
 		}
 
-		if (getConnector() instanceof RectPolylinConnector) {
-			RectPolylinConnector connector = (RectPolylinConnector) getConnector();
+		if (getConnectorSpecification() instanceof RectPolylinConnectorSpecification) {
+			RectPolylinConnectorSpecification connector = (RectPolylinConnectorSpecification) getConnectorSpecification();
 			if (endOrientationFixed) {
 				if (startOrientationFixed) {
 					connector.setRectPolylinConstraints(RectPolylinConstraints.ORIENTATIONS_FIXED, newStartOrientation, newEndOrientation);
@@ -430,14 +430,14 @@ public abstract class EdgeGR<O extends WKFEdge<?, ?>> extends WKFConnectorGR<O> 
 	}
 
 	private void storeNewLayout() {
-		if (getConnector() instanceof RectPolylinConnector && isRegistered()) {
-			RectPolylinConnector connector = (RectPolylinConnector) getConnector();
+		if (getConnectorSpecification() instanceof RectPolylinConnectorSpecification && isRegistered()) {
+			RectPolylinConnectorSpecification connector = (RectPolylinConnectorSpecification) getConnectorSpecification();
 			if (connector.getAdjustability() == RectPolylinAdjustability.FULLY_ADJUSTABLE) {
 				ensurePolylinConverterIsRegistered();
-				if (connector.getWasManuallyAdjusted() && connector._getPolylin() != null) {
+				if (connector.getWasManuallyAdjusted() && connector.getPolylin() != null) {
 					if (polylinIWillBeAdustedTo == null) { // Store this layout only in no other layout is beeing registering
 						// logger.info("Post "+getPostCondition().getName()+": store new layout to "+connector._getPolylin());
-						getEdge()._setGraphicalPropertyForKey(connector._getPolylin(), getStoredPolylinKey());
+						getEdge()._setGraphicalPropertyForKey(connector.getPolylin(), getStoredPolylinKey());
 					}
 				} else {
 					if (getEdge().hasGraphicalPropertyForKey(getStoredPolylinKey())) {
@@ -468,14 +468,14 @@ public abstract class EdgeGR<O extends WKFEdge<?, ?>> extends WKFConnectorGR<O> 
 					getEdge()._removeGraphicalPropertyWithKey(getFixedEndLocationKey());
 				}
 			}
-		} else if (getConnector() instanceof CurveConnector && isRegistered()) {
-			CurveConnector connector = (CurveConnector) getConnector();
+		} else if (getConnectorSpecification() instanceof CurveConnectorSpecification && isRegistered()) {
+			CurveConnectorSpecification connector = (CurveConnectorSpecification) getConnectorSpecification();
 			ensurePointConverterIsRegistered();
-			getEdge()._setGraphicalPropertyForKey(connector._getCpPosition(), getStoredCurveCPKey());
+			getEdge()._setGraphicalPropertyForKey(connector.getCpPosition(), getStoredCurveCPKey());
 			if (connector.getAreBoundsAdjustable()) {
 				ensurePointConverterIsRegistered();
-				getEdge()._setGraphicalPropertyForKey(connector._getCp1RelativeToStartObject(), getFixedStartLocationKey());
-				getEdge()._setGraphicalPropertyForKey(connector._getCp2RelativeToEndObject(), getFixedEndLocationKey());
+				getEdge()._setGraphicalPropertyForKey(connector.getCp1RelativeToStartObject(), getFixedStartLocationKey());
+				getEdge()._setGraphicalPropertyForKey(connector.getCp2RelativeToEndObject(), getFixedEndLocationKey());
 			} else {
 				if (getEdge().hasGraphicalPropertyForKey(getFixedStartLocationKey())) {
 					getEdge()._removeGraphicalPropertyWithKey(getFixedStartLocationKey());
@@ -499,11 +499,11 @@ public abstract class EdgeGR<O extends WKFEdge<?, ?>> extends WKFConnectorGR<O> 
 	}
 
 	public boolean startLocationManuallyAdjusted() {
-		return getConnector() instanceof RectPolylinConnector && ((RectPolylinConnector) getConnector()).getIsStartingLocationFixed();
+		return getConnectorSpecification() instanceof RectPolylinConnectorSpecification && ((RectPolylinConnectorSpecification) getConnectorSpecification()).getIsStartingLocationFixed();
 	}
 
 	public boolean endLocationManuallyAdjusted() {
-		return getConnector() instanceof RectPolylinConnector && ((RectPolylinConnector) getConnector()).getIsEndingLocationFixed();
+		return getConnectorSpecification() instanceof RectPolylinConnectorSpecification && ((RectPolylinConnectorSpecification) getConnectorSpecification()).getIsEndingLocationFixed();
 	}
 
 	private boolean isPolylinConverterRegistered = false;
@@ -535,7 +535,7 @@ public abstract class EdgeGR<O extends WKFEdge<?, ?>> extends WKFConnectorGR<O> 
 		public ResetLayout() {
 			super("ResetLayout", MouseButton.LEFT, 2, new CustomClickControlAction() {
 				@Override
-				public boolean handleClick(GraphicalRepresentation<?> graphicalRepresentation, DrawingController<?> controller,
+				public boolean handleClick(GraphicalRepresentation graphicalRepresentation, DrawingController controller,
 						java.awt.event.MouseEvent event) {
 					// logger.info("Reset layout for edge");
 					resetLayout();
@@ -599,7 +599,7 @@ public abstract class EdgeGR<O extends WKFEdge<?, ?>> extends WKFConnectorGR<O> 
 		ts.setBackgroundColor(getDrawable().getBgColor(SWIMMING_LANE_EDITOR, Color.WHITE));
 		ts.setIsBackgroundColored(true);
 		setTextStyle(ts);
-		setConnector(makeConnector(type.getConnectorType()));
+		setConnectorSpecification(makeConnector(type.getConnectorType()));
 	}
 
 	private FlexoFont getEdgeFont() {
@@ -612,16 +612,16 @@ public abstract class EdgeGR<O extends WKFEdge<?, ?>> extends WKFConnectorGR<O> 
 
 	// Override to implement defaut automatic layout
 	public double getDefaultLabelX() {
-		if (getConnector() instanceof RectPolylinConnector) {
-			return Math.sin(((RectPolylinConnector) getConnector()).getMiddleSymbolAngle()) * 15;
+		if (getConnectorSpecification() instanceof RectPolylinConnectorSpecification) {
+			return Math.sin(((RectPolylinConnectorSpecification) getConnectorSpecification()).getMiddleSymbolAngle()) * 15;
 		}
 		return 0;
 	}
 
 	// Override to implement defaut automatic layout
 	public double getDefaultLabelY() {
-		if (getConnector() instanceof RectPolylinConnector) {
-			return Math.cos(((RectPolylinConnector) getConnector()).getMiddleSymbolAngle()) * 15;
+		if (getConnectorSpecification() instanceof RectPolylinConnectorSpecification) {
+			return Math.cos(((RectPolylinConnectorSpecification) getConnectorSpecification()).getMiddleSymbolAngle()) * 15;
 		}
 		return 0;
 	}

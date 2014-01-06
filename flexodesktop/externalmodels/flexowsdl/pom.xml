@@ -7,7 +7,7 @@
 	<parent>
 		<groupId>org.openflexo</groupId>
 		<artifactId>externalmodels</artifactId>
-		<version>1.5.2-SNAPSHOT</version>
+        <version>1.7-SNAPSHOT</version>
 	</parent>
 	<artifactId>flexowsdl</artifactId>
 	<name>ExternalModel :: FlexoWSDL</name>
@@ -34,6 +34,16 @@
 		</plugins>
 	</build>
 	<dependencies>
+		<dependency>
+			<groupId>org.openflexo</groupId>
+			<artifactId>agilebirdsconnector</artifactId>
+		</dependency>
+		<dependency>
+			<groupId>org.openflexo</groupId>
+			<artifactId>agilebirdsconnector</artifactId>
+			<classifier>tests</classifier>
+			<scope>test</scope>
+		</dependency>
 		<dependency>
 			<groupId>org.openflexo</groupId>
 			<artifactId>flexofoundation</artifactId>

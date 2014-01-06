@@ -28,7 +28,7 @@ import java.util.logging.Logger;
 import javax.swing.JComponent;
 
 import org.openflexo.FlexoCst;
-import org.openflexo.foundation.FlexoModelObject;
+import org.openflexo.foundation.FlexoObject;
 import org.openflexo.toolbox.ToolBox;
 import org.openflexo.view.controller.FlexoController;
 
@@ -159,11 +159,11 @@ public abstract class MouseSelectionManager extends SelectionManager implements 
 	// ==========================================================================
 
 	@Override
-	public FlexoModelObject getPasteContext() {
+	public FlexoObject getPasteContext() {
 		return pasteContextForComponent(getLastClickedContainer());
 	}
 
-	public abstract FlexoModelObject pasteContextForComponent(JComponent aComponent);
+	public abstract FlexoObject pasteContextForComponent(JComponent aComponent);
 
 	@Override
 	public PastingGraphicalContext getPastingGraphicalContext() {

@@ -1,5 +1,6 @@
 package org.openflexo.model.factory;
 
+import java.io.ByteArrayOutputStream;
 import java.io.IOException;
 import java.io.InputStream;
 import java.io.OutputStream;
@@ -31,6 +32,8 @@ import org.openflexo.model.annotations.PastingPoint;
 import org.openflexo.model.exceptions.InvalidDataException;
 import org.openflexo.model.exceptions.ModelDefinitionException;
 import org.openflexo.model.exceptions.ModelExecutionException;
+import org.openflexo.model.undo.CreateCommand;
+import org.openflexo.model.undo.UndoManager;
 
 public class ModelFactory {
 
@@ -38,25 +41,39 @@ public class ModelFactory {
 	private Class<? extends List> listImplementationClass = Vector.class;
 	private Class<? extends Map> mapImplementationClass = Hashtable.class;
 
-	private Map<Class, PAMELAProxyFactory> proxyFactories;
-	private StringEncoder stringEncoder;
-	private ModelContext modelContext;
+	private final Map<Class, PAMELAProxyFactory> proxyFactories;
+	private final StringEncoder stringEncoder;
+	private final ModelContext modelContext;
 
 	private ModelContext extendedContext;
+
+	private UndoManager undoManager;
 
 	public class PAMELAProxyFactory<I> extends ProxyFactory {
 		private final ModelEntity<I> modelEntity;
 		private boolean locked = false;
 		private boolean overridingSuperClass = false;
 
-		public PAMELAProxyFactory(ModelEntity<I> modelEntity) throws ModelDefinitionException {
+		public PAMELAProxyFactory(ModelEntity<I> aModelEntity) throws ModelDefinitionException {
 			super();
-			this.modelEntity = modelEntity;
+			this.modelEntity = aModelEntity;
 			setFilter(new MethodFilter() {
 				@Override
 				public boolean isHandled(Method method) {
-					return Modifier.isAbstract(method.getModifiers()) || method.getName().equals("toString")
-							&& method.getParameterTypes().length == 0 && method.getDeclaringClass() == Object.class;
+
+					if (Modifier.isAbstract(method.getModifiers()))
+						return true;
+					if (method.getName().equals("toString")) {
+						return true;
+					}
+					// TODO perf issue ??? Check this !
+					if (modelEntity.getPropertyForMethod(method) != null) {
+						return true;
+					}
+					return false;
+					// Old code
+					/*return Modifier.isAbstract(method.getModifiers()) || method.getName().equals("toString")
+							&& method.getParameterTypes().length == 0 && method.getDeclaringClass() == Object.class;*/
 				}
 			});
 			Class<?> implementingClass = modelEntity.getImplementingClass();
@@ -138,6 +155,7 @@ public class ModelFactory {
 					}
 				}
 			}
+			objectHasBeenCreated(returned, modelEntity.getImplementedInterface());
 			return returned;
 		}
 	}
@@ -150,6 +168,20 @@ public class ModelFactory {
 		this.modelContext = modelContext;
 		proxyFactories = new HashMap<Class, PAMELAProxyFactory>();
 		stringEncoder = new StringEncoder(this);
+	}
+
+	/**
+	 * Creates and register an UndoManager tracking edits on this ModelFactory
+	 * 
+	 * @return
+	 */
+	public UndoManager createUndoManager() {
+		undoManager = new UndoManager();
+		return undoManager;
+	}
+
+	public UndoManager getUndoManager() {
+		return undoManager;
 	}
 
 	public ModelContext getModelContext() {
@@ -175,7 +207,11 @@ public class ModelFactory {
 	public <I> I newInstance(Class<I> implementedInterface, Object... args) {
 		try {
 			PAMELAProxyFactory<I> proxyFactory = getProxyFactory(implementedInterface, true);
-			return proxyFactory.newInstance(args);
+			I returned = proxyFactory.newInstance(args);
+			if (getUndoManager() != null) {
+				getUndoManager().addEdit(new CreateCommand<I>(returned, proxyFactory.getModelEntity(), this));
+			}
+			return returned;
 		} catch (IllegalArgumentException e) {
 			e.printStackTrace();
 			throw new ModelExecutionException(e);
@@ -204,7 +240,11 @@ public class ModelFactory {
 	<I> I _newInstance(Class<I> implementedInterface, boolean useExtended, Object... args) {
 		try {
 			PAMELAProxyFactory<I> proxyFactory = getProxyFactory(implementedInterface, true, useExtended);
-			return proxyFactory.newInstance(args);
+			I returned = proxyFactory.newInstance(args);
+			if (getUndoManager() != null) {
+				getUndoManager().addEdit(new CreateCommand<I>(returned, proxyFactory.getModelEntity(), this));
+			}
+			return returned;
 		} catch (IllegalArgumentException e) {
 			e.printStackTrace();
 			throw new ModelExecutionException(e);
@@ -245,6 +285,12 @@ public class ModelFactory {
 				entity = getModelContext().getModelEntity(implementedInterface);
 			}
 			if (entity == null) {
+				System.out.println("Debug model context");
+				Iterator<ModelEntity> it = modelContext.getEntities();
+				while (it.hasNext()) {
+					ModelEntity<?> next = it.next();
+					System.out.println("> " + next);
+				}
 				throw new ModelExecutionException("Unknown entity '" + implementedInterface.getName()
 						+ "'! Did you forget to import it or to annotated it with @ModelEntity?");
 			} else {
@@ -364,6 +410,20 @@ public class ModelFactory {
 	 * @param context
 	 * @return
 	 */
+	public List<Object> getEmbeddedObjects(Object root, EmbeddingType embeddingType) {
+		return getEmbeddedObjects(root, embeddingType, (Object[]) null);
+	}
+
+	/**
+	 * Build and return a List of embedded objects, using meta informations contained in related class All property should be annotated with
+	 * a @Embedded annotation which determine the way of handling this property
+	 * 
+	 * Supplied context is used to determine the closure of objects graph being constructed during this operation.
+	 * 
+	 * @param root
+	 * @param context
+	 * @return
+	 */
 	public List<Object> getEmbeddedObjects(Object root, EmbeddingType embeddingType, Object... context) {
 		if (!isProxyObject(root)) {
 			return Collections.emptyList();
@@ -410,8 +470,8 @@ public class ModelFactory {
 	}
 
 	private class ConditionalPresence {
-		private Object object;
-		private List<Object> requiredPresence;
+		private final Object object;
+		private final List<Object> requiredPresence;
 
 		public ConditionalPresence(Object object, List<Object> requiredPresence) {
 			super();
@@ -522,6 +582,17 @@ public class ModelFactory {
 		return null;
 	}
 
+	/**
+	 * Paste supplied clipboard in context object<br>
+	 * Return pasted objects (a single object for a single contents clipboard, and a list of objects for a multiple contents)
+	 * 
+	 * @param clipboard
+	 * @param context
+	 * @return
+	 * @throws ModelExecutionException
+	 * @throws ModelDefinitionException
+	 * @throws CloneNotSupportedException
+	 */
 	public Object paste(Clipboard clipboard, Object context) throws ModelExecutionException, ModelDefinitionException,
 			CloneNotSupportedException {
 		if (!isProxyObject(context)) {
@@ -531,6 +602,18 @@ public class ModelFactory {
 		return getHandler(context).paste(clipboard);
 	}
 
+	/**
+	 * Paste supplied clipboard in context object for supplied property <br>
+	 * Return pasted objects (a single object for a single contents clipboard, and a list of objects for a multiple contents)
+	 * 
+	 * @param clipboard
+	 * @param modelProperty
+	 * @param context
+	 * @return
+	 * @throws ModelExecutionException
+	 * @throws ModelDefinitionException
+	 * @throws CloneNotSupportedException
+	 */
 	public Object paste(Clipboard clipboard, ModelProperty<?> modelProperty, Object context) throws ModelExecutionException,
 			ModelDefinitionException, CloneNotSupportedException {
 		if (!isProxyObject(context)) {
@@ -540,6 +623,19 @@ public class ModelFactory {
 		return getHandler(context).paste(clipboard, (ModelProperty) modelProperty);
 	}
 
+	/**
+	 * Paste supplied clipboard in context object for supplied property at specified pasting point<br>
+	 * Return pasted objects (a single object for a single contents clipboard, and a list of objects for a multiple contents)
+	 * 
+	 * @param clipboard
+	 * @param modelProperty
+	 * @param pp
+	 * @param context
+	 * @return
+	 * @throws ModelExecutionException
+	 * @throws ModelDefinitionException
+	 * @throws CloneNotSupportedException
+	 */
 	public Object paste(Clipboard clipboard, ModelProperty<?> modelProperty, PastingPoint pp, Object context)
 			throws ModelExecutionException, ModelDefinitionException, CloneNotSupportedException {
 		if (!isProxyObject(context)) {
@@ -547,6 +643,17 @@ public class ModelFactory {
 		}
 
 		return getHandler(context).paste(clipboard, (ModelProperty) modelProperty, pp);
+	}
+
+	public String stringRepresentation(Object object) {
+		ByteArrayOutputStream baos = new ByteArrayOutputStream();
+		try {
+			serialize(object, baos, SerializationPolicy.PERMISSIVE);
+		} catch (IOException e) {
+			e.printStackTrace();
+			return null;
+		}
+		return baos.toString();
 	}
 
 	public void serialize(Object object, OutputStream os) throws IOException {
@@ -576,5 +683,24 @@ public class ModelFactory {
 			ModelDefinitionException {
 		XMLDeserializer deserializer = new XMLDeserializer(this, policy);
 		return deserializer.deserializeDocument(input);
+	}
+
+	/**
+	 * Hook to detect an object creation Default implementation silently returns
+	 * 
+	 * @param newlyCreatedObject
+	 * @param implementedInterface
+	 */
+	public <I> void objectHasBeenCreated(I newlyCreatedObject, Class<I> implementedInterface) {
+	}
+
+	/**
+	 * Hook to detect an object deserialization<br>
+	 * Default implementation silently returns
+	 * 
+	 * @param newlyCreatedObject
+	 * @param implementedInterface
+	 */
+	public <I> void objectHasBeenDeserialized(I newlyCreatedObject, Class<I> implementedInterface) {
 	}
 }

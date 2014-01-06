@@ -11,7 +11,7 @@ import org.openflexo.builders.exception.MissingArgumentException;
 import org.openflexo.builders.utils.FlexoBuilderListener;
 import org.openflexo.foundation.CodeType;
 import org.openflexo.foundation.FlexoEditor;
-import org.openflexo.foundation.rm.FlexoProject;
+import org.openflexo.foundation.FlexoProject;
 import org.openflexo.foundation.toc.TOCData;
 import org.openflexo.foundation.toc.TOCRepository;
 import org.openflexo.foundation.utils.ProjectInitializerException;

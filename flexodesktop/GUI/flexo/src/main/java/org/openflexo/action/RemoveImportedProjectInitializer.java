@@ -21,12 +21,12 @@ package org.openflexo.action;
 
 import java.util.logging.Logger;
 
-import org.openflexo.foundation.FlexoModelObject;
+import org.openflexo.foundation.FlexoProjectObject;
 import org.openflexo.foundation.action.RemoveImportedProject;
 import org.openflexo.view.controller.ActionInitializer;
 import org.openflexo.view.controller.ControllerActionInitializer;
 
-public class RemoveImportedProjectInitializer extends ActionInitializer<RemoveImportedProject, FlexoModelObject, FlexoModelObject> {
+public class RemoveImportedProjectInitializer extends ActionInitializer<RemoveImportedProject, FlexoProjectObject, FlexoProjectObject> {
 
 	private static final Logger logger = Logger.getLogger(ControllerActionInitializer.class.getPackage().getName());
 

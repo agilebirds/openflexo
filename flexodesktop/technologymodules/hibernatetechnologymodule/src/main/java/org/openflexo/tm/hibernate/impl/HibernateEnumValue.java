@@ -85,7 +85,7 @@ public class HibernateEnumValue extends TechnologyModelObject {
 	 * {@inheritDoc}
 	 */
 	@Override
-	public void delete() {
+	public boolean delete() {
 
 		if (getHibernateEnum() != null) {
 			getHibernateEnum().removeFromHibernateEnumValues(this);
@@ -95,6 +95,7 @@ public class HibernateEnumValue extends TechnologyModelObject {
 		notifyObservers(new SGObjectDeletedModification());
 		super.delete();
 		deleteObservers();
+		return true;
 	}
 
 	/* ===================== */

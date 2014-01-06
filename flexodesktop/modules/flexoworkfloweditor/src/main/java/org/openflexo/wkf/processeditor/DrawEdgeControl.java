@@ -58,7 +58,7 @@ public class DrawEdgeControl extends MouseDragControl {
 
 	protected class DrawEdgeAction extends CustomDragControlAction {
 		@Override
-		public boolean handleMousePressed(GraphicalRepresentation<?> graphicalRepresentation, DrawingController<?> controller,
+		public boolean handleMousePressed(GraphicalRepresentation graphicalRepresentation, DrawingController controller,
 				MouseEvent event) {
 			if (graphicalRepresentation instanceof WKFNodeGR) {
 				drawEdge = true;
@@ -70,7 +70,7 @@ public class DrawEdgeControl extends MouseDragControl {
 		}
 
 		@Override
-		public boolean handleMouseReleased(GraphicalRepresentation<?> graphicalRepresentation, DrawingController<?> controller,
+		public boolean handleMouseReleased(GraphicalRepresentation graphicalRepresentation, DrawingController controller,
 				MouseEvent event, boolean isSignificativeDrag) {
 			if (drawEdge) {
 				try {
@@ -111,12 +111,12 @@ public class DrawEdgeControl extends MouseDragControl {
 
 		// Attempt to repaint relevant zone only
 		private Rectangle getBoundsToRepaint(DrawingView<?> drawingView) {
-			ShapeView<?> fromView = drawingView.shapeViewForObject(from);
+			ShapeView<?> fromView = drawingView.shapeViewForNode(from);
 			Rectangle fromViewBounds = SwingUtilities.convertRectangle(fromView, fromView.getBounds(), drawingView);
 			Rectangle boundsToRepaint = fromViewBounds;
 
 			if (to != null) {
-				ShapeView<?> toView = drawingView.shapeViewForObject(to);
+				ShapeView<?> toView = drawingView.shapeViewForNode(to);
 				Rectangle toViewBounds = SwingUtilities.convertRectangle(toView, toView.getBounds(), drawingView);
 				boundsToRepaint = fromViewBounds.union(toViewBounds);
 			}
@@ -132,7 +132,7 @@ public class DrawEdgeControl extends MouseDragControl {
 		}
 
 		@Override
-		public boolean handleMouseDragged(GraphicalRepresentation<?> graphicalRepresentation, DrawingController<?> controller,
+		public boolean handleMouseDragged(GraphicalRepresentation graphicalRepresentation, DrawingController controller,
 				MouseEvent event) {
 			if (drawEdge) {
 
@@ -182,7 +182,7 @@ public class DrawEdgeControl extends MouseDragControl {
 		public void paint(Graphics g, DrawingController controller) {
 			if (drawEdge && currentDraggingLocationInDrawingView != null) {
 				Point fromPoint = controller.getDrawingGraphicalRepresentation().convertRemoteNormalizedPointToLocalViewCoordinates(
-						from.getShape().getShape().getCenter(), from, controller.getScale());
+						from.getShapeSpecification().getShapeSpecification().getCenter(), from, controller.getScale());
 				Point toPoint = currentDraggingLocationInDrawingView;
 				if (to != null) {
 					/*toPoint = controller.getDrawingGraphicalRepresentation().convertRemoteNormalizedPointToLocalViewCoordinates(

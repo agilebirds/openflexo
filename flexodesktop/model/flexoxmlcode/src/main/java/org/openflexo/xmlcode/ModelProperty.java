@@ -111,7 +111,7 @@ public class ModelProperty {
 	private PropertyType propertyType;
 
 	/** Stores related model entity */
-	private ModelEntity modelEntity;
+	private final ModelEntity modelEntity;
 
 	/** Stores related KeyValueProperty */
 	private KeyValueProperty keyValueProperty;
@@ -153,6 +153,35 @@ public class ModelProperty {
 	 */
 	public ModelProperty(ModelEntity aModelEntity, String aName, String someXMLTags, String aContainsTag, String aKeyToUse,
 			PropertyType aPropertyType, boolean isAttributeFlag, boolean isTextFlag) throws InvalidModelException {
+		this(aModelEntity, aName, someXMLTags, aContainsTag, aKeyToUse, aPropertyType, isAttributeFlag, isTextFlag, false);
+	}
+
+	/**
+	 * Creates a new <code>ModelEntity</code> instance<br>
+	 * This constructor should be called for dynamically XMLMapping building purposes.<br>
+	 * Use {@link ModelEntity#registerNewModelProperty(ModelProperty)} to register this new <code>ModelProperty</code> object in an
+	 * <code>ModelEntity</code> instance.
+	 * 
+	 * @param aModelEntity
+	 *            a <code>ModelEntity</code> value
+	 * @param aPropertyType
+	 *            a <code>int</code> value, which could be:
+	 *            <ul>
+	 *            <li>{@link #SINGLE_PROPERTY_TYPE}: this property matches a single object or primitive</li>
+	 *            <li>{@link #ARRAY_PROPERTY_TYPE}: this property matches a array of objects or primitives</li>
+	 *            <li>{@link #VECTOR_PROPERTY_TYPE}: this property matches a list of objects stored in a {@link java.util.Vector} or a
+	 *            sub-class of {@link java.util.Vector}.</li>
+	 *            <li>{@link #HASHTABLE_PROPERTY_TYPE}: this property matches a list of objects stored in a {@link java.util.Hashtable} or a
+	 *            sub-class of {@link java.util.Hashtable}.</li>
+	 *            <li>{@link #PROPERTIES_PROPERTY_TYPE}: this property matches a dynamic list of objects stored in a
+	 *            {@link java.util.Hashtable} or a sub-class of {@link java.util.Hashtable} where key is a String obtained and parsed
+	 *            from/as XML element name: therefore, there is no need to implement model for contained data</li>
+	 *            </ul>
+	 * @exception InvalidModelException
+	 *                if an error occurs
+	 */
+	public ModelProperty(ModelEntity aModelEntity, String aName, String someXMLTags, String aContainsTag, String aKeyToUse,
+			PropertyType aPropertyType, boolean isAttributeFlag, boolean isTextFlag, boolean permissive) throws InvalidModelException {
 
 		super();
 
@@ -285,6 +314,18 @@ public class ModelProperty {
 	 *            a <code>ModelEntity</code> value
 	 */
 	public ModelProperty(Node aPropertyNode, ModelEntity aModelEntity) {
+		this(aPropertyNode, aModelEntity, false);
+	}
+
+	/**
+	 * Creates a new <code>ModelProperty</code> instance, given a node <code>aPropertyNode</code>
+	 * 
+	 * @param aPropertyNode
+	 *            a <code>Node</code> value
+	 * @param aModelEntity
+	 *            a <code>ModelEntity</code> value
+	 */
+	public ModelProperty(Node aPropertyNode, ModelEntity aModelEntity, boolean permissive) {
 
 		super();
 

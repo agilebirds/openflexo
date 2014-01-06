@@ -36,6 +36,7 @@ import org.openflexo.fge.geom.FGEPoint;
 import org.openflexo.fge.view.DrawingView;
 import org.openflexo.foundation.FlexoEditor;
 import org.openflexo.foundation.FlexoModelObject;
+import org.openflexo.foundation.FlexoObject;
 import org.openflexo.foundation.wkf.ActionPetriGraph;
 import org.openflexo.foundation.wkf.ActivityPetriGraph;
 import org.openflexo.foundation.wkf.FlexoProcess;
@@ -49,12 +50,12 @@ import org.openflexo.localization.FlexoLocalization;
 import org.openflexo.logging.FlexoLogger;
 import org.openflexo.module.UserType;
 import org.openflexo.selection.SelectionManager;
-import org.openflexo.selection.SelectionManagingDrawingController;
+import org.openflexo.selection.SelectionManagingDianaEditor;
 import org.openflexo.wkf.WKFPreferences;
 import org.openflexo.wkf.controller.WKFController;
 import org.openflexo.wkf.processeditor.gr.WKFObjectGR;
 
-public class ProcessEditorController extends SelectionManagingDrawingController<ProcessRepresentation> {
+public class ProcessEditorController extends SelectionManagingDianaEditor<ProcessRepresentation> {
 
 	private static final Logger logger = FlexoLogger.getLogger(ProcessEditorController.class.getPackage().getName());
 
@@ -208,7 +209,7 @@ public class ProcessEditorController extends SelectionManagingDrawingController<
 	}
 
 	protected boolean paletteSwitchRequested = false;
-	protected FlexoModelObject objectForPaletteSwitch;
+	protected FlexoObject objectForPaletteSwitch;
 
 	public void setObjectForPaletteSwitch(FlexoModelObject objectForPaletteSwitch) {
 		if (this.objectForPaletteSwitch != null && this.objectForPaletteSwitch != objectForPaletteSwitch) {
@@ -300,7 +301,7 @@ public class ProcessEditorController extends SelectionManagingDrawingController<
 			movedObject = ((WKFObjectGR<?>) currentMove.getMovedObject()).getModel();
 		}
 
-		for (GraphicalRepresentation<?> gr : currentMove.getMovedObjects()) {
+		for (GraphicalRepresentation gr : currentMove.getMovedObjects()) {
 			if (gr instanceof WKFObjectGR<?>) {
 				movedObjects.add(((WKFObjectGR<?>) gr).getModel());
 			}
@@ -309,7 +310,7 @@ public class ProcessEditorController extends SelectionManagingDrawingController<
 		if (movedObject != null) {
 			currentMoveAction = WKFMove.actionType.makeNewAction(movedObject, movedObjects, getEditor());
 			currentMoveAction.setGraphicalContext(ProcessEditorConstants.BASIC_PROCESS_EDITOR);
-			for (ShapeGraphicalRepresentation<?> gr : currentMove.getMovedObjects()) {
+			for (ShapeGraphicalRepresentation gr : currentMove.getMovedObjects()) {
 				if (gr instanceof WKFObjectGR<?>) {
 					WKFObject o = ((WKFObjectGR<?>) gr).getModel();
 					FGEPoint initialLocation = currentMove.getInitialLocations().get(gr);
@@ -330,7 +331,7 @@ public class ProcessEditorController extends SelectionManagingDrawingController<
 	@Override
 	public void notifyHasMoved(MoveInfo currentMove) {
 		if (currentMoveAction != null) {
-			for (ShapeGraphicalRepresentation<?> gr : currentMove.getMovedObjects()) {
+			for (ShapeGraphicalRepresentation gr : currentMove.getMovedObjects()) {
 				if (gr instanceof WKFObjectGR<?>) {
 					WKFObject o = ((WKFObjectGR<?>) gr).getModel();
 					currentMoveAction.getNewLocations().put(o, new Point2D.Double(gr.getX(), gr.getY()));

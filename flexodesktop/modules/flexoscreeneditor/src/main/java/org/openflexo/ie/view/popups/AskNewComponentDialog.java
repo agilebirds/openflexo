@@ -42,7 +42,7 @@ import org.openflexo.foundation.dm.DMEntity;
 import org.openflexo.foundation.ie.IERegExp;
 import org.openflexo.foundation.ie.cl.FlexoComponentFolder;
 import org.openflexo.foundation.ie.cl.action.AddComponent;
-import org.openflexo.foundation.rm.FlexoProject;
+import org.openflexo.foundation.FlexoProject;
 import org.openflexo.foundation.wkf.FlexoProcess;
 import org.openflexo.icon.IconLibrary;
 import org.openflexo.localization.FlexoLocalization;

@@ -22,7 +22,7 @@ package org.openflexo.components.widget;
 import java.io.File;
 import java.util.logging.Logger;
 
-import org.openflexo.foundation.view.ViewDefinition;
+import org.openflexo.foundation.resource.RepositoryFolder;
 import org.openflexo.toolbox.FileResource;
 
 /**
@@ -33,13 +33,14 @@ import org.openflexo.toolbox.FileResource;
  *         DEPRECATED BECAUSE NOT IMPLEMENTED YET!
  */
 @Deprecated
-public class FIBViewFolderSelector extends FIBModelObjectSelector<ViewDefinition> {
-	@SuppressWarnings("hiding")
+@SuppressWarnings("serial")
+public class FIBViewFolderSelector extends FIBFlexoObjectSelector<RepositoryFolder> {
+
 	static final Logger logger = Logger.getLogger(FIBViewFolderSelector.class.getPackage().getName());
 
 	public static FileResource FIB_FILE = new FileResource("Fib/ViewFolderSelector.fib");
 
-	public FIBViewFolderSelector(ViewDefinition editedObject) {
+	public FIBViewFolderSelector(RepositoryFolder editedObject) {
 		super(editedObject);
 	}
 
@@ -49,12 +50,12 @@ public class FIBViewFolderSelector extends FIBModelObjectSelector<ViewDefinition
 	}
 
 	@Override
-	public Class<ViewDefinition> getRepresentedType() {
-		return ViewDefinition.class;
+	public Class<RepositoryFolder> getRepresentedType() {
+		return RepositoryFolder.class;
 	}
 
 	@Override
-	public String renderedString(ViewDefinition editedObject) {
+	public String renderedString(RepositoryFolder editedObject) {
 		if (editedObject != null) {
 			return editedObject.getName();
 		}

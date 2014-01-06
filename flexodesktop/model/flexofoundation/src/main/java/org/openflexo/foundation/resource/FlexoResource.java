@@ -1,14 +1,22 @@
 package org.openflexo.foundation.resource;
 
+import java.io.FileNotFoundException;
+import java.util.Date;
 import java.util.List;
 
+import org.openflexo.foundation.FlexoException;
+import org.openflexo.foundation.FlexoObject;
+import org.openflexo.foundation.FlexoServiceManager;
 import org.openflexo.model.annotations.Adder;
 import org.openflexo.model.annotations.Getter;
 import org.openflexo.model.annotations.Getter.Cardinality;
+import org.openflexo.model.annotations.ImplementationClass;
 import org.openflexo.model.annotations.ModelEntity;
 import org.openflexo.model.annotations.Remover;
+import org.openflexo.model.annotations.Setter;
 import org.openflexo.model.annotations.XMLAttribute;
 import org.openflexo.model.annotations.XMLElement;
+import org.openflexo.toolbox.FlexoVersion;
 import org.openflexo.toolbox.IProgress;
 
 /**
@@ -20,8 +28,9 @@ import org.openflexo.toolbox.IProgress;
  * 
  */
 @ModelEntity
+@ImplementationClass(FlexoResourceImpl.class)
 @XMLElement
-public interface FlexoResource<RD extends ResourceData<RD>> {
+public interface FlexoResource<RD extends ResourceData<RD>> extends FlexoObject {
 
 	public static final String NAME = "name";
 	public static final String URI = "URI";
@@ -31,6 +40,7 @@ public interface FlexoResource<RD extends ResourceData<RD>> {
 	public static final String CONTENTS = "contents";
 	public static final String DEPENDENCIES = "dependencies";
 	public static final String LAST_UPDATE = "lastUpdate";
+	public static final String SERVICE_MANAGER = "serviceManager";
 
 	/**
 	 * Returns the name of this resource. The name of the resource is a displayable name that the end-user will understand. There are no
@@ -43,6 +53,14 @@ public interface FlexoResource<RD extends ResourceData<RD>> {
 	public String getName();
 
 	/**
+	 * Sets the name of this resource
+	 * 
+	 * @param aName
+	 */
+	@Setter(NAME)
+	public void setName(String aName);
+
+	/**
 	 * Returns the unique resource identifier of this resource. A URI is unique in the whole universe and clearly and uniquely identifies
 	 * this resource.
 	 * 
@@ -53,13 +71,51 @@ public interface FlexoResource<RD extends ResourceData<RD>> {
 	public String getURI();
 
 	/**
+	 * Sets the unique resource identifier of this resource.
+	 * 
+	 * @param anURI
+	 */
+	@Setter(URI)
+	public void setURI(String anURI);
+
+	/**
 	 * Returns a displayable version that the end-user will understand.
 	 * 
 	 * @return a displayable version that the end-user will understand.
 	 */
-	@Getter(VERSION)
+	@Getter(value = VERSION, isStringConvertable = true)
 	@XMLAttribute
-	public String getVersion();
+	public FlexoVersion getVersion();
+
+	/**
+	 * Sets version for this resource.
+	 * 
+	 * @param anURI
+	 */
+	@Setter(VERSION)
+	public void setVersion(FlexoVersion aVersion);
+
+	/**
+	 * Returns the date where the resource was updated for the last time.<br>
+	 * This timestamp references the date where the last serialization was performed (not the date where the resource data in memory was
+	 * updated for the last time).<br>
+	 * (For a file resource, this date is the diskLastModified date)
+	 * 
+	 * @return date
+	 */
+	@Getter(value = LAST_UPDATE, isStringConvertable = true)
+	@XMLAttribute
+	public Date getLastUpdate();
+
+	/**
+	 * Sets the date where the resource was updated for the last time.<br>
+	 * This timestamp references the date where the last serialization was performed (not the date where the resource data in memory was
+	 * updated for the last time).<br>
+	 * 
+	 * @param date
+	 */
+	@Setter(LAST_UPDATE)
+	public void setLastUpdate(Date aDate);
 
 	/**
 	 * Returns the revision of this resource. Each resource should ensure that upon each time it is edited, the revision number is
@@ -71,6 +127,23 @@ public interface FlexoResource<RD extends ResourceData<RD>> {
 	@Getter(REVISION)
 	@XMLAttribute
 	public Long getRevision();
+
+	/**
+	 * Returns the FlexoServiceManager where this resource is registered
+	 * 
+	 * @return the name of this resource.
+	 */
+	@Override
+	@Getter(value = SERVICE_MANAGER, ignoreType = true)
+	public FlexoServiceManager getServiceManager();
+
+	/**
+	 * Sets the FlexoServiceManager where this resource is registered
+	 * 
+	 * @param aName
+	 */
+	@Setter(SERVICE_MANAGER)
+	public void setServiceManager(FlexoServiceManager serviceManager);
 
 	/**
 	 * Returns the class of the resource data held by this resource.
@@ -92,15 +165,24 @@ public interface FlexoResource<RD extends ResourceData<RD>> {
 	 * 
 	 * @return the container of this resource.
 	 */
-	@Getter(CONTAINER)
+	@Getter(value = CONTAINER, inverse = CONTENTS)
 	public FlexoResource<?> getContainer();
+
+	/**
+	 * Sets the resource in which this resource is contained.
+	 * 
+	 * 
+	 * @param resource
+	 */
+	@Setter(CONTAINER)
+	public void setContainer(FlexoResource<?> resource);
 
 	/**
 	 * Returns a list of resources contained by this resource.
 	 * 
 	 * @return the list of contained resources.
 	 */
-	@Getter(value = CONTENTS, cardinality = Cardinality.LIST)
+	@Getter(value = CONTENTS, cardinality = Cardinality.LIST, inverse = CONTAINER)
 	public List<FlexoResource<?>> getContents();
 
 	/**
@@ -120,6 +202,13 @@ public interface FlexoResource<RD extends ResourceData<RD>> {
 	 */
 	@Remover(CONTENTS)
 	public void removeFromContents(FlexoResource<?> resource);
+
+	/**
+	 * Returns a list of resources of supplied type contained by this resource.
+	 * 
+	 * @return the list of contained resources.
+	 */
+	public <R extends FlexoResource<?>> List<R> getContents(Class<R> resourceClass);
 
 	/**
 	 * Returns a list of resources required by this resource.
@@ -148,6 +237,28 @@ public interface FlexoResource<RD extends ResourceData<RD>> {
 	public void removeFromDependencies(FlexoResource<?> resource);
 
 	/**
+	 * Return flag indicating if this resource is loaded
+	 * 
+	 * @return
+	 */
+	public boolean isLoaded();
+
+	/**
+	 * Return flag indicating if this resource is loadable
+	 * 
+	 * @return
+	 */
+	public boolean isLoadable();
+
+	/**
+	 * Returns the &quot;real&quot; resource data of this resource, asserting resource data is already loaded. If the resource is not
+	 * loaded, do not load the data, and return null
+	 * 
+	 * @return the resource data.
+	 */
+	public RD getLoadedResourceData();
+
+	/**
 	 * Returns the &quot;real&quot; resource data of this resource. This may cause the loading of the resource data.
 	 * 
 	 * @param progress
@@ -155,10 +266,88 @@ public interface FlexoResource<RD extends ResourceData<RD>> {
 	 * @return the resource data.
 	 * @throws ResourceLoadingCancelledException
 	 */
-	public RD getResourceData(IProgress progress) throws ResourceLoadingCancelledException;
+	public RD getResourceData(IProgress progress) throws ResourceLoadingCancelledException, FileNotFoundException, FlexoException;
+
+	/**
+	 * Sets {@link ResourceData} for this resource
+	 * 
+	 * @param resourceData
+	 */
+	public void setResourceData(RD resourceData);
+
+	/**
+	 * Load the &quot;real&quot; load resource data of this resource.
+	 * 
+	 * @param progress
+	 *            a progress monitor in case the resource data is not immediately available.
+	 * @return the resource data.
+	 * @throws ResourceLoadingCancelledException
+	 * @throws ResourceDependencyLoopException
+	 * @throws FileNotFoundException
+	 * @throws FlexoException
+	 */
+	public RD loadResourceData(IProgress progress) throws ResourceLoadingCancelledException, FileNotFoundException, FlexoException;
+
+	/**
+	 * Delete (dereference) resource data if resource data is loaded<br>
+	 * Also delete the resource data
+	 */
+	public void unloadResourceData();
+
+	/**
+	 * Save the &quot;real&quot; resource data of this resource.
+	 * 
+	 * @throws SaveResourceException
+	 */
+	public void save(IProgress progress) throws SaveResourceException;
 
 	/**
 	 * This method updates the resource.
 	 */
-	public void update();
+	/*public FlexoResourceTree update() throws ResourceDependencyLoopException, LoadResourceException, FileNotFoundException,
+			ProjectLoadingCancelledException, FlexoException;*/
+
+	/**
+	 * Called to notify that a resource has successfully been loaded
+	 */
+	public void notifyResourceLoaded();
+
+	/**
+	 * Called to notify that a resource has successfully been saved
+	 */
+	public void notifyResourceSaved();
+
+	/**
+	 * Called to notify that a resource has been added to contents
+	 * 
+	 * @param resource
+	 *            : resource beeing added
+	 */
+	public void notifyContentsAdded(FlexoResource<?> resource);
+
+	/**
+	 * Called to notify that a resource has been remove to contents<br>
+	 * 
+	 * @param resource
+	 *            : resource being removed
+	 */
+	public void notifyContentsRemoved(FlexoResource<?> resource);
+
+	/**
+	 * Delete this resource<br>
+	 * Also delete the resource data of this resource, when instantiated
+	 * 
+	 * @return flag indicating if deletion has successfully been performed
+	 */
+	public boolean delete();
+
+	/**
+	 * Return a flag indicating if this resource was deleted
+	 * 
+	 * @return
+	 */
+	@Override
+	public boolean isDeleted();
+
+	// public Date getLastUpdate();
 }

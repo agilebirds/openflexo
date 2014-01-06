@@ -27,7 +27,7 @@ import org.openflexo.components.tabular.model.AbstractModel;
 import org.openflexo.components.tabular.model.EditableStringColumn;
 import org.openflexo.components.tabular.model.IconColumn;
 import org.openflexo.drm.DocItemFolder;
-import org.openflexo.foundation.rm.FlexoProject;
+import org.openflexo.foundation.FlexoProject;
 import org.openflexo.icon.DREIconLibrary;
 
 /**

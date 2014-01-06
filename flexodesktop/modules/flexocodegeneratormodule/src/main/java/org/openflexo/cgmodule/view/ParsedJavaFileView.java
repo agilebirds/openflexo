@@ -31,7 +31,7 @@ import org.openflexo.cgmodule.controller.GeneratorController;
 import org.openflexo.cgmodule.controller.browser.fjp.JavaParserBrowser;
 import org.openflexo.cgmodule.view.CodeDisplayer.ASCIIFileCodePanel;
 import org.openflexo.components.browser.view.BrowserView;
-import org.openflexo.foundation.FlexoModelObject;
+import org.openflexo.foundation.FlexoObject;
 import org.openflexo.foundation.cg.CGFile;
 import org.openflexo.foundation.cg.CGFile.FileContentEditor;
 import org.openflexo.foundation.rm.cg.ContentSource;
@@ -127,7 +127,7 @@ public class ParsedJavaFileView extends JSplitPane implements FileContentEditor 
 		}
 
 		@Override
-		public void treeSingleClick(FlexoModelObject object) {
+		public void treeSingleClick(FlexoObject object) {
 			if (_currentHighlight != null) {
 				_codePanel.getPainter().removeCustomHighlight(_currentHighlight);
 				_currentHighlight = null;
@@ -147,7 +147,7 @@ public class ParsedJavaFileView extends JSplitPane implements FileContentEditor 
 		}
 
 		@Override
-		public void treeDoubleClick(FlexoModelObject object) {
+		public void treeDoubleClick(FlexoObject object) {
 		}
 
 	}

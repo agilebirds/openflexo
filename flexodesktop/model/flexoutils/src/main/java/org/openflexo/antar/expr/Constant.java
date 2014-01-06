@@ -19,16 +19,10 @@
  */
 package org.openflexo.antar.expr;
 
+import java.lang.reflect.Type;
 import java.util.Date;
 import java.util.Vector;
 
-import org.openflexo.antar.expr.oldparser.BooleanValue;
-import org.openflexo.antar.expr.oldparser.DateValue;
-import org.openflexo.antar.expr.oldparser.DurationValue;
-import org.openflexo.antar.expr.oldparser.FloatValue;
-import org.openflexo.antar.expr.oldparser.IntValue;
-import org.openflexo.antar.expr.oldparser.StringValue;
-import org.openflexo.antar.expr.oldparser.Value;
 import org.openflexo.toolbox.Duration;
 
 public abstract class Constant<V> extends Expression {
@@ -48,7 +42,7 @@ public abstract class Constant<V> extends Expression {
 		} else if (value instanceof String) {
 			return new Constant.StringConstant((String) value);
 		} else if (value.getClass().isEnum()) {
-			return new Constant.EnumConstant(((Enum) value).name());
+			return new Constant.EnumConstant(((Enum) value));
 		} else if (value instanceof Float) {
 			return new Constant.FloatConstant(((Float) value).doubleValue());
 		} else if (value instanceof Double) {
@@ -66,7 +60,7 @@ public abstract class Constant<V> extends Expression {
 			} else if (value instanceof DurationValue) {
 			return new Constant.DurationConstant(((DurationValue) value).getDurationValue());
 			}*/
-		return new Constant.StringConstant(value.toString());
+		return new Constant.ObjectConstant(value);
 	}
 
 	/*@Override
@@ -77,6 +71,11 @@ public abstract class Constant<V> extends Expression {
 	@Override
 	public Expression transform(ExpressionTransformer transformer) throws TransformException {
 		return transformer.performTransformation(this);
+	}
+
+	@Override
+	public void visit(ExpressionVisitor visitor) throws VisitorException {
+		visitor.visit(this);
 	}
 
 	@Override
@@ -91,7 +90,9 @@ public abstract class Constant<V> extends Expression {
 
 	public abstract V getValue();
 
-	public abstract Value getParsingValue();
+	public Type getType() {
+		return getEvaluationType().getType();
+	}
 
 	public static abstract class BooleanConstant extends Constant<Boolean> {
 		public static BooleanConstant get(boolean value) {
@@ -116,10 +117,6 @@ public abstract class Constant<V> extends Expression {
 				return true;
 			}
 
-			@Override
-			public Value getParsingValue() {
-				return new BooleanValue(true);
-			}
 		};
 
 		public static final BooleanConstant FALSE = new BooleanConstant() {
@@ -128,10 +125,6 @@ public abstract class Constant<V> extends Expression {
 				return false;
 			}
 
-			@Override
-			public Value getParsingValue() {
-				return new BooleanValue(false);
-			}
 		};
 	}
 
@@ -157,42 +150,67 @@ public abstract class Constant<V> extends Expression {
 			this.value = value;
 		}
 
+	}
+
+	public static class ObjectConstant extends Constant<Object> {
+		private Object value;
+
 		@Override
-		public Value getParsingValue() {
-			return new StringValue(value);
+		public EvaluationType getEvaluationType() {
+			return EvaluationType.LITERAL;
 		}
+
+		public ObjectConstant(Object value) {
+			super();
+			this.value = value;
+		}
+
+		@Override
+		public Object getValue() {
+			return value;
+		}
+
+		public void setValue(Object value) {
+			this.value = value;
+		}
+
+		@Override
+		public Type getType() {
+			return getValue().getClass();
+		}
+
 	}
 
 	public static class EnumConstant extends Constant<Enum> {
-		private String name;
+		private Enum value;
+		private String enumName;
 
 		@Override
 		public EvaluationType getEvaluationType() {
 			return EvaluationType.ENUM;
 		}
 
-		public EnumConstant(String aName) {
+		public EnumConstant(Enum value) {
 			super();
-			this.name = aName;
+			this.value = value;
+		}
+
+		@Deprecated
+		public EnumConstant(String enumName) {
+			super();
+			this.enumName = enumName;
 		}
 
 		public String getName() {
-			return name;
-		}
-
-		public void setName(String value) {
-			this.name = value;
-		}
-
-		@Override
-		public Value getParsingValue() {
-			return new StringValue(name);
+			if (value != null) {
+				return value.name();
+			}
+			return enumName;
 		}
 
 		@Override
 		public Enum getValue() {
-			// TODO !
-			return null;
+			return value;
 		}
 	}
 
@@ -228,11 +246,6 @@ public abstract class Constant<V> extends Expression {
 			return getValue();
 		}
 
-		@Override
-		public Value getParsingValue() {
-			return new IntValue(value);
-		}
-
 	}
 
 	public static class FloatConstant extends ArithmeticConstant<Double> {
@@ -260,11 +273,6 @@ public abstract class Constant<V> extends Expression {
 		@Override
 		public double getArithmeticValue() {
 			return getValue();
-		}
-
-		@Override
-		public Value getParsingValue() {
-			return new FloatValue(value);
 		}
 
 	}
@@ -323,11 +331,6 @@ public abstract class Constant<V> extends Expression {
 
 		public void setDate(Date date) {
 			this.date = date;
-		}
-
-		@Override
-		public Value getParsingValue() {
-			return new DateValue(date);
 		}
 
 		@Override
@@ -406,11 +409,6 @@ public abstract class Constant<V> extends Expression {
 		}
 
 		@Override
-		public Value getParsingValue() {
-			return new DurationValue(duration);
-		}
-
-		@Override
 		public Duration getValue() {
 			return getDuration();
 		}
@@ -452,15 +450,11 @@ public abstract class Constant<V> extends Expression {
 		}
 
 		@Override
-		public Value getParsingValue() {
-			return null;
-		}
-
-		@Override
 		public Object getValue() {
 			// TODO
 			return null;
 		}
+
 	}
 
 }

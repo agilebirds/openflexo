@@ -19,20 +19,33 @@
  */
 package org.openflexo.foundation.viewpoint;
 
-import org.openflexo.antar.binding.BindingDefinition;
-import org.openflexo.antar.binding.BindingDefinition.BindingDefinitionType;
+import java.lang.reflect.InvocationTargetException;
+import java.util.Collection;
+
 import org.openflexo.antar.binding.BindingModel;
+import org.openflexo.antar.binding.DataBinding;
+import org.openflexo.antar.expr.NullReferenceException;
+import org.openflexo.antar.expr.TypeMismatchException;
+import org.openflexo.foundation.validation.Validable;
 import org.openflexo.foundation.view.action.EditionSchemeAction;
-import org.openflexo.foundation.viewpoint.EditionAction.EditionActionBindingAttribute;
-import org.openflexo.foundation.viewpoint.ViewPoint.ViewPointBuilder;
-import org.openflexo.foundation.viewpoint.binding.ViewPointDataBinding;
 
 public abstract class AbstractAssertion extends EditionSchemeObject {
 
 	private AddIndividual _action;
+	private DataBinding<Boolean> conditional;
 
-	public AbstractAssertion(ViewPointBuilder builder) {
-		super(builder);
+	public AbstractAssertion() {
+		super();
+	}
+
+	@Override
+	public String getURI() {
+		return null;
+	}
+
+	@Override
+	public Collection<? extends Validable> getEmbeddedValidableObjects() {
+		return null;
 	}
 
 	public void setAction(AddIndividual action) {
@@ -44,7 +57,10 @@ public abstract class AbstractAssertion extends EditionSchemeObject {
 	}
 
 	public EditionScheme getScheme() {
-		return getAction().getScheme();
+		if (getAction() != null) {
+			return getAction().getScheme();
+		}
+		return null;
 	}
 
 	@Override
@@ -53,16 +69,24 @@ public abstract class AbstractAssertion extends EditionSchemeObject {
 	}
 
 	@Override
-	public ViewPoint getViewPoint() {
+	public VirtualModel getVirtualModel() {
 		if (getAction() != null) {
-			return getAction().getViewPoint();
+			return getAction().getVirtualModel();
 		}
 		return null;
 	}
 
 	public boolean evaluateCondition(EditionSchemeAction action) {
 		if (getConditional().isValid()) {
-			return (Boolean) getConditional().getBindingValue(action);
+			try {
+				return getConditional().getBindingValue(action);
+			} catch (TypeMismatchException e) {
+				e.printStackTrace();
+			} catch (NullReferenceException e) {
+				e.printStackTrace();
+			} catch (InvocationTargetException e) {
+				e.printStackTrace();
+			}
 		}
 		return true;
 	}
@@ -77,26 +101,21 @@ public abstract class AbstractAssertion extends EditionSchemeObject {
 		return getEditionPattern().getBindingModel();
 	}
 
-	private ViewPointDataBinding conditional;
-
-	private static final BindingDefinition CONDITIONAL = new BindingDefinition("conditional", Boolean.class, BindingDefinitionType.GET,
-			false);
-
-	public BindingDefinition getConditionalBindingDefinition() {
-		return CONDITIONAL;
-	}
-
-	public ViewPointDataBinding getConditional() {
+	public DataBinding<Boolean> getConditional() {
 		if (conditional == null) {
-			conditional = new ViewPointDataBinding(this, EditionActionBindingAttribute.conditional, getConditionalBindingDefinition());
+			conditional = new DataBinding<Boolean>(this, Boolean.class, DataBinding.BindingDefinitionType.GET);
+			conditional.setBindingName("conditional");
 		}
 		return conditional;
 	}
 
-	public void setConditional(ViewPointDataBinding conditional) {
-		conditional.setOwner(this);
-		conditional.setBindingAttribute(EditionActionBindingAttribute.conditional);
-		conditional.setBindingDefinition(getConditionalBindingDefinition());
+	public void setConditional(DataBinding<Boolean> conditional) {
+		if (conditional != null) {
+			conditional.setOwner(this);
+			conditional.setDeclaredType(Boolean.class);
+			conditional.setBindingDefinitionType(DataBinding.BindingDefinitionType.GET);
+			conditional.setBindingName("conditional");
+		}
 		this.conditional = conditional;
 	}
 

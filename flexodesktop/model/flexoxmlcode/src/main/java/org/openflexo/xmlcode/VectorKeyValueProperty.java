@@ -324,4 +324,12 @@ public class VectorKeyValueProperty extends KeyValueProperty {
 		}
 	}
 
+	public Method getDefaultAddToMethod() {
+		return addToMethods.first().getMethod();
+	}
+
+	public Method getDefaultRemoveFromMethod() {
+		return removeFromMethods.first().getMethod();
+	}
+
 }

@@ -22,42 +22,43 @@ package org.openflexo.action;
 import java.util.Vector;
 
 import org.openflexo.foundation.FlexoEditor;
-import org.openflexo.foundation.FlexoModelObject;
+import org.openflexo.foundation.FlexoObject;
+import org.openflexo.foundation.FlexoObject.FlexoObjectImpl;
 import org.openflexo.foundation.action.FlexoActionType;
 import org.openflexo.foundation.action.FlexoGUIAction;
 import org.openflexo.inspector.InspectableObject;
 import org.openflexo.localization.FlexoLocalization;
 
-public class HelpAction extends FlexoGUIAction<HelpAction, FlexoModelObject, FlexoModelObject> {
+public class HelpAction extends FlexoGUIAction<HelpAction, FlexoObject, FlexoObject> {
 
-	public static FlexoActionType<HelpAction, FlexoModelObject, FlexoModelObject> actionType = new FlexoActionType<HelpAction, FlexoModelObject, FlexoModelObject>(
+	public static FlexoActionType<HelpAction, FlexoObject, FlexoObject> actionType = new FlexoActionType<HelpAction, FlexoObject, FlexoObject>(
 			"help", FlexoActionType.helpGroup) {
 
 		/**
 		 * Factory method
 		 */
 		@Override
-		public HelpAction makeNewAction(FlexoModelObject focusedObject, Vector<FlexoModelObject> globalSelection, FlexoEditor editor) {
+		public HelpAction makeNewAction(FlexoObject focusedObject, Vector<FlexoObject> globalSelection, FlexoEditor editor) {
 			return new HelpAction(focusedObject, globalSelection, editor);
 		}
 
 		@Override
-		public boolean isVisibleForSelection(FlexoModelObject object, Vector<FlexoModelObject> globalSelection) {
+		public boolean isVisibleForSelection(FlexoObject object, Vector<FlexoObject> globalSelection) {
 			return true;
 		}
 
 		@Override
-		public boolean isEnabledForSelection(FlexoModelObject object, Vector<FlexoModelObject> globalSelection) {
+		public boolean isEnabledForSelection(FlexoObject object, Vector<FlexoObject> globalSelection) {
 			return object instanceof InspectableObject;
 		}
 
 	};
 
 	static {
-		FlexoModelObject.addActionForClass(HelpAction.actionType, FlexoModelObject.class);
+		FlexoObjectImpl.addActionForClass(HelpAction.actionType, FlexoObject.class);
 	}
 
-	HelpAction(FlexoModelObject focusedObject, Vector<FlexoModelObject> globalSelection, FlexoEditor editor) {
+	HelpAction(FlexoObject focusedObject, Vector<FlexoObject> globalSelection, FlexoEditor editor) {
 		super(actionType, focusedObject, globalSelection, editor);
 	}
 
@@ -69,7 +70,7 @@ public class HelpAction extends FlexoGUIAction<HelpAction, FlexoModelObject, Fle
 			 StringTokenizer st = new StringTokenizer(extClassName,".");
 			 while (st.hasMoreTokens()) shortClassName = st.nextToken();*/
 			return FlexoLocalization.localizedForKey("help_on") + " "
-					+ FlexoLocalization.localizedForKey(getFocusedObject().getClassNameKey());
+					+ FlexoLocalization.localizedForKey(getFocusedObject().getClass().getName());
 		}
 		return null;
 	}

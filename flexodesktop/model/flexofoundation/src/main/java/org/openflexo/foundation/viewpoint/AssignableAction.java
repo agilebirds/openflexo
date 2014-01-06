@@ -22,10 +22,12 @@ package org.openflexo.foundation.viewpoint;
 import java.lang.reflect.Type;
 import java.util.logging.Logger;
 
-import org.openflexo.antar.binding.BindingDefinition;
-import org.openflexo.antar.binding.BindingDefinition.BindingDefinitionType;
-import org.openflexo.foundation.viewpoint.ViewPoint.ViewPointBuilder;
-import org.openflexo.foundation.viewpoint.binding.ViewPointDataBinding;
+import org.openflexo.antar.binding.BindingEvaluationContext;
+import org.openflexo.antar.binding.BindingModel;
+import org.openflexo.antar.binding.BindingVariable;
+import org.openflexo.antar.binding.DataBinding;
+import org.openflexo.antar.binding.DataBinding.BindingDefinitionType;
+import org.openflexo.foundation.technologyadapter.ModelSlot;
 import org.openflexo.toolbox.StringUtils;
 
 /**
@@ -34,63 +36,74 @@ import org.openflexo.toolbox.StringUtils;
  * @author sylvain
  * 
  */
-public abstract class AssignableAction extends EditionAction {
+public abstract class AssignableAction<MS extends ModelSlot<?>, T> extends EditionAction<MS, T> {
 
 	private static final Logger logger = Logger.getLogger(AssignableAction.class.getPackage().getName());
 
-	private ViewPointDataBinding assignation;
+	private DataBinding<Object> assignation;
 
-	private BindingDefinition ASSIGNATION = new BindingDefinition("assignation", Object.class, BindingDefinitionType.GET_SET, false) {
-		@Override
-		public java.lang.reflect.Type getType() {
-			return getAssignableType();
-		};
+	private String variableName = null;
 
-		@Override
-		public boolean getIsMandatory() {
-			return isAssignationRequired();
-		};
-	};
-
-	public AssignableAction(ViewPointBuilder builder) {
-		super(builder);
+	public AssignableAction() {
+		super();
 	}
 
 	public boolean isAssignationRequired() {
 		return false;
 	}
 
-	@Override
-	public abstract EditionActionType getEditionActionType();
+	/*@Override
+	public abstract EditionActionType getEditionActionType();*/
 
 	public abstract Type getAssignableType();
 
-	public BindingDefinition getAssignationBindingDefinition() {
-		return ASSIGNATION;
-	}
-
-	public ViewPointDataBinding getAssignation() {
+	public DataBinding<Object> getAssignation() {
 		if (assignation == null) {
-			assignation = new ViewPointDataBinding(this, EditionActionBindingAttribute.assignation, getAssignationBindingDefinition());
+			if (StringUtils.isNotEmpty(variableName)) {
+				updateVariableAssignation();
+			} else {
+				assignation = new DataBinding<Object>(this, Object.class, DataBinding.BindingDefinitionType.GET_SET) {
+					@Override
+					public Type getDeclaredType() {
+						return getAssignableType();
+					}
+				};
+				assignation.setDeclaredType(getAssignableType());
+				assignation.setBindingName("assignation");
+				assignation.setMandatory(isAssignationRequired());
+			}
 		}
+		assignation.setDeclaredType(getAssignableType());
 		return assignation;
 	}
 
-	public void setAssignation(ViewPointDataBinding assignation) {
+	public void setAssignation(DataBinding<Object> assignation) {
 		if (assignation != null) {
-			assignation.setOwner(this);
-			assignation.setBindingAttribute(EditionActionBindingAttribute.assignation);
-			assignation.setBindingDefinition(getAssignationBindingDefinition());
+			this.assignation = new DataBinding<Object>(assignation.toString(), this, Object.class,
+					DataBinding.BindingDefinitionType.GET_SET) {
+				@Override
+				public Type getDeclaredType() {
+					return getAssignableType();
+				}
+			};
+			/*assignation.setOwner(this);
+			assignation.setBindingName("assignation");
+			assignation.setDeclaredType(getAssignableType());
+			assignation.setBindingDefinitionType(DataBinding.BindingDefinitionType.GET_SET);
+			assignation.setMandatory(isAssignationRequired());*/
 		}
-		this.assignation = assignation;
-		notifyBindingChanged(this.assignation);
+		// this.assignation = assignation;
+		notifiedBindingChanged(this.assignation);
 	}
 
-	public PatternRole getPatternRole() {
+	public PatternRole<?> getPatternRole() {
 		if (getEditionPattern() == null) {
 			return null;
 		}
-		return getEditionPattern().getPatternRole(getAssignation().toString());
+		if (assignation != null) {
+			return getEditionPattern().getPatternRole(assignation.toString());
+		}
+		return null;
 	}
 
 	@Override
@@ -99,15 +112,70 @@ public abstract class AssignableAction extends EditionAction {
 				+ (StringUtils.isNotEmpty(getAssignation().toString()) ? " (" + getAssignation().toString() + ")" : "");
 	}
 
-	/*@Deprecated
-	public String _getPatternRoleName() {
-		return getAssignation().toString();
+	public String getVariableName() {
+		return variableName;
 	}
 
-	@Deprecated
-	public void _setPatternRoleName(String patternRole) {
-		getAssignation().setUnparsedBinding(patternRole);
-	}*/
+	public void setVariableName(String variableName) {
+		if (!FlexoObjectImpl.areSameValue(variableName, this.variableName)) {
+			this.variableName = variableName;
+			if (StringUtils.isNotEmpty(variableName)) {
+				updateVariableAssignation();
+			}
+			if (getActionContainer() != null) {
+				getActionContainer().variableAdded(this);
+			}
+		}
+	}
+
+	public boolean getIsVariableDeclaration() {
+		return StringUtils.isNotEmpty(getVariableName());
+	}
+
+	public void setIsVariableDeclaration(boolean flag) {
+		if (flag) {
+			if (StringUtils.isEmpty(getVariableName())) {
+				setVariableName("newVariable");
+			}
+		} else {
+			if (StringUtils.isNotEmpty(getVariableName())) {
+				setVariableName(null);
+				getAssignation().reset();
+			}
+		}
+	}
+
+	protected void updateVariableAssignation() {
+		assignation = new DataBinding<Object>(getVariableName(), this, getAssignableType(), BindingDefinitionType.GET_SET);
+	}
+
+	@Override
+	public void finalizePerformAction(org.openflexo.foundation.view.action.EditionSchemeAction action, T initialContext) {
+		/*if (getIsVariableDeclaration()) {
+			System.out.println("Setting variable " + getVariableName() + " with " + initialContext);
+			action.declareVariable(getVariableName(), initialContext);
+		}*/
+	}
+
+	@Override
+	protected final BindingModel buildInferedBindingModel() {
+		BindingModel returned = super.buildInferedBindingModel();
+		if (getIsVariableDeclaration()) {
+			returned.addToBindingVariables(new BindingVariable(getVariableName(), getAssignableType()) {
+				@Override
+				public Object getBindingValue(Object target, BindingEvaluationContext context) {
+					logger.info("What should i return for " + getVariableName() + " ? target " + target + " context=" + context);
+					return super.getBindingValue(target, context);
+				}
+
+				@Override
+				public Type getType() {
+					return getAssignableType();
+				}
+			});
+		}
+		return returned;
+	}
 
 	public static class AssignationBindingMustBeValid extends BindingMustBeValid<AssignableAction> {
 		public AssignationBindingMustBeValid() {
@@ -115,13 +183,8 @@ public abstract class AssignableAction extends EditionAction {
 		}
 
 		@Override
-		public ViewPointDataBinding getBinding(AssignableAction object) {
+		public DataBinding<Object> getBinding(AssignableAction object) {
 			return object.getAssignation();
-		}
-
-		@Override
-		public BindingDefinition getBindingDefinition(AssignableAction object) {
-			return object.getAssignationBindingDefinition();
 		}
 
 	}

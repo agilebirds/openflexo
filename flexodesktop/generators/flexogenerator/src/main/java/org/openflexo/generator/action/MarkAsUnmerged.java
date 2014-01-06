@@ -56,7 +56,7 @@ public class MarkAsUnmerged extends MultipleFileGCAction<MarkAsUnmerged> {
 	};
 
 	static {
-		FlexoModelObject.addActionForClass(MarkAsUnmerged.actionType, CGObject.class);
+		TestModelObject.addActionForClass(MarkAsUnmerged.actionType, CGObject.class);
 	}
 
 	MarkAsUnmerged(CGObject focusedObject, Vector<CGObject> globalSelection, FlexoEditor editor) {

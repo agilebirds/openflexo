@@ -21,12 +21,12 @@ package org.openflexo.wkf.swleditor.gr;
 
 import java.util.logging.Logger;
 
+import org.openflexo.fge.ForegroundStyle;
+import org.openflexo.fge.ForegroundStyle.DashStyle;
+import org.openflexo.fge.connectors.RectPolylinConnectorSpecification;
 import org.openflexo.fge.connectors.ConnectorSymbol.EndSymbolType;
 import org.openflexo.fge.connectors.ConnectorSymbol.MiddleSymbolType;
 import org.openflexo.fge.connectors.ConnectorSymbol.StartSymbolType;
-import org.openflexo.fge.connectors.rpc.RectPolylinConnector;
-import org.openflexo.fge.graphics.ForegroundStyle;
-import org.openflexo.fge.graphics.ForegroundStyle.DashStyle;
 import org.openflexo.foundation.DataModification;
 import org.openflexo.foundation.FlexoObservable;
 import org.openflexo.foundation.wkf.dm.AssociationRemoved;
@@ -95,10 +95,10 @@ public class AssociationGR extends EdgeGR<WKFAssociation> {
 			// during big model restructurations (for example during a multiple delete)
 			return;
 		}
-		if (getConnector() instanceof RectPolylinConnector) {
+		if (getConnectorSpecification() instanceof RectPolylinConnectorSpecification) {
 			startOrientationFixed = false;
 			endOrientationFixed = false;
-			// ((RectPolylinConnector)getConnector()).setRectPolylinConstraints(RectPolylinConstraints.NONE);
+			// ((RectPolylinConnectorSpecification)getConnector()).setRectPolylinConstraints(RectPolylinConstraints.NONE);
 		}
 		super.refreshConnector();
 	}

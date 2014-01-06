@@ -1,4 +1,4 @@
-<inspector title = "Ontologic object" inspectedClassName="org.openflexo.foundation.ontology.OntologyObject">
+<inspector title = "Ontologic object" inspectedClassName="org.openflexo.foundation.ontology.IFlexoOntologyConcept">
 
 	<tab name="Basic" index="0" layout="DEFAULT">
 

@@ -22,8 +22,7 @@ package org.openflexo.components.widget;
 import java.io.File;
 import java.util.logging.Logger;
 
-import org.openflexo.foundation.ontology.FlexoOntology;
-import org.openflexo.foundation.ontology.OntologyLibrary;
+import org.openflexo.foundation.ontology.IFlexoOntology;
 import org.openflexo.toolbox.FileResource;
 
 /**
@@ -32,21 +31,22 @@ import org.openflexo.toolbox.FileResource;
  * @author sguerin
  * 
  */
-public class FIBOntologySelector extends FIBModelObjectSelector<FlexoOntology> {
-	@SuppressWarnings("hiding")
+@SuppressWarnings("serial")
+public class FIBOntologySelector extends FIBFlexoObjectSelector<IFlexoOntology> {
+
 	static final Logger logger = Logger.getLogger(FIBOntologySelector.class.getPackage().getName());
 
 	public static FileResource FIB_FILE = new FileResource("Fib/FIBOntologySelector.fib");
 
-	public FIBOntologySelector(FlexoOntology editedObject) {
+	public FIBOntologySelector(IFlexoOntology editedObject) {
 		super(editedObject);
 	}
 
-	@Override
+	/*@Override
 	public void delete() {
 		super.delete();
 		ontologyLibrary = null;
-	}
+	}*/
 
 	@Override
 	public File getFIBFile() {
@@ -54,19 +54,19 @@ public class FIBOntologySelector extends FIBModelObjectSelector<FlexoOntology> {
 	}
 
 	@Override
-	public Class<FlexoOntology> getRepresentedType() {
-		return FlexoOntology.class;
+	public Class<IFlexoOntology> getRepresentedType() {
+		return IFlexoOntology.class;
 	}
 
 	@Override
-	public String renderedString(FlexoOntology editedObject) {
+	public String renderedString(IFlexoOntology editedObject) {
 		if (editedObject != null) {
 			return editedObject.getName();
 		}
 		return "";
 	}
 
-	private OntologyLibrary ontologyLibrary;
+	/*private OntologyLibrary ontologyLibrary;
 
 	public OntologyLibrary getOntologyLibrary() {
 		return ontologyLibrary;
@@ -75,7 +75,7 @@ public class FIBOntologySelector extends FIBModelObjectSelector<FlexoOntology> {
 	@CustomComponentParameter(name = "ontologyLibrary", type = CustomComponentParameter.Type.MANDATORY)
 	public void setOntologyLibrary(OntologyLibrary ontologyLibrary) {
 		this.ontologyLibrary = ontologyLibrary;
-	}
+	}*/
 
 	/**
 	 * This method must be implemented if we want to implement completion<br>
@@ -83,9 +83,9 @@ public class FIBOntologySelector extends FIBModelObjectSelector<FlexoOntology> {
 	 * Return all viewpoints of this library
 	 */
 	/*@Override
-	protected Enumeration<FlexoOntology> getAllSelectableValues() {
+	protected Enumeration<IFlexoOntology> getAllSelectableValues() {
 		if (getOntologyLibrary() != null) {
-			Vector<FlexoOntology> allOntologies = new Vector<FlexoOntology>(getOntologyLibrary().getAllOntologies());
+			Vector<IFlexoOntology> allOntologies = new Vector<IFlexoOntology>(getOntologyLibrary().getAllOntologies());
 			return allOntologies.elements();
 		}
 		return null;

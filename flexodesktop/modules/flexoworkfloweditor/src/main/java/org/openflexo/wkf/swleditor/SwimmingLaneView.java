@@ -24,7 +24,7 @@ import java.beans.PropertyChangeEvent;
 import java.beans.PropertyChangeListener;
 
 import org.openflexo.fge.view.DrawingView;
-import org.openflexo.foundation.rm.FlexoProject;
+import org.openflexo.foundation.FlexoProject;
 import org.openflexo.foundation.wkf.FlexoProcess;
 import org.openflexo.view.ModuleView;
 import org.openflexo.wkf.controller.SwimmingLanePerspective;

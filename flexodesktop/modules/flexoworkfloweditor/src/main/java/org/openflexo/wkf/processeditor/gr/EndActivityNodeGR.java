@@ -21,12 +21,12 @@ package org.openflexo.wkf.processeditor.gr;
 
 import java.awt.Color;
 
-import org.openflexo.fge.graphics.BackgroundStyle;
+import org.openflexo.fge.BackgroundStyle;
+import org.openflexo.fge.ForegroundStyle;
 import org.openflexo.fge.graphics.FGEShapeGraphics;
-import org.openflexo.fge.graphics.ForegroundStyle;
 import org.openflexo.fge.graphics.ShapePainter;
 import org.openflexo.fge.shapes.Rectangle;
-import org.openflexo.fge.shapes.Shape.ShapeType;
+import org.openflexo.fge.shapes.ShapeSpecification.ShapeType;
 import org.openflexo.foundation.wkf.node.ActivityNode;
 import org.openflexo.wkf.processeditor.ProcessRepresentation;
 import org.openflexo.wkf.swleditor.SWLEditorConstants;
@@ -83,7 +83,7 @@ public class EndActivityNodeGR extends AbstractActivityNodeGR<ActivityNode> {
 
 	@Override
 	public Rectangle getShape() {
-		return (Rectangle) super.getShape();
+		return (Rectangle) super.getShapeSpecification();
 	}
 
 	private boolean isInRoot() {

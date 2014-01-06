@@ -27,43 +27,56 @@ import javax.swing.JComponent;
 
 import org.openflexo.ApplicationContext;
 import org.openflexo.components.ProgressWindow;
-import org.openflexo.fge.Drawing;
-import org.openflexo.fge.controller.DrawingController;
-import org.openflexo.fge.view.DrawingView;
-import org.openflexo.foundation.FlexoModelObject;
+import org.openflexo.fge.swing.JDianaInteractiveEditor;
+import org.openflexo.fge.swing.view.JDrawingView;
+import org.openflexo.foundation.FlexoObject;
 import org.openflexo.foundation.InspectorGroup;
 import org.openflexo.foundation.Inspectors;
-import org.openflexo.foundation.viewpoint.ExampleDrawingShema;
-import org.openflexo.foundation.viewpoint.ViewPointPalette;
+import org.openflexo.icon.VPMIconLibrary;
 import org.openflexo.localization.FlexoLocalization;
 import org.openflexo.module.FlexoModule;
 import org.openflexo.module.Module;
-import org.openflexo.module.external.ExternalCEDModule;
+import org.openflexo.module.external.ExternalVPMModule;
 import org.openflexo.view.controller.FlexoController;
 import org.openflexo.vpm.controller.VPMController;
-import org.openflexo.vpm.drawingshema.CalcDrawingShemaController;
-import org.openflexo.vpm.palette.CalcPaletteController;
+import org.openflexo.vpm.diagrampalette.DiagramPaletteEditor;
+import org.openflexo.vpm.examplediagram.ExampleDiagramEditor;
 
 /**
- * CalcEditor module
+ * ViewPointModeller module
  * 
  * @author sylvain
  */
-public class VPMModule extends FlexoModule implements ExternalCEDModule {
+public class VPMModule extends FlexoModule implements ExternalVPMModule {
+
+	public static final String VPM_MODULE_SHORT_NAME = "VPM";
+
+	public static final String VPM_MODULE_NAME = "vpm_module_name";
+
+	public static class ViewPointModeller extends Module {
+
+		public ViewPointModeller() {
+			super(VPM_MODULE_NAME, VPM_MODULE_SHORT_NAME, "org.openflexo.vpm.VPMModule", "modules/flexoviewpointmodeller", "10009", "vpm",
+					VPMIconLibrary.VPM_SMALL_ICON, VPMIconLibrary.VPM_MEDIUM_ICON, VPMIconLibrary.VPM_MEDIUM_ICON_WITH_HOVER,
+					VPMIconLibrary.VPM_BIG_ICON, false);
+		}
+
+	}
 
 	private static final Logger logger = Logger.getLogger(VPMModule.class.getPackage().getName());
-	private static final InspectorGroup[] inspectorGroups = new InspectorGroup[] { Inspectors.VPM, Inspectors.VE };
+	private static final InspectorGroup[] inspectorGroups = new InspectorGroup[] { Inspectors.VE };
 
-	private DrawingController<? extends Drawing<? extends FlexoModelObject>> screenshotController;
-	private DrawingView<? extends Drawing<? extends FlexoModelObject>> screenshot = null;
+	private JDianaInteractiveEditor<?> screenshotController;
+	private JDrawingView<?> screenshot = null;
 	private boolean drawWorkingArea;
-	private FlexoModelObject screenshotObject;
+	private FlexoObject screenshotObject;
 
 	public VPMModule(ApplicationContext applicationContext) throws Exception {
 		super(applicationContext);
 		// UGLIEST HACK EVER TO BE REMOVED ASAP:
-		ViewPointPalette.setModuleLoader(applicationContext.getModuleLoader());
-		CEDPreferences.init();
+		// DiagramPalette.setModuleLoader(applicationContext.getModuleLoader());
+		// Hack removed : guillaume, what about that ?
+		VPMPreferences.init();
 		ProgressWindow.setProgressInstance(FlexoLocalization.localizedForKey("build_editor"));
 
 	}
@@ -72,7 +85,7 @@ public class VPMModule extends FlexoModule implements ExternalCEDModule {
 	public void initModule() {
 		super.initModule();
 		// Put here a code to display default view
-		getCEDController().setCurrentEditedObjectAsModuleView(getCEDController().getCalcLibrary());
+		getVPMController().setCurrentEditedObjectAsModuleView(getVPMController().getViewPointLibrary());
 	}
 
 	@Override
@@ -90,22 +103,26 @@ public class VPMModule extends FlexoModule implements ExternalCEDModule {
 		return inspectorGroups;
 	}
 
-	public VPMController getCEDController() {
+	public VPMController getVPMController() {
 		return (VPMController) getFlexoController();
 	}
 
 	@Override
 	public boolean close() {
-		if (getCEDController().reviewModifiedResources()) {
+		if (getApplicationContext().getResourceManager().getUnsavedResources().size() == 0) {
 			return super.close();
 		} else {
-			return false;
+			if (getVPMController().reviewModifiedResources()) {
+				return super.close();
+			} else {
+				return false;
+			}
 		}
 	}
 
 	@Override
 	public float getScreenshotQuality() {
-		float reply = Float.valueOf(CEDPreferences.getScreenshotQuality()) / 100f;
+		float reply = Float.valueOf(VPMPreferences.getScreenshotQuality()) / 100f;
 		if (reply > 1) {
 			return 1f;
 		}
@@ -116,7 +133,7 @@ public class VPMModule extends FlexoModule implements ExternalCEDModule {
 	}
 
 	@Override
-	public JComponent createScreenshotForShema(ExampleDrawingShema target) {
+	public JComponent createScreenshotForExampleDiagram(ExampleDiagram target) {
 		if (target == null) {
 			if (logger.isLoggable(Level.SEVERE)) {
 				logger.severe("Cannot create screenshot for null target!");
@@ -128,13 +145,13 @@ public class VPMModule extends FlexoModule implements ExternalCEDModule {
 
 		screenshotObject = target;
 
-		// prevent process to be marked as modified during screenshot generation
+		// prevent example diagram to be marked as modified during screenshot generation
 		target.setIgnoreNotifications();
-		screenshotController = new CalcDrawingShemaController(getCEDController(), target, true);
+		screenshotController = new ExampleDiagramEditor(getVPMController(), target, true);
 
 		screenshot = screenshotController.getDrawingView();
-		drawWorkingArea = screenshot.getDrawingGraphicalRepresentation().getDrawWorkingArea();
-		screenshot.getDrawingGraphicalRepresentation().setDrawWorkingArea(false);
+		drawWorkingArea = screenshot.getDrawing().getRoot().getDrawWorkingArea();
+		screenshot.getDrawing().getRoot().setDrawWorkingArea(false);
 		screenshot.getPaintManager().disablePaintingCache();
 		screenshot.validate();
 		Dimension d = screenshot.getComputedMinimumSize();
@@ -148,7 +165,7 @@ public class VPMModule extends FlexoModule implements ExternalCEDModule {
 	}
 
 	@Override
-	public JComponent createScreenshotForPalette(ViewPointPalette target) {
+	public JComponent createScreenshotForDiagramPalette(DiagramPalette target) {
 		if (target == null) {
 			if (logger.isLoggable(Level.SEVERE)) {
 				logger.severe("Cannot create screenshot for null target!");
@@ -162,15 +179,14 @@ public class VPMModule extends FlexoModule implements ExternalCEDModule {
 
 		// prevent process to be marked as modified during screenshot generation
 		target.setIgnoreNotifications();
-		screenshotController = new CalcPaletteController(getCEDController(), target, true);
+		screenshotController = new DiagramPaletteEditor(getVPMController(), target, true);
 
 		screenshot = screenshotController.getDrawingView();
-		drawWorkingArea = screenshot.getDrawingGraphicalRepresentation().getDrawWorkingArea();
-		screenshot.getDrawingGraphicalRepresentation().setDrawWorkingArea(false);
+		drawWorkingArea = screenshot.getDrawing().getRoot().getDrawWorkingArea();
+		screenshot.getDrawing().getRoot().setDrawWorkingArea(false);
 		screenshot.getPaintManager().disablePaintingCache();
 		screenshot.validate();
-		Dimension d = new Dimension((int) screenshot.getDrawingGraphicalRepresentation().getWidth(), (int) screenshot
-				.getDrawingGraphicalRepresentation().getHeight());
+		Dimension d = new Dimension((int) screenshot.getDrawing().getRoot().getWidth(), (int) screenshot.getDrawing().getRoot().getHeight());
 		screenshot.setSize(d);
 		screenshot.setPreferredSize(d);
 		target.resetIgnoreNotifications();
@@ -183,11 +199,9 @@ public class VPMModule extends FlexoModule implements ExternalCEDModule {
 		logger.info("finalizeScreenshotGeneration()");
 
 		if (screenshot != null) {
-			if (screenshot.getDrawingGraphicalRepresentation() != null) {
-				screenshotObject.setIgnoreNotifications();
-				screenshot.getDrawingGraphicalRepresentation().setDrawWorkingArea(drawWorkingArea);
-				screenshotObject.resetIgnoreNotifications();
-			}
+			screenshotObject.setIgnoreNotifications();
+			screenshot.getDrawing().getRoot().setDrawWorkingArea(drawWorkingArea);
+			screenshotObject.resetIgnoreNotifications();
 			screenshotController.delete();
 			if (screenshot.getParent() != null) {
 				screenshot.getParent().remove(screenshot);

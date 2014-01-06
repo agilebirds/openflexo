@@ -57,6 +57,7 @@ import org.openflexo.doceditor.controller.TOCPerspective;
 import org.openflexo.foundation.DataModification;
 import org.openflexo.foundation.FlexoEditor;
 import org.openflexo.foundation.FlexoModelObject;
+import org.openflexo.foundation.FlexoObject;
 import org.openflexo.foundation.FlexoObservable;
 import org.openflexo.foundation.FlexoObserver;
 import org.openflexo.foundation.GraphicalFlexoObserver;
@@ -71,7 +72,7 @@ import org.openflexo.foundation.param.CheckboxParameter;
 import org.openflexo.foundation.param.RadioButtonListParameter;
 import org.openflexo.foundation.rm.FlexoCopiedResource;
 import org.openflexo.foundation.rm.FlexoGeneratedResource;
-import org.openflexo.foundation.rm.FlexoProject;
+import org.openflexo.foundation.FlexoProject;
 import org.openflexo.foundation.rm.ResourceUpdateHandler.GeneratedResourceModifiedHook;
 import org.openflexo.foundation.rm.cg.CGRepositoryFileResource;
 import org.openflexo.foundation.rm.cg.ContentSource;
@@ -275,7 +276,7 @@ public class DGController extends DEController implements FlexoObserver, Project
 	 *            : the object to focus on
 	 */
 	@Override
-	public void selectAndFocusObject(FlexoModelObject object) {
+	public void selectAndFocusObject(FlexoObject object) {
 		if (object instanceof CGFile) {
 			setCurrentEditedObjectAsModuleView(object);
 		}
@@ -286,7 +287,7 @@ public class DGController extends DEController implements FlexoObserver, Project
 	}
 
 	public DGRepository getCurrentGeneratedCodeRepository() {
-		FlexoModelObject object = getCurrentDisplayedObjectAsModuleView();
+		FlexoObject object = getCurrentDisplayedObjectAsModuleView();
 		if (object instanceof CGObject) {
 			return (DGRepository) AbstractGCAction.repositoryForObject((CGObject) object);
 		}

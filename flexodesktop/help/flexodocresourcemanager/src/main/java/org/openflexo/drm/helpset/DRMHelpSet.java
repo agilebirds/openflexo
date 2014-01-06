@@ -32,7 +32,7 @@ import org.jdom2.DocType;
 import org.openflexo.drm.DocItemFolder;
 import org.openflexo.drm.DocResourceCenter;
 import org.openflexo.drm.Language;
-import org.openflexo.foundation.FlexoObject;
+import org.openflexo.foundation.KVCFlexoObject;
 import org.openflexo.foundation.utils.FlexoProgress;
 import org.openflexo.localization.FlexoLocalization;
 import org.openflexo.toolbox.FileResource;
@@ -43,7 +43,7 @@ import org.openflexo.xmlcode.XMLMapping;
 import org.openflexo.xmlcode.XMLSerializable;
 import org.xml.sax.SAXException;
 
-public class DRMHelpSet extends FlexoObject implements XMLSerializable {
+public class DRMHelpSet extends KVCFlexoObject implements XMLSerializable {
 
 	private static final Logger logger = Logger.getLogger(DRMHelpSet.class.getPackage().getName());
 
@@ -139,22 +139,22 @@ public class DRMHelpSet extends FlexoObject implements XMLSerializable {
 		return configuration.getLanguage();
 	}
 
-	public class Maps extends FlexoObject implements XMLSerializable {
+	public class Maps extends KVCFlexoObject implements XMLSerializable {
 		public String homeID = _hsToc.getRootEntry().docItem.getIdentifier();
 		public MapRef mapref = new MapRef();
 
-		public class MapRef extends FlexoObject implements XMLSerializable {
+		public class MapRef extends KVCFlexoObject implements XMLSerializable {
 			public String location = getMapFile().getName();
 		}
 	}
 
-	public static class View extends FlexoObject implements XMLSerializable {
+	public static class View extends KVCFlexoObject implements XMLSerializable {
 		public String name;
 		public String label;
 		public String type;
 		public ViewData viewData;
 
-		public static class ViewData extends FlexoObject implements XMLSerializable {
+		public static class ViewData extends KVCFlexoObject implements XMLSerializable {
 			public String dataType;
 			public String engine;
 
@@ -172,7 +172,7 @@ public class DRMHelpSet extends FlexoObject implements XMLSerializable {
 		}
 	}
 
-	public static class Presentation extends FlexoObject implements XMLSerializable {
+	public static class Presentation extends KVCFlexoObject implements XMLSerializable {
 		public boolean isDefault = false;
 		public boolean displayviewimages = false;
 		public String name;
@@ -182,7 +182,7 @@ public class DRMHelpSet extends FlexoObject implements XMLSerializable {
 		public String image;
 		public Toolbar toolbar;
 
-		public static class Location extends FlexoObject implements XMLSerializable {
+		public static class Location extends KVCFlexoObject implements XMLSerializable {
 			public int x;
 			public int y;
 
@@ -192,7 +192,7 @@ public class DRMHelpSet extends FlexoObject implements XMLSerializable {
 			}
 		}
 
-		public static class Size extends FlexoObject implements XMLSerializable {
+		public static class Size extends KVCFlexoObject implements XMLSerializable {
 			public int width;
 			public int height;
 
@@ -202,7 +202,7 @@ public class DRMHelpSet extends FlexoObject implements XMLSerializable {
 			}
 		}
 
-		public static class Toolbar extends FlexoObject implements XMLSerializable {
+		public static class Toolbar extends KVCFlexoObject implements XMLSerializable {
 			public Vector helpActions;
 
 			public Toolbar() {
@@ -213,7 +213,7 @@ public class DRMHelpSet extends FlexoObject implements XMLSerializable {
 				helpActions.add(new HelpAction(helpAction));
 			}
 
-			public static class HelpAction extends FlexoObject implements XMLSerializable {
+			public static class HelpAction extends KVCFlexoObject implements XMLSerializable {
 				public String actionName;
 
 				public HelpAction(String helpAction) {

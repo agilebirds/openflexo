@@ -29,14 +29,14 @@ import javax.swing.JPanel;
 
 import org.openflexo.components.ProgressWindow;
 import org.openflexo.foundation.DataModification;
-import org.openflexo.foundation.FlexoModelObject;
+import org.openflexo.foundation.FlexoObject;
 import org.openflexo.foundation.FlexoObservable;
 import org.openflexo.foundation.FlexoObserver;
 import org.openflexo.foundation.ie.ComponentInstance;
 import org.openflexo.foundation.ie.PartialComponentInstance;
 import org.openflexo.foundation.ie.cl.ComponentDefinition;
-import org.openflexo.foundation.rm.FlexoProject;
-import org.openflexo.foundation.rm.ProjectClosedNotification;
+import org.openflexo.foundation.FlexoProject;
+import org.openflexo.foundation.resource.ProjectClosedNotification;
 import org.openflexo.icon.SEIconLibrary;
 import org.openflexo.ie.view.IEReusableWidgetComponentView;
 import org.openflexo.ie.view.IEWOComponentView;
@@ -81,7 +81,7 @@ class ComponentPerspective extends FlexoPerspective implements FlexoObserver {
 	}
 
 	@Override
-	public ComponentInstance getDefaultObject(FlexoModelObject proposedObject) {
+	public ComponentInstance getDefaultObject(FlexoObject proposedObject) {
 		if (proposedObject instanceof ComponentInstance) {
 			return (ComponentInstance) proposedObject;
 		}
@@ -89,12 +89,12 @@ class ComponentPerspective extends FlexoPerspective implements FlexoObserver {
 	}
 
 	@Override
-	public boolean hasModuleViewForObject(FlexoModelObject object) {
+	public boolean hasModuleViewForObject(FlexoObject object) {
 		return object instanceof ComponentInstance;
 	}
 
 	@Override
-	public ModuleView<?> createModuleViewForObject(FlexoModelObject object, FlexoController controller) {
+	public ModuleView<?> createModuleViewForObject(FlexoObject object, FlexoController controller) {
 		if (object instanceof ComponentInstance) {
 			ComponentInstance ci = (ComponentInstance) object;
 			ComponentDefinition component = ci.getComponentDefinition();

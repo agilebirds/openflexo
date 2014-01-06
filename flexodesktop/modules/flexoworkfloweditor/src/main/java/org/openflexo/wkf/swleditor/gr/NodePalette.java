@@ -34,9 +34,13 @@ import java.util.Observer;
 
 import javax.swing.SwingUtilities;
 
+import org.openflexo.fge.BackgroundStyle;
 import org.openflexo.fge.DrawingGraphicalRepresentation;
 import org.openflexo.fge.FGEUtils;
+import org.openflexo.fge.ForegroundStyle;
 import org.openflexo.fge.GraphicalRepresentation;
+import org.openflexo.fge.TextStyle;
+import org.openflexo.fge.ColorGradientBackgroundStyle.ColorGradientDirection;
 import org.openflexo.fge.GraphicalRepresentation.HorizontalTextAlignment;
 import org.openflexo.fge.ShapeGraphicalRepresentation;
 import org.openflexo.fge.controller.DrawingController;
@@ -48,11 +52,7 @@ import org.openflexo.fge.geom.FGERectangle;
 import org.openflexo.fge.geom.FGERegularPolygon;
 import org.openflexo.fge.geom.FGERoundRectangle;
 import org.openflexo.fge.geom.FGEShape;
-import org.openflexo.fge.graphics.BackgroundStyle;
-import org.openflexo.fge.graphics.BackgroundStyle.ColorGradient.ColorGradientDirection;
 import org.openflexo.fge.graphics.FGEGraphics;
-import org.openflexo.fge.graphics.ForegroundStyle;
-import org.openflexo.fge.graphics.TextStyle;
 import org.openflexo.fge.notifications.ObjectResized;
 import org.openflexo.fge.view.DrawingView;
 import org.openflexo.fge.view.FGEPaintManager;
@@ -142,8 +142,8 @@ public class NodePalette extends ControlArea<FGERoundRectangle> implements SWLEd
 	protected boolean drawEdge = false;
 	protected boolean isDnd = false;
 	protected WKFNodeGR<?> to = null;
-	protected GraphicalRepresentation<?> focusedGR;
-	private DrawingController<?> controller;
+	protected GraphicalRepresentation focusedGR;
+	private DrawingController controller;
 	private FGEPoint normalizedStartPoint;
 
 	private Rectangle previousRectangle;
@@ -152,8 +152,8 @@ public class NodePalette extends ControlArea<FGERoundRectangle> implements SWLEd
 
 	public void paint(Graphics g, SwimmingLaneEditorController controller) {
 		if (drawEdge && currentDraggingLocationInDrawingView != null) {
-			FGEShape<?> fgeShape = nodeGR.getShape().getOutline();
-			DrawingGraphicalRepresentation<?> drawingGR = controller.getDrawingGraphicalRepresentation();
+			FGEShape<?> fgeShape = nodeGR.getShapeSpecification().getOutline();
+			DrawingGraphicalRepresentation drawingGR = controller.getDrawingGraphicalRepresentation();
 			double scale = controller.getScale();
 			FGEPoint nearestOnOutline = fgeShape.getNearestPoint(drawingGR.convertLocalViewCoordinatesToRemoteNormalizedPoint(
 					currentDraggingLocationInDrawingView, nodeGR, scale));
@@ -198,7 +198,7 @@ public class NodePalette extends ControlArea<FGERoundRectangle> implements SWLEd
 	}
 
 	@Override
-	public void startDragging(DrawingController<?> controller, FGEPoint startPoint) {
+	public void startDragging(DrawingController controller, FGEPoint startPoint) {
 		mode = null;
 		if (nodeRect.contains(startPoint)) {
 			mode = Mode.NODE;
@@ -268,12 +268,12 @@ public class NodePalette extends ControlArea<FGERoundRectangle> implements SWLEd
 
 	// Attempt to repaint relevant zone only
 	private Rectangle getBoundsToRepaint(DrawingView<?> drawingView) {
-		ShapeView<?> fromView = drawingView.shapeViewForObject(nodeGR);
+		ShapeView<?> fromView = drawingView.shapeViewForNode(nodeGR);
 		Rectangle fromViewBounds = SwingUtilities.convertRectangle(fromView, fromView.getBounds(), drawingView);
 		Rectangle boundsToRepaint = fromViewBounds;
 
 		if (to != null) {
-			ShapeView<?> toView = drawingView.shapeViewForObject(to);
+			ShapeView<?> toView = drawingView.shapeViewForNode(to);
 			Rectangle toViewBounds = SwingUtilities.convertRectangle(toView, toView.getBounds(), drawingView);
 			boundsToRepaint = fromViewBounds.union(toViewBounds);
 		}
@@ -289,15 +289,15 @@ public class NodePalette extends ControlArea<FGERoundRectangle> implements SWLEd
 	}
 
 	@Override
-	public void stopDragging(DrawingController<?> controller, GraphicalRepresentation<?> focusedGR) {
+	public void stopDragging(DrawingController controller, GraphicalRepresentation focusedGR) {
 		if (drawEdge && currentDraggingLocationInDrawingView != null && isDnd) {
 			try {
 				WKFNode to = null;
 				WKFPaletteElement element = null;
 				Role role = null;
-				GraphicalRepresentation<?> targetGR = null;
+				GraphicalRepresentation targetGR = null;
 				if (target.isRootPetriGraph()) {
-					GraphicalRepresentation<?> gr = focusedGR;
+					GraphicalRepresentation gr = focusedGR;
 					while (gr != null) {
 						if (gr.getDrawable() instanceof Role) {
 							role = (Role) gr.getDrawable();
@@ -450,7 +450,7 @@ public class NodePalette extends ControlArea<FGERoundRectangle> implements SWLEd
 					controller.getGraphicalRepresentation(container), controller.getDrawingGraphicalRepresentation(), 1.0));// gr.getLocationInDrawing();
 		}
 		if (drop.getObject() != null && drop.hasActionExecutionSucceeded()) {
-			ShapeGraphicalRepresentation<?> gr = (ShapeGraphicalRepresentation<?>) controller.getGraphicalRepresentation(drop.getObject());
+			ShapeGraphicalRepresentation gr = (ShapeGraphicalRepresentation) controller.getGraphicalRepresentation(drop.getObject());
 			if (locationInDrawing == null) {
 				locationInDrawing = gr.getLocationInDrawing();
 			}
@@ -582,7 +582,7 @@ public class NodePalette extends ControlArea<FGERoundRectangle> implements SWLEd
 	}
 
 	/*@Override
-	public boolean isApplicable(GraphicalRepresentation<?> graphicalRepresentation, DrawingController<?> controller, MouseEvent e)
+	public boolean isApplicable(GraphicalRepresentation graphicalRepresentation, DianaEditor controller, MouseEvent e)
 	{
 		return super.isApplicable(graphicalRepresentation, controller, e)
 		&& (RoleContainerGR.isInsideRectangle(graphicalRepresentation, controller, e, upRect)

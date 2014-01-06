@@ -19,30 +19,17 @@
  */
 package org.openflexo.view.controller;
 
-import java.awt.BorderLayout;
-import java.awt.FlowLayout;
-import java.awt.event.ActionEvent;
-import java.awt.event.ActionListener;
 import java.io.File;
 import java.util.Hashtable;
 import java.util.Vector;
 
-import javax.swing.JButton;
-import javax.swing.JFrame;
-import javax.swing.JPanel;
-
-import org.openflexo.components.AskParametersPanel;
 import org.openflexo.components.ProgressWindow;
-import org.openflexo.foundation.param.LabelParameter;
-import org.openflexo.foundation.param.PropertyListParameter;
-import org.openflexo.foundation.rm.FlexoProject;
-import org.openflexo.foundation.rm.FlexoXMLStorageResource;
+import org.openflexo.foundation.FlexoProject;
+import org.openflexo.foundation.resource.FlexoResource;
 import org.openflexo.foundation.utils.FlexoProgress;
 import org.openflexo.foundation.utils.ProjectLoadingCancelledException;
 import org.openflexo.icon.IconLibrary;
 import org.openflexo.localization.FlexoLocalization;
-import org.openflexo.toolbox.ToolBox;
-import org.openflexo.view.FlexoDialog;
 
 public class FullInteractiveProjectLoadingHandler extends InteractiveProjectLoadingHandler {
 
@@ -53,7 +40,7 @@ public class FullInteractiveProjectLoadingHandler extends InteractiveProjectLoad
 	}
 
 	@Override
-	public boolean upgradeResourceToLatestVersion(FlexoXMLStorageResource resource) throws ProjectLoadingCancelledException {
+	public boolean upgradeResourceToLatestVersion(FlexoResource<?> resource) throws ProjectLoadingCancelledException {
 		if (isPerformingAutomaticConversion()) {
 			return true;
 		}
@@ -75,15 +62,15 @@ public class FullInteractiveProjectLoadingHandler extends InteractiveProjectLoad
 								+ "</b></center><br>"
 								+ FlexoLocalization.localizedForKey("resource")
 								+ " <b>"
-								+ resource.getResourceIdentifier()
+								+ resource.getURI()
 								+ "</b><br>"
 								+ FlexoLocalization
 										.localizedForKey("this_resource_has_been_serialized_with_an_older_version_than_the_one_declared_as_current_application_version")
 								+ "<br>"
 								+ FlexoLocalization
 										.localizedForKey("should_i_convert_this_resource_to_latest_version_(recommanded_choice)") + "<br>"
-								+ FlexoLocalization.localizedForKey("current_version") + " : <b>" + resource.getXmlVersion() + "</b><br>"
-								+ FlexoLocalization.localizedForKey("will_be_converted_to_version") + " : <b>" + resource.latestVersion()
+								// + FlexoLocalization.localizedForKey("current_version") + " : <b>" + resource.getXmlVersion() + "</b><br>"
+								// + FlexoLocalization.localizedForKey("will_be_converted_to_version") + " : <b>" + resource.latestVersion()
 								+ "</b><br></html>", CONVERT_ALL, CONVERT_ALL, CONVERT, DONT_CONVERT, CANCEL);
 
 		if (choice == 0) { // CONVERT_ALL
@@ -101,12 +88,12 @@ public class FullInteractiveProjectLoadingHandler extends InteractiveProjectLoad
 		}
 	}
 
-	private Hashtable<FlexoXMLStorageResource, Boolean> useOlderMappingHashtable;
+	private Hashtable<FlexoResource<?>, Boolean> useOlderMappingHashtable;
 
 	@Override
-	public boolean useOlderMappingWhenLoadingFailure(FlexoXMLStorageResource resource) throws ProjectLoadingCancelledException {
+	public boolean useOlderMappingWhenLoadingFailure(FlexoResource<?> resource) throws ProjectLoadingCancelledException {
 		if (useOlderMappingHashtable == null) {
-			useOlderMappingHashtable = new Hashtable<FlexoXMLStorageResource, Boolean>();
+			useOlderMappingHashtable = new Hashtable<FlexoResource<?>, Boolean>();
 		}
 
 		if (useOlderMappingHashtable.get(resource) != null) {
@@ -118,7 +105,7 @@ public class FullInteractiveProjectLoadingHandler extends InteractiveProjectLoad
 		int choice = FlexoController.selectOption(
 				"<html><center>" + IconLibrary.UNFIXABLE_WARNING_ICON.getHTMLImg() + "<b>&nbsp;"
 						+ FlexoLocalization.localizedForKey("warning") + "</b></center><br>"
-						+ FlexoLocalization.localizedForKey("resource") + " <b>" + resource.getResourceIdentifier() + "</b><br>"
+						+ FlexoLocalization.localizedForKey("resource") + " <b>" + resource.getURI() + "</b><br>"
 						+ FlexoLocalization.localizedForKey("this_resource_could_not_be_deserialized_with_declared_version") + "<br>"
 						+ FlexoLocalization.localizedForKey("should_i_try_to_recover_by_using_older_versions") + "<br>" + "<i>"
 						+ FlexoLocalization.localizedForKey("you_may_loose_some_informations") + "</i><br></html>", TRY_TO_RECOVER,
@@ -141,7 +128,8 @@ public class FullInteractiveProjectLoadingHandler extends InteractiveProjectLoad
 			return true;
 		}
 		if (resourcesToConvert.size() > 0) {
-			ProjectConversionDialog dialog = new ProjectConversionDialog(project, resourcesToConvert);
+			// TODO: reimplement this
+			/*ProjectConversionDialog dialog = new ProjectConversionDialog(project, resourcesToConvert);
 			if (dialog.getStatus() == ProjectConversionDialog.ReturnedStatus.CANCEL) {
 				throw new ProjectLoadingCancelledException();
 			} else if (dialog.getStatus() == ProjectConversionDialog.ReturnedStatus.SKIP_CONVERSION) {
@@ -150,13 +138,15 @@ public class FullInteractiveProjectLoadingHandler extends InteractiveProjectLoad
 				alwaysUpgradeResourceToLatestVersion = true;
 				performConversion(project, resourcesToConvert, progress);
 				return true;
-			}
+			}*/
 		}
 
 		return false;
 	}
 
-	private static class ProjectConversionDialog extends FlexoDialog {
+	// TODO: reimplement this
+
+	/*private static class ProjectConversionDialog extends FlexoDialog {
 
 		private enum ReturnedStatus {
 			CANCEL, CONVERT, SKIP_CONVERSION
@@ -230,6 +220,6 @@ public class FullInteractiveProjectLoadingHandler extends InteractiveProjectLoad
 		protected ReturnedStatus getStatus() {
 			return status;
 		}
-	}
+	}*/
 
 }

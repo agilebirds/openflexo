@@ -33,54 +33,55 @@ import org.openflexo.drm.Language;
 import org.openflexo.drm.helpset.DRMHelpSet;
 import org.openflexo.drm.helpset.HelpSetConfiguration;
 import org.openflexo.foundation.FlexoEditor;
-import org.openflexo.foundation.FlexoModelObject;
+import org.openflexo.foundation.FlexoObject;
+import org.openflexo.foundation.FlexoObject.FlexoObjectImpl;
 import org.openflexo.foundation.action.FlexoAction;
 import org.openflexo.foundation.action.FlexoActionType;
 import org.openflexo.localization.FlexoLocalization;
 import org.openflexo.toolbox.FileResource;
 
-public class GenerateHelpSet extends FlexoAction<GenerateHelpSet, FlexoModelObject, FlexoModelObject> {
+public class GenerateHelpSet extends FlexoAction<GenerateHelpSet, FlexoObject, FlexoObject> {
 
 	private static final Logger logger = Logger.getLogger(GenerateHelpSet.class.getPackage().getName());
 
-	public static FlexoActionType<GenerateHelpSet, FlexoModelObject, FlexoModelObject> actionType = new FlexoActionType<GenerateHelpSet, FlexoModelObject, FlexoModelObject>(
+	public static FlexoActionType<GenerateHelpSet, FlexoObject, FlexoObject> actionType = new FlexoActionType<GenerateHelpSet, FlexoObject, FlexoObject>(
 			"generate_helpset", FlexoActionType.defaultGroup, FlexoActionType.NORMAL_ACTION_TYPE) {
 
 		/**
 		 * Factory method
 		 */
 		@Override
-		public GenerateHelpSet makeNewAction(FlexoModelObject focusedObject, Vector<FlexoModelObject> globalSelection, FlexoEditor editor) {
+		public GenerateHelpSet makeNewAction(FlexoObject focusedObject, Vector<FlexoObject> globalSelection, FlexoEditor editor) {
 			return new GenerateHelpSet(focusedObject, globalSelection, editor);
 		}
 
 		@Override
-		public boolean isVisibleForSelection(FlexoModelObject object, Vector<FlexoModelObject> globalSelection) {
+		public boolean isVisibleForSelection(FlexoObject object, Vector<FlexoObject> globalSelection) {
 			return isEnabledForSelection(object, globalSelection);
 		}
 
 		@Override
-		public boolean isEnabledForSelection(FlexoModelObject object, Vector<FlexoModelObject> globalSelection) {
+		public boolean isEnabledForSelection(FlexoObject object, Vector<FlexoObject> globalSelection) {
 			return object != null && (!(object instanceof DocItemFolder) || ((DocItemFolder) object).isRootFolder());
 		}
 
 	};
 
 	static {
-		FlexoModelObject.addActionForClass(actionType, DocResourceCenter.class);
-		FlexoModelObject.addActionForClass(actionType, DocItemFolder.class);
+		FlexoObjectImpl.addActionForClass(actionType, DocResourceCenter.class);
+		FlexoObjectImpl.addActionForClass(actionType, DocItemFolder.class);
 	}
 
 	private String baseName;
 	private String note;
 
-	private Vector<HelpSetConfiguration> configurations;
-	private Hashtable<HelpSetConfiguration, DRMHelpSet> generatedHelpsets;
+	private final Vector<HelpSetConfiguration> configurations;
+	private final Hashtable<HelpSetConfiguration, DRMHelpSet> generatedHelpsets;
 
 	// private DRMHelpSet newHelpSet;
 	// private Language language;
 
-	protected GenerateHelpSet(FlexoModelObject focusedObject, Vector<FlexoModelObject> globalSelection, FlexoEditor editor) {
+	protected GenerateHelpSet(FlexoObject focusedObject, Vector<FlexoObject> globalSelection, FlexoEditor editor) {
 		super(actionType, focusedObject, globalSelection, editor);
 		configurations = new Vector<HelpSetConfiguration>();
 		generatedHelpsets = new Hashtable<HelpSetConfiguration, DRMHelpSet>();
@@ -132,7 +133,7 @@ public class GenerateHelpSet extends FlexoAction<GenerateHelpSet, FlexoModelObje
 
 	private File _helpSetDirectory;
 
-	private File getHelpsetDirectory() {
+	public File getHelpsetDirectory() {
 		if (_helpSetDirectory == null) {
 			_helpSetDirectory = new FileResource("Help");
 		}

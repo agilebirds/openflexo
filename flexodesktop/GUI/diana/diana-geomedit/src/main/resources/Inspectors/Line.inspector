@@ -1,0 +1,32 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<Panel className="org.openflexo.fge.geomedit.FIBInspector" layout="border" titleFont="SansSerif,0,12" darkLevel="0" dataClassName="org.openflexo.fge.geomedit.gr.LineGraphicalRepresentation" font="SansSerif,0,12" name="Inspector">
+  <TabPanel name="Tab" constraints="border(location=center)">
+    <Tab title="Construction" layout="twocols" titleFont="SansSerif,0,11" darkLevel="0" index="5" font="SansSerif,0,11" useScrollBar="true" horizontalScrollbarPolicy="HORIZONTAL_SCROLLBAR_AS_NEEDED" verticalScrollbarPolicy="VERTICAL_SCROLLBAR_AS_NEEDED" name="ConstructionTab">
+      <Label label="construction" index="0" constraints="twocols(expandHorizontally=false;expandVertically=false;index=0;location=left)" localize="true" />
+      <TextArea index="1" data="data.drawable.construction.toString" constraints="twocols(expandHorizontally=true;expandVertically=true;index=1;location=right)" localize="true" />
+    </Tab>
+    <Tab title="Data" layout="twocols" titleFont="SansSerif,0,11" darkLevel="0" index="0" font="SansSerif,0,11" useScrollBar="true" horizontalScrollbarPolicy="HORIZONTAL_SCROLLBAR_AS_NEEDED" verticalScrollbarPolicy="VERTICAL_SCROLLBAR_AS_NEEDED" name="DataTab">
+      <Label label="name" index="0" constraints="twocols(expandHorizontally=false;expandVertically=false;index=0;location=left)" localize="true" />
+      <TextField index="1" data="data.drawable.name" constraints="twocols(expandHorizontally=true;expandVertically=false;index=1;location=right)" localize="true" columns="10" />
+      <Label label="x1" index="2" constraints="twocols(expandHorizontally=false;expandVertically=false;index=2;location=left)" localize="true" />
+      <Number minValue="-Infinity" maxValue="Infinity" increment="1.0" numberType="DoubleType" index="3" data="data.drawable.x1" constraints="twocols(expandHorizontally=false;expandVertically=false;index=3;location=right)" localize="true" />
+      <Label label="y1" index="4" constraints="twocols(expandHorizontally=false;expandVertically=false;index=4;location=left)" localize="true" />
+      <Number minValue="-Infinity" maxValue="Infinity" increment="1.0" numberType="DoubleType" index="5" data="data.drawable.y1" constraints="twocols(expandHorizontally=false;expandVertically=false;index=5;location=right)" localize="true" />
+      <Label label="x2" index="6" constraints="twocols(expandHorizontally=false;expandVertically=false;index=6;location=left)" localize="true" />
+      <Number minValue="-Infinity" maxValue="Infinity" increment="1.0" numberType="DoubleType" index="7" data="data.drawable.x2" constraints="twocols(expandHorizontally=false;expandVertically=false;index=7;location=right)" localize="true" />
+      <Label label="y2" index="8" constraints="twocols(expandHorizontally=false;expandVertically=false;index=8;location=left)" localize="true" />
+      <Number minValue="-Infinity" maxValue="Infinity" increment="1.0" numberType="DoubleType" index="9" data="data.drawable.y2" constraints="twocols(expandHorizontally=false;expandVertically=false;index=9;location=right)" localize="true" />
+      <Label label="description" index="10" constraints="twocols(expandHorizontally=false;expandVertically=false;index=10;location=left)" localize="true" />
+      <TextArea index="11" data="data.drawable.description" constraints="twocols(expandHorizontally=true;expandVertically=true;index=11;location=right)" localize="true" />
+    </Tab>
+  </TabPanel>
+  <LocalizedDictionary>
+    <Localized key="name" lang="English">Name</Localized>
+    <Localized key="name" lang="French">Nom</Localized>
+    <Localized key="name" lang="Dutch">Name</Localized>
+    <Localized key="description" lang="English">Description</Localized>
+    <Localized key="description" lang="French">Description</Localized>
+    <Localized key="description" lang="Dutch">Description</Localized>
+  </LocalizedDictionary>
+  <Parameter name="title" value="Line" />
+</Panel>

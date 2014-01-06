@@ -23,12 +23,11 @@ import java.util.Hashtable;
 import java.util.Map;
 import java.util.logging.Logger;
 
-import org.openflexo.fge.view.DrawingView;
 import org.openflexo.foundation.viewpoint.EditionPattern;
 import org.openflexo.selection.SelectionManager;
-import org.openflexo.selection.SelectionManagingDrawingController;
+import org.openflexo.selection.SelectionManagingDianaEditor;
 
-public class EditionPatternPreviewController extends SelectionManagingDrawingController<EditionPatternPreviewRepresentation> {
+public class EditionPatternPreviewController extends SelectionManagingDianaEditor<EditionPattern> {
 
 	private static final Logger logger = Logger.getLogger(EditionPatternPreviewController.class.getPackage().getName());
 
@@ -53,7 +52,7 @@ public class EditionPatternPreviewController extends SelectionManagingDrawingCon
 	}
 
 	public EditionPatternPreviewController(EditionPattern editionPattern, SelectionManager sm) {
-		super(obtainEditionPatternPreviewRepresentations(editionPattern), sm);
+		super(obtainEditionPatternPreviewRepresentations(editionPattern), sm, EditionPatternPreviewRepresentation.PREVIEW_FACTORY, null);
 	}
 
 	@Override
@@ -63,18 +62,8 @@ public class EditionPatternPreviewController extends SelectionManagingDrawingCon
 		super.delete();
 	}
 
-	@Override
-	public DrawingView<EditionPatternPreviewRepresentation> makeDrawingView(EditionPatternPreviewRepresentation drawing) {
-		return new EditionPatterPreviewDrawingView(drawing, this);
-	}
-
-	@Override
-	public EditionPatterPreviewDrawingView getDrawingView() {
-		return (EditionPatterPreviewDrawingView) super.getDrawingView();
-	}
-
 	public EditionPattern getEditionPattern() {
-		return getDrawing().getEditionPattern();
+		return getDrawing().getModel();
 	}
 
 }

@@ -23,13 +23,13 @@ import java.util.logging.Logger;
 
 import javax.swing.ImageIcon;
 
-import org.openflexo.foundation.view.AbstractViewObject;
+import org.openflexo.foundation.view.EditionPatternInstance;
+import org.openflexo.foundation.view.ModelSlotInstance;
 import org.openflexo.foundation.view.View;
-import org.openflexo.foundation.view.ViewConnector;
-import org.openflexo.foundation.view.ViewDefinition;
-import org.openflexo.foundation.view.ViewFolder;
-import org.openflexo.foundation.view.ViewLibrary;
-import org.openflexo.foundation.view.ViewShape;
+import org.openflexo.foundation.view.ViewObject;
+import org.openflexo.foundation.view.VirtualModelInstance;
+import org.openflexo.foundation.view.rm.ViewResource;
+import org.openflexo.foundation.view.rm.VirtualModelInstanceResource;
 import org.openflexo.toolbox.ImageIconResource;
 
 /**
@@ -55,27 +55,32 @@ public class VEIconLibrary extends IconLibrary {
 	// Model icons
 	public static final ImageIconResource VIEW_LIBRARY_ICON = new ImageIconResource("Icons/Model/VE/ViewLibrary.png");
 	public static final ImageIconResource VIEW_ICON = new ImageIconResource("Icons/Model/VE/View.png");
-	public static final ImageIconResource SHAPE_ICON = new ImageIconResource("Icons/Model/VE/ViewShape.png");
-	public static final ImageIconResource CONNECTOR_ICON = new ImageIconResource("Icons/Model/VE/ViewConnector.gif");
+	public static final ImageIconResource VIRTUAL_MODEL_INSTANCE_ICON = new ImageIconResource("Icons/Model/VE/VirtualModelInstance.png");
+	public static final ImageIconResource EDITION_PATTERN_INSTANCE_ICON = new ImageIconResource("Icons/Model/VE/EditionPatternInstance.png");
+	public static final ImageIconResource MODEL_SLOT_INSTANCE_ICON = new ImageIconResource("Icons/Model/VE/ModelSlotInstance.png");
 
 	public static final ImageIconResource UNKNOWN_ICON = new ImageIconResource("Icons/Model/VPM/UnknownIcon.gif");
 
-	public static ImageIcon iconForObject(AbstractViewObject object) {
+	public static ImageIcon iconForObject(ViewObject object) {
 		if (object instanceof View) {
 			return VIEW_ICON;
-		} else if (object instanceof ViewConnector) {
-			return CONNECTOR_ICON;
-		} else if (object instanceof ViewShape) {
-			return SHAPE_ICON;
-		} else if (object instanceof ViewLibrary) {
-			return VIEW_LIBRARY_ICON;
-		} else if (object instanceof ViewDefinition) {
-			return VIEW_ICON;
-		} else if (object instanceof ViewFolder) {
-			return FOLDER_ICON;
+		} else if (object instanceof ModelSlotInstance) {
+			return MODEL_SLOT_INSTANCE_ICON;
+		} else if (object instanceof VirtualModelInstance) {
+			return VIRTUAL_MODEL_INSTANCE_ICON;
+		} else if (object instanceof EditionPatternInstance) {
+			return EDITION_PATTERN_INSTANCE_ICON;
 		}
 		logger.warning("No icon for " + object.getClass());
 		return UNKNOWN_ICON;
+	}
+
+	public static ImageIcon iconForObject(ViewResource object) {
+		return VIEW_ICON;
+	}
+
+	public static ImageIcon iconForObject(VirtualModelInstanceResource object) {
+		return VIRTUAL_MODEL_INSTANCE_ICON;
 	}
 
 }

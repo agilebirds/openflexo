@@ -33,6 +33,7 @@ import org.openflexo.components.browser.CustomBrowserFilter;
 import org.openflexo.components.browser.ProjectBrowser;
 import org.openflexo.foundation.DataModification;
 import org.openflexo.foundation.FlexoModelObject;
+import org.openflexo.foundation.FlexoObject;
 import org.openflexo.foundation.FlexoObservable;
 import org.openflexo.foundation.FlexoObserver;
 import org.openflexo.foundation.cg.CGFile;
@@ -72,7 +73,7 @@ public class GeneratorBrowser extends ProjectBrowser implements FlexoObserver {
 		}
 
 		@Override
-		public BrowserElement makeNewElement(FlexoModelObject object, ProjectBrowser browser, BrowserElement parent) {
+		public BrowserElement makeNewElement(FlexoObject object, ProjectBrowser browser, BrowserElement parent) {
 			if (object instanceof GeneratedOutput) {
 				return new GeneratedCodeElement((GeneratedOutput) object, browser, parent);
 			} else if (object instanceof GenerationRepository) {
@@ -106,7 +107,7 @@ public class GeneratorBrowser extends ProjectBrowser implements FlexoObserver {
 		}
 
 		@Override
-		public boolean accept(FlexoModelObject object) {
+		public boolean accept(FlexoObject object) {
 			if (object instanceof CGFile) {
 				return acceptFile((CGFile) object);
 			}
@@ -151,7 +152,7 @@ public class GeneratorBrowser extends ProjectBrowser implements FlexoObserver {
 		// Custom filters
 		setAllFilesAndDirectoryFilter(new CustomBrowserFilter("all_files_and_directories", null) {
 			@Override
-			public boolean accept(FlexoModelObject object) {
+			public boolean accept(FlexoObject object) {
 				return true;
 			}
 		});

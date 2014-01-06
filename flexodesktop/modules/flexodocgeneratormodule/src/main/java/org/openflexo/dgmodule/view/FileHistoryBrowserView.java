@@ -26,7 +26,7 @@ import org.openflexo.components.tabularbrowser.TabularBrowserModel;
 import org.openflexo.components.tabularbrowser.TabularBrowserView;
 import org.openflexo.dgmodule.controller.DGController;
 import org.openflexo.foundation.FlexoEditor;
-import org.openflexo.foundation.FlexoModelObject;
+import org.openflexo.foundation.FlexoObject;
 import org.openflexo.foundation.cg.CGFile;
 import org.openflexo.foundation.cg.CGObject;
 import org.openflexo.foundation.cg.version.AbstractCGFileVersion;
@@ -83,7 +83,7 @@ public class FileHistoryBrowserView extends TabularBrowserView {
 	}
 
 	@Override
-	public boolean mayRepresents(FlexoModelObject anObject) {
+	public boolean mayRepresents(FlexoObject anObject) {
 		if (anObject instanceof CGFile) {
 			return anObject == _cgFile;
 		}

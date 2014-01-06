@@ -66,8 +66,10 @@ public class ProjectExcelExportInitializer extends ActionInitializer {
 				chooser.setSelectedFile(new File(System.getProperty("user.home"), action.getFocusedObject().getProjectName() + ".csv"));
 				int ret = chooser.showSaveDialog(FlexoFrame.getActiveFrame());
 				if (ret == JFileChooser.APPROVE_OPTION) {
-					action.getFocusedObject().getStatistics().refresh();
-					String s = action.getFocusedObject().getStatistics().excel();
+					// action.getFocusedObject().getStatistics().refresh();
+					// String s = action.getFocusedObject().getStatistics().excel();
+					// TODO !
+					String s = null;
 					File out = chooser.getSelectedFile();
 					if (!out.getName().endsWith(".csv")) {
 						out = new File(out.getAbsolutePath() + ".csv");

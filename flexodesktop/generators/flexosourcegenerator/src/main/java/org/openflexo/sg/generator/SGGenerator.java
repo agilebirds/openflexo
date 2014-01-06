@@ -38,7 +38,7 @@ import org.openflexo.foundation.rm.cg.CGRepositoryFileResource;
 import org.openflexo.foundation.sg.SourceRepository;
 import org.openflexo.foundation.sg.implmodel.TechnologyModuleDefinition;
 import org.openflexo.foundation.sg.implmodel.TechnologyModuleImplementation;
-import org.openflexo.foundation.utils.FlexoModelObjectReference;
+import org.openflexo.foundation.utils.FlexoObjectReference;
 import org.openflexo.generator.Generator;
 import org.openflexo.generator.exception.TemplateNotFoundException;
 import org.openflexo.logging.FlexoLogger;
@@ -107,7 +107,7 @@ public abstract class SGGenerator<T extends FlexoModelObject, CR extends Generat
 		}
 
 		for (ContextEntry ce : getFileEntry().template.contexts) {
-			FlexoModelObjectReference<?> ref = new FlexoModelObjectReference<FlexoModelObject>(getProject(), ce.value);
+			FlexoObjectReference<?> ref = new FlexoObjectReference<FlexoModelObject>(getProject(), ce.value);
 			FlexoModelObject object = ref.getObject(true);
 			if (object != null) {
 				returned.put(ce.name, object);

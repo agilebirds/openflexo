@@ -28,21 +28,21 @@ import java.util.logging.Logger;
 
 import javax.swing.SwingUtilities;
 
+import org.openflexo.fge.BackgroundStyle;
+import org.openflexo.fge.ForegroundStyle;
 import org.openflexo.fge.GraphicalRepresentation;
+import org.openflexo.fge.TextStyle;
+import org.openflexo.fge.ColorGradientBackgroundStyle.ColorGradientDirection;
+import org.openflexo.fge.ForegroundStyle.DashStyle;
 import org.openflexo.fge.controller.CustomDragControlAction;
 import org.openflexo.fge.controller.DrawingController;
 import org.openflexo.fge.controller.MouseDragControl;
 import org.openflexo.fge.geom.FGEPoint;
 import org.openflexo.fge.geom.FGERectangle;
-import org.openflexo.fge.graphics.BackgroundStyle;
-import org.openflexo.fge.graphics.BackgroundStyle.ColorGradient.ColorGradientDirection;
 import org.openflexo.fge.graphics.FGEShapeGraphics;
-import org.openflexo.fge.graphics.ForegroundStyle;
-import org.openflexo.fge.graphics.ForegroundStyle.DashStyle;
 import org.openflexo.fge.graphics.ShapePainter;
-import org.openflexo.fge.graphics.TextStyle;
 import org.openflexo.fge.shapes.Rectangle;
-import org.openflexo.fge.shapes.Shape.ShapeType;
+import org.openflexo.fge.shapes.ShapeSpecification.ShapeType;
 import org.openflexo.fge.view.ShapeView;
 import org.openflexo.foundation.DataModification;
 import org.openflexo.foundation.FlexoObservable;
@@ -130,7 +130,7 @@ public class CollabsedActivityGroupGR extends WKFObjectGR<ActivityGroup> {
 
 	@Override
 	public Rectangle getShape() {
-		return (Rectangle) super.getShape();
+		return (Rectangle) super.getShapeSpecification();
 	}
 
 	@Override
@@ -146,7 +146,7 @@ public class CollabsedActivityGroupGR extends WKFObjectGR<ActivityGroup> {
 		public GroupExpander() {
 			super("GroupExpander", MouseButton.LEFT, new CustomDragControlAction() {
 				@Override
-				public boolean handleMousePressed(GraphicalRepresentation<?> graphicalRepresentation, DrawingController<?> controller,
+				public boolean handleMousePressed(GraphicalRepresentation graphicalRepresentation, DrawingController controller,
 						MouseEvent event) {
 					logger.info("Expand group");
 					OpenGroup.actionType.makeNewAction(getActivityGroup(), null, getDrawing().getEditor()).doAction();
@@ -154,14 +154,14 @@ public class CollabsedActivityGroupGR extends WKFObjectGR<ActivityGroup> {
 				}
 
 				@Override
-				public boolean handleMouseReleased(GraphicalRepresentation<?> graphicalRepresentation, DrawingController<?> controller,
+				public boolean handleMouseReleased(GraphicalRepresentation graphicalRepresentation, DrawingController controller,
 						MouseEvent event, boolean isSignificativeDrag) {
 					// TODO Auto-generated method stub
 					return false;
 				}
 
 				@Override
-				public boolean handleMouseDragged(GraphicalRepresentation<?> graphicalRepresentation, DrawingController<?> controller,
+				public boolean handleMouseDragged(GraphicalRepresentation graphicalRepresentation, DrawingController controller,
 						MouseEvent event) {
 					// TODO Auto-generated method stub
 					return false;
@@ -170,15 +170,15 @@ public class CollabsedActivityGroupGR extends WKFObjectGR<ActivityGroup> {
 		}
 
 		@Override
-		public boolean isApplicable(GraphicalRepresentation<?> graphicalRepresentation, DrawingController<?> controller, MouseEvent e) {
+		public boolean isApplicable(GraphicalRepresentation graphicalRepresentation, DrawingController controller, MouseEvent e) {
 			return super.isApplicable(graphicalRepresentation, controller, e) && isInsideClosingBox(graphicalRepresentation, controller, e);
 		}
 
 	}
 
-	protected boolean isInsideClosingBox(GraphicalRepresentation<?> graphicalRepresentation, DrawingController<?> controller,
+	protected boolean isInsideClosingBox(GraphicalRepresentation graphicalRepresentation, DrawingController controller,
 			MouseEvent event) {
-		ShapeView view = (ShapeView) controller.getDrawingView().viewForObject(graphicalRepresentation);
+		ShapeView view = (ShapeView) controller.getDrawingView().viewForNode(graphicalRepresentation);
 		FGERectangle expandingRect = getExpandingRect();
 		java.awt.Rectangle scaledExpandingRect = convertNormalizedRectangleToViewCoordinates(expandingRect, controller.getScale());
 		Point clickLocation = SwingUtilities.convertPoint((Component) event.getSource(), event.getPoint(), view);

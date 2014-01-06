@@ -1,16 +1,17 @@
 package org.openflexo.model;
 
-import java.util.ArrayList;
 import java.util.Arrays;
+import java.util.HashSet;
 import java.util.Hashtable;
-import java.util.List;
 import java.util.Map;
+import java.util.Set;
 
 import org.openflexo.model.exceptions.ModelDefinitionException;
 
 public class ModelContextLibrary {
 
 	private static final Map<Class<?>, ModelContext> contexts = new Hashtable<Class<?>, ModelContext>();
+	private static final Map<Set<Class<?>>, ModelContext> setContexts = new Hashtable<Set<Class<?>>, ModelContext>();
 
 	public static synchronized ModelContext getModelContext(Class<?> baseClass) throws ModelDefinitionException {
 		ModelContext context = contexts.get(baseClass);
@@ -24,14 +25,17 @@ public class ModelContextLibrary {
 		return contexts.get(baseClass) != null;
 	}
 
-	public static List<ModelContext> getModelContext(List<Class<?>> classes) throws ModelDefinitionException {
-		if (classes.size() == 1) {
-			return Arrays.asList(getModelContext(classes.get(0)));
+	public static ModelContext getCompoundModelContext(Class<?>... classes) throws ModelDefinitionException {
+		if (classes.length == 1) {
+			return getModelContext(classes[0]);
 		}
-		List<ModelContext> contexts = new ArrayList<ModelContext>(classes.size());
-		for (Class<?> klass : classes) {
-			contexts.add(getModelContext(klass));
+
+		Set<Class<?>> set = new HashSet<Class<?>>(Arrays.asList(classes));
+		ModelContext context = setContexts.get(set);
+		if (context == null) {
+			setContexts.put(set, context = new ModelContext(classes));
 		}
-		return contexts;
+		return context;
 	}
+
 }

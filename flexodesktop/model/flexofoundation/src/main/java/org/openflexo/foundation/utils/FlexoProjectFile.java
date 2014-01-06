@@ -23,9 +23,9 @@ import java.io.File;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 
-import org.openflexo.foundation.FlexoObject;
-import org.openflexo.foundation.rm.FlexoProject;
-import org.openflexo.foundation.rm.ProjectExternalRepository;
+import org.openflexo.foundation.FlexoProject;
+import org.openflexo.foundation.KVCFlexoObject;
+import org.openflexo.foundation.resource.ProjectExternalRepository;
 import org.openflexo.toolbox.FileUtils;
 import org.openflexo.xmlcode.StringConvertable;
 import org.openflexo.xmlcode.StringEncoder;
@@ -37,7 +37,7 @@ import org.openflexo.xmlcode.StringEncoder.Converter;
  * @author sguerin
  * 
  */
-public class FlexoProjectFile extends FlexoObject implements StringConvertable, Cloneable {
+public class FlexoProjectFile extends KVCFlexoObject implements StringConvertable, Cloneable {
 
 	private static final Logger logger = Logger.getLogger(FlexoProjectFile.class.getPackage().getName());
 
@@ -251,4 +251,27 @@ public class FlexoProjectFile extends FlexoObject implements StringConvertable, 
 	public Object clone() {
 		return new FlexoProjectFile(getProject(), getExternalRepository(), getRelativePath());
 	}
+
+	public static boolean isContainedInProject(File aFile, FlexoProject project) {
+		return FileUtils.isFileContainedIn(aFile, project.getProjectDirectory());
+	}
+
+	public static boolean isContainedInProjectDeclaredExternalRepositories(File aFile, FlexoProject project) {
+		for (ProjectExternalRepository externalRepository : project.getExternalRepositories()) {
+			if (FileUtils.isFileContainedIn(aFile, externalRepository.getDirectory())) {
+				return true;
+			}
+		}
+		return false;
+	}
+
+	public static ProjectExternalRepository getProjectExternalRepository(File aFile, FlexoProject project) {
+		for (ProjectExternalRepository externalRepository : project.getExternalRepositories()) {
+			if (FileUtils.isFileContainedIn(aFile, externalRepository.getDirectory())) {
+				return externalRepository;
+			}
+		}
+		return null;
+	}
+
 }

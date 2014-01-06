@@ -21,7 +21,7 @@ package org.openflexo.wkf.controller;
 
 import javax.swing.ImageIcon;
 
-import org.openflexo.foundation.FlexoModelObject;
+import org.openflexo.foundation.FlexoObject;
 import org.openflexo.foundation.wkf.FlexoProcess;
 import org.openflexo.foundation.wkf.WKFObject;
 import org.openflexo.icon.WKFIconLibrary;
@@ -61,7 +61,7 @@ public class DocumentationPerspective extends FlexoPerspective {
 	}
 
 	@Override
-	public FlexoProcess getDefaultObject(FlexoModelObject proposedObject) {
+	public FlexoProcess getDefaultObject(FlexoObject proposedObject) {
 		if (proposedObject instanceof WKFObject) {
 			return ((WKFObject) proposedObject).getProcess();
 		}
@@ -69,12 +69,12 @@ public class DocumentationPerspective extends FlexoPerspective {
 	}
 
 	@Override
-	public boolean hasModuleViewForObject(FlexoModelObject object) {
+	public boolean hasModuleViewForObject(FlexoObject object) {
 		return object instanceof FlexoProcess;
 	}
 
 	@Override
-	public ModuleView<?> createModuleViewForObject(FlexoModelObject process, FlexoController controller) {
+	public ModuleView<?> createModuleViewForObject(FlexoObject process, FlexoController controller) {
 		if (process instanceof FlexoProcess) {
 			return new WKFDocumentationView((FlexoProcess) process, (WKFController) controller);
 		} else {

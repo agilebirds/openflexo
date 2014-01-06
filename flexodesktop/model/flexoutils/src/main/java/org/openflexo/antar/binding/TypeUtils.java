@@ -19,6 +19,7 @@
  */
 package org.openflexo.antar.binding;
 
+import java.io.File;
 import java.lang.reflect.GenericArrayType;
 import java.lang.reflect.GenericDeclaration;
 import java.lang.reflect.Method;
@@ -28,7 +29,9 @@ import java.lang.reflect.TypeVariable;
 import java.lang.reflect.WildcardType;
 import java.util.Collection;
 import java.util.List;
+import java.util.Map;
 import java.util.Vector;
+import java.util.logging.Level;
 import java.util.logging.Logger;
 
 import javax.annotation.Nullable;
@@ -37,11 +40,29 @@ import org.openflexo.antar.expr.EvaluationType;
 
 import com.google.common.primitives.Primitives;
 
+/**
+ * Utility methods focusing on types introspection
+ */
 public class TypeUtils {
 
 	static final Logger logger = Logger.getLogger(TypeUtils.class.getPackage().getName());
 
-	public static Class getBaseClass(Type aType) {
+	/**
+	 * <p>
+	 * Transforms the passed in type to a {@code Class} object. Type-checking method of convenience.
+	 * </p>
+	 * 
+	 * @param parameterizedType
+	 *            the type to be converted
+	 * @return the corresponding {@code Class} object
+	 * @throws IllegalStateException
+	 *             if the conversion fails
+	 */
+	public static Class<?> getRawType(Type aType) {
+		return getBaseClass(aType);
+	}
+
+	public static Class<?> getBaseClass(Type aType) {
 		if (aType == null) {
 			return null;
 		}
@@ -56,10 +77,10 @@ public class TypeUtils {
 				if (rawType instanceof Class) {
 					return (Class) rawType;
 				}
-				logger.warning("Not handled: " + aType.getClass().getName());
+				logger.warning("Not handled: " + aType + " of " + aType.getClass().getName());
 				return null;
 			} else {
-				logger.warning("Not handled: " + aType.getClass().getName());
+				logger.warning("Not handled: " + aType + " of " + aType.getClass().getName());
 				return null;
 			}
 		}
@@ -74,10 +95,20 @@ public class TypeUtils {
 			}
 		}
 		if (aType instanceof TypeVariable) {
-			Type[] bounds = ((TypeVariable<?>) aType).getBounds();
-			if (bounds.length == 1) {
-				return getBaseClass(bounds[0]);
+			TypeVariable tv = (TypeVariable) aType;
+			StringBuffer upperBounds = new StringBuffer();
+			boolean isFirst = true;
+			for (Type upperBound : tv.getBounds()) {
+				upperBounds.append((isFirst ? "" : ",") + upperBound.toString());
+				isFirst = false;
 			}
+			// logger.warning("Unresolved TypeVariable: " + tv.getName() + " " + tv.getGenericDeclaration() + " bounds=" + upperBounds);
+			if (tv.getBounds().length > 0) {
+				return getBaseClass(tv.getBounds()[0]);
+			} else {
+				return Object.class;
+			}
+
 		}
 		logger.warning("Not handled: " + aType.getClass().getName());
 		return null;
@@ -212,6 +243,13 @@ public class TypeUtils {
 		return type.equals(Object.class);
 	}
 
+	public static boolean isFile(Type type) {
+		if (type == null) {
+			return false;
+		}
+		return type.equals(File.class);
+	}
+
 	public static boolean isShort(Type type) {
 		if (type == null) {
 			return false;
@@ -309,6 +347,10 @@ public class TypeUtils {
 		// If supplied type is null return false
 		if (aType == null || anOtherType == null) {
 			return false;
+		}
+
+		if (aType.equals(anOtherType)) {
+			return true;
 		}
 
 		// Everything could be assigned to Object
@@ -425,6 +467,19 @@ public class TypeUtils {
 			}
 			return true;
 		}
+
+		// In this case, the type is not fully resolved, we only consider the first upper bound
+		if (aType instanceof TypeVariable) {
+			TypeVariable tv = (TypeVariable) aType;
+			if (tv.getBounds() != null && tv.getBounds().length > 0 && tv.getBounds()[0] != null) {
+				return isTypeAssignableFrom(tv.getBounds()[0], anOtherType);
+			}
+		}
+
+		if (aType instanceof WildcardType) {
+			logger.warning("WildcardType not implemented yet !");
+		}
+
 		return org.apache.commons.lang3.reflect.TypeUtils.isAssignable(anOtherType, aType);
 		/*if (getBaseEntity() == type.getBaseEntity()) {
 			// Base entities are the same, let's analyse parameters
@@ -523,7 +578,8 @@ public class TypeUtils {
 	}
 
 	public static boolean isResolved(Type type) {
-		return type instanceof Class || type instanceof GenericArrayType || type instanceof ParameterizedType || type instanceof CustomType;
+		return type instanceof Class || type instanceof GenericArrayType && isResolved(((GenericArrayType) type).getGenericComponentType())
+				|| type instanceof ParameterizedType || type instanceof CustomType;
 	}
 
 	/**
@@ -577,6 +633,29 @@ public class TypeUtils {
 	}
 
 	/**
+	 * Build a new type infering implicit typing constraints<br>
+	 * Raw classes are parameterized
+	 * 
+	 * @param aType
+	 * @return
+	 */
+	public static Type makeInferedType(Type aType) {
+		// We handle here the case where we ask to resolve a type in the context of an
+		// unresolved type (a class with generic arguments not specified)
+		// We make an indirection with an infered context computed with default bounds
+		// declared in generic type
+		if (aType instanceof Class && ((Class) aType).getTypeParameters().length > 0) {
+			Type[] args = new Type[((Class) aType).getTypeParameters().length];
+			for (int i = 0; i < ((Class) aType).getTypeParameters().length; i++) {
+				args[i] = new WilcardTypeImpl(((Class) aType).getTypeParameters()[i].getBounds(), new Type[0]);
+			}
+			return new ParameterizedTypeImpl((Class) aType, args);
+		}
+		return aType;
+
+	}
+
+	/**
 	 * Build instanciated DMType considering supplied type is generic (contains TypeVariable definitions) Returns a clone of DMType where
 	 * all references to TypeVariable are replaced by values defined in context type. For example, given type=Enumeration<E> and
 	 * context=Vector<String>, returns Enumeration<String> If supplied type is not generic, return type value (without cloning!)
@@ -594,6 +673,14 @@ public class TypeUtils {
 
 		if (!isGeneric(type)) {
 			return type;
+		}
+
+		// We handle here the case where we ask to resolve a type in the context of an
+		// unresolved type (a class with generic arguments not specified)
+		// We make an indirection with an infered context computed with default bounds
+		// declared in generic type
+		if (context instanceof Class && ((Class) context).getTypeParameters().length > 0) {
+			return makeInstantiatedType(type, makeInferedType(context));
 		}
 
 		if (type instanceof ParameterizedType) {
@@ -626,6 +713,7 @@ public class TypeUtils {
 							} else {
 								logger.warning("Could not retrieve parameterized type " + tv + " with context "
 										+ simpleRepresentation(context));
+								// ((TypeVariable)type).getGenericDeclaration().g
 								return type;
 							}
 						}
@@ -636,9 +724,11 @@ public class TypeUtils {
 			} else if (gd instanceof Method) {
 				return type;
 			}
-			logger.warning("Not found type variable " + tv + " in context " + context + " GenericDeclaration=" + tv.getGenericDeclaration());
-			// throw new InvalidKeyValuePropertyException("Not found type variable "+tv+" in context "+context);
-			return type;
+			if (logger.isLoggable(Level.FINE)) {
+				logger.fine("Not found type variable " + tv + " in context " + context + " GenericDeclaration="
+						+ tv.getGenericDeclaration() + " bounds=" + (tv.getBounds().length > 0 ? tv.getBounds()[0] : Object.class));
+			}
+			return tv.getBounds().length > 0 ? tv.getBounds()[0] : Object.class;
 		}
 
 		if (type instanceof WildcardType) {
@@ -670,6 +760,9 @@ public class TypeUtils {
 					actualTypeArguments[i] = makeInstantiatedType(tv2, type);
 				}
 				return new ParameterizedTypeImpl(((Class<?>) ((ParameterizedType) type).getRawType()).getSuperclass(), actualTypeArguments);
+			} else {
+				// System.out.println("super type of " + simpleRepresentation(type) + " is " + simpleRepresentation(superType));
+				return superType;
 			}
 		} else if (type instanceof Class) {
 			return ((Class) type).getGenericSuperclass();
@@ -760,6 +853,33 @@ public class TypeUtils {
 
 	}
 
+	/**
+	 * <p>
+	 * Retrieves all the type arguments for this parameterized type including owner hierarchy arguments such as <code>
+	 * Outer<K,V>.Inner<T>.DeepInner<E></code> . The arguments are returned in a {@link Map} specifying the argument type for each
+	 * {@link TypeVariable}.
+	 * </p>
+	 * 
+	 * @param type
+	 *            specifies the subject parameterized type from which to harvest the parameters.
+	 * @return a map of the type arguments to their respective type variables.
+	 */
+	public static Map<TypeVariable<?>, Type> getTypeArguments(Type type, Class<?> rawType) {
+		return org.apache.commons.lang3.reflect.TypeUtils.getTypeArguments(type, rawType);
+	}
+
+	/**
+	 * Retrieve resolved type for type variable at specified index relatively to specified type, for supplied Type
+	 * 
+	 * @param type
+	 * @param index
+	 * @return
+	 */
+	public static Type getTypeArgument(Type type, Class<?> rawType, int index) {
+
+		return getTypeArguments(type, rawType).get(rawType.getTypeParameters()[index]);
+	}
+
 	// TESTS
 
 	public static interface ShouldFail {
@@ -828,7 +948,12 @@ public class TypeUtils {
 
 	}
 
+	public static class MyVector extends Vector<String> {
+
+	}
+
 	public static void main(String[] args) {
+		System.out.println("Type Argument=" + getTypeArgument(MyVector.class, Vector.class, 0));
 		System.err.println(isTypeAssignableFrom(Number.class, Integer.class));
 		System.err.println(org.apache.commons.lang3.reflect.TypeUtils.isAssignable(Integer.class, Number.class));
 	}

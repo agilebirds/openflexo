@@ -1,0 +1,17 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<Panel layout="twocols" darkLevel="0" data="" dataClassName="org.openflexo.foundation.technologyadapter.InformationSpace" controllerClassName="org.openflexo.view.controller.FlexoFIBController" visible="">
+  <Browser root="data" iteratorClassName="java.lang.Object" visibleRowCount="5" rowHeight="18" boundToSelectionManager="true" selectionMode="DiscontiguousTreeSelection" selected="" showFooter="true" rootVisible="true" showRootsHandle="true" format="" icon="" tooltip="" localize="true" enable="" manageDynamicModel="true" clickAction="controller.singleClick(OntologyLibraryBrowser.selected)" doubleClickAction="controller.doubleClick(OntologyLibraryBrowser.selected)" rightClickAction="controller.rightClick(OntologyLibraryBrowser.selected,event)" enterPressedAction="" valueChangedAction="" valueTransform="" valueValidator="" name="OntologyLibraryBrowser" index="0" data="" constraints="twocols(expandHorizontally=true;expandVertically=true;index=0;insetsBottom=0;insetsLeft=2;insetsRight=2;insetsTop=0;location=center)" visible="">
+    <BrowserElement dataClassName="org.openflexo.foundation.technologyadapter.InformationSpace" label="&quot;Information Space&quot;" icon="controller.iconForObject(informationSpace)" tooltip="" enabled="" visible="" isEditable="false" editableLabel="" filtered="false" defaultVisible="true" dynamicFont="" name="informationSpace">
+      <Children data="data.technologyAdapters" visible="" cast="" name="resourceCenters" />
+    </BrowserElement>
+    <BrowserElement dataClassName="org.openflexo.foundation.resource.RepositoryFolder" label="viewPointFolder.name" icon="controller.iconForObject(viewPointFolder)" tooltip="" enabled="" visible="" isEditable="false" editableLabel="" filtered="false" defaultVisible="true" dynamicFont="" name="viewPointFolder">
+      <Children data="viewPointFolder.children" visible="" cast="" name="subFolders" />
+      <Children data="viewPointFolder.resources" visible="" cast="" name="resource" />
+    </BrowserElement>
+    <BrowserElement dataClassName="org.openflexo.foundation.resource.FlexoResource" label="resource.name" icon="controller.iconForObject(resource)" tooltip="" enabled="" visible="" isEditable="false" editableLabel="" filtered="false" defaultVisible="true" dynamicFont="" name="resource" />
+    <BrowserElement dataClassName="org.openflexo.foundation.technologyadapter.TechnologyAdapter" label="technologyAdapter.name" icon="controller.iconForObject(technologyAdapter)" tooltip="" enabled="" visible="" isEditable="false" editableLabel="" filtered="false" defaultVisible="true" dynamicFont="" name="technologyAdapter">
+      <Children data="data.getAllRepositories(technologyAdapter)" visible="" cast="child.rootFolder" name="repositories" />
+    </BrowserElement>
+  </Browser>
+  <LocalizedDictionary />
+</Panel>

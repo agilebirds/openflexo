@@ -1,20 +1,24 @@
 package org.openflexo.foundation.viewpoint;
 
-import org.openflexo.foundation.ontology.OntologyClass;
-import org.openflexo.foundation.ontology.OntologyObjectProperty;
-import org.openflexo.foundation.viewpoint.ViewPoint.ViewPointBuilder;
+import java.lang.reflect.Type;
 
-public class ObjectPropertyPatternRole extends PropertyPatternRole {
+import org.openflexo.foundation.ontology.IFlexoOntologyClass;
+import org.openflexo.foundation.ontology.IFlexoOntologyObjectProperty;
+
+public abstract class ObjectPropertyPatternRole<P extends IFlexoOntologyObjectProperty> extends PropertyPatternRole<P> {
 
 	private String rangeURI;
 
-	public ObjectPropertyPatternRole(ViewPointBuilder builder) {
-		super(builder);
+	public ObjectPropertyPatternRole() {
+		super();
 	}
 
 	@Override
-	public PatternRoleType getType() {
-		return PatternRoleType.ObjectProperty;
+	public Type getType() {
+		if (getParentProperty() == null) {
+			return IFlexoOntologyObjectProperty.class;
+		}
+		return super.getType();
 	}
 
 	@Override
@@ -26,16 +30,11 @@ public class ObjectPropertyPatternRole extends PropertyPatternRole {
 	}
 
 	@Override
-	public Class<?> getAccessedClass() {
-		return OntologyObjectProperty.class;
+	public IFlexoOntologyObjectProperty getParentProperty() {
+		return (IFlexoOntologyObjectProperty) super.getParentProperty();
 	}
 
-	@Override
-	public OntologyObjectProperty getParentProperty() {
-		return (OntologyObjectProperty) super.getParentProperty();
-	}
-
-	public void setParentProperty(OntologyObjectProperty ontologyProperty) {
+	public void setParentProperty(IFlexoOntologyObjectProperty ontologyProperty) {
 		super.setParentProperty(ontologyProperty);
 	}
 
@@ -47,12 +46,11 @@ public class ObjectPropertyPatternRole extends PropertyPatternRole {
 		this.rangeURI = domainURI;
 	}
 
-	public OntologyClass getRange() {
-		getViewPoint().loadWhenUnloaded();
-		return getViewPoint().getViewpointOntology().getClass(_getRangeURI());
+	public IFlexoOntologyClass getRange() {
+		return getVirtualModel().getOntologyClass(_getRangeURI());
 	}
 
-	public void setRange(OntologyClass c) {
+	public void setRange(IFlexoOntologyClass c) {
 		_setRangeURI(c != null ? c.getURI() : null);
 	}
 

@@ -1,40 +1,45 @@
 package org.openflexo.module;
 
 import java.io.File;
+import java.util.logging.Logger;
 
 import javax.swing.JFileChooser;
 
 import org.openflexo.ApplicationContext;
 import org.openflexo.components.ProjectChooserComponent;
 import org.openflexo.foundation.FlexoEditor;
+import org.openflexo.foundation.FlexoProject;
+import org.openflexo.foundation.FlexoProject.FlexoProjectReferenceLoader;
+import org.openflexo.foundation.FlexoService;
+import org.openflexo.foundation.FlexoServiceImpl;
+import org.openflexo.foundation.resource.FlexoFileResource;
+import org.openflexo.foundation.resource.FlexoProjectReference;
 import org.openflexo.foundation.resource.FlexoResource;
-import org.openflexo.foundation.resource.UserResourceCenter.FlexoFileResource;
-import org.openflexo.foundation.rm.FlexoProject;
-import org.openflexo.foundation.rm.FlexoProject.FlexoProjectReferenceLoader;
-import org.openflexo.foundation.rm.FlexoProjectReference;
 import org.openflexo.foundation.utils.ProjectInitializerException;
 import org.openflexo.foundation.utils.ProjectLoadingCancelledException;
 import org.openflexo.localization.FlexoLocalization;
 import org.openflexo.view.FlexoFrame;
 import org.openflexo.view.controller.FlexoController;
 
-public class InteractiveFlexoProjectReferenceLoader implements FlexoProjectReferenceLoader {
+public class InteractiveFlexoProjectReferenceLoader extends FlexoServiceImpl implements FlexoProjectReferenceLoader {
 
-	private ApplicationContext applicationContext;
+	private static final Logger logger = Logger.getLogger(ModuleLoader.class.getPackage().getName());
 
-	public InteractiveFlexoProjectReferenceLoader(ApplicationContext applicationContext) {
-		this.applicationContext = applicationContext;
+	public InteractiveFlexoProjectReferenceLoader() {
 	}
 
-	public ApplicationContext getApplicationContext() {
-		return applicationContext;
+	@Override
+	public ApplicationContext getServiceManager() {
+		return (ApplicationContext) super.getServiceManager();
 	}
 
 	@Override
 	public FlexoProject loadProject(FlexoProjectReference ref, boolean silentlyOnly) {
 		boolean retrievedFromResourceCenter = false;
-		FlexoResource<FlexoProject> retrievedResource = getApplicationContext().getResourceCenterService().getUserResourceCenter()
-				.retrieveResource(ref.getURI(), ref.getVersion(), ref.getResourceDataClass(), null);
+
+		FlexoResource<FlexoProject> retrievedResource = getServiceManager().getInformationSpace().getResource(ref.getURI(),
+				ref.getVersion(), FlexoProject.class);
+
 		File selectedFile = null;
 
 		if (retrievedResource instanceof FlexoFileResource) {
@@ -48,7 +53,7 @@ public class InteractiveFlexoProjectReferenceLoader implements FlexoProjectRefer
 					return null;
 				}
 				if (projectChooser == null) {
-					projectChooser = new ProjectChooserComponent(FlexoFrame.getActiveFrame()) {
+					projectChooser = new ProjectChooserComponent(FlexoFrame.getActiveFrame(), getServiceManager()) {
 					};
 					projectChooser.setOpenMode();
 					projectChooser.setTitle(FlexoLocalization.localizedForKey("locate_project") + " " + ref.getName() + " "
@@ -62,13 +67,13 @@ public class InteractiveFlexoProjectReferenceLoader implements FlexoProjectRefer
 					return null;
 				}
 			}
-			boolean openedProject = applicationContext.getProjectLoader().hasEditorForProjectDirectory(selectedFile);
+			boolean openedProject = getServiceManager().getProjectLoader().hasEditorForProjectDirectory(selectedFile);
 			if (!openedProject && silentlyOnly) {
 				return null;
 			}
 			FlexoEditor editor = null;
 			try {
-				editor = applicationContext.getProjectLoader().loadProject(selectedFile, true);
+				editor = getServiceManager().getProjectLoader().loadProject(selectedFile, true);
 			} catch (ProjectLoadingCancelledException e) {
 				return null;
 			} catch (ProjectInitializerException e) {
@@ -96,7 +101,7 @@ public class InteractiveFlexoProjectReferenceLoader implements FlexoProjectRefer
 					if (ok) {
 						return project;
 					} else if (!openedProject) {
-						applicationContext.getProjectLoader().closeProject(project);
+						getServiceManager().getProjectLoader().closeProject(project);
 					}
 				}
 			} else {
@@ -112,4 +117,14 @@ public class InteractiveFlexoProjectReferenceLoader implements FlexoProjectRefer
 			selectedFile = null;
 		}
 	}
+
+	@Override
+	public void receiveNotification(FlexoService caller, ServiceNotification notification) {
+		logger.fine("FlexoProjectReferenceLoader service received notification " + notification + " from " + caller);
+	}
+
+	@Override
+	public void initialize() {
+	}
+
 }

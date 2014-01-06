@@ -27,6 +27,7 @@ import javax.swing.Icon;
 
 import org.openflexo.components.AskParametersDialog;
 import org.openflexo.foundation.FlexoModelObject;
+import org.openflexo.foundation.FlexoObject;
 import org.openflexo.foundation.action.FlexoActionFinalizer;
 import org.openflexo.foundation.action.FlexoActionInitializer;
 import org.openflexo.foundation.dkv.Domain;
@@ -34,7 +35,7 @@ import org.openflexo.foundation.dkv.Key;
 import org.openflexo.foundation.dkv.action.DKVDelete;
 import org.openflexo.foundation.param.CheckboxListParameter;
 import org.openflexo.foundation.toc.TOCEntry;
-import org.openflexo.foundation.utils.FlexoModelObjectReference;
+import org.openflexo.foundation.utils.FlexoObjectReference;
 import org.openflexo.icon.IconLibrary;
 import org.openflexo.localization.FlexoLocalization;
 import org.openflexo.view.controller.ActionInitializer;
@@ -67,11 +68,11 @@ public class DKVDeleteInitializer extends ActionInitializer {
 					v.add(action.getFocusedObject());
 				}
 				action.setObjectsToDelete(v);
-				Vector<FlexoModelObject> objects = action.getGlobalSelectionAndFocusedObject();
+				Vector<FlexoObject> objects = action.getGlobalSelectionAndFocusedObject();
 				Vector<TOCEntry> tocEntries = new Vector<TOCEntry>();
-				for (FlexoModelObject object : objects) {
-					if (!object.isDeleted()) {
-						for (FlexoModelObjectReference ref : object.getReferencers()) {
+				for (FlexoObject object : objects) {
+					if (!object.isDeleted() && object instanceof FlexoModelObject) {
+						for (FlexoObjectReference ref : ((FlexoModelObject) object).getReferencers()) {
 							if (ref.getOwner() instanceof TOCEntry) {
 								tocEntries.add((TOCEntry) ref.getOwner());
 							}

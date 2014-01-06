@@ -1,8 +1,0 @@
-<Panel className="org.openflexo.fib.editor.controller.FIBInspector" 
-	   name="Inspector" 
-	   layout="border" 
-	   dataClassName="org.openflexo.fib.model.FIBTabPanel">
-	<Parameter name="title" value="Tabbed panel"/>
-
-	
-</Panel>

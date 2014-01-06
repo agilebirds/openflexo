@@ -62,11 +62,11 @@ import javax.swing.text.Document;
 import javax.swing.text.JTextComponent;
 import javax.swing.text.html.HTMLDocument;
 
+import org.openflexo.ch.DocResourceManager;
 import org.openflexo.drm.ActionType;
 import org.openflexo.drm.DocItem;
 import org.openflexo.drm.DocItemAction;
 import org.openflexo.drm.DocItemVersion;
-import org.openflexo.drm.DocResourceManager;
 import org.openflexo.drm.Language;
 import org.openflexo.drm.action.AddToEmbeddingChildItem;
 import org.openflexo.drm.action.AddToInheritanceChildItem;
@@ -75,10 +75,9 @@ import org.openflexo.drm.action.RemoveEmbeddingChildItem;
 import org.openflexo.drm.action.RemoveInheritanceChildItem;
 import org.openflexo.drm.action.RemoveRelatedToItem;
 import org.openflexo.foundation.FlexoEditor;
-import org.openflexo.foundation.FlexoModelObject;
-import org.openflexo.foundation.rm.FlexoProject;
+import org.openflexo.foundation.FlexoObject;
+import org.openflexo.foundation.FlexoProject;
 import org.openflexo.localization.FlexoLocalization;
-import org.openflexo.module.UserType;
 import org.openflexo.view.controller.FlexoController;
 import org.openflexo.wysiwyg.FlexoWysiwyg;
 import org.openflexo.wysiwyg.FlexoWysiwygLight;
@@ -291,7 +290,7 @@ public abstract class AbstractDocItemView extends JPanel {
 
 			@Override
 			public void itemRemoved(DocItem anItem) {
-				Vector<FlexoModelObject> globalSelection = new Vector<FlexoModelObject>();
+				Vector<FlexoObject> globalSelection = new Vector<FlexoObject>();
 				globalSelection.add(_docItem);
 				RemoveRelatedToItem.actionType.makeNewAction(anItem, globalSelection, _editor).doAction();
 				updateViewFromModel();
@@ -350,7 +349,7 @@ public abstract class AbstractDocItemView extends JPanel {
 			addField("status", currentStatusTF = new JTextField(15), true, false);
 			currentStatusTF.setEnabled(false);
 
-			addField("extends", parentItemRelatedToInheritanceDIS = new DocItemSelector(getProject(), _docItem.getInheritanceParentItem()) {
+			addField("extends", parentItemRelatedToInheritanceDIS = new DocItemSelector(_docItem.getInheritanceParentItem()) {
 				@Override
 				public void apply() {
 					super.apply();
@@ -372,7 +371,7 @@ public abstract class AbstractDocItemView extends JPanel {
 				}
 			});
 
-			addField("found_in", parentItemRelatedToEmbeddingDIS = new DocItemSelector(getProject(), _docItem.getEmbeddingParentItem()) {
+			addField("found_in", parentItemRelatedToEmbeddingDIS = new DocItemSelector(_docItem.getEmbeddingParentItem()) {
 				@Override
 				public void apply() {
 					super.apply();
@@ -425,10 +424,10 @@ public abstract class AbstractDocItemView extends JPanel {
 	}
 
 	protected class EditorPanel extends JPanel {
-		private JPanel shortHTMLDescriptionPanel;
-		private JPanel fullHTMLDescriptionPanel;
-		private JEditorPane shortHTMLDescriptionLabel;
-		private JEditorPane fullHTMLDescriptionLabel;
+		private final JPanel shortHTMLDescriptionPanel;
+		private final JPanel fullHTMLDescriptionPanel;
+		private final JEditorPane shortHTMLDescriptionLabel;
+		private final JEditorPane fullHTMLDescriptionLabel;
 		FlexoWysiwyg shortHTMLDescriptionEditor;
 		FlexoWysiwyg fullHTMLDescriptionEditor;
 		private boolean _isEditing;
@@ -491,9 +490,9 @@ public abstract class AbstractDocItemView extends JPanel {
 					addSupportForInsertedObjects(new File(_docItem.getFolder().getDirectory(), "Figures"));
 				}
 			}
-			File cssFile = getProject() != null ? getProject().getDocumentationCssResource().getFile() : null;
+			File cssFile = getDocResourceManager().getDocumentationCssResourceFile();
 			shortHTMLDescriptionEditor = new FlexoWysiwygHelpDocEditor(FlexoLocalization.localizedForKey("write_documentation_here"),
-					cssFile, UserType.isDevelopperRelease() || UserType.isMaintainerRelease()) {
+					cssFile, true) {
 				@Override
 				public void notifyTextChanged() {
 					getDocResourceManager().getEditedVersion(_docItem).setShortHTMLDescription(shortHTMLDescriptionEditor.getBodyContent());
@@ -502,7 +501,7 @@ public abstract class AbstractDocItemView extends JPanel {
 			shortHTMLDescriptionEditor.setPreferredSize(new Dimension(850, 250));
 
 			fullHTMLDescriptionEditor = new FlexoWysiwygHelpDocEditor(FlexoLocalization.localizedForKey("write_documentation_here"),
-					cssFile, UserType.isDevelopperRelease() || UserType.isMaintainerRelease()) {
+					cssFile, true) {
 				@Override
 				public void notifyTextChanged() {
 					getDocResourceManager().getEditedVersion(_docItem).setFullHTMLDescription(shortHTMLDescriptionEditor.getBodyContent());
@@ -806,7 +805,7 @@ public abstract class AbstractDocItemView extends JPanel {
 		}
 
 		class HistoryPanelCellRenderer extends DefaultListCellRenderer {
-			private Color GREEN = new Color(20, 120, 20);
+			private final Color GREEN = new Color(20, 120, 20);
 
 			@Override
 			public Component getListCellRendererComponent(JList list, Object value, int index, boolean isSelected, boolean cellHasFocus) {
@@ -901,7 +900,7 @@ public abstract class AbstractDocItemView extends JPanel {
 	}
 
 	public class InfoPanel extends JPanel {
-		private GridBagLayout _gridbag;
+		private final GridBagLayout _gridbag;
 
 		public InfoPanel() {
 			super();
@@ -945,7 +944,7 @@ public abstract class AbstractDocItemView extends JPanel {
 		}
 
 		protected class InfoPanelDocumentListener implements DocumentListener {
-			private JTextComponent _textComponent;
+			private final JTextComponent _textComponent;
 
 			protected InfoPanelDocumentListener(JTextComponent textComponent) {
 				super();
@@ -1007,7 +1006,7 @@ public abstract class AbstractDocItemView extends JPanel {
 	}
 
 	public DocResourceManager getDocResourceManager() {
-		return DocResourceManager.instance();
+		return getController().getApplicationContext().getDocResourceManager();
 	}
 
 }

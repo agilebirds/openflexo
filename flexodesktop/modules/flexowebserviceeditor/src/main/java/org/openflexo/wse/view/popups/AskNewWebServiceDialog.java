@@ -41,7 +41,7 @@ import javax.swing.JTextField;
 import javax.swing.filechooser.FileFilter;
 
 import org.openflexo.FlexoCst;
-import org.openflexo.foundation.rm.FlexoProject;
+import org.openflexo.foundation.FlexoProject;
 import org.openflexo.foundation.ws.action.AbstractCreateNewWebService;
 import org.openflexo.foundation.ws.action.CreateNewWebService;
 import org.openflexo.localization.FlexoLocalization;

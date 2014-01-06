@@ -102,9 +102,8 @@
     <Label label="value" index="21" constraints="twocols(expandHorizontally=true;expandVertically=false;index=21;insetsBottom=0;insetsLeft=2;insetsRight=2;insetsTop=5;location=left)" visible="(AccessType.selectedIndex = 1)" localize="true">
       <LocalizedDictionary />
     </Label>
-    <Custom componentClassName="org.openflexo.fib.utils.BindingSelector" localize="true" manageDynamicModel="true" index="22" data="data.value.binding" constraints="twocols(expandHorizontally=true;expandVertically=false;index=22;insetsBottom=0;insetsLeft=2;insetsRight=2;insetsTop=0;location=right)" visible="(AccessType.selectedIndex = 1)">
+    <Custom componentClassName="org.openflexo.fib.utils.BindingSelector" data="data.value" constraints="twocols(expandHorizontally=true;expandVertically=false;index=22;insetsBottom=0;insetsLeft=2;insetsRight=2;insetsTop=0;location=right)" visible="(AccessType.selectedIndex = 1)" localize="true" manageDynamicModel="true">
       <Assignment variable="component.bindable" value="data" />
-      <Assignment variable="component.bindingDefinition" value="data.valueBindingDefinition" />
     </Custom>
     <Label label="view_folder" index="23" constraints="twocols(expandHorizontally=true;expandVertically=false;index=23;insetsBottom=0;insetsLeft=2;insetsRight=2;insetsTop=5;location=left)" visible="((data.modelObjectType = &quot;ViewFolder&quot;) &amp; (AccessType.selectedIndex = 0))" localize="true" />
     <Custom localize="true" manageDynamicModel="true" index="24" constraints="twocols(expandHorizontally=true;expandVertically=false;index=24;insetsBottom=0;insetsLeft=2;insetsRight=2;insetsTop=0;location=right)" visible="((data.modelObjectType = &quot;ViewFolder&quot;) &amp; (AccessType.selectedIndex = 0))" />
@@ -116,7 +115,6 @@
     </Label>
     <Custom componentClassName="org.openflexo.fib.utils.BindingSelector" localize="true" manageDynamicModel="true" index="2" data="data.condition.binding" constraints="twocols(expandHorizontally=true;expandVertically=false;index=2;insetsBottom=0;insetsLeft=2;insetsRight=2;insetsTop=0;location=right)">
       <Assignment variable="component.bindable" value="data" />
-      <Assignment variable="component.bindingDefinition" value="data.conditionBindingDefinition" />
     </Custom>
   </Panel>
   <Panel layout="twocols" border="rounded3d" borderTitle="" borderTop="2" borderBottom="2" borderLeft="20" borderRight="20" titleFont="Lucida Grande,0,13" darkLevel="0" index="7" constraints="gridbag(anchor=center;fill=both;gridHeight=1;gridWidth=0;gridX=-1;gridY=-1;index=7;insetsBottom=0;insetsLeft=0;insetsRight=0;insetsTop=0;padX=0;padY=0;weightX=0.0;weightY=1.0)" visible="(PaletteRadioButtonList.selectedIndex = 4)" name="IterationSectionPanel">
@@ -128,14 +126,12 @@
     </Label>
     <Custom componentClassName="org.openflexo.fib.utils.BindingSelector" localize="true" manageDynamicModel="true" index="4" data="data.iteration.binding" constraints="twocols(expandHorizontally=true;expandVertically=false;index=4;insetsBottom=0;insetsLeft=2;insetsRight=2;insetsTop=0;location=right)">
       <Assignment variable="component.bindable" value="data" />
-      <Assignment variable="component.bindingDefinition" value="data.iterationBindingDefinition" />
     </Custom>
     <Label label="condition" index="5" constraints="twocols(expandHorizontally=true;expandVertically=false;index=5;insetsBottom=0;insetsLeft=2;insetsRight=2;insetsTop=5;location=left)" localize="true">
       <LocalizedDictionary />
     </Label>
     <Custom componentClassName="org.openflexo.fib.utils.BindingSelector" localize="true" manageDynamicModel="true" index="6" data="data.iterationCondition.binding" constraints="twocols(expandHorizontally=true;expandVertically=false;index=6;insetsBottom=0;insetsLeft=2;insetsRight=2;insetsTop=0;location=right)">
       <Assignment variable="component.bindable" value="data.conditionalOwner" />
-      <Assignment variable="component.bindingDefinition" value="data.iterationConditionBindingDefinition" />
     </Custom>
   </Panel>
   <Panel layout="flow" hGap="5" vGap="5" flowAlignment="CENTER" borderTitle="Panel" borderTop="10" titleFont="Lucida Grande,0,13" darkLevel="0" index="8" constraints="gridbag(anchor=center;fill=both;gridHeight=1;gridWidth=0;gridX=-1;gridY=-1;index=8;insetsBottom=0;insetsLeft=0;insetsRight=0;insetsTop=0;padX=0;padY=0;weightX=1.0;weightY=0.0)">

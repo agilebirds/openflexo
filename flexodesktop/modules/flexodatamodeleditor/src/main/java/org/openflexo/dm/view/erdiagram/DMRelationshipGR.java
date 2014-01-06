@@ -24,20 +24,20 @@ import java.util.logging.Logger;
 
 import org.openflexo.fge.ConnectorGraphicalRepresentation;
 import org.openflexo.fge.Drawing;
+import org.openflexo.fge.ForegroundStyle;
 import org.openflexo.fge.GraphicalRepresentation;
 import org.openflexo.fge.ShapeGraphicalRepresentation;
-import org.openflexo.fge.connectors.Connector.ConnectorType;
+import org.openflexo.fge.TextStyle;
+import org.openflexo.fge.connectors.RectPolylinConnectorSpecification;
+import org.openflexo.fge.connectors.ConnectorSpecification.ConnectorType;
 import org.openflexo.fge.connectors.ConnectorSymbol.EndSymbolType;
 import org.openflexo.fge.connectors.ConnectorSymbol.StartSymbolType;
-import org.openflexo.fge.connectors.rpc.RectPolylinConnector;
-import org.openflexo.fge.connectors.rpc.RectPolylinConnector.RectPolylinAdjustability;
-import org.openflexo.fge.connectors.rpc.RectPolylinConnector.RectPolylinConstraints;
+import org.openflexo.fge.connectors.RectPolylinConnectorSpecification.RectPolylinAdjustability;
+import org.openflexo.fge.connectors.RectPolylinConnectorSpecification.RectPolylinConstraints;
 import org.openflexo.fge.controller.CustomClickControlAction;
 import org.openflexo.fge.controller.DrawingController;
 import org.openflexo.fge.controller.MouseClickControl;
 import org.openflexo.fge.geom.FGERectPolylin;
-import org.openflexo.fge.graphics.ForegroundStyle;
-import org.openflexo.fge.graphics.TextStyle;
 import org.openflexo.foundation.dm.DMProperty;
 import org.openflexo.toolbox.ToolBox;
 
@@ -50,8 +50,8 @@ public class DMRelationshipGR extends ConnectorGraphicalRepresentation<Relations
 	private ForegroundStyle foreground;
 
 	public DMRelationshipGR(RelationshipRepresentation aRelationshipRepresentation, Drawing<?> aDrawing) {
-		super(ConnectorType.RECT_POLYLIN, (ShapeGraphicalRepresentation<?>) aDrawing.getGraphicalRepresentation(aRelationshipRepresentation
-				.getProperty()), (ShapeGraphicalRepresentation<?>) aDrawing.getGraphicalRepresentation(aRelationshipRepresentation
+		super(ConnectorType.RECT_POLYLIN, (ShapeGraphicalRepresentation) aDrawing.getGraphicalRepresentation(aRelationshipRepresentation
+				.getProperty()), (ShapeGraphicalRepresentation) aDrawing.getGraphicalRepresentation(aRelationshipRepresentation
 				.getInverseProperty() != null ? aRelationshipRepresentation.getInverseProperty() : aRelationshipRepresentation
 				.getDestinationEntity()), aRelationshipRepresentation, aDrawing);
 		// setText(getRole().getName());
@@ -62,11 +62,11 @@ public class DMRelationshipGR extends ConnectorGraphicalRepresentation<Relations
 
 		setTextStyle(propertyNameStyle);
 
-		getConnector().setIsRounded(true);
-		getConnector().setRectPolylinConstraints(RectPolylinConstraints.HORIZONTAL_LAYOUT);
-		getConnector().setAdjustability(RectPolylinAdjustability.FULLY_ADJUSTABLE);
-		getConnector().setStraightLineWhenPossible(true);
-		getConnector().setPixelOverlap(30);
+		getConnectorSpecification().setIsRounded(true);
+		getConnectorSpecification().setRectPolylinConstraints(RectPolylinConstraints.HORIZONTAL_LAYOUT);
+		getConnectorSpecification().setAdjustability(RectPolylinAdjustability.FULLY_ADJUSTABLE);
+		getConnectorSpecification().setStraightLineWhenPossible(true);
+		getConnectorSpecification().setPixelOverlap(30);
 
 		if (getProperty().getCardinality().isMultiple()) {
 			setEndSymbol(EndSymbolType.FILLED_DOUBLE_ARROW);
@@ -89,7 +89,7 @@ public class DMRelationshipGR extends ConnectorGraphicalRepresentation<Relations
 		if (getProperty().hasGraphicalPropertyForKey(getStoredPolylinKey())) {
 			ensurePolylinConverterIsRegistered();
 			polylinIWillBeAdustedTo = (FGERectPolylin) getProperty()._graphicalPropertyForKey(getStoredPolylinKey());
-			getConnector().setWasManuallyAdjusted(true);
+			getConnectorSpecification().setWasManuallyAdjusted(true);
 		}
 
 		setForeground(ForegroundStyle.makeStyle(Color.DARK_GRAY, 1.6f));
@@ -106,8 +106,8 @@ public class DMRelationshipGR extends ConnectorGraphicalRepresentation<Relations
 	}
 
 	@Override
-	public RectPolylinConnector getConnector() {
-		return (RectPolylinConnector) super.getConnector();
+	public RectPolylinConnectorSpecification getConnectorSpecification() {
+		return (RectPolylinConnectorSpecification) super.getConnectorSpecification();
 	}
 
 	private void updateStyles() {
@@ -136,7 +136,7 @@ public class DMRelationshipGR extends ConnectorGraphicalRepresentation<Relations
 		public ResetLayout() {
 			super("ResetLayout", MouseButton.LEFT, 2, new CustomClickControlAction() {
 				@Override
-				public boolean handleClick(GraphicalRepresentation<?> graphicalRepresentation, DrawingController<?> controller,
+				public boolean handleClick(GraphicalRepresentation graphicalRepresentation, DrawingController controller,
 						java.awt.event.MouseEvent event) {
 					// logger.info("Reset layout for edge");
 					resetLayout();
@@ -148,7 +148,7 @@ public class DMRelationshipGR extends ConnectorGraphicalRepresentation<Relations
 	}
 
 	public void resetLayout() {
-		getConnector().setWasManuallyAdjusted(false);
+		getConnectorSpecification().setWasManuallyAdjusted(false);
 	}
 
 	private FGERectPolylin polylinIWillBeAdustedTo;
@@ -157,7 +157,7 @@ public class DMRelationshipGR extends ConnectorGraphicalRepresentation<Relations
 	public void notifyObjectHierarchyHasBeenUpdated() {
 		super.notifyObjectHierarchyHasBeenUpdated();
 		if (polylinIWillBeAdustedTo != null && !getProperty().isDeleted()) {
-			getConnector().manuallySetPolylin(polylinIWillBeAdustedTo);
+			getConnectorSpecification().manuallySetPolylin(polylinIWillBeAdustedTo);
 			polylinIWillBeAdustedTo = null;
 			refreshConnector();
 		}
@@ -191,10 +191,10 @@ public class DMRelationshipGR extends ConnectorGraphicalRepresentation<Relations
 	private void storeNewLayout() {
 		if (isRegistered()) {
 			ensurePolylinConverterIsRegistered();
-			if (getConnector().getWasManuallyAdjusted() && getConnector()._getPolylin() != null) {
+			if (getConnectorSpecification().getWasManuallyAdjusted() && getConnectorSpecification().getPolylin() != null) {
 				if (polylinIWillBeAdustedTo == null) { // Store this layout only in no other layout is beeing registering
 					// logger.info("Post "+getPostCondition().getName()+": store new layout to "+connector._getPolylin());
-					getProperty()._setGraphicalPropertyForKey(getConnector()._getPolylin(), getStoredPolylinKey());
+					getProperty()._setGraphicalPropertyForKey(getConnectorSpecification().getPolylin(), getStoredPolylinKey());
 				}
 			} else {
 				if (getProperty().hasGraphicalPropertyForKey(getStoredPolylinKey())) {

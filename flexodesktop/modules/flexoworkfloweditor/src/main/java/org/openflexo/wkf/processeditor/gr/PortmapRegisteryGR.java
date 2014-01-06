@@ -25,13 +25,13 @@ import java.util.Observable;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 
+import org.openflexo.fge.BackgroundStyle;
+import org.openflexo.fge.ForegroundStyle;
 import org.openflexo.fge.GraphicalRepresentation;
 import org.openflexo.fge.ShapeGraphicalRepresentation;
 import org.openflexo.fge.geom.FGEGeometricObject.SimplifiedCardinalDirection;
 import org.openflexo.fge.geom.FGEPoint;
 import org.openflexo.fge.geom.area.FGEArea;
-import org.openflexo.fge.graphics.BackgroundStyle;
-import org.openflexo.fge.graphics.ForegroundStyle;
 import org.openflexo.fge.notifications.ObjectHasMoved;
 import org.openflexo.fge.notifications.ObjectHasResized;
 import org.openflexo.fge.notifications.ObjectMove;
@@ -39,7 +39,7 @@ import org.openflexo.fge.notifications.ObjectResized;
 import org.openflexo.fge.notifications.ObjectWillMove;
 import org.openflexo.fge.notifications.ObjectWillResize;
 import org.openflexo.fge.notifications.ShapeChanged;
-import org.openflexo.fge.shapes.Shape.ShapeType;
+import org.openflexo.fge.shapes.ShapeSpecification.ShapeType;
 import org.openflexo.foundation.DataModification;
 import org.openflexo.foundation.FlexoObservable;
 import org.openflexo.foundation.wkf.dm.ObjectLocationChanged;
@@ -85,17 +85,17 @@ public class PortmapRegisteryGR extends WKFObjectGR<PortMapRegistery> {
 		return false;
 	}
 
-	private GraphicalRepresentation<?> parentGR = null;
+	private GraphicalRepresentation parentGR = null;
 	private FGEArea parentOutline = null;
 
 	@Override
 	public FGEArea getLocationConstrainedArea() {
-		GraphicalRepresentation<?> parent = getContainerGraphicalRepresentation();
+		GraphicalRepresentation parent = getContainerGraphicalRepresentation();
 		if (parentGR == null || parent != parentGR) {
 			if (parent != null && parent instanceof ShapeGraphicalRepresentation) {
-				parentOutline = ((ShapeGraphicalRepresentation<?>) parent).getShape().getOutline();
+				parentOutline = ((ShapeGraphicalRepresentation) parent).getShapeSpecification().getOutline();
 				parentOutline = parentOutline.transform(AffineTransform.getScaleInstance(
-						((ShapeGraphicalRepresentation<?>) parent).getWidth(), ((ShapeGraphicalRepresentation<?>) parent).getHeight()));
+						((ShapeGraphicalRepresentation) parent).getWidth(), ((ShapeGraphicalRepresentation) parent).getHeight()));
 				parentOutline = parentOutline.transform(AffineTransform.getTranslateInstance(
 						PORTMAP_REGISTERY_WIDTH / 2 - getBorder().left, PORTMAP_REGISTERY_WIDTH / 2 - getBorder().top));
 				// System.out.println("Rebuild outline = "+parentOutline);

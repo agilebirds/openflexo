@@ -34,8 +34,9 @@ import org.openflexo.fge.geom.FGEGeometricObject.Filling;
 import org.openflexo.fge.geom.FGEPoint;
 import org.openflexo.fge.geom.FGERectangle;
 import org.openflexo.foundation.FlexoModelObject;
+import org.openflexo.foundation.FlexoObject;
 import org.openflexo.foundation.RepresentableFlexoModelObject;
-import org.openflexo.foundation.rm.FlexoProject;
+import org.openflexo.foundation.FlexoProject;
 import org.openflexo.foundation.wkf.DuplicateRoleException;
 import org.openflexo.foundation.wkf.FlexoLevel;
 import org.openflexo.foundation.wkf.FlexoPetriGraph;
@@ -131,7 +132,7 @@ public class WKFClipboard extends FlexoClipboard {
 	}
 
 	@Override
-	protected void performSelectionPaste(FlexoModelObject pastingContext, PastingGraphicalContext graphicalContext) {
+	protected void performSelectionPaste(FlexoObject pastingContext, PastingGraphicalContext graphicalContext) {
 		logger.info("performSelectionPaste() with context " + pastingContext);
 
 		JComponent targetContainer = null;
@@ -337,7 +338,7 @@ public class WKFClipboard extends FlexoClipboard {
 	}
 
 	@Override
-	protected boolean isCurrentSelectionValidForCopy(Vector<? extends FlexoModelObject> currentlySelectedObjects) {
+	protected boolean isCurrentSelectionValidForCopy(Vector<? extends FlexoObject> currentlySelectedObjects) {
 		return getSelectionManager().getSelectionSize() > 0;
 	}
 
@@ -354,7 +355,7 @@ public class WKFClipboard extends FlexoClipboard {
 	 * Selection procedure for copy
 	 */
 	@Override
-	protected boolean performCopyOfSelection(Vector<? extends FlexoModelObject> currentlySelectedObjects) {
+	protected boolean performCopyOfSelection(Vector<? extends FlexoObject> currentlySelectedObjects) {
 		logger.info("performCopyOfSelection() for " + currentlySelectedObjects);
 
 		// TODO reimplement all of this
@@ -371,8 +372,8 @@ public class WKFClipboard extends FlexoClipboard {
 				Vector<WKFArtefact> selectedAnnotations = new Vector<WKFArtefact>();
 
 				FlexoProcess process = null;
-				for (Enumeration<? extends FlexoModelObject> e = currentlySelectedObjects.elements(); e.hasMoreElements();) {
-					FlexoModelObject next = e.nextElement();
+				for (Enumeration<? extends FlexoObject> e = currentlySelectedObjects.elements(); e.hasMoreElements();) {
+					FlexoObject next = e.nextElement();
 					if (logger.isLoggable(Level.FINE)) {
 						logger.fine("Selected: " + next);
 					}
@@ -397,7 +398,7 @@ public class WKFClipboard extends FlexoClipboard {
 
 				FlexoProject project = ((Role) currentlySelectedObjects.firstElement()).getProject();
 				Vector<Role> rolesToBeCopied = new Vector<Role>();
-				for (FlexoModelObject o : currentlySelectedObjects) {
+				for (FlexoObject o : currentlySelectedObjects) {
 					if (o instanceof Role) {
 						rolesToBeCopied.add((Role) o);
 					}
@@ -417,7 +418,7 @@ public class WKFClipboard extends FlexoClipboard {
 		return true;
 	}
 
-	protected boolean isTargetValidForPasting(FlexoModelObject pastingContext) {
+	protected boolean isTargetValidForPasting(FlexoObject pastingContext) {
 		if (pastingContext == null) {
 			return false;
 		}

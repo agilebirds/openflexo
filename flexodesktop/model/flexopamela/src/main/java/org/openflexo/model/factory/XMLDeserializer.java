@@ -126,7 +126,7 @@ class XMLDeserializer {
 
 		I returned;
 		String text = node.getText();
-		if (text != null && getStringEncoder().isConvertable(modelEntity.getImplementedInterface())) {
+		if (text != null && getStringEncoder() != null && getStringEncoder().isConvertable(modelEntity.getImplementedInterface())) {
 			// GPO: I am not sure this is still useful.
 			try {
 				returned = getStringEncoder().fromString(modelEntity.getImplementedInterface(), text);
@@ -135,6 +135,7 @@ class XMLDeserializer {
 			}
 		} else {
 			returned = modelFactory._newInstance(modelEntity.getImplementedInterface(), policy == DeserializationPolicy.EXTENSIVE);
+			modelFactory.objectHasBeenDeserialized(returned, modelEntity.getImplementedInterface());
 		}
 
 		if (currentDeserializedReference != null) {
@@ -162,7 +163,8 @@ class XMLDeserializer {
 					throw new RestrictiveDeserializationException("No attribute found for the attribute named: " + attribute.getName());
 				case EXTENSIVE:
 					// TODO: handle extra values
-					break;
+					// break;
+					continue; // As long as we don't handlethem, we continue to avoid NPE.
 				}
 			}
 			Object value = getStringEncoder().fromString(property.getType(), attribute.getValue());

@@ -1,0 +1,61 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<ViewPoint id="1" uri="http://www.agilebirds.com/openflexo/ViewPoints/Tests/BasicOrganizationTreeEditor.owl" modelVersion="1.0" name="BasicOrganizationTreeEditor">
+  <LocalizedDictionary id="2">
+    <Localized id="3" key="company_name" lang="en">Company name</Localized>
+    <Localized id="4" key="department_name" lang="en">Department name</Localized>
+    <Localized id="5" key="sub_department_name" lang="en">Sub-department name</Localized>
+    <Localized id="6" key="LinkTwoEmployeesByHierarchicalRelationship" lang="en">Is responsible of</Localized>
+    <Localized id="7" key="uri" lang="English">URI</Localized>
+    <Localized id="8" key="assign_employee" lang="English">Assign employee</Localized>
+    <Localized id="9" key="employee_last_name" lang="English">Employee last name</Localized>
+    <Localized id="10" key="employee_first_name" lang="English">Employee first name</Localized>
+    <Localized id="11" key="employee_role_name" lang="English">Employee role name</Localized>
+    <Localized id="12" key="employee_uri" lang="English">Employee URI</Localized>
+    <Localized id="13" key="first_name" lang="English">First name</Localized>
+    <Localized id="14" key="is_head_of_organization" lang="English">Is head of organization</Localized>
+    <Localized id="15" key="is_manager" lang="English">Is manager</Localized>
+    <Localized id="16" key="last_name" lang="English">Last name</Localized>
+    <Localized id="17" key="make_inverse_relationship" lang="English">Make inverse relationship</Localized>
+    <Localized id="18" key="manager_role_name" lang="English">Manager role name</Localized>
+    <Localized id="19" key="person_uri" lang="English">Person URI</Localized>
+    <Localized id="20" key="role_name" lang="English">Role name</Localized>
+    <Localized id="21" key="assign_employee" lang="French">Assigner un employé</Localized>
+    <Localized id="22" key="company_name" lang="French">Nom de la société</Localized>
+    <Localized id="23" key="DefineInNewShema" lang="English">Define in new shema</Localized>
+    <Localized id="24" key="DropBOTCompanyAtTopLevel" lang="English">Drop company at top level</Localized>
+    <Localized id="25" key="DropBOTDepartmentInBOTCompany" lang="English">Drop department in company</Localized>
+    <Localized id="26" key="DropBOTSubDepartmentInBOTDepartment" lang="English">Drop sub-department in department</Localized>
+    <Localized id="27" key="DropEmployeeInOrganization" lang="English">Drop employee in organization</Localized>
+    <Localized id="28" key="EmployeeHierarchicalRelationship" lang="English">Employee hierarchical relationship</Localized>
+    <Localized id="29" key="DefineInNewShema" lang="French">Définir dans un nouveau schéma</Localized>
+    <Localized id="30" key="BOTCompany" lang="English">Company</Localized>
+    <Localized id="31" key="BOTDepartment" lang="English">Department</Localized>
+    <Localized id="32" key="BOTSubDepartment" lang="English">Sub-department</Localized>
+    <Localized id="33" key="BOTCompany" lang="French">Société</Localized>
+    <Localized id="34" key="BOTDepartment" lang="French">Département</Localized>
+    <Localized id="35" key="BOTSubDepartment" lang="French">Sous-département</Localized>
+    <Localized id="36" key="department_name" lang="French">Nom du département</Localized>
+    <Localized id="37" key="DropBOTCompanyAtTopLevel" lang="French">Créer une société</Localized>
+    <Localized id="38" key="DropBOTDepartmentInBOTCompany" lang="French">Créer un département de la société</Localized>
+    <Localized id="39" key="DropBOTSubDepartmentInBOTDepartment" lang="French">Créer un sous-département pour ce département</Localized>
+    <Localized id="40" key="DropEmployeeInOrganization" lang="French">Créer un employé dans cette unité organisationnelle</Localized>
+    <Localized id="41" key="employee_first_name" lang="French">Prénom de l'employé</Localized>
+    <Localized id="42" key="employee_last_name" lang="French">Nom de l'employé</Localized>
+    <Localized id="43" key="employee_role_name" lang="French">Fonction de l'employé</Localized>
+    <Localized id="44" key="employee_uri" lang="French">URI de l'employé</Localized>
+    <Localized id="45" key="first_name" lang="French">Prénom</Localized>
+    <Localized id="46" key="EmployeeHierarchicalRelationship" lang="French">Relation hiérarchique entre employés</Localized>
+    <Localized id="47" key="is_head_of_organization" lang="French">A la tête de l'unité organisationnelle</Localized>
+    <Localized id="48" key="is_manager" lang="French">Est responsable</Localized>
+    <Localized id="49" key="last_name" lang="French">Nom</Localized>
+    <Localized id="50" key="LinkTwoEmployeesByHierarchicalRelationship" lang="French">Est responsable de</Localized>
+    <Localized id="51" key="make_inverse_relationship" lang="French">Créer la relation inverse</Localized>
+    <Localized id="52" key="manager_role_name" lang="French">Fonction du responsable</Localized>
+    <Localized id="53" key="person_uri" lang="French">URI de la personne</Localized>
+    <Localized id="54" key="role_name" lang="French">Fonction</Localized>
+    <Localized id="55" key="ShowDetails" lang="English">Show details</Localized>
+    <Localized id="56" key="ShowDetails" lang="French">Voir les détails</Localized>
+    <Localized id="57" key="sub_department_name" lang="French">Nom du sous-département</Localized>
+  </LocalizedDictionary>
+  <description>This calc is intented to edit basic organization tree</description>
+</ViewPoint>

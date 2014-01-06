@@ -27,6 +27,7 @@ import javax.swing.SwingUtilities;
 
 import org.openflexo.components.AskParametersDialog;
 import org.openflexo.foundation.FlexoException;
+import org.openflexo.foundation.FlexoProjectObject;
 import org.openflexo.foundation.action.FlexoActionFinalizer;
 import org.openflexo.foundation.action.FlexoActionInitializer;
 import org.openflexo.foundation.action.FlexoExceptionHandler;
@@ -83,6 +84,9 @@ public class DMSetPropertyInitializer extends ActionInitializer {
 
 						};
 					}*/
+				if (!(action.getFocusedObject() instanceof FlexoProjectObject)) {
+					return false;
+				}
 
 				if (action.getFocusedObject() instanceof WORepository && action.getKey().equals(WORepository.CUSTOM_COMPONENT_ENTITY_KEY)) {
 
@@ -100,7 +104,7 @@ public class DMSetPropertyInitializer extends ActionInitializer {
 						concernedComponentsParam.addReadOnlyTextFieldColumn("name", "name", 150, true);
 
 						AskParametersDialog dialog = AskParametersDialog.createAskParametersDialog(
-								action.getFocusedObject().getProject(),
+								((FlexoProjectObject) action.getFocusedObject()).getProject(),
 								null,
 								FlexoLocalization.localizedForKey("selecting_default_component_entity"),
 								"<html><center>"

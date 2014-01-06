@@ -35,11 +35,9 @@ import java.util.logging.Logger;
 
 import javax.swing.SwingUtilities;
 
-import org.openflexo.foundation.rm.FlexoProject;
-import org.openflexo.foundation.rm.FlexoResource;
-import org.openflexo.foundation.rm.FlexoResourceData;
-import org.openflexo.foundation.rm.FlexoStorageResource;
-import org.openflexo.foundation.rm.SaveResourceException;
+import org.openflexo.foundation.FlexoProject;
+import org.openflexo.foundation.resource.FlexoResource;
+import org.openflexo.foundation.resource.SaveResourceException;
 import org.openflexo.inspector.InspectableObject;
 import org.openflexo.inspector.InspectorObserver;
 import org.openflexo.inspector.model.TabModel;
@@ -76,12 +74,12 @@ public class FlexoAutoSaveThread extends Thread {
 	/**
 	 * A queue that lists the different files already used. This queue is managed with the FIFO policy.
 	 */
-	private LinkedList<FlexoAutoSaveFile> projects;
+	private final LinkedList<FlexoAutoSaveFile> projects;
 
 	/**
 	 * The project on which this thread works
 	 */
-	private FlexoProject project;
+	private final FlexoProject project;
 
 	/**
 	 * The root directory for the specified project containing all the intermediate project save. For example, you will have tempDirectory
@@ -233,8 +231,8 @@ public class FlexoAutoSaveThread extends Thread {
 				needsSave = true;
 			} else {
 				Date lastAutoSave = projects.getLast().getCreationDate();
-				for (FlexoResource<? extends FlexoResourceData> resource : project) {
-					if (resource instanceof FlexoStorageResource && resource.getLastUpdate().after(lastAutoSave)) {
+				for (FlexoResource<?> resource : project.getAllResources()) {
+					if (resource.getLastUpdate().after(lastAutoSave)) {
 						needsSave = true;
 						break;
 					}
@@ -250,7 +248,7 @@ public class FlexoAutoSaveThread extends Thread {
 				boolean saveActionSuccess = true;
 				File nextSaveDirectory = getNextSaveDirectory();
 				try {
-					project.saveAs(nextSaveDirectory, null, null, false, true);
+					project.saveAs(nextSaveDirectory, null);
 				} catch (SaveResourceException e) {
 					saveActionSuccess = false;
 					e.printStackTrace();
@@ -344,9 +342,9 @@ public class FlexoAutoSaveThread extends Thread {
 
 	public static class FlexoAutoSaveFile extends KVCObject implements InspectableObject {
 
-		private File directory;
+		private final File directory;
 
-		private Date creationDate;
+		private final Date creationDate;
 
 		/**
 		 *

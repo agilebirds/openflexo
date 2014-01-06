@@ -23,11 +23,11 @@ import java.util.logging.Logger;
 
 import junit.framework.AssertionFailedError;
 
-import org.openflexo.foundation.FlexoTestCase;
+import org.openflexo.foundation.AgileBirdsTestCase;
 import org.openflexo.foundation.rm.FlexoResource;
 import org.openflexo.foundation.rm.FlexoStorageResource;
 
-public abstract class DGTestCase extends FlexoTestCase {
+public abstract class DGTestCase extends AgileBirdsTestCase {
 
 	public DGTestCase(String name) {
 		super(name);

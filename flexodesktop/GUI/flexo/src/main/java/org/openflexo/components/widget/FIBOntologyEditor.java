@@ -23,25 +23,32 @@ import java.beans.PropertyChangeEvent;
 import java.util.ArrayList;
 import java.util.Iterator;
 import java.util.List;
+import java.util.Observable;
+import java.util.Observer;
 import java.util.Vector;
 import java.util.logging.Logger;
 
 import javax.swing.ImageIcon;
 import javax.swing.SwingUtilities;
 
+import org.openflexo.components.widget.OntologyBrowserModel.OntologyBrowserModelRecomputed;
 import org.openflexo.fib.model.FIBBrowser;
 import org.openflexo.fib.model.FIBComponent;
 import org.openflexo.fib.model.FIBCustom.FIBCustomComponent.CustomComponentParameter;
 import org.openflexo.fib.view.widget.FIBBrowserWidget;
-import org.openflexo.foundation.ontology.FlexoOntology;
-import org.openflexo.foundation.ontology.OntologyClass;
-import org.openflexo.foundation.ontology.OntologyObject;
+import org.openflexo.foundation.ontology.IFlexoOntology;
+import org.openflexo.foundation.ontology.IFlexoOntologyClass;
+import org.openflexo.foundation.ontology.IFlexoOntologyConcept;
+import org.openflexo.foundation.technologyadapter.TechnologyAdapter;
 import org.openflexo.icon.UtilsIconLibrary;
 import org.openflexo.toolbox.FileResource;
 import org.openflexo.toolbox.HasPropertyChangeSupport;
 import org.openflexo.toolbox.StringUtils;
 import org.openflexo.view.SelectionSynchronizedFIBView;
 import org.openflexo.view.controller.FlexoController;
+import org.openflexo.view.controller.IFlexoOntologyTechnologyAdapterController;
+import org.openflexo.view.controller.TechnologyAdapterController;
+import org.openflexo.view.controller.TechnologyAdapterControllerService;
 
 /**
  * Widget allowing to edit/view an ontology.<br>
@@ -49,15 +56,16 @@ import org.openflexo.view.controller.FlexoController;
  * @author sguerin
  * 
  */
+@SuppressWarnings("serial")
 public class FIBOntologyEditor extends SelectionSynchronizedFIBView {
 	static final Logger logger = Logger.getLogger(FIBOntologyEditor.class.getPackage().getName());
 
 	public static final FileResource FIB_FILE = new FileResource("Fib/FIBOntologyEditor.fib");
 
-	private FlexoOntology ontology;
+	private IFlexoOntology ontology;
 	private boolean hierarchicalMode = true;
 	private boolean strictMode = false;
-	private OntologyClass rootClass;
+	private IFlexoOntologyClass rootClass;
 	private boolean displayPropertiesInClasses = true;
 
 	private boolean showObjectProperties = true;
@@ -66,31 +74,31 @@ public class FIBOntologyEditor extends SelectionSynchronizedFIBView {
 	private boolean showClasses = true;
 	private boolean showIndividuals = true;
 
-	private boolean showOWLAndRDFConcepts = false;
-
 	private boolean allowsSearch = true;
 	private boolean displayOptions = true;
 
-	private OntologyBrowserModel model = null;
+	protected OntologyBrowserModel model = null;
+	private TechnologyAdapter technologyAdapter;
 
 	private boolean isSearching = false;
 	private String filteredName;
-	private List<OntologyObject> matchingValues;
-	private OntologyObject selectedValue;
+	private List<IFlexoOntologyConcept> matchingValues;
+	private IFlexoOntologyConcept selectedValue;
 
-	public FIBOntologyEditor(FlexoOntology ontology, FlexoController controller) {
+	public FIBOntologyEditor(IFlexoOntology ontology, FlexoController controller) {
 		super(null, controller, FIB_FILE);
-		matchingValues = new ArrayList<OntologyObject>();
+		matchingValues = new ArrayList<IFlexoOntologyConcept>();
 		setOntology(ontology);
+		setTechnologyAdapter(ontology.getTechnologyAdapter());
 		setDataObject(this);
 	}
 
-	public FlexoOntology getOntology() {
+	public IFlexoOntology getOntology() {
 		return ontology;
 	}
 
 	@CustomComponentParameter(name = "ontology", type = CustomComponentParameter.Type.MANDATORY)
-	public void setOntology(FlexoOntology context) {
+	public void setOntology(IFlexoOntology context) {
 		if (this.ontology instanceof HasPropertyChangeSupport && ((HasPropertyChangeSupport) ontology).getDeletedProperty() != null) {
 			manager.removeListener(((HasPropertyChangeSupport) ontology).getDeletedProperty(), this,
 					(HasPropertyChangeSupport) this.ontology);
@@ -99,7 +107,7 @@ public class FIBOntologyEditor extends SelectionSynchronizedFIBView {
 		if (this.ontology instanceof HasPropertyChangeSupport && ((HasPropertyChangeSupport) ontology).getDeletedProperty() != null) {
 			manager.addListener(((HasPropertyChangeSupport) ontology).getDeletedProperty(), this, (HasPropertyChangeSupport) this.ontology);
 		}
-		ontology.loadWhenUnloaded();
+		// ontology.loadWhenUnloaded();
 		update();
 	}
 
@@ -133,12 +141,12 @@ public class FIBOntologyEditor extends SelectionSynchronizedFIBView {
 		update();
 	}
 
-	public OntologyClass getRootClass() {
+	public IFlexoOntologyClass getRootClass() {
 		return rootClass;
 	}
 
 	@CustomComponentParameter(name = "rootClass", type = CustomComponentParameter.Type.OPTIONAL)
-	public void setRootClass(OntologyClass rootClass) {
+	public void setRootClass(IFlexoOntologyClass rootClass) {
 		this.rootClass = rootClass;
 		update();
 	}
@@ -211,30 +219,41 @@ public class FIBOntologyEditor extends SelectionSynchronizedFIBView {
 		update();
 	}
 
-	public boolean getShowOWLAndRDFConcepts() {
-		return showOWLAndRDFConcepts;
+	public TechnologyAdapter getTechnologyAdapter() {
+		return technologyAdapter;
 	}
 
-	@CustomComponentParameter(name = "showOWLAndRDFConcepts", type = CustomComponentParameter.Type.OPTIONAL)
-	public void setShowOWLAndRDFConcepts(boolean showOWLAndRDFConcepts) {
-		this.showOWLAndRDFConcepts = showOWLAndRDFConcepts;
-		update();
+	public void setTechnologyAdapter(TechnologyAdapter technologyAdapter) {
+		this.technologyAdapter = technologyAdapter;
+	}
+
+	/**
+	 * Build browser model Override this method when required
+	 * 
+	 * @return
+	 */
+	protected OntologyBrowserModel makeBrowserModel() {
+		OntologyBrowserModel returned = null;
+		if (getTechnologyAdapter() != null) {
+			// Use technology specific browser model
+			TechnologyAdapterController<?> technologyAdapterController = getTechnologyAdapter().getTechnologyAdapterService()
+					.getServiceManager().getService(TechnologyAdapterControllerService.class)
+					.getTechnologyAdapterController(technologyAdapter);
+			if (technologyAdapterController instanceof IFlexoOntologyTechnologyAdapterController) {
+				returned = ((IFlexoOntologyTechnologyAdapterController) technologyAdapterController)
+						.makeOntologyBrowserModel(getOntology());
+			}
+		}
+		if (returned == null) {
+			// Use default
+			returned = new OntologyBrowserModel(getOntology());
+		}
+		return returned;
 	}
 
 	public OntologyBrowserModel getModel() {
 		if (model == null) {
-			model = new OntologyBrowserModel(getOntology()) {
-				@Override
-				public void recomputeStructure() {
-					super.recomputeStructure();
-					SwingUtilities.invokeLater(new Runnable() {
-						@Override
-						public void run() {
-							getPropertyChangeSupport().firePropertyChange("model", null, getModel());
-						}
-					});
-				}
-			};
+			model = makeBrowserModel();
 			model.setStrictMode(getStrictMode());
 			model.setHierarchicalMode(getHierarchicalMode());
 			model.setDisplayPropertiesInClasses(getDisplayPropertiesInClasses());
@@ -244,8 +263,15 @@ public class FIBOntologyEditor extends SelectionSynchronizedFIBView {
 			model.setShowObjectProperties(getShowObjectProperties());
 			model.setShowDataProperties(getShowDataProperties());
 			model.setShowAnnotationProperties(getShowAnnotationProperties());
-			model.setShowOWLAndRDFConcepts(showOWLAndRDFConcepts);
 			model.recomputeStructure();
+			model.addObserver(new Observer() {
+				@Override
+				public void update(Observable o, Object arg) {
+					if (arg instanceof OntologyBrowserModelRecomputed) {
+						performFireModelUpdated();
+					}
+				}
+			});
 		}
 		return model;
 	}
@@ -255,10 +281,22 @@ public class FIBOntologyEditor extends SelectionSynchronizedFIBView {
 			model.delete();
 			model = null;
 			setDataObject(this);
+			performFireModelUpdated();
+		}
+	}
+
+	private boolean modelWillBeUpdated = false;
+
+	private void performFireModelUpdated() {
+		if (modelWillBeUpdated) {
+			return;
+		} else {
+			modelWillBeUpdated = true;
 			SwingUtilities.invokeLater(new Runnable() {
 				@Override
 				public void run() {
 					getPropertyChangeSupport().firePropertyChange("model", null, getModel());
+					modelWillBeUpdated = false;
 				}
 			});
 		}
@@ -272,7 +310,7 @@ public class FIBOntologyEditor extends SelectionSynchronizedFIBView {
 		this.filteredName = filteredName;
 	}
 
-	public List<OntologyObject> getMatchingValues() {
+	public List<IFlexoOntologyConcept> getMatchingValues() {
 		return matchingValues;
 	}
 
@@ -280,7 +318,7 @@ public class FIBOntologyEditor extends SelectionSynchronizedFIBView {
 		if (StringUtils.isNotEmpty(getFilteredName())) {
 			logger.info("Searching " + getFilteredName());
 			matchingValues.clear();
-			for (OntologyObject o : getAllSelectableValues()) {
+			for (IFlexoOntologyConcept o : getAllSelectableValues()) {
 				if (o.getName().indexOf(getFilteredName()) > -1) {
 					if (!matchingValues.contains(o)) {
 						matchingValues.add(o);
@@ -333,19 +371,20 @@ public class FIBOntologyEditor extends SelectionSynchronizedFIBView {
 	 * 
 	 * Override when required
 	 */
-	protected Vector<OntologyObject> getAllSelectableValues() {
-		Vector<OntologyObject> returned = new Vector<OntologyObject>();
+	protected Vector<IFlexoOntologyConcept> getAllSelectableValues() {
+		Vector<IFlexoOntologyConcept> returned = new Vector<IFlexoOntologyConcept>();
 		FIBBrowserWidget browserWidget = retrieveFIBBrowserWidget();
 		if (browserWidget == null) {
 			return null;
 		}
-		Iterator<Object> it = browserWidget.getBrowserModel().retrieveContents();
+		Iterator<Object> it = browserWidget.getBrowserModel().recursivelyExploreModelToRetrieveContents();
 		while (it.hasNext()) {
 			Object o = it.next();
-			if (o instanceof OntologyObject) {
-				returned.add((OntologyObject) o);
+			if (o instanceof IFlexoOntologyConcept) {
+				returned.add((IFlexoOntologyConcept) o);
 			}
 		}
+		// System.out.println("Returned: (" + returned.size() + ") " + returned);
 		return returned;
 	}
 
@@ -369,17 +408,17 @@ public class FIBOntologyEditor extends SelectionSynchronizedFIBView {
 		return null;
 	}
 
-	public OntologyObject getSelectedValue() {
+	public IFlexoOntologyConcept getSelectedValue() {
 		return selectedValue;
 	}
 
-	public void setSelectedValue(OntologyObject selectedValue) {
-		OntologyObject oldSelected = this.selectedValue;
+	public void setSelectedValue(IFlexoOntologyConcept selectedValue) {
+		IFlexoOntologyConcept oldSelected = this.selectedValue;
 		this.selectedValue = selectedValue;
 		getPropertyChangeSupport().firePropertyChange("selectedValue", oldSelected, selectedValue);
 	}
 
-	public void selectValue(OntologyObject selectedValue) {
+	public void selectValue(IFlexoOntologyConcept selectedValue) {
 		getFIBController().selectionCleared();
 		getFIBController().objectAddedToSelection(selectedValue);
 	}

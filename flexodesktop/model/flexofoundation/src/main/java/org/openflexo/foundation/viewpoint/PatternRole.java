@@ -19,32 +19,58 @@
  */
 package org.openflexo.foundation.viewpoint;
 
+import java.lang.reflect.Type;
+import java.util.Collection;
+
 import org.openflexo.antar.binding.BindingModel;
-import org.openflexo.foundation.Inspectors;
+import org.openflexo.foundation.DataModification;
+import org.openflexo.foundation.technologyadapter.ModelSlot;
+import org.openflexo.foundation.validation.Validable;
 import org.openflexo.foundation.validation.ValidationError;
 import org.openflexo.foundation.validation.ValidationIssue;
 import org.openflexo.foundation.validation.ValidationRule;
-import org.openflexo.foundation.viewpoint.ViewPoint.ViewPointBuilder;
+import org.openflexo.foundation.view.ActorReference;
+import org.openflexo.foundation.view.EditionPatternInstance;
 import org.openflexo.toolbox.StringUtils;
 
 /**
- * A PatternRole is an element of an EditionPattern, which play a role in this edition pattern
+ * A {@link PatternRole} is a structural element of an EditionPattern, which plays a role in this {@link EditionPattern}<br>
+ * More formerly, a {@link PatternRole} is the specification of an object accessed at run-time (inside an {@link EditionPattern} instance)
+ * 
  * 
  * @author sylvain
  * 
  */
-public abstract class PatternRole extends EditionPatternObject {
+public abstract class PatternRole<T> extends EditionPatternObject {
 
-	public static enum PatternRoleType {
-		Shape, Connector, Individual, Class, Property, ObjectProperty, DataProperty, IsAStatement, ObjectPropertyStatement, DataPropertyStatement, RestrictionStatement, FlexoModelObject, Diagram, EditionPattern, Primitive
-	}
+	// private static final Logger logger = Logger.getLogger(PatternRole.class.getPackage().getName());
 
 	private EditionPattern _pattern;
-	private String patternRoleName;
-	private String description;
 
-	public PatternRole(ViewPointBuilder builder) {
-		super(builder);
+	private ModelSlot<?> modelSlot;
+
+	public PatternRole() {
+		super();
+	}
+
+	@Override
+	public String getURI() {
+		return getEditionPattern().getURI() + "." + getPatternRoleName();
+	}
+
+	@Override
+	public Collection<? extends Validable> getEmbeddedValidableObjects() {
+		return null;
+	}
+
+	public ModelSlot<?> getModelSlot() {
+		return modelSlot;
+	}
+
+	public void setModelSlot(ModelSlot<?> modelSlot) {
+		this.modelSlot = modelSlot;
+		setChanged();
+		notifyObservers(new DataModification("modelSlot", null, modelSlot));
 	}
 
 	public void setEditionPattern(EditionPattern pattern) {
@@ -57,75 +83,51 @@ public abstract class PatternRole extends EditionPatternObject {
 	}
 
 	@Override
-	public String getDescription() {
-		return description;
-	}
-
-	@Override
-	public void setDescription(String description) {
-		this.description = description;
-	}
-
-	@Override
-	public ViewPoint getViewPoint() {
+	public VirtualModel getVirtualModel() {
 		if (getEditionPattern() != null) {
-			return getEditionPattern().getViewPoint();
+			return getEditionPattern().getVirtualModel();
 		}
 		return null;
 	}
 
-	@Override
-	public String getName() {
-		return getPatternRoleName();
-	}
-
 	public String getPatternRoleName() {
-		return patternRoleName;
+		return getName();
 	}
 
 	public void setPatternRoleName(String patternRoleName) {
-		this.patternRoleName = patternRoleName;
-		/*String oldValue = patternRoleName;
-		if (patternRoleName != null && !patternRoleName.equals(oldValue)) {
-			this.patternRoleName = patternRoleName;
-			setChanged();
-			notifyObservers(new NameChanged(oldValue, patternRoleName));
-		}*/
-	}
-
-	@Override
-	public String getInspectorName() {
-		if (getType() == PatternRoleType.Shape) {
-			return Inspectors.VPM.SHAPE_PATTERN_ROLE_INSPECTOR;
-		} else if (getType() == PatternRoleType.Connector) {
-			return Inspectors.VPM.CONNECTOR_PATTERN_ROLE_INSPECTOR;
-		} else {
-			return Inspectors.VPM.PATTERN_ROLE_INSPECTOR;
-		}
+		setName(patternRoleName);
 	}
 
 	@Override
 	public String toString() {
-		return getPatternRoleName();
+		return getClass().getSimpleName()
+				+ ":"
+				+ getPatternRoleName()
+				+ "[container="
+				+ (getEditionPattern() != null ? getEditionPattern().getName() + "/"
+						+ (getEditionPattern().getVirtualModel() != null ? getEditionPattern().getVirtualModel().getName() : "null")
+						: "null") + "][" + Integer.toHexString(hashCode()) + "]";
 	}
 
-	public abstract PatternRoleType getType();
+	public abstract Type getType();
 
 	public abstract String getPreciseType();
 
 	public void finalizePatternRoleDeserialization() {
 	}
 
-	public abstract Class<?> getAccessedClass();
-
 	@Override
 	public final BindingModel getBindingModel() {
 		return getEditionPattern().getBindingModel();
 	}
 
-	public abstract boolean getIsPrimaryRole();
+	// public abstract boolean getIsPrimaryRole();
 
-	public abstract void setIsPrimaryRole(boolean isPrimary);
+	// public abstract void setIsPrimaryRole(boolean isPrimary);
+
+	public abstract boolean defaultBehaviourIsToBeDeleted();
+
+	public abstract ActorReference<T> makeActorReference(T object, EditionPatternInstance epi);
 
 	// @Override
 	// public abstract String getLanguageRepresentation();
@@ -143,4 +145,5 @@ public abstract class PatternRole extends EditionPatternObject {
 			return null;
 		}
 	}
+
 }

@@ -22,13 +22,22 @@ package org.openflexo.icon;
 import javax.swing.Icon;
 import javax.swing.ImageIcon;
 
-import org.openflexo.foundation.rm.ResourceType;
+import org.openflexo.foundation.FlexoServiceManager;
+import org.openflexo.foundation.ProjectDataResource;
+import org.openflexo.foundation.ProjectDirectoryResource;
+import org.openflexo.foundation.resource.FlexoResource;
+import org.openflexo.foundation.technologyadapter.TechnologyAdapter;
 import org.openflexo.foundation.validation.InformationIssue;
 import org.openflexo.foundation.validation.ValidationError;
 import org.openflexo.foundation.validation.ValidationIssue;
 import org.openflexo.foundation.validation.ValidationWarning;
+import org.openflexo.foundation.view.rm.ViewResource;
+import org.openflexo.foundation.viewpoint.rm.ViewPointResource;
+import org.openflexo.foundation.viewpoint.rm.VirtualModelResource;
 import org.openflexo.swing.AnimatedIcon;
 import org.openflexo.toolbox.ImageIconResource;
+import org.openflexo.view.controller.TechnologyAdapterController;
+import org.openflexo.view.controller.TechnologyAdapterControllerService;
 
 /**
  * Utility class containing all icons used in whole application
@@ -58,9 +67,12 @@ public class IconLibrary {
 	public static final ImageIcon OPENFLEXO_TEXT_SMALL_ICON = new ImageIconResource("Icons/Flexo/OpenflexoText_150x40.png");
 
 	// Common icons
+	public static final ImageIcon HOME_ICON = new ImageIconResource("Icons/Common/Home.png");
 	public static final ImageIcon FOLDER_ICON = new ImageIconResource("Icons/Common/Folder.gif");
 	public static final ImageIcon SMALL_EXCEL_ICON = new ImageIconResource("Icons/Common/SmallExcel.gif");
 	public static final ImageIcon BIG_EXCEL_ICON = new ImageIconResource("Icons/Common/BigExcel.png");
+	public static final ImageIcon INFORMATION_SPACE_ICON = new ImageIconResource("Icons/Common/InformationSpace.png");
+	public static final ImageIcon RESOURCE_CENTER_ICON = new ImageIconResource("Icons/Common/ResourceCenter.png");
 
 	public static final Icon IN_PROGRESS_ICON = new AnimatedIcon(new ImageIconResource("Icons/Common/Progress.gif"));
 	public static final ImageIcon VALID_ICON = new ImageIconResource("Icons/Common/Valid.png");
@@ -139,6 +151,7 @@ public class IconLibrary {
 	public static final IconMarker DELETE = new IconMarker(new ImageIconResource("Icons/Utils/Markers/Delete.png"), 8, 8);
 	public static final IconMarker DUPLICATE = new IconMarker(new ImageIconResource("Icons/Utils/Markers/Plus.png"), 8, 8);
 	public static final IconMarker LOCKED = new IconMarker(new ImageIconResource("Icons/Utils/Markers/Locked.png"), 0, 5);
+	public static final IconMarker SYNC = new IconMarker(new ImageIconResource("Icons/Utils/Markers/Sync.png"), 10, 7);
 	public static final ImageIcon QUESTION_ICON = new ImageIconResource("Icons/Utils/Question.gif");
 
 	// Cursors
@@ -170,7 +183,7 @@ public class IconLibrary {
 		return null;
 	}
 
-	public static ImageIcon getIconForResourceType(ResourceType resourceType) {
+	/*public static ImageIcon getIconForResourceType(ResourceType resourceType) {
 		if (resourceType == ResourceType.COMPONENT_LIBRARY) {
 			return SEIconLibrary.COMPONENT_LIBRARY_ICON;
 		} else if (resourceType == ResourceType.DKV_MODEL) {
@@ -206,5 +219,44 @@ public class IconLibrary {
 		}
 
 		return FilesIconLibrary.smallIconForFileFormat(resourceType.getFormat());
+	}*/
+
+	/**
+	 * Return the technology-specific controller for supplied technology adapter
+	 * 
+	 * @param technologyAdapter
+	 * @return
+	 */
+	public static <TA extends TechnologyAdapter> TechnologyAdapterController<TA> getTechnologyAdapterController(TA technologyAdapter) {
+		if (technologyAdapter != null) {
+			try {
+				FlexoServiceManager sm = technologyAdapter.getTechnologyAdapterService().getServiceManager();
+				if (sm != null) {
+					TechnologyAdapterControllerService service = sm.getService(TechnologyAdapterControllerService.class);
+					if (service != null) {
+						return service.getTechnologyAdapterController(technologyAdapter);
+					}
+				}
+			} catch (Exception e) {
+				e.printStackTrace();
+			}
+		}
+		return null;
 	}
+
+	public static ImageIcon getIconForResource(FlexoResource<?> resource) {
+		if (resource instanceof ProjectDirectoryResource) {
+			return OPENFLEXO_NOTEXT_16;
+		} else if (resource instanceof ProjectDataResource) {
+			return OPENFLEXO_NOTEXT_16;
+		} else if (resource instanceof ViewResource) {
+			return VEIconLibrary.VIEW_ICON;
+		} else if (resource instanceof ViewPointResource) {
+			return VPMIconLibrary.VIEWPOINT_ICON;
+		} else if (resource instanceof VirtualModelResource) {
+			return VPMIconLibrary.VIRTUAL_MODEL_ICON;
+		}
+		return null;
+	}
+
 }

@@ -22,10 +22,10 @@ package org.openflexo.wkf.roleeditor;
 import org.openflexo.fge.view.DrawingView;
 import org.openflexo.foundation.FlexoEditor;
 import org.openflexo.foundation.wkf.RoleList;
-import org.openflexo.selection.SelectionManagingDrawingController;
+import org.openflexo.selection.SelectionManagingDianaEditor;
 import org.openflexo.wkf.controller.WKFController;
 
-public class RoleEditorController extends SelectionManagingDrawingController<RoleListRepresentation> {
+public class RoleEditorController extends SelectionManagingDianaEditor<RoleListRepresentation> {
 
 	// Can be null!
 	private WKFController _controller;

@@ -35,7 +35,7 @@ import org.openflexo.foundation.dkv.Domain;
 import org.openflexo.foundation.dkv.Key;
 import org.openflexo.foundation.dkv.Language;
 import org.openflexo.foundation.dkv.Value;
-import org.openflexo.foundation.rm.FlexoProject;
+import org.openflexo.foundation.FlexoProject;
 import org.openflexo.icon.DMEIconLibrary;
 
 /**

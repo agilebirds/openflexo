@@ -27,11 +27,10 @@ import javax.ws.rs.core.UriBuilder;
 import org.apache.commons.io.FileUtils;
 import org.apache.commons.io.IOUtils;
 import org.apache.commons.lang3.StringUtils;
-import org.openflexo.AdvancedPrefs;
 import org.openflexo.LocalDBAccess;
 import org.openflexo.fib.controller.FIBController.Status;
 import org.openflexo.fib.controller.FIBDialog;
-import org.openflexo.foundation.rm.FlexoProject;
+import org.openflexo.foundation.FlexoProject;
 import org.openflexo.localization.FlexoLocalization;
 import org.openflexo.model.exceptions.ModelDefinitionException;
 import org.openflexo.model.factory.ModelFactory;
@@ -45,7 +44,6 @@ import org.openflexo.toolbox.ZipUtils;
 import org.openflexo.view.FlexoFrame;
 import org.openflexo.view.controller.FlexoController;
 import org.openflexo.view.controller.FlexoServerInstance;
-import org.openflexo.view.controller.FlexoServerInstanceManager;
 
 import com.sun.jersey.api.client.Client;
 import com.sun.jersey.api.client.ClientResponse;
@@ -110,8 +108,8 @@ public class ServerRestService {
 
 						} catch (WebApplicationException e) {
 							if (e.getResponse().getStatus() == com.sun.jersey.api.client.ClientResponse.Status.UNAUTHORIZED.getStatusCode()) {
-								AdvancedPrefs.setRememberAndDontAskWebServiceParamsAnymore(false);
-								AdvancedPrefs.save();
+								projectLoader.getServiceManager().getAdvancedPrefs().setRememberAndDontAskWebServiceParamsAnymore(false);
+								// AdvancedPrefs.save();
 							}
 						} catch (Exception e) {
 							logger.log(Level.WARNING, "Unexpected exception while trying to handle ", e);
@@ -228,7 +226,7 @@ public class ServerRestService {
 
 		private class ParameterCallable implements Callable<ServerRestClientParameter> {
 
-			private ServerRestClientParameter params;
+			private final ServerRestClientParameter params;
 
 			public ParameterCallable(ServerRestClientParameter params) {
 				super();
@@ -237,7 +235,7 @@ public class ServerRestService {
 
 			@Override
 			public ServerRestClientParameter call() throws Exception {
-				WebServiceURLDialog data = new WebServiceURLDialog();
+				WebServiceURLDialog data = new WebServiceURLDialog(projectLoader.getServiceManager());
 				data.setClientParameter(params);
 				FIBDialog<WebServiceURLDialog> dialog = FIBDialog.instanciateAndShowDialog(WebServiceURLDialog.FIB_FILE, data,
 						FlexoFrame.getActiveFrame(), true, FlexoLocalization.getMainLocalizer());
@@ -255,24 +253,24 @@ public class ServerRestService {
 					} catch (URISyntaxException e1) {
 						e1.printStackTrace();
 						FlexoController.notify(e1.getMessage());
-						AdvancedPrefs.setRememberAndDontAskWebServiceParamsAnymore(false);
-						AdvancedPrefs.save();
+						projectLoader.getServiceManager().getAdvancedPrefs().setRememberAndDontAskWebServiceParamsAnymore(false);
+						// AdvancedPrefs.save();
 						return null;
 					}
 					if (params.getWSInstance() != null) {
-						AdvancedPrefs.setWebServiceInstance(params.getWSInstance().getID());
+						projectLoader.getServiceManager().getAdvancedPrefs().setWebServiceInstance(params.getWSInstance().getID());
 					}
 					if (params.getWSURL() != null) {
-						AdvancedPrefs.setWebServiceUrl(params.getWSURL());
+						projectLoader.getServiceManager().getAdvancedPrefs().setWebServiceUrl(params.getWSURL());
 					}
 					if (params.getWSLogin() != null) {
-						AdvancedPrefs.setWebServiceLogin(params.getWSLogin());
+						projectLoader.getServiceManager().getAdvancedPrefs().setWebServiceLogin(params.getWSLogin());
 					}
 					if (params.getWSPassword() != null) {
-						AdvancedPrefs.setWebServicePassword(params.getWSPassword());
+						projectLoader.getServiceManager().getAdvancedPrefs().setWebServicePassword(params.getWSPassword());
 					}
-					AdvancedPrefs.setRememberAndDontAskWebServiceParamsAnymore(params.getRemember());
-					AdvancedPrefs.save();
+					projectLoader.getServiceManager().getAdvancedPrefs().setRememberAndDontAskWebServiceParamsAnymore(params.getRemember());
+					// AdvancedPrefs.save();
 					return params;
 				} else {
 					return null;
@@ -290,14 +288,14 @@ public class ServerRestService {
 				e.printStackTrace();
 				throw new Error("Improperly configured PPMWSClientParameter. ", e);
 			}
-			FlexoServerInstance instance = FlexoServerInstanceManager.getInstance().getAddressBook()
-					.getInstanceWithID(AdvancedPrefs.getWebServiceInstance());
+			FlexoServerInstance instance = projectLoader.getServiceManager().getFlexoServerInstanceManager().getAddressBook()
+					.getInstanceWithID(projectLoader.getServiceManager().getAdvancedPrefs().getWebServiceInstance());
 			ServerRestClientParameter params = factory.newInstance(ServerRestClientParameter.class);
 			params.setWSInstance(instance);
-			params.setWSLogin(AdvancedPrefs.getWebServiceLogin());
-			params.setWSPassword(AdvancedPrefs.getWebServicePassword());
-			params.setWSURL(AdvancedPrefs.getWebServiceUrl());
-			params.setRemember(AdvancedPrefs.getRememberAndDontAskWebServiceParamsAnymore());
+			params.setWSLogin(projectLoader.getServiceManager().getAdvancedPrefs().getWebServiceLogin());
+			params.setWSPassword(projectLoader.getServiceManager().getAdvancedPrefs().getWebServicePassword());
+			params.setWSURL(projectLoader.getServiceManager().getAdvancedPrefs().getWebServiceUrl());
+			params.setRemember(projectLoader.getServiceManager().getAdvancedPrefs().getRememberAndDontAskWebServiceParamsAnymore());
 			if (params.getWSInstance() != null && !params.getWSInstance().getID().equals(FlexoServerInstance.OTHER_ID)) {
 				params.setWSURL(params.getWSInstance().getRestURL());
 			}
@@ -349,7 +347,7 @@ public class ServerRestService {
 
 	private ScheduledFuture<?> scheduledFuture;
 	private final ProjectLoader projectLoader;
-	private ServerRestClientParameterProvider parameterProvider;
+	private final ServerRestClientParameterProvider parameterProvider;
 
 	public ServerRestService(ProjectLoader projectLoader) {
 		this.projectLoader = projectLoader;
@@ -358,6 +356,9 @@ public class ServerRestService {
 
 	public ServerRestClient getWSClient(boolean forceDialog) {
 		ServerRestClientParameter params = getServerRestClientParameter(forceDialog);
+		if (params == null) {
+			return null;
+		}
 		// now that we have the parameters. We have to invoke the WS
 		ServerRestClient client;
 		try {

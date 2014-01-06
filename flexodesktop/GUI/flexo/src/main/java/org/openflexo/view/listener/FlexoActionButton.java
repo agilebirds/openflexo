@@ -22,14 +22,14 @@ package org.openflexo.view.listener;
 import java.awt.Component;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
+import java.util.List;
 import java.util.Vector;
 
 import javax.swing.JButton;
 
 import org.openflexo.antar.binding.TypeUtils;
-import org.openflexo.ch.FCH;
 import org.openflexo.foundation.FlexoEditor;
-import org.openflexo.foundation.FlexoModelObject;
+import org.openflexo.foundation.FlexoObject;
 import org.openflexo.foundation.action.FlexoAction;
 import org.openflexo.foundation.action.FlexoActionSource;
 import org.openflexo.foundation.action.FlexoActionType;
@@ -62,7 +62,7 @@ public class FlexoActionButton extends JButton {
 			}
 		}
 		addActionListener(action);
-		FCH.setHelpItem(this, action.getActionType().getUnlocalizedName());
+		controller.getApplicationContext().getDocResourceManager().setHelpItem(this, action.getActionType().getUnlocalizedName());
 	}
 
 	private FlexoEditor getEditor() {
@@ -77,16 +77,15 @@ public class FlexoActionButton extends JButton {
 		setEnabled(action.isEnabled());
 	}
 
-	protected Vector<? extends FlexoModelObject> getGlobalSelection() {
+	protected List<? extends FlexoObject> getGlobalSelection() {
 		return actionSource.getGlobalSelection();
 	}
 
-	protected FlexoModelObject getFocusedObject() {
+	protected FlexoObject getFocusedObject() {
 		return actionSource.getFocusedObject();
 	}
 
-	public class ButtonAction<A extends FlexoAction<A, T1, T2>, T1 extends FlexoModelObject, T2 extends FlexoModelObject> implements
-			ActionListener {
+	public class ButtonAction<A extends FlexoAction<A, T1, T2>, T1 extends FlexoObject, T2 extends FlexoObject> implements ActionListener {
 
 		private final FlexoActionType<A, T1, T2> actionType;
 		private String _unlocalizedName = null;
@@ -103,7 +102,7 @@ public class FlexoActionButton extends JButton {
 
 		@Override
 		public void actionPerformed(ActionEvent event) {
-			Vector<? extends FlexoModelObject> globalSelection = getGlobalSelection();
+			List<? extends FlexoObject> globalSelection = getGlobalSelection();
 			if (TypeUtils.isAssignableTo(getFocusedObject(), actionType.getFocusedObjectType())
 					&& (globalSelection == null || TypeUtils.isAssignableTo(globalSelection, actionType.getGlobalSelectionType()))) {
 				getEditor().performActionType(actionType, (T1) getFocusedObject(), (Vector<T2>) globalSelection, event);
@@ -111,7 +110,7 @@ public class FlexoActionButton extends JButton {
 		}
 
 		public boolean isEnabled() {
-			Vector<? extends FlexoModelObject> globalSelection = getGlobalSelection();
+			List<? extends FlexoObject> globalSelection = getGlobalSelection();
 			if (TypeUtils.isAssignableTo(getFocusedObject(), actionType.getFocusedObjectType())
 					&& (globalSelection == null || TypeUtils.isAssignableTo(globalSelection, actionType.getGlobalSelectionType()))) {
 				return getEditor().isActionEnabled(actionType, (T1) getFocusedObject(), (Vector<T2>) globalSelection);

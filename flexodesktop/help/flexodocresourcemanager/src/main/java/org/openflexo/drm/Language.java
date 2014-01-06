@@ -59,12 +59,10 @@ public class Language extends DRMObject implements ChoiceList, Comparable<Langua
 		this.identifier = identifier;
 	}
 
-	@Override
 	public String getName() {
 		return name;
 	}
 
-	@Override
 	public void setName(String name) {
 		this.name = name;
 	}
@@ -76,11 +74,6 @@ public class Language extends DRMObject implements ChoiceList, Comparable<Langua
 	@Override
 	public Vector getAvailableValues() {
 		return getDocResourceCenter().getLanguages();
-	}
-
-	@Override
-	public String getClassNameKey() {
-		return "language";
 	}
 
 	@Override

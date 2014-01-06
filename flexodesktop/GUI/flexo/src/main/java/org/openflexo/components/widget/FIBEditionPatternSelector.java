@@ -22,20 +22,22 @@ package org.openflexo.components.widget;
 import java.io.File;
 import java.util.logging.Logger;
 
+import org.openflexo.foundation.FlexoObject;
 import org.openflexo.foundation.viewpoint.EditionPattern;
 import org.openflexo.foundation.viewpoint.ViewPoint;
 import org.openflexo.foundation.viewpoint.ViewPointLibrary;
-import org.openflexo.foundation.viewpoint.ViewPointLibraryObject;
+import org.openflexo.foundation.viewpoint.VirtualModel;
 import org.openflexo.toolbox.FileResource;
 
 /**
- * Widget allowing to select a ViewPoint
+ * Widget allowing to select an EditionPattern
  * 
  * @author sguerin
  * 
  */
-public class FIBEditionPatternSelector extends FIBModelObjectSelector<EditionPattern> {
-	@SuppressWarnings("hiding")
+@SuppressWarnings("serial")
+public class FIBEditionPatternSelector extends FIBFlexoObjectSelector<EditionPattern> {
+
 	static final Logger logger = Logger.getLogger(FIBEditionPatternSelector.class.getPackage().getName());
 
 	public static FileResource FIB_FILE = new FileResource("Fib/EditionPatternSelector.fib");
@@ -90,8 +92,21 @@ public class FIBEditionPatternSelector extends FIBModelObjectSelector<EditionPat
 		this.viewPoint = viewPoint;
 	}
 
-	public ViewPointLibraryObject getRootObject() {
-		if (getViewPoint() != null) {
+	private VirtualModel virtualModel;
+
+	public VirtualModel getVirtualModel() {
+		return virtualModel;
+	}
+
+	@CustomComponentParameter(name = "virtualModel", type = CustomComponentParameter.Type.OPTIONAL)
+	public void setVirtualModel(VirtualModel virtualModel) {
+		this.virtualModel = virtualModel;
+	}
+
+	public FlexoObject getRootObject() {
+		if (getVirtualModel() != null) {
+			return getVirtualModel();
+		} else if (getViewPoint() != null) {
 			return getViewPoint();
 		} else {
 			return getViewPointLibrary();
@@ -105,9 +120,10 @@ public class FIBEditionPatternSelector extends FIBModelObjectSelector<EditionPat
 		FIBAbstractEditor editor = new FIBAbstractEditor() {
 			@Override
 			public Object[] getData() {
-				FlexoResourceCenter resourceCenter = FlexoResourceCenterService.instance().getFlexoResourceCenter();
+				TestApplicationContext testApplicationContext = new TestApplicationContext(new FileResource(
+						"src/test/resources/TestResourceCenter"));
 				FIBEditionPatternSelector selector = new FIBEditionPatternSelector(null);
-				selector.setViewPointLibrary(resourceCenter.retrieveViewPointLibrary());
+				selector.setViewPointLibrary(testApplicationContext.getViewPointLibrary());
 				return makeArray(selector);
 			}
 
@@ -118,7 +134,7 @@ public class FIBEditionPatternSelector extends FIBModelObjectSelector<EditionPat
 
 			@Override
 			public FIBController makeNewController(FIBComponent component) {
-				return new FlexoFIBController<FIBEditionPatternSelector>(component);
+				return new FlexoFIBController(component);
 			}
 		};
 		editor.launch();

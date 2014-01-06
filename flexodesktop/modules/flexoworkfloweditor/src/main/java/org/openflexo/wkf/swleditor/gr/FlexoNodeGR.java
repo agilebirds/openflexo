@@ -22,7 +22,7 @@ package org.openflexo.wkf.swleditor.gr;
 import java.util.List;
 import java.util.logging.Logger;
 
-import org.openflexo.fge.shapes.Shape.ShapeType;
+import org.openflexo.fge.shapes.ShapeSpecification.ShapeType;
 import org.openflexo.foundation.wkf.node.FlexoNode;
 import org.openflexo.foundation.wkf.node.FlexoPreCondition;
 import org.openflexo.wkf.swleditor.SwimmingLaneRepresentation;

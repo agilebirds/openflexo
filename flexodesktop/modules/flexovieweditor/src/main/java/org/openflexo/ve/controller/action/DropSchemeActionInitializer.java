@@ -30,12 +30,13 @@ import org.openflexo.foundation.action.FlexoActionFinalizer;
 import org.openflexo.foundation.action.FlexoActionInitializer;
 import org.openflexo.foundation.action.FlexoExceptionHandler;
 import org.openflexo.foundation.action.NotImplementedException;
-import org.openflexo.foundation.view.ViewShape;
-import org.openflexo.foundation.view.action.DropSchemeAction;
+import org.openflexo.foundation.view.diagram.action.DropSchemeAction;
+import org.openflexo.foundation.view.diagram.model.DiagramShape;
 import org.openflexo.icon.VEIconLibrary;
 import org.openflexo.localization.FlexoLocalization;
 import org.openflexo.ve.controller.VEController;
-import org.openflexo.ve.shema.VEShemaModuleView;
+import org.openflexo.ve.diagram.DiagramModuleView;
+import org.openflexo.ve.widget.ParametersRetriever;
 import org.openflexo.view.ModuleView;
 import org.openflexo.view.controller.ActionInitializer;
 import org.openflexo.view.controller.ControllerActionInitializer;
@@ -70,29 +71,28 @@ public class DropSchemeActionInitializer extends ActionInitializer {
 		return new FlexoActionFinalizer<DropSchemeAction>() {
 			@Override
 			public boolean run(EventObject e, DropSchemeAction action) {
-				/*	ViewShape shape = action.getPrimaryShape();
-					logger.info("border5 = " + ((ShapeGraphicalRepresentation<?>) shape.getGraphicalRepresentation()).getBorder());
+				/*	DiagramShape shape = action.getPrimaryShape();
+					logger.info("border5 = " + ((ShapeGraphicalRepresentation) shape.getGraphicalRepresentation()).getBorder());
 					if (shape.getParent() != action.getParent()) {
-						VEShapeGR parentGR = (VEShapeGR) shape.getParent().getGraphicalRepresentation();
-						VEShapeGR expectedGR = (VEShapeGR) action.getParent().getGraphicalRepresentation();
-						VEShapeGR myGR = (VEShapeGR) action.getPrimaryShape().getGraphicalRepresentation();
+						DiagramShapeGR parentNode = (DiagramShapeGR) shape.getParent().getGraphicalRepresentation();
+						DiagramShapeGR expectedGR = (DiagramShapeGR) action.getParent().getGraphicalRepresentation();
+						DiagramShapeGR myGR = (DiagramShapeGR) action.getPrimaryShape().getGraphicalRepresentation();
 						Point p = new Point((int) myGR.getX(), (int) myGR.getY());
-						Point newP = GraphicalRepresentation.convertPoint(expectedGR, p, parentGR, 1.0);
+						Point newP = GraphicalRepresentation.convertPoint(expectedGR, p, parentNode, 1.0);
 						myGR.setLocation(new FGEPoint(newP.x, newP.y));
 						logger.info("border6 = " + myGR.getBorder());
-						logger.info("Shape has been relocated");
+						logger.info("ShapeSpecification has been relocated");
 					}*/
 
 				((VEController) getController()).getSelectionManager().setSelectedObject(action.getPrimaryShape());
 				if (action.getPrimaryShape() != null) {
-					ModuleView<?> moduleView = getController().moduleViewForObject(
-							action.getPrimaryShape().getShema().getShemaDefinition(), false);
-					if (moduleView instanceof VEShemaModuleView) {
-						ShapeView<ViewShape> shape = ((VEShemaModuleView) moduleView).getController().getDrawingView()
+					ModuleView<?> moduleView = getController().moduleViewForObject(action.getPrimaryShape().getDiagram(), false);
+					if (moduleView instanceof DiagramModuleView) {
+						ShapeView<DiagramShape> shape = ((DiagramModuleView) moduleView).getController().getDrawingView()
 								.shapeViewForObject(action.getPrimaryShape().getGraphicalRepresentation());
 						if (shape != null) {
 							if (shape.getLabelView() != null) {
-								shape.getLabelView().startEdition();
+								shape.getLabelView().continueEdition();
 							}
 						}
 

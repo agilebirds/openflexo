@@ -20,122 +20,117 @@
 package org.openflexo.foundation.viewpoint.action;
 
 import java.io.File;
-import java.io.IOException;
 import java.net.MalformedURLException;
 import java.net.URL;
 import java.util.Vector;
 import java.util.logging.Logger;
 
 import org.openflexo.foundation.FlexoEditor;
-import org.openflexo.foundation.FlexoModelObject;
+import org.openflexo.foundation.FlexoObject.FlexoObjectImpl;
 import org.openflexo.foundation.IOFlexoException;
 import org.openflexo.foundation.action.FlexoAction;
 import org.openflexo.foundation.action.FlexoActionType;
-import org.openflexo.foundation.ontology.FlexoOntology;
-import org.openflexo.foundation.ontology.ImportedOWLOntology;
-import org.openflexo.foundation.ontology.owl.OWLOntology;
-import org.openflexo.foundation.ontology.owl.OWLOntology.OntologyNotFoundException;
-import org.openflexo.foundation.rm.SaveResourceException;
+import org.openflexo.foundation.resource.RepositoryFolder;
 import org.openflexo.foundation.viewpoint.ViewPoint;
-import org.openflexo.foundation.viewpoint.ViewPointFolder;
+import org.openflexo.foundation.viewpoint.ViewPoint.ViewPointImpl;
 import org.openflexo.foundation.viewpoint.ViewPointLibrary;
-import org.openflexo.foundation.viewpoint.ViewPointLibraryObject;
 import org.openflexo.foundation.viewpoint.ViewPointObject;
-import org.openflexo.toolbox.FileUtils;
+import org.openflexo.foundation.viewpoint.ViewPointRepository;
+import org.openflexo.foundation.viewpoint.rm.ViewPointResource;
 import org.openflexo.toolbox.JavaUtils;
 import org.openflexo.toolbox.StringUtils;
-import org.openflexo.toolbox.ToolBox;
 
-public class CreateViewPoint extends FlexoAction<CreateViewPoint, ViewPointLibraryObject, ViewPointObject> {
+public class CreateViewPoint extends FlexoAction<CreateViewPoint, RepositoryFolder<ViewPointResource>, ViewPointObject> {
 
 	private static final Logger logger = Logger.getLogger(CreateViewPoint.class.getPackage().getName());
 
-	public static FlexoActionType<CreateViewPoint, ViewPointLibraryObject, ViewPointObject> actionType = new FlexoActionType<CreateViewPoint, ViewPointLibraryObject, ViewPointObject>(
-			"create_view_point", FlexoActionType.newMenu, FlexoActionType.defaultGroup, FlexoActionType.ADD_ACTION_TYPE) {
+	public static FlexoActionType<CreateViewPoint, RepositoryFolder<ViewPointResource>, ViewPointObject> actionType = new FlexoActionType<CreateViewPoint, RepositoryFolder<ViewPointResource>, ViewPointObject>(
+			"create_view_definition", FlexoActionType.newMenu, FlexoActionType.defaultGroup, FlexoActionType.ADD_ACTION_TYPE) {
 
 		/**
 		 * Factory method
 		 */
 		@Override
-		public CreateViewPoint makeNewAction(ViewPointLibraryObject focusedObject, Vector<ViewPointObject> globalSelection,
+		public CreateViewPoint makeNewAction(RepositoryFolder<ViewPointResource> focusedObject, Vector<ViewPointObject> globalSelection,
 				FlexoEditor editor) {
 			return new CreateViewPoint(focusedObject, globalSelection, editor);
 		}
 
 		@Override
-		public boolean isVisibleForSelection(ViewPointLibraryObject object, Vector<ViewPointObject> globalSelection) {
-			return object != null;
+		public boolean isVisibleForSelection(RepositoryFolder<ViewPointResource> object, Vector<ViewPointObject> globalSelection) {
+			return object.getResourceRepository() instanceof ViewPointRepository;
 		}
 
 		@Override
-		public boolean isEnabledForSelection(ViewPointLibraryObject object, Vector<ViewPointObject> globalSelection) {
+		public boolean isEnabledForSelection(RepositoryFolder<ViewPointResource> object, Vector<ViewPointObject> globalSelection) {
 			return object != null;
 		}
 
 	};
 
 	static {
-		FlexoModelObject.addActionForClass(CreateViewPoint.actionType, ViewPointLibrary.class);
-		FlexoModelObject.addActionForClass(CreateViewPoint.actionType, ViewPointFolder.class);
+		FlexoObjectImpl.addActionForClass(CreateViewPoint.actionType, RepositoryFolder.class);
 	}
 
-	public static enum OntologicalScopeChoices {
-		IMPORT_EXISTING_ONTOLOGY, CREATES_NEW_ONTOLOGY
-	}
+	private String _newViewPointName;
+	private String _newViewPointURI;
+	private String _newViewPointDescription;
+	private ViewPoint newViewPoint;
 
-	public OntologicalScopeChoices ontologicalScopeChoice = OntologicalScopeChoices.IMPORT_EXISTING_ONTOLOGY;
-
-	private String _newCalcName;
-	private String _newCalcURI;
-	private String _newCalcDescription;
-	private File _ontologyFile;
-	private ViewPointFolder _calcFolder;
-	private ViewPoint _newViewPoint;
-
-	public Vector<FlexoOntology> importedOntologies = new Vector<FlexoOntology>();
-
-	// private boolean createsOntology = false;
-
-	CreateViewPoint(ViewPointLibraryObject focusedObject, Vector<ViewPointObject> globalSelection, FlexoEditor editor) {
+	CreateViewPoint(RepositoryFolder focusedObject, Vector<ViewPointObject> globalSelection, FlexoEditor editor) {
 		super(actionType, focusedObject, globalSelection, editor);
+	}
+
+	public ViewPointLibrary getViewPointLibrary() {
+		if (!(getFocusedObject().getResourceRepository() instanceof ViewPointRepository)) {
+			return null;
+		}
+		return ((ViewPointRepository) getFocusedObject().getResourceRepository()).getViewPointLibrary();
 	}
 
 	@Override
 	protected void doAction(Object context) throws IOFlexoException {
-		logger.info("Create new calc");
 
-		ViewPointLibrary viewPointLibrary = getFocusedObject().getViewPointLibrary();
+		if (!(getFocusedObject().getResourceRepository() instanceof ViewPointRepository)) {
+			return;
+		}
 
-		File newCalcDir = getCalcDir();
+		logger.info("Create new viewpoint");
 
-		newCalcDir.mkdirs();
+		ViewPointLibrary viewPointLibrary = getViewPointLibrary();
+		ViewPointRepository vpRepository = (ViewPointRepository) getFocusedObject().getResourceRepository();
 
-		if (ontologicalScopeChoice == OntologicalScopeChoices.CREATES_NEW_ONTOLOGY) {
+		File newViewPointDir = getViewPointDir();
+
+		logger.info("Creating viewpoint " + newViewPointDir.getAbsolutePath());
+
+		// newViewPointDir.mkdirs();
+
+		/*if (ontologicalScopeChoice == OntologicalScopeChoices.CREATES_NEW_ONTOLOGY) {
 			buildOntology();
 		} else if (ontologicalScopeChoice == OntologicalScopeChoices.IMPORT_EXISTING_ONTOLOGY) {
 			try {
-				FileUtils.copyFileToDir(getOntologyFile(), newCalcDir);
+				FileUtils.copyFileToDir(getOntologyFile(), newViewPointDir);
 			} catch (IOException e) {
 				throw new IOFlexoException(e);
 			}
 
-			_ontologyFile = new File(newCalcDir, _ontologyFile.getName());
-		}
+			_ontologyFile = new File(newViewPointDir, _ontologyFile.getName());
+		}*/
 
-		// Instanciate new Calc
-		_newViewPoint = ViewPoint.newViewPoint(getBaseName(), getNewCalcURI(), getOntologyFile(), newCalcDir, viewPointLibrary,
-				getCalcFolder());
-		_newViewPoint.setDescription(getNewCalcDescription());
+		// Instanciate new ViewPoint
+		newViewPoint = ViewPointImpl.newViewPoint(getBaseName(), getNewViewPointURI(), newViewPointDir, viewPointLibrary);
+		newViewPoint.setDescription(getNewViewPointDescription());
 
-		// And register it to the library
-		viewPointLibrary.registerViewPoint(_newViewPoint);
+		vpRepository.registerResource((ViewPointResource) newViewPoint.getResource(), getFocusedObject());
+
 	}
 
-	private ImportedOWLOntology buildOntology() {
-		_ontologyFile = new File(getCalcDir(), getBaseName() + ".owl");
-		ImportedOWLOntology newOntology = ImportedOWLOntology.createNewImportedOntology(getNewCalcURI(), _ontologyFile, getCalcFolder()
+	/*private OWLMetaModel buildOntology() {
+		_ontologyFile = new File(getViewPointDir(), getBaseName() + ".owl");
+		OWLMetaModel newOntology = OWLMetaModel.createNewImportedOntology(getNewViewPointURI(), _ontologyFile, getViewPointFolder()
 				.getOntologyLibrary());
-		for (FlexoOntology importedOntology : importedOntologies) {
+		for (IFlexoOntology importedOntology : importedOntologies) {
 			try {
 				if (importedOntology instanceof OWLOntology) {
 					newOntology.importOntology(importedOntology);
@@ -152,36 +147,33 @@ public class CreateViewPoint extends FlexoAction<CreateViewPoint, ViewPointLibra
 			e.printStackTrace();
 		}
 		return newOntology;
+	}*/
+
+	public String getNewViewPointName() {
+		return _newViewPointName;
 	}
 
-	public String getNewCalcName() {
-		return _newCalcName;
+	public void setNewViewPointName(String newViewPointName) {
+		this._newViewPointName = newViewPointName;
 	}
 
-	public void setNewCalcName(String newCalcName) {
-		this._newCalcName = newCalcName;
+	public String getNewViewPointURI() {
+		return _newViewPointURI;
 	}
 
-	public String getNewCalcURI() {
-		if (StringUtils.isEmpty(_newCalcURI) && getOntologyFile() != null) {
-			return OWLOntology.findOntologyURI(getOntologyFile());
-		}
-		return _newCalcURI;
+	public void setNewViewPointURI(String newViewPointURI) {
+		this._newViewPointURI = newViewPointURI;
 	}
 
-	public void setNewCalcURI(String newCalcURI) {
-		this._newCalcURI = newCalcURI;
+	public String getNewViewPointDescription() {
+		return _newViewPointDescription;
 	}
 
-	public String getNewCalcDescription() {
-		return _newCalcDescription;
+	public void setNewViewPointDescription(String newViewPointDescription) {
+		this._newViewPointDescription = newViewPointDescription;
 	}
 
-	public void setNewCalcDescription(String newCalcDescription) {
-		this._newCalcDescription = newCalcDescription;
-	}
-
-	public File getOntologyFile() {
+	/*	public File getOntologyFile() {
 		return _ontologyFile;
 	}
 
@@ -194,94 +186,73 @@ public class CreateViewPoint extends FlexoAction<CreateViewPoint, ViewPointLibra
 				ontologyName = ontologyFile.getName().substring(0, ontologyFile.getName().length() - 4);
 			}
 			if (StringUtils.isNotEmpty(ontologyURI)) {
-				_newCalcURI = ontologyURI;
+				_newViewPointURI = ontologyURI;
 			}
-			setNewCalcName(ontologyName);
+			setNewViewPointName(ontologyName);
 		}
+		}*/
+
+	public RepositoryFolder getViewPointFolder() {
+		return getFocusedObject();
 	}
 
-	public ViewPointFolder getCalcFolder() {
-		if (_calcFolder == null) {
-			if (getFocusedObject() instanceof ViewPointFolder) {
-				return _calcFolder = (ViewPointFolder) getFocusedObject();
-			} else if (getFocusedObject() instanceof ViewPointLibrary) {
-				return _calcFolder = ((ViewPointLibrary) getFocusedObject()).getRootFolder();
-			}
-			return null;
-		}
-		return _calcFolder;
-	}
-
-	public void setCalcFolder(ViewPointFolder viewPointFolder) {
-		_calcFolder = viewPointFolder;
-	}
-
-	public boolean isNewCalcNameValid() {
-		if (StringUtils.isEmpty(getNewCalcName())) {
+	public boolean isNewViewPointNameValid() {
+		if (StringUtils.isEmpty(getNewViewPointName())) {
 			errorMessage = "please_supply_valid_view_point_name";
 			return false;
 		}
 		return true;
 	}
 
-	public boolean isNewCalcURIValid() {
-		if (StringUtils.isEmpty(getNewCalcURI())) {
+	public boolean isNewViewPointURIValid() {
+		if (StringUtils.isEmpty(getNewViewPointURI())) {
 			errorMessage = "please_supply_valid_uri";
 			return false;
 		}
 		try {
-			new URL(getNewCalcURI());
+			new URL(getNewViewPointURI());
 		} catch (MalformedURLException e) {
 			errorMessage = "malformed_uri";
 			return false;
 		}
-		if (!getNewCalcURI().endsWith(".owl")) {
-			errorMessage = "malformed_uri";
+		if (getViewPointLibrary().getViewPointResource(getNewViewPointURI()) != null) {
+			errorMessage = "already_existing_viewpoint_uri";
 			return false;
 		}
+
 		return true;
 	}
 
 	public String errorMessage;
 
+	@Override
 	public boolean isValid() {
-		if (!isNewCalcNameValid()) {
+		if (!isNewViewPointNameValid()) {
 			return false;
 		}
-		if (!isNewCalcURIValid()) {
+		if (!isNewViewPointURIValid()) {
 			return false;
 		}
-		if (ontologicalScopeChoice == OntologicalScopeChoices.IMPORT_EXISTING_ONTOLOGY) {
+		/*if (ontologicalScopeChoice == OntologicalScopeChoices.IMPORT_EXISTING_ONTOLOGY) {
 			return getOntologyFile() != null;
-		}
+		}*/
 		return true;
 	}
 
 	public ViewPoint getNewViewPoint() {
-		return _newViewPoint;
+		return newViewPoint;
 	}
 
 	private String getBaseName() {
-		return JavaUtils.getClassName(getNewCalcName());
+		return JavaUtils.getClassName(getNewViewPointName());
 	}
 
-	private File getCalcDir() {
+	private File getViewPointDir() {
 		String baseName = getBaseName();
-		return new File(getCalcFolder().getExpectedPath(), baseName + ".viewpoint");
+		if (getFocusedObject().getResourceRepository() instanceof ViewPointRepository) {
+			return new File(getFocusedObject().getFile(), baseName + ".viewpoint");
+		}
+		return null;
 	}
 
-	/*public void createOntology() {
-		createsOntology = true;
-		_ontologyFile = new File(getCalcDir(), getBaseName() + ".owl");
-	}*/
-
-	public void addToImportedOntologies(FlexoOntology ontology) {
-		System.out.println("import ontology " + ontology);
-		importedOntologies.add(ontology);
-	}
-
-	public void removeFromImportedOntologies(FlexoOntology ontology) {
-		System.out.println("remove ontology " + ontology);
-		importedOntologies.remove(ontology);
-	}
 }

@@ -18,7 +18,8 @@ import org.openflexo.builders.utils.FlexoCVSConsoleListener;
 import org.openflexo.foundation.DefaultFlexoEditor;
 import org.openflexo.foundation.FlexoEditor;
 import org.openflexo.foundation.FlexoEditor.FlexoEditorFactory;
-import org.openflexo.foundation.rm.FlexoProject;
+import org.openflexo.foundation.FlexoServiceManager;
+import org.openflexo.foundation.FlexoProject;
 import org.openflexo.foundation.rm.FlexoResourceManager;
 import org.openflexo.foundation.rm.FlexoStorageResource;
 import org.openflexo.foundation.rm.StorageResourceData;
@@ -58,7 +59,7 @@ public class FlexoProjectMergeMain extends FlexoExternalMain {
 
 	public static final String COMMENT_ARGUMENT_PREFIX = "-Comment=";
 
-	protected FlexoEditor EDITOR = new DefaultFlexoEditor(null) {
+	protected FlexoEditor EDITOR = new DefaultFlexoEditor(null, null) {
 		@Override
 		public boolean performResourceScanning() {
 			return false;
@@ -281,7 +282,7 @@ public class FlexoProjectMergeMain extends FlexoExternalMain {
 			editor = FlexoResourceManager.initializeExistingProject(projectCopyDirectory, new FlexoEditorFactory() {
 
 				@Override
-				public FlexoEditor makeFlexoEditor(FlexoProject project) {
+				public FlexoEditor makeFlexoEditor(FlexoProject project, FlexoServiceManager serviceManager) {
 
 					return new FlexoBuilderEditor(null, project);
 				}
@@ -422,7 +423,7 @@ public class FlexoProjectMergeMain extends FlexoExternalMain {
 			editor = FlexoResourceManager.initializeExistingProject(projectCopyDirectory, new FlexoEditorFactory() {
 
 				@Override
-				public FlexoEditor makeFlexoEditor(FlexoProject project) {
+				public FlexoEditor makeFlexoEditor(FlexoProject project, FlexoServiceManager serviceManager) {
 
 					return new FlexoBuilderEditor(null, project);
 				}

@@ -1,4 +1,4 @@
-<inspector title="ImportedModelObject" inspectedClassName="org.openflexo.foundation.FlexoModelObject">
+<inspector title="ImportedModelObject" inspectedClassName="org.openflexo.foundation.FlexoObject">
 	<tab name="Basic" index="1" layout="DEFAULT">
 		<property name="name" label="name" widget="READ_ONLY_TEXT_FIELD" constraint="1"/>
 		<property name="description" label="description" widget="WYSIWYG_ULTRA_LIGHT" constraint="2">

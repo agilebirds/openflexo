@@ -22,9 +22,9 @@ package org.openflexo.foundation.action;
 import java.util.Vector;
 
 import org.openflexo.foundation.FlexoEditor;
-import org.openflexo.foundation.FlexoModelObject;
+import org.openflexo.foundation.FlexoObject;
 
-public class FlexoActionizer<A extends FlexoAction<A, T1, T2>, T1 extends FlexoModelObject, T2 extends FlexoModelObject> {
+public class FlexoActionizer<A extends FlexoAction<A, T1, T2>, T1 extends FlexoObject, T2 extends FlexoObject> {
 	public interface EditorProvider {
 		public FlexoEditor getEditor();
 	}

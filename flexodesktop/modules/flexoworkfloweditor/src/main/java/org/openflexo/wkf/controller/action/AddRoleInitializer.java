@@ -125,10 +125,10 @@ public class AddRoleInitializer extends ActionInitializer<AddRole, WorkflowModel
 					if (moduleView instanceof RoleEditorView) {
 						RoleEditorView drawing = (RoleEditorView) moduleView;
 						if (drawing != null) {
-							ShapeGraphicalRepresentation<?> roleGR = (ShapeGraphicalRepresentation<?>) drawing.getDrawing()
+							ShapeGraphicalRepresentation roleGR = (ShapeGraphicalRepresentation) drawing.getDrawing()
 									.getGraphicalRepresentation(newRole);
 							if (roleGR != null) {
-								final ShapeView<?> view = (ShapeView<?>) drawing.viewForObject(roleGR);
+								final ShapeView<?> view = (ShapeView<?>) drawing.viewForNode(roleGR);
 								SwingUtilities.invokeLater(new Runnable() {
 									@Override
 									public void run() {

@@ -20,19 +20,37 @@
 package org.openflexo.antar.binding;
 
 /**
- * Implemented by all class defining a domain in which bindings take values
+ * Implemented by all classes defining a domain in which bindings take values
  * 
  * @author sguerin
  * 
  */
 public interface Bindable {
 	/**
-	 * Return the Binding model for the current object. Note that this method is invoked during deserialization process meaning that the
-	 * state of your object can be very various.
+	 * Return the Binding model for the current object.
 	 * 
 	 * @return
 	 */
 	public BindingModel getBindingModel();
 
+	/**
+	 * Return the factory used to build bindings related to this bindable
+	 * 
+	 * @return
+	 */
 	public BindingFactory getBindingFactory();
+
+	/**
+	 * Called when supplied data binding changed its value
+	 * 
+	 * @param dataBinding
+	 */
+	public void notifiedBindingChanged(DataBinding<?> dataBinding);
+
+	/**
+	 * Called when supplied data binding has been decoded (syntaxic and semantics analysis performed)
+	 * 
+	 * @param dataBinding
+	 */
+	public void notifiedBindingDecoded(DataBinding<?> dataBinding);
 }

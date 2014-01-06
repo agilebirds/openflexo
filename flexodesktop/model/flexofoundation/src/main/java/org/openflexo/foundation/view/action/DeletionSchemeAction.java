@@ -23,62 +23,62 @@ import java.util.Vector;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 
+import org.openflexo.antar.binding.BindingVariable;
 import org.openflexo.foundation.FlexoEditor;
-import org.openflexo.foundation.FlexoModelObject;
+import org.openflexo.foundation.FlexoObject.FlexoObjectImpl;
 import org.openflexo.foundation.action.FlexoActionType;
 import org.openflexo.foundation.action.InvalidParametersException;
 import org.openflexo.foundation.action.NotImplementedException;
-import org.openflexo.foundation.ontology.EditionPatternInstance;
-import org.openflexo.foundation.rm.DuplicateResourceException;
-import org.openflexo.foundation.view.View;
-import org.openflexo.foundation.view.ViewElement;
-import org.openflexo.foundation.view.ViewObject;
+import org.openflexo.foundation.view.EditionPatternInstance;
+import org.openflexo.foundation.view.VirtualModelInstance;
+import org.openflexo.foundation.view.VirtualModelInstanceObject;
 import org.openflexo.foundation.viewpoint.DeletionScheme;
 import org.openflexo.foundation.viewpoint.EditionScheme;
+import org.openflexo.foundation.viewpoint.binding.PatternRoleBindingVariable;
 
-public class DeletionSchemeAction extends EditionSchemeAction<DeletionSchemeAction> {
+public class DeletionSchemeAction extends EditionSchemeAction<DeletionSchemeAction, DeletionScheme, EditionPatternInstance> {
 
 	private static final Logger logger = Logger.getLogger(DeletionSchemeAction.class.getPackage().getName());
 
-	public static FlexoActionType<DeletionSchemeAction, FlexoModelObject, FlexoModelObject> actionType = new FlexoActionType<DeletionSchemeAction, FlexoModelObject, FlexoModelObject>(
+	public static FlexoActionType<DeletionSchemeAction, EditionPatternInstance, VirtualModelInstanceObject> actionType = new FlexoActionType<DeletionSchemeAction, EditionPatternInstance, VirtualModelInstanceObject>(
 			"delete_edition_pattern_instance", FlexoActionType.editGroup, FlexoActionType.DELETE_ACTION_TYPE) {
 
 		/**
 		 * Factory method
 		 */
 		@Override
-		public DeletionSchemeAction makeNewAction(FlexoModelObject focusedObject, Vector<FlexoModelObject> globalSelection,
+		public DeletionSchemeAction makeNewAction(EditionPatternInstance focusedObject, Vector<VirtualModelInstanceObject> globalSelection,
 				FlexoEditor editor) {
 			return new DeletionSchemeAction(focusedObject, globalSelection, editor);
 		}
 
 		@Override
-		public boolean isVisibleForSelection(FlexoModelObject object, Vector<FlexoModelObject> globalSelection) {
+		public boolean isVisibleForSelection(EditionPatternInstance object, Vector<VirtualModelInstanceObject> globalSelection) {
 			return false;
 		}
 
 		@Override
-		public boolean isEnabledForSelection(FlexoModelObject object, Vector<FlexoModelObject> globalSelection) {
+		public boolean isEnabledForSelection(EditionPatternInstance object, Vector<VirtualModelInstanceObject> globalSelection) {
 			return true;
 		}
 
 	};
 
 	static {
-		FlexoModelObject.addActionForClass(actionType, ViewObject.class);
+		FlexoObjectImpl.addActionForClass(actionType, EditionPatternInstance.class);
 	}
 
-	private View _view;
+	private VirtualModelInstance vmInstance;
 	private DeletionScheme deletionScheme;
 
-	DeletionSchemeAction(FlexoModelObject focusedObject, Vector<FlexoModelObject> globalSelection, FlexoEditor editor) {
+	DeletionSchemeAction(EditionPatternInstance focusedObject, Vector<VirtualModelInstanceObject> globalSelection, FlexoEditor editor) {
 		super(actionType, focusedObject, globalSelection, editor);
 	}
 
-	private EditionPatternInstance editionPatternInstanceToDelete;
+	// private EditionPatternInstance editionPatternInstanceToDelete;
 
 	@Override
-	protected void doAction(Object context) throws DuplicateResourceException, NotImplementedException, InvalidParametersException {
+	protected void doAction(Object context) throws NotImplementedException, InvalidParametersException {
 		if (logger.isLoggable(Level.FINE)) {
 			logger.fine("Delete EditionPatternInstance using DeletionScheme");
 			logger.fine("getDeletionScheme()=" + getDeletionScheme());
@@ -88,17 +88,29 @@ public class DeletionSchemeAction extends EditionSchemeAction<DeletionSchemeActi
 
 	}
 
-	public View getView() {
-		if (_view == null) {
-			if (getFocusedObject() instanceof View) {
-				_view = (View) getFocusedObject();
-			}
-		}
-		return _view;
+	/**
+	 * Return the {@link EditionPatternInstance} on which this {@link EditionScheme} is applied.<br>
+	 * This is this instance that will be deleted.
+	 * 
+	 * @return
+	 */
+	@Override
+	public final EditionPatternInstance getEditionPatternInstance() {
+		return getFocusedObject();
 	}
 
-	public void setView(View view) {
-		_view = view;
+	@Override
+	public VirtualModelInstance getVirtualModelInstance() {
+		if (vmInstance == null) {
+			if (getFocusedObject() instanceof VirtualModelInstance) {
+				vmInstance = (VirtualModelInstance) getFocusedObject();
+			}
+		}
+		return vmInstance;
+	}
+
+	public void setVirtualModelInstance(VirtualModelInstance vmInstance) {
+		this.vmInstance = vmInstance;
 	}
 
 	public DeletionScheme getDeletionScheme() {
@@ -110,29 +122,48 @@ public class DeletionSchemeAction extends EditionSchemeAction<DeletionSchemeActi
 	}
 
 	@Override
-	public EditionScheme getEditionScheme() {
+	public DeletionScheme getEditionScheme() {
 		return getDeletionScheme();
 	}
 
-	@Override
+	/*@Override
 	public EditionPatternInstance getEditionPatternInstance() {
 		return getEditionPatternInstanceToDelete();
 	}
 
 	public EditionPatternInstance getEditionPatternInstanceToDelete() {
-		if (editionPatternInstanceToDelete == null && getFocusedObject() instanceof ViewElement) {
-			editionPatternInstanceToDelete = ((ViewElement) getFocusedObject()).getEditionPatternInstance();
+		if (editionPatternInstanceToDelete == null && getFocusedObject() instanceof DiagramElement) {
+			editionPatternInstanceToDelete = ((DiagramElement) getFocusedObject()).getEditionPatternInstance();
 		}
 		return editionPatternInstanceToDelete;
 	}
 
 	public void setEditionPatternInstanceToDelete(EditionPatternInstance editionPatternInstanceToDelete) {
 		this.editionPatternInstanceToDelete = editionPatternInstanceToDelete;
+	}*/
+
+	@Override
+	public VirtualModelInstance retrieveVirtualModelInstance() {
+		return getVirtualModelInstance();
 	}
 
 	@Override
-	protected View retrieveOEShema() {
-		return getView();
+	public Object getValue(BindingVariable variable) {
+		if (variable instanceof PatternRoleBindingVariable) {
+			return getEditionPatternInstance().getPatternActor(((PatternRoleBindingVariable) variable).getPatternRole());
+		} else if (variable.getVariableName().equals(EditionScheme.THIS)) {
+			return getEditionPatternInstance();
+		}
+		return super.getValue(variable);
+	}
+
+	@Override
+	public void setValue(Object value, BindingVariable variable) {
+		if (variable instanceof PatternRoleBindingVariable) {
+			getEditionPatternInstance().setPatternActor(value, ((PatternRoleBindingVariable) variable).getPatternRole());
+			return;
+		}
+		super.setValue(value, variable);
 	}
 
 }

@@ -24,7 +24,7 @@ import java.util.Vector;
 import java.util.logging.Logger;
 
 import org.openflexo.foundation.FlexoEditor;
-import org.openflexo.foundation.FlexoModelObject;
+import org.openflexo.foundation.FlexoObject;
 import org.openflexo.foundation.action.FlexoActionType;
 import org.openflexo.fps.CVSAbstractFile;
 import org.openflexo.fps.CVSAbstractFile.UpdateListener;
@@ -57,7 +57,7 @@ public class MarkAsMergedFiles extends MultipleFileCVSAction<MarkAsMergedFiles> 
 	};
 
 	static {
-		FlexoModelObject.addActionForClass(MarkAsMergedFiles.actionType, CVSAbstractFile.class);
+		FlexoObject.addActionForClass(MarkAsMergedFiles.actionType, CVSAbstractFile.class);
 	}
 
 	MarkAsMergedFiles(FPSObject focusedObject, Vector<FPSObject> globalSelection, FlexoEditor editor) {

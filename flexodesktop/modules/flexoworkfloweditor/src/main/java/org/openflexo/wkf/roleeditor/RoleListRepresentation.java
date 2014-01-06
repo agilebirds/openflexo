@@ -21,9 +21,9 @@ package org.openflexo.wkf.roleeditor;
 
 import java.util.logging.Logger;
 
-import org.openflexo.fge.DefaultDrawing;
 import org.openflexo.fge.DrawingGraphicalRepresentation;
 import org.openflexo.fge.GraphicalRepresentation;
+import org.openflexo.fge.impl.DrawingImpl;
 import org.openflexo.foundation.DataModification;
 import org.openflexo.foundation.FlexoEditor;
 import org.openflexo.foundation.FlexoObservable;
@@ -35,7 +35,7 @@ import org.openflexo.foundation.wkf.dm.RoleInserted;
 import org.openflexo.foundation.wkf.dm.RoleRemoved;
 import org.openflexo.wkf.controller.WKFController;
 
-public class RoleListRepresentation extends DefaultDrawing<RoleList> implements GraphicalFlexoObserver {
+public class RoleListRepresentation extends DrawingImpl<RoleList> implements GraphicalFlexoObserver {
 
 	private static final Logger logger = Logger.getLogger(RoleListRepresentation.class.getPackage().getName());
 
@@ -88,11 +88,11 @@ public class RoleListRepresentation extends DefaultDrawing<RoleList> implements 
 
 	@SuppressWarnings("unchecked")
 	@Override
-	public <O> GraphicalRepresentation<O> retrieveGraphicalRepresentation(O aDrawable) {
-		return (GraphicalRepresentation<O>) buildGraphicalRepresentation(aDrawable);
+	public <O> GraphicalRepresentation retrieveGraphicalRepresentation(O aDrawable) {
+		return (GraphicalRepresentation) buildGraphicalRepresentation(aDrawable);
 	}
 
-	private GraphicalRepresentation<?> buildGraphicalRepresentation(Object aDrawable) {
+	private GraphicalRepresentation buildGraphicalRepresentation(Object aDrawable) {
 		if (aDrawable instanceof Role) {
 			return new RoleGR((Role) aDrawable, this);
 		}

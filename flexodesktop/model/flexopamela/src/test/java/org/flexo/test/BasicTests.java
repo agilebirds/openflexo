@@ -508,12 +508,12 @@ public class BasicTests extends AbstractPAMELATest {
 
 		Clipboard clipboard = factory.copy(activityNode);
 		System.out.println("Clipboard 1");
-		System.out.println(debug(clipboard.getContents()));
+		System.out.println(debug(clipboard.getSingleContents()));
 		assertTrue(clipboard.isSingleObject());
-		assertTrue(clipboard.getContents() instanceof ActivityNode);
-		assertEquals("MyActivity", ((ActivityNode) clipboard.getContents()).getName());
-		assertEquals(0, ((ActivityNode) clipboard.getContents()).getIncomingEdges().size());
-		assertEquals(0, ((ActivityNode) clipboard.getContents()).getOutgoingEdges().size());
+		assertTrue(clipboard.getSingleContents() instanceof ActivityNode);
+		assertEquals("MyActivity", ((ActivityNode) clipboard.getSingleContents()).getName());
+		assertEquals(0, ((ActivityNode) clipboard.getSingleContents()).getIncomingEdges().size());
+		assertEquals(0, ((ActivityNode) clipboard.getSingleContents()).getOutgoingEdges().size());
 
 		Object pasted = factory.paste(clipboard, process);
 		assertNotNull(pasted);
@@ -560,14 +560,14 @@ public class BasicTests extends AbstractPAMELATest {
 
 		Clipboard clipboard = factory.copy(startNode, activityNode);
 		System.out.println("Clipboard");
-		System.out.println(debug(clipboard.getContents()));
+		System.out.println(debug(clipboard.getMultipleContents()));
 		assertFalse(clipboard.isSingleObject());
-		assertTrue(clipboard.getContents() instanceof List);
-		assertEquals(2, ((List) clipboard.getContents()).size());
-		assertTrue(((List) clipboard.getContents()).get(0) instanceof StartNode);
-		assertTrue(((List) clipboard.getContents()).get(1) instanceof ActivityNode);
-		StartNode copiedStartNode = (StartNode) ((List) clipboard.getContents()).get(0);
-		ActivityNode copiedActivityNode = (ActivityNode) ((List) clipboard.getContents()).get(1);
+		assertTrue(clipboard.getMultipleContents() instanceof List);
+		assertEquals(2, (clipboard.getMultipleContents()).size());
+		assertTrue(clipboard.getMultipleContents().get(0) instanceof StartNode);
+		assertTrue(clipboard.getMultipleContents().get(1) instanceof ActivityNode);
+		StartNode copiedStartNode = (StartNode) clipboard.getMultipleContents().get(0);
+		ActivityNode copiedActivityNode = (ActivityNode) clipboard.getMultipleContents().get(1);
 		assertEquals("Start", copiedStartNode.getName());
 		assertEquals("MyActivity", copiedActivityNode.getName());
 		assertEquals(0, copiedStartNode.getIncomingEdges().size());
@@ -669,7 +669,13 @@ public class BasicTests extends AbstractPAMELATest {
 		EndNode endNode = factory.newInstance(EndNode.class, "End");
 		process.addToNodes(endNode);
 		TokenEdge edge1 = factory.newInstance(TokenEdge.class, "edge1", startNode, activityNode);
-		startNode.delete();
+		System.out.println("Deleting " + startNode);
+		try {
+			startNode.delete();
+		} catch (Throwable t) {
+			t.printStackTrace();
+			System.exit(-1);
+		}
 		assertTrue(startNode.isDeleted());
 		assertFalse(edge1.isDeleted());
 		activityNode.delete();

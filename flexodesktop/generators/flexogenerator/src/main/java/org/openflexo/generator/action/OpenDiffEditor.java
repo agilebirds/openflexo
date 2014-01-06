@@ -56,7 +56,7 @@ public class OpenDiffEditor extends FlexoGUIAction<OpenDiffEditor, CGFile, CGObj
 	};
 
 	static {
-		FlexoModelObject.addActionForClass(OpenDiffEditor.actionType, CGFile.class);
+		TestModelObject.addActionForClass(OpenDiffEditor.actionType, CGFile.class);
 	}
 
 	OpenDiffEditor(CGFile focusedObject, Vector<CGObject> globalSelection, FlexoEditor editor) {

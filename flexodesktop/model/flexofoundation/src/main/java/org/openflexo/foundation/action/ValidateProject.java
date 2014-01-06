@@ -22,56 +22,51 @@ package org.openflexo.foundation.action;
 import java.util.Vector;
 import java.util.logging.Logger;
 
-import org.openflexo.foundation.CodeType;
 import org.openflexo.foundation.DataModification;
 import org.openflexo.foundation.FlexoEditor;
-import org.openflexo.foundation.FlexoModelObject;
 import org.openflexo.foundation.FlexoObservable;
 import org.openflexo.foundation.FlexoObserver;
-import org.openflexo.foundation.dkv.DKVValidationModel;
-import org.openflexo.foundation.dm.DMValidationModel;
-import org.openflexo.foundation.ie.IEValidationModel;
-import org.openflexo.foundation.rm.FlexoProject;
+import org.openflexo.foundation.FlexoProject;
+import org.openflexo.foundation.FlexoProjectObject;
 import org.openflexo.foundation.validation.ValidationFinishedNotification;
 import org.openflexo.foundation.validation.ValidationInitNotification;
 import org.openflexo.foundation.validation.ValidationNotification;
 import org.openflexo.foundation.validation.ValidationProgressNotification;
 import org.openflexo.foundation.validation.ValidationReport;
-import org.openflexo.foundation.wkf.WKFValidationModel;
 import org.openflexo.localization.FlexoLocalization;
 
-public class ValidateProject extends FlexoAction<ValidateProject, FlexoModelObject, FlexoModelObject> {
+public class ValidateProject extends FlexoAction<ValidateProject, FlexoProjectObject, FlexoProjectObject> {
 
 	static final Logger logger = Logger.getLogger(ValidateProject.class.getPackage().getName());
 
-	public static FlexoActionType<ValidateProject, FlexoModelObject, FlexoModelObject> actionType = new FlexoActionType<ValidateProject, FlexoModelObject, FlexoModelObject>(
+	public static FlexoActionType<ValidateProject, FlexoProjectObject, FlexoProjectObject> actionType = new FlexoActionType<ValidateProject, FlexoProjectObject, FlexoProjectObject>(
 			"validate_project") {
 
 		/**
 		 * Factory method
 		 */
 		@Override
-		public ValidateProject makeNewAction(FlexoModelObject object, Vector<FlexoModelObject> globalSelection, FlexoEditor editor) {
+		public ValidateProject makeNewAction(FlexoProjectObject object, Vector<FlexoProjectObject> globalSelection, FlexoEditor editor) {
 			return new ValidateProject(object, globalSelection, editor);
 		}
 
 		@Override
-		public boolean isVisibleForSelection(FlexoModelObject focusedObject, Vector<FlexoModelObject> globalSelection) {
+		public boolean isVisibleForSelection(FlexoProjectObject focusedObject, Vector<FlexoProjectObject> globalSelection) {
 			return true;
 		}
 
 		@Override
-		public boolean isEnabledForSelection(FlexoModelObject focusedObject, Vector<FlexoModelObject> globalSelection) {
+		public boolean isEnabledForSelection(FlexoProjectObject focusedObject, Vector<FlexoProjectObject> globalSelection) {
 			return true;
 		}
 
 	};
 
 	static {
-		FlexoModelObject.addActionForClass(ValidateProject.actionType, FlexoProject.class);
+		// FlexoObject.addActionForClass(ValidateProject.actionType, FlexoProject.class);
 	}
 
-	ValidateProject(FlexoModelObject focusedObject, Vector<FlexoModelObject> globalSelection, FlexoEditor editor) {
+	ValidateProject(FlexoProjectObject focusedObject, Vector<FlexoProjectObject> globalSelection, FlexoEditor editor) {
 		super(actionType, focusedObject, globalSelection, editor);
 	}
 
@@ -85,7 +80,7 @@ public class ValidateProject extends FlexoAction<ValidateProject, FlexoModelObje
 		makeFlexoProgress(FlexoLocalization.localizedForKey("check_model_consistency"), 5);
 		setProgress(FlexoLocalization.localizedForKey("loading_required_resources"));
 
-		if (getProject().getFlexoComponentLibrary(false) != null) {
+		/*if (getProject().getFlexoComponentLibrary(false) != null) {
 			// We validate the component library model
 			IEValidationModel ieValidationModel = new IEValidationModel(getProject(), CodeType.PROTOTYPE);
 			ieValidationModel.addObserver(ieValidationObserver);
@@ -111,7 +106,7 @@ public class ValidateProject extends FlexoAction<ValidateProject, FlexoModelObje
 			dmValidationModel.addObserver(dmValidationObserver);
 			dmValidationReport = getProject().getDataModel().validate(dmValidationModel);
 			dmValidationModel.deleteObserver(dmValidationObserver);
-		}
+		}*/
 		hideFlexoProgress();
 	}
 
@@ -141,7 +136,7 @@ public class ValidateProject extends FlexoAction<ValidateProject, FlexoModelObje
 		return errorsNb;
 	}
 
-	private FlexoObserver ieValidationObserver = new FlexoObserver() {
+	private final FlexoObserver ieValidationObserver = new FlexoObserver() {
 		@Override
 		public void update(FlexoObservable observable, DataModification dataModification) {
 			if (dataModification instanceof ValidationNotification) {
@@ -153,7 +148,7 @@ public class ValidateProject extends FlexoAction<ValidateProject, FlexoModelObje
 				} else if (dataModification instanceof ValidationProgressNotification) {
 					ValidationProgressNotification progressNotification = (ValidationProgressNotification) dataModification;
 					setSecondaryProgress(FlexoLocalization.localizedForKey("validating") + " "
-							+ progressNotification.getValidatedObject().getFullyQualifiedName());
+							+ progressNotification.getValidatedObject().toString());
 				}
 			} else if (dataModification instanceof ValidationFinishedNotification) {
 				// Nothing
@@ -161,7 +156,7 @@ public class ValidateProject extends FlexoAction<ValidateProject, FlexoModelObje
 		}
 	};
 
-	private FlexoObserver wkfValidationObserver = new FlexoObserver() {
+	private final FlexoObserver wkfValidationObserver = new FlexoObserver() {
 		@Override
 		public void update(FlexoObservable observable, DataModification dataModification) {
 			if (dataModification instanceof ValidationNotification) {
@@ -173,7 +168,7 @@ public class ValidateProject extends FlexoAction<ValidateProject, FlexoModelObje
 				} else if (dataModification instanceof ValidationProgressNotification) {
 					ValidationProgressNotification progressNotification = (ValidationProgressNotification) dataModification;
 					setSecondaryProgress(FlexoLocalization.localizedForKey("validating") + " "
-							+ progressNotification.getValidatedObject().getFullyQualifiedName());
+							+ progressNotification.getValidatedObject().toString());
 				} else if (dataModification instanceof ValidationFinishedNotification) {
 					// Nothing
 				}
@@ -182,7 +177,7 @@ public class ValidateProject extends FlexoAction<ValidateProject, FlexoModelObje
 		}
 	};
 
-	private FlexoObserver dkvValidationObserver = new FlexoObserver() {
+	private final FlexoObserver dkvValidationObserver = new FlexoObserver() {
 		@Override
 		public void update(FlexoObservable observable, DataModification dataModification) {
 			if (dataModification instanceof ValidationNotification) {
@@ -194,7 +189,7 @@ public class ValidateProject extends FlexoAction<ValidateProject, FlexoModelObje
 				} else if (dataModification instanceof ValidationProgressNotification) {
 					ValidationProgressNotification progressNotification = (ValidationProgressNotification) dataModification;
 					setSecondaryProgress(FlexoLocalization.localizedForKey("validating") + " "
-							+ progressNotification.getValidatedObject().getFullyQualifiedName());
+							+ progressNotification.getValidatedObject().toString());
 				} else if (dataModification instanceof ValidationFinishedNotification) {
 					// Nothing
 				}
@@ -203,7 +198,7 @@ public class ValidateProject extends FlexoAction<ValidateProject, FlexoModelObje
 		}
 	};
 
-	private FlexoObserver dmValidationObserver = new FlexoObserver() {
+	private final FlexoObserver dmValidationObserver = new FlexoObserver() {
 		@Override
 		public void update(FlexoObservable observable, DataModification dataModification) {
 			if (dataModification instanceof ValidationNotification) {
@@ -215,7 +210,7 @@ public class ValidateProject extends FlexoAction<ValidateProject, FlexoModelObje
 				} else if (dataModification instanceof ValidationProgressNotification) {
 					ValidationProgressNotification progressNotification = (ValidationProgressNotification) dataModification;
 					setSecondaryProgress(FlexoLocalization.localizedForKey("validating") + " "
-							+ progressNotification.getValidatedObject().getFullyQualifiedName());
+							+ progressNotification.getValidatedObject().toString());
 				} else if (dataModification instanceof ValidationFinishedNotification) {
 					// Nothing
 				}

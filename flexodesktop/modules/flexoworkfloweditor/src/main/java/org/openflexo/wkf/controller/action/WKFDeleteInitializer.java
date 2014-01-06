@@ -32,13 +32,14 @@ import org.openflexo.FlexoCst;
 import org.openflexo.components.AskParametersDialog;
 import org.openflexo.foundation.FlexoEditor;
 import org.openflexo.foundation.FlexoModelObject;
+import org.openflexo.foundation.FlexoObject;
 import org.openflexo.foundation.action.FlexoActionEnableCondition;
 import org.openflexo.foundation.action.FlexoActionFinalizer;
 import org.openflexo.foundation.action.FlexoActionInitializer;
 import org.openflexo.foundation.action.FlexoActionType;
 import org.openflexo.foundation.param.CheckboxListParameter;
 import org.openflexo.foundation.toc.TOCEntry;
-import org.openflexo.foundation.utils.FlexoModelObjectReference;
+import org.openflexo.foundation.utils.FlexoObjectReference;
 import org.openflexo.foundation.wkf.FlexoProcess;
 import org.openflexo.foundation.wkf.WKFObject;
 import org.openflexo.foundation.wkf.action.WKFDelete;
@@ -174,11 +175,11 @@ public class WKFDeleteInitializer extends ActionInitializer {
 					}
 				}
 				if (doIt) {
-					Vector<FlexoModelObject> objects = action.getGlobalSelectionAndFocusedObject();
+					Vector<FlexoObject> objects = action.getGlobalSelectionAndFocusedObject();
 					Vector<TOCEntry> tocEntries = new Vector<TOCEntry>();
-					for (FlexoModelObject object : objects) {
-						if (!object.isDeleted()) {
-							for (FlexoModelObjectReference<?> ref : object.getReferencers()) {
+					for (FlexoObject object : objects) {
+						if (!object.isDeleted() && object instanceof FlexoModelObject) {
+							for (FlexoObjectReference<?> ref : ((FlexoModelObject) object).getReferencers()) {
 								if (ref.getOwner() instanceof TOCEntry) {
 									tocEntries.add((TOCEntry) ref.getOwner());
 								}

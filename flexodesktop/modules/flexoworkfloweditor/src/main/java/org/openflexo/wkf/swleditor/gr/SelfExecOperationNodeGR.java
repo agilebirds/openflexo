@@ -22,15 +22,15 @@ package org.openflexo.wkf.swleditor.gr;
 import java.awt.Color;
 import java.util.logging.Logger;
 
+import org.openflexo.fge.BackgroundImageBackgroundStyle;
+import org.openflexo.fge.BackgroundStyle;
+import org.openflexo.fge.ForegroundStyle;
 import org.openflexo.fge.GraphicalRepresentation;
 import org.openflexo.fge.controller.CustomClickControlAction;
 import org.openflexo.fge.controller.DrawingController;
 import org.openflexo.fge.controller.MouseClickControl;
-import org.openflexo.fge.graphics.BackgroundStyle;
-import org.openflexo.fge.graphics.BackgroundStyle.BackgroundImage;
-import org.openflexo.fge.graphics.ForegroundStyle;
 import org.openflexo.fge.shapes.Circle;
-import org.openflexo.fge.shapes.Shape.ShapeType;
+import org.openflexo.fge.shapes.ShapeSpecification.ShapeType;
 import org.openflexo.foundation.wkf.action.OpenExecutionPetriGraph;
 import org.openflexo.foundation.wkf.node.SelfExecutableOperationNode;
 import org.openflexo.icon.WKFIconLibrary;
@@ -42,7 +42,7 @@ public class SelfExecOperationNodeGR extends AbstractOperationNodeGR {
 	private static final Logger logger = Logger.getLogger(SelfExecOperationNodeGR.class.getPackage().getName());
 
 	private final ForegroundStyle foreground;
-	private final BackgroundImage background;
+	private final BackgroundImageBackgroundStyle background;
 
 	public SelfExecOperationNodeGR(SelfExecutableOperationNode operationNode, SwimmingLaneRepresentation aDrawing, boolean isInPalet) {
 		super(operationNode, ShapeType.CIRCLE, aDrawing, isInPalet);
@@ -76,7 +76,7 @@ public class SelfExecOperationNodeGR extends AbstractOperationNodeGR {
 
 	@Override
 	public Circle getShape() {
-		return (Circle) super.getShape();
+		return (Circle) super.getShapeSpecification();
 	}
 
 	public class ExecutionPetriGraphOpener extends MouseClickControl {
@@ -84,7 +84,7 @@ public class SelfExecOperationNodeGR extends AbstractOperationNodeGR {
 		public ExecutionPetriGraphOpener() {
 			super("ExecutionPetriGraphOpener", MouseButton.LEFT, 2, new CustomClickControlAction() {
 				@Override
-				public boolean handleClick(GraphicalRepresentation<?> graphicalRepresentation, DrawingController<?> controller,
+				public boolean handleClick(GraphicalRepresentation graphicalRepresentation, DrawingController controller,
 						java.awt.event.MouseEvent event) {
 					logger.info("Opening Execution petri graph by double-clicking");
 					OpenExecutionPetriGraph.actionType.makeNewAction(getOperationNode(), null, getDrawing().getEditor()).doAction();

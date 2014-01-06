@@ -42,7 +42,9 @@ import org.openflexo.localization.FlexoLocalization;
  */
 public class PreferencesWindow extends JFrame {
 
-	public PreferencesWindow() {
+	private PreferencesService service;
+
+	public PreferencesWindow(PreferencesService service) {
 		super();
 		getContentPane().setLayout(new BorderLayout());
 		setSize(PREFERENCES_WINDOW_WIDTH, PREFERENCES_WINDOW_HEIGHT);
@@ -96,7 +98,7 @@ public class PreferencesWindow extends JFrame {
 		_saveButton.addActionListener(new ActionListener() {
 			@Override
 			public void actionPerformed(ActionEvent e) {
-				FlexoPreferences.savePreferences(true);
+				service.savePreferences();
 				_saveButton.setEnabled(false);
 				_revertButton.setEnabled(false);
 				setVisible(false);
@@ -107,7 +109,7 @@ public class PreferencesWindow extends JFrame {
 		_revertButton.addActionListener(new ActionListener() {
 			@Override
 			public void actionPerformed(ActionEvent e) {
-				FlexoPreferences.revertToSaved();
+				service.revertToSaved();
 				_saveButton.setEnabled(false);
 				_revertButton.setEnabled(false);
 				setVisible(false);

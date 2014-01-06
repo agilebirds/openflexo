@@ -21,11 +21,11 @@ package org.openflexo.wkf.swleditor.gr;
 
 import java.util.logging.Logger;
 
-import org.openflexo.fge.graphics.BackgroundStyle;
-import org.openflexo.fge.graphics.BackgroundStyle.ColorGradient.ColorGradientDirection;
-import org.openflexo.fge.graphics.ForegroundStyle;
+import org.openflexo.fge.BackgroundStyle;
+import org.openflexo.fge.ForegroundStyle;
+import org.openflexo.fge.ColorGradientBackgroundStyle.ColorGradientDirection;
 import org.openflexo.fge.shapes.Rectangle;
-import org.openflexo.fge.shapes.Shape.ShapeType;
+import org.openflexo.fge.shapes.ShapeSpecification.ShapeType;
 import org.openflexo.foundation.wkf.node.AbstractActivityNode;
 import org.openflexo.wkf.WKFCst;
 import org.openflexo.wkf.swleditor.SwimmingLaneRepresentation;
@@ -62,7 +62,7 @@ public class NormalAbstractActivityNodeGR<O extends AbstractActivityNode> extend
 
 	@Override
 	public Rectangle getShape() {
-		return (Rectangle) super.getShape();
+		return (Rectangle) super.getShapeSpecification();
 	}
 
 	@Override

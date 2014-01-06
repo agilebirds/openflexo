@@ -38,6 +38,21 @@ import org.openflexo.view.controller.FlexoController;
 public class GeneratorModule extends FlexoModule implements ExternalGeneratorModule {
 
 	private static final Logger logger = Logger.getLogger(GeneratorModule.class.getPackage().getName());
+
+	public static final String GENERATOR_MODULE_SHORT_NAME = "CG";
+
+	public static final String GENERATOR_MODULE_NAME = "code_generator";
+
+	protected static class CodeGenerator extends Module {
+
+		public CodeGenerator() {
+			super(GENERATOR_MODULE_NAME, GENERATOR_MODULE_SHORT_NAME, "org.openflexo.cgmodule.GeneratorModule",
+					"modules/flexocodegenerator", "10002", "cg", CGIconLibrary.CG_SMALL_ICON, CGIconLibrary.CG_MEDIUM_ICON,
+					CGIconLibrary.CG_MEDIUM_ICON_WITH_HOVER, CGIconLibrary.CG_BIG_ICON, true);
+		}
+
+	}
+
 	private static final InspectorGroup[] inspectorGroups = new InspectorGroup[] { Inspectors.GENERATORS, Inspectors.CG };
 
 	public GeneratorModule(ApplicationContext applicationContext) throws Exception {

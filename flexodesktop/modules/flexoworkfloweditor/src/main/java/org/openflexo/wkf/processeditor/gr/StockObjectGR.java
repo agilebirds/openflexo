@@ -22,7 +22,7 @@ package org.openflexo.wkf.processeditor.gr;
 import java.util.logging.Logger;
 
 import org.openflexo.fge.geom.FGESteppedDimensionConstraint;
-import org.openflexo.fge.shapes.Shape.ShapeType;
+import org.openflexo.fge.shapes.ShapeSpecification.ShapeType;
 import org.openflexo.foundation.wkf.WKFStockObject;
 import org.openflexo.wkf.grsetup.StockObjectGRSetup;
 import org.openflexo.wkf.processeditor.ProcessRepresentation;
@@ -86,8 +86,8 @@ public class StockObjectGR extends ArtefactGR<WKFStockObject> {
 			FGESteppedDimensionConstraint constraint = getDrawing().getDrawingGraphicalRepresentation().getDimensionConstraintsForObject(
 					this);
 			if (constraint != null) {
-				return new FGESteppedDimensionConstraint(constraint.getHorizontalStep() / getShape().getShape().getEmbeddingBounds().width,
-						constraint.getVerticalStep() / getShape().getShape().getEmbeddingBounds().height);
+				return new FGESteppedDimensionConstraint(constraint.getHorizontalStep() / getShapeSpecification().getShapeSpecification().getEmbeddingBounds().width,
+						constraint.getVerticalStep() / getShapeSpecification().getShapeSpecification().getEmbeddingBounds().height);
 			}
 			return constraint;
 		}

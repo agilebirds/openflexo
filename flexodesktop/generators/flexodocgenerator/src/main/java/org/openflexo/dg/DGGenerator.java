@@ -51,7 +51,7 @@ import org.openflexo.foundation.ie.cl.PopupComponentDefinition;
 import org.openflexo.foundation.ie.cl.TabComponentDefinition;
 import org.openflexo.foundation.ie.menu.FlexoNavigationMenu;
 import org.openflexo.foundation.rm.FlexoCopiedResource;
-import org.openflexo.foundation.rm.FlexoProject;
+import org.openflexo.foundation.FlexoProject;
 import org.openflexo.foundation.rm.GeneratedResourceData;
 import org.openflexo.foundation.rm.cg.CGRepositoryFileResource;
 import org.openflexo.foundation.toc.TOCEntry;

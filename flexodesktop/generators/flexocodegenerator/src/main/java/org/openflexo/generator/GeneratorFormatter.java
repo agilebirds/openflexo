@@ -26,7 +26,7 @@ import java.util.logging.Logger;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
-import org.openflexo.foundation.rm.FlexoProject;
+import org.openflexo.foundation.FlexoProject;
 import org.openflexo.generator.exception.JavaFormattingException;
 import org.openflexo.logging.FlexoLogger;
 import org.openflexo.toolbox.StringUtils;

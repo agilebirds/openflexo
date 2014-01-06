@@ -45,22 +45,18 @@ import javax.swing.SwingUtilities;
 import javax.swing.WindowConstants;
 
 import org.openflexo.FlexoCst;
-import org.openflexo.GeneralPreferences;
-import org.openflexo.ch.FCH;
 import org.openflexo.components.ProgressWindow;
 import org.openflexo.foundation.DataModification;
 import org.openflexo.foundation.FlexoEditor;
-import org.openflexo.foundation.FlexoModelObject;
+import org.openflexo.foundation.FlexoObject;
 import org.openflexo.foundation.FlexoObservable;
 import org.openflexo.foundation.GraphicalFlexoObserver;
 import org.openflexo.foundation.NameChanged;
 import org.openflexo.foundation.action.FlexoActionSource;
-import org.openflexo.foundation.rm.ResourceStatusModification;
 import org.openflexo.icon.IconLibrary;
 import org.openflexo.module.FlexoModule;
 import org.openflexo.module.ModuleLoader;
 import org.openflexo.module.ModuleLoadingException;
-import org.openflexo.prefs.FlexoPreferences;
 import org.openflexo.toolbox.ToolBox;
 import org.openflexo.view.controller.FlexoController;
 import org.openflexo.view.controller.model.ControllerModel;
@@ -206,7 +202,8 @@ public final class FlexoFrame extends JFrame implements GraphicalFlexoObserver, 
 		_controller = controller;
 		_relativeWindows = new Vector<FlexoRelativeWindow>();
 		_displayedRelativeWindows = new Vector<FlexoRelativeWindow>();
-		Rectangle bounds = GeneralPreferences.getBoundForFrameWithID(getController().getModule().getShortName() + "Frame");
+		Rectangle bounds = getController().getApplicationContext().getGeneralPreferences()
+				.getBoundForFrameWithID(getController().getModule().getShortName() + "Frame");
 		if (bounds != null) {
 			// In case we remove a screen (if you go from 3 to 2 screen, go to hell, that's all you deserve ;-))
 			if (GraphicsEnvironment.getLocalGraphicsEnvironment().getScreenDevices().length == 1) {
@@ -222,10 +219,12 @@ public final class FlexoFrame extends JFrame implements GraphicalFlexoObserver, 
 			setSize(3 * Toolkit.getDefaultToolkit().getScreenSize().width / 4, 3 * Toolkit.getDefaultToolkit().getScreenSize().height / 4);
 			setLocationByPlatform(true);
 		}
-		int state = GeneralPreferences.getFrameStateForFrameWithID(getController().getModule().getShortName() + "Frame");
+		int state = getController().getApplicationContext().getGeneralPreferences()
+				.getFrameStateForFrameWithID(getController().getModule().getShortName() + "Frame");
 		if (state != -1
 				&& ((state & Frame.MAXIMIZED_BOTH) == Frame.MAXIMIZED_BOTH || (state & Frame.MAXIMIZED_HORIZ) == Frame.MAXIMIZED_HORIZ || (state & Frame.MAXIMIZED_VERT) == Frame.MAXIMIZED_VERT)) {
-			setExtendedState(GeneralPreferences.getFrameStateForFrameWithID(getController().getModule().getShortName() + "Frame"));
+			setExtendedState(getController().getApplicationContext().getGeneralPreferences()
+					.getFrameStateForFrameWithID(getController().getModule().getShortName() + "Frame"));
 		}
 		_controller.getControllerModel().getPropertyChangeSupport().addPropertyChangeListener(ControllerModel.CURRENT_EDITOR, this);
 		if (defaultFrame != null) {
@@ -381,9 +380,9 @@ public final class FlexoFrame extends JFrame implements GraphicalFlexoObserver, 
 		} else if ("projectDirectory".equals(dataModification.propertyName())) {
 			updateTitle();
 		}
-		if (ToolBox.getPLATFORM() == ToolBox.MACOS && dataModification instanceof ResourceStatusModification) {
+		/*if (ToolBox.getPLATFORM() == ToolBox.MACOS && dataModification instanceof ResourceStatusModification) {
 			getRootPane().putClientProperty(WINDOW_MODIFIED, getController().getProject().hasUnsaveStorageResources());
-		}
+		}*/
 	}
 
 	@Override
@@ -455,7 +454,7 @@ public final class FlexoFrame extends JFrame implements GraphicalFlexoObserver, 
 	@Override
 	public void validate() {
 		super.validate();
-		FCH.validateWindow(this);
+		getController().getApplicationContext().getDocResourceManager().validateWindow(this);
 	}
 
 	private Thread boundsSaver;
@@ -494,10 +493,12 @@ public final class FlexoFrame extends JFrame implements GraphicalFlexoObserver, 
 		int state = getExtendedState();
 		if (state == -1 || (state & Frame.MAXIMIZED_BOTH) != Frame.MAXIMIZED_BOTH
 				&& (state & Frame.MAXIMIZED_HORIZ) != Frame.MAXIMIZED_HORIZ && (state & Frame.MAXIMIZED_VERT) != Frame.MAXIMIZED_VERT) {
-			GeneralPreferences.setBoundForFrameWithID(getController().getModule().getShortName() + "Frame", getBounds());
+			getController().getApplicationContext().getGeneralPreferences()
+					.setBoundForFrameWithID(getController().getModule().getShortName() + "Frame", getBounds());
 		}
-		GeneralPreferences.setFrameStateForFrameWithID(getController().getModule().getShortName() + "Frame", getExtendedState());
-		FlexoPreferences.savePreferences(true);
+		getController().getApplicationContext().getGeneralPreferences()
+				.setFrameStateForFrameWithID(getController().getModule().getShortName() + "Frame", getExtendedState());
+		getController().getApplicationContext().getPreferencesService().savePreferences();
 		boundsSaver = null;
 	}
 
@@ -507,12 +508,12 @@ public final class FlexoFrame extends JFrame implements GraphicalFlexoObserver, 
 	}
 
 	@Override
-	public FlexoModelObject getFocusedObject() {
+	public FlexoObject getFocusedObject() {
 		return getController().getSelectionManager().getFocusedObject();
 	}
 
 	@Override
-	public Vector<FlexoModelObject> getGlobalSelection() {
+	public Vector<FlexoObject> getGlobalSelection() {
 		return getController().getSelectionManager().getSelection();
 	}
 

@@ -60,7 +60,7 @@ public class ExcludeFromGeneration extends MultipleFileGCAction<ExcludeFromGener
 	}
 
 	static {
-		FlexoModelObject.addActionForClass(ExcludeFromGeneration.actionType, CGObject.class);
+		TestModelObject.addActionForClass(ExcludeFromGeneration.actionType, CGObject.class);
 	}
 
 	/**

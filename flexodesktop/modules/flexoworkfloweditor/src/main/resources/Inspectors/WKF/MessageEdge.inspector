@@ -1,8 +1,8 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <Panel className="org.openflexo.inspector.FIBInspector" layout="border" titleFont="SansSerif,0,12" darkLevel="0" dataClassName="org.openflexo.foundation.wkf.edge.MessageEdge" controllerClassName="org.openflexo.inspector.FIBInspectorController" font="SansSerif,0,12" name="Inspector">
   <TabPanel name="Tab" constraints="border(location=center)">
-    <Tab title="Basic" layout="twocols" titleFont="SansSerif,0,11" darkLevel="0" index="0" font="SansSerif,0,11" name="BasicTab"  opaque="false"/>
-    <Tab title="Data" layout="twocols" titleFont="SansSerif,0,11" darkLevel="0" index="3" font="SansSerif,0,11" name="DataTab" opaque="false">
+    <Tab title="Basic" layout="twocols" titleFont="SansSerif,0,11" darkLevel="0" index="0" font="SansSerif,0,11" opaque="false" useScrollBar="true" horizontalScrollbarPolicy="HORIZONTAL_SCROLLBAR_AS_NEEDED" verticalScrollbarPolicy="VERTICAL_SCROLLBAR_AS_NEEDED" name="BasicTab" />
+    <Tab title="Data" layout="twocols" titleFont="SansSerif,0,11" darkLevel="0" index="3" font="SansSerif,0,11" opaque="false" useScrollBar="true" horizontalScrollbarPolicy="HORIZONTAL_SCROLLBAR_AS_NEEDED" verticalScrollbarPolicy="VERTICAL_SCROLLBAR_AS_NEEDED" name="DataTab">
       <Label label="has_output_message" index="0" constraints="twocols(expandHorizontally=false;expandVertically=false;index=0;insetsBottom=0;insetsLeft=2;insetsRight=2;insetsTop=5;location=left)" visible="false" name="HasOutputMessageLabel" localize="true" />
       <Label label="input_message" index="0" constraints="twocols(expandHorizontally=false;expandVertically=false;index=8;insetsBottom=0;insetsLeft=2;insetsRight=2;insetsTop=5;location=left)" visible="(data.hasInputMessage = true)" name="InputMessagenameLabel" localize="true">
         <Parameter name="visibleFor" value="MAINTAINER,DEVELOPER,ANALYST" />
@@ -20,7 +20,6 @@
         </CustomColumn>
         <CheckBoxColumn data="iterator.bindingDefinition.isMandatory" title="mandatory" columnWidth="30" resizable="true" displayTitle="true" />
         <CustomColumn componentClassName="org.openflexo.components.widget.binding.BindingSelector" customRendering="false" disableTerminateEditOnFocusLost="false" data="iterator.bindingValue" format="object.stringRepresentation" title="value" columnWidth="150" resizable="true" displayTitle="true">
-          <ColumnAssignment variable="component.bindingDefinition" value="iterator.bindingDefinition" />
           <ColumnAssignment variable="component.bindable" value="iterator" />
         </CustomColumn>
         <AddAction method="data.inputMessage.createNewBinding" name="new" />
@@ -40,7 +39,6 @@
         </CustomColumn>
         <CheckBoxColumn data="iterator.bindingDefinition.isMandatory" title="mandatory" columnWidth="30" resizable="true" displayTitle="true" />
         <CustomColumn componentClassName="org.openflexo.components.widget.binding.BindingSelector" customRendering="false" disableTerminateEditOnFocusLost="false" data="iterator.bindingValue" format="object.stringRepresentation" title="value" columnWidth="150" resizable="true" displayTitle="true">
-          <ColumnAssignment variable="component.bindingDefinition" value="iterator.bindingDefinition" />
           <ColumnAssignment variable="component.bindable" value="iterator" />
         </CustomColumn>
         <AddAction method="data.outputMessage.createNewBinding" name="new" />

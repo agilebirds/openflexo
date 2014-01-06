@@ -19,7 +19,7 @@
  */
 package org.openflexo.wkf.swleditor.gr;
 
-import static org.openflexo.wkf.swleditor.gr.ContainerGR.*;
+import static org.openflexo.wkf.swleditor.gr.ContainerGR.logger;
 
 import java.awt.Color;
 import java.awt.Component;
@@ -30,9 +30,16 @@ import java.util.List;
 
 import javax.swing.SwingUtilities;
 
+import org.openflexo.fge.BackgroundStyle;
 import org.openflexo.fge.FGEConstants;
+import org.openflexo.fge.ForegroundStyle;
 import org.openflexo.fge.GraphicalRepresentation;
 import org.openflexo.fge.ShapeGraphicalRepresentation;
+import org.openflexo.fge.TextStyle;
+import org.openflexo.fge.ColorGradientBackgroundStyle.ColorGradientDirection;
+import org.openflexo.fge.ForegroundStyle.CapStyle;
+import org.openflexo.fge.ForegroundStyle.DashStyle;
+import org.openflexo.fge.ForegroundStyle.JoinStyle;
 import org.openflexo.fge.controller.CustomDragControlAction;
 import org.openflexo.fge.controller.DrawingController;
 import org.openflexo.fge.controller.MouseDragControl;
@@ -41,15 +48,8 @@ import org.openflexo.fge.geom.FGEDimension;
 import org.openflexo.fge.geom.FGEGeometricObject.SimplifiedCardinalDirection;
 import org.openflexo.fge.geom.FGEPoint;
 import org.openflexo.fge.geom.area.FGEHalfLine;
-import org.openflexo.fge.graphics.BackgroundStyle;
-import org.openflexo.fge.graphics.BackgroundStyle.ColorGradient.ColorGradientDirection;
 import org.openflexo.fge.graphics.DecorationPainter;
-import org.openflexo.fge.graphics.ForegroundStyle;
-import org.openflexo.fge.graphics.ForegroundStyle.CapStyle;
-import org.openflexo.fge.graphics.ForegroundStyle.DashStyle;
-import org.openflexo.fge.graphics.ForegroundStyle.JoinStyle;
-import org.openflexo.fge.graphics.TextStyle;
-import org.openflexo.fge.shapes.Shape.ShapeType;
+import org.openflexo.fge.shapes.ShapeSpecification.ShapeType;
 import org.openflexo.fge.view.ShapeView;
 import org.openflexo.foundation.DataModification;
 import org.openflexo.foundation.FlexoObservable;
@@ -163,7 +163,7 @@ public class PortRegisteryGR extends SWLObjectGR<PortRegistery> implements SWLCo
 		public PortRegisteryCloser() {
 			super("Closer", MouseButton.LEFT, new CustomDragControlAction() {
 				@Override
-				public boolean handleMousePressed(GraphicalRepresentation<?> graphicalRepresentation, DrawingController<?> controller,
+				public boolean handleMousePressed(GraphicalRepresentation graphicalRepresentation, DrawingController controller,
 						MouseEvent event) {
 					logger.info("handleMousePressed");
 					if (isInsideClosingBox(graphicalRepresentation, controller, event)) {
@@ -175,14 +175,14 @@ public class PortRegisteryGR extends SWLObjectGR<PortRegistery> implements SWLCo
 				}
 
 				@Override
-				public boolean handleMouseReleased(GraphicalRepresentation<?> graphicalRepresentation, DrawingController<?> controller,
+				public boolean handleMouseReleased(GraphicalRepresentation graphicalRepresentation, DrawingController controller,
 						MouseEvent event, boolean isSignificativeDrag) {
 					// TODO Auto-generated method stub
 					return false;
 				}
 
 				@Override
-				public boolean handleMouseDragged(GraphicalRepresentation<?> graphicalRepresentation, DrawingController<?> controller,
+				public boolean handleMouseDragged(GraphicalRepresentation graphicalRepresentation, DrawingController controller,
 						MouseEvent event) {
 					// TODO Auto-generated method stub
 					return false;
@@ -191,16 +191,16 @@ public class PortRegisteryGR extends SWLObjectGR<PortRegistery> implements SWLCo
 		}
 
 		@Override
-		public boolean isApplicable(GraphicalRepresentation<?> graphicalRepresentation, DrawingController<?> controller, MouseEvent e) {
+		public boolean isApplicable(GraphicalRepresentation graphicalRepresentation, DrawingController controller, MouseEvent e) {
 			// TODO Auto-generated method stub
 			return super.isApplicable(graphicalRepresentation, controller, e) && isInsideClosingBox(graphicalRepresentation, controller, e);
 		}
 
 	}
 
-	protected static boolean isInsideClosingBox(GraphicalRepresentation<?> graphicalRepresentation, DrawingController<?> controller,
+	protected static boolean isInsideClosingBox(GraphicalRepresentation graphicalRepresentation, DrawingController controller,
 			MouseEvent event) {
-		ShapeView view = (ShapeView) controller.getDrawingView().viewForObject(graphicalRepresentation);
+		ShapeView view = (ShapeView) controller.getDrawingView().viewForNode(graphicalRepresentation);
 		Rectangle closingBoxRect = new Rectangle((int) (5 * controller.getScale()), (int) (5 * controller.getScale()),
 				(int) (15 * controller.getScale()), (int) (15 * controller.getScale()));
 		Point clickLocation = SwingUtilities.convertPoint((Component) event.getSource(), event.getPoint(), view);
@@ -303,9 +303,9 @@ public class PortRegisteryGR extends SWLObjectGR<PortRegistery> implements SWLCo
 		if (objectIsBeeingDragged) {
 			getDrawing().reindexObjectForNewVerticalLocation(getPortRegistery(), getY());
 			anchorLocation();
-			for (GraphicalRepresentation<?> gr : getDrawingGraphicalRepresentation().getContainedGraphicalRepresentations()) {
+			for (GraphicalRepresentation gr : getDrawingGraphicalRepresentation().getContainedGraphicalRepresentations()) {
 				if (gr instanceof ShapeGraphicalRepresentation && gr != this) {
-					((ShapeGraphicalRepresentation<?>) gr).notifyObjectHasMoved();
+					((ShapeGraphicalRepresentation) gr).notifyObjectHasMoved();
 				}
 			}
 		}

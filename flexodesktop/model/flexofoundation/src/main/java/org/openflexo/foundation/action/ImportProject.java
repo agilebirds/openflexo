@@ -4,53 +4,50 @@ import java.util.Vector;
 
 import org.openflexo.foundation.FlexoEditor;
 import org.openflexo.foundation.FlexoException;
-import org.openflexo.foundation.FlexoModelObject;
-import org.openflexo.foundation.rm.FlexoPamelaResource;
-import org.openflexo.foundation.rm.FlexoProject;
-import org.openflexo.foundation.rm.FlexoProjectReference;
-import org.openflexo.foundation.rm.ProjectData;
-import org.openflexo.foundation.wkf.FlexoProcess;
-import org.openflexo.foundation.wkf.FlexoWorkflow;
+import org.openflexo.foundation.FlexoProject;
+import org.openflexo.foundation.FlexoProjectObject;
+import org.openflexo.foundation.ProjectDataResource;
+import org.openflexo.foundation.resource.FlexoProjectReference;
 
-public class ImportProject extends FlexoAction<ImportProject, FlexoModelObject, FlexoModelObject> {
+public class ImportProject extends FlexoAction<ImportProject, FlexoProjectObject, FlexoProjectObject> {
 
-	public static final FlexoActionType<ImportProject, FlexoModelObject, FlexoModelObject> actionType = new FlexoActionType<ImportProject, FlexoModelObject, FlexoModelObject>(
+	public static final FlexoActionType<ImportProject, FlexoProjectObject, FlexoProjectObject> actionType = new FlexoActionType<ImportProject, FlexoProjectObject, FlexoProjectObject>(
 			"import_project") {
 
 		@Override
-		public ImportProject makeNewAction(FlexoModelObject focusedObject, Vector<FlexoModelObject> globalSelection, FlexoEditor editor) {
+		public ImportProject makeNewAction(FlexoProjectObject focusedObject, Vector<FlexoProjectObject> globalSelection, FlexoEditor editor) {
 			return new ImportProject(focusedObject, globalSelection, editor);
 		}
 
 		@Override
-		public boolean isVisibleForSelection(FlexoModelObject object, Vector<FlexoModelObject> globalSelection) {
+		public boolean isVisibleForSelection(FlexoProjectObject object, Vector<FlexoProjectObject> globalSelection) {
 			return object != null && object.getProject() != null;
 		}
 
 		@Override
-		public boolean isEnabledForSelection(FlexoModelObject object, Vector<FlexoModelObject> globalSelection) {
+		public boolean isEnabledForSelection(FlexoProjectObject object, Vector<FlexoProjectObject> globalSelection) {
 			return object != null && object.getProject() != null;
 		}
 	};
 
 	static {
-		FlexoModelObject.addActionForClass(actionType, FlexoWorkflow.class);
-		FlexoModelObject.addActionForClass(actionType, FlexoProcess.class);
-		FlexoModelObject.addActionForClass(actionType, FlexoProject.class);
+		// FlexoProjectObject.addActionForClass(actionType, FlexoWorkflow.class);
+		// FlexoProjectObject.addActionForClass(actionType, FlexoProcess.class);
+		// FlexoObject.addActionForClass(actionType, FlexoProject.class);
 	}
 
 	private FlexoProject projectToImport;
 
-	public ImportProject(FlexoModelObject focusedObject, Vector<FlexoModelObject> globalSelection, FlexoEditor editor) {
+	public ImportProject(FlexoProjectObject focusedObject, Vector<FlexoProjectObject> globalSelection, FlexoEditor editor) {
 		super(actionType, focusedObject, globalSelection, editor);
 	}
 
 	@Override
 	protected void doAction(Object context) throws FlexoException {
 		FlexoProject project = getImportingProject();
-		FlexoPamelaResource<ProjectData> resource = (FlexoPamelaResource<ProjectData>) project.getProjectData(true).getFlexoResource();
-		FlexoProjectReference projectReference = resource.getModelFactory().newInstance(FlexoProjectReference.class).init(projectToImport);
-		project.getProjectData(true).addToImportedProjects(projectReference);
+		ProjectDataResource resource = project.getProjectDataResource();
+		FlexoProjectReference projectReference = resource.getFactory().newInstance(FlexoProjectReference.class).init(projectToImport);
+		project.getProjectData().addToImportedProjects(projectReference);
 	}
 
 	public FlexoProject getImportingProject() {

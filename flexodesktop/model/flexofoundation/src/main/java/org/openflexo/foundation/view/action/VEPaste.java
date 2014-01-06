@@ -23,43 +23,45 @@ import java.util.Vector;
 import java.util.logging.Logger;
 
 import org.openflexo.foundation.FlexoEditor;
-import org.openflexo.foundation.FlexoModelObject;
+import org.openflexo.foundation.FlexoObject.FlexoObjectImpl;
 import org.openflexo.foundation.action.FlexoActionType;
 import org.openflexo.foundation.action.FlexoUndoableAction;
-import org.openflexo.foundation.view.ViewObject;
+import org.openflexo.foundation.view.EditionPatternInstance;
+import org.openflexo.foundation.view.VirtualModelInstanceObject;
 
-public class VEPaste extends FlexoUndoableAction<VEPaste, ViewObject, ViewObject> {
+public class VEPaste extends FlexoUndoableAction<VEPaste, VirtualModelInstanceObject, VirtualModelInstanceObject> {
 
 	private static final Logger logger = Logger.getLogger(VEPaste.class.getPackage().getName());
 
-	public static FlexoActionType<VEPaste, ViewObject, ViewObject> actionType = new FlexoActionType<VEPaste, ViewObject, ViewObject>(
+	public static FlexoActionType<VEPaste, VirtualModelInstanceObject, VirtualModelInstanceObject> actionType = new FlexoActionType<VEPaste, VirtualModelInstanceObject, VirtualModelInstanceObject>(
 			"paste", FlexoActionType.editGroup) {
 
 		/**
 		 * Factory method
 		 */
 		@Override
-		public VEPaste makeNewAction(ViewObject focusedObject, Vector<ViewObject> globalSelection, FlexoEditor editor) {
+		public VEPaste makeNewAction(VirtualModelInstanceObject focusedObject, Vector<VirtualModelInstanceObject> globalSelection,
+				FlexoEditor editor) {
 			return new VEPaste(focusedObject, globalSelection, editor);
 		}
 
 		@Override
-		public boolean isVisibleForSelection(ViewObject object, Vector<ViewObject> globalSelection) {
+		public boolean isVisibleForSelection(VirtualModelInstanceObject object, Vector<VirtualModelInstanceObject> globalSelection) {
 			return true;
 		}
 
 		@Override
-		public boolean isEnabledForSelection(ViewObject object, Vector<ViewObject> globalSelection) {
+		public boolean isEnabledForSelection(VirtualModelInstanceObject object, Vector<VirtualModelInstanceObject> globalSelection) {
 			return true;
 		}
 
 	};
 
 	static {
-		FlexoModelObject.addActionForClass(VEPaste.actionType, ViewObject.class);
+		FlexoObjectImpl.addActionForClass(VEPaste.actionType, EditionPatternInstance.class);
 	}
 
-	VEPaste(ViewObject focusedObject, Vector<ViewObject> globalSelection, FlexoEditor editor) {
+	VEPaste(VirtualModelInstanceObject focusedObject, Vector<VirtualModelInstanceObject> globalSelection, FlexoEditor editor) {
 		super(actionType, focusedObject, globalSelection, editor);
 	}
 

@@ -93,7 +93,7 @@ public class HibernateEnumContainer extends TechnologyModelObject implements Fle
 	 * {@inheritDoc}
 	 */
 	@Override
-	public void delete() {
+	public boolean delete() {
 
 		for (HibernateEnum hibernateEnum : new Vector<HibernateEnum>(getHibernateEnums())) {
 			hibernateEnum.delete();
@@ -107,6 +107,7 @@ public class HibernateEnumContainer extends TechnologyModelObject implements Fle
 		notifyObservers(new SGObjectDeletedModification());
 		super.delete();
 		deleteObservers();
+		return true;
 	}
 
 	/**

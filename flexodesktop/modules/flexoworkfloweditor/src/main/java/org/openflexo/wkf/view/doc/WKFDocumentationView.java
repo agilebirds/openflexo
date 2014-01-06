@@ -36,7 +36,8 @@ import org.openflexo.components.browser.ProjectBrowser;
 import org.openflexo.components.tabular.model.TextColumn;
 import org.openflexo.components.tabularbrowser.TabularBrowserModel;
 import org.openflexo.foundation.FlexoModelObject;
-import org.openflexo.foundation.rm.FlexoProject;
+import org.openflexo.foundation.FlexoObject;
+import org.openflexo.foundation.FlexoProject;
 import org.openflexo.foundation.wkf.FlexoProcess;
 import org.openflexo.foundation.wkf.node.AbstractNode;
 import org.openflexo.selection.SelectionListener;
@@ -186,12 +187,12 @@ public class WKFDocumentationView extends JPanel implements SelectionSynchronize
 	}
 
 	@Override
-	public void fireObjectSelected(FlexoModelObject object) {
+	public void fireObjectSelected(FlexoObject object) {
 		getTabularBrowserView().fireObjectSelected(object);
 	}
 
 	@Override
-	public void fireObjectDeselected(FlexoModelObject object) {
+	public void fireObjectDeselected(FlexoObject object) {
 		getTabularBrowserView().fireObjectDeselected(object);
 	}
 

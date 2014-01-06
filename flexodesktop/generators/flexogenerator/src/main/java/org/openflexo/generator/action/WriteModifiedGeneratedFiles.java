@@ -63,7 +63,7 @@ public class WriteModifiedGeneratedFiles extends MultipleFileGCAction<WriteModif
 	};
 
 	static {
-		FlexoModelObject.addActionForClass(WriteModifiedGeneratedFiles.actionType, CGObject.class);
+		TestModelObject.addActionForClass(WriteModifiedGeneratedFiles.actionType, CGObject.class);
 	}
 
 	WriteModifiedGeneratedFiles(CGObject focusedObject, Vector<CGObject> globalSelection, FlexoEditor editor) {

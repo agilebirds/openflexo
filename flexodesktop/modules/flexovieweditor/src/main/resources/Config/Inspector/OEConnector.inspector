@@ -1,4 +1,4 @@
-<inspector title = "Connector" inheritsfrom="ModelObject.inspector" inspectedClassName="org.openflexo.foundation.view.ViewConnector">
+<inspector title = "Connector" inheritsfrom="ModelObject.inspector" inspectedClassName="org.openflexo.foundation.view.diagram.model.DiagramConnector">
 
 	<tab name="Connector" index="1" layout="DEFAULT">
 		<property name="graphicalRepresentation.foreground" label="foreground" widget="CUSTOM" constraint="1">

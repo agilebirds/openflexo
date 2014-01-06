@@ -1,0 +1,45 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<Panel className="org.openflexo.fib.editor.controller.FIBInspector" layout="border" darkLevel="0" dataClassName="org.openflexo.fib.model.FIBModelObject" name="Inspector">
+  <TabPanel name="Tab" constraints="border(location=center)">
+    <Tab title="Basic" layout="twocols" titleFont="SansSerif,0,11" darkLevel="0" index="0" font="SansSerif,0,11" useScrollBar="true" horizontalScrollbarPolicy="HORIZONTAL_SCROLLBAR_AS_NEEDED" verticalScrollbarPolicy="VERTICAL_SCROLLBAR_AS_NEEDED" name="BasicTab">
+      <Label label="name" constraints="twocols(location=left)" localize="true" />
+      <TextField data="data.name" constraints="twocols(expandHorizontally=true;location=right)" localize="true" columns="15" />
+    </Tab>
+    <Tab title="Advanced" layout="twocols" titleFont="SansSerif,0,11" darkLevel="0" index="1" font="SansSerif,0,11" useScrollBar="true" horizontalScrollbarPolicy="HORIZONTAL_SCROLLBAR_AS_NEEDED" verticalScrollbarPolicy="VERTICAL_SCROLLBAR_AS_NEEDED" name="AdvancedTab" />
+    <Tab title="Controls" layout="twocols" titleFont="SansSerif,0,11" darkLevel="0" index="2" font="SansSerif,0,11" useScrollBar="true" horizontalScrollbarPolicy="HORIZONTAL_SCROLLBAR_AS_NEEDED" verticalScrollbarPolicy="VERTICAL_SCROLLBAR_AS_NEEDED" name="ControlsTab" />
+    <Tab title="Layout" layout="twocols" titleFont="SansSerif,0,11" darkLevel="0" index="3" font="SansSerif,0,11" useScrollBar="true" horizontalScrollbarPolicy="HORIZONTAL_SCROLLBAR_AS_NEEDED" verticalScrollbarPolicy="VERTICAL_SCROLLBAR_AS_NEEDED" name="LayoutTab" />
+    <Tab title="Graphics" layout="twocols" titleFont="SansSerif,0,11" darkLevel="0" index="4" font="SansSerif,0,11" useScrollBar="true" horizontalScrollbarPolicy="HORIZONTAL_SCROLLBAR_AS_NEEDED" verticalScrollbarPolicy="VERTICAL_SCROLLBAR_AS_NEEDED" name="GraphicsTab" />
+    <Tab title="Depends" layout="twocols" titleFont="SansSerif,0,11" darkLevel="0" index="5" font="SansSerif,0,11" useScrollBar="true" horizontalScrollbarPolicy="HORIZONTAL_SCROLLBAR_AS_NEEDED" verticalScrollbarPolicy="VERTICAL_SCROLLBAR_AS_NEEDED" name="DependenciesTab" />
+    <Tab title="Doc" layout="twocols" titleFont="SansSerif,0,11" darkLevel="0" index="6" font="SansSerif,0,11" useScrollBar="true" horizontalScrollbarPolicy="HORIZONTAL_SCROLLBAR_AS_NEEDED" verticalScrollbarPolicy="VERTICAL_SCROLLBAR_AS_NEEDED" name="DocumentationTab">
+      <TextArea data="data.description" constraints="twocols(expandHorizontally=true;expandVertically=true;location=center)" useScrollBar="true" horizontalScrollbarPolicy="HORIZONTAL_SCROLLBAR_AS_NEEDED" verticalScrollbarPolicy="VERTICAL_SCROLLBAR_AS_NEEDED" localize="true" />
+    </Tab>
+    <Tab title="Params" layout="border" titleFont="SansSerif,0,11" darkLevel="0" index="7" font="SansSerif,0,11" useScrollBar="true" horizontalScrollbarPolicy="HORIZONTAL_SCROLLBAR_AS_NEEDED" verticalScrollbarPolicy="VERTICAL_SCROLLBAR_AS_NEEDED" name="ParametersTab">
+      <Table iteratorClassName="org.openflexo.fib.model.FIBParameter" visibleRowCount="5" rowHeight="20" autoSelectFirstRow="false" createNewRowOnClick="false" boundToSelectionManager="false" showFooter="true" selectionMode="MultipleIntervalSelection" localize="true" manageDynamicModel="true" name="ParametersTable" data="data.parameters" constraints="border(location=center)">
+        <TextFieldColumn data="iterator.name" title="name" columnWidth="100" resizable="true" displayTitle="true" name="name" />
+        <TextFieldColumn data="iterator.value" title="value" columnWidth="200" resizable="true" displayTitle="true" name="description" />
+        <AddAction method="data.createNewParameter()" isAvailable="data.isParameterAddable()" name="make_new_parameter" />
+        <RemoveAction method="data.deleteParameter(selected)" isAvailable="data.isParameterDeletable(selected)" name="delete_parameter" />
+      </Table>
+    </Tab>
+  </TabPanel>
+  <LocalizedDictionary>
+    <Localized key="name" lang="English">Name</Localized>
+    <Localized key="value" lang="English">Value</Localized>
+    <Localized key="name" lang="French">Nom</Localized>
+    <Localized key="value" lang="French">Valeur</Localized>
+    <Localized key="Basic" lang="French">Basique</Localized>
+    <Localized key="Advanced" lang="French">Avancé</Localized>
+    <Localized key="Graphics" lang="French">Graphisme</Localized>
+    <Localized key="name" lang="Dutch">Name</Localized>
+    <Localized key="value" lang="Dutch">Value</Localized>
+    <Localized key="delete_parameter" lang="French">Supprimer le paramètre</Localized>
+    <Localized key="Depends" lang="French">Dépendances</Localized>
+    <Localized key="Doc" lang="French">Doc</Localized>
+    <Localized key="make_new_parameter" lang="French">Créer un nouveau paramètre</Localized>
+    <Localized key="Params" lang="French">Paramètres</Localized>
+    <Localized key="Params" lang="English">Params</Localized>
+    <Localized key="make_new_parameter" lang="English">Make new parameter</Localized>
+    <Localized key="delete_parameter" lang="English">Delete parameter</Localized>
+  </LocalizedDictionary>
+  <Parameter name="title" value="Model object" />
+</Panel>

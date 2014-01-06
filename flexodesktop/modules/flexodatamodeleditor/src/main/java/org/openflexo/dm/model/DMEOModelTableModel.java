@@ -30,7 +30,7 @@ import org.openflexo.components.tabular.model.StringColumn;
 import org.openflexo.foundation.dm.eo.DMEOAdaptorType;
 import org.openflexo.foundation.dm.eo.DMEOModel;
 import org.openflexo.foundation.dm.eo.DMEORepository;
-import org.openflexo.foundation.rm.FlexoProject;
+import org.openflexo.foundation.FlexoProject;
 import org.openflexo.icon.DMEIconLibrary;
 import org.openflexo.kvc.ChoiceList;
 import org.openflexo.localization.FlexoLocalization;

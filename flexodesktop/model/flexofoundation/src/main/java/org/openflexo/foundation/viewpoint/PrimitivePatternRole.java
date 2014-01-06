@@ -1,9 +1,17 @@
 package org.openflexo.foundation.viewpoint;
 
-import org.openflexo.foundation.viewpoint.ViewPoint.ViewPointBuilder;
-import org.openflexo.localization.FlexoLocalization;
+import java.lang.reflect.Type;
+import java.util.logging.Logger;
 
-public class PrimitivePatternRole extends PatternRole {
+import org.openflexo.foundation.view.ActorReference;
+import org.openflexo.foundation.view.EditionPatternInstance;
+import org.openflexo.foundation.viewpoint.FMLRepresentationContext.FMLRepresentationOutput;
+import org.openflexo.localization.FlexoLocalization;
+import org.openflexo.logging.FlexoLogger;
+
+public class PrimitivePatternRole extends PatternRole<Object> {
+
+	protected static final Logger logger = FlexoLogger.getLogger(PrimitivePatternRole.class.getPackage().getName());
 
 	public static enum PrimitiveType {
 		Boolean, String, LocalizedString, Integer, Float
@@ -11,13 +19,15 @@ public class PrimitivePatternRole extends PatternRole {
 
 	private PrimitiveType primitiveType;
 
-	public PrimitivePatternRole(ViewPointBuilder builder) {
-		super(builder);
+	public PrimitivePatternRole() {
+		super();
 	}
 
 	@Override
-	public PatternRoleType getType() {
-		return PatternRoleType.Primitive;
+	public String getFMLRepresentation(FMLRepresentationContext context) {
+		FMLRepresentationOutput out = new FMLRepresentationOutput(context);
+		out.append("PatternRole " + getName() + " as " + getPreciseType() + ";", context);
+		return out.toString();
 	}
 
 	public PrimitiveType getPrimitiveType() {
@@ -50,7 +60,7 @@ public class PrimitivePatternRole extends PatternRole {
 	}
 
 	@Override
-	public Class<?> getAccessedClass() {
+	public Type getType() {
 		if (primitiveType == null) {
 			return null;
 		}
@@ -70,7 +80,7 @@ public class PrimitivePatternRole extends PatternRole {
 		}
 	}
 
-	@Override
+	/*@Override
 	public boolean getIsPrimaryRole() {
 		return false;
 	}
@@ -78,6 +88,17 @@ public class PrimitivePatternRole extends PatternRole {
 	@Override
 	public void setIsPrimaryRole(boolean isPrimary) {
 		// Not relevant
+	}*/
+
+	@Override
+	public boolean defaultBehaviourIsToBeDeleted() {
+		return true;
+	}
+
+	@Override
+	public ActorReference<Object> makeActorReference(Object object, EditionPatternInstance epi) {
+		logger.warning("Not implemented");
+		return null;
 	}
 
 }

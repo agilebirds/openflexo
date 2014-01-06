@@ -54,15 +54,15 @@ import org.openflexo.foundation.cg.CGObject;
 import org.openflexo.foundation.cg.DGRepository;
 import org.openflexo.foundation.cg.GeneratedDoc;
 import org.openflexo.foundation.cg.action.AbstractGCAction;
-import org.openflexo.foundation.ontology.EditionPatternInstance;
-import org.openflexo.foundation.ontology.EditionPatternReference;
-import org.openflexo.foundation.rm.FlexoProject;
+import org.openflexo.foundation.FlexoProject;
 import org.openflexo.foundation.rm.FlexoStorageResource;
 import org.openflexo.foundation.rm.StorageResourceData;
+import org.openflexo.foundation.rm.ViewResource;
 import org.openflexo.foundation.toc.TOCEntry;
-import org.openflexo.foundation.utils.FlexoModelObjectReference;
+import org.openflexo.foundation.utils.FlexoObjectReference;
+import org.openflexo.foundation.view.EditionPatternInstance;
 import org.openflexo.foundation.view.View;
-import org.openflexo.foundation.view.ViewDefinition;
+import org.openflexo.foundation.view.VirtualModelInstance;
 import org.openflexo.foundation.viewpoint.EditionPattern;
 import org.openflexo.localization.FlexoLocalization;
 import org.openflexo.toolbox.FileUtils;
@@ -259,16 +259,17 @@ public class ReinjectDocx extends AbstractGCAction<ReinjectDocx, CGObject> {
 			if (epi.getModelObjectReference() == null) {
 				continue;
 			}
-			FlexoModelObject object = new FlexoModelObjectReference<FlexoModelObject>(project, epi.getModelObjectReference())
+			FlexoModelObject object = new FlexoObjectReference<FlexoModelObject>(project, epi.getModelObjectReference())
 					.getObject(true);
 			long instanceID = Long.valueOf(epi.getEditionPatternInstanceID());
 			if (object != null) {
 				boolean found = false;
-				for (EditionPatternReference ref : object.getEditionPatternReferences()) {
-					if (ref.getEditionPattern() != null && ref.getEditionPattern().getURI().equals(epi.getEditionPatternURI())
-							&& ref.getInstanceId() == instanceID) {
-						if (ref.getEditionPatternInstance() != null) {
-							epis.put(ref.getEditionPatternInstance(), epi);
+				for (FlexoObjectReference<EditionPatternInstance> ref : object.getEditionPatternReferences()) {
+					EditionPatternInstance epi2 = ref.getObject();
+					if (epi2.getEditionPattern() != null && epi2.getEditionPattern().getURI().equals(epi.getEditionPatternURI())
+							&& epi2.getFlexoID() == instanceID) {
+						if (epi2 != null) {
+							epis.put(epi2, epi);
 							found = true;
 							break;
 						}
@@ -279,29 +280,31 @@ public class ReinjectDocx extends AbstractGCAction<ReinjectDocx, CGObject> {
 				}
 			}
 			boolean found = false;
-			for (ViewDefinition vd : project.getShemaLibrary().getAllShemaList()) {
-				View view = vd.getShema();
+			for (ViewResource vr : project.getViewLibrary().getAllResources()) {
+				View view = vr.getView();
 				if (view == null) {
 					continue;
 				}
-				EditionPattern pattern = null;
-				for (EditionPattern ep : view.getCalc().getEditionPatterns()) {
-					if (ep.getURI().equals(epi.getEditionPatternURI())) {
-						pattern = ep;
-						break;
-					}
-				}
-				if (pattern != null) {
-					for (EditionPatternInstance inst : vd.getShema().getEPInstances(pattern)) {
-						if (inst.getInstanceId() == instanceID) {
-							epis.put(inst, epi);
-							found = true;
+				for (VirtualModelInstance<?, ?> vmi : view.getVirtualModelInstances()) {
+					EditionPattern pattern = null;
+					for (EditionPattern ep : vmi.getVirtualModel().getEditionPatterns()) {
+						if (ep.getURI().equals(epi.getEditionPatternURI())) {
+							pattern = ep;
 							break;
 						}
 					}
-				}
-				if (found) {
-					break;
+					if (pattern != null) {
+						for (EditionPatternInstance inst : vmi.getEPInstances(pattern)) {
+							if (inst.getFlexoID() == instanceID) {
+								epis.put(inst, epi);
+								found = true;
+								break;
+							}
+						}
+					}
+					if (found) {
+						break;
+					}
 				}
 			}
 			if (found) {

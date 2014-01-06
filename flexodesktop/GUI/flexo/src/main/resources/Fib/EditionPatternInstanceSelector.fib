@@ -1,0 +1,26 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<Panel layout="twocols" darkLevel="0" dataClassName="org.openflexo.components.widget.FIBEditionPatternInstanceSelector" controllerClassName="org.openflexo.components.widget.FIBModelObjectSelector$SelectorFIBController" width="270" height="300">
+  <List visibleRowCount="4" rowHeight="18" createNewRowOnClick="false" boundToSelectionManager="true" selectionMode="MultipleIntervalSelection" selected="data.selectedValue" layoutOrientation="vertical" index="0" constraints="twocols(expandHorizontally=true;expandVertically=true;index=0;insetsBottom=0;insetsLeft=2;insetsRight=2;insetsTop=0;location=center)" visible="(data.matchingValues.size &gt; 1)" useScrollBar="true" horizontalScrollbarPolicy="HORIZONTAL_SCROLLBAR_AS_NEEDED" verticalScrollbarPolicy="VERTICAL_SCROLLBAR_AS_NEEDED" name="PotentialMatches" format="object.stringRepresentation" icon="controller.iconForObject(object)" localize="true" manageDynamicModel="true" clickAction="controller.selectedObjectChanged()" doubleClickAction="controller.apply()" enterPressedAction="controller.apply()" list="data.matchingValues" showIcon="true" iteratorClassName="org.openflexo.foundation.view.EditionPatternInstance" autoSelectFirstRow="true" />
+  <Panel layout="gridbag" borderTitle="Panel" darkLevel="0" index="1" constraints="twocols(expandHorizontally=true;expandVertically=false;index=1;insetsBottom=0;insetsLeft=2;insetsRight=2;insetsTop=0;location=center)" name="Matches">
+    <Label label="dsffdsmksdfmkfdsmkfdsmkdfskmsdf" align="right" index="0" data="((&quot;Found &quot; + data.matchingValues.size) + &quot; matches&quot;)" constraints="gridbag(anchor=east;fill=horizontal;gridHeight=1;gridWidth=0;gridX=-1;gridY=-1;index=0;insetsBottom=0;insetsLeft=0;insetsRight=5;insetsTop=0;padX=0;padY=0;weightX=1.0;weightY=0.0)" visible="((data.matchingValues.size != 1) &amp; data.isFiltered)" name="MatchesLabel" localize="true" />
+  </Panel>
+  <Browser root="data.rootObject" iteratorClassName="org.openflexo.foundation.view.EditionPatternInstance" visibleRowCount="5" rowHeight="18" boundToSelectionManager="false" selectionMode="DiscontiguousTreeSelection" selected="data.selectedValue" showFooter="true" rootVisible="true" showRootsHandle="true" localize="true" manageDynamicModel="true" clickAction="controller.selectedObjectChanged()" doubleClickAction="controller.apply()" enterPressedAction="controller.apply()" name="ViewPointBrowser" index="2" constraints="twocols(expandHorizontally=true;expandVertically=true;index=2;insetsBottom=0;insetsLeft=2;insetsRight=2;insetsTop=0;location=center)">
+    <BrowserElement dataClassName="org.openflexo.foundation.viewpoint.ViewPoint" label="viewPoint.name" icon="controller.iconForObject(viewPoint)" isEditable="false" filtered="false" defaultVisible="true" name="viewPoint">
+      <Children data="viewPoint.virtualModels" name="editionPatterns" />
+    </BrowserElement>
+    <BrowserElement dataClassName="org.openflexo.foundation.viewpoint.EditionPattern" label="editionPattern.name" icon="controller.iconForObject(editionPattern)" isEditable="false" filtered="false" defaultVisible="true" name="editionPattern">
+      <Children data="editionPattern.childEditionPatterns" name="children" />
+      <Children data="data.getEPInstances(editionPattern)" name="epis" />
+    </BrowserElement>
+    <BrowserElement dataClassName="org.openflexo.foundation.viewpoint.VirtualModel" label="virtualModel.name" icon="controller.iconForObject(virtualModel)" isEditable="false" filtered="false" defaultVisible="true" name="virtualModel">
+      <Children data="virtualModel.allRootEditionPatterns" name="children" />
+    </BrowserElement>
+    <BrowserElement dataClassName="org.openflexo.foundation.view.EditionPatternInstance" label="editionPatternInstance.stringRepresentation" icon="controller.iconForObject(editionPatternInstance)" isEditable="false" filtered="false" defaultVisible="true" name="editionPatternInstance" />
+  </Browser>
+  <Panel layout="flow" hGap="5" vGap="0" flowAlignment="CENTER" borderTitle="Panel" darkLevel="0" index="3" constraints="twocols(expandHorizontally=true;expandVertically=false;index=3;insetsBottom=0;insetsLeft=2;insetsRight=2;insetsTop=0;location=center)">
+    <Button action="controller.apply()" buttonType="Trigger" label="apply" localize="true" enable="(data.selectedValue != null)" index="0" constraints="flow(index=0)" />
+    <Button action="controller.cancel()" buttonType="Trigger" label="cancel" localize="true" index="1" constraints="flow(index=1)" />
+    <Button action="controller.reset()" buttonType="Trigger" label="reset" localize="true" index="2" constraints="flow(index=2)" />
+  </Panel>
+  <LocalizedDictionary />
+</Panel>

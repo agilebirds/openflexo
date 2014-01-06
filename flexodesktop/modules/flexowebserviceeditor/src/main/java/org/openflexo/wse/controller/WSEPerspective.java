@@ -8,10 +8,11 @@ import java.util.logging.Level;
 import javax.swing.ImageIcon;
 
 import org.openflexo.foundation.FlexoModelObject;
+import org.openflexo.foundation.FlexoObject;
 import org.openflexo.foundation.dm.DMEntity;
 import org.openflexo.foundation.dm.DMPackage;
 import org.openflexo.foundation.dm.DMRepository;
-import org.openflexo.foundation.rm.FlexoProject;
+import org.openflexo.foundation.FlexoProject;
 import org.openflexo.foundation.wkf.ws.ServiceInterface;
 import org.openflexo.foundation.wkf.ws.ServiceMessageDefinition;
 import org.openflexo.foundation.wkf.ws.ServiceOperation;
@@ -60,7 +61,7 @@ public class WSEPerspective extends FlexoPerspective {
 	}
 
 	@Override
-	public FlexoModelObject getDefaultObject(FlexoModelObject proposedObject) {
+	public FlexoObject getDefaultObject(FlexoObject proposedObject) {
 		if (hasModuleViewForObject(proposedObject)) {
 			return proposedObject;
 		}
@@ -68,12 +69,12 @@ public class WSEPerspective extends FlexoPerspective {
 	}
 
 	@Override
-	public boolean hasModuleViewForObject(FlexoModelObject object) {
+	public boolean hasModuleViewForObject(FlexoObject object) {
 		return true;
 	}
 
 	@Override
-	public ModuleView<? extends FlexoModelObject> createModuleViewForObject(FlexoModelObject object, FlexoController controller) {
+	public ModuleView<? extends FlexoModelObject> createModuleViewForObject(FlexoObject object, FlexoController controller) {
 		if (object instanceof FlexoProject) {
 			return new WSELibraryView(((FlexoProject) object).getFlexoWSLibrary(), (WSEController) controller);
 		} else if (object instanceof FlexoWSLibrary) {

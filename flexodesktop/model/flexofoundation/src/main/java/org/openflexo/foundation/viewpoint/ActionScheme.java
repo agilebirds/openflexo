@@ -19,23 +19,13 @@
  */
 package org.openflexo.foundation.viewpoint;
 
-import org.openflexo.foundation.Inspectors;
-import org.openflexo.foundation.viewpoint.ViewPoint.ViewPointBuilder;
+import org.openflexo.foundation.viewpoint.annotations.FIBPanel;
 
+@FIBPanel("Fib/ActionSchemePanel.fib")
 public class ActionScheme extends AbstractActionScheme {
 
-	public ActionScheme(ViewPointBuilder builder) {
-		super(builder);
-	}
-
-	@Override
-	public EditionSchemeType getEditionSchemeType() {
-		return EditionSchemeType.ActionScheme;
-	}
-
-	@Override
-	public String getInspectorName() {
-		return Inspectors.VPM.ACTION_SCHEME_INSPECTOR;
+	public ActionScheme() {
+		super();
 	}
 
 }

@@ -22,10 +22,11 @@ package org.openflexo.wkf.processeditor.gr;
 import java.awt.Color;
 import java.util.logging.Logger;
 
-import org.openflexo.fge.graphics.BackgroundStyle;
-import org.openflexo.fge.graphics.ForegroundStyle;
-import org.openflexo.fge.graphics.TextStyle;
-import org.openflexo.fge.shapes.Shape.ShapeType;
+import org.openflexo.fge.BackgroundImageBackgroundStyle;
+import org.openflexo.fge.BackgroundStyle;
+import org.openflexo.fge.ForegroundStyle;
+import org.openflexo.fge.TextStyle;
+import org.openflexo.fge.shapes.ShapeSpecification.ShapeType;
 import org.openflexo.foundation.wkf.ws.FlexoPort;
 import org.openflexo.icon.WKFIconLibrary;
 import org.openflexo.wkf.WKFPreferences;
@@ -35,7 +36,7 @@ public class PortGR extends AbstractNodeGR<FlexoPort> {
 
 	private static final Logger logger = Logger.getLogger(PortGR.class.getPackage().getName());
 
-	private final BackgroundStyle.BackgroundImage background;
+	private final BackgroundImageBackgroundStyle background;
 
 	public PortGR(FlexoPort port, ProcessRepresentation aDrawing) {
 		super(port, ShapeType.SQUARE, aDrawing);

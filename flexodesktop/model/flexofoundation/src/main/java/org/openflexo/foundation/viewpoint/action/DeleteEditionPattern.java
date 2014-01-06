@@ -24,11 +24,10 @@ import java.util.Vector;
 import java.util.logging.Logger;
 
 import org.openflexo.foundation.FlexoEditor;
-import org.openflexo.foundation.FlexoModelObject;
+import org.openflexo.foundation.FlexoObject.FlexoObjectImpl;
 import org.openflexo.foundation.action.FlexoAction;
 import org.openflexo.foundation.action.FlexoActionType;
 import org.openflexo.foundation.action.NotImplementedException;
-import org.openflexo.foundation.rm.DuplicateResourceException;
 import org.openflexo.foundation.viewpoint.EditionPattern;
 import org.openflexo.foundation.viewpoint.ViewPointObject;
 
@@ -49,39 +48,29 @@ public class DeleteEditionPattern extends FlexoAction<DeleteEditionPattern, Edit
 
 		@Override
 		public boolean isVisibleForSelection(EditionPattern object, Vector<ViewPointObject> globalSelection) {
-			return object != null;
+			return object != null && object.getClass().equals(EditionPattern.class);
 		}
 
 		@Override
 		public boolean isEnabledForSelection(EditionPattern object, Vector<ViewPointObject> globalSelection) {
-			return object != null;
+			return isVisibleForSelection(object, globalSelection);
 		}
 
 	};
 
 	static {
-		FlexoModelObject.addActionForClass(DeleteEditionPattern.actionType, EditionPattern.class);
+		FlexoObjectImpl.addActionForClass(DeleteEditionPattern.actionType, EditionPattern.class);
 	}
 
 	DeleteEditionPattern(EditionPattern focusedObject, Vector<ViewPointObject> globalSelection, FlexoEditor editor) {
 		super(actionType, focusedObject, globalSelection, editor);
 	}
 
-	private boolean deleteChildren = false;
-
 	@Override
-	protected void doAction(Object context) throws DuplicateResourceException, NotImplementedException, InvalidParameterException {
+	protected void doAction(Object context) throws NotImplementedException, InvalidParameterException {
 		logger.info("Delete edition pattern");
 
-		getFocusedObject().delete(isDeleteChildren());
-	}
-
-	public boolean isDeleteChildren() {
-		return deleteChildren;
-	}
-
-	public void setDeleteChildren(boolean deleteChildren) {
-		this.deleteChildren = deleteChildren;
+		getFocusedObject().delete();
 	}
 
 }

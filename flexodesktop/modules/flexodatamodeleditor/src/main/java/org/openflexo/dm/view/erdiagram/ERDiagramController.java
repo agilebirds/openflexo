@@ -22,9 +22,9 @@ package org.openflexo.dm.view.erdiagram;
 import org.openflexo.dm.view.controller.DMController;
 import org.openflexo.fge.view.DrawingView;
 import org.openflexo.foundation.dm.ERDiagram;
-import org.openflexo.selection.SelectionManagingDrawingController;
+import org.openflexo.selection.SelectionManagingDianaEditor;
 
-public class ERDiagramController extends SelectionManagingDrawingController<ERDiagramRepresentation> {
+public class ERDiagramController extends SelectionManagingDianaEditor<ERDiagramRepresentation> {
 
 	private DMController controller;
 	private DiagramPalette palette;

@@ -21,12 +21,11 @@ package org.openflexo.ch;
 
 import java.util.logging.Logger;
 
-import org.openflexo.GeneralPreferences;
+import org.openflexo.ApplicationContext;
 import org.openflexo.drm.DocItem;
-import org.openflexo.drm.DocResourceManager;
 import org.openflexo.drm.Language;
-import org.openflexo.foundation.FlexoModelObject;
-import org.openflexo.foundation.FlexoModelObject.HelpRetriever;
+import org.openflexo.foundation.FlexoObject;
+import org.openflexo.foundation.FlexoObject.FlexoObjectImpl.HelpRetriever;
 import org.openflexo.inspector.InspectableObject;
 import org.openflexo.inspector.widget.DenaliWidget;
 
@@ -34,10 +33,10 @@ public class DefaultHelpRetriever implements HelpRetriever {
 
 	private static final Logger logger = Logger.getLogger(DenaliWidget.class.getPackage().getName());
 
-	private DocResourceManager _docResourceManager;
+	private final DocResourceManager docResourceManager;
 
 	public DefaultHelpRetriever(DocResourceManager docResourceManager) {
-		_docResourceManager = docResourceManager;
+		this.docResourceManager = docResourceManager;
 	}
 
 	/**
@@ -45,13 +44,14 @@ public class DefaultHelpRetriever implements HelpRetriever {
 	 * <html>...</html> tags.
 	 */
 	@Override
-	public String shortHelpForObject(FlexoModelObject object) {
+	public String shortHelpForObject(FlexoObject object) {
 		if (!(object instanceof InspectableObject)) {
 			return null;
 		}
-		Language language = _docResourceManager.getLanguage(GeneralPreferences.getLanguage());
+		ApplicationContext applicationContext = (ApplicationContext) docResourceManager.getServiceManager();
+		Language language = docResourceManager.getLanguage(applicationContext.getGeneralPreferences().getLanguage());
 
-		DocItem propertyModelItem = _docResourceManager.getDocItemFor((InspectableObject) object);
+		DocItem propertyModelItem = docResourceManager.getDocItemFor((InspectableObject) object);
 		if (propertyModelItem != null) {
 			if (propertyModelItem.getLastApprovedActionForLanguage(language) != null) {
 				return "<html>" + propertyModelItem.getLastApprovedActionForLanguage(language).getVersion().getShortHTMLDescription()
@@ -66,13 +66,14 @@ public class DefaultHelpRetriever implements HelpRetriever {
 	 * <html>...</html> tags.
 	 */
 	@Override
-	public String longHelpForObject(FlexoModelObject object) {
+	public String longHelpForObject(FlexoObject object) {
 		if (!(object instanceof InspectableObject)) {
 			return null;
 		}
-		Language language = DocResourceManager.instance().getLanguage(GeneralPreferences.getLanguage());
+		ApplicationContext applicationContext = (ApplicationContext) docResourceManager.getServiceManager();
+		Language language = docResourceManager.getLanguage(applicationContext.getGeneralPreferences().getLanguage());
 
-		DocItem propertyModelItem = _docResourceManager.getDocItemFor((InspectableObject) object);
+		DocItem propertyModelItem = docResourceManager.getDocItemFor((InspectableObject) object);
 		if (propertyModelItem != null) {
 			if (propertyModelItem.getLastApprovedActionForLanguage(language) != null) {
 				String returned = "<html>"

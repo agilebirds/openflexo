@@ -1,21 +1,44 @@
 package org.openflexo.foundation.viewpoint;
 
-import org.openflexo.foundation.ontology.OntologyClass;
-import org.openflexo.foundation.ontology.OntologyIndividual;
+import java.lang.reflect.Type;
+
+import org.openflexo.foundation.ontology.IFlexoOntologyClass;
+import org.openflexo.foundation.ontology.IFlexoOntologyIndividual;
+import org.openflexo.foundation.ontology.IndividualOfClass;
 import org.openflexo.foundation.validation.ValidationError;
 import org.openflexo.foundation.validation.ValidationIssue;
 import org.openflexo.foundation.validation.ValidationRule;
-import org.openflexo.foundation.viewpoint.ViewPoint.ViewPointBuilder;
+import org.openflexo.foundation.view.ConceptActorReference;
+import org.openflexo.foundation.view.EditionPatternInstance;
+import org.openflexo.foundation.viewpoint.FMLRepresentationContext.FMLRepresentationOutput;
 
-public class IndividualPatternRole extends OntologicObjectPatternRole {
 
-	public IndividualPatternRole(ViewPointBuilder builder) {
-		super(builder);
+public abstract class IndividualPatternRole<I extends IFlexoOntologyIndividual> extends OntologicObjectPatternRole<I> {
+
+	public IndividualPatternRole() {
+		super();
 	}
 
 	@Override
-	public PatternRoleType getType() {
-		return PatternRoleType.Individual;
+	public String getFMLRepresentation(FMLRepresentationContext context) {
+		FMLRepresentationOutput out = new FMLRepresentationOutput(context);
+		out.append(
+				"PatternRole " + getName() + " as Individual conformTo " + getPreciseType() + " from " + getModelSlot().getName() + " ;",
+				context);
+		return out.toString();
+	}
+
+	@Override
+	public boolean defaultBehaviourIsToBeDeleted() {
+		return true;
+	}
+
+	@Override
+	public Type getType() {
+		if (getOntologicType() == null) {
+			return IFlexoOntologyIndividual.class;
+		}
+		return IndividualOfClass.getIndividualOfClass(getOntologicType());
 	}
 
 	@Override
@@ -24,11 +47,6 @@ public class IndividualPatternRole extends OntologicObjectPatternRole {
 			return getOntologicType().getName();
 		}
 		return "";
-	}
-
-	@Override
-	public Class<?> getAccessedClass() {
-		return OntologyIndividual.class;
 	}
 
 	private String conceptURI;
@@ -41,17 +59,14 @@ public class IndividualPatternRole extends OntologicObjectPatternRole {
 		this.conceptURI = conceptURI;
 	}
 
-	public OntologyClass getOntologicType() {
-		if (getViewPoint() != null) {
-			getViewPoint().loadWhenUnloaded();
-			if (getViewPoint().getViewpointOntology() != null) {
-				return getViewPoint().getViewpointOntology().getClass(_getConceptURI());
-			}
+	public IFlexoOntologyClass getOntologicType() {
+		if (getVirtualModel() != null) {
+			return getVirtualModel().getOntologyClass(_getConceptURI());
 		}
 		return null;
 	}
 
-	public void setOntologicType(OntologyClass ontologyClass) {
+	public void setOntologicType(IFlexoOntologyClass ontologyClass) {
 		conceptURI = ontologyClass != null ? ontologyClass.getURI() : null;
 	}
 
@@ -70,6 +85,11 @@ public class IndividualPatternRole extends OntologicObjectPatternRole {
 			}
 			return null;
 		}
+	}
+
+	@Override
+	public ConceptActorReference<I> makeActorReference(I object, EditionPatternInstance epi) {
+		return new ConceptActorReference<I>(object, this, epi);
 	}
 
 }

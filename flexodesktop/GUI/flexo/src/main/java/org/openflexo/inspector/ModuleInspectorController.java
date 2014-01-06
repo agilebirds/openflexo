@@ -32,20 +32,14 @@ import java.util.Observer;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 
-import org.openflexo.GeneralPreferences;
-import org.openflexo.antar.binding.BooleanStaticBinding;
+import org.openflexo.antar.binding.DataBinding;
 import org.openflexo.antar.binding.TypeUtils;
 import org.openflexo.fib.FIBLibrary;
-import org.openflexo.fib.model.DataBinding;
 import org.openflexo.fib.model.FIBComponent;
 import org.openflexo.fib.model.FIBContainer;
 import org.openflexo.fib.model.FIBWidget;
-import org.openflexo.foundation.FlexoModelObject;
-import org.openflexo.inspector.selection.EmptySelection;
-import org.openflexo.inspector.selection.InspectorSelection;
-import org.openflexo.inspector.selection.MultipleSelection;
-import org.openflexo.inspector.selection.UniqueSelection;
-import org.openflexo.module.UserType;
+import org.openflexo.foundation.FlexoObject;
+import org.openflexo.foundation.view.EditionPatternInstance;
 import org.openflexo.toolbox.FileResource;
 import org.openflexo.view.controller.FlexoController;
 
@@ -71,23 +65,23 @@ public class ModuleInspectorController extends Observable implements Observer {
 	private FIBInspector currentInspector = null;
 	private Object currentInspectedObject = null;
 
-	public ModuleInspectorController(FlexoController flexoController) {
+	public ModuleInspectorController(final FlexoController flexoController) {
 		this.flexoController = flexoController;
 		inspectors = new Hashtable<Class<?>, FIBInspector>();
 		inspectorDialog = new FIBInspectorDialog(this);
-		Boolean visible = GeneralPreferences.getPreferences().getBooleanProperty("FIBInspector.visible");
+		Boolean visible = flexoController.getApplicationContext().getGeneralPreferences().getInspectorVisible();
 		inspectorDialog.setVisible(visible == null || visible);
 		inspectorDialog.addComponentListener(new ComponentAdapter() {
 			@Override
 			public void componentShown(ComponentEvent e) {
-				GeneralPreferences.getPreferences().setBooleanProperty("FIBInspector.visible", Boolean.TRUE);
-				GeneralPreferences.save();
+				flexoController.getApplicationContext().getGeneralPreferences().setInspectorVisible(true);
+				flexoController.getApplicationContext().getPreferencesService().savePreferences();
 			}
 
 			@Override
 			public void componentHidden(ComponentEvent e) {
-				GeneralPreferences.getPreferences().setBooleanProperty("FIBInspector.visible", Boolean.FALSE);
-				GeneralPreferences.save();
+				flexoController.getApplicationContext().getGeneralPreferences().setInspectorVisible(true);
+				flexoController.getApplicationContext().getPreferencesService().savePreferences();
 			};
 		});
 		File inspectorsDir = new FileResource("Inspectors/COMMON");
@@ -115,7 +109,7 @@ public class ModuleInspectorController extends Observable implements Observer {
 				return name.endsWith(".inspector");
 			}
 		})) {
-			// System.out.println("Read "+f.getAbsolutePath());
+			logger.fine("Loading: " + f.getAbsolutePath());
 			FIBInspector inspector = (FIBInspector) FIBLibrary.instance().retrieveFIBComponent(f);
 			if (inspector != null) {
 				appendVisibleFor(inspector);
@@ -138,6 +132,7 @@ public class ModuleInspectorController extends Observable implements Observer {
 		}
 
 		for (FIBInspector inspector : inspectors.values()) {
+			// logger.info("Merging inspector: " + inspector);
 			inspector.appendSuperInspectors(this);
 		}
 
@@ -154,11 +149,11 @@ public class ModuleInspectorController extends Observable implements Observer {
 	private void appendEditableCondition(FIBComponent component) {
 		if (component instanceof FIBWidget) {
 			FIBWidget widget = (FIBWidget) component;
-			if (widget.getEnable() != null && widget.getEnable().isValid()) {
-				DataBinding enable = widget.getEnable();
-				widget.setEnable(new DataBinding(enable.getBinding().getStringRepresentation() + " & " + CONTROLLER_EDITABLE_BINDING));
+			DataBinding<Boolean> enable = widget.getEnable();
+			if (enable != null && enable.isValid()) {
+				widget.setEnable(new DataBinding<Boolean>(enable.toString() + " & " + CONTROLLER_EDITABLE_BINDING));
 			} else {
-				widget.setEnable(new DataBinding(CONTROLLER_EDITABLE_BINDING));
+				widget.setEnable(new DataBinding<Boolean>(CONTROLLER_EDITABLE_BINDING));
 			}
 		} else if (component instanceof FIBContainer) {
 			for (FIBComponent child : ((FIBContainer) component).getSubComponents()) {
@@ -168,7 +163,7 @@ public class ModuleInspectorController extends Observable implements Observer {
 	}
 
 	private void appendVisibleFor(FIBComponent component) {
-		String visibleForParam = component.getParameter("visibleFor");
+		/*String visibleForParam = component.getParameter("visibleFor");
 		if (visibleForParam != null) {
 			String[] s = visibleForParam.split("[;,\"]");
 			if (s.length > 0) {
@@ -182,10 +177,10 @@ public class ModuleInspectorController extends Observable implements Observer {
 					}
 				}
 				if (!ok) {
-					component.getVisible().setBinding(new BooleanStaticBinding(false));
+					component.setVisible(new DataBinding<Boolean>("false"));
 				}
 			}
-		}
+		}*/
 		if (component instanceof FIBContainer) {
 			for (FIBComponent child : ((FIBContainer) component).getSubComponents()) {
 				appendVisibleFor(child);
@@ -295,8 +290,10 @@ public class ModuleInspectorController extends Observable implements Observer {
 			switchToEmptyContent();
 		} else {
 			boolean updateEPTabs = false;
-			if (object instanceof FlexoModelObject) {
-				updateEPTabs = newInspector.updateEditionPatternReferences((FlexoModelObject) object);
+			if (object instanceof EditionPatternInstance) {
+				updateEPTabs = newInspector.updateEditionPatternInstanceInspector((EditionPatternInstance) object);
+			} else if (object instanceof FlexoObject) {
+				updateEPTabs = newInspector.updateFlexoObjectInspector((FlexoObject) object);
 			}
 			if (newInspector != currentInspector || updateEPTabs) {
 				switchToInspector(newInspector, updateEPTabs);
@@ -342,8 +339,8 @@ public class ModuleInspectorController extends Observable implements Observer {
 	}
 
 	public static class InspectorSwitching {
-		private boolean updateEPTabs;
-		private FIBInspector newInspector;
+		private final boolean updateEPTabs;
+		private final FIBInspector newInspector;
 
 		public InspectorSwitching(FIBInspector newInspector, boolean updateEPTabs) {
 			this.newInspector = newInspector;
@@ -360,7 +357,7 @@ public class ModuleInspectorController extends Observable implements Observer {
 	}
 
 	public static class InspectedObjectChanged {
-		private Object inspectedObject;
+		private final Object inspectedObject;
 
 		public InspectedObjectChanged(Object inspectedObject) {
 			this.inspectedObject = inspectedObject;

@@ -47,17 +47,16 @@ import javax.swing.event.DocumentListener;
 import javax.swing.event.ListSelectionEvent;
 import javax.swing.event.ListSelectionListener;
 
+import org.openflexo.ApplicationContext;
 import org.openflexo.FlexoCst;
-import org.openflexo.GeneralPreferences;
+import org.openflexo.FlexoMainLocalizer;
 import org.openflexo.foundation.DataModification;
-import org.openflexo.foundation.FlexoMainLocalizer;
 import org.openflexo.foundation.FlexoObservable;
 import org.openflexo.foundation.GraphicalFlexoObserver;
 import org.openflexo.foundation.validation.ValidationModel;
 import org.openflexo.foundation.validation.ValidationRule;
 import org.openflexo.foundation.validation.ValidationRuleSet;
 import org.openflexo.localization.FlexoLocalization;
-import org.openflexo.module.UserType;
 
 /**
  * Defines the panel allowing to show and edit a ValidationModel
@@ -101,9 +100,13 @@ public class ValidationModelViewer extends JPanel implements GraphicalFlexoObser
 
 	ConsistencyCheckDialogInterface _consistencyCheckDialog;
 
-	public ValidationModelViewer(ConsistencyCheckDialogInterface consistencyCheckDialog, ValidationModel validationModel) {
+	private ApplicationContext applicationContext;
+
+	public ValidationModelViewer(ConsistencyCheckDialogInterface consistencyCheckDialog, ValidationModel validationModel,
+			ApplicationContext applicationContext) {
 		super();
 		setLayout(new BorderLayout());
+		this.applicationContext = applicationContext;
 		_consistencyCheckDialog = consistencyCheckDialog;
 		_validationModel = validationModel;
 		_currentRuleSet = new ValidationRuleSet(null, new Vector());
@@ -256,8 +259,9 @@ public class ValidationModelViewer extends JPanel implements GraphicalFlexoObser
 			public void actionPerformed(ActionEvent e) {
 				if (_currentRule != null) {
 					_currentRule.setIsEnabled(!_currentRule.getIsEnabled());
-					GeneralPreferences.setValidationRuleEnabled(_currentRule, _currentRule.getIsEnabled());
-					GeneralPreferences.save();
+					ValidationModelViewer.this.applicationContext.getGeneralPreferences().setValidationRuleEnabled(_currentRule,
+							_currentRule.getIsEnabled());
+					ValidationModelViewer.this.applicationContext.getPreferencesService().savePreferences();
 					disableButton.setText(_currentRule.getIsEnabled() ? FlexoLocalization.localizedForKey("disableRule", disableButton)
 							: FlexoLocalization.localizedForKey("enableRule", disableButton));
 					_ruleSetList.validate();
@@ -295,10 +299,8 @@ public class ValidationModelViewer extends JPanel implements GraphicalFlexoObser
 			}
 		});
 		controlPanel.add(closeButton);
-		if (UserType.isDevelopperRelease() || UserType.isMaintainerRelease()) {
-			controlPanel.add(editButton);
-			controlPanel.add(saveButton);
-		}
+		controlPanel.add(editButton);
+		controlPanel.add(saveButton);
 
 		add(_title, BorderLayout.NORTH);
 		add(splitPane2, BorderLayout.CENTER);

@@ -21,30 +21,31 @@ package org.openflexo.vpm.fib.dialogs;
 
 import java.io.File;
 
+import org.openflexo.TestApplicationContext;
 import org.openflexo.fib.editor.FIBAbstractEditor;
-import org.openflexo.foundation.resource.DefaultResourceCenterService;
-import org.openflexo.foundation.resource.FlexoResourceCenter;
+import org.openflexo.foundation.view.diagram.viewpoint.action.CreateDiagramPalette;
 import org.openflexo.foundation.viewpoint.ViewPoint;
 import org.openflexo.foundation.viewpoint.ViewPointLibrary;
-import org.openflexo.foundation.viewpoint.action.CreateViewPointPalette;
-import org.openflexo.vpm.CEDCst;
+import org.openflexo.toolbox.FileResource;
+import org.openflexo.vpm.VPMCst;
 
 public class CreatePaletteDialogEDITOR extends FIBAbstractEditor {
 
 	@Override
 	public Object[] getData() {
-		FlexoResourceCenter resourceCenter = DefaultResourceCenterService.getNewInstance().getOpenFlexoResourceCenter();
-		ViewPointLibrary calcLibrary = resourceCenter.retrieveViewPointLibrary();
-		ViewPoint calc1 = calcLibrary
-				.getOntologyCalc("http://www.agilebirds.com/openflexo/ViewPoints/Tests/BasicOrganizationTreeEditor.owl");
-		calc1.loadWhenUnloaded();
-		CreateViewPointPalette action = CreateViewPointPalette.actionType.makeNewAction(calc1, null, null);
+		TestApplicationContext testApplicationContext = new TestApplicationContext(
+				new FileResource("src/test/resources/TestResourceCenter"));
+		ViewPointLibrary viewPointLibrary = testApplicationContext.getViewPointLibrary();
+
+		ViewPoint vp = viewPointLibrary
+				.getViewPoint("http://www.agilebirds.com/openflexo/ViewPoints/Tests/BasicOrganizationTreeEditor.owl");
+		CreateDiagramPalette action = CreateDiagramPalette.actionType.makeNewAction(vp.getDefaultDiagramSpecification(), null, null);
 		return makeArray(action);
 	}
 
 	@Override
 	public File getFIBFile() {
-		return CEDCst.CREATE_PALETTE_DIALOG_FIB;
+		return VPMCst.CREATE_PALETTE_DIALOG_FIB;
 	}
 
 	public static void main(String[] args) {

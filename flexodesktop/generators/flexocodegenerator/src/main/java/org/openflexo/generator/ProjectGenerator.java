@@ -49,7 +49,7 @@ import org.openflexo.foundation.dm.DMPackage;
 import org.openflexo.foundation.ie.IEWOComponent;
 import org.openflexo.foundation.ie.ProjectInstanceTree;
 import org.openflexo.foundation.ie.cl.ComponentDefinition;
-import org.openflexo.foundation.rm.FlexoProject;
+import org.openflexo.foundation.FlexoProject;
 import org.openflexo.foundation.rm.cg.CGRepositoryFileResource;
 import org.openflexo.foundation.wkf.FlexoProcess;
 import org.openflexo.generator.bpel.BPELGenerator;

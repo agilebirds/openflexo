@@ -167,4 +167,5 @@ public abstract class TextFieldCustomPopup<T> extends CustomPopup<T> {
 	protected boolean textIsBeeingProgrammaticallyEditing() {
 		return textIsBeeingProgrammaticallyEditing;
 	}
+
 }

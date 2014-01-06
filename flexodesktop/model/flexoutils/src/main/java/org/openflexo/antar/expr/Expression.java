@@ -19,8 +19,10 @@
  */
 package org.openflexo.antar.expr;
 
+import java.util.ArrayList;
 import java.util.Hashtable;
 import java.util.Iterator;
+import java.util.List;
 import java.util.Vector;
 import java.util.logging.Logger;
 
@@ -36,6 +38,8 @@ import org.openflexo.antar.expr.parser.ParseException;
 public abstract class Expression {
 
 	private static final Logger logger = Logger.getLogger(Expression.class.getPackage().getName());
+
+	public abstract void visit(ExpressionVisitor visitor) throws VisitorException;
 
 	public abstract Expression transform(ExpressionTransformer transformer) throws TransformException;
 
@@ -88,12 +92,45 @@ public abstract class Expression {
 	}
 
 	/**
-	 * Returns an iterator on atomic expressions
+	 * Return a list containing all {@link BindingValue} used in this expression
+	 * 
+	 * @param expression
+	 * @return
+	 * @throws ParseException
+	 * @throws TypeMismatchException
+	 */
+	public List<BindingValue> getAllBindingValues() {
+
+		final List<BindingValue> returned = new ArrayList<BindingValue>();
+
+		try {
+			visit(new ExpressionVisitor() {
+				@Override
+				public void visit(Expression e) {
+					if (e instanceof BindingValue) {
+						returned.add((BindingValue) e);
+					}
+				}
+			});
+		} catch (VisitorException e) {
+			logger.warning("Unexpected " + e);
+		}
+
+		return returned;
+	}
+
+	/**
+	 * Returns an iterator on atomic expressions, which are generally all expressions that are not decomposable into smaller expressions (an
+	 * atomic expression is a constant or a binding value, or a variable). An atomic expression has no child.
 	 */
 	public Iterator<Expression> atomicExpressions() {
 		return getAllAtomicExpressions().iterator();
 	}
 
+	/**
+	 * Returns all atomic expressions defined in this expression, which are generally all expressions that are not decomposable into smaller
+	 * expressions (an atomic expression is a constant or a binding value, or a variable). An atomic expression has no child.
+	 */
 	public Vector<Expression> getAllAtomicExpressions() {
 		Vector<Expression> returned = new Vector<Expression>();
 		appendAllAtomicExpressions(returned, this);
@@ -110,6 +147,12 @@ public abstract class Expression {
 		}
 	}
 
+	/**
+	 * Return the direct childs of this expression, which are involved in the direct decomposition of this expression. An atomic expression
+	 * has no child.
+	 * 
+	 * @return
+	 */
 	protected abstract Vector<Expression> getChilds();
 
 	/**
@@ -119,13 +162,14 @@ public abstract class Expression {
 	 * @return
 	 * @throws TypeMismatchException
 	 */
+	@Deprecated
 	public Expression evaluate(final Hashtable<String, ?> variables) throws TypeMismatchException {
 		try {
 			Expression resolvedExpression = transform(new ExpressionTransformer() {
 				@Override
 				public Expression performTransformation(Expression e) throws TransformException {
-					if (e instanceof BindingValueAsExpression) {
-						BindingValueAsExpression bv = (BindingValueAsExpression) e;
+					if (e instanceof BindingValue) {
+						BindingValue bv = (BindingValue) e;
 						if (bv.isSimpleVariable() && variables.get(bv.toString()) != null) {
 							return Constant.makeConstant(variables.get(bv.toString()));
 						}
@@ -138,39 +182,9 @@ public abstract class Expression {
 			e.printStackTrace();
 			return null;
 		}
-
-		/*return evaluate(new EvaluationContext(new ExpressionParser.DefaultConstantFactory(), new VariableFactory() {
-			@Override
-			public Expression makeVariable(Word value, Bindable bindable) {
-				Object valueObject = variables.get(value.getValue());
-				if (valueObject == null) {
-					return ObjectSymbolicConstant.NULL;
-				}
-				if (valueObject instanceof String) {
-					return new Constant.StringConstant((String) valueObject);
-				} else if (valueObject instanceof Enum) {
-					return new Constant.EnumConstant(((Enum) valueObject).name());
-				} else if (valueObject instanceof Integer) {
-					return new Constant.IntegerConstant((Integer) valueObject);
-				} else if (valueObject instanceof Long) {
-					return new Constant.IntegerConstant((Long) valueObject);
-				} else if (valueObject instanceof Short) {
-					return new Constant.IntegerConstant((Short) valueObject);
-				} else if (valueObject instanceof Float) {
-					return new Constant.FloatConstant((Float) valueObject);
-				} else if (valueObject instanceof Double) {
-					return new Constant.FloatConstant((Double) valueObject);
-				} else if (valueObject instanceof Boolean) {
-					return (Boolean) valueObject ? Constant.BooleanConstant.TRUE : Constant.BooleanConstant.FALSE;
-				}
-				// TODO Handle others
-				// return new Variable(value.getValue());
-				return new Constant.StringConstant(value.getValue());
-			}
-		}, new ExpressionParser.DefaultFunctionFactory()), bindable);*/
-
 	}
 
+	@Deprecated
 	public boolean evaluateCondition(final Hashtable<String, ?> variables) throws TypeMismatchException, UnresolvedExpressionException {
 		// logger.info("evaluate "+this);
 		// logger.info("variables "+variables);
@@ -187,114 +201,15 @@ public abstract class Expression {
 		throw new UnresolvedExpressionException();
 	}
 
-	public static Vector<Variable> extractVariables(String anExpression) throws ParseException, TypeMismatchException {
-		final Hashtable<String, Variable> returnedHash = new Hashtable<String, Variable>();
-		try {
-			Expression e = ExpressionParser.parse(anExpression);
-			e.transform(new ExpressionTransformer() {
-				@Override
-				public Expression performTransformation(Expression e) throws TransformException {
-					if (e instanceof BindingValueAsExpression) {
-						String variableName = ((BindingValueAsExpression) e).toString();
-						Variable returned = returnedHash.get(variableName);
-						if (returned == null) {
-							returned = new Variable(variableName);
-							returnedHash.put(variableName, returned);
-						}
-						return returned;
-					}
-					return e;
-				}
-			});
-		} catch (ParseException e1) {
-			throw e1;
-		} catch (TransformException e) {
-			e.printStackTrace();
-		}
+	@Deprecated
+	public static List<BindingValue> extractBindingValues(String anExpression) throws ParseException, TypeMismatchException {
 
-		/*DefaultExpressionParser parser = new DefaultExpressionParser();
-		Expression expression = parser.parse(anExpression, bindable);
-		expression.evaluate(new EvaluationContext(new ExpressionParser.DefaultConstantFactory(), new VariableFactory() {
-			@Override
-			public Expression makeVariable(Word value, Bindable bindable) {
-				Variable returned = returnedHash.get(value.getValue());
-				if (returned == null) {
-					returned = new Variable(value.getValue());
-					returnedHash.put(value.getValue(), returned);
-				}
-				return returned;
-			}
-		}, new ExpressionParser.DefaultFunctionFactory()), bindable);*/
-
-		Vector<Variable> returned = new Vector<Variable>();
-		for (String v : returnedHash.keySet()) {
-			returned.add(returnedHash.get(v));
-		}
-		return returned;
+		return extractBindingValues(ExpressionParser.parse(anExpression));
 	}
 
-	public static Vector<Expression> extractPrimitives(String anExpression) throws ParseException, TypeMismatchException {
-		final Hashtable<String, Expression> returnedHash = new Hashtable<String, Expression>();
-
-		try {
-			Expression e = ExpressionParser.parse(anExpression);
-			e.transform(new ExpressionTransformer() {
-				@Override
-				public Expression performTransformation(Expression e) throws TransformException {
-					if (e instanceof BindingValueAsExpression) {
-						String variableName = ((BindingValueAsExpression) e).toString();
-						Expression returned = returnedHash.get(variableName);
-						if (returned == null) {
-							returned = new Variable(variableName);
-							returnedHash.put(variableName, returned);
-						}
-						return returned;
-					}
-					return e;
-				}
-			});
-		} catch (org.openflexo.antar.expr.parser.ParseException e1) {
-			e1.printStackTrace();
-		} catch (TransformException e) {
-			e.printStackTrace();
-		}
-
-		/*DefaultExpressionParser parser = new DefaultExpressionParser();
-		Expression expression = parser.parse(anExpression, bindable);
-		expression.evaluate(new EvaluationContext(new ExpressionParser.DefaultConstantFactory(), new VariableFactory() {
-			@Override
-			public Expression makeVariable(Word value, Bindable bindable) {
-				Expression returned = returnedHash.get(value.getValue());
-				if (returned == null) {
-					returned = new Variable(value.getValue());
-					returnedHash.put(value.getValue(), returned);
-				}
-				return returned;
-			}
-		}, new FunctionFactory() {
-			@Override
-			public Expression makeFunction(String functionName, List<Expression> args, Bindable bindable) {
-				StringBuffer key = new StringBuffer();
-				key.append(functionName + "(");
-				for (int i = 0; i < args.size(); i++) {
-					key.append((i > 0 ? "," : "") + "arg" + i);
-				}
-				key.append(")");
-				Expression returned = returnedHash.get(key);
-				if (returned == null) {
-					returned = new Function(functionName, args);
-					returnedHash.put(key.toString(), returned);
-				}
-				return returned;
-			}
-		}), bindable);
-		*/
-
-		Vector<Expression> returned = new Vector<Expression>();
-		for (String v : returnedHash.keySet()) {
-			returned.add(returnedHash.get(v));
-		}
-		return returned;
+	@Deprecated
+	public static List<BindingValue> extractBindingValues(final Expression expression) throws ParseException, TypeMismatchException {
+		return expression.getAllBindingValues();
 	}
 
 	@Override

@@ -8,7 +8,7 @@ import java.util.List;
 
 import org.junit.Test;
 import org.openflexo.foundation.CodeType;
-import org.openflexo.foundation.FlexoObject;
+import org.openflexo.foundation.KVCFlexoObject;
 
 public class TestCodeGeneration extends AbstractTestExternalBuilders<FlexoCodeGeneratorMain> {
 
@@ -19,7 +19,7 @@ public class TestCodeGeneration extends AbstractTestExternalBuilders<FlexoCodeGe
 	@Test
 	public void testWARGeneration() {
 		// Just forcing FlexoObject to load before CodeType
-		FlexoObject.initialize(true);
+		KVCFlexoObject.initialize(true);
 		List<String> argList = getArgList();
 		String warName = "TestWAR";
 		File warFile = new File(getWorkingDir(), warName + ".war");

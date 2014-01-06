@@ -25,6 +25,7 @@ import org.openflexo.dre.controller.DREController;
 import org.openflexo.drm.DocItem;
 import org.openflexo.drm.DocItemFolder;
 import org.openflexo.foundation.FlexoModelObject;
+import org.openflexo.foundation.FlexoObject;
 
 public class DRETabularView extends TabularView {
 
@@ -37,7 +38,7 @@ public class DRETabularView extends TabularView {
 	}
 
 	@Override
-	protected FlexoModelObject getParentObject(FlexoModelObject object) {
+	protected FlexoModelObject getParentObject(FlexoObject object) {
 		if (object instanceof DocItem) {
 			return ((DocItem) object).getFolder();
 		} else if (object instanceof DocItemFolder) {

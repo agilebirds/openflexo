@@ -19,7 +19,7 @@
  */
 package org.openflexo.wkf.swleditor.gr;
 
-import org.openflexo.fge.shapes.Shape.ShapeType;
+import org.openflexo.fge.shapes.ShapeSpecification.ShapeType;
 import org.openflexo.foundation.wkf.FlexoWorkflow;
 import org.openflexo.foundation.wkf.WKFObject;
 import org.openflexo.wkf.swleditor.SwimmingLaneRepresentation;

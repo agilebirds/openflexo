@@ -26,21 +26,22 @@ import java.beans.PropertyChangeListener;
 
 import javax.swing.JSplitPane;
 
-import org.openflexo.GeneralPreferences;
-import org.openflexo.prefs.FlexoPreferences;
+import org.openflexo.view.controller.FlexoController;
 
 public class FlexoSplitPaneLocationSaver implements PropertyChangeListener {
 
-	private JSplitPane splitPane;
-	private String id;
+	private final JSplitPane splitPane;
+	private final String id;
+	private final FlexoController controller;
 
-	public FlexoSplitPaneLocationSaver(JSplitPane pane, String id) {
-		this(pane, id, null);
+	public FlexoSplitPaneLocationSaver(JSplitPane pane, String id, FlexoController controller) {
+		this(pane, id, null, controller);
 	}
 
-	public FlexoSplitPaneLocationSaver(JSplitPane pane, final String id, final Double defaultDividerLocation) {
+	public FlexoSplitPaneLocationSaver(JSplitPane pane, final String id, final Double defaultDividerLocation, FlexoController controller) {
 		this.splitPane = pane;
 		this.id = id;
+		this.controller = controller;
 		layoutSplitPaneWhenShowing(id, defaultDividerLocation);
 	}
 
@@ -58,8 +59,9 @@ public class FlexoSplitPaneLocationSaver implements PropertyChangeListener {
 	}
 
 	private void layoutSplitPane(String id, Double defaultDividerLocation) {
-		if (GeneralPreferences.getDividerLocationForSplitPaneWithID(id) >= 0) {
-			splitPane.setDividerLocation(GeneralPreferences.getDividerLocationForSplitPaneWithID(id));
+		if (controller.getApplicationContext().getGeneralPreferences().getDividerLocationForSplitPaneWithID(id) >= 0) {
+			splitPane.setDividerLocation(controller.getApplicationContext().getGeneralPreferences()
+					.getDividerLocationForSplitPaneWithID(id));
 		} else if (defaultDividerLocation != null) {
 			splitPane.setDividerLocation(defaultDividerLocation);
 		} else {
@@ -114,8 +116,8 @@ public class FlexoSplitPaneLocationSaver implements PropertyChangeListener {
 		} else if (value < splitPane.getMinimumDividerLocation()) {
 			value = splitPane.getMinimumDividerLocation();
 		}
-		GeneralPreferences.setDividerLocationForSplitPaneWithID(value, id);
-		FlexoPreferences.savePreferences(true);
+		controller.getApplicationContext().getGeneralPreferences().setDividerLocationForSplitPaneWithID(value, id);
+		controller.getApplicationContext().getPreferencesService().savePreferences(); // FlexoPreferences.savePreferences(true);
 		locationSaver = null;
 	}
 

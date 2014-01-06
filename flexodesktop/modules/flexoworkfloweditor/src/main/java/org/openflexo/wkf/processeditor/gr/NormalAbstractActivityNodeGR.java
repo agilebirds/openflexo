@@ -21,13 +21,13 @@ package org.openflexo.wkf.processeditor.gr;
 
 import java.awt.Color;
 
+import org.openflexo.fge.BackgroundStyle;
+import org.openflexo.fge.ForegroundStyle;
+import org.openflexo.fge.TextStyle;
+import org.openflexo.fge.ColorGradientBackgroundStyle.ColorGradientDirection;
 import org.openflexo.fge.geom.FGESteppedDimensionConstraint;
-import org.openflexo.fge.graphics.BackgroundStyle;
-import org.openflexo.fge.graphics.BackgroundStyle.ColorGradient.ColorGradientDirection;
-import org.openflexo.fge.graphics.ForegroundStyle;
-import org.openflexo.fge.graphics.TextStyle;
 import org.openflexo.fge.shapes.Rectangle;
-import org.openflexo.fge.shapes.Shape.ShapeType;
+import org.openflexo.fge.shapes.ShapeSpecification.ShapeType;
 import org.openflexo.foundation.DataModification;
 import org.openflexo.foundation.FlexoObservable;
 import org.openflexo.foundation.utils.FlexoFont;
@@ -82,7 +82,7 @@ public class NormalAbstractActivityNodeGR<O extends AbstractActivityNode> extend
 
 	@Override
 	public Rectangle getShape() {
-		return (Rectangle) super.getShape();
+		return (Rectangle) super.getShapeSpecification();
 	}
 
 	@Override

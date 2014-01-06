@@ -22,40 +22,40 @@ package org.openflexo.action;
 import java.util.Vector;
 
 import org.openflexo.foundation.FlexoEditor;
-import org.openflexo.foundation.FlexoModelObject;
+import org.openflexo.foundation.FlexoObject;
+import org.openflexo.foundation.FlexoObject.FlexoObjectImpl;
+import org.openflexo.foundation.FlexoProject;
 import org.openflexo.foundation.action.FlexoActionType;
 import org.openflexo.foundation.action.FlexoGUIAction;
-import org.openflexo.foundation.rm.FlexoProject;
 
 /**
  * @author gpolet
  * 
  */
-public class ProjectExcelExportAction extends FlexoGUIAction<ProjectExcelExportAction, FlexoProject, FlexoModelObject> {
+public class ProjectExcelExportAction extends FlexoGUIAction<ProjectExcelExportAction, FlexoProject, FlexoObject> {
 
-	public static final FlexoActionType<ProjectExcelExportAction, FlexoProject, FlexoModelObject> actionType = new FlexoActionType<ProjectExcelExportAction, FlexoProject, FlexoModelObject>(
+	public static final FlexoActionType<ProjectExcelExportAction, FlexoProject, FlexoObject> actionType = new FlexoActionType<ProjectExcelExportAction, FlexoProject, FlexoObject>(
 			"project_excel_export", FlexoActionType.docGroup) {
 
 		@Override
-		public boolean isEnabledForSelection(FlexoProject object, Vector<FlexoModelObject> globalSelection) {
+		public boolean isEnabledForSelection(FlexoProject object, Vector<FlexoObject> globalSelection) {
 			return true;
 		}
 
 		@Override
-		public boolean isVisibleForSelection(FlexoProject object, Vector<FlexoModelObject> globalSelection) {
+		public boolean isVisibleForSelection(FlexoProject object, Vector<FlexoObject> globalSelection) {
 			return true;
 		}
 
 		@Override
-		public ProjectExcelExportAction makeNewAction(FlexoProject focusedObject, Vector<FlexoModelObject> globalSelection,
-				FlexoEditor editor) {
+		public ProjectExcelExportAction makeNewAction(FlexoProject focusedObject, Vector<FlexoObject> globalSelection, FlexoEditor editor) {
 			return new ProjectExcelExportAction(focusedObject, globalSelection, editor);
 		}
 
 	};
 
 	static {
-		FlexoModelObject.addActionForClass(ProjectExcelExportAction.actionType, FlexoProject.class);
+		FlexoObjectImpl.addActionForClass(ProjectExcelExportAction.actionType, FlexoProject.class);
 	}
 
 	/**
@@ -64,7 +64,7 @@ public class ProjectExcelExportAction extends FlexoGUIAction<ProjectExcelExportA
 	 * @param globalSelection
 	 * @param editor
 	 */
-	protected ProjectExcelExportAction(FlexoProject focusedObject, Vector<FlexoModelObject> globalSelection, FlexoEditor editor) {
+	protected ProjectExcelExportAction(FlexoProject focusedObject, Vector<FlexoObject> globalSelection, FlexoEditor editor) {
 		super(actionType, focusedObject, globalSelection, editor);
 	}
 

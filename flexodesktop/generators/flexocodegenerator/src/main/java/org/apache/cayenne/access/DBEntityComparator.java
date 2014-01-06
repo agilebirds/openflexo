@@ -29,7 +29,7 @@ import org.apache.cayenne.map.DbEntity;
 import org.apache.cayenne.wocompat.EOObjEntity;
 import org.openflexo.foundation.dm.DMEntity;
 import org.openflexo.foundation.dm.eo.DMEOEntity;
-import org.openflexo.foundation.rm.FlexoProject;
+import org.openflexo.foundation.FlexoProject;
 import org.openflexo.logging.FlexoLogger;
 
 /**

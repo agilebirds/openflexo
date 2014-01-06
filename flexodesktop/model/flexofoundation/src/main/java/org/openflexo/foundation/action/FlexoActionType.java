@@ -25,15 +25,17 @@ import java.lang.reflect.TypeVariable;
 import java.util.Map;
 import java.util.Map.Entry;
 import java.util.Vector;
+import java.util.logging.Level;
 import java.util.logging.Logger;
 
 import org.apache.commons.lang3.reflect.TypeUtils;
+import org.flexo.model.TestModelObject;
 import org.openflexo.foundation.FlexoEditor;
-import org.openflexo.foundation.FlexoModelObject;
+import org.openflexo.foundation.FlexoObject;
 import org.openflexo.localization.FlexoLocalization;
 import org.openflexo.localization.LocalizedDelegate;
 
-public abstract class FlexoActionType<A extends FlexoAction<A, T1, T2>, T1 extends FlexoModelObject, T2 extends FlexoModelObject> {
+public abstract class FlexoActionType<A extends FlexoAction<A, T1, T2>, T1 extends FlexoObject, T2 extends FlexoObject> {
 
 	private static final Logger logger = Logger.getLogger(FlexoActionType.class.getPackage().getName());
 
@@ -80,7 +82,7 @@ public abstract class FlexoActionType<A extends FlexoAction<A, T1, T2>, T1 exten
 				return e.getValue();
 			}
 		}
-		return FlexoModelObject.class;
+		return TestModelObject.class;
 	}
 
 	public Type getGlobalSelectionType() {
@@ -90,7 +92,7 @@ public abstract class FlexoActionType<A extends FlexoAction<A, T1, T2>, T1 exten
 				return e.getValue();
 			}
 		}
-		return FlexoModelObject.class;
+		return TestModelObject.class;
 	}
 
 	/*protected FlexoActionType (String actionName, Icon icon)
@@ -266,6 +268,10 @@ public abstract class FlexoActionType<A extends FlexoAction<A, T1, T2>, T1 exten
 	 */
 	public boolean isEnabled(T1 object, Vector<T2> globalSelection) {
 		if (object != null && object.getActionList().indexOf(this) == -1) {
+			if (logger.isLoggable(Level.WARNING)) {
+				logger.warning("Cannot execute " + getLocalizedName() + " on " + object.getClass().getName()
+						+ " because action is not registered on this object type");
+			}
 			return false;
 		}
 
@@ -276,7 +282,7 @@ public abstract class FlexoActionType<A extends FlexoAction<A, T1, T2>, T1 exten
 		if (object != null && object.getActionList().indexOf(this) == -1) {
 			return FlexoLocalization.localizedForKey("action") + " " + getLocalizedName() + " "
 					+ FlexoLocalization.localizedForKey("is_not_active_for") + " "
-					+ FlexoLocalization.localizedForKey(object.getClassNameKey());
+					+ FlexoLocalization.localizedForKey(object.getClass().getSimpleName());
 		}
 		if (!isEnabledForSelection(object, globalSelection)) {
 			return FlexoLocalization.localizedForKey("action") + " " + getLocalizedName() + " "

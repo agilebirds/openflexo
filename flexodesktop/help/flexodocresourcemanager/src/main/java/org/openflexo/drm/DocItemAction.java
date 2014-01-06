@@ -205,11 +205,6 @@ public class DocItemAction extends DRMObject {
 		return "";
 	}
 
-	@Override
-	public String getClassNameKey() {
-		return "doc_item_action";
-	}
-
 	/**
 	 * Overrides getIdentifier
 	 * 

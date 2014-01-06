@@ -69,7 +69,7 @@ public class GenerateZip extends GenerateArtefact<GenerateZip, GenerationReposit
 	}
 
 	static {
-		FlexoModelObject.addActionForClass(GenerateZip.actionType, GenerationRepository.class);
+		TestModelObject.addActionForClass(GenerateZip.actionType, GenerationRepository.class);
 	}
 
 	protected class ZipFileFilter implements FileFilter {

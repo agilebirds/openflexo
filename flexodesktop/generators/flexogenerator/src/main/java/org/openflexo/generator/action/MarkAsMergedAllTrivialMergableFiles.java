@@ -57,7 +57,7 @@ public class MarkAsMergedAllTrivialMergableFiles extends MultipleFileGCAction<Ma
 	};
 
 	static {
-		FlexoModelObject.addActionForClass(MarkAsMergedAllTrivialMergableFiles.actionType, CGObject.class);
+		TestModelObject.addActionForClass(MarkAsMergedAllTrivialMergableFiles.actionType, CGObject.class);
 	}
 
 	MarkAsMergedAllTrivialMergableFiles(CGObject focusedObject, Vector<CGObject> globalSelection, FlexoEditor editor) {

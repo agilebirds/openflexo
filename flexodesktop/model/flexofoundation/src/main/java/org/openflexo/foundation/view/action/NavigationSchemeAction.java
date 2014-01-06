@@ -22,22 +22,22 @@ package org.openflexo.foundation.view.action;
 import java.util.Vector;
 import java.util.logging.Logger;
 
+import org.flexo.model.TestModelObject;
 import org.openflexo.foundation.FlexoEditor;
-import org.openflexo.foundation.FlexoModelObject;
-import org.openflexo.foundation.ontology.EditionPatternInstance;
-import org.openflexo.foundation.view.View;
-import org.openflexo.foundation.view.ViewObject;
+import org.openflexo.foundation.view.EditionPatternInstance;
+import org.openflexo.foundation.view.VirtualModelInstance;
+import org.openflexo.foundation.view.VirtualModelInstanceObject;
 import org.openflexo.foundation.viewpoint.EditionScheme;
 import org.openflexo.foundation.viewpoint.NavigationScheme;
 
-public class NavigationSchemeAction extends EditionSchemeAction<NavigationSchemeAction> {
+public class NavigationSchemeAction extends EditionSchemeAction<NavigationSchemeAction, NavigationScheme, EditionPatternInstance> {
 
 	private static final Logger logger = Logger.getLogger(NavigationSchemeAction.class.getPackage().getName());
 
-	private NavigationSchemeActionType actionType;
+	private final NavigationSchemeActionType actionType;
 
-	public NavigationSchemeAction(NavigationSchemeActionType actionType, FlexoModelObject focusedObject,
-			Vector<FlexoModelObject> globalSelection, FlexoEditor editor) {
+	public NavigationSchemeAction(NavigationSchemeActionType actionType, EditionPatternInstance focusedObject,
+			Vector<VirtualModelInstanceObject> globalSelection, FlexoEditor editor) {
 		super(actionType, focusedObject, globalSelection, editor);
 		this.actionType = actionType;
 	}
@@ -49,16 +49,22 @@ public class NavigationSchemeAction extends EditionSchemeAction<NavigationScheme
 		return null;
 	}
 
+	/**
+	 * Return the {@link EditionPatternInstance} on which this {@link EditionScheme} is applied.<br>
+	 * We want to navigate to this {@link EditionPatternInstance}
+	 * 
+	 * @return
+	 */
 	@Override
 	public EditionPatternInstance getEditionPatternInstance() {
 		if (actionType != null) {
-			return actionType.getEditionPatternReference().getEditionPatternInstance();
+			return actionType.getEditionPatternInstance();
 		}
 		return null;
 	}
 
 	@Override
-	public EditionScheme getEditionScheme() {
+	public NavigationScheme getEditionScheme() {
 		return getNavigationScheme();
 	}
 
@@ -79,23 +85,23 @@ public class NavigationSchemeAction extends EditionSchemeAction<NavigationScheme
 			logger.warning("No navigation scheme. Please investigate !");
 			return false;
 		}
-		return getNavigationScheme().evaluateCondition(actionType.getEditionPatternReference());
+		return getNavigationScheme().evaluateCondition(actionType.getEditionPatternInstance());
 	}
 
-	public FlexoModelObject getTargetObject() {
+	public TestModelObject getTargetObject() {
 		if (getNavigationScheme() == null) {
 			logger.warning("No navigation scheme. Please investigate !");
 			return null;
 		}
-		return getNavigationScheme().evaluateTargetObject(actionType.getEditionPatternReference());
+		return getNavigationScheme().evaluateTargetObject(actionType.getEditionPatternInstance());
 	}
 
 	@Override
-	protected View retrieveOEShema() {
-		if (getFocusedObject() instanceof ViewObject) {
-			return ((ViewObject) getFocusedObject()).getShema();
-		}
-		return null;
+	public VirtualModelInstance retrieveVirtualModelInstance() {
+		/*if (getFocusedObject() instanceof DiagramElement<?>) {
+			return ((DiagramElement<?>) getFocusedObject()).getDiagram();
+		}*/
+		return getEditionPatternInstance().getVirtualModelInstance();
 	}
 
 }

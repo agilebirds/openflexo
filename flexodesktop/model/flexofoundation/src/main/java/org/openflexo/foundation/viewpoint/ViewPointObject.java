@@ -19,25 +19,24 @@
  */
 package org.openflexo.foundation.viewpoint;
 
-import java.util.Vector;
 import java.util.logging.Logger;
 
-import org.openflexo.antar.binding.AbstractBinding;
 import org.openflexo.antar.binding.Bindable;
-import org.openflexo.antar.binding.BindingDefinition;
-import org.openflexo.antar.binding.BindingExpression;
 import org.openflexo.antar.binding.BindingFactory;
 import org.openflexo.antar.binding.BindingModelChanged;
-import org.openflexo.antar.binding.BindingValue;
-import org.openflexo.foundation.ontology.FlexoOntology;
-import org.openflexo.foundation.ontology.ImportedOntology;
+import org.openflexo.antar.binding.DataBinding;
+import org.openflexo.foundation.FlexoObject;
+import org.openflexo.foundation.FlexoServiceManager;
+import org.openflexo.foundation.InnerResourceData;
+import org.openflexo.foundation.technologyadapter.InformationSpace;
 import org.openflexo.foundation.validation.FixProposal;
 import org.openflexo.foundation.validation.ValidationError;
 import org.openflexo.foundation.validation.ValidationIssue;
+import org.openflexo.foundation.validation.ValidationModel;
 import org.openflexo.foundation.validation.ValidationRule;
-import org.openflexo.foundation.viewpoint.ViewPoint.ViewPointBuilder;
-import org.openflexo.foundation.viewpoint.binding.ViewPointDataBinding;
-import org.openflexo.foundation.viewpoint.inspector.InspectorBindingAttribute;
+import org.openflexo.foundation.viewpoint.rm.ViewPointResource;
+import org.openflexo.model.annotations.ImplementationClass;
+import org.openflexo.model.annotations.ModelEntity;
 
 /**
  * Represents an object which is part of the model of a ViewPoint
@@ -45,209 +44,194 @@ import org.openflexo.foundation.viewpoint.inspector.InspectorBindingAttribute;
  * @author sylvain
  * 
  */
-public abstract class ViewPointObject extends ViewPointLibraryObject implements Bindable {
+@ModelEntity(isAbstract = true)
+@ImplementationClass(ViewPointObject.ViewPointObjectImpl.class)
+public interface ViewPointObject extends FlexoObject, Bindable, InnerResourceData {
 
-	private static final Logger logger = Logger.getLogger(ViewPointObject.class.getPackage().getName());
+	@Override
+	public FlexoServiceManager getServiceManager();
 
-	private ImportedOntology viewPointOntology = null;
+	public InformationSpace getInformationSpace();
 
-	public ViewPointObject(ViewPointBuilder builder) {
-		if (builder != null) {
-			// System.out.println("BEGIN deserialisation for " + getClass().getSimpleName());
-			initializeDeserialization(builder);
-			viewPointOntology = builder.getViewPointOntology();
+	public ViewPoint getViewPoint();
+
+	public ViewPointLibrary getViewPointLibrary();
+
+	public ViewPointModelFactory getFactory();
+
+	public String getFMLRepresentation();
+
+	public String getStringRepresentation();
+
+	public static abstract class ViewPointObjectImpl extends FlexoObjectImpl implements ViewPointObject {
+
+		private static final Logger logger = Logger.getLogger(ViewPointObject.class.getPackage().getName());
+
+		@Override
+		public FlexoServiceManager getServiceManager() {
+			return getViewPoint().getViewPointLibrary().getServiceManager();
 		}
-	}
 
-	@Override
-	public final Object instanciateNewBuilder() {
-		return new ViewPointBuilder(getViewPoint());
-	}
-
-	/*@Override
-	public void finalizeDeserialization(Object builder) {
-		System.out.println("END deserialisation for " + getClass().getSimpleName());
-		super.finalizeDeserialization(builder);
-	}*/
-
-	@Override
-	public ViewPointLibrary getViewPointLibrary() {
-		if (getViewPoint() != null) {
+		@Override
+		public ViewPointLibrary getViewPointLibrary() {
 			return getViewPoint().getViewPointLibrary();
 		}
-		return null;
-	}
-
-	@Override
-	public void setChanged() {
-		super.setChanged();
-		if (getViewPoint() != null) {
-			getViewPoint().setIsModified();
-		}
-	}
-
-	public void notifyBindingChanged(ViewPointDataBinding binding) {
-		if (getPropertyChangeSupport() != null) {
-			if (binding != null && binding.getBindingAttribute() != null) {
-				getPropertyChangeSupport().firePropertyChange(binding.getBindingAttribute().toString(), null, binding);
-			}
-		}
-	}
-
-	public void notifyChange(String propertyName, Object oldValue, Object newValue) {
-		if (getPropertyChangeSupport() != null) {
-			getPropertyChangeSupport().firePropertyChange(propertyName, oldValue, newValue);
-		}
-	}
-
-	public void notifyChange(InspectorBindingAttribute bindingAttribute, AbstractBinding oldValue, AbstractBinding newValue) {
-		if (getPropertyChangeSupport() != null) {
-			if (bindingAttribute != null) {
-				getPropertyChangeSupport().firePropertyChange(bindingAttribute.toString(), oldValue, newValue);
-			}
-		}
-	}
-
-	@Override
-	public BindingFactory getBindingFactory() {
-		if (getViewPoint() != null) {
-			return getViewPoint().getBindingFactory();
-		}
-		return null;
-	}
-
-	public void notifyBindingModelChanged() {
-		getPropertyChangeSupport().firePropertyChange(BindingModelChanged.BINDING_MODEL_CHANGED, null, null);
-	}
-
-	public LocalizedDictionary getLocalizedDictionary() {
-		return getViewPoint().getLocalizedDictionary();
-	}
-
-	public abstract ViewPoint getViewPoint();
-
-	public FlexoOntology getViewpointOntology() {
-		if (isDeserializing() || getViewPoint() == null) {
-			return viewPointOntology;
-		} else {
-			return getViewPoint().getViewpointOntology();
-		}
-	}
-
-	@Deprecated
-	public ViewPoint getCalc() {
-		return getViewPoint();
-	}
-
-	@Deprecated
-	@Override
-	public String getInspectorName() {
-		// TODO Auto-generated method stub
-		return null;
-	}
-
-	/**
-	 * Return a vector of all embedded objects on which the validation will be performed
-	 * 
-	 * @return a Vector of Validable objects
-	 */
-	/*@Override
-	public Vector<Validable> getAllEmbeddedValidableObjects() {
-		return new Vector<Validable>(getAllEmbeddedViewPointObjects());
-	}*/
-
-	public final Vector<ViewPointObject> getAllEmbeddedViewPointObjects() {
-		return null;
-	}
-
-	public abstract String getLanguageRepresentation();
-
-	@Override
-	public String getFullyQualifiedName() {
-		return (getViewPoint() != null ? getViewPoint().getFullyQualifiedName() : "null") + "#" + getClass().getSimpleName();
-	}
-
-	public static abstract class BindingMustBeValid<C extends ViewPointObject> extends ValidationRule<BindingMustBeValid<C>, C> {
-		public BindingMustBeValid(String ruleName, Class<C> clazz) {
-			super(clazz, ruleName);
-		}
-
-		public abstract ViewPointDataBinding getBinding(C object);
-
-		public abstract BindingDefinition getBindingDefinition(C object);
 
 		@Override
-		public ValidationIssue<BindingMustBeValid<C>, C> applyValidation(C object) {
-			if (getBinding(object) != null && getBinding(object).isSet()) {
-				if (!getBinding(object).isValid()) {
-					logger.info("Binding NOT valid: " + getBinding(object) + " for " + object.getFullyQualifiedName() + ". Reason follows.");
-					getBinding(object).getBinding().debugIsBindingValid();
-					DeleteBinding<C> deleteBinding = new DeleteBinding<C>(this);
-					return new ValidationError<BindingMustBeValid<C>, C>(this, object, BindingMustBeValid.this.getNameKey(), deleteBinding);
-				}
+		public InformationSpace getInformationSpace() {
+			if (getViewPoint().getViewPointLibrary() != null) {
+				return getViewPoint().getViewPointLibrary().getServiceManager().getInformationSpace();
 			}
 			return null;
 		}
 
-		protected static class DeleteBinding<C extends ViewPointObject> extends FixProposal<BindingMustBeValid<C>, C> {
+		@Override
+		public ViewPoint getResourceData() {
+			return getViewPoint();
+		}
 
-			private BindingMustBeValid<C> rule;
-
-			public DeleteBinding(BindingMustBeValid<C> rule) {
-				super("delete_this_binding");
-				this.rule = rule;
+		@Override
+		public ValidationModel getDefaultValidationModel() {
+			if (getViewPoint() != null) {
+				return getViewPoint().getDefaultValidationModel();
 			}
+			return null;
+		}
+
+		@Override
+		public void setChanged() {
+			super.setChanged();
+			if (getViewPoint() != null) {
+				getViewPoint().setIsModified();
+			}
+		}
+
+		@Override
+		public void notifiedBindingChanged(DataBinding<?> dataBinding) {
+			if (getPropertyChangeSupport() != null) {
+				if (dataBinding != null && dataBinding.getBindingName() != null) {
+					getPropertyChangeSupport().firePropertyChange(dataBinding.getBindingName(), null, dataBinding);
+				}
+			}
+		}
+
+		@Override
+		public void notifiedBindingDecoded(DataBinding<?> dataBinding) {
+			// logger.info("Binding decoded: " + dataBinding);
+		}
+
+		public void notifyChange(String propertyName, Object oldValue, Object newValue) {
+			if (getPropertyChangeSupport() != null) {
+				getPropertyChangeSupport().firePropertyChange(propertyName, oldValue, newValue);
+			}
+		}
+
+		@Override
+		public BindingFactory getBindingFactory() {
+			if (getViewPoint() != null) {
+				return getViewPoint().getBindingFactory();
+			}
+			return null;
+		}
+
+		public void notifyBindingModelChanged() {
+			getPropertyChangeSupport().firePropertyChange(BindingModelChanged.BINDING_MODEL_CHANGED, null, null);
+		}
+
+		public LocalizedDictionary getLocalizedDictionary() {
+			return getViewPoint().getLocalizedDictionary();
+		}
+
+		@Override
+		public abstract ViewPoint getViewPoint();
+
+		// Voir du cote de GeneratorFormatter pour formatter tout ca
+		public abstract String getFMLRepresentation(FMLRepresentationContext context);
+
+		@Override
+		public final String getFMLRepresentation() {
+			return getFMLRepresentation(new FMLRepresentationContext());
+		}
+
+		public static abstract class BindingMustBeValid<C extends ViewPointObject> extends ValidationRule<BindingMustBeValid<C>, C> {
+			public BindingMustBeValid(String ruleName, Class<C> clazz) {
+				super(clazz, ruleName);
+			}
+
+			public abstract DataBinding<?> getBinding(C object);
 
 			@Override
-			protected void fixAction() {
-				rule.getBinding(getObject()).setBinding(null);
+			public ValidationIssue<BindingMustBeValid<C>, C> applyValidation(C object) {
+				if (getBinding(object) != null && getBinding(object).isSet()) {
+					if (!getBinding(object).isValid()) {
+						logger.info("Binding NOT valid: " + getBinding(object) + " for " + object.getStringRepresentation() + ". Reason: "
+								+ getBinding(object).invalidBindingReason());
+						DeleteBinding<C> deleteBinding = new DeleteBinding<C>(this);
+						return new ValidationError<BindingMustBeValid<C>, C>(this, object, BindingMustBeValid.this.getNameKey(),
+								deleteBinding);
+					}
+				}
+				return null;
 			}
 
-		}
-	}
+			protected static class DeleteBinding<C extends ViewPointObject> extends FixProposal<BindingMustBeValid<C>, C> {
 
-	public static abstract class BindingIsRequiredAndMustBeValid<C extends ViewPointObject> extends
-			ValidationRule<BindingIsRequiredAndMustBeValid<C>, C> {
-		public BindingIsRequiredAndMustBeValid(String ruleName, Class<C> clazz) {
-			super(clazz, ruleName);
-		}
+				private final BindingMustBeValid<C> rule;
 
-		public abstract ViewPointDataBinding getBinding(C object);
-
-		public abstract BindingDefinition getBindingDefinition(C object);
-
-		@Override
-		public ValidationIssue<BindingIsRequiredAndMustBeValid<C>, C> applyValidation(C object) {
-			if (getBinding(object) == null || !getBinding(object).isSet()) {
-				return new ValidationError<BindingIsRequiredAndMustBeValid<C>, C>(this, object,
-						BindingIsRequiredAndMustBeValid.this.getNameKey());
-			} else if (!getBinding(object).isValid()) {
-				logger.info(getClass().getName() + ": Binding NOT valid: " + getBinding(object) + " for " + object.getFullyQualifiedName()
-						+ ". Reason: " + getBinding(object).getBinding().invalidBindingReason());
-				getBinding(object).getBinding().debugIsBindingValid();
-				return new ValidationError<BindingIsRequiredAndMustBeValid<C>, C>(this, object,
-						BindingIsRequiredAndMustBeValid.this.getNameKey());
-			}
-			return null;
-		}
-
-		public String retrieveIssueDetails(C object) {
-			if (getBinding(object) == null || !getBinding(object).isSet()) {
-				return "Binding not set";
-			} else if (!getBinding(object).isValid()) {
-				if (getBinding(object).getBinding() instanceof BindingExpression) {
-					System.out.println("**** J'essaie d'en faire un BV");
-					object.getBindingFactory().getBindingValueFactory().debug = true;
-					BindingValue bv = object.getBindingFactory().getBindingValueFactory()
-							.convertFromString(getBinding(object).getUnparsedBinding(), object);
-					object.getBindingFactory().getBindingValueFactory().debug = false;
-					System.out.println("**** j'ai reussi a en faire un BV: " + bv);
+				public DeleteBinding(BindingMustBeValid<C> rule) {
+					super("delete_this_binding");
+					this.rule = rule;
 				}
 
-				return "Binding not valid [" + getBinding(object) + "], reason: " + getBinding(object).getBinding().invalidBindingReason();
+				@Override
+				protected void fixAction() {
+					rule.getBinding(getObject()).reset();
+				}
+
 			}
-			return null;
+		}
+
+		public static abstract class BindingIsRequiredAndMustBeValid<C extends ViewPointObject> extends
+				ValidationRule<BindingIsRequiredAndMustBeValid<C>, C> {
+			public BindingIsRequiredAndMustBeValid(String ruleName, Class<C> clazz) {
+				super(clazz, ruleName);
+			}
+
+			public abstract DataBinding<?> getBinding(C object);
+
+			@Override
+			public ValidationIssue<BindingIsRequiredAndMustBeValid<C>, C> applyValidation(C object) {
+				DataBinding<?> b = getBinding(object);
+				if (b == null || !b.isSet()) {
+					return new ValidationError<BindingIsRequiredAndMustBeValid<C>, C>(this, object,
+							BindingIsRequiredAndMustBeValid.this.getNameKey());
+				} else if (!b.isValid()) {
+					logger.info(getClass().getName() + ": Binding NOT valid: " + b + " for " + object.getStringRepresentation()
+							+ ". Reason: " + b.invalidBindingReason());
+					return new ValidationError<BindingIsRequiredAndMustBeValid<C>, C>(this, object,
+							BindingIsRequiredAndMustBeValid.this.getNameKey());
+				}
+				return null;
+			}
+
+			public String retrieveIssueDetails(C object) {
+				if (getBinding(object) == null || !getBinding(object).isSet()) {
+					return "Binding not set";
+				} else if (!getBinding(object).isValid()) {
+					return "Binding not valid [" + getBinding(object) + "], reason: " + getBinding(object).invalidBindingReason();
+				}
+				return null;
+			}
+		}
+
+		@Override
+		public ViewPointModelFactory getFactory() {
+			return ((ViewPointResource) getResourceData().getResource()).getFactory();
+		}
+
+		@Override
+		public String getStringRepresentation() {
+			return getFactory().stringRepresentation(this);
 		}
 	}
-
 }

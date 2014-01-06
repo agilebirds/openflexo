@@ -24,11 +24,10 @@ import java.util.Vector;
 import java.util.logging.Logger;
 
 import org.openflexo.foundation.FlexoEditor;
-import org.openflexo.foundation.FlexoModelObject;
+import org.openflexo.foundation.FlexoObject.FlexoObjectImpl;
 import org.openflexo.foundation.action.FlexoAction;
 import org.openflexo.foundation.action.FlexoActionType;
 import org.openflexo.foundation.action.NotImplementedException;
-import org.openflexo.foundation.rm.DuplicateResourceException;
 import org.openflexo.foundation.viewpoint.EditionPattern;
 import org.openflexo.foundation.viewpoint.ViewPointObject;
 
@@ -51,18 +50,18 @@ public class DuplicateEditionPattern extends FlexoAction<DuplicateEditionPattern
 
 		@Override
 		public boolean isVisibleForSelection(EditionPattern object, Vector<ViewPointObject> globalSelection) {
-			return object != null;
+			return object != null && object.getClass().equals(EditionPattern.class);
 		}
 
 		@Override
 		public boolean isEnabledForSelection(EditionPattern object, Vector<ViewPointObject> globalSelection) {
-			return object != null;
+			return isVisibleForSelection(object, globalSelection);
 		}
 
 	};
 
 	static {
-		FlexoModelObject.addActionForClass(DuplicateEditionPattern.actionType, EditionPattern.class);
+		FlexoObjectImpl.addActionForClass(DuplicateEditionPattern.actionType, EditionPattern.class);
 	}
 
 	DuplicateEditionPattern(EditionPattern focusedObject, Vector<ViewPointObject> globalSelection, FlexoEditor editor) {
@@ -73,7 +72,7 @@ public class DuplicateEditionPattern extends FlexoAction<DuplicateEditionPattern
 	public EditionPattern newEditionPattern;
 
 	@Override
-	protected void doAction(Object context) throws DuplicateResourceException, NotImplementedException, InvalidParameterException {
+	protected void doAction(Object context) throws NotImplementedException, InvalidParameterException {
 		logger.info("Duplicate edition pattern");
 
 		newEditionPattern = getFocusedObject().duplicate(newName);

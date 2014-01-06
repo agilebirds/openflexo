@@ -36,6 +36,7 @@ import org.openflexo.fge.geom.FGEPoint;
 import org.openflexo.fge.view.DrawingView;
 import org.openflexo.foundation.FlexoEditor;
 import org.openflexo.foundation.FlexoModelObject;
+import org.openflexo.foundation.FlexoObject;
 import org.openflexo.foundation.wkf.ActionPetriGraph;
 import org.openflexo.foundation.wkf.ActivityPetriGraph;
 import org.openflexo.foundation.wkf.FlexoProcess;
@@ -49,12 +50,12 @@ import org.openflexo.localization.FlexoLocalization;
 import org.openflexo.logging.FlexoLogger;
 import org.openflexo.module.UserType;
 import org.openflexo.selection.SelectionManager;
-import org.openflexo.selection.SelectionManagingDrawingController;
+import org.openflexo.selection.SelectionManagingDianaEditor;
 import org.openflexo.wkf.controller.WKFController;
 import org.openflexo.wkf.swleditor.SwimmingLaneRepresentation.SwimmingLaneRepresentationObjectVisibilityDelegate;
 import org.openflexo.wkf.swleditor.gr.WKFObjectGR;
 
-public class SwimmingLaneEditorController extends SelectionManagingDrawingController<SwimmingLaneRepresentation> {
+public class SwimmingLaneEditorController extends SelectionManagingDianaEditor<SwimmingLaneRepresentation> {
 
 	private static final Logger logger = FlexoLogger.getLogger(SwimmingLaneEditorController.class.getPackage().getName());
 
@@ -202,7 +203,7 @@ public class SwimmingLaneEditorController extends SelectionManagingDrawingContro
 	}
 
 	protected boolean paletteSwitchRequested = false;
-	protected FlexoModelObject objectForPaletteSwitch;
+	protected FlexoObject objectForPaletteSwitch;
 
 	public void setObjectForPaletteSwitch(FlexoModelObject objectForPaletteSwitch) {
 		if (this.objectForPaletteSwitch != null && this.objectForPaletteSwitch != objectForPaletteSwitch) {
@@ -294,7 +295,7 @@ public class SwimmingLaneEditorController extends SelectionManagingDrawingContro
 			movedObject = ((WKFObjectGR<?>) currentMove.getMovedObject()).getModel();
 		}
 
-		for (GraphicalRepresentation<?> gr : currentMove.getMovedObjects()) {
+		for (GraphicalRepresentation gr : currentMove.getMovedObjects()) {
 			if (gr instanceof WKFObjectGR<?>) {
 				movedObjects.add(((WKFObjectGR<?>) gr).getModel());
 			}
@@ -303,7 +304,7 @@ public class SwimmingLaneEditorController extends SelectionManagingDrawingContro
 		if (movedObject != null) {
 			currentMoveAction = WKFMove.actionType.makeNewAction(movedObject, movedObjects, getWKFController().getEditor());
 			currentMoveAction.setGraphicalContext(SWLEditorConstants.SWIMMING_LANE_EDITOR);
-			for (ShapeGraphicalRepresentation<?> gr : currentMove.getMovedObjects()) {
+			for (ShapeGraphicalRepresentation gr : currentMove.getMovedObjects()) {
 				if (gr instanceof WKFObjectGR<?>) {
 					WKFObject o = ((WKFObjectGR<?>) gr).getModel();
 					FGEPoint initialLocation = currentMove.getInitialLocations().get(gr);
@@ -318,7 +319,7 @@ public class SwimmingLaneEditorController extends SelectionManagingDrawingContro
 	@Override
 	public void notifyHasMoved(MoveInfo currentMove) {
 		if (currentMoveAction != null) {
-			for (ShapeGraphicalRepresentation<?> gr : currentMove.getMovedObjects()) {
+			for (ShapeGraphicalRepresentation gr : currentMove.getMovedObjects()) {
 				if (gr instanceof WKFObjectGR<?>) {
 					WKFObject o = ((WKFObjectGR<?>) gr).getModel();
 					currentMoveAction.getNewLocations().put(o, new Point2D.Double(gr.getX(), gr.getY()));

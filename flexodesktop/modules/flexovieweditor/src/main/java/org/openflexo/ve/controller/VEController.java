@@ -29,8 +29,8 @@ import java.util.logging.Logger;
 
 import org.openflexo.fge.GraphicalRepresentation;
 import org.openflexo.foundation.FlexoEditor;
-import org.openflexo.foundation.FlexoModelObject;
-import org.openflexo.foundation.rm.FlexoProject;
+import org.openflexo.foundation.FlexoObject;
+import org.openflexo.foundation.FlexoProject;
 import org.openflexo.inspector.InspectableObject;
 import org.openflexo.module.FlexoModule;
 import org.openflexo.selection.SelectionManager;
@@ -51,8 +51,9 @@ public class VEController extends FlexoController {
 
 	private static final Logger logger = Logger.getLogger(VEController.class.getPackage().getName());
 
-	public DiagramPerspective DIAGRAM_PERSPECTIVE;
-	public OntologyPerspective ONTOLOGY_PERSPECTIVE;
+	public ViewLibraryPerspective VIEW_LIBRARY_PERSPECTIVE;
+
+	public InformationSpacePerspective INFORMATION_SPACE_PERSPECTIVE;
 
 	@Override
 	public boolean useNewInspectorScheme() {
@@ -73,8 +74,8 @@ public class VEController extends FlexoController {
 
 	@Override
 	protected void initializePerspectives() {
-		addToPerspectives(DIAGRAM_PERSPECTIVE = new DiagramPerspective(this));
-		addToPerspectives(ONTOLOGY_PERSPECTIVE = new OntologyPerspective(this));
+		addToPerspectives(VIEW_LIBRARY_PERSPECTIVE = new ViewLibraryPerspective(this));
+		addToPerspectives(INFORMATION_SPACE_PERSPECTIVE = new InformationSpacePerspective(this));
 	}
 
 	@Override
@@ -105,13 +106,13 @@ public class VEController extends FlexoController {
 			project.getStringEncoder()._addConverter(GraphicalRepresentation.POINT_CONVERTER);
 			project.getStringEncoder()._addConverter(GraphicalRepresentation.RECT_POLYLIN_CONVERTER);
 		}
-		DIAGRAM_PERSPECTIVE.setProject(project);
-		ONTOLOGY_PERSPECTIVE.setProject(project);
+		VIEW_LIBRARY_PERSPECTIVE.setProject(project);
+		// ONTOLOGY_PERSPECTIVE.setProject(project);
 	}
 
 	@Override
-	public FlexoModelObject getDefaultObjectToSelect(FlexoProject project) {
-		return project.getShemaLibrary();
+	public FlexoObject getDefaultObjectToSelect(FlexoProject project) {
+		return project.getViewLibrary();
 	}
 
 	/**
@@ -131,19 +132,6 @@ public class VEController extends FlexoController {
 		return new VEMainPane(this);
 	}
 
-	/**
-	 * Select the view representing supplied object, if this view exists. Try all to really display supplied object, even if required view
-	 * is not the current displayed view
-	 * 
-	 * @param object
-	 *            : the object to focus on
-	 */
-	@Override
-	public void selectAndFocusObject(FlexoModelObject object) {
-		// TODO: Implements this
-		setCurrentEditedObjectAsModuleView(object);
-	}
-
 	@Override
 	public boolean handleException(InspectableObject inspectable, String propertyName, Object value, Throwable exception) {
 		// TODO: Handles here exceptions that may be thrown through the inspector
@@ -151,13 +139,13 @@ public class VEController extends FlexoController {
 	}
 
 	@Override
-	public String getWindowTitleforObject(FlexoModelObject object) {
-		if (getCurrentPerspective() == DIAGRAM_PERSPECTIVE) {
-			return DIAGRAM_PERSPECTIVE.getWindowTitleforObject(object);
+	public String getWindowTitleforObject(FlexoObject object) {
+		if (getCurrentPerspective() == VIEW_LIBRARY_PERSPECTIVE) {
+			return VIEW_LIBRARY_PERSPECTIVE.getWindowTitleforObject(object);
 		}
-		if (getCurrentPerspective() == ONTOLOGY_PERSPECTIVE) {
+		/*if (getCurrentPerspective() == ONTOLOGY_PERSPECTIVE) {
 			return ONTOLOGY_PERSPECTIVE.getWindowTitleforObject(object);
-		}
+		}*/
 		return object.getFullyQualifiedName();
 	}
 

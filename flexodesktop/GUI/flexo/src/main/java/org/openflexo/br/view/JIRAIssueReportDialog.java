@@ -11,29 +11,29 @@ import java.net.MalformedURLException;
 import java.net.SocketTimeoutException;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Map.Entry;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 import java.util.zip.Deflater;
 
-import org.openflexo.AdvancedPrefs;
+import org.openflexo.ApplicationContext;
 import org.openflexo.ApplicationVersion;
 import org.openflexo.Flexo;
-import org.openflexo.br.BugReportManager;
 import org.openflexo.components.ProgressWindow;
 import org.openflexo.fib.controller.FIBController.Status;
 import org.openflexo.fib.controller.FIBDialog;
-import org.openflexo.foundation.rm.FlexoProject;
+import org.openflexo.foundation.FlexoProject;
 import org.openflexo.localization.FlexoLocalization;
 import org.openflexo.logging.FlexoLogger;
 import org.openflexo.module.FlexoModule;
 import org.openflexo.module.Module;
-import org.openflexo.module.Modules;
 import org.openflexo.swing.ImageUtils;
 import org.openflexo.swing.ImageUtils.ImageType;
 import org.openflexo.toolbox.FileResource;
 import org.openflexo.toolbox.FileUtils;
 import org.openflexo.toolbox.FlexoVersion;
 import org.openflexo.toolbox.IProgress;
+import org.openflexo.toolbox.StringUtils;
 import org.openflexo.toolbox.ToolBox;
 import org.openflexo.toolbox.ZipUtils;
 import org.openflexo.view.FlexoDialog;
@@ -42,9 +42,11 @@ import org.openflexo.view.controller.FlexoController;
 import org.openflexo.ws.jira.JIRAClient;
 import org.openflexo.ws.jira.JIRAClient.Method;
 import org.openflexo.ws.jira.JIRAClient.Progress;
+import org.openflexo.ws.jira.JIRAException;
 import org.openflexo.ws.jira.UnauthorizedJIRAAccessException;
 import org.openflexo.ws.jira.action.SubmitIssue;
 import org.openflexo.ws.jira.model.JIRAComponent;
+import org.openflexo.ws.jira.model.JIRAErrors;
 import org.openflexo.ws.jira.model.JIRAIssue;
 import org.openflexo.ws.jira.model.JIRAObject;
 import org.openflexo.ws.jira.model.JIRAPriority;
@@ -81,8 +83,8 @@ public class JIRAIssueReportDialog {
 
 		private String issueLink;
 
-		private List<String> errors;
-		private List<String> warnings;
+		private final List<String> errors;
+		private final List<String> warnings;
 
 		public SubmitIssueReport() {
 			errors = new ArrayList<String>();
@@ -159,7 +161,7 @@ public class JIRAIssueReportDialog {
 	private static final List<JIRAComponent> EMPTY_LIST = new ArrayList<JIRAComponent>(0);
 
 	private JIRAIssue issue;
-	private JIRAProject project;
+	private final JIRAProject project;
 
 	private boolean sendLogs;
 	private boolean sendScreenshots;
@@ -168,16 +170,18 @@ public class JIRAIssueReportDialog {
 
 	private File attachFile;
 
+	private ApplicationContext serviceManager;
 	private FlexoProject flexoProject;
 
-	public static void newBugReport(FlexoModule module, FlexoProject project) {
-		newBugReport(null, module, project);
+	public static void newBugReport(FlexoModule module, FlexoProject project, ApplicationContext serviceManager) {
+		newBugReport(null, module, project, serviceManager);
 	}
 
-	public static void newBugReport(Exception e, FlexoModule module, FlexoProject project) {
+	public static void newBugReport(Exception e, FlexoModule module, FlexoProject project, ApplicationContext serviceManager) {
 		try {
 			JIRAIssueReportDialog report = new JIRAIssueReportDialog(e);
 			report.setFlexoProject(project);
+			report.setServiceManager(serviceManager);
 			if (module != null) {
 				if (report.getIssue().getIssuetype().getComponentField() != null
 						&& report.getIssue().getIssuetype().getComponentField().getAllowedValues() != null) {
@@ -195,10 +199,11 @@ public class JIRAIssueReportDialog {
 			while (!ok) {
 				if (dialog.getStatus() == Status.VALIDATED) {
 					try {
-						while (AdvancedPrefs.getBugReportUser() == null || AdvancedPrefs.getBugReportUser().trim().length() == 0
-								|| AdvancedPrefs.getBugReportPassword() == null
-								|| AdvancedPrefs.getBugReportPassword().trim().length() == 0) {
-							if (!JIRAURLCredentialsDialog.askLoginPassword()) {
+						while (serviceManager.getAdvancedPrefs().getBugReportUser() == null
+								|| serviceManager.getAdvancedPrefs().getBugReportUser().trim().length() == 0
+								|| serviceManager.getAdvancedPrefs().getBugReportPassword() == null
+								|| serviceManager.getAdvancedPrefs().getBugReportPassword().trim().length() == 0) {
+							if (!JIRAURLCredentialsDialog.askLoginPassword(serviceManager)) {
 								break;
 							}
 						}
@@ -206,12 +211,33 @@ public class JIRAIssueReportDialog {
 					} catch (MalformedURLException e1) {
 						FlexoController.showError(FlexoLocalization.localizedForKey("could_not_send_bug_report") + " " + e.getMessage());
 					} catch (UnauthorizedJIRAAccessException e1) {
-						if (JIRAURLCredentialsDialog.askLoginPassword()) {
+						if (JIRAURLCredentialsDialog.askLoginPassword(serviceManager)) {
 							continue;
 						} else {
 							break;
 						}
-					} catch (IOException e1) {
+					} catch (JIRAException e1) {
+						StringBuilder sb = new StringBuilder();
+						JIRAErrors errors = e1.getErrors();
+						if (errors.getErrorMessages() != null) {
+							for (String s : errors.getErrorMessages()) {
+								if (sb.length() > 0) {
+									sb.append('\n');
+								}
+								sb.append(s);
+							}
+						}
+						if (errors.getErrors() != null) {
+							for (Entry<String, String> e2 : errors.getErrors().entrySet()) {
+								if (sb.length() > 0) {
+									sb.append('\n');
+								}
+								sb.append(FlexoLocalization.localizedForKey("field") + " " + FlexoLocalization.localizedForKey(e2.getKey())
+										+ " : " + FlexoLocalization.localizedForKey(e2.getValue()));
+							}
+						}
+						FlexoController.notify(FlexoLocalization.localizedForKey("could_not_send_bug_report") + ":\n" + sb.toString());
+					} catch (Exception e1) {
 						e1.printStackTrace();
 					}
 				} else {
@@ -233,16 +259,20 @@ public class JIRAIssueReportDialog {
 		}
 	}
 
-	private void setFlexoProject(FlexoProject flexoProject) {
-		this.flexoProject = flexoProject;
+	private void setServiceManager(ApplicationContext serviceManager) {
+		this.serviceManager = serviceManager;
 	}
 
-	public JIRAIssueReportDialog() throws JsonSyntaxException, JsonIOException, FileNotFoundException {
+	private void setFlexoProject(FlexoProject project) {
+		this.flexoProject = project;
+	}
+
+	private JIRAIssueReportDialog() throws JsonSyntaxException, JsonIOException, FileNotFoundException {
 		this(null);
 	}
 
-	public JIRAIssueReportDialog(Exception e) throws JsonSyntaxException, JsonIOException, FileNotFoundException {
-		this.project = BugReportManager.getInstance().getOpenFlexoProject();
+	private JIRAIssueReportDialog(Exception e) throws JsonSyntaxException, JsonIOException, FileNotFoundException {
+		this.project = serviceManager.getBugReportService().getOpenFlexoProject();
 		issue = new JIRAIssue();
 		issue.setIssuetype(project.getIssuetypes().get(0));
 		issue.setProject(project);
@@ -279,9 +309,9 @@ public class JIRAIssueReportDialog {
 		this.issue = issue;
 	}
 
-	public boolean send() throws IOException {
-		JIRAClient client = new JIRAClient(AdvancedPrefs.getBugReportUrl(), AdvancedPrefs.getBugReportUser(),
-				AdvancedPrefs.getBugReportPassword());
+	public boolean send() throws Exception {
+		JIRAClient client = new JIRAClient(serviceManager.getAdvancedPrefs().getBugReportUrl(), serviceManager.getAdvancedPrefs()
+				.getBugReportUser(), serviceManager.getAdvancedPrefs().getBugReportPassword());
 		final SubmitIssueReport report = new SubmitIssueReport();
 		SubmitIssueToJIRA target = new SubmitIssueToJIRA(client, report);
 		int steps = target.getNumberOfSteps();
@@ -314,8 +344,8 @@ public class JIRAIssueReportDialog {
 
 	private class SubmitIssueToJIRA implements Runnable {
 
-		private SubmitIssueReport report;
-		private IOException exception;
+		private final SubmitIssueReport report;
+		private Exception exception;
 
 		private final JIRAClient client;
 
@@ -401,7 +431,7 @@ public class JIRAIssueReportDialog {
 				if (submit.getKey() != null) {
 					JIRAIssue result = new JIRAIssue();
 					result.setKey(submit.getKey());
-					report.setIssueLink(AdvancedPrefs.getBugReportUrl() + "/browse/" + submit.getKey());
+					report.setIssueLink(serviceManager.getAdvancedPrefs().getBugReportUrl() + "/browse/" + submit.getKey());
 					if (sendLogs) {
 						ProgressWindow.instance().setProgress(FlexoLocalization.localizedForKey("sending_logs"));
 						progressAdapter.resetCount();
@@ -496,13 +526,16 @@ public class JIRAIssueReportDialog {
 			} catch (IOException e) {
 				e.printStackTrace();
 				this.exception = e;
+			} catch (JIRAException e) {
+				e.printStackTrace();
+				this.exception = e;
 			} finally {
 				getIssue().<JIRAObject> replaceMembersByOriginalMembers();
 			}
 
 		}
 
-		public IOException getException() {
+		public Exception getException() {
 			return exception;
 		}
 	}
@@ -526,7 +559,7 @@ public class JIRAIssueReportDialog {
 			return EMPTY_LIST;
 		}
 		List<JIRAComponent> availableModules = new ArrayList<JIRAComponent>();
-		for (Module module : Modules.getInstance().getAvailableModules()) {
+		for (Module<?> module : serviceManager.getModuleLoader().getKnownModules()) {
 			for (JIRAComponent component : getIssue().getIssuetype().getComponentField().getAllowedValues()) {
 				if (module.getJiraComponentID().equals(component.getId())) {
 					availableModules.add(component);
@@ -575,5 +608,10 @@ public class JIRAIssueReportDialog {
 
 	public void setSendProject(boolean sendProject) {
 		this.sendProject = sendProject;
+	}
+
+	public boolean isValid() {
+		return getIssue() != null && getIssue().getIssuetype() != null && StringUtils.isNotEmpty(getIssue().getSummary())
+				&& StringUtils.isNotEmpty(getIssue().getDescription());
 	}
 }

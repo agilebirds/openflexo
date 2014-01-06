@@ -19,18 +19,19 @@
  */
 package org.openflexo.foundation.viewpoint;
 
-import org.openflexo.foundation.ontology.dm.OEDataModification;
+import org.openflexo.foundation.ontology.dm.OntologyDataModification;
+import org.openflexo.foundation.viewpoint.rm.ViewPointResource;
 
 /**
- * Notify that a new calc has been created
+ * Notify that a new viewpoint has been registered in ViewPointLibrary
  * 
- * @author sguerin
+ * @author sylvain
  * 
  */
-public class OntologyCalcCreated extends OEDataModification {
+public class OntologyCalcCreated extends OntologyDataModification {
 
-	public OntologyCalcCreated(ViewPoint newCalc) {
-		super(null, newCalc);
+	public OntologyCalcCreated(ViewPointResource newViewPointResource) {
+		super(null, newViewPointResource);
 	}
 
 }

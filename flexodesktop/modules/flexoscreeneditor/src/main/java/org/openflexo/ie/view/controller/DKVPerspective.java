@@ -21,7 +21,7 @@ package org.openflexo.ie.view.controller;
 
 import javax.swing.ImageIcon;
 
-import org.openflexo.foundation.FlexoModelObject;
+import org.openflexo.foundation.FlexoObject;
 import org.openflexo.foundation.dkv.DKVModel;
 import org.openflexo.foundation.dkv.DKVObject;
 import org.openflexo.icon.SEIconLibrary;
@@ -63,7 +63,7 @@ class DKVPerspective extends FlexoPerspective {
 	}
 
 	@Override
-	public DKVModel getDefaultObject(FlexoModelObject proposedObject) {
+	public DKVModel getDefaultObject(FlexoObject proposedObject) {
 		if (proposedObject instanceof DKVObject) {
 			return ((DKVObject) proposedObject).getDkvModel();
 		}
@@ -71,12 +71,12 @@ class DKVPerspective extends FlexoPerspective {
 	}
 
 	@Override
-	public boolean hasModuleViewForObject(FlexoModelObject object) {
+	public boolean hasModuleViewForObject(FlexoObject object) {
 		return object instanceof DKVModel;
 	}
 
 	@Override
-	public ModuleView<?> createModuleViewForObject(FlexoModelObject object, FlexoController controller) {
+	public ModuleView<?> createModuleViewForObject(FlexoObject object, FlexoController controller) {
 		if (object instanceof DKVModel) {
 			if (dkvModelView == null) {
 				dkvModelView = new DKVModelView((DKVModel) object, (IEController) controller);

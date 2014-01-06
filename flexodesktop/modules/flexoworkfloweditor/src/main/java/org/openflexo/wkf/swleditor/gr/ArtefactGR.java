@@ -27,10 +27,10 @@ import java.util.Vector;
 import java.util.logging.Logger;
 
 import org.openflexo.fge.GraphicalRepresentation;
+import org.openflexo.fge.TextStyle;
 import org.openflexo.fge.cp.ControlArea;
 import org.openflexo.fge.geom.FGEPoint;
-import org.openflexo.fge.graphics.TextStyle;
-import org.openflexo.fge.shapes.Shape.ShapeType;
+import org.openflexo.fge.shapes.ShapeSpecification.ShapeType;
 import org.openflexo.foundation.DataModification;
 import org.openflexo.foundation.FlexoObservable;
 import org.openflexo.foundation.utils.FlexoFont;
@@ -120,7 +120,7 @@ public class ArtefactGR<O extends WKFArtefact> extends WKFNodeGR<O> {
 				}
 			}
 			if (node instanceof PetriGraphNode && ((PetriGraphNode) node).getParentPetriGraph() == parentPetrigraph) {
-				GraphicalRepresentation<?> gr = getGraphicalRepresentation(node);
+				GraphicalRepresentation gr = getGraphicalRepresentation(node);
 				if (gr != null) {
 					AffineTransform at = convertCoordinatesAT(gr.getParentGraphicalRepresentation(), getParentGraphicalRepresentation(),
 							1.0);

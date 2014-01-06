@@ -24,12 +24,12 @@ import java.awt.Font;
 import java.util.logging.Logger;
 
 import org.openflexo.fge.FGEConstants;
+import org.openflexo.fge.ForegroundStyle;
+import org.openflexo.fge.TextStyle;
 import org.openflexo.fge.GraphicalRepresentation.HorizontalTextAlignment;
 import org.openflexo.fge.controller.PaletteElement;
 import org.openflexo.fge.graphics.DrawingDecorationPainter;
 import org.openflexo.fge.graphics.FGEDrawingDecorationGraphics;
-import org.openflexo.fge.graphics.ForegroundStyle;
-import org.openflexo.fge.graphics.TextStyle;
 import org.openflexo.fge.view.LabelView;
 import org.openflexo.foundation.wkf.FlexoPetriGraph;
 import org.openflexo.foundation.wkf.FlexoProcess;

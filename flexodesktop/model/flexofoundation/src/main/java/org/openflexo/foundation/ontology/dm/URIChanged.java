@@ -25,7 +25,7 @@ package org.openflexo.foundation.ontology.dm;
  * @author sguerin
  * 
  */
-public class URIChanged extends OEDataModification {
+public class URIChanged extends OntologyDataModification {
 
 	public static final String URI_KEY = "uri";
 

@@ -1,5 +1,7 @@
 package org.openflexo.antar.binding;
 
+import java.lang.reflect.InvocationTargetException;
+
 import junit.framework.TestCase;
 
 import org.openflexo.antar.expr.NullReferenceException;
@@ -18,6 +20,8 @@ public class TestBindingEvaluator extends TestCase {
 		} catch (TypeMismatchException e) {
 			fail();
 		} catch (NullReferenceException e) {
+			fail();
+		} catch (InvocationTargetException e) {
 			fail();
 		}
 		System.out.println("Evaluated as " + evaluatedResult);
@@ -82,4 +86,40 @@ public class TestBindingEvaluator extends TestCase {
 		genericTest("substring(3,length()-2)+' hash='+hashCode()", thisIsATest, "lo world, this is a te hash=" + thisIsATest.hashCode());
 	}
 
+	public void test10() {
+		TestObject object = new TestObject();
+		genericTest("object.getValue(object)", object, 0);
+		genericTest("object.setValue(10,object)", object, null);
+		genericTest("object.getValue(object)", object, 10);
+		genericTest("object.setValue(object.getValue(object),object)", object, null);
+	}
+
+	public void test11() {
+		TestObject object = new TestObject();
+		genericTest("object.setValue(object.getValue(object)+1,object)", object, null);
+		genericTest("object.getValue(object)", object, 1);
+	}
+
+	public void test12() {
+		TestObject object = new TestObject();
+		genericTest("object.method()", object, null);
+	}
+
+	public static class TestObject {
+
+		private int value = 0;
+
+		public int getValue(TestObject o) {
+			return value;
+		}
+
+		public void setValue(int aValue, TestObject o) {
+			System.out.println("sets value with " + aValue);
+			value = aValue;
+		}
+
+		public void method() {
+			System.out.println("Called method");
+		}
+	}
 }

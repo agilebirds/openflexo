@@ -21,12 +21,10 @@ package org.openflexo.foundation.viewpoint;
 
 import java.lang.reflect.Type;
 
-import org.openflexo.foundation.viewpoint.ViewPoint.ViewPointBuilder;
-
 public class TextAreaParameter extends EditionSchemeParameter {
 
-	public TextAreaParameter(ViewPointBuilder builder) {
-		super(builder);
+	public TextAreaParameter() {
+		super();
 	}
 
 	@Override

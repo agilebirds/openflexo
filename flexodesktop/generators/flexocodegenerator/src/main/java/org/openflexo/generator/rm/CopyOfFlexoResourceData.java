@@ -29,7 +29,7 @@ import org.openflexo.foundation.IOFlexoException;
 import org.openflexo.foundation.rm.DuplicateResourceException;
 import org.openflexo.foundation.rm.FlexoFileResource.FileWritingLock;
 import org.openflexo.foundation.rm.FlexoGeneratedResource;
-import org.openflexo.foundation.rm.FlexoProject;
+import org.openflexo.foundation.FlexoProject;
 import org.openflexo.foundation.rm.FlexoResource;
 import org.openflexo.foundation.rm.GeneratedResourceData;
 import org.openflexo.foundation.rm.cg.CopyOfFlexoResource;

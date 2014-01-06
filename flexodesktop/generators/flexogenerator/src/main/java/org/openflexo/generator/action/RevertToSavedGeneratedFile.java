@@ -57,7 +57,7 @@ public class RevertToSavedGeneratedFile extends GCAction<RevertToSavedGeneratedF
 	};
 
 	static {
-		FlexoModelObject.addActionForClass(RevertToSavedGeneratedFile.actionType, CGFile.class);
+		TestModelObject.addActionForClass(RevertToSavedGeneratedFile.actionType, CGFile.class);
 	}
 
 	RevertToSavedGeneratedFile(CGFile focusedObject, Vector<CGObject> globalSelection, FlexoEditor editor) {

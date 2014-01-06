@@ -19,7 +19,7 @@
  */
 package org.openflexo.foundation.validation;
 
-import java.util.Vector;
+import java.util.Collection;
 
 /**
  * Implemented by all objects on which validation is required
@@ -79,18 +79,19 @@ public interface Validable {
 	public void validate(ValidationReport report, ValidationModel validationModel);
 
 	/**
-	 * Return a vector of all embedded objects on which the validation will be performed
+	 * Return an collection of all embedded objects on which the validation will be performed
 	 * 
 	 * @return a Vector of Validable objects
 	 */
-	public Vector<Validable> getAllEmbeddedValidableObjects();
+	public Collection<? extends Validable> getEmbeddedValidableObjects();
 
 	/**
-	 * Returns fully qualified name for this object
+	 * Return by deep recursion (see {@link #getEmbeddedValidableObjects()} a collection containing all validable objects contained in this
+	 * Validable object
 	 * 
 	 * @return
 	 */
-	public String getFullyQualifiedName();
+	public Collection<? extends Validable> getAllEmbeddedValidableObjects();
 
 	/**
 	 * Return a flag indicating if this object was deleted

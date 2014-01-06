@@ -20,6 +20,7 @@
 package org.openflexo.view.controller;
 
 import java.awt.GraphicsEnvironment;
+import java.io.FileNotFoundException;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Vector;
@@ -29,19 +30,15 @@ import java.util.logging.Logger;
 import javax.swing.Icon;
 import javax.swing.JOptionPane;
 
-import org.openflexo.foundation.TemporaryFlexoModelObject;
-import org.openflexo.foundation.rm.FlexoProcessResource;
-import org.openflexo.foundation.rm.FlexoProject;
-import org.openflexo.foundation.rm.FlexoRMResource;
-import org.openflexo.foundation.rm.FlexoResource;
-import org.openflexo.foundation.rm.FlexoResource.DependencyAlgorithmScheme;
-import org.openflexo.foundation.rm.FlexoXMLStorageResource;
-import org.openflexo.foundation.rm.FlexoXMLStorageResource.LoadXMLResourceException;
-import org.openflexo.foundation.rm.XMLStorageResourceData;
+import org.openflexo.foundation.FlexoException;
+import org.openflexo.foundation.FlexoProject;
+import org.openflexo.foundation.resource.FlexoFileResource;
+import org.openflexo.foundation.resource.FlexoResource;
+import org.openflexo.foundation.resource.PamelaResource;
+import org.openflexo.foundation.resource.ResourceLoadingCancelledException;
 import org.openflexo.foundation.utils.FlexoProgress;
 import org.openflexo.foundation.utils.ProjectLoadingHandler;
-import org.openflexo.icon.FilesIconLibrary;
-import org.openflexo.inspector.InspectableObject;
+import org.openflexo.icon.IconLibrary;
 import org.openflexo.localization.FlexoLocalization;
 
 public abstract class InteractiveProjectLoadingHandler implements ProjectLoadingHandler {
@@ -61,10 +58,14 @@ public abstract class InteractiveProjectLoadingHandler implements ProjectLoading
 	protected Vector<ResourceToConvert> searchResourcesToConvert(FlexoProject project) {
 		Vector<ResourceToConvert> resourcesToConvert = new Vector<ResourceToConvert>();
 
-		for (FlexoXMLStorageResource<? extends XMLStorageResourceData> resource : project.getXMLStorageResources()) {
-			if (!resource.getXmlVersion().equals(resource.latestVersion())) {
-				resourcesToConvert.add(new ResourceToConvert(resource));
-				logger.fine("Require conversion for " + resource + " from " + resource.getXmlVersion() + " to " + resource.latestVersion());
+		for (FlexoResource<?> resource : project.getAllResources()) {
+			if (resource instanceof PamelaResource) {
+				PamelaResource<?, ?> pamelaResource = (PamelaResource<?, ?>) resource;
+				if (!pamelaResource.getModelVersion().equals(pamelaResource.latestVersion())) {
+					resourcesToConvert.add(new ResourceToConvert(pamelaResource));
+					logger.fine("Require conversion for " + pamelaResource + " from " + pamelaResource.getModelVersion() + " to "
+							+ pamelaResource.latestVersion());
+				}
 			}
 		}
 
@@ -72,106 +73,111 @@ public abstract class InteractiveProjectLoadingHandler implements ProjectLoading
 	}
 
 	protected void performConversion(FlexoProject project, Vector<ResourceToConvert> resourcesToConvert, FlexoProgress progress) {
-		List<FlexoXMLStorageResource<? extends XMLStorageResourceData>> resources = new ArrayList<FlexoXMLStorageResource<? extends XMLStorageResourceData>>();
+		List<PamelaResource<?, ?>> resources = new ArrayList<PamelaResource<?, ?>>();
 		for (ResourceToConvert resourceToConvert : resourcesToConvert) {
-			if (resourceToConvert.getResource() instanceof FlexoProcessResource) {
-				if (!resources.contains(project.getFlexoWorkflowResource())) {
-					resources.add(project.getFlexoWorkflowResource());
-				}
-			} else {
-				resources.add(resourceToConvert.getResource());
-			}
+			resources.add(resourceToConvert.getResource());
 		}
 		progress.setProgress(FlexoLocalization.localizedForKey("converting_project"));
 		progress.resetSecondaryProgress(resourcesToConvert.size());
 		performingAutomaticConversion = true;
-		DependencyAlgorithmScheme scheme = project.getDependancyScheme();
+		// DependencyAlgorithmScheme scheme = project.getDependancyScheme();
 		// Pessimistic dependancy scheme is cheaper and optimistic is not intended for this situation
-		project.setDependancyScheme(DependencyAlgorithmScheme.Pessimistic);
-		FlexoResource.sortResourcesWithDependancies(resources);
-		for (FlexoXMLStorageResource<? extends XMLStorageResourceData> res : resources) {
-			progress.setSecondaryProgress(FlexoLocalization.localizedForKey("converting") + " " + res.getResourceIdentifier() + " "
-					+ FlexoLocalization.localizedForKey("from") + " " + res.getXmlVersion() + " " + FlexoLocalization.localizedForKey("to")
-					+ " " + res.latestVersion());
+		// project.setDependancyScheme(DependencyAlgorithmScheme.Pessimistic);
+		// FlexoResource.sortResourcesWithDependancies(resources);
+		for (PamelaResource<?, ?> res : resources) {
+			progress.setSecondaryProgress(FlexoLocalization.localizedForKey("converting") + " " + res.getURI() + " "
+					+ FlexoLocalization.localizedForKey("from") + " " + res.getModelVersion() + " "
+					+ FlexoLocalization.localizedForKey("to") + " " + res.latestVersion());
 			if (!res.isDeleted()) {
-				res.getResourceData();// Converts the resource by loading it.
+				try {
+					res.getResourceData(null);
+				} catch (FileNotFoundException e) {
+					// TODO Auto-generated catch block
+					e.printStackTrace();
+				} catch (ResourceLoadingCancelledException e) {
+					// TODO Auto-generated catch block
+					e.printStackTrace();
+				} catch (FlexoException e) {
+					// TODO Auto-generated catch block
+					e.printStackTrace();
+				}// Converts the resource by loading it.
 			}
 		}
-		project.setDependancyScheme(scheme);
+		// project.setDependancyScheme(scheme);
 		performingAutomaticConversion = false;
+
 	}
 
 	@Override
-	public void notifySevereLoadingFailure(FlexoResource resource, Exception exception) {
-		if (exception instanceof LoadXMLResourceException && resource instanceof FlexoRMResource) {
-			FlexoRMResource r = (FlexoRMResource) resource;
-			LoadXMLResourceException e = (LoadXMLResourceException) exception;
-			if (e.getExtendedMessage().indexOf("JDOMParseException") > -1 && !GraphicsEnvironment.isHeadless()) {
+	public void notifySevereLoadingFailure(FlexoResource<?> resource, Exception e) {
+		if (resource instanceof FlexoFileResource) {
+			FlexoFileResource<?> r = (FlexoFileResource<?>) resource;
+			if (e.getMessage().indexOf("JDOMParseException") > -1 && !GraphicsEnvironment.isHeadless()) {
 				JOptionPane.showMessageDialog(
 						null,
 						"Could not load project: file '"
 								+ r.getFile().getAbsolutePath()
 								+ "' contains invalid XML!\n"
-								+ e.getExtendedMessage().substring(e.getExtendedMessage().indexOf("JDOMParseException") + 20,
-										e.getExtendedMessage().indexOf("StackTrace") - 1), "XML error", JOptionPane.ERROR_MESSAGE);
+								+ e.getMessage().substring(e.getMessage().indexOf("JDOMParseException") + 20,
+										e.getMessage().indexOf("StackTrace") - 1), "XML error", JOptionPane.ERROR_MESSAGE);
 
 			}
 			e.printStackTrace();
 			if (logger.isLoggable(Level.INFO)) {
-				logger.info("Full exception message: " + e.getExtendedMessage());
+				logger.info("Full exception message: " + e.getMessage());
 			}
 			if (!GraphicsEnvironment.isHeadless()) {
 				JOptionPane.showMessageDialog(
 						null,
 						FlexoLocalization.localizedForKey("could_not_open_resource_manager_file") + "\n"
 								+ FlexoLocalization.localizedForKey("to_avoid_damaging_the_project_flexo_will_exit") + "\n"
-								+ FlexoLocalization.localizedForKey("error_is_caused_by_file") + " : '"
-								+ e.getFileResource().getResourceIdentifier() + "'",
-						FlexoLocalization.localizedForKey("error_during_opening_project"), JOptionPane.ERROR_MESSAGE);
+								+ FlexoLocalization.localizedForKey("error_is_caused_by_file") + " : '" + r.getFile().getAbsolutePath()
+								+ "'", FlexoLocalization.localizedForKey("error_during_opening_project"), JOptionPane.ERROR_MESSAGE);
 			}
 		}
 	}
 
-	protected class ResourceToConvert extends TemporaryFlexoModelObject implements InspectableObject {
-		private final FlexoXMLStorageResource<? extends XMLStorageResourceData> _resource;
+	protected class ResourceToConvert {
 
-		ResourceToConvert(FlexoXMLStorageResource<? extends XMLStorageResourceData> resource) {
-			_resource = resource;
+		private final PamelaResource<?, ?> resource;
+
+		ResourceToConvert(PamelaResource<?, ?> resource) {
+			this.resource = resource;
 		}
 
 		public Icon getIcon() {
-			return FilesIconLibrary.smallIconForFileFormat(_resource.getResourceType().getFormat());
+			return IconLibrary.getIconForResource(resource);
 		}
 
-		public String getResourceType() {
-			return _resource.getResourceType().getName();
-		}
-
-		@Override
 		public String getName() {
-			return _resource.getName();
+			return resource.getName();
 		}
 
 		public String getCurrentVersion() {
-			return _resource.getXmlVersion().toString();
+			return resource.getModelVersion().toString();
 		}
 
 		public String getLatestVersion() {
-			return _resource.latestVersion().toString();
+			return resource.latestVersion().toString();
 		}
 
-		@Override
-		public String getInspectorName() {
-			// unused
-			return null;
-		}
-
-		public FlexoXMLStorageResource<? extends XMLStorageResourceData> getResource() {
-			return _resource;
+		public PamelaResource<?, ?> getResource() {
+			return resource;
 		}
 
 		protected void convert() {
-			_resource.getResourceData();
+			try {
+				resource.getResourceData(null);
+			} catch (FileNotFoundException e) {
+				// TODO Auto-generated catch block
+				e.printStackTrace();
+			} catch (ResourceLoadingCancelledException e) {
+				// TODO Auto-generated catch block
+				e.printStackTrace();
+			} catch (FlexoException e) {
+				// TODO Auto-generated catch block
+				e.printStackTrace();
+			}
 		}
 	}
 

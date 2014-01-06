@@ -33,6 +33,7 @@ import javax.swing.JButton;
 import javax.swing.JComponent;
 import javax.swing.JPanel;
 
+import org.openflexo.ch.DocResourceManager;
 import org.openflexo.dre.AbstractDocItemView;
 import org.openflexo.dre.DREBrowser;
 import org.openflexo.dre.controller.action.DREControllerActionInitializer;
@@ -42,17 +43,17 @@ import org.openflexo.dre.view.menu.DREMenuBar;
 import org.openflexo.drm.DRMObject;
 import org.openflexo.drm.DocItem;
 import org.openflexo.drm.DocItemFolder;
-import org.openflexo.drm.DocResourceManager;
 import org.openflexo.drm.action.GenerateHelpSet;
 import org.openflexo.drm.action.SaveDocumentationCenter;
 import org.openflexo.drm.dm.DocResourceCenterIsModified;
 import org.openflexo.drm.dm.DocResourceCenterIsSaved;
 import org.openflexo.foundation.DataModification;
 import org.openflexo.foundation.FlexoModelObject;
+import org.openflexo.foundation.FlexoObject;
 import org.openflexo.foundation.FlexoObservable;
 import org.openflexo.foundation.GraphicalFlexoObserver;
 import org.openflexo.foundation.action.FlexoActionSource;
-import org.openflexo.foundation.rm.FlexoProject;
+import org.openflexo.foundation.FlexoProject;
 import org.openflexo.foundation.validation.ValidationModel;
 import org.openflexo.localization.FlexoLocalization;
 import org.openflexo.module.FlexoModule;
@@ -130,7 +131,7 @@ public class DREController extends FlexoController implements FlexoActionSource 
 	protected DocItemView docItemView;
 
 	@Override
-	public ModuleView<?> moduleViewForObject(FlexoModelObject object, boolean recalculateViewIfRequired) {
+	public ModuleView<?> moduleViewForObject(FlexoObject object, boolean recalculateViewIfRequired) {
 		ModuleView<?> returned = super.moduleViewForObject(object, recalculateViewIfRequired);
 		if (returned instanceof AbstractDocItemView) {
 			((AbstractDocItemView) returned).setDocItem((DocItem) object);
@@ -198,7 +199,7 @@ public class DREController extends FlexoController implements FlexoActionSource 
 	}
 
 	@Override
-	public String getWindowTitleforObject(FlexoModelObject object) {
+	public String getWindowTitleforObject(FlexoObject object) {
 		// Overriden to improve performance !!!!
 		if (object instanceof DocItem) {
 			return AbstractDocItemView.getTitleForDocItem((DocItem) object);
@@ -226,7 +227,7 @@ public class DREController extends FlexoController implements FlexoActionSource 
 	 * @see org.openflexo.foundation.action.FlexoActionSource#getFocusedObject()
 	 */
 	@Override
-	public FlexoModelObject getFocusedObject() {
+	public FlexoObject getFocusedObject() {
 		return getSelectionManager().getFocusedObject();
 	}
 
@@ -236,7 +237,7 @@ public class DREController extends FlexoController implements FlexoActionSource 
 	 * @see org.openflexo.foundation.action.FlexoActionSource#getGlobalSelection()
 	 */
 	@Override
-	public Vector<FlexoModelObject> getGlobalSelection() {
+	public Vector<FlexoObject> getGlobalSelection() {
 		return getSelectionManager().getSelection();
 	}
 }

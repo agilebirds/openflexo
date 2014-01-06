@@ -19,27 +19,28 @@
  */
 package org.openflexo.foundation.viewpoint;
 
+import java.lang.reflect.InvocationTargetException;
 import java.lang.reflect.Type;
 
-import org.openflexo.antar.binding.AbstractBinding.BindingEvaluationContext;
-import org.openflexo.antar.binding.BindingDefinition;
-import org.openflexo.antar.binding.BindingDefinition.BindingDefinitionType;
-import org.openflexo.foundation.ontology.OntologyClass;
-import org.openflexo.foundation.ontology.OntologyProperty;
-import org.openflexo.foundation.viewpoint.ViewPoint.ViewPointBuilder;
-import org.openflexo.foundation.viewpoint.binding.ViewPointDataBinding;
+import org.openflexo.antar.binding.BindingEvaluationContext;
+import org.openflexo.antar.binding.DataBinding;
+import org.openflexo.antar.binding.DataBinding.BindingDefinitionType;
+import org.openflexo.antar.expr.NullReferenceException;
+import org.openflexo.antar.expr.TypeMismatchException;
+import org.openflexo.foundation.ontology.IFlexoOntologyClass;
+import org.openflexo.foundation.ontology.IFlexoOntologyStructuralProperty;
+import org.openflexo.foundation.technologyadapter.TypeAwareModelSlot;
 
-public class PropertyParameter extends EditionSchemeParameter {
+public class PropertyParameter extends InnerModelSlotParameter<TypeAwareModelSlot<?, ?>> {
 
 	private String domainURI;
 	private String parentPropertyURI;
+	private boolean isDynamicDomainValueSet = false;
 
-	private ViewPointDataBinding domainValue;
+	private DataBinding<IFlexoOntologyClass> domainValue;
 
-	private BindingDefinition DOMAIN_VALUE = new BindingDefinition("domainValue", OntologyClass.class, BindingDefinitionType.GET, false);
-
-	public PropertyParameter(ViewPointBuilder builder) {
-		super(builder);
+	public PropertyParameter() {
+		super();
 	}
 
 	@Override
@@ -49,7 +50,7 @@ public class PropertyParameter extends EditionSchemeParameter {
 
 	@Override
 	public Type getType() {
-		return OntologyProperty.class;
+		return IFlexoOntologyStructuralProperty.class;
 	};
 
 	public String _getDomainURI() {
@@ -60,36 +61,31 @@ public class PropertyParameter extends EditionSchemeParameter {
 		this.domainURI = domainURI;
 	}
 
-	public OntologyClass getDomain() {
-		getViewPoint().loadWhenUnloaded();
-		return getViewPoint().getViewpointOntology().getClass(_getDomainURI());
+	public IFlexoOntologyClass getDomain() {
+		return getVirtualModel().getOntologyClass(_getDomainURI());
 	}
 
-	public void setDomain(OntologyClass c) {
+	public void setDomain(IFlexoOntologyClass c) {
 		_setDomainURI(c != null ? c.getURI() : null);
 	}
 
-	public BindingDefinition getDomainValueBindingDefinition() {
-		return DOMAIN_VALUE;
-	}
-
-	public ViewPointDataBinding getDomainValue() {
+	public DataBinding<IFlexoOntologyClass> getDomainValue() {
 		if (domainValue == null) {
-			domainValue = new ViewPointDataBinding(this, ParameterBindingAttribute.domainValue, getDomainValueBindingDefinition());
+			domainValue = new DataBinding<IFlexoOntologyClass>(this, IFlexoOntologyClass.class, BindingDefinitionType.GET);
+			domainValue.setBindingName("domainValue");
 		}
 		return domainValue;
 	}
 
-	public void setDomainValue(ViewPointDataBinding domainValue) {
+	public void setDomainValue(DataBinding<IFlexoOntologyClass> domainValue) {
 		if (domainValue != null) {
 			domainValue.setOwner(this);
-			domainValue.setBindingAttribute(ParameterBindingAttribute.domainValue);
-			domainValue.setBindingDefinition(getDomainValueBindingDefinition());
+			domainValue.setBindingName("domainValue");
+			domainValue.setDeclaredType(IFlexoOntologyClass.class);
+			domainValue.setBindingDefinitionType(BindingDefinitionType.GET);
 		}
 		this.domainValue = domainValue;
 	}
-
-	private boolean isDynamicDomainValueSet = false;
 
 	public boolean getIsDynamicDomainValue() {
 		return getDomainValue().isSet() || isDynamicDomainValueSet;
@@ -104,9 +100,17 @@ public class PropertyParameter extends EditionSchemeParameter {
 		}
 	}
 
-	public OntologyClass evaluateDomainValue(BindingEvaluationContext parameterRetriever) {
+	public IFlexoOntologyClass evaluateDomainValue(BindingEvaluationContext parameterRetriever) {
 		if (getDomainValue().isValid()) {
-			return (OntologyClass) getDomainValue().getBindingValue(parameterRetriever);
+			try {
+				return getDomainValue().getBindingValue(parameterRetriever);
+			} catch (TypeMismatchException e) {
+				e.printStackTrace();
+			} catch (NullReferenceException e) {
+				e.printStackTrace();
+			} catch (InvocationTargetException e) {
+				e.printStackTrace();
+			}
 		}
 		return null;
 	}
@@ -119,15 +123,23 @@ public class PropertyParameter extends EditionSchemeParameter {
 		this.parentPropertyURI = parentPropertyURI;
 	}
 
-	public OntologyProperty getParentProperty() {
-		if (getViewPoint() != null) {
-			getViewPoint().loadWhenUnloaded();
-		}
-		return getViewPoint().getViewpointOntology().getProperty(_getParentPropertyURI());
+	public IFlexoOntologyStructuralProperty getParentProperty() {
+		return getVirtualModel().getOntologyProperty(_getParentPropertyURI());
 	}
 
-	public void setParentProperty(OntologyProperty ontologyProperty) {
+	public void setParentProperty(IFlexoOntologyStructuralProperty ontologyProperty) {
 		parentPropertyURI = ontologyProperty != null ? ontologyProperty.getURI() : null;
+	}
+
+	@Override
+	public TypeAwareModelSlot<?, ?> getModelSlot() {
+		TypeAwareModelSlot<?, ?> returned = super.getModelSlot();
+		if (returned == null) {
+			if (getVirtualModel() != null && getVirtualModel().getModelSlots(TypeAwareModelSlot.class).size() > 0) {
+				return getVirtualModel().getModelSlots(TypeAwareModelSlot.class).get(0);
+			}
+		}
+		return returned;
 	}
 
 }

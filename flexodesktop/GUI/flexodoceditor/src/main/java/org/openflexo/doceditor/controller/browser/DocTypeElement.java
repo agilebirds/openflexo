@@ -23,7 +23,7 @@ import org.openflexo.components.browser.BrowserElement;
 import org.openflexo.components.browser.BrowserElementType;
 import org.openflexo.components.browser.ProjectBrowser;
 import org.openflexo.foundation.DocType;
-import org.openflexo.foundation.FlexoModelObject;
+import org.openflexo.foundation.FlexoObject;
 
 /**
  * @author gpolet
@@ -36,7 +36,7 @@ public class DocTypeElement extends BrowserElement {
 	 * @param elementType
 	 * @param browser
 	 */
-	public DocTypeElement(FlexoModelObject object, ProjectBrowser browser, BrowserElement parent) {
+	public DocTypeElement(FlexoObject object, ProjectBrowser browser, BrowserElement parent) {
 		super(object, BrowserElementType.DOC_TYPE, browser, parent);
 	}
 

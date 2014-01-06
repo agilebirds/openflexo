@@ -23,8 +23,8 @@ import java.io.File;
 import java.util.Collection;
 import java.util.logging.Logger;
 
-import org.openflexo.foundation.viewpoint.ViewPoint;
 import org.openflexo.foundation.viewpoint.ViewPointLibrary;
+import org.openflexo.foundation.viewpoint.rm.ViewPointResource;
 import org.openflexo.toolbox.FileResource;
 
 /**
@@ -33,13 +33,14 @@ import org.openflexo.toolbox.FileResource;
  * @author sguerin
  * 
  */
-public class FIBViewPointSelector extends FIBModelObjectSelector<ViewPoint> {
-	@SuppressWarnings("hiding")
+@SuppressWarnings("serial")
+public class FIBViewPointSelector extends FIBFlexoObjectSelector<ViewPointResource> {
+
 	static final Logger logger = Logger.getLogger(FIBViewPointSelector.class.getPackage().getName());
 
 	public static FileResource FIB_FILE = new FileResource("Fib/ViewPointSelector.fib");
 
-	public FIBViewPointSelector(ViewPoint editedObject) {
+	public FIBViewPointSelector(ViewPointResource editedObject) {
 		super(editedObject);
 	}
 
@@ -55,12 +56,12 @@ public class FIBViewPointSelector extends FIBModelObjectSelector<ViewPoint> {
 	}
 
 	@Override
-	public Class<ViewPoint> getRepresentedType() {
-		return ViewPoint.class;
+	public Class<ViewPointResource> getRepresentedType() {
+		return ViewPointResource.class;
 	}
 
 	@Override
-	public String renderedString(ViewPoint editedObject) {
+	public String renderedString(ViewPointResource editedObject) {
 		if (editedObject != null) {
 			return editedObject.getName();
 		}
@@ -84,7 +85,7 @@ public class FIBViewPointSelector extends FIBModelObjectSelector<ViewPoint> {
 	 * Return all viewpoints of this library
 	 */
 	@Override
-	protected Collection<ViewPoint> getAllSelectableValues() {
+	protected Collection<ViewPointResource> getAllSelectableValues() {
 		if (getViewPointLibrary() != null) {
 			return getViewPointLibrary().getViewPoints();
 		}
@@ -95,12 +96,37 @@ public class FIBViewPointSelector extends FIBModelObjectSelector<ViewPoint> {
 	// Never commit this uncommented since it will not compile on continuous build
 	// To have icon, you need to choose "Test interface" in the editor (otherwise, flexo controller is not insanciated in EDIT mode)
 	/*public static void main(String[] args) {
+
+		try {
+			FlexoLoggingManager.initialize(-1, true, null, Level.INFO, null);
+		} catch (SecurityException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		} catch (IOException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		}
+
+		final ViewPointLibrary viewPointLibrary;
+
+		final FlexoServiceManager serviceManager = new DefaultFlexoServiceManager() {
+			@Override
+			protected FlexoProjectReferenceLoader createProjectReferenceLoader() {
+				return null;
+			}
+
+			@Override
+			protected FlexoEditor createApplicationEditor() {
+				return null;
+			}
+		};
+		viewPointLibrary = serviceManager.getViewPointLibrary();
+
 		FIBAbstractEditor editor = new FIBAbstractEditor() {
 			@Override
 			public Object[] getData() {
-				FlexoResourceCenter resourceCenter = FlexoResourceCenterService.instance().getFlexoResourceCenter();
 				FIBViewPointSelector selector = new FIBViewPointSelector(null);
-				selector.setViewPointLibrary(resourceCenter.retrieveViewPointLibrary());
+				selector.setViewPointLibrary(viewPointLibrary);
 				return makeArray(selector);
 			}
 
@@ -111,7 +137,7 @@ public class FIBViewPointSelector extends FIBModelObjectSelector<ViewPoint> {
 
 			@Override
 			public FIBController makeNewController(FIBComponent component) {
-				return new FlexoFIBController<FIBViewPointSelector>(component);
+				return new FlexoFIBController(component);
 			}
 		};
 		editor.launch();

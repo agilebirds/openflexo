@@ -19,16 +19,22 @@
  */
 package org.openflexo.foundation.viewpoint.inspector;
 
+import java.lang.reflect.Type;
+import java.util.Collection;
 import java.util.Vector;
 import java.util.logging.Logger;
 
 import org.openflexo.antar.binding.Bindable;
+import org.openflexo.antar.binding.BindingFactory;
 import org.openflexo.antar.binding.BindingModel;
+import org.openflexo.antar.binding.BindingVariable;
+import org.openflexo.antar.binding.DataBinding;
+import org.openflexo.antar.binding.DataBinding.BindingDefinitionType;
 import org.openflexo.foundation.viewpoint.EditionPattern;
+import org.openflexo.foundation.viewpoint.EditionPatternInstanceType;
 import org.openflexo.foundation.viewpoint.EditionPatternObject;
-import org.openflexo.foundation.viewpoint.ViewPoint;
-import org.openflexo.foundation.viewpoint.ViewPoint.ViewPointBuilder;
 import org.openflexo.foundation.viewpoint.ViewPointLibrary;
+import org.openflexo.foundation.viewpoint.VirtualModel;
 import org.openflexo.foundation.viewpoint.dm.InspectorEntryInserted;
 import org.openflexo.foundation.viewpoint.dm.InspectorEntryRemoved;
 import org.openflexo.logging.FlexoLogger;
@@ -46,19 +52,35 @@ public class EditionPatternInspector extends EditionPatternObject implements Bin
 	private String inspectorTitle;
 	private EditionPattern _editionPattern;
 	private Vector<InspectorEntry> entries;
+	private DataBinding<String> renderer;
 
-	// private BindingModel _bindingModel;
+	private final EditionPatternFormatter formatter;
 
 	public static EditionPatternInspector makeEditionPatternInspector(EditionPattern ep) {
-		EditionPatternInspector returned = new EditionPatternInspector(null);
+		EditionPatternInspector returned = new EditionPatternInspector();
 		returned.setInspectorTitle(ep.getName());
 		ep.setInspector(returned);
 		return returned;
 	}
 
-	public EditionPatternInspector(ViewPointBuilder builder) {
-		super(builder);
+	public EditionPatternInspector() {
+		super();
 		entries = new Vector<InspectorEntry>();
+		formatter = new EditionPatternFormatter();
+	}
+
+	@Override
+	public String getURI() {
+		return null;
+	}
+
+	public EditionPatternFormatter getFormatter() {
+		return formatter;
+	}
+
+	@Override
+	public Collection<InspectorEntry> getEmbeddedValidableObjects() {
+		return entries;
 	}
 
 	@Override
@@ -68,26 +90,21 @@ public class EditionPatternInspector extends EditionPatternObject implements Bin
 
 	public void setEditionPattern(EditionPattern editionPattern) {
 		_editionPattern = editionPattern;
+		formatter.notifiedBindingModelRecreated();
 	}
 
 	@Override
-	public ViewPoint getViewPoint() {
+	public VirtualModel getVirtualModel() {
 		if (getEditionPattern() != null) {
-			return getEditionPattern().getViewPoint();
+			return getEditionPattern().getVirtualModel();
 		}
 		return null;
 	}
 
 	public ViewPointLibrary getCalcLibrary() {
-		return getViewPoint().getViewPointLibrary();
+		return getVirtualModel().getViewPointLibrary();
 	}
 
-	@Override
-	public String getInspectorName() {
-		return null;
-	}
-
-	@Override
 	public String getInspectorTitle() {
 		return inspectorTitle;
 	}
@@ -119,7 +136,7 @@ public class EditionPatternInspector extends EditionPatternObject implements Bin
 	}
 
 	public TextFieldInspectorEntry createNewTextField() {
-		TextFieldInspectorEntry newEntry = new TextFieldInspectorEntry(null);
+		TextFieldInspectorEntry newEntry = new TextFieldInspectorEntry();
 		newEntry.setName("textfield");
 		// newEntry.setLabel("textfield");
 		addToEntries(newEntry);
@@ -127,7 +144,7 @@ public class EditionPatternInspector extends EditionPatternObject implements Bin
 	}
 
 	public TextAreaInspectorEntry createNewTextArea() {
-		TextAreaInspectorEntry newEntry = new TextAreaInspectorEntry(null);
+		TextAreaInspectorEntry newEntry = new TextAreaInspectorEntry();
 		newEntry.setName("textarea");
 		// newEntry.setLabel("textarea");
 		addToEntries(newEntry);
@@ -135,7 +152,7 @@ public class EditionPatternInspector extends EditionPatternObject implements Bin
 	}
 
 	public IntegerInspectorEntry createNewInteger() {
-		IntegerInspectorEntry newEntry = new IntegerInspectorEntry(null);
+		IntegerInspectorEntry newEntry = new IntegerInspectorEntry();
 		newEntry.setName("integer");
 		// newEntry.setLabel("integer");
 		addToEntries(newEntry);
@@ -143,7 +160,7 @@ public class EditionPatternInspector extends EditionPatternObject implements Bin
 	}
 
 	public CheckboxInspectorEntry createNewCheckbox() {
-		CheckboxInspectorEntry newEntry = new CheckboxInspectorEntry(null);
+		CheckboxInspectorEntry newEntry = new CheckboxInspectorEntry();
 		newEntry.setName("checkbox");
 		// newEntry.setLabel("checkbox");
 		addToEntries(newEntry);
@@ -151,7 +168,7 @@ public class EditionPatternInspector extends EditionPatternObject implements Bin
 	}
 
 	public IndividualInspectorEntry createNewIndividual() {
-		IndividualInspectorEntry newEntry = new IndividualInspectorEntry(null);
+		IndividualInspectorEntry newEntry = new IndividualInspectorEntry();
 		newEntry.setName("individual");
 		// newEntry.setLabel("individual");
 		addToEntries(newEntry);
@@ -159,7 +176,7 @@ public class EditionPatternInspector extends EditionPatternObject implements Bin
 	}
 
 	public ClassInspectorEntry createNewClass() {
-		ClassInspectorEntry newEntry = new ClassInspectorEntry(null);
+		ClassInspectorEntry newEntry = new ClassInspectorEntry();
 		newEntry.setName("class");
 		// newEntry.setLabel("class");
 		addToEntries(newEntry);
@@ -167,7 +184,7 @@ public class EditionPatternInspector extends EditionPatternObject implements Bin
 	}
 
 	public PropertyInspectorEntry createNewProperty() {
-		PropertyInspectorEntry newEntry = new PropertyInspectorEntry(null);
+		PropertyInspectorEntry newEntry = new PropertyInspectorEntry();
 		newEntry.setName("property");
 		// newEntry.setLabel("class");
 		addToEntries(newEntry);
@@ -175,7 +192,7 @@ public class EditionPatternInspector extends EditionPatternObject implements Bin
 	}
 
 	public ObjectPropertyInspectorEntry createNewObjectProperty() {
-		ObjectPropertyInspectorEntry newEntry = new ObjectPropertyInspectorEntry(null);
+		ObjectPropertyInspectorEntry newEntry = new ObjectPropertyInspectorEntry();
 		newEntry.setName("property");
 		// newEntry.setLabel("class");
 		addToEntries(newEntry);
@@ -183,20 +200,20 @@ public class EditionPatternInspector extends EditionPatternObject implements Bin
 	}
 
 	public DataPropertyInspectorEntry createNewDataProperty() {
-		DataPropertyInspectorEntry newEntry = new DataPropertyInspectorEntry(null);
+		DataPropertyInspectorEntry newEntry = new DataPropertyInspectorEntry();
 		newEntry.setName("property");
 		// newEntry.setLabel("class");
 		addToEntries(newEntry);
 		return newEntry;
 	}
 
-	public FlexoObjectInspectorEntry createNewFlexoObject() {
-		FlexoObjectInspectorEntry newEntry = new FlexoObjectInspectorEntry(null);
+	/*public FlexoObjectInspectorEntry createNewFlexoObject() {
+		FlexoObjectInspectorEntry newEntry = new FlexoObjectInspectorEntry();
 		newEntry.setName("flexoObject");
 		// newEntry.setLabel("flexoObject");
 		addToEntries(newEntry);
 		return newEntry;
-	}
+	}*/
 
 	public InspectorEntry deleteEntry(InspectorEntry entry) {
 		removeFromEntries(entry);
@@ -272,6 +289,72 @@ public class EditionPatternInspector extends EditionPatternObject implements Bin
 		setChanged();
 		notifyObservers();
 		notifyChange("entries", null, entries);
+	}
+
+	public DataBinding<String> getRenderer() {
+		if (renderer == null) {
+			renderer = new DataBinding<String>(formatter, String.class, BindingDefinitionType.GET);
+			renderer.setBindingName("renderer");
+		}
+		return renderer;
+	}
+
+	public void setRenderer(DataBinding<String> renderer) {
+		if (renderer != null) {
+			renderer.setOwner(formatter);
+			renderer.setDeclaredType(String.class);
+			renderer.setBindingDefinitionType(BindingDefinitionType.GET);
+			renderer.setBindingName("renderer");
+		}
+		this.renderer = renderer;
+		notifiedBindingChanged(this.renderer);
+	}
+
+	private class EditionPatternFormatter implements Bindable {
+		private BindingModel formatterBindingModel = null;
+
+		public void notifiedBindingModelRecreated() {
+			createFormatterBindingModel();
+		}
+
+		@Override
+		public BindingFactory getBindingFactory() {
+			return EditionPatternInspector.this.getBindingFactory();
+		}
+
+		@Override
+		public BindingModel getBindingModel() {
+			if (formatterBindingModel == null) {
+				createFormatterBindingModel();
+			}
+			return formatterBindingModel;
+		}
+
+		private void createFormatterBindingModel() {
+			formatterBindingModel = new BindingModel();
+			formatterBindingModel.addToBindingVariables(new BindingVariable("instance", EditionPatternInstanceType
+					.getEditionPatternInstanceType(getEditionPattern())) {
+				@Override
+				public Type getType() {
+					return EditionPatternInstanceType.getEditionPatternInstanceType(getEditionPattern());
+				}
+			});
+		}
+
+		@Override
+		public void notifiedBindingChanged(DataBinding<?> dataBinding) {
+			if (dataBinding == getRenderer()) {
+				EditionPatternInspector.this.notifiedBindingChanged(dataBinding);
+			}
+		}
+
+		@Override
+		public void notifiedBindingDecoded(DataBinding<?> dataBinding) {
+			if (dataBinding == getRenderer()) {
+				EditionPatternInspector.this.notifiedBindingDecoded(dataBinding);
+			}
+		}
+
 	}
 
 }

@@ -19,15 +19,17 @@
  */
 package org.openflexo.foundation.viewpoint;
 
-import org.openflexo.foundation.viewpoint.ViewPoint.ViewPointBuilder;
+import org.openflexo.foundation.ontology.IFlexoOntologyObject;
+import org.openflexo.foundation.technologyadapter.ModelSlot;
+import org.openflexo.foundation.technologyadapter.TypeAwareModelSlot;
 
-public abstract class OntologicObjectPatternRole extends PatternRole {
+public abstract class OntologicObjectPatternRole<T extends IFlexoOntologyObject> extends PatternRole<T> {
 
-	public OntologicObjectPatternRole(ViewPointBuilder builder) {
-		super(builder);
+	public OntologicObjectPatternRole() {
+		super();
 	}
 
-	public boolean getIsPrimaryConceptRole() {
+	/*public boolean getIsPrimaryConceptRole() {
 		if (getEditionPattern() == null) {
 			return false;
 		}
@@ -53,6 +55,27 @@ public abstract class OntologicObjectPatternRole extends PatternRole {
 	@Override
 	public void setIsPrimaryRole(boolean isPrimary) {
 		setIsPrimaryConceptRole(isPrimary);
+	}*/
+
+	@Override
+	public TypeAwareModelSlot<?, ?> getModelSlot() {
+		TypeAwareModelSlot<?, ?> returned = null;
+		ModelSlot<?> superMS = super.getModelSlot();
+		if (superMS instanceof TypeAwareModelSlot) {
+			returned = (TypeAwareModelSlot<?, ?>) super.getModelSlot();
+		}
+		if (returned == null) {
+			if (getVirtualModel() != null && getVirtualModel().getModelSlots(TypeAwareModelSlot.class).size() > 0) {
+				return getVirtualModel().getModelSlots(TypeAwareModelSlot.class).get(0);
+			}
+		}
+		return returned;
 	}
 
+	@Override
+	public void setModelSlot(ModelSlot<?> modelSlot) {
+		if (modelSlot instanceof TypeAwareModelSlot) {
+			super.setModelSlot(modelSlot);
+		}
+	}
 }

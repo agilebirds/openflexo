@@ -23,44 +23,44 @@ import java.util.Vector;
 import java.util.logging.Logger;
 
 import org.openflexo.foundation.FlexoEditor;
-import org.openflexo.foundation.FlexoModelObject;
+import org.openflexo.foundation.FlexoObject;
+import org.openflexo.foundation.FlexoObject.FlexoObjectImpl;
 import org.openflexo.foundation.action.FlexoActionType;
 import org.openflexo.foundation.action.FlexoGUIAction;
-import org.openflexo.inspector.InspectableObject;
 import org.openflexo.logging.FlexoLogger;
 
-public class InspectAction extends FlexoGUIAction<InspectAction, FlexoModelObject, FlexoModelObject> {
+public class InspectAction extends FlexoGUIAction<InspectAction, FlexoObject, FlexoObject> {
 
 	private static final Logger logger = FlexoLogger.getLogger(InspectAction.class.getPackage().getName());
 
-	public static FlexoActionType<InspectAction, FlexoModelObject, FlexoModelObject> actionType = new FlexoActionType<InspectAction, FlexoModelObject, FlexoModelObject>(
+	public static FlexoActionType<InspectAction, FlexoObject, FlexoObject> actionType = new FlexoActionType<InspectAction, FlexoObject, FlexoObject>(
 			"inspect", FlexoActionType.inspectGroup) {
 
 		/**
 		 * Factory method
 		 */
 		@Override
-		public InspectAction makeNewAction(FlexoModelObject focusedObject, Vector<FlexoModelObject> globalSelection, FlexoEditor editor) {
+		public InspectAction makeNewAction(FlexoObject focusedObject, Vector<FlexoObject> globalSelection, FlexoEditor editor) {
 			return new InspectAction(focusedObject, globalSelection, editor);
 		}
 
 		@Override
-		public boolean isVisibleForSelection(FlexoModelObject object, Vector<FlexoModelObject> globalSelection) {
+		public boolean isVisibleForSelection(FlexoObject object, Vector<FlexoObject> globalSelection) {
 			return true;
 		}
 
 		@Override
-		public boolean isEnabledForSelection(FlexoModelObject object, Vector<FlexoModelObject> globalSelection) {
-			return object instanceof InspectableObject;
+		public boolean isEnabledForSelection(FlexoObject object, Vector<FlexoObject> globalSelection) {
+			return true;
 		}
 
 	};
 
 	static {
-		FlexoModelObject.addActionForClass(InspectAction.actionType, FlexoModelObject.class);
+		FlexoObjectImpl.addActionForClass(InspectAction.actionType, FlexoObject.class);
 	}
 
-	InspectAction(FlexoModelObject focusedObject, Vector<FlexoModelObject> globalSelection, FlexoEditor editor) {
+	InspectAction(FlexoObject focusedObject, Vector<FlexoObject> globalSelection, FlexoEditor editor) {
 		super(actionType, focusedObject, globalSelection, editor);
 		// logger.info("InspectAction with "+editor);
 	}

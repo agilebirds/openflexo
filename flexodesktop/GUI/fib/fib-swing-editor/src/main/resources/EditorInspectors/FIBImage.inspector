@@ -1,0 +1,20 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<Panel className="org.openflexo.fib.editor.controller.FIBInspector" layout="border" darkLevel="0" dataClassName="org.openflexo.fib.model.FIBImage" name="Inspector">
+  <TabPanel name="Tab" constraints="border(location=center)">
+    <Tab title="Basic" layout="twocols" titleFont="SansSerif,0,11" darkLevel="0" index="0" font="SansSerif,0,11" useScrollBar="true" horizontalScrollbarPolicy="HORIZONTAL_SCROLLBAR_AS_NEEDED" verticalScrollbarPolicy="VERTICAL_SCROLLBAR_AS_NEEDED" name="BasicTab">
+      <Label label="image_file" constraints="twocols(location=left)" localize="true" />
+      <File isDirectory="false" columns="15" localize="true" data="data.imageFile" constraints="twocols(expandHorizontally=true;location=right)" />
+      <Label label="align" constraints="twocols(location=left)" localize="true" />
+      <DropDown data="data.align" constraints="twocols(location=right)" localize="true" iteratorClassName="org.openflexo.fib.model.FIBImage$Align" autoSelectFirstRow="false" />
+      <Panel layout="twocols" border="titled" borderTitle="Image resizing" titleFont="SansSerif,0,11" darkLevel="0" constraints="twocols(expandHorizontally=true;location=center)">
+        <Label label="size_adjustment" constraints="twocols(location=left)" localize="true" />
+        <DropDown data="data.sizeAdjustment" constraints="twocols(location=right)" localize="true" iteratorClassName="org.openflexo.fib.model.FIBImage$SizeAdjustment" autoSelectFirstRow="false" />
+        <Label label="image_width" constraints="twocols(location=left)" visible="((data.sizeAdjustment = &quot;AdjustWidth&quot;) | (data.sizeAdjustment = &quot;AdjustDimensions&quot;))" localize="true" />
+        <Number numberType="IntegerType" columns="3" data="data.imageWidth" constraints="twocols(location=right)" visible="((data.sizeAdjustment = &quot;AdjustWidth&quot;) | (data.sizeAdjustment = &quot;AdjustDimensions&quot;))" localize="true" />
+        <Label label="image_height" constraints="twocols(location=left)" visible="((data.sizeAdjustment = &quot;AdjustHeight&quot;) | (data.sizeAdjustment = &quot;AdjustDimensions&quot;))" localize="true" />
+        <Number numberType="IntegerType" columns="3" data="data.imageHeight" constraints="twocols(location=right)" visible="((data.sizeAdjustment = &quot;AdjustHeight&quot;) | (data.sizeAdjustment = &quot;AdjustDimensions&quot;))" localize="true" />
+      </Panel>
+    </Tab>
+  </TabPanel>
+  <Parameter name="title" value="Image" />
+</Panel>

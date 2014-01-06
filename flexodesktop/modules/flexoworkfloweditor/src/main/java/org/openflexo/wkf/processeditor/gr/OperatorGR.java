@@ -23,10 +23,11 @@ import java.awt.Color;
 
 import javax.swing.ImageIcon;
 
-import org.openflexo.fge.graphics.BackgroundStyle;
-import org.openflexo.fge.graphics.ForegroundStyle;
-import org.openflexo.fge.graphics.TextStyle;
-import org.openflexo.fge.shapes.Shape.ShapeType;
+import org.openflexo.fge.BackgroundImageBackgroundStyle;
+import org.openflexo.fge.BackgroundStyle;
+import org.openflexo.fge.ForegroundStyle;
+import org.openflexo.fge.TextStyle;
+import org.openflexo.fge.shapes.ShapeSpecification.ShapeType;
 import org.openflexo.foundation.DataModification;
 import org.openflexo.foundation.FlexoObservable;
 import org.openflexo.foundation.wkf.FlexoLevel;
@@ -117,10 +118,10 @@ public abstract class OperatorGR<O extends OperatorNode> extends PetriGraphNodeG
 		//setLineWrap(isResizable());
 		if (getImageIcon() != null) {
 			background = BackgroundStyle.makeImageBackground(getImageIcon());
-			((BackgroundStyle.BackgroundImage) background).setScaleX(1);
-			((BackgroundStyle.BackgroundImage) background).setScaleY(1);
-			((BackgroundStyle.BackgroundImage) background).setDeltaX(-2);
-			((BackgroundStyle.BackgroundImage) background).setDeltaY(-3);
+			((BackgroundImageBackgroundStyle) background).setScaleX(1);
+			((BackgroundImageBackgroundStyle) background).setScaleY(1);
+			((BackgroundImageBackgroundStyle) background).setDeltaX(-2);
+			((BackgroundImageBackgroundStyle) background).setDeltaY(-3);
 		} else {
 			background = BackgroundStyle.makeColoredBackground(Color.WHITE);
 		}

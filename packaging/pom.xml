@@ -4,7 +4,7 @@
 	<parent>
 		<groupId>org.openflexo</groupId>
 		<artifactId>openflexo</artifactId>
-		<version>1.5.2-SNAPSHOT</version>
+        <version>1.7-SNAPSHOT</version>
 	</parent>
 	<groupId>org.openflexo.packaging</groupId>
 	<artifactId>packaging</artifactId>
@@ -14,6 +14,7 @@
 		<module>flexobuild</module>
 		<module>exec</module>
 		<module>server</module>
+		<module>technologyadaptersintegration</module>
 	</modules>
 	<build>
 		<pluginManagement>

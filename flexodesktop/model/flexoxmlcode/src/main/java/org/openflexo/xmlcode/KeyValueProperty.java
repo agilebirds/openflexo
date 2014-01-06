@@ -142,6 +142,10 @@ public abstract class KeyValueProperty {
 			lastClass = objectClass;
 		}
 
+		if (lastClass == null) {
+			return;
+		}
+
 		String propertyNameWithFirstCharToUpperCase = lastName.substring(0, 1).toUpperCase() + lastName.substring(1, lastName.length());
 
 		field = null;
@@ -240,6 +244,17 @@ public abstract class KeyValueProperty {
 		for (String trie : tries) {
 			try {
 				return lastClass.getMethod(trie, (Class<?>[]) null);
+			} catch (SecurityException err) {
+				// we continue
+			} catch (NoSuchMethodException err) {
+				// we continue
+			}
+		}
+
+		// manage static class methods
+		for (String trie : tries) {
+			try {
+				return ((Class) lastClass.getClass()).getMethod(trie, (Class<?>[]) null);
 			} catch (SecurityException err) {
 				// we continue
 			} catch (NoSuchMethodException err) {
@@ -563,9 +578,9 @@ public abstract class KeyValueProperty {
 	}
 
 	public static class PathTokenizer {
-		private Vector<String> _tokens;
+		private final Vector<String> _tokens;
 
-		private Enumeration<String> enumeration;
+		private final Enumeration<String> enumeration;
 
 		public PathTokenizer(String value) {
 			super();

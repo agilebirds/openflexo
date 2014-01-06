@@ -195,7 +195,9 @@ class XMLSerializer {
 									String value;
 									try {
 										value = getStringEncoder().toString(oValue);
-										returned.setAttribute(p.getXMLTag(), value);
+										if (value != null) {
+											returned.setAttribute(p.getXMLTag(), value);
+										}
 									} catch (InvalidDataException e) {
 										throw new ModelExecutionException(e);
 									}

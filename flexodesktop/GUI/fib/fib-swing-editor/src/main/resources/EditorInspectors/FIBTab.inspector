@@ -1,0 +1,12 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<Panel className="org.openflexo.fib.editor.controller.FIBInspector" layout="border" darkLevel="0" dataClassName="org.openflexo.fib.model.FIBTab" name="Inspector">
+  <TabPanel name="Tab" constraints="border(location=center)">
+    <Tab title="Basic" layout="twocols" titleFont="SansSerif,0,11" darkLevel="0" index="0" font="SansSerif,0,11" useScrollBar="true" horizontalScrollbarPolicy="HORIZONTAL_SCROLLBAR_AS_NEEDED" verticalScrollbarPolicy="VERTICAL_SCROLLBAR_AS_NEEDED" name="BasicTab">
+      <Label label="title" constraints="twocols(location=left)" localize="true" />
+      <TextField data="data.title" constraints="twocols(expandHorizontally=true;location=right)" localize="true" />
+      <Label label="index" constraints="twocols(location=left)" localize="true" />
+      <Number numberType="IntegerType" data="data.index" constraints="twocols(location=right)" localize="true" />
+    </Tab>
+  </TabPanel>
+  <Parameter name="title" value="Tab pane" />
+</Panel>

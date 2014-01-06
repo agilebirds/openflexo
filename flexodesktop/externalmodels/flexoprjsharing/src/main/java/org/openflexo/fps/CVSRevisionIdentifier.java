@@ -23,12 +23,12 @@ import java.util.Comparator;
 import java.util.StringTokenizer;
 import java.util.logging.Logger;
 
-import org.openflexo.foundation.FlexoObject;
+import org.openflexo.foundation.KVCFlexoObject;
 import org.openflexo.xmlcode.StringConvertable;
 import org.openflexo.xmlcode.StringEncoder;
 import org.openflexo.xmlcode.StringEncoder.Converter;
 
-public class CVSRevisionIdentifier extends FlexoObject implements StringConvertable, Cloneable {
+public class CVSRevisionIdentifier extends KVCFlexoObject implements StringConvertable, Cloneable {
 	protected static final Logger logger = Logger.getLogger(CVSRevisionIdentifier.class.getPackage().getName());
 
 	private static Converter<CVSRevisionIdentifier> converter = StringEncoder.addConverter(new Converter<CVSRevisionIdentifier>(

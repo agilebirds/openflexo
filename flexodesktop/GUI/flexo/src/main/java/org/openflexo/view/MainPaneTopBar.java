@@ -17,7 +17,7 @@ import javax.swing.JPanel;
 import javax.swing.UIManager;
 
 import org.openflexo.components.widget.FIBProjectSelector;
-import org.openflexo.foundation.rm.FlexoProject;
+import org.openflexo.foundation.FlexoProject;
 import org.openflexo.icon.IconLibrary;
 import org.openflexo.localization.FlexoLocalization;
 import org.openflexo.module.Module;
@@ -35,9 +35,9 @@ public class MainPaneTopBar extends JMenuBar {
 	private static final java.util.logging.Logger logger = org.openflexo.logging.FlexoLogger.getLogger(MainPaneTopBar.class.getPackage()
 			.getName());
 
-	private PropertyChangeListenerRegistrationManager registrationManager;
+	private final PropertyChangeListenerRegistrationManager registrationManager;
 
-	private ControllerModel model;
+	private final ControllerModel model;
 
 	private JPanel left;
 	private JPanel center;
@@ -51,7 +51,7 @@ public class MainPaneTopBar extends JMenuBar {
 
 	private JPanel perspectives;
 
-	private boolean forcePreferredSize;
+	private final boolean forcePreferredSize;
 
 	private final FlexoController controller;
 
@@ -86,12 +86,12 @@ public class MainPaneTopBar extends JMenuBar {
 	}
 
 	private void initModules() {
-		for (final Module module : model.getModuleLoader().getAvailableModules()) {
+		for (final Module<?> module : model.getModuleLoader().getKnownModules()) {
 			final JButton button = new BarButton(module.getMediumIcon());
 			button.setToolTipText(FlexoLocalization.localizedTooltipForKey(module.getName(), button));
 			button.setEnabled(true);
 			button.setFocusable(false);
-			if (forcePreferredSize) {
+			if (forcePreferredSize && button.getIcon() != null) {
 				button.setPreferredSize(new Dimension(button.getIcon().getIconWidth() + 4, button.getIcon().getIconHeight() + 4));
 			}
 			button.addActionListener(new ActionListener() {

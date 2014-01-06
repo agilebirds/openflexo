@@ -24,30 +24,29 @@ import java.util.logging.Logger;
 
 import javax.swing.Icon;
 
-import org.openflexo.fib.controller.FIBController.Status;
-import org.openflexo.fib.controller.FIBDialog;
+import org.openflexo.components.widget.CommonFIB;
 import org.openflexo.foundation.action.FlexoActionFinalizer;
 import org.openflexo.foundation.action.FlexoActionInitializer;
-import org.openflexo.foundation.viewpoint.action.DeclareConnectorInEditionPattern;
+import org.openflexo.foundation.view.diagram.viewpoint.ExampleDiagramConnector;
+import org.openflexo.foundation.view.diagram.viewpoint.ExampleDiagramObject;
+import org.openflexo.foundation.view.diagram.viewpoint.action.DeclareExampleDiagramConnectorInEditionPattern;
 import org.openflexo.icon.VPMIconLibrary;
-import org.openflexo.localization.FlexoLocalization;
-import org.openflexo.view.FlexoFrame;
 import org.openflexo.view.controller.ActionInitializer;
 import org.openflexo.view.controller.ControllerActionInitializer;
-import org.openflexo.vpm.CEDCst;
 import org.openflexo.vpm.controller.VPMController;
 
-public class DeclareConnectorInEditionPatternInitializer extends ActionInitializer {
+public class DeclareConnectorInEditionPatternInitializer extends
+		ActionInitializer<DeclareExampleDiagramConnectorInEditionPattern, ExampleDiagramConnector, ExampleDiagramObject> {
 
 	private static final Logger logger = Logger.getLogger(ControllerActionInitializer.class.getPackage().getName());
 
-	DeclareConnectorInEditionPatternInitializer(CEDControllerActionInitializer actionInitializer) {
-		super(DeclareConnectorInEditionPattern.actionType, actionInitializer);
+	DeclareConnectorInEditionPatternInitializer(VPMControllerActionInitializer actionInitializer) {
+		super(DeclareExampleDiagramConnectorInEditionPattern.actionType, actionInitializer);
 	}
 
 	@Override
-	protected CEDControllerActionInitializer getControllerActionInitializer() {
-		return (CEDControllerActionInitializer) super.getControllerActionInitializer();
+	protected VPMControllerActionInitializer getControllerActionInitializer() {
+		return (VPMControllerActionInitializer) super.getControllerActionInitializer();
 	}
 
 	@Override
@@ -56,23 +55,21 @@ public class DeclareConnectorInEditionPatternInitializer extends ActionInitializ
 	}
 
 	@Override
-	protected FlexoActionInitializer<DeclareConnectorInEditionPattern> getDefaultInitializer() {
-		return new FlexoActionInitializer<DeclareConnectorInEditionPattern>() {
+	protected FlexoActionInitializer<DeclareExampleDiagramConnectorInEditionPattern> getDefaultInitializer() {
+		return new FlexoActionInitializer<DeclareExampleDiagramConnectorInEditionPattern>() {
 			@Override
-			public boolean run(EventObject e, DeclareConnectorInEditionPattern action) {
+			public boolean run(EventObject e, DeclareExampleDiagramConnectorInEditionPattern action) {
 
-				FIBDialog dialog = FIBDialog.instanciateAndShowDialog(CEDCst.DECLARE_CONNECTOR_IN_EDITION_PATTERN_DIALOG_FIB, action,
-						FlexoFrame.getActiveFrame(), true, FlexoLocalization.getMainLocalizer());
-				return dialog.getStatus() == Status.VALIDATED;
+				return instanciateAndShowDialog(action, CommonFIB.DECLARE_CONNECTOR_IN_EDITION_PATTERN_DIALOG_FIB);
 			}
 		};
 	}
 
 	@Override
-	protected FlexoActionFinalizer<DeclareConnectorInEditionPattern> getDefaultFinalizer() {
-		return new FlexoActionFinalizer<DeclareConnectorInEditionPattern>() {
+	protected FlexoActionFinalizer<DeclareExampleDiagramConnectorInEditionPattern> getDefaultFinalizer() {
+		return new FlexoActionFinalizer<DeclareExampleDiagramConnectorInEditionPattern>() {
 			@Override
-			public boolean run(EventObject e, DeclareConnectorInEditionPattern action) {
+			public boolean run(EventObject e, DeclareExampleDiagramConnectorInEditionPattern action) {
 				getController().setCurrentEditedObjectAsModuleView(action.getEditionPattern(), getController().VIEW_POINT_PERSPECTIVE);
 				getController().getSelectionManager().setSelectedObject(action.getPatternRole());
 				return true;

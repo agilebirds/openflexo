@@ -19,11 +19,14 @@
  */
 package org.openflexo.fps;
 
-import org.openflexo.foundation.TemporaryFlexoModelObject;
+import java.util.Vector;
+
+import org.openflexo.foundation.FlexoObject;
 import org.openflexo.fps.automerge.AutomergeInitializer;
 import org.openflexo.inspector.InspectableObject;
+import org.openflexo.inspector.model.TabModel;
 
-public abstract class FPSObject extends TemporaryFlexoModelObject implements InspectableObject {
+public abstract class FPSObject extends FlexoObject implements InspectableObject {
 
 	static {
 		AutomergeInitializer.initialize();
@@ -32,9 +35,6 @@ public abstract class FPSObject extends TemporaryFlexoModelObject implements Ins
 	public boolean isEnabled() {
 		return true;
 	}
-
-	@Override
-	public abstract String getClassNameKey();
 
 	// ==========================================================================
 	// ========================== Embedding implementation =====================
@@ -46,4 +46,15 @@ public abstract class FPSObject extends TemporaryFlexoModelObject implements Ins
 		return obj.isContainedIn(this);
 	}
 
+	@Override
+	public String getInspectorTitle() {
+		// TODO Auto-generated method stub
+		return null;
+	}
+
+	@Override
+	public Vector<TabModel> inspectionExtraTabs() {
+		// TODO Auto-generated method stub
+		return null;
+	}
 }

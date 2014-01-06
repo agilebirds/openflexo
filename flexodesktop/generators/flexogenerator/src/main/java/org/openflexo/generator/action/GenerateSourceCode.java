@@ -63,7 +63,7 @@ public class GenerateSourceCode extends MultipleFileGCAction<GenerateSourceCode>
 	private boolean generationSucceeded;
 
 	static {
-		FlexoModelObject.addActionForClass(GenerateSourceCode.actionType, CGObject.class);
+		TestModelObject.addActionForClass(GenerateSourceCode.actionType, CGObject.class);
 	}
 
 	GenerateSourceCode(CGObject focusedObject, Vector<CGObject> globalSelection, FlexoEditor editor) {

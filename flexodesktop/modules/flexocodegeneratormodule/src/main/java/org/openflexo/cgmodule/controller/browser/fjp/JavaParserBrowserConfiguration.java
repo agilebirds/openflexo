@@ -25,8 +25,8 @@ import org.openflexo.components.browser.BrowserConfiguration;
 import org.openflexo.components.browser.BrowserElement;
 import org.openflexo.components.browser.BrowserElementFactory;
 import org.openflexo.components.browser.ProjectBrowser;
-import org.openflexo.foundation.FlexoModelObject;
-import org.openflexo.foundation.rm.FlexoProject;
+import org.openflexo.foundation.FlexoObject;
+import org.openflexo.foundation.FlexoProject;
 import org.openflexo.generator.cg.CGJavaFile;
 import org.openflexo.javaparser.FJPJavaClass;
 import org.openflexo.javaparser.FJPJavaElement;
@@ -89,7 +89,7 @@ public class JavaParserBrowserConfiguration implements BrowserConfiguration {
 		}
 
 		@Override
-		public BrowserElement makeNewElement(FlexoModelObject object, ProjectBrowser browser, BrowserElement parent) {
+		public BrowserElement makeNewElement(FlexoObject object, ProjectBrowser browser, BrowserElement parent) {
 			if (object instanceof FJPJavaSource) {
 				return new JavaSourceElement((FJPJavaSource) object, (JavaParserBrowser) browser, parent);
 			} else if (object instanceof FJPPackageDeclaration) {

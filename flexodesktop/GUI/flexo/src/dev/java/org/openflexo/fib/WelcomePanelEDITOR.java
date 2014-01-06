@@ -26,12 +26,18 @@ import org.openflexo.ApplicationData;
 import org.openflexo.components.WelcomeDialog;
 import org.openflexo.fib.editor.FIBAbstractEditor;
 import org.openflexo.foundation.FlexoEditor;
+import org.openflexo.foundation.FlexoServiceManager;
 import org.openflexo.foundation.resource.FlexoResourceCenterService;
-import org.openflexo.foundation.rm.FlexoProject;
+import org.openflexo.foundation.FlexoProject;
 import org.openflexo.foundation.rm.FlexoProject.FlexoProjectReferenceLoader;
+import org.openflexo.foundation.technologyadapter.InformationSpace;
+import org.openflexo.foundation.technologyadapter.TechnologyAdapterService;
 import org.openflexo.foundation.utils.DefaultProjectLoadingHandler;
 import org.openflexo.foundation.utils.ProjectLoadingHandler;
+import org.openflexo.foundation.viewpoint.ViewPointLibrary;
+import org.openflexo.foundation.xml.XMLSerializationService;
 import org.openflexo.view.controller.InteractiveFlexoEditor;
+import org.openflexo.view.controller.TechnologyAdapterControllerService;
 
 public class WelcomePanelEDITOR extends FIBAbstractEditor {
 
@@ -40,7 +46,12 @@ public class WelcomePanelEDITOR extends FIBAbstractEditor {
 		ApplicationData applicationData = new ApplicationData(new ApplicationContext() {
 
 			@Override
-			public FlexoEditor makeFlexoEditor(FlexoProject project) {
+			protected XMLSerializationService createXMLSerializationService() {
+				return XMLSerializationService.createInstance();
+			}
+
+			@Override
+			public FlexoEditor makeFlexoEditor(FlexoProject project, FlexoServiceManager sm) {
 				return new InteractiveFlexoEditor(this, project);
 			}
 
@@ -63,6 +74,27 @@ public class WelcomePanelEDITOR extends FIBAbstractEditor {
 			protected FlexoResourceCenterService createResourceCenterService() {
 				return null;
 			}
+
+			@Override
+			protected TechnologyAdapterService createTechnologyAdapterService(FlexoResourceCenterService resourceCenterService) {
+				return null;
+			}
+
+			@Override
+			protected TechnologyAdapterControllerService createTechnologyAdapterControllerService() {
+				return null;
+			}
+
+			@Override
+			protected ViewPointLibrary createViewPointLibraryService() {
+				return null;
+			}
+
+			@Override
+			protected InformationSpace createInformationSpace() {
+				return null;
+			}
+
 		});
 		return FIBAbstractEditor.makeArray(applicationData);
 	}

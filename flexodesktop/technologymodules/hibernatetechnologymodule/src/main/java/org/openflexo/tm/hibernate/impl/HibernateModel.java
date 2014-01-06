@@ -22,7 +22,7 @@ import org.openflexo.foundation.sg.implmodel.event.SGAttributeModification;
 import org.openflexo.foundation.sg.implmodel.event.SGObjectAddedToListModification;
 import org.openflexo.foundation.sg.implmodel.event.SGObjectDeletedModification;
 import org.openflexo.foundation.sg.implmodel.event.SGObjectRemovedFromListModification;
-import org.openflexo.foundation.utils.FlexoModelObjectReference;
+import org.openflexo.foundation.utils.FlexoObjectReference;
 import org.openflexo.foundation.xml.ImplementationModelBuilder;
 
 /**
@@ -114,7 +114,7 @@ public class HibernateModel extends TechnologyModelObject implements FlexoObserv
 	 * {@inheritDoc}
 	 */
 	@Override
-	public void delete() {
+	public boolean delete() {
 
 		for (HibernateEntity hibernateEntity : new Vector<HibernateEntity>(getEntities())) {
 			hibernateEntity.delete();
@@ -128,6 +128,7 @@ public class HibernateModel extends TechnologyModelObject implements FlexoObserv
 		notifyObservers(new SGObjectDeletedModification());
 		super.delete();
 		deleteObservers();
+		return true;
 	}
 
 	/**
@@ -225,14 +226,14 @@ public class HibernateModel extends TechnologyModelObject implements FlexoObserv
 		}
 	}
 
-	public FlexoModelObjectReference<DMRepository> getWatchedRepositoryReference() {
+	public FlexoObjectReference<DMRepository> getWatchedRepositoryReference() {
 		if (getWatchedRepository() != null) {
-			return new FlexoModelObjectReference<DMRepository>(getWatchedRepository());
+			return new FlexoObjectReference<DMRepository>(getWatchedRepository());
 		}
 		return null;
 	}
 
-	public void setWatchedRepositoryReference(FlexoModelObjectReference<DMRepository> watchedRepositoryReference) {
+	public void setWatchedRepositoryReference(FlexoObjectReference<DMRepository> watchedRepositoryReference) {
 		setWatchedRepository(watchedRepositoryReference == null ? null : watchedRepositoryReference.getObject());
 	}
 

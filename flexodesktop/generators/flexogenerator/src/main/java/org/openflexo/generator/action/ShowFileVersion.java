@@ -104,13 +104,13 @@ public class ShowFileVersion extends FlexoGUIAction<ShowFileVersion, CGFile, CGO
 			ContentSourceType.HistoryVersion);
 
 	static {
-		FlexoModelObject.addActionForClass(showPureGeneration, CGFile.class);
-		FlexoModelObject.addActionForClass(showGeneratedMerge, CGFile.class);
-		FlexoModelObject.addActionForClass(showContentOnDisk, CGFile.class);
-		FlexoModelObject.addActionForClass(showResultFileMerge, CGFile.class);
-		FlexoModelObject.addActionForClass(showLastGenerated, CGFile.class);
-		FlexoModelObject.addActionForClass(showLastAccepted, CGFile.class);
-		FlexoModelObject.addActionForClass(showHistoryVersion, CGFile.class);
+		TestModelObject.addActionForClass(showPureGeneration, CGFile.class);
+		TestModelObject.addActionForClass(showGeneratedMerge, CGFile.class);
+		TestModelObject.addActionForClass(showContentOnDisk, CGFile.class);
+		TestModelObject.addActionForClass(showResultFileMerge, CGFile.class);
+		TestModelObject.addActionForClass(showLastGenerated, CGFile.class);
+		TestModelObject.addActionForClass(showLastAccepted, CGFile.class);
+		TestModelObject.addActionForClass(showHistoryVersion, CGFile.class);
 	}
 
 	public static ShowFileVersionActionType getActionTypeFor(ContentSourceType contentSource) {

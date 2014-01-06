@@ -14,6 +14,7 @@ import org.openflexo.FlexoCst;
 import org.openflexo.dgmodule.controller.browser.FIBTemplatesBrowser;
 import org.openflexo.dgmodule.view.DGTemplateFileModuleView;
 import org.openflexo.foundation.FlexoModelObject;
+import org.openflexo.foundation.FlexoObject;
 import org.openflexo.foundation.cg.templates.CGTemplate;
 import org.openflexo.icon.DGIconLibrary;
 import org.openflexo.view.ModuleView;
@@ -64,7 +65,7 @@ public class TemplatesPerspective extends FlexoPerspective {
 	}
 
 	@Override
-	public FlexoModelObject getDefaultObject(FlexoModelObject proposedObject) {
+	public FlexoObject getDefaultObject(FlexoObject proposedObject) {
 		if (proposedObject instanceof CGTemplate) {
 			return proposedObject;
 		} else if (dgController.getProject() != null) {
@@ -75,12 +76,12 @@ public class TemplatesPerspective extends FlexoPerspective {
 	}
 
 	@Override
-	public boolean hasModuleViewForObject(FlexoModelObject object) {
+	public boolean hasModuleViewForObject(FlexoObject object) {
 		return object instanceof CGTemplate;
 	}
 
 	@Override
-	public ModuleView<? extends FlexoModelObject> createModuleViewForObject(FlexoModelObject object, FlexoController controller) {
+	public ModuleView<? extends FlexoModelObject> createModuleViewForObject(FlexoObject object, FlexoController controller) {
 		if (object instanceof CGTemplate) {
 			return new DGTemplateFileModuleView((CGTemplate) object, (DGController) controller);
 		}

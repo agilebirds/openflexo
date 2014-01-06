@@ -1,0 +1,17 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<Panel className="org.openflexo.inspector.FIBInspector" layout="border" titleFont="SansSerif,0,12" darkLevel="0" dataClassName="org.openflexo.foundation.viewpoint.EditionPatternInstancePatternRole" controllerClassName="org.openflexo.inspector.FIBInspectorController" font="SansSerif,0,12" name="Inspector">
+  <TabPanel name="Tab" constraints="border(location=center)">
+    <Tab title="Basic" layout="twocols" titleFont="SansSerif,0,11" darkLevel="0" index="0" font="SansSerif,0,11" useScrollBar="true" horizontalScrollbarPolicy="HORIZONTAL_SCROLLBAR_AS_NEEDED" verticalScrollbarPolicy="VERTICAL_SCROLLBAR_AS_NEEDED" name="BasicTab">
+      <Label label="edition_pattern" index="6" constraints="twocols(expandHorizontally=false;expandVertically=false;index=6;insetsBottom=0;insetsLeft=2;insetsRight=2;insetsTop=5;location=left)" localize="true" />
+      <Custom componentClassName="org.openflexo.components.widget.FIBEditionPatternSelector" localize="true" manageDynamicModel="true" index="11" data="data.editionPatternType" constraints="twocols(expandHorizontally=true;expandVertically=false;index=6;insetsBottom=0;insetsLeft=2;insetsRight=2;insetsTop=5;location=right)">
+        <Assignment variable="component.virtualModel" value="data.virtualModelModelSlot.virtualModelResource.virtualModel" />
+      </Custom>
+    </Tab>
+    <Tab title="Advanced" layout="twocols" titleFont="SansSerif,0,11" darkLevel="0" index="2" font="SansSerif,0,11" useScrollBar="true" horizontalScrollbarPolicy="HORIZONTAL_SCROLLBAR_AS_NEEDED" verticalScrollbarPolicy="VERTICAL_SCROLLBAR_AS_NEEDED" name="AdvancedTab" />
+  </TabPanel>
+  <LocalizedDictionary>
+    <Localized key="Advanced" lang="French">Avancé</Localized>
+    <Localized key="Basic" lang="French">Basique</Localized>
+  </LocalizedDictionary>
+  <Parameter name="title" value="Edition Pattern Instance Pattern Role" />
+</Panel>

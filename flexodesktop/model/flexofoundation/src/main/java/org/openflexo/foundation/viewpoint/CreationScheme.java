@@ -19,23 +19,13 @@
  */
 package org.openflexo.foundation.viewpoint;
 
-import org.openflexo.foundation.Inspectors;
-import org.openflexo.foundation.viewpoint.ViewPoint.ViewPointBuilder;
+import org.openflexo.foundation.viewpoint.annotations.FIBPanel;
 
+@FIBPanel("Fib/CreationSchemePanel.fib")
 public class CreationScheme extends AbstractCreationScheme {
 
-	public CreationScheme(ViewPointBuilder builder) {
-		super(builder);
-	}
-
-	@Override
-	public EditionSchemeType getEditionSchemeType() {
-		return EditionSchemeType.CreationScheme;
-	}
-
-	@Override
-	public String getInspectorName() {
-		return Inspectors.VPM.CREATION_SCHEME_INSPECTOR;
+	public CreationScheme() {
+		super();
 	}
 
 }

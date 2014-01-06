@@ -20,820 +20,718 @@
 package org.openflexo.foundation.viewpoint;
 
 import java.io.File;
-import java.io.FileInputStream;
-import java.io.FileNotFoundException;
 import java.io.IOException;
+import java.util.ArrayList;
+import java.util.Collection;
 import java.util.Iterator;
+import java.util.List;
 import java.util.Vector;
-import java.util.logging.Level;
 import java.util.logging.Logger;
 
+import org.jdom2.Attribute;
 import org.jdom2.Document;
 import org.jdom2.Element;
 import org.jdom2.JDOMException;
-import org.jdom2.filter.ElementFilter;
-import org.jdom2.input.SAXBuilder;
-import org.openflexo.antar.binding.BindingFactory;
 import org.openflexo.antar.binding.BindingModel;
-import org.openflexo.fge.DataBinding;
-import org.openflexo.foundation.Inspectors;
-import org.openflexo.foundation.ontology.FlexoOntology;
-import org.openflexo.foundation.ontology.ImportedOWLOntology;
-import org.openflexo.foundation.ontology.ImportedOntology;
-import org.openflexo.foundation.ontology.dm.OEDataModification;
-import org.openflexo.foundation.ontology.owl.OWLOntology;
+import org.openflexo.antar.binding.BindingVariable;
+import org.openflexo.antar.binding.DataBinding;
+import org.openflexo.foundation.resource.ResourceData;
+import org.openflexo.foundation.resource.SaveResourceException;
+import org.openflexo.foundation.utils.XMLUtils;
+import org.openflexo.foundation.validation.ValidationModel;
+import org.openflexo.foundation.viewpoint.FMLRepresentationContext.FMLRepresentationOutput;
 import org.openflexo.foundation.viewpoint.binding.EditionPatternBindingFactory;
-import org.openflexo.foundation.viewpoint.binding.EditionPatternPathElement;
-import org.openflexo.foundation.viewpoint.dm.CalcDrawingShemaInserted;
-import org.openflexo.foundation.viewpoint.dm.CalcDrawingShemaRemoved;
-import org.openflexo.foundation.viewpoint.dm.CalcPaletteInserted;
-import org.openflexo.foundation.viewpoint.dm.CalcPaletteRemoved;
-import org.openflexo.toolbox.FileUtils;
-import org.openflexo.toolbox.JavaUtils;
-import org.openflexo.toolbox.RelativePathFileConverter;
+import org.openflexo.foundation.viewpoint.dm.VirtualModelCreated;
+import org.openflexo.foundation.viewpoint.dm.VirtualModelDeleted;
+import org.openflexo.foundation.viewpoint.rm.ViewPointResource;
+import org.openflexo.foundation.viewpoint.rm.ViewPointResourceImpl;
+import org.openflexo.foundation.viewpoint.rm.VirtualModelResource;
+import org.openflexo.model.annotations.Adder;
+import org.openflexo.model.annotations.Getter;
+import org.openflexo.model.annotations.Getter.Cardinality;
+import org.openflexo.model.annotations.ImplementationClass;
+import org.openflexo.model.annotations.ModelEntity;
+import org.openflexo.model.annotations.PropertyIdentifier;
+import org.openflexo.model.annotations.Remover;
+import org.openflexo.model.annotations.Setter;
+import org.openflexo.model.annotations.XMLAttribute;
+import org.openflexo.model.annotations.XMLElement;
+import org.openflexo.toolbox.ChainedCollection;
+import org.openflexo.toolbox.FlexoVersion;
 import org.openflexo.toolbox.StringUtils;
-import org.openflexo.xmlcode.AccessorInvocationException;
-import org.openflexo.xmlcode.InvalidModelException;
-import org.openflexo.xmlcode.InvalidObjectSpecificationException;
-import org.openflexo.xmlcode.InvalidXMLDataException;
 import org.openflexo.xmlcode.StringEncoder;
-import org.openflexo.xmlcode.XMLDecoder;
-import org.openflexo.xmlcode.XMLMapping;
 
-public class ViewPoint extends ViewPointObject {
+/**
+ * In the Openflexo Viewpoint Architecture a {@link ViewPoint} is the metamodel level of model federation.<br>
+ * A {@link View} (run-time context of model federation) is conform to a {@link ViewPoint}.<br>
+ * 
+ * A viewpoint partitions the set preoccupations of the stakeholders so that issues related to such preoccupation subsets can be addressed
+ * separately. Viewpoints provide the convention, rules and modelling technologies for constructing, presenting and analysing Views. It can
+ * address one or several existing sources of informations (in which we can find models or metamodels).<br>
+ * 
+ * Viewpoints also propose dedicated tools for presenting and manipulating data in the particular context of some stakeholderâs
+ * preoccupations.
+ * 
+ * An Openflexo View is the instantiation of a particular Viewpoint with its own Objective relevant to some of the preoccupations of the
+ * Viewpoint.
+ * 
+ * A Viewpoint addresses some preoccupations of the real world. A View is defined for a given objective and for a particular stakeholder or
+ * observer.
+ * 
+ * A Viewpoint provides:
+ * <ul>
+ * <li>model extensions to model information relevant to a given context;</li>
+ * <li>manipulation primitives (EditionSchemes) involving one or many models;</li>
+ * <li>tools to create and edit models using model manipulation primitives;</li>
+ * <li>tools to import existing models;</li>
+ * <li>graphical representation of manipulated models, with dedicated graphical editors (diagrams, tabular and textual views).</li>
+ * </ul>
+ * 
+ * @author sylvain
+ * 
+ */
+@ModelEntity
+@ImplementationClass(ViewPoint.ViewPointImpl.class)
+@XMLElement(xmlTag = "ViewPoint")
+public interface ViewPoint extends NamedViewPointObject, ResourceData<ViewPoint> {
 
-	private static final String URI_XML_ATTRIBUTE_NAME = "uri";
+	@PropertyIdentifier(type = String.class)
+	public static final String VIEW_POINT_URI_KEY = "viewPointURI";
+	@PropertyIdentifier(type = FlexoVersion.class)
+	public static final String VERSION_KEY = "version";
+	@PropertyIdentifier(type = FlexoVersion.class)
+	public static final String MODEL_VERSION_KEY = "modelVersion";
+	@PropertyIdentifier(type = LocalizedDictionary.class)
+	public static final String LOCALIZED_DICTIONARY_KEY = "localizedDictionary";
+	@PropertyIdentifier(type = List.class)
+	public static final String VIRTUAL_MODELS_KEY = "virtualModels";
 
-	private static final String VIEW_POINT_ELEMENT_XML_TAG = "ViewPoint";
+	@Getter(value = VIEW_POINT_URI_KEY)
+	@XMLAttribute(xmlTag = "uri")
+	public String getViewPointURI();
 
-	private static final String VIEWPOINT_DIRECTORY_EXTENSION = ".viewpoint";
+	@Setter(VIEW_POINT_URI_KEY)
+	public void setViewPointURI(String viewPointURI);
 
-	private static final Logger logger = Logger.getLogger(ViewPoint.class.getPackage().getName());
+	@Getter(value = VERSION_KEY)
+	@XMLAttribute
+	public FlexoVersion getVersion();
 
-	// TODO: We must find a better solution
-	static {
-		StringEncoder.getDefaultInstance()._addConverter(DataBinding.CONVERTER);
-	}
+	@Setter(VERSION_KEY)
+	public void setVersion(FlexoVersion version);
 
-	private String name;
-	private String viewPointURI;
-	private String description;
-	private String version;
+	@Getter(value = MODEL_VERSION_KEY)
+	@XMLAttribute
+	public FlexoVersion getModelVersion();
 
-	private Vector<EditionPattern> editionPatterns;
-	private LocalizedDictionary localizedDictionary;
+	@Setter(MODEL_VERSION_KEY)
+	public void setModelVersion(FlexoVersion modelVersion);
 
-	private ImportedOntology viewpointOntology;
+	@Getter(value = LOCALIZED_DICTIONARY_KEY, inverse = LocalizedDictionary.OWNER_KEY)
+	public LocalizedDictionary getLocalizedDictionary();
 
-	private Vector<ViewPointPalette> palettes;
-	private Vector<ExampleDrawingShema> shemas;
+	@Setter(LOCALIZED_DICTIONARY_KEY)
+	public void setLocalizedDictionary(LocalizedDictionary localizedDictionary);
 
-	private File viewPointDirectory;
-	private File owlFile;
-	private File xmlFile;
-	private ViewPointLibrary _library;
-	private boolean isLoaded = false;
-	private boolean isLoading = false;
-	private RelativePathFileConverter relativePathFileConverter;
+	/**
+	 * Return EditionPattern matching supplied id represented as a string, which could be either the name of EditionPattern, or its URI
+	 * 
+	 * @param editionPatternId
+	 * @return
+	 */
+	public EditionPattern getEditionPattern(String editionPatternId);
 
-	public static File getViewPointFile(File viewPointDirectory) {
-		return new File(viewPointDirectory, getViewPointBaseName(viewPointDirectory) + ".xml");
-	}
+	/**
+	 * Return all {@link VirtualModel} defined in this {@link ViewPoint}
+	 * 
+	 * @return
+	 */
+	@Getter(value = VIRTUAL_MODELS_KEY, cardinality = Cardinality.LIST/*, inverse = VirtualModel.VIEWPOINT_KEY*/)
+	public List<VirtualModel> getVirtualModels();
 
-	public static String getViewPointBaseName(File viewPointDirectory) {
-		return viewPointDirectory.getName().substring(0, viewPointDirectory.getName().length() - VIEWPOINT_DIRECTORY_EXTENSION.length());
-	}
+	@Setter(VIRTUAL_MODELS_KEY)
+	public void setVirtualModels(Vector<VirtualModel> virtualModels);
 
-	public static String getURI(File viewpointDirectory) throws JDOMException, IOException {
-		File viewPointFile = getViewPointFile(viewpointDirectory);
-		Document document = readXMLFile(viewPointFile);
-		Element element = getElement(document, VIEW_POINT_ELEMENT_XML_TAG);
-		return element.getAttributeValue(URI_XML_ATTRIBUTE_NAME);
-	}
+	@Adder(VIRTUAL_MODELS_KEY)
+	public void addToVirtualModels(VirtualModel virtualModel);
 
-	public static ViewPoint openViewPoint(File viewPointDirectory, ViewPointLibrary library, ViewPointFolder folder) {
+	@Remover(VIRTUAL_MODELS_KEY)
+	public void removeFromVirtualModels(VirtualModel virtualModel);
 
-		String baseName = getViewPointBaseName(viewPointDirectory);
-		File xmlFile = getViewPointFile(viewPointDirectory);
+	public VirtualModel getVirtualModelNamed(String virtualModelName);
 
-		if (xmlFile.exists()) {
+	/**
+	 * Default implementation for {@link ViewPoint}
+	 * 
+	 * @author sylvain
+	 * 
+	 */
+	public static abstract class ViewPointImpl extends NamedViewPointObjectImpl implements ViewPoint {
 
-			ImportedOntology viewPointOntology = readViewpointOntology(xmlFile, library);
+		private static final Logger logger = Logger.getLogger(ViewPoint.class.getPackage().getName());
 
-			FileInputStream inputStream = null;
+		// TODO: We must find a better solution
+		static {
+			StringEncoder.getDefaultInstance()._addConverter(DataBinding.CONVERTER);
+		}
+
+		// private String viewPointURI;
+
+		private LocalizedDictionary localizedDictionary;
+		private ViewPointLibrary _library;
+		// private List<ModelSlot> modelSlots;
+		private List<VirtualModel> virtualModels;
+		private ViewPointResource resource;
+		private BindingModel bindingModel;
+		private final EditionPatternBindingFactory bindingFactory = new EditionPatternBindingFactory(this);
+
+		/**
+		 * Stores a chained collections of objects which are involved in validation
+		 */
+		private final ChainedCollection<ViewPointObject> validableObjects = null;
+
+		public static ViewPoint newViewPoint(String baseName, String viewpointURI, File viewpointDir, ViewPointLibrary library) {
+			ViewPointResource vpRes = ViewPointResourceImpl.makeViewPointResource(baseName, viewpointURI, viewpointDir, library);
+			ViewPointImpl viewpoint = (ViewPointImpl) vpRes.getFactory().newInstance(ViewPoint.class);
+			vpRes.setResourceData(viewpoint);
+			viewpoint.setResource(vpRes);
+			// And register it to the library
+			library.registerViewPoint(vpRes);
+
+			viewpoint.init(baseName, library);
+			viewpoint.loadViewpointMetaModels();
 			try {
-				ViewPointBuilder builder = new ViewPointBuilder(viewPointOntology);
-				RelativePathFileConverter relativePathFileConverter = new RelativePathFileConverter(viewPointDirectory);
-				inputStream = new FileInputStream(xmlFile);
-				if (logger.isLoggable(Level.FINE)) {
-					logger.fine("Reading file " + xmlFile.getAbsolutePath());
+				vpRes.save(null);
+			} catch (SaveResourceException e) {
+				e.printStackTrace();
+			}
+			return viewpoint;
+		}
+
+		private void loadViewpointMetaModels() {
+			logger.warning("loadViewpointMetaModels() : not implemented yet");
+		}
+
+		@Override
+		public FlexoVersion getModelVersion() {
+			return getResource().getModelVersion();
+		}
+
+		@Override
+		public void setModelVersion(FlexoVersion aVersion) {
+		}
+
+		// Used during deserialization, do not use it
+		/*public ViewPointImpl(ViewPointBuilder builder) {
+			super(builder);
+			if (builder != null) {
+				builder.setViewPoint(this);
+				resource = builder.resource;
+			}
+			// modelSlots = new ArrayList<ModelSlot>();
+			virtualModels = new ArrayList<VirtualModel>();
+		}*/
+
+		// Used during deserialization, do not use it
+		private ViewPointImpl() {
+			super();
+			virtualModels = new ArrayList<VirtualModel>();
+		}
+
+		public void init(String baseName, /* File viewpointDir, File xmlFile,*/ViewPointLibrary library/*, ViewPointFolder folder*/) {
+			logger.info("Registering viewpoint " + baseName + " URI=" + getViewPointURI());
+
+			setName(baseName);
+			_library = library;
+
+			loadViewpointMetaModels();
+
+			/*for (VirtualModel vm : getVirtualModels()) {
+				for (EditionPattern ep : vm.getEditionPatterns()) {
+					for (PatternRole<?> pr : ep.getPatternRoles()) {
+						if (pr instanceof ShapePatternRole) {
+							((ShapePatternRole) pr).tryToFindAGR();
+						}
+					}
 				}
-				ViewPoint returned = (ViewPoint) XMLDecoder.decodeObjectWithMapping(inputStream, library.get_VIEW_POINT_MODEL(), builder,
-						new StringEncoder(StringEncoder.getDefaultInstance(), relativePathFileConverter));
-				if (logger.isLoggable(Level.FINE)) {
-					logger.fine("DONE reading file " + xmlFile.getAbsolutePath());
+			}*/
+		}
+
+		@Override
+		public String getStringRepresentation() {
+			return getURI();
+		}
+
+		/**
+		 * Return the URI of the {@link ViewPoint}<br>
+		 * The convention for URI are following: <viewpoint_uri>/<virtual_model_name>#<edition_pattern_name>.<edition_scheme_name> <br>
+		 * eg<br>
+		 * http://www.mydomain.org/MyViewPoint/MyVirtualModel#MyEditionPattern.MyEditionScheme
+		 * 
+		 * @return String representing unique URI of this object
+		 */
+		@Override
+		public String getURI() {
+			return getViewPointURI();
+		}
+
+		@Override
+		public String getViewPointURI() {
+			if (getResource() != null) {
+				return getResource().getURI();
+			}
+			return null;
+		}
+
+		@Override
+		public void setViewPointURI(String vpURI) {
+			if (vpURI != null) {
+				// We prevent ',' so that we can use it as a delimiter in tags.
+				vpURI = vpURI.replace(",", "");
+			}
+			if (getResource() != null) {
+				getResource().setURI(vpURI);
+			}
+		}
+
+		@Override
+		public String toString() {
+			return "ViewPoint:" + getViewPointURI();
+		}
+
+		@Override
+		public String getName() {
+			if (getResource() != null) {
+				return getResource().getName();
+			}
+			return super.getName();
+		}
+
+		@Override
+		public void setName(String name) {
+			if (requireChange(getName(), name)) {
+				if (getResource() != null) {
+					getResource().setName(name);
+				} else {
+					super.setName(name);
 				}
-				returned.init(baseName, viewPointDirectory, xmlFile, library, viewPointOntology, folder);
-				return returned;
-			} catch (FileNotFoundException e) {
-				// TODO Auto-generated catch block
-				e.printStackTrace();
-			} catch (InvalidXMLDataException e) {
-				// TODO Auto-generated catch block
-				e.printStackTrace();
-			} catch (InvalidObjectSpecificationException e) {
-				// TODO Auto-generated catch block
-				e.printStackTrace();
-			} catch (AccessorInvocationException e) {
-				// TODO Auto-generated catch block
-				e.printStackTrace();
-			} catch (InvalidModelException e) {
-				// TODO Auto-generated catch block
+			}
+		}
+
+		@Override
+		public FlexoVersion getVersion() {
+			if (getResource() != null) {
+				return getResource().getVersion();
+			}
+			return null;
+		}
+
+		@Override
+		public void setVersion(FlexoVersion aVersion) {
+			if (requireChange(getVersion(), aVersion)) {
+				if (getResource() != null) {
+					getResource().setVersion(aVersion);
+				}
+			}
+		}
+
+		@Override
+		public ViewPointLibrary getViewPointLibrary() {
+			return _library;
+		}
+
+		@Override
+		public ViewPointImpl getViewPoint() {
+			return this;
+		}
+
+		private boolean isLoading = false;
+
+		/**
+		 * Load eventually unloaded VirtualModels<br>
+		 * After this call return, we can assert that all {@link VirtualModel} are loaded.
+		 */
+		private synchronized void loadVirtualModelsWhenUnloaded() {
+			if (isLoading) {
+				return;
+			}
+			isLoading = true;
+			for (org.openflexo.foundation.resource.FlexoResource<?> r : getResource().getContents()) {
+				if (r instanceof VirtualModelResource) {
+					((VirtualModelResource) r).getVirtualModel();
+				}
+			}
+			isLoading = false;
+		}
+
+		/**
+		 * Return all VirtualModel of a given class.<br>
+		 * If onlyFinalInstances is set to true, only instances of supplied class (and not specialized classes) are retrieved
+		 * 
+		 * @return
+		 */
+		public <VM extends VirtualModel> List<VM> getVirtualModels(Class<VM> virtualModelClass, boolean onlyFinalInstances) {
+			List<VM> returned = new ArrayList<VM>();
+			for (VirtualModel vm : getVirtualModels()) {
+				if (onlyFinalInstances) {
+					if (virtualModelClass.equals(vm.getClass())) {
+						returned.add((VM) vm);
+					}
+				} else {
+					if (virtualModelClass.isAssignableFrom(vm.getClass())) {
+						returned.add((VM) vm);
+					}
+				}
+			}
+			return returned;
+		}
+
+		/**
+		 * Return all "plain" {@link VirtualModel} defined in this {@link ViewPoint} (does NOT return subclasses of {@link VirtualModel})
+		 * 
+		 * @return
+		 */
+		public List<VirtualModel> getPlainVirtualModels() {
+			return getVirtualModels(VirtualModel.class, true);
+		}
+
+		/**
+		 * Return all {@link DiagramSpecification} defined in this {@link ViewPoint}
+		 * 
+		 * @return
+		 */
+		/*public List<DiagramSpecification> getDiagramSpecifications() {
+			return getVirtualModels(DiagramSpecification.class, true);
+		}*/
+
+		/**
+		 * Return all {@link VirtualModel} defined in this {@link ViewPoint}
+		 * 
+		 * @return
+		 */
+		@Override
+		public List<VirtualModel> getVirtualModels() {
+			loadVirtualModelsWhenUnloaded();
+			return virtualModels;
+		}
+
+		@Override
+		public void setVirtualModels(Vector<VirtualModel> virtualModels) {
+			loadVirtualModelsWhenUnloaded();
+			this.virtualModels = virtualModels;
+		}
+
+		@Override
+		public void addToVirtualModels(VirtualModel virtualModel) {
+			loadVirtualModelsWhenUnloaded();
+			virtualModel.setViewPoint(this);
+			virtualModels.add(virtualModel);
+			setChanged();
+			notifyObservers(new VirtualModelCreated(virtualModel));
+		}
+
+		@Override
+		public void removeFromVirtualModels(VirtualModel virtualModel) {
+			loadVirtualModelsWhenUnloaded();
+			virtualModel.setViewPoint(null);
+			virtualModels.remove(virtualModel);
+			setChanged();
+			notifyObservers(new VirtualModelDeleted(virtualModel));
+		}
+
+		/**
+		 * Return {@link VirtualModel} with supplied name or URI
+		 * 
+		 * @return
+		 */
+		@Override
+		public VirtualModel getVirtualModelNamed(String virtualModelName) {
+			loadVirtualModelsWhenUnloaded();
+			for (VirtualModel vm : getVirtualModels()) {
+				if (vm.getName().equals(virtualModelName)) {
+					return vm;
+				}
+				if (vm.getURI().equals(virtualModelName)) {
+					return vm;
+				}
+			}
+			return null;
+		}
+
+		/**
+		 * Return {@link DiagramSpecification} with supplied name or URI
+		 * 
+		 * @return
+		 */
+		/*public DiagramSpecification getDiagramSpecificationNamed(String diagramSpecificationName) {
+			loadVirtualModelsWhenUnloaded();
+			for (VirtualModel vm : getVirtualModels()) {
+				if (vm instanceof DiagramSpecification) {
+					if (vm.getName().equals(diagramSpecificationName)) {
+						return (DiagramSpecification) vm;
+					}
+					if (vm.getURI().equals(diagramSpecificationName)) {
+						return (DiagramSpecification) vm;
+					}
+				}
+			}
+			return null;
+		}*/
+
+		/**
+		 * Return EditionPattern matching supplied id represented as a string, which could be either the name of EditionPattern, or its URI
+		 * 
+		 * @param editionPatternId
+		 * @return
+		 */
+		@Override
+		public EditionPattern getEditionPattern(String editionPatternId) {
+			for (VirtualModel vm : getVirtualModels()) {
+				EditionPattern returned = vm.getEditionPattern(editionPatternId);
+				if (returned != null) {
+					return returned;
+				}
+			}
+			// logger.warning("Not found EditionPattern:" + editionPatternId);
+			return null;
+		}
+
+		// Return a default diagram specification (temporary hack to ensure compatibility with old versions)
+		/*@Deprecated
+		public DiagramSpecification getDefaultDiagramSpecification() {
+			loadVirtualModelsWhenUnloaded();
+			for (VirtualModel vm : getVirtualModels()) {
+				if (vm instanceof DiagramSpecification) {
+					return (DiagramSpecification) vm;
+				}
+			}
+			// OK, lets create a default one
+			// DiagramSpecification ds = new DiagramSpecification(this);
+			// addToVirtualModels(ds);
+			return null;
+		}*/
+
+		@Override
+		public LocalizedDictionary getLocalizedDictionary() {
+			if (localizedDictionary == null) {
+				localizedDictionary = getResource().getFactory().newInstance(LocalizedDictionary.class);
+				localizedDictionary.setOwner(this);
+			}
+			return localizedDictionary;
+		}
+
+		@Override
+		public void setLocalizedDictionary(LocalizedDictionary localizedDictionary) {
+			localizedDictionary.setOwner(this);
+			this.localizedDictionary = localizedDictionary;
+		}
+
+		@Deprecated
+		public static String findOntologyImports(File aFile) {
+			Document document;
+			try {
+				logger.fine("Try to find URI for " + aFile);
+				document = XMLUtils.readXMLFile(aFile);
+				Element root = XMLUtils.getElement(document, "Ontology");
+				if (root != null) {
+					Element importElement = XMLUtils.getElement(document, "imports");
+					if (importElement != null) {
+						Iterator it = importElement.getAttributes().iterator();
+						while (it.hasNext()) {
+							Attribute at = (Attribute) it.next();
+							if (at.getName().equals("resource")) {
+								// System.out.println("Returned " + at.getValue());
+								String returned = at.getValue();
+								if (StringUtils.isNotEmpty(returned)) {
+									return returned;
+								}
+							}
+						}
+					}
+				}
+			} catch (JDOMException e) {
 				e.printStackTrace();
 			} catch (IOException e) {
-				// TODO Auto-generated catch block
 				e.printStackTrace();
-			} catch (JDOMException e) {
-				// TODO Auto-generated catch block
-				e.printStackTrace();
-			} catch (Exception e) {
-				// TODO Auto-generated catch block
-				e.printStackTrace();
-			} finally {
-				try {
-					if (inputStream != null) {
-						inputStream.close();
-					}
-				} catch (IOException e) {
-					// TODO Auto-generated catch block
-					e.printStackTrace();
-				}
 			}
-			return null;
-		} else {
-			logger.severe("Not found: " + xmlFile);
-			// TODO: implement a search here (find the good XML file)
-			return null;
-		}
-	}
-
-	public static ViewPoint newViewPoint(String baseName, String viewpointURI, File owlFile, File viewpointDir, ViewPointLibrary library,
-			ViewPointFolder folder) {
-		File xmlFile = new File(viewpointDir, baseName + ".xml");
-		ViewPoint viewpoint = new ViewPoint();
-		viewpoint.owlFile = owlFile;
-		viewpoint._setViewPointURI(viewpointURI);
-
-		ImportedOntology viewPointOntology = loadViewpointOntology(viewpointURI, owlFile, library);
-
-		viewpoint.init(baseName, viewpointDir, xmlFile, library, viewPointOntology, folder);
-		viewpoint.save();
-		return viewpoint;
-	}
-
-	private static ImportedOntology readViewpointOntology(File viewPointFile, ViewPointLibrary library) {
-
-		if (viewPointFile == null || !viewPointFile.exists() || viewPointFile.length() == 0) {
-			if (viewPointFile.length() == 0) {
-				viewPointFile.delete();
-			}
+			logger.fine("Returned null");
 			return null;
 		}
 
-		File owlFile = null;
-		String viewPointURI = null;
-
-		Document document;
-		try {
-			logger.fine("Try to find ontology for viewpoint" + viewPointFile);
-			document = readXMLFile(viewPointFile);
-			Element root = getElement(document, VIEW_POINT_ELEMENT_XML_TAG);
-			if (root != null) {
-				String owlFileAttribute = root.getAttributeValue("owlFile");
-				if (owlFileAttribute != null) {
-					owlFile = new File(viewPointFile.getParent(), owlFileAttribute);
-					viewPointURI = root.getAttributeValue(URI_XML_ATTRIBUTE_NAME);
-				}
+		@Override
+		public BindingModel getBindingModel() {
+			if (bindingModel == null) {
+				createBindingModel();
 			}
-		} catch (JDOMException e) {
-			e.printStackTrace();
-		} catch (IOException e) {
-			e.printStackTrace();
+			return bindingModel;
 		}
 
-		if (owlFile != null && owlFile.exists()) {
-			return loadViewpointOntology(viewPointURI, owlFile, library);
-		}
-
-		return null;
-	}
-
-	private static ImportedOntology loadViewpointOntology(String viewPointURI, File owlFile, ViewPointLibrary library) {
-
-		ImportedOntology viewpointOntology = null;
-
-		if (owlFile.exists()) {
-			logger.fine("Found " + owlFile);
-			String ontologyURI = OWLOntology.findOntologyURI(owlFile);
-			if (StringUtils.isEmpty(ontologyURI)) {
-				ontologyURI = viewPointURI;
-			}
-			viewpointOntology = library.getOntologyLibrary().importOntology(ontologyURI, owlFile);
-			viewpointOntology.setIsReadOnly(false);
-		}
-
-		return viewpointOntology;
-	}
-
-	private static Document readXMLFile(File f) throws JDOMException, IOException {
-		FileInputStream fio = new FileInputStream(f);
-		SAXBuilder parser = new SAXBuilder();
-		Document reply = parser.build(fio);
-		return reply;
-	}
-
-	private static Element getElement(Document document, String name) {
-		Iterator<Element> it = document.getDescendants(new ElementFilter(name));
-		if (it.hasNext()) {
-			return it.next();
-		} else {
-			return null;
-		}
-	}
-
-	private static Element getElement(Element from, String name) {
-		Iterator<Element> it = from.getDescendants(new ElementFilter(name));
-		if (it.hasNext()) {
-			return it.next();
-		} else {
-			return null;
-		}
-	}
-
-	public static class ViewPointBuilder {
-		private ViewPoint viewPoint;
-		private ImportedOntology viewPointOntology;
-
-		public ViewPointBuilder(ViewPoint viewPoint) {
-			this.viewPoint = viewPoint;
-			if (viewPoint != null) {
-				this.viewPointOntology = (ImportedOntology) viewPoint.getViewpointOntology();
-			}
-		}
-
-		public ViewPointBuilder(ImportedOntology viewPointOntology) {
-			this.viewPointOntology = viewPointOntology;
-			// viewPointOntology.loadWhenUnloaded();
-		}
-
-		public ImportedOntology getViewPointOntology() {
-			return viewPointOntology;
-		}
-
-		public ViewPoint getViewPoint() {
-			return viewPoint;
-		}
-
-		public void setViewPoint(ViewPoint viewPoint) {
-			this.viewPoint = viewPoint;
-		}
-	}
-
-	// Used during deserialization, do not use it
-	public ViewPoint(ViewPointBuilder builder) {
-		super(builder);
-		if (builder != null) {
-			builder.setViewPoint(this);
-		}
-		editionPatterns = new Vector<EditionPattern>();
-	}
-
-	// Used during deserialization, do not use it
-	private ViewPoint() {
-		super(null);
-		editionPatterns = new Vector<EditionPattern>();
-	}
-
-	private void init(String baseName, File viewpointDir, File xmlFile, ViewPointLibrary library, ImportedOntology ontology,
-			ViewPointFolder folder) {
-		logger.info("Registering viewpoint " + baseName + " URI=" + getViewPointURI());
-
-		name = baseName;
-		viewPointDirectory = viewpointDir;
-		_library = library;
-
-		folder.addToViewPoints(this);
-
-		relativePathFileConverter = new RelativePathFileConverter(viewPointDirectory);
-
-		this.xmlFile = xmlFile;
-
-		/*if (owlFile == null) {
-			owlFile = new File(viewpointDir, baseName + ".owl");
-		}
-
-		if (owlFile.exists()) {
-			logger.fine("Found " + owlFile);
-			viewpointOntology = _library.getOntologyLibrary().importOntology(viewPointURI, owlFile);
-			viewpointOntology.setIsReadOnly(false);
-		}
-
-		else {
-			logger.warning("Could not find " + owlFile);
-			return;
-		}*/
-
-		viewpointOntology = ontology;
-
-		for (EditionPattern ep : getEditionPatterns()) {
-			for (PatternRole pr : ep.getPatternRoles()) {
-				if (pr instanceof ShapePatternRole) {
-					((ShapePatternRole) pr).tryToFindAGR();
-				}
-			}
-		}
-	}
-
-	private StringEncoder encoder;
-
-	@Override
-	public StringEncoder getStringEncoder() {
-		if (encoder == null) {
-			return encoder = new StringEncoder(super.getStringEncoder(), relativePathFileConverter);
-		}
-		return encoder;
-	}
-
-	@Override
-	public void saveToFile(File aFile) {
-		super.saveToFile(aFile);
-		clearIsModified(true);
-	}
-
-	public void save() {
-		logger.info("Saving ViewPoint to " + xmlFile.getAbsolutePath() + "...");
-
-		// Following was used to debug (display purpose only)
-		/*Converter<File> previousConverter = StringEncoder.getDefaultInstance()._converterForClass(File.class);
-		StringEncoder.getDefaultInstance()._addConverter(relativePathFileConverter);
-		try {
-			System.out.println("File: " + XMLCoder.encodeObjectWithMapping(this, getXMLMapping(), getStringEncoder()));
-		} catch (InvalidObjectSpecificationException e) {
-			// TODO Auto-generated catch block
-			e.printStackTrace();
-		} catch (InvalidModelException e) {
-			// TODO Auto-generated catch block
-			e.printStackTrace();
-		} catch (AccessorInvocationException e) {
-			// TODO Auto-generated catch block
-			e.printStackTrace();
-		} catch (DuplicateSerializationIdentifierException e) {
-			// TODO Auto-generated catch block
-			e.printStackTrace();
-		}
-		StringEncoder.getDefaultInstance()._addConverter(previousConverter);
-		 */
-
-		File dir = xmlFile.getParentFile();
-		if (!dir.exists()) {
-			dir.mkdirs();
-		}
-		File temporaryFile = null;
-		try {
-			makeLocalCopy();
-			temporaryFile = File.createTempFile("temp", ".xml", dir);
-			saveToFile(temporaryFile);
-			FileUtils.rename(temporaryFile, xmlFile);
-			clearIsModified(true);
-			logger.info("Saved ViewPoint to " + xmlFile.getAbsolutePath() + ". Done.");
-		} catch (IOException e) {
-			e.printStackTrace();
-			logger.severe("Could not save ViewPoint to " + xmlFile.getAbsolutePath());
-			if (temporaryFile != null) {
-				temporaryFile.delete();
-			}
-		}
-	}
-
-	private void makeLocalCopy() throws IOException {
-		if (xmlFile != null && xmlFile.exists()) {
-			String localCopyName = xmlFile.getName() + "~";
-			File localCopy = new File(xmlFile.getParentFile(), localCopyName);
-			FileUtils.copyFileToFile(xmlFile, localCopy);
-		}
-	}
-
-	@Override
-	public String getClassNameKey() {
-		return "view_point";
-	}
-
-	private void findPalettes(File dir) {
-		if (dir == null) {
-			return;
-		}
-		if (palettes == null) {
-			palettes = new Vector<ViewPointPalette>();
-		}
-		for (File f : dir.listFiles()) {
-			if (!f.isDirectory() && f.getName().endsWith(".palette") && f.length() > 0) {
-				ViewPointPalette palette = ViewPointPalette.instanciateCalcPalette(this, f);
-				if (palette != null) {
-					addToCalcPalettes(palette);
-				}
-			} else if (f.isDirectory() && !f.getName().equals("CVS")) {
-				findPalettes(f);
-			}
-		}
-	}
-
-	private void findShemas(File dir) {
-		if (dir == null) {
-			return;
-		}
-		if (shemas == null) {
-			shemas = new Vector<ExampleDrawingShema>();
-		}
-		for (File f : dir.listFiles()) {
-			if (!f.isDirectory() && f.getName().endsWith(".shema")) {
-				ExampleDrawingShema palette = ExampleDrawingShema.instanciateShema(this, f);
-				addToCalcShemas(palette);
-			} else if (f.isDirectory() && !f.getName().equals("CVS")) {
-				findShemas(f);
-			}
-		}
-	}
-
-	public void loadWhenUnloaded() {
-		if (!isLoaded && !isLoading && viewpointOntology != null) {
-			load();
-		}
-	}
-
-	protected void load() {
-		// logger.info("------------------------------------------------- "+calcURI);
-		logger.info("Try to load ViewPoint " + viewPointURI);
-
-		isLoading = true;
-
-		logger.info("viewpointOntology=" + viewpointOntology);
-		if (viewpointOntology != null) {
-			logger.info(viewpointOntology.getURI() + " isLoaded=" + viewpointOntology.isLoaded() + " isLoading="
-					+ viewpointOntology.isLoading());
-			viewpointOntology.loadWhenUnloaded();
-		}
-
-		// Deprecated code
-		/*if (getLocalizedDictionary() != null) {
-			FlexoLocalization.addToLocalizedDelegates(getLocalizedDictionary());
-		}*/
-
-		if (viewpointOntology != null) {
-			isLoaded = true;
-		}
-		isLoading = false;
-
-		logger.info("Loaded ViewPoint " + viewPointURI);
-
-		/*for (OntologyClass clazz : getOntologyLibrary().getAllClasses()) {
-			System.out.println("Found: " + clazz);
-		}*/
-
-	}
-
-	@Override
-	public String getFullyQualifiedName() {
-		return getURI();
-	}
-
-	public File getViewPointDirectory() {
-		return viewPointDirectory;
-	}
-
-	@Override
-	public String getURI() {
-		return getViewPointURI();
-	}
-
-	public String getViewPointURI() {
-		return viewPointURI;
-	}
-
-	public void _setViewPointURI(String vpURI) {
-		if (vpURI != null) {
-			// We prevent ',' so that we can use it as a delimiter in tags.
-			vpURI = vpURI.replace(",", "");
-		}
-		this.viewPointURI = vpURI;
-	}
-
-	@Override
-	public String toString() {
-		return "ViewPoint:" + getViewPointURI();
-	}
-
-	@Override
-	public String getName() {
-		return name;
-	}
-
-	@Override
-	public String getDescription() {
-		return description;
-	}
-
-	@Override
-	public void setDescription(String description) {
-		this.description = description;
-	}
-
-	public String getVersion() {
-		return version;
-	}
-
-	public void setVersion(String aVersion) {
-		if (requireChange(version, aVersion)) {
-			String old = this.version;
-			this.version = aVersion;
-			setChanged();
-			notifyObservers(new OEDataModification("version", old, version));
-		}
-	}
-
-	@Override
-	public FlexoOntology getViewpointOntology() {
-		if (isDeserializing()) {
-			return super.getViewpointOntology();
-		}
-		return viewpointOntology;
-	}
-
-	public void setViewpointOntology(ImportedOWLOntology viewpointOntology) {
-		this.viewpointOntology = viewpointOntology;
-	}
-
-	@Override
-	public ViewPointLibrary getViewPointLibrary() {
-		return _library;
-	}
-
-	@Override
-	public String getInspectorName() {
-		return Inspectors.VPM.ONTOLOGY_CALC_INSPECTOR;
-	}
-
-	public Vector<ViewPointPalette> getPalettes() {
-		if (palettes == null) {
-			findPalettes(viewPointDirectory);
-		}
-		return palettes;
-	}
-
-	public ViewPointPalette getPalette(String paletteName) {
-		if (paletteName == null) {
-			return null;
-		}
-		for (ViewPointPalette p : getPalettes()) {
-			if (paletteName.equals(p.getName())) {
-				return p;
-			}
-		}
-		return null;
-	}
-
-	public void addToCalcPalettes(ViewPointPalette aPalette) {
-		palettes.add(aPalette);
-		setChanged();
-		notifyObservers(new CalcPaletteInserted(aPalette, this));
-	}
-
-	public void removeFromCalcPalettes(ViewPointPalette aPalette) {
-		palettes.remove(aPalette);
-		setChanged();
-		notifyObservers(new CalcPaletteRemoved(aPalette, this));
-	}
-
-	public Vector<ExampleDrawingShema> getShemas() {
-		if (shemas == null) {
-			findShemas(viewPointDirectory);
-		}
-		return shemas;
-	}
-
-	public ExampleDrawingShema getShema(String shemaName) {
-		if (shemaName == null) {
-			return null;
-		}
-		for (ExampleDrawingShema s : getShemas()) {
-			if (shemaName.equals(s.getName())) {
-				return s;
-			}
-		}
-		return null;
-	}
-
-	public void addToCalcShemas(ExampleDrawingShema aShema) {
-		shemas.add(aShema);
-		setChanged();
-		notifyObservers(new CalcDrawingShemaInserted(aShema, this));
-	}
-
-	public void removeFromCalcShemas(ExampleDrawingShema aShema) {
-		shemas.remove(aShema);
-		setChanged();
-		notifyObservers(new CalcDrawingShemaRemoved(aShema, this));
-	}
-
-	@Override
-	public ViewPoint getViewPoint() {
-		return this;
-	}
-
-	protected void notifyEditionSchemeModified() {
-		_allEditionPatternWithDropScheme = null;
-		_allEditionPatternWithLinkScheme = null;
-	}
-
-	private Vector<EditionPattern> _allEditionPatternWithDropScheme;
-	private Vector<EditionPattern> _allEditionPatternWithLinkScheme;
-
-	public Vector<EditionPattern> getAllEditionPatternWithDropScheme() {
-		if (_allEditionPatternWithDropScheme == null) {
-			_allEditionPatternWithDropScheme = new Vector<EditionPattern>();
-			for (EditionPattern p : getEditionPatterns()) {
-				if (p.hasDropScheme()) {
-					_allEditionPatternWithDropScheme.add(p);
-				}
-			}
-		}
-		return _allEditionPatternWithDropScheme;
-	}
-
-	public Vector<EditionPattern> getAllEditionPatternWithLinkScheme() {
-		if (_allEditionPatternWithLinkScheme == null) {
-			_allEditionPatternWithLinkScheme = new Vector<EditionPattern>();
-			for (EditionPattern p : getEditionPatterns()) {
-				if (p.hasLinkScheme()) {
-					_allEditionPatternWithLinkScheme.add(p);
-				}
-			}
-		}
-		return _allEditionPatternWithLinkScheme;
-	}
-
-	public Vector<EditionPattern> getAllRootEditionPatterns() {
-		Vector<EditionPattern> returned = new Vector<EditionPattern>();
-		for (EditionPattern ep : getEditionPatterns()) {
-			if (ep.isRoot()) {
-				returned.add(ep);
-			}
-		}
-		return returned;
-	}
-
-	public Vector<EditionPattern> getEditionPatterns() {
-		return editionPatterns;
-	}
-
-	public void setEditionPatterns(Vector<EditionPattern> editionPatterns) {
-		this.editionPatterns = editionPatterns;
-	}
-
-	public void addToEditionPatterns(EditionPattern pattern) {
-		pattern.setCalc(this);
-		editionPatterns.add(pattern);
-		_allEditionPatternWithDropScheme = null;
-		_allEditionPatternWithLinkScheme = null;
-		setChanged();
-		notifyObservers(new EditionPatternCreated(pattern));
-	}
-
-	public void removeFromEditionPatterns(EditionPattern pattern) {
-		pattern.setCalc(null);
-		editionPatterns.remove(pattern);
-		setChanged();
-		notifyObservers(new EditionPatternDeleted(pattern));
-	}
-
-	@Override
-	public LocalizedDictionary getLocalizedDictionary() {
-		if (localizedDictionary == null) {
-			localizedDictionary = new LocalizedDictionary(null);
-			localizedDictionary.setCalc(this);
-		}
-		return localizedDictionary;
-	}
-
-	public void setLocalizedDictionary(LocalizedDictionary localizedDictionary) {
-		localizedDictionary.setCalc(this);
-		this.localizedDictionary = localizedDictionary;
-	}
-
-	@Override
-	public XMLMapping getXMLMapping() {
-		return getViewPointLibrary().get_VIEW_POINT_MODEL();
-	}
-
-	public EditionPattern getEditionPattern(String editionPatternId) {
-		for (EditionPattern concept : editionPatterns) {
-			if (concept.getName().equals(editionPatternId)) {
-				return concept;
-			}
-		}
-		logger.warning("Not found EditionPattern:" + editionPatternId);
-		return null;
-	}
-
-	public Vector<LinkScheme> getAllConnectors() {
-		Vector<LinkScheme> returned = new Vector<LinkScheme>();
-		for (EditionPattern ep : getViewPoint().getEditionPatterns()) {
-			for (LinkScheme s : ep.getLinkSchemes()) {
-				returned.add(s);
-			}
-		}
-		return returned;
-	}
-
-	public Vector<LinkScheme> getConnectorsMatching(EditionPattern fromConcept, EditionPattern toConcept) {
-		Vector<LinkScheme> returned = new Vector<LinkScheme>();
-		for (EditionPattern ep : getViewPoint().getEditionPatterns()) {
-			for (LinkScheme s : ep.getLinkSchemes()) {
-				if (s.isValidTarget(fromConcept, toConcept)) {
-					returned.add(s);
-				}
-			}
-		}
-		return returned;
-	}
-
-	public File getOwlFile() {
-		return owlFile;
-	}
-
-	public void setOwlFile(File owlFile) {
-		this.owlFile = owlFile;
-	}
-
-	@Override
-	public final void finalizeDeserialization(Object builder) {
-		for (EditionPattern ep : getEditionPatterns()) {
-			ep.finalizeEditionPatternDeserialization();
-		}
-		super.finalizeDeserialization(builder);
-	}
-
-	private BindingModel _bindingModel;
-
-	@Override
-	public BindingModel getBindingModel() {
-		if (_bindingModel == null) {
+		public void updateBindingModel() {
+			logger.fine("updateBindingModel()");
+			bindingModel = null;
 			createBindingModel();
 		}
-		return _bindingModel;
-	}
 
-	public void updateBindingModel() {
-		logger.fine("updateBindingModel()");
-		_bindingModel = null;
-		createBindingModel();
-	}
-
-	private void createBindingModel() {
-		_bindingModel = new BindingModel();
-		for (EditionPattern ep : getEditionPatterns()) {
-			_bindingModel.addToBindingVariables(new EditionPatternPathElement<ViewPoint>(ep, this));
-		}
-	}
-
-	@Override
-	public BindingFactory getBindingFactory() {
-		return EDITION_PATTERN_BINDING_FACTORY;
-	}
-
-	private static EditionPatternBindingFactory EDITION_PATTERN_BINDING_FACTORY = new EditionPatternBindingFactory();
-
-	@Override
-	public String getLanguageRepresentation() {
-		// Voir du cote de GeneratorFormatter pour formatter tout ca
-		StringBuffer sb = new StringBuffer();
-		System.out.println("loaded: " + getViewpointOntology().isLoaded());
-		for (FlexoOntology o : getViewpointOntology().getImportedOntologies()) {
-			if (o != getOntologyLibrary().getOWLOntology()) {
-				String modelName = JavaUtils.getVariableName(o.getName());
-				sb.append("import " + modelName + " as " + o.getURI() + ";" + StringUtils.LINE_SEPARATOR);
+		private void createBindingModel() {
+			bindingModel = new BindingModel();
+			for (VirtualModel vm : getVirtualModels()) {
+				bindingModel.addToBindingVariables(new BindingVariable(vm.getName(), Object.class));
 			}
 		}
-		sb.append("ViewDefinition " + getName() + " uri=\"" + getURI() + "\"");
-		sb.append(" {" + StringUtils.LINE_SEPARATOR);
-		// TODO iterate on slots here
-		sb.append("ModelSlot defaultModelSlot implements toto;");
-		sb.append(StringUtils.LINE_SEPARATOR);
-		for (EditionPattern ep : getEditionPatterns()) {
-			sb.append(ep.getLanguageRepresentation());
-			sb.append(StringUtils.LINE_SEPARATOR);
-		}
-		sb.append("}" + StringUtils.LINE_SEPARATOR);
-		return sb.toString();
-	}
 
+		@Override
+		public EditionPatternBindingFactory getBindingFactory() {
+			return bindingFactory;
+		}
+
+		@Override
+		public ValidationModel getDefaultValidationModel() {
+			return ViewPointLibrary.VALIDATION_MODEL;
+		}
+
+		// ==========================================================================
+		// ============================== Model Slots ===============================
+		// ==========================================================================
+
+		/*public void setModelSlots(List<ModelSlot> modelSlots) {
+			this.modelSlots = modelSlots;
+		}
+
+		public List<ModelSlot> getModelSlots() {
+			return modelSlots;
+		}
+
+		public void addToModelSlots(ModelSlot modelSlot) {
+			modelSlots.add(modelSlot);
+			modelSlot.setViewPoint(this);
+			setChanged();
+			notifyObservers(new ModelSlotAdded(modelSlot, this));
+		}
+
+		public void removeFromModelSlots(ModelSlot modelSlot) {
+			modelSlots.remove(modelSlot);
+			modelSlot.setViewPoint(null);
+			setChanged();
+			notifyObservers(new ModelSlotRemoved(modelSlot, this));
+		}
+
+		public <MS extends ModelSlot> List<MS> getModelSlots(Class<MS> msType) {
+			List<MS> returned = new ArrayList<MS>();
+			for (ModelSlot ms : getModelSlots()) {
+				if (TypeUtils.isTypeAssignableFrom(msType, ms.getClass())) {
+					returned.add((MS) ms);
+				}
+			}
+			return returned;
+		}
+
+		public ModelSlot getModelSlot(String modelSlotName) {
+			for (ModelSlot ms : getModelSlots()) {
+				if (ms.getName().equals(modelSlotName)) {
+					return ms;
+				}
+			}
+			return null;
+		}
+
+		public List<ModelSlot> getRequiredModelSlots() {
+			List<ModelSlot> requiredModelSlots = new ArrayList<ModelSlot>();
+			for (ModelSlot modelSlot : getModelSlots()) {
+				if (modelSlot.getIsRequired()) {
+					requiredModelSlots.add(modelSlot);
+				}
+			}
+			return modelSlots;
+		}*/
+
+		@Override
+		public String getFMLRepresentation(FMLRepresentationContext context) {
+			// Voir du cote de GeneratorFormatter pour formatter tout ca
+			FMLRepresentationOutput out = new FMLRepresentationOutput(context);
+
+			/*for (FlexoMetaModelResource<?, ?> mm : getAllMetaModels()) {
+				out.append("import " + mm.getURI() + ";", context);
+				out.append(StringUtils.LINE_SEPARATOR, context);
+			}*/
+
+			out.append("ViewDefinition " + getName() + " uri=\"" + getURI() + "\"", context);
+			out.append(" {" + StringUtils.LINE_SEPARATOR, context);
+
+			/*for (ModelSlot modelSlot : getModelSlots()) {
+				// if (modelSlot.getMetaModelResource() != null) {
+				out.append(modelSlot.getFMLRepresentation(context), context);
+				// }
+			}*/
+
+			out.append(StringUtils.LINE_SEPARATOR, context);
+			for (VirtualModel vm : getVirtualModels()) {
+				out.append(vm.getFMLRepresentation(context), context, 1);
+				out.append(StringUtils.LINE_SEPARATOR, context, 1);
+			}
+			out.append("}" + StringUtils.LINE_SEPARATOR, context);
+			return out.toString();
+		}
+
+		@Override
+		public Collection<VirtualModel> getEmbeddedValidableObjects() {
+			return getVirtualModels();
+		}
+
+		// Implementation of XMLStorageResourceData
+
+		/*@Override
+		public FlexoStorageResource<ViewPoint> getFlexoResource() {
+			return (FlexoStorageResource<ViewPoint>) getResource();
+		}
+
+		@Override
+		public void setFlexoResource(FlexoResource resource) throws DuplicateResourceException {
+			setResource(resource);
+		}*/
+
+		@Override
+		public ViewPointResource getResource() {
+			return resource;
+		}
+
+		@Override
+		public void setResource(org.openflexo.foundation.resource.FlexoResource<ViewPoint> resource) {
+			this.resource = (ViewPointResource) resource;
+		}
+
+		/*@Override
+		public ViewPointImplResource getFlexoXMLFileResource() {
+			return getResource();
+		}*/
+
+		/*@Override
+		public void save() {
+			logger.info("Saving ViewPoint to " + getResource().getFile().getAbsolutePath() + "...");
+
+			try {
+				getResource().save(null);
+			} catch (SaveResourceException e) {
+				e.printStackTrace();
+			}
+		}*/
+
+		@Override
+		public boolean delete() {
+
+			logger.info("Deleting ViewPoint " + this);
+
+			// Unregister the viewpoint resource from the viewpoint library
+			if (getResource() != null && getViewPointLibrary() != null) {
+				getViewPointLibrary().unregisterViewPoint(getResource());
+			}
+
+			// Delete viewpoint
+			super.delete();
+
+			// Delete observers
+			deleteObservers();
+
+			return true;
+		}
+	}
 }

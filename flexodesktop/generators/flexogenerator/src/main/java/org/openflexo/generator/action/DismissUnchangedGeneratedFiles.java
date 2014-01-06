@@ -60,7 +60,7 @@ public class DismissUnchangedGeneratedFiles extends MultipleFileGCAction<Dismiss
 	};
 
 	static {
-		FlexoModelObject.addActionForClass(DismissUnchangedGeneratedFiles.actionType, CGObject.class);
+		TestModelObject.addActionForClass(DismissUnchangedGeneratedFiles.actionType, CGObject.class);
 	}
 
 	DismissUnchangedGeneratedFiles(CGObject focusedObject, Vector<CGObject> globalSelection, FlexoEditor editor) {

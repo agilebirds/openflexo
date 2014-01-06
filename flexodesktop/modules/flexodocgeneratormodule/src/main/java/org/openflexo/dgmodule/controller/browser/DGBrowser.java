@@ -36,7 +36,7 @@ import org.openflexo.doceditor.controller.browser.TOCEntryElement;
 import org.openflexo.doceditor.controller.browser.TOCRepositoryElement;
 import org.openflexo.foundation.DataModification;
 import org.openflexo.foundation.DocType;
-import org.openflexo.foundation.FlexoModelObject;
+import org.openflexo.foundation.FlexoObject;
 import org.openflexo.foundation.FlexoObservable;
 import org.openflexo.foundation.FlexoObserver;
 import org.openflexo.foundation.cg.CGFile;
@@ -77,7 +77,7 @@ public class DGBrowser extends ProjectBrowser implements FlexoObserver {
 		}
 
 		@Override
-		public boolean accept(FlexoModelObject object) {
+		public boolean accept(FlexoObject object) {
 			if (object instanceof CGFile) {
 				return acceptFile((CGFile) object);
 			}
@@ -112,7 +112,7 @@ public class DGBrowser extends ProjectBrowser implements FlexoObserver {
 		}
 
 		@Override
-		public BrowserElement makeNewElement(FlexoModelObject object, ProjectBrowser browser, BrowserElement parent) {
+		public BrowserElement makeNewElement(FlexoObject object, ProjectBrowser browser, BrowserElement parent) {
 			if (object instanceof GeneratedDoc) {
 				return new GeneratedDocElement((GeneratedDoc) object, browser, parent);
 			} else if (object instanceof GenerationRepository) {
@@ -157,7 +157,7 @@ public class DGBrowser extends ProjectBrowser implements FlexoObserver {
 		// Custom filters
 		setAllFilesAndDirectoryFilter(new CustomBrowserFilter("all_files_and_directories", null) {
 			@Override
-			public boolean accept(FlexoModelObject object) {
+			public boolean accept(FlexoObject object) {
 				return true;
 			}
 		});

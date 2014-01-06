@@ -26,8 +26,7 @@ import java.util.logging.Logger;
 
 import javax.swing.JFileChooser;
 
-import org.openflexo.AdvancedPrefs;
-import org.openflexo.prefs.FlexoPreferences;
+import org.openflexo.ApplicationContext;
 import org.openflexo.view.FlexoFrame;
 
 /**
@@ -39,17 +38,17 @@ public class OpenProjectComponent extends ProjectChooserComponent {
 
 	private static final Logger logger = Logger.getLogger(OpenProjectComponent.class.getPackage().getName());
 
-	protected OpenProjectComponent(Frame owner) {
-		super(owner);
+	protected OpenProjectComponent(Frame owner, ApplicationContext applicationContext) {
+		super(owner, applicationContext);
 		logger.info("Build OpenProjectComponent");
 	}
 
-	public static File getProjectDirectory() {
-		return getProjectDirectory(FlexoFrame.getActiveFrame());
+	public static File getProjectDirectory(ApplicationContext applicationContext) {
+		return getProjectDirectory(FlexoFrame.getActiveFrame(), applicationContext);
 	}
 
-	public static File getProjectDirectory(Frame owner) {
-		OpenProjectComponent chooser = new OpenProjectComponent(owner);
+	public static File getProjectDirectory(Frame owner, ApplicationContext applicationContext) {
+		OpenProjectComponent chooser = new OpenProjectComponent(owner, applicationContext);
 		File returned = null;
 		int returnVal = -1;
 		boolean ok = false;
@@ -65,8 +64,8 @@ public class OpenProjectComponent extends ProjectChooserComponent {
 		}
 		if (returnVal == JFileChooser.APPROVE_OPTION) {
 			returned = chooser.getSelectedFile();
-			AdvancedPrefs.setLastVisitedDirectory(returned.getParentFile());
-			FlexoPreferences.savePreferences(true);
+			applicationContext.getAdvancedPrefs().setLastVisitedDirectory(returned.getParentFile());
+			applicationContext.getPreferencesService().savePreferences();
 		} else {
 			if (logger.isLoggable(Level.FINE)) {
 				logger.fine("No project supplied");

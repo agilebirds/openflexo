@@ -26,8 +26,9 @@ import javax.swing.JComponent;
 import javax.swing.JPanel;
 import javax.swing.SwingUtilities;
 
-import org.openflexo.foundation.FlexoModelObject;
-import org.openflexo.foundation.rm.FlexoProject;
+import org.openflexo.foundation.FlexoObject;
+import org.openflexo.foundation.FlexoProjectObject;
+import org.openflexo.foundation.FlexoProject;
 import org.openflexo.foundation.wkf.FlexoProcess;
 import org.openflexo.foundation.wkf.FlexoWorkflow;
 import org.openflexo.foundation.wkf.WKFObject;
@@ -105,14 +106,16 @@ public class ProcessPerspective extends FlexoPerspective {
 	}
 
 	@Override
-	public FlexoModelObject getDefaultObject(FlexoModelObject proposedObject) {
+	public FlexoObject getDefaultObject(FlexoObject proposedObject) {
 		if (proposedObject instanceof WKFObject) {
 			return ((WKFObject) proposedObject).getProcess();
-		} else if (proposedObject != null && proposedObject.getProject() != null) {
-			if (proposedObject.getProject().getRootFlexoProcess() != null) {
-				return proposedObject.getProject().getRootFlexoProcess();
+		} else if (proposedObject instanceof WKFObject) {
+			return ((WKFObject) proposedObject).getProcess();
+		} else if (proposedObject instanceof FlexoProjectObject && ((FlexoProjectObject) proposedObject).getProject() != null) {
+			if (((FlexoProjectObject) proposedObject).getProject().getRootFlexoProcess() != null) {
+				return ((FlexoProjectObject) proposedObject).getProject().getRootFlexoProcess();
 			} else {
-				return proposedObject.getProject().getWorkflow();
+				return ((FlexoProjectObject) proposedObject).getProject().getWorkflow();
 			}
 		} else {
 			return null;
@@ -120,12 +123,12 @@ public class ProcessPerspective extends FlexoPerspective {
 	}
 
 	@Override
-	public boolean hasModuleViewForObject(FlexoModelObject object) {
+	public boolean hasModuleViewForObject(FlexoObject object) {
 		return object instanceof FlexoProcess || object instanceof FlexoWorkflow && !((FlexoWorkflow) object).isCache();
 	}
 
 	@Override
-	public ModuleView<?> createModuleViewForObject(FlexoModelObject object, FlexoController controller, boolean editable) {
+	public ModuleView<?> createModuleViewForObject(FlexoObject object, FlexoController controller, boolean editable) {
 		if (object instanceof FlexoProcess) {
 			ProcessView drawingView = new ProcessEditorController(_controller, (FlexoProcess) object).getDrawingView();
 			drawingView.getDrawing().setEditable(editable);
@@ -139,7 +142,7 @@ public class ProcessPerspective extends FlexoPerspective {
 	}
 
 	@Override
-	public ModuleView<?> createModuleViewForObject(FlexoModelObject object, FlexoController controller) {
+	public ModuleView<?> createModuleViewForObject(FlexoObject object, FlexoController controller) {
 		return createModuleViewForObject(object, controller, true);
 	}
 

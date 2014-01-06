@@ -25,7 +25,8 @@ import java.util.logging.Logger;
 import org.openflexo.drm.DocItem;
 import org.openflexo.drm.DocItemFolder;
 import org.openflexo.foundation.FlexoEditor;
-import org.openflexo.foundation.FlexoModelObject;
+import org.openflexo.foundation.FlexoObject;
+import org.openflexo.foundation.FlexoObject.FlexoObjectImpl;
 import org.openflexo.foundation.action.FlexoAction;
 import org.openflexo.foundation.action.FlexoActionType;
 
@@ -40,24 +41,24 @@ public class CreateDocItem extends FlexoAction {
 		 * Factory method
 		 */
 		@Override
-		public FlexoAction makeNewAction(FlexoModelObject focusedObject, Vector globalSelection, FlexoEditor editor) {
+		public FlexoAction makeNewAction(FlexoObject focusedObject, Vector globalSelection, FlexoEditor editor) {
 			return new CreateDocItem(focusedObject, globalSelection, editor);
 		}
 
 		@Override
-		public boolean isVisibleForSelection(FlexoModelObject object, Vector globalSelection) {
+		public boolean isVisibleForSelection(FlexoObject object, Vector globalSelection) {
 			return true;
 		}
 
 		@Override
-		public boolean isEnabledForSelection(FlexoModelObject object, Vector globalSelection) {
+		public boolean isEnabledForSelection(FlexoObject object, Vector globalSelection) {
 			return object != null && object instanceof DocItemFolder;
 		}
 
 	};
 
 	static {
-		FlexoModelObject.addActionForClass(actionType, DocItemFolder.class);
+		FlexoObjectImpl.addActionForClass(actionType, DocItemFolder.class);
 	}
 
 	private DocItemFolder _docItemFolder;
@@ -65,7 +66,7 @@ public class CreateDocItem extends FlexoAction {
 	private String _newItemDescription;
 	private DocItem _newDocItem;
 
-	CreateDocItem(FlexoModelObject focusedObject, Vector globalSelection, FlexoEditor editor) {
+	CreateDocItem(FlexoObject focusedObject, Vector globalSelection, FlexoEditor editor) {
 		super(actionType, focusedObject, globalSelection, editor);
 	}
 

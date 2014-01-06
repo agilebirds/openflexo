@@ -28,7 +28,7 @@ import org.openflexo.components.widget.AbstractBrowserSelector;
 import org.openflexo.components.widget.AbstractSelectorPanel;
 import org.openflexo.foundation.cg.CGFile;
 import org.openflexo.foundation.cg.version.AbstractCGFileVersion;
-import org.openflexo.foundation.rm.FlexoProject;
+import org.openflexo.foundation.FlexoProject;
 import org.openflexo.view.controller.FlexoController;
 
 /**

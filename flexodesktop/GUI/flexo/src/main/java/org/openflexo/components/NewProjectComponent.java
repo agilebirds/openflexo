@@ -26,7 +26,7 @@ import java.util.logging.Logger;
 
 import javax.swing.JFileChooser;
 
-import org.openflexo.AdvancedPrefs;
+import org.openflexo.ApplicationContext;
 import org.openflexo.localization.FlexoLocalization;
 import org.openflexo.toolbox.FileUtils;
 import org.openflexo.view.FlexoFrame;
@@ -41,24 +41,24 @@ public class NewProjectComponent extends ProjectChooserComponent {
 
 	private static final Logger logger = Logger.getLogger(OpenProjectComponent.class.getPackage().getName());
 
-	protected NewProjectComponent(Frame owner) {
-		super(owner);
+	protected NewProjectComponent(Frame owner, ApplicationContext applicationContext) {
+		super(owner, applicationContext);
 		setApproveButtonText(FlexoLocalization.localizedForKey("create"));
 	}
 
-	public static File getProjectDirectory() {
-		return getProjectDirectory(FlexoFrame.getActiveFrame());
+	public static File getProjectDirectory(ApplicationContext applicationContext) {
+		return getProjectDirectory(FlexoFrame.getActiveFrame(), applicationContext);
 	}
 
-	public static File getProjectDirectory(Frame owner) {
-		NewProjectComponent chooser = new NewProjectComponent(owner);
+	public static File getProjectDirectory(Frame owner, ApplicationContext applicationContext) {
+		NewProjectComponent chooser = new NewProjectComponent(owner, applicationContext);
 		File newProjectDir = null;
 		int returnVal = chooser.showSaveDialog();
 		if (returnVal == JFileChooser.APPROVE_OPTION) {
 			if (isValidProjectName(chooser.getSelectedFile().getName())) {
 				newProjectDir = chooser.getSelectedFile();
 				File newFileDir = chooser.getSelectedFile().getParentFile();
-				AdvancedPrefs.setLastVisitedDirectory(newFileDir);
+				applicationContext.getAdvancedPrefs().setLastVisitedDirectory(newFileDir);
 				if (!newProjectDir.getName().toLowerCase().endsWith(".prj")) {
 					newProjectDir = new File(newProjectDir.getAbsolutePath() + ".prj");
 				}

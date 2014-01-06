@@ -3,7 +3,7 @@
  */
 package org.openflexo.fps.controller;
 
-import org.openflexo.foundation.FlexoModelObject;
+import org.openflexo.foundation.FlexoObject;
 import org.openflexo.fps.CVSFile;
 import org.openflexo.fps.view.CVSFileModuleView;
 import org.openflexo.view.ModuleView;
@@ -24,17 +24,17 @@ public abstract class FPSPerspective extends FlexoPerspective {
 	public abstract void setFilters();
 
 	@Override
-	public boolean hasModuleViewForObject(FlexoModelObject object) {
+	public boolean hasModuleViewForObject(FlexoObject object) {
 		return true;
 	}
 
 	@Override
-	public CVSFile getDefaultObject(FlexoModelObject proposedObject) {
+	public CVSFile getDefaultObject(FlexoObject proposedObject) {
 		return null;
 	}
 
 	@Override
-	public ModuleView<?> createModuleViewForObject(FlexoModelObject file, FlexoController controller) {
+	public ModuleView<?> createModuleViewForObject(FlexoObject file, FlexoController controller) {
 		if (file instanceof CVSFile) {
 			return new CVSFileModuleView((CVSFile) file, (FPSController) controller);
 		} else {

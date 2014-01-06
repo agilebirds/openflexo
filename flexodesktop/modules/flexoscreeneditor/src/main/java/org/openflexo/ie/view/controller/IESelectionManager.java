@@ -28,6 +28,7 @@ import java.util.logging.Logger;
 import javax.swing.JComponent;
 
 import org.openflexo.foundation.FlexoModelObject;
+import org.openflexo.foundation.FlexoObject;
 import org.openflexo.foundation.ie.IEWOComponent;
 import org.openflexo.foundation.ie.cl.ComponentDefinition;
 import org.openflexo.foundation.ie.widget.IEHTMLTableWidget;
@@ -128,9 +129,9 @@ public class IESelectionManager extends MouseSelectionManager {
 			logger.fine("performSelectionCut in " + getClass().getName());
 		}
 		_clipboard.performSelectionCut(getSelection());
-		Enumeration<FlexoModelObject> en = getSelection().elements();
+		Enumeration<FlexoObject> en = getSelection().elements();
 		while (en.hasMoreElements()) {
-			FlexoModelObject o = en.nextElement();
+			FlexoObject o = en.nextElement();
 			if (o instanceof IETDWidget) {
 				IESequenceWidget seq = ((IETDWidget) o).getSequenceWidget();
 				seq.removeFromContainer();
@@ -210,7 +211,7 @@ public class IESelectionManager extends MouseSelectionManager {
 	 *            : the object to add to selection
 	 */
 	@Override
-	protected void internallyAddToSelected(FlexoModelObject object, boolean isNewFocusedObject) {
+	protected void internallyAddToSelected(FlexoObject object, boolean isNewFocusedObject) {
 		if (object == null || object.isDeleted()) {
 			return;
 		}
@@ -219,8 +220,8 @@ public class IESelectionManager extends MouseSelectionManager {
 				return;
 			}
 			if (((IEWidget) object).getWOComponent().getRootSequence() == object) {
-				object = ((IEWidget) object).getWOComponent();
-			}
+			object = ((IEWidget) object).getWOComponent();
+		}
 		}
 		if (object instanceof ComponentDefinition) {
 			if (((ComponentDefinition) object).isLoaded()) {
@@ -238,7 +239,7 @@ public class IESelectionManager extends MouseSelectionManager {
 	 *            : the object to remove from selection
 	 */
 	@Override
-	protected void internallyRemoveFromSelected(FlexoModelObject object) {
+	protected void internallyRemoveFromSelected(FlexoObject object) {
 		if (object instanceof ComponentDefinition) {
 			if (((ComponentDefinition) object).isLoaded()) {
 				if (selectionContains(((ComponentDefinition) object).getWOComponent())) {

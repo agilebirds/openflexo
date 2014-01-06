@@ -19,68 +19,73 @@
  */
 package org.openflexo.foundation.viewpoint;
 
+import java.lang.reflect.InvocationTargetException;
 import java.lang.reflect.ParameterizedType;
 import java.lang.reflect.Type;
 import java.util.List;
 import java.util.logging.Logger;
 
-import org.openflexo.antar.binding.AbstractBinding.BindingEvaluationContext;
-import org.openflexo.antar.binding.BindingDefinition;
-import org.openflexo.antar.binding.BindingDefinition.BindingDefinitionType;
+import org.openflexo.antar.binding.BindingEvaluationContext;
 import org.openflexo.antar.binding.BindingModel;
-import org.openflexo.antar.binding.BindingVariableImpl;
+import org.openflexo.antar.binding.BindingVariable;
+import org.openflexo.antar.binding.DataBinding;
+import org.openflexo.antar.binding.DataBinding.BindingDefinitionType;
+import org.openflexo.antar.expr.NullReferenceException;
+import org.openflexo.antar.expr.TypeMismatchException;
 import org.openflexo.foundation.view.action.EditionSchemeAction;
-import org.openflexo.foundation.viewpoint.ViewPoint.ViewPointBuilder;
-import org.openflexo.foundation.viewpoint.binding.ViewPointDataBinding;
+import org.openflexo.foundation.viewpoint.FMLRepresentationContext.FMLRepresentationOutput;
+import org.openflexo.foundation.viewpoint.annotations.FIBPanel;
+import org.openflexo.toolbox.StringUtils;
 
+@FIBPanel("Fib/IterationActionPanel.fib")
 public class IterationAction extends ControlStructureAction {
 
 	private static final Logger logger = Logger.getLogger(IterationAction.class.getPackage().getName());
 
 	private String iteratorName = "item";
 
-	public IterationAction(ViewPointBuilder builder) {
-		super(builder);
+	public IterationAction() {
+		super();
 	}
 
 	@Override
-	public EditionActionType getEditionActionType() {
-		return EditionActionType.Iteration;
+	public String getFMLRepresentation(FMLRepresentationContext context) {
+		FMLRepresentationOutput out = new FMLRepresentationOutput(context);
+		out.append("for (" + getIteratorName() + " in " + getIteration().toString(), context);
+		out.append(") {", context);
+		out.append(StringUtils.LINE_SEPARATOR, context);
+		for (EditionAction action : getActions()) {
+			out.append(action.getFMLRepresentation(context), context, 1);
+			out.append(StringUtils.LINE_SEPARATOR, context);
+		}
+
+		out.append("}", context);
+		return out.toString();
 	}
 
-	/*@Override
-	public List<PatternRole> getAvailablePatternRoles() {
-		return getEditionPattern().getPatternRoles();
-	}*/
+	private DataBinding<List<?>> iteration;
 
-	private ViewPointDataBinding iteration;
-
-	private BindingDefinition ITERATION = new BindingDefinition("iteration", List.class, BindingDefinitionType.GET, true);
-
-	public BindingDefinition getIterationBindingDefinition() {
-		return ITERATION;
-	}
-
-	public ViewPointDataBinding getIteration() {
+	public DataBinding<List<?>> getIteration() {
 		if (iteration == null) {
-			iteration = new ViewPointDataBinding(this, EditionActionBindingAttribute.object, getIterationBindingDefinition());
+			iteration = new DataBinding<List<?>>(this, List.class, BindingDefinitionType.GET);
 		}
 		return iteration;
 	}
 
-	public void setIteration(ViewPointDataBinding iteration) {
+	public void setIteration(DataBinding<List<?>> iteration) {
 		if (iteration != null) {
 			iteration.setOwner(this);
-			iteration.setBindingAttribute(EditionActionBindingAttribute.iteration);
-			iteration.setBindingDefinition(getIterationBindingDefinition());
+			iteration.setBindingName("iteration");
+			iteration.setDeclaredType(List.class);
+			iteration.setBindingDefinitionType(BindingDefinitionType.GET);
 		}
 		this.iteration = iteration;
 		rebuildInferedBindingModel();
 	}
 
 	@Override
-	public void notifyBindingChanged(ViewPointDataBinding binding) {
-		super.notifyBindingChanged(binding);
+	public void notifiedBindingChanged(DataBinding<?> binding) {
+		super.notifiedBindingChanged(binding);
 		if (binding == iteration) {
 			rebuildInferedBindingModel();
 		}
@@ -96,8 +101,8 @@ public class IterationAction extends ControlStructureAction {
 	}
 
 	public Type getItemType() {
-		if (getIteration() != null && getIteration().hasBinding()) {
-			Type accessedType = getIteration().getBinding().getAccessedType();
+		if (getIteration() != null && getIteration().isSet()) {
+			Type accessedType = getIteration().getAnalyzedType();
 			if (accessedType instanceof ParameterizedType && ((ParameterizedType) accessedType).getActualTypeArguments().length > 0) {
 				return ((ParameterizedType) accessedType).getActualTypeArguments()[0];
 			}
@@ -108,7 +113,7 @@ public class IterationAction extends ControlStructureAction {
 	@Override
 	protected BindingModel buildInferedBindingModel() {
 		BindingModel returned = super.buildInferedBindingModel();
-		returned.addToBindingVariables(new BindingVariableImpl(this, getIteratorName(), getItemType()) {
+		returned.addToBindingVariables(new BindingVariable(getIteratorName(), getItemType()) {
 			@Override
 			public Object getBindingValue(Object target, BindingEvaluationContext context) {
 				logger.info("What should i return for " + getIteratorName() + " ? target " + target + " context=" + context);
@@ -125,8 +130,30 @@ public class IterationAction extends ControlStructureAction {
 
 	public List<?> evaluateIteration(EditionSchemeAction action) {
 		if (getIteration().isValid()) {
-			return (List<?>) getIteration().getBindingValue(action);
+			try {
+				return getIteration().getBindingValue(action);
+			} catch (TypeMismatchException e) {
+				e.printStackTrace();
+			} catch (NullReferenceException e) {
+				e.printStackTrace();
+			} catch (InvocationTargetException e) {
+				e.printStackTrace();
+			}
 		}
+		return null;
+	}
+
+	@Override
+	public Object performAction(EditionSchemeAction action) {
+		List<?> items = evaluateIteration(action);
+		if (items != null) {
+			for (Object item : items) {
+				System.out.println("> working with " + getIteratorName() + "=" + item);
+				action.declareVariable(getIteratorName(), item);
+				performBatchOfActions(getActions(), action);
+			}
+		}
+		action.dereferenceVariable(getIteratorName());
 		return null;
 	}
 
@@ -144,13 +171,8 @@ public class IterationAction extends ControlStructureAction {
 		}
 
 		@Override
-		public ViewPointDataBinding getBinding(IterationAction object) {
+		public DataBinding<List<?>> getBinding(IterationAction object) {
 			return object.getIteration();
-		}
-
-		@Override
-		public BindingDefinition getBindingDefinition(IterationAction object) {
-			return object.getIterationBindingDefinition();
 		}
 
 	}

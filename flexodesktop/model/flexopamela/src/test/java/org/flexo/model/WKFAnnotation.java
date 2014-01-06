@@ -11,7 +11,7 @@ import org.openflexo.model.exceptions.InvalidDataException;
 import org.openflexo.model.factory.ModelFactory;
 
 @ModelEntity
-public interface WKFAnnotation extends FlexoModelObject {
+public interface WKFAnnotation extends TestModelObject {
 
 	public static final String TEXT = "text";
 

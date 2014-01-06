@@ -27,7 +27,7 @@ import javax.swing.Icon;
 import org.openflexo.components.AskParametersDialog;
 import org.openflexo.foundation.action.FlexoActionFinalizer;
 import org.openflexo.foundation.action.FlexoActionInitializer;
-import org.openflexo.foundation.param.TextAreaParameter;
+import org.openflexo.foundation.viewpoint.TextAreaParameter;
 import org.openflexo.fps.action.CommitFiles;
 import org.openflexo.icon.FPSIconLibrary;
 import org.openflexo.localization.FlexoLocalization;

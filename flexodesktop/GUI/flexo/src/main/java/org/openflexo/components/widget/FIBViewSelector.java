@@ -22,7 +22,7 @@ package org.openflexo.components.widget;
 import java.io.File;
 import java.util.logging.Logger;
 
-import org.openflexo.foundation.view.ViewDefinition;
+import org.openflexo.foundation.view.rm.ViewResource;
 import org.openflexo.toolbox.FileResource;
 
 /**
@@ -31,13 +31,14 @@ import org.openflexo.toolbox.FileResource;
  * @author sguerin
  * 
  */
-public class FIBViewSelector extends FIBModelObjectSelector<ViewDefinition> {
-	@SuppressWarnings("hiding")
+@SuppressWarnings("serial")
+public class FIBViewSelector extends FIBFlexoObjectSelector<ViewResource> {
+
 	static final Logger logger = Logger.getLogger(FIBViewSelector.class.getPackage().getName());
 
 	public static FileResource FIB_FILE = new FileResource("Fib/ViewSelector.fib");
 
-	public FIBViewSelector(ViewDefinition editedObject) {
+	public FIBViewSelector(ViewResource editedObject) {
 		super(editedObject);
 	}
 
@@ -47,12 +48,12 @@ public class FIBViewSelector extends FIBModelObjectSelector<ViewDefinition> {
 	}
 
 	@Override
-	public Class<ViewDefinition> getRepresentedType() {
-		return ViewDefinition.class;
+	public Class<ViewResource> getRepresentedType() {
+		return ViewResource.class;
 	}
 
 	@Override
-	public String renderedString(ViewDefinition editedObject) {
+	public String renderedString(ViewResource editedObject) {
 		if (editedObject != null) {
 			return editedObject.getName();
 		}

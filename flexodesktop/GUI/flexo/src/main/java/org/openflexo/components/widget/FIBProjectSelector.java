@@ -22,7 +22,7 @@ package org.openflexo.components.widget;
 import java.io.File;
 import java.util.logging.Logger;
 
-import org.openflexo.foundation.rm.FlexoProject;
+import org.openflexo.foundation.FlexoProject;
 import org.openflexo.module.ProjectLoader;
 import org.openflexo.toolbox.FileResource;
 
@@ -32,7 +32,9 @@ import org.openflexo.toolbox.FileResource;
  * @author sguerin
  * 
  */
-public class FIBProjectSelector extends FIBModelObjectSelector<FlexoProject> {
+@SuppressWarnings("serial")
+public class FIBProjectSelector extends FIBFlexoObjectSelector<FlexoProject> {
+
 	static final Logger logger = Logger.getLogger(FIBProjectSelector.class.getPackage().getName());
 
 	public static FileResource FIB_FILE = new FileResource("Fib/ProjectSelector.fib");

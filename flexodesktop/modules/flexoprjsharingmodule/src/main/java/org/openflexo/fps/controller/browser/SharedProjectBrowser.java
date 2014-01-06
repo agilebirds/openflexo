@@ -25,7 +25,7 @@ import java.util.logging.Logger;
 import org.openflexo.components.browser.BrowserConfiguration;
 import org.openflexo.components.browser.CustomBrowserFilter;
 import org.openflexo.foundation.DataModification;
-import org.openflexo.foundation.FlexoModelObject;
+import org.openflexo.foundation.FlexoObject;
 import org.openflexo.foundation.FlexoObservable;
 import org.openflexo.foundation.FlexoObserver;
 import org.openflexo.fps.SharedProject;
@@ -69,7 +69,7 @@ public class SharedProjectBrowser extends FPSBrowser implements FlexoObserver {
 	}
 
 	@Override
-	public FlexoModelObject getDefaultRootObject() {
+	public FlexoObject getDefaultRootObject() {
 		if (getController() != null) {
 			return getController().getSharedProject();
 		}

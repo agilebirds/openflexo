@@ -19,6 +19,9 @@
  */
 package org.openflexo.vpm.view;
 
+import java.io.File;
+
+import org.openflexo.fib.view.container.FIBPanelView;
 import org.openflexo.fib.view.container.FIBTabPanelView;
 import org.openflexo.fib.view.widget.FIBBrowserWidget;
 import org.openflexo.fib.view.widget.FIBTableWidget;
@@ -31,23 +34,20 @@ import org.openflexo.foundation.viewpoint.PatternRole;
 import org.openflexo.foundation.viewpoint.inspector.EditionPatternInspector;
 import org.openflexo.foundation.viewpoint.inspector.InspectorEntry;
 import org.openflexo.view.FIBModuleView;
-import org.openflexo.vpm.CEDCst;
 import org.openflexo.vpm.controller.VPMController;
 import org.openflexo.vpm.controller.ViewPointPerspective;
 
 /**
- * Please comment this class
+ * This is the module view representing an EditionPattern<br>
+ * Because an EditionPattern can be of multiple forms, this class is abstract and must be subclassed with a specific FIB
  * 
  * @author sguerin
  * 
  */
-public class EditionPatternView extends FIBModuleView<EditionPattern> {
+public abstract class EditionPatternView<EP extends EditionPattern> extends FIBModuleView<EP> {
 
-	public EditionPatternView(EditionPattern editionPattern, VPMController controller) {
-		super(editionPattern, controller, CEDCst.EDITION_PATTERN_VIEW_FIB);
-
-		controller.manageResource(editionPattern.getViewPoint());
-
+	public EditionPatternView(EP editionPattern, VPMController controller, File fibFile) {
+		super(editionPattern, controller, fibFile);
 	}
 
 	@Override
@@ -64,32 +64,58 @@ public class EditionPatternView extends FIBModuleView<EditionPattern> {
 		FIBTableWidget patternRoleTable = (FIBTableWidget) getFIBView("PatternRoleTable");
 		FIBTabPanelView mainTabPanel = (FIBTabPanelView) getFIBView("MainTabPanel");
 		FIBTableWidget editionSchemeTable = (FIBTableWidget) getFIBView("EditionSchemeTable");
-		FIBTabPanelView editionSchemePanel = (FIBTabPanelView) getFIBView("EditionSchemePanel");
+		FIBPanelView editionSchemePanel = (FIBPanelView) getFIBView("EditionSchemePanel");
 		FIBTableWidget parametersTable = (FIBTableWidget) getFIBView("ParametersTable");
 		FIBBrowserWidget editionActionBrowser = (FIBBrowserWidget) getFIBView("EditionActionBrowser");
 		FIBTableWidget inspectorPropertyTable = (FIBTableWidget) getFIBView("InspectorPropertyTable");
 		FIBTableWidget localizedTable = (FIBTableWidget) getFIBView("LocalizedTable");
 
 		if (object instanceof PatternRole) {
-			patternRoleTable.setSelectedObject(object);
+			if (patternRoleTable != null) {
+				patternRoleTable.setSelected(object);
+			}
 		} else if (object instanceof EditionScheme) {
-			mainTabPanel.setSelectedIndex(0);
-			editionSchemeTable.setSelectedObject(object);
+			if (mainTabPanel != null) {
+				mainTabPanel.setSelectedIndex(0);
+			}
+			if (editionSchemeTable != null) {
+				editionSchemeTable.setSelected(object);
+			}
 		} else if (object instanceof EditionSchemeParameter) {
-			mainTabPanel.setSelectedIndex(0);
-			editionSchemeTable.setSelectedObject(((EditionSchemeParameter) object).getEditionScheme());
-			editionSchemePanel.setSelectedIndex(0);
-			parametersTable.setSelectedObject(object);
+			if (mainTabPanel != null) {
+				mainTabPanel.setSelectedIndex(0);
+			}
+			if (editionSchemeTable != null) {
+				editionSchemeTable.setSelected(((EditionSchemeParameter) object).getEditionScheme());
+			}
+			if (parametersTable != null) {
+				parametersTable.setSelected(object);
+			}
+			// this is not a tab any more
+			// editionSchemePanel.setSelectedIndex(0);
 		} else if (object instanceof EditionAction) {
-			mainTabPanel.setSelectedIndex(0);
-			editionSchemeTable.setSelectedObject(((EditionAction) object).getEditionScheme());
-			editionSchemePanel.setSelectedIndex(1);
-			editionActionBrowser.setSelectedObject(object);
+			if (mainTabPanel != null) {
+				mainTabPanel.setSelectedIndex(0);
+			}
+			if (editionSchemeTable != null) {
+				editionSchemeTable.setSelected(((EditionAction) object).getEditionScheme());
+			}
+			// this is not a tab any more
+			// editionSchemePanel.setSelectedIndex(1);
+			if (editionActionBrowser != null) {
+				editionActionBrowser.setSelected(object);
+			}
 		} else if (object instanceof EditionPatternInspector) {
-			mainTabPanel.setSelectedIndex(1);
+			if (mainTabPanel != null) {
+				mainTabPanel.setSelectedIndex(1);
+			}
 		} else if (object instanceof InspectorEntry) {
-			mainTabPanel.setSelectedIndex(1);
-			inspectorPropertyTable.setSelectedObject(object);
+			if (mainTabPanel != null) {
+				mainTabPanel.setSelectedIndex(1);
+			}
+			if (inspectorPropertyTable != null) {
+				inspectorPropertyTable.setSelected(object);
+			}
 		}
 	}
 }

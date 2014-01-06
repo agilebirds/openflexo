@@ -28,19 +28,16 @@ import javax.swing.JComponent;
 import org.openflexo.ApplicationContext;
 import org.openflexo.components.ProgressWindow;
 import org.openflexo.fge.Drawing;
-import org.openflexo.fge.controller.DrawingController;
 import org.openflexo.fge.view.DrawingView;
-import org.openflexo.foundation.FlexoModelObject;
 import org.openflexo.foundation.InspectorGroup;
 import org.openflexo.foundation.Inspectors;
-import org.openflexo.foundation.view.View;
-import org.openflexo.foundation.view.ViewDefinition;
+import org.openflexo.icon.VEIconLibrary;
 import org.openflexo.localization.FlexoLocalization;
 import org.openflexo.module.FlexoModule;
 import org.openflexo.module.Module;
-import org.openflexo.module.external.ExternalOEModule;
+import org.openflexo.module.external.ExternalVEModule;
 import org.openflexo.ve.controller.VEController;
-import org.openflexo.ve.shema.VEShemaController;
+import org.openflexo.ve.diagram.DiagramController;
 import org.openflexo.view.controller.FlexoController;
 
 /**
@@ -48,8 +45,22 @@ import org.openflexo.view.controller.FlexoController;
  * 
  * @author yourname
  */
-public class VEModule extends FlexoModule implements ExternalOEModule {
+public class VEModule extends FlexoModule implements ExternalVEModule {
 	private static final Logger logger = Logger.getLogger(VEModule.class.getPackage().getName());
+
+	public static final String VE_MODULE_SHORT_NAME = "VE";
+
+	public static final String VE_MODULE_NAME = "ve_module_name";
+
+	public static class ViewEditor extends Module {
+
+		public ViewEditor() {
+			super(VE_MODULE_NAME, VE_MODULE_SHORT_NAME, "org.openflexo.ve.VEModule", "modules/flexovieweditor", "10008", "ve",
+					VEIconLibrary.VE_SMALL_ICON, VEIconLibrary.VE_MEDIUM_ICON, VEIconLibrary.VE_MEDIUM_ICON_WITH_HOVER,
+					VEIconLibrary.VE_BIG_ICON, true);
+		}
+
+	}
 
 	private static final InspectorGroup[] inspectorGroups = new InspectorGroup[] { Inspectors.VE };
 
@@ -79,7 +90,7 @@ public class VEModule extends FlexoModule implements ExternalOEModule {
 		return inspectorGroups;
 	}
 
-	public VEController getOEController() {
+	public VEController getVEController() {
 		return (VEController) getFlexoController();
 	}
 
@@ -96,8 +107,8 @@ public class VEModule extends FlexoModule implements ExternalOEModule {
 	}
 
 	@Override
-	public JComponent createScreenshotForShema(ViewDefinition viewDefinition) {
-		View target = viewDefinition.getShema();
+	public JComponent createScreenshotForDiagram(DiagramResource diagramResource) {
+		Diagram target = diagramResource.getDiagram();
 		if (target == null) {
 			if (logger.isLoggable(Level.SEVERE)) {
 				logger.severe("Cannot create screenshot for null target!");
@@ -109,7 +120,7 @@ public class VEModule extends FlexoModule implements ExternalOEModule {
 
 		// prevent process to be marked as modified during screenshot generation
 		target.setIgnoreNotifications();
-		screenshotController = new VEShemaController(getOEController(), target, true);
+		screenshotController = new DiagramController(getVEController(), target, true);
 
 		screenshot = screenshotController.getDrawingView();
 		drawWorkingArea = screenshot.getDrawingGraphicalRepresentation().getDrawWorkingArea();

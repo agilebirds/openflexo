@@ -19,10 +19,10 @@
  */
 package org.openflexo.foundation.ontology.dm;
 
-import org.openflexo.foundation.ontology.OntologyIndividual;
+import org.openflexo.foundation.ontology.IFlexoOntologyIndividual;
 
-public class OntologyIndividualRemoved extends OEDataModification {
-	public OntologyIndividualRemoved(OntologyIndividual individual) {
+public class OntologyIndividualRemoved extends OntologyDataModification {
+	public OntologyIndividualRemoved(IFlexoOntologyIndividual individual) {
 		super(individual, null);
 	}
 }

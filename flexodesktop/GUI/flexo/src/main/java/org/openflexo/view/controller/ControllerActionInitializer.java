@@ -28,10 +28,10 @@ import java.util.logging.Level;
 import org.openflexo.action.ImportProjectInitializer;
 import org.openflexo.action.ProjectExcelExportInitializer;
 import org.openflexo.action.RemoveImportedProjectInitializer;
-import org.openflexo.action.UploadProjectInitializer;
 import org.openflexo.antar.binding.TypeUtils;
 import org.openflexo.foundation.FlexoEditor;
-import org.openflexo.foundation.FlexoModelObject;
+import org.openflexo.foundation.FlexoObject;
+import org.openflexo.foundation.FlexoObject.FlexoObjectImpl;
 import org.openflexo.foundation.FlexoProperty;
 import org.openflexo.foundation.action.AddFlexoProperty;
 import org.openflexo.foundation.action.DeleteFlexoProperty;
@@ -51,10 +51,13 @@ import org.openflexo.foundation.action.FlexoExceptionHandler;
 import org.openflexo.foundation.action.SortFlexoProperties;
 import org.openflexo.module.FlexoModule;
 import org.openflexo.view.controller.action.AddFlexoPropertyActionizer;
+import org.openflexo.view.controller.action.AddRepositoryFolderInitializer;
 import org.openflexo.view.controller.action.DeleteFlexoPropertyActionizer;
+import org.openflexo.view.controller.action.DeleteRepositoryFolderInitializer;
 import org.openflexo.view.controller.action.HelpActionizer;
 import org.openflexo.view.controller.action.InspectActionizer;
 import org.openflexo.view.controller.action.LoadAllImportedProjectInitializer;
+import org.openflexo.view.controller.action.LoadResourceActionInitializer;
 import org.openflexo.view.controller.action.SortFlexoPropertiesActionizer;
 import org.openflexo.view.controller.action.SubmitDocumentationActionizer;
 
@@ -65,8 +68,8 @@ public class ControllerActionInitializer implements EditorProvider {
 
 	private final FlexoController _controller;
 
-	private Map<FlexoActionType<?, ?, ?>, ActionInitializer<?, ?, ?>> initializers;
-	private Map<Class<?>, ActionInitializer<?, ?, ?>> initializersByActionClass;
+	private final Map<FlexoActionType<?, ?, ?>, ActionInitializer<?, ?, ?>> initializers;
+	private final Map<Class<?>, ActionInitializer<?, ?, ?>> initializersByActionClass;
 
 	protected ControllerActionInitializer(FlexoController controller) {
 		super();
@@ -84,7 +87,7 @@ public class ControllerActionInitializer implements EditorProvider {
 		return getController().getModule();
 	}
 
-	public <A extends FlexoAction<A, T1, T2>, T1 extends FlexoModelObject, T2 extends FlexoModelObject> void registerInitializer(
+	public <A extends FlexoAction<A, T1, T2>, T1 extends FlexoObject, T2 extends FlexoObject> void registerInitializer(
 			FlexoActionType<A, T1, T2> actionType, ActionInitializer<A, T1, T2> initializer) {
 		if (actionType != null) {
 			initializers.put(actionType, initializer);
@@ -116,33 +119,37 @@ public class ControllerActionInitializer implements EditorProvider {
 
 	public void initializeActions() {
 		new InspectActionizer(this);
+		new LoadResourceActionInitializer(this);
 		new ImportProjectInitializer(this);
 		new RemoveImportedProjectInitializer(this);
 		new HelpActionizer(this);
 		new SubmitDocumentationActionizer(this);
-		new UploadProjectInitializer(this);
+		// new UploadProjectInitializer(this);
 		new ProjectExcelExportInitializer(this);
 		new LoadAllImportedProjectInitializer(this);
+
+		new AddRepositoryFolderInitializer(this);
+		new DeleteRepositoryFolderInitializer(this);
 
 		new AddFlexoPropertyActionizer(this);
 		new DeleteFlexoPropertyActionizer(this);
 		new SortFlexoPropertiesActionizer(this);
-		if (FlexoModelObject.addFlexoPropertyActionizer == null) {
-			FlexoModelObject.addFlexoPropertyActionizer = new FlexoActionizer<AddFlexoProperty, FlexoModelObject, FlexoModelObject>(
+		if (FlexoObjectImpl.addFlexoPropertyActionizer == null) {
+			FlexoObjectImpl.addFlexoPropertyActionizer = new FlexoActionizer<AddFlexoProperty, FlexoObject, FlexoObject>(
 					AddFlexoProperty.actionType, this);
 		}
-		if (FlexoModelObject.sortFlexoPropertiesActionizer == null) {
-			FlexoModelObject.sortFlexoPropertiesActionizer = new FlexoActionizer<SortFlexoProperties, FlexoModelObject, FlexoModelObject>(
+		if (FlexoObjectImpl.sortFlexoPropertiesActionizer == null) {
+			FlexoObjectImpl.sortFlexoPropertiesActionizer = new FlexoActionizer<SortFlexoProperties, FlexoObject, FlexoObject>(
 					SortFlexoProperties.actionType, this);
 		}
-		if (FlexoModelObject.deleteFlexoPropertyActionizer == null) {
-			FlexoModelObject.deleteFlexoPropertyActionizer = new FlexoActionizer<DeleteFlexoProperty, FlexoProperty, FlexoProperty>(
+		if (FlexoObjectImpl.deleteFlexoPropertyActionizer == null) {
+			FlexoObjectImpl.deleteFlexoPropertyActionizer = new FlexoActionizer<DeleteFlexoProperty, FlexoProperty, FlexoProperty>(
 					DeleteFlexoProperty.actionType, this);
 		}
 	}
 
 	@SuppressWarnings("unchecked")
-	public <A extends FlexoAction<A, T1, T2>, T1 extends FlexoModelObject, T2 extends FlexoModelObject> ActionInitializer<A, T1, T2> getActionInitializer(
+	public <A extends FlexoAction<A, T1, T2>, T1 extends FlexoObject, T2 extends FlexoObject> ActionInitializer<A, T1, T2> getActionInitializer(
 			FlexoActionType<A, T1, T2> actionType) {
 		ActionInitializer<A, T1, T2> actionInitializer = (ActionInitializer<A, T1, T2>) initializers.get(actionType);
 		if (actionInitializer == null) {
@@ -155,7 +162,7 @@ public class ControllerActionInitializer implements EditorProvider {
 		return actionInitializer;
 	}
 
-	public <A extends FlexoAction<A, T1, T2>, T1 extends FlexoModelObject, T2 extends FlexoModelObject> FlexoActionFinalizer<A> getFinalizerFor(
+	public <A extends FlexoAction<A, T1, T2>, T1 extends FlexoObject, T2 extends FlexoObject> FlexoActionFinalizer<A> getFinalizerFor(
 			FlexoActionType<A, T1, T2> actionType) {
 		ActionInitializer<A, T1, T2> initializer = getActionInitializer(actionType);
 		if (initializer != null) {
@@ -164,7 +171,7 @@ public class ControllerActionInitializer implements EditorProvider {
 		return null;
 	}
 
-	public <A extends FlexoAction<A, T1, T2>, T1 extends FlexoModelObject, T2 extends FlexoModelObject> FlexoActionInitializer<A> getInitializerFor(
+	public <A extends FlexoAction<A, T1, T2>, T1 extends FlexoObject, T2 extends FlexoObject> FlexoActionInitializer<A> getInitializerFor(
 			FlexoActionType<A, T1, T2> actionType) {
 		ActionInitializer<A, T1, T2> initializer = getActionInitializer(actionType);
 		if (initializer != null) {
@@ -173,7 +180,7 @@ public class ControllerActionInitializer implements EditorProvider {
 		return null;
 	}
 
-	public <A extends FlexoAction<A, T1, T2>, T1 extends FlexoModelObject, T2 extends FlexoModelObject> FlexoActionUndoFinalizer<A> getUndoFinalizerFor(
+	public <A extends FlexoAction<A, T1, T2>, T1 extends FlexoObject, T2 extends FlexoObject> FlexoActionUndoFinalizer<A> getUndoFinalizerFor(
 			FlexoActionType<A, T1, T2> actionType) {
 		ActionInitializer<A, T1, T2> initializer = getActionInitializer(actionType);
 		if (initializer != null) {
@@ -182,7 +189,7 @@ public class ControllerActionInitializer implements EditorProvider {
 		return null;
 	}
 
-	public <A extends FlexoAction<A, T1, T2>, T1 extends FlexoModelObject, T2 extends FlexoModelObject> FlexoActionUndoInitializer<A> getUndoInitializerFor(
+	public <A extends FlexoAction<A, T1, T2>, T1 extends FlexoObject, T2 extends FlexoObject> FlexoActionUndoInitializer<A> getUndoInitializerFor(
 			FlexoActionType<A, T1, T2> actionType) {
 		ActionInitializer<A, T1, T2> initializer = getActionInitializer(actionType);
 		if (initializer != null) {
@@ -191,7 +198,7 @@ public class ControllerActionInitializer implements EditorProvider {
 		return null;
 	}
 
-	public <A extends FlexoAction<A, T1, T2>, T1 extends FlexoModelObject, T2 extends FlexoModelObject> FlexoActionRedoFinalizer<A> getRedoFinalizerFor(
+	public <A extends FlexoAction<A, T1, T2>, T1 extends FlexoObject, T2 extends FlexoObject> FlexoActionRedoFinalizer<A> getRedoFinalizerFor(
 			FlexoActionType<A, T1, T2> actionType) {
 		ActionInitializer<A, T1, T2> initializer = getActionInitializer(actionType);
 		if (initializer != null) {
@@ -200,7 +207,7 @@ public class ControllerActionInitializer implements EditorProvider {
 		return null;
 	}
 
-	public <A extends FlexoAction<A, T1, T2>, T1 extends FlexoModelObject, T2 extends FlexoModelObject> FlexoActionRedoInitializer<A> getRedoInitializerFor(
+	public <A extends FlexoAction<A, T1, T2>, T1 extends FlexoObject, T2 extends FlexoObject> FlexoActionRedoInitializer<A> getRedoInitializerFor(
 			FlexoActionType<A, T1, T2> actionType) {
 		ActionInitializer<A, T1, T2> initializer = getActionInitializer(actionType);
 		if (initializer != null) {
@@ -209,7 +216,7 @@ public class ControllerActionInitializer implements EditorProvider {
 		return null;
 	}
 
-	public <A extends FlexoAction<A, T1, T2>, T1 extends FlexoModelObject, T2 extends FlexoModelObject> FlexoActionEnableCondition<A, T1, T2> getEnableConditionFor(
+	public <A extends FlexoAction<A, T1, T2>, T1 extends FlexoObject, T2 extends FlexoObject> FlexoActionEnableCondition<A, T1, T2> getEnableConditionFor(
 			FlexoActionType<A, T1, T2> actionType) {
 		ActionInitializer<A, T1, T2> initializer = getActionInitializer(actionType);
 		if (initializer != null) {
@@ -218,7 +225,7 @@ public class ControllerActionInitializer implements EditorProvider {
 		return null;
 	}
 
-	public <A extends FlexoAction<A, T1, T2>, T1 extends FlexoModelObject, T2 extends FlexoModelObject> FlexoActionVisibleCondition<A, T1, T2> getVisibleConditionFor(
+	public <A extends FlexoAction<A, T1, T2>, T1 extends FlexoObject, T2 extends FlexoObject> FlexoActionVisibleCondition<A, T1, T2> getVisibleConditionFor(
 			FlexoActionType<A, T1, T2> actionType) {
 		ActionInitializer<A, T1, T2> initializer = getActionInitializer(actionType);
 		if (initializer != null) {
@@ -227,7 +234,7 @@ public class ControllerActionInitializer implements EditorProvider {
 		return null;
 	}
 
-	public <A extends FlexoAction<A, T1, T2>, T1 extends FlexoModelObject, T2 extends FlexoModelObject> FlexoExceptionHandler<A> getExceptionHandlerFor(
+	public <A extends FlexoAction<A, T1, T2>, T1 extends FlexoObject, T2 extends FlexoObject> FlexoExceptionHandler<A> getExceptionHandlerFor(
 			FlexoActionType<A, T1, T2> actionType) {
 		ActionInitializer<A, T1, T2> initializer = getActionInitializer(actionType);
 		if (initializer != null) {

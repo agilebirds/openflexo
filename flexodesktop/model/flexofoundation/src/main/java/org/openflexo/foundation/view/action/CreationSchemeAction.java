@@ -19,60 +19,67 @@
  */
 package org.openflexo.foundation.view.action;
 
+import java.util.Hashtable;
 import java.util.List;
 import java.util.Vector;
 import java.util.logging.Logger;
 
+import org.flexo.model.TestModelObject;
+import org.openflexo.antar.binding.BindingVariable;
 import org.openflexo.foundation.FlexoEditor;
-import org.openflexo.foundation.FlexoModelObject;
+import org.openflexo.foundation.FlexoObject.FlexoObjectImpl;
 import org.openflexo.foundation.action.FlexoActionType;
 import org.openflexo.foundation.action.InvalidParametersException;
 import org.openflexo.foundation.action.NotImplementedException;
-import org.openflexo.foundation.ontology.EditionPatternInstance;
-import org.openflexo.foundation.rm.DuplicateResourceException;
-import org.openflexo.foundation.view.View;
-import org.openflexo.foundation.view.ViewObject;
+import org.openflexo.foundation.view.EditionPatternInstance;
+import org.openflexo.foundation.view.VirtualModelInstance;
+import org.openflexo.foundation.view.VirtualModelInstanceObject;
+import org.openflexo.foundation.viewpoint.AssignableAction;
 import org.openflexo.foundation.viewpoint.CreationScheme;
+import org.openflexo.foundation.viewpoint.EditionAction;
 import org.openflexo.foundation.viewpoint.EditionScheme;
 import org.openflexo.foundation.viewpoint.EditionSchemeParameter;
 import org.openflexo.foundation.viewpoint.ListParameter;
+import org.openflexo.foundation.viewpoint.binding.PatternRoleBindingVariable;
 
-public class CreationSchemeAction extends EditionSchemeAction<CreationSchemeAction> {
+public class CreationSchemeAction extends EditionSchemeAction<CreationSchemeAction, CreationScheme, VirtualModelInstance> {
 
 	private static final Logger logger = Logger.getLogger(CreationSchemeAction.class.getPackage().getName());
 
-	public static FlexoActionType<CreationSchemeAction, FlexoModelObject, FlexoModelObject> actionType = new FlexoActionType<CreationSchemeAction, FlexoModelObject, FlexoModelObject>(
+	public static FlexoActionType<CreationSchemeAction, VirtualModelInstance, VirtualModelInstanceObject> actionType = new FlexoActionType<CreationSchemeAction, VirtualModelInstance, VirtualModelInstanceObject>(
 			"create_edition_pattern_instance", FlexoActionType.newMenu, FlexoActionType.defaultGroup, FlexoActionType.ADD_ACTION_TYPE) {
 
 		/**
 		 * Factory method
 		 */
 		@Override
-		public CreationSchemeAction makeNewAction(FlexoModelObject focusedObject, Vector<FlexoModelObject> globalSelection,
+		public CreationSchemeAction makeNewAction(VirtualModelInstance focusedObject, Vector<VirtualModelInstanceObject> globalSelection,
 				FlexoEditor editor) {
 			return new CreationSchemeAction(focusedObject, globalSelection, editor);
 		}
 
 		@Override
-		public boolean isVisibleForSelection(FlexoModelObject object, Vector<FlexoModelObject> globalSelection) {
+		public boolean isVisibleForSelection(VirtualModelInstance object, Vector<VirtualModelInstanceObject> globalSelection) {
 			return false;
 		}
 
 		@Override
-		public boolean isEnabledForSelection(FlexoModelObject object, Vector<FlexoModelObject> globalSelection) {
+		public boolean isEnabledForSelection(VirtualModelInstance object, Vector<VirtualModelInstanceObject> globalSelection) {
 			return true;
 		}
 
 	};
 
 	static {
-		FlexoModelObject.addActionForClass(actionType, ViewObject.class);
+		// FlexoObject.addActionForClass(actionType, DiagramElement.class);
+		FlexoObjectImpl.addActionForClass(actionType, VirtualModelInstance.class);
+		// FlexoObject.addActionForClass(actionType, View.class);
 	}
 
-	private View _view;
+	private VirtualModelInstance vmInstance;
 	private CreationScheme _creationScheme;
 
-	CreationSchemeAction(FlexoModelObject focusedObject, Vector<FlexoModelObject> globalSelection, FlexoEditor editor) {
+	CreationSchemeAction(VirtualModelInstance focusedObject, Vector<VirtualModelInstanceObject> globalSelection, FlexoEditor editor) {
 		super(actionType, focusedObject, globalSelection, editor);
 	}
 
@@ -81,19 +88,38 @@ public class CreationSchemeAction extends EditionSchemeAction<CreationSchemeActi
 	private EditionPatternInstance editionPatternInstance;
 
 	@Override
-	protected void doAction(Object context) throws DuplicateResourceException, NotImplementedException, InvalidParametersException {
+	protected void doAction(Object context) throws NotImplementedException, InvalidParametersException {
 		logger.info("Create EditionPatternInstance using CreationScheme");
 		logger.info("getEditionPattern()=" + getEditionPattern());
 
 		retrieveMissingDefaultParameters();
-		if (getEditionPattern().getViewPoint().getViewpointOntology() != null) {
-			getEditionPattern().getViewPoint().getViewpointOntology().loadWhenUnloaded();
-		}
 
-		editionPatternInstance = getProject().makeNewEditionPatternInstance(getEditionPattern());
+		// getEditionPattern().getViewPoint().getViewpointOntology().loadWhenUnloaded();
+
+		// In case of this action is embedded in a CreateVirtualModelInstance action, the editionPatternInstance (which will be here a
+		// VirtualModelInstance) will be already initialized and should subsequently not been recreated)
+		if (editionPatternInstance == null) {
+			if (getVirtualModelInstance() != null) {
+				editionPatternInstance = getVirtualModelInstance().makeNewEditionPatternInstance(getEditionPattern());
+			} else {
+				logger.warning("Could not create new EditionPatternInstance because container VirtualModelInstance is null");
+				throw new InvalidParametersException("VirtualModelInstance");
+			}
+		}
 
 		applyEditionActions();
 
+	}
+
+	/**
+	 * Used when creation of EditionPatternInstance initialization is beeing delegated to an other component.<br>
+	 * This happens for example in the case of VirtualModelInstance creation, where the creation of EditionPatternInstance is performed in
+	 * the {@link CreateVirtualModelInstance} action
+	 * 
+	 * @param editionPatternInstance
+	 */
+	public void initWithEditionPatternInstance(EditionPatternInstance editionPatternInstance) {
+		this.editionPatternInstance = editionPatternInstance;
 	}
 
 	public boolean retrieveMissingDefaultParameters() {
@@ -120,17 +146,18 @@ public class CreationSchemeAction extends EditionSchemeAction<CreationSchemeActi
 		return returned;
 	}
 
-	public View getView() {
-		if (_view == null) {
-			if (getFocusedObject() instanceof View) {
-				_view = (View) getFocusedObject();
+	@Override
+	public VirtualModelInstance getVirtualModelInstance() {
+		if (vmInstance == null) {
+			if (getFocusedObject() instanceof VirtualModelInstance) {
+				vmInstance = getFocusedObject();
 			}
 		}
-		return _view;
+		return vmInstance;
 	}
 
-	public void setView(View view) {
-		_view = view;
+	public void setVirtualModelInstance(VirtualModelInstance vmInstance) {
+		this.vmInstance = vmInstance;
 	}
 
 	public CreationScheme getCreationScheme() {
@@ -142,18 +169,53 @@ public class CreationSchemeAction extends EditionSchemeAction<CreationSchemeActi
 	}
 
 	@Override
-	public EditionScheme getEditionScheme() {
+	public CreationScheme getEditionScheme() {
 		return getCreationScheme();
 	}
 
-	@Override
 	public EditionPatternInstance getEditionPatternInstance() {
 		return editionPatternInstance;
 	}
 
 	@Override
-	protected View retrieveOEShema() {
-		return getView();
+	public VirtualModelInstance retrieveVirtualModelInstance() {
+		return getVirtualModelInstance();
+	}
+
+	/**
+	 * This is the internal code performing execution of a single {@link EditionAction} defined to be part of the execution control graph of
+	 * related {@link EditionScheme}<br>
+	 */
+	@Override
+	protected Object performAction(EditionAction action, Hashtable<EditionAction, Object> performedActions) {
+		Object assignedObject = super.performAction(action, performedActions);
+		if (assignedObject != null && action instanceof AssignableAction) {
+			AssignableAction assignableAction = (AssignableAction) action;
+			if (assignableAction.getPatternRole() != null && assignedObject instanceof TestModelObject) {
+				getEditionPatternInstance().setObjectForPatternRole((TestModelObject) assignedObject, assignableAction.getPatternRole());
+			}
+		}
+
+		return assignedObject;
+	}
+
+	@Override
+	public Object getValue(BindingVariable variable) {
+		if (variable instanceof PatternRoleBindingVariable) {
+			return getEditionPatternInstance().getPatternActor(((PatternRoleBindingVariable) variable).getPatternRole());
+		} else if (variable.getVariableName().equals(EditionScheme.THIS)) {
+			return getEditionPatternInstance();
+		}
+		return super.getValue(variable);
+	}
+
+	@Override
+	public void setValue(Object value, BindingVariable variable) {
+		if (variable instanceof PatternRoleBindingVariable) {
+			getEditionPatternInstance().setPatternActor(value, ((PatternRoleBindingVariable) variable).getPatternRole());
+			return;
+		}
+		super.setValue(value, variable);
 	}
 
 }

@@ -35,7 +35,7 @@ import javax.swing.JScrollPane;
 import javax.swing.JTabbedPane;
 import javax.swing.SwingUtilities;
 
-import org.openflexo.foundation.FlexoModelObject;
+import org.openflexo.foundation.FlexoObject;
 import org.openflexo.localization.FlexoLocalization;
 import org.openflexo.selection.SelectableView;
 import org.openflexo.selection.SelectionListener;
@@ -175,7 +175,7 @@ public abstract class PalettePanel extends JPanel implements SelectionListener {
 		g2.fillRect(selection.x + selection.width - 5, selection.y + selection.height - 5, 5, 5);
 	}
 
-	protected SelectableView selectableViewForObject(FlexoModelObject object) {
+	protected SelectableView selectableViewForObject(FlexoObject object) {
 		for (PaletteElement next : _paletteElements) {
 			if (next.getObject() == object) {
 				return next.getView();
@@ -191,7 +191,7 @@ public abstract class PalettePanel extends JPanel implements SelectionListener {
 	 *            : the object that has been added to selection
 	 */
 	@Override
-	public void fireObjectSelected(FlexoModelObject object) {
+	public void fireObjectSelected(FlexoObject object) {
 		if (object != null) {
 			SelectableView view = selectableViewForObject(object);
 			if (view != null) {
@@ -207,7 +207,7 @@ public abstract class PalettePanel extends JPanel implements SelectionListener {
 	 *            : the object that has been removed from selection
 	 */
 	@Override
-	public void fireObjectDeselected(FlexoModelObject object) {
+	public void fireObjectDeselected(FlexoObject object) {
 		if (object != null) {
 			SelectableView view = selectableViewForObject(object);
 			if (view != null) {

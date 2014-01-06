@@ -27,14 +27,14 @@ public class AskLocalResourceCenterDirectoryEDITOR extends FIBAbstractEditor {
 
 	@Override
 	public Object[] getData() {
-		AskLocalResourceCenterDirectory o = new AskLocalResourceCenterDirectory();
+		AskResourceCenterDirectory o = new AskResourceCenterDirectory();
 		o.setLocalResourceDirectory(null); // new File(System.getProperty("user.dir"));
 		return FIBAbstractEditor.makeArray(o);
 	}
 
 	@Override
 	public File getFIBFile() {
-		return AskLocalResourceCenterDirectory.FIB_FILE;
+		return AskResourceCenterDirectory.FIB_FILE;
 	}
 
 	public static void main(String[] args) {

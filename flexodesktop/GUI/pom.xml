@@ -4,7 +4,7 @@
 	<parent>
 		<groupId>org.openflexo</groupId>
 		<artifactId>flexodesktop</artifactId>
-		<version>1.5.2-SNAPSHOT</version>
+        <version>1.7-SNAPSHOT</version>
 	</parent>
 	<modelVersion>4.0.0</modelVersion>
 	<artifactId>GUI</artifactId>
@@ -13,10 +13,10 @@
 	<modules>
 		<module>flexo</module>
 		<module>flexodoceditor</module>
-		<module>flexographicalengine</module>
 		<module>flexographicutils</module>
-		<module>flexointerfacebuilder</module>
 		<module>flexowysiwyg</module>
+		<module>diana</module>
+		<module>fib</module>
     </modules>
 </project>
 

@@ -26,7 +26,7 @@ import java.util.logging.Logger;
 import javax.swing.JPanel;
 
 import org.openflexo.foundation.FlexoEditor;
-import org.openflexo.foundation.FlexoModelObject;
+import org.openflexo.foundation.FlexoObject;
 import org.openflexo.foundation.action.FlexoActionSource;
 import org.openflexo.foundation.ie.IEObject;
 import org.openflexo.foundation.ie.util.FlexoConceptualColor;
@@ -140,12 +140,12 @@ public abstract class IEPanel extends JPanel implements IEViewManaging, FlexoAct
 	}
 
 	@Override
-	public FlexoModelObject getFocusedObject() {
+	public FlexoObject getFocusedObject() {
 		return getIEController().getSelectionManager().getFocusedObject();
 	}
 
 	@Override
-	public Vector<FlexoModelObject> getGlobalSelection() {
+	public Vector<FlexoObject> getGlobalSelection() {
 		return getIEController().getSelectionManager().getSelection();
 	}
 

@@ -3,16 +3,16 @@ package org.openflexo.foundation.action;
 import java.util.Vector;
 
 import org.openflexo.foundation.FlexoException;
-import org.openflexo.foundation.FlexoModelObject;
+import org.openflexo.foundation.FlexoObject;
 
 public class InactiveFlexoActionException extends FlexoException {
 
 	private final FlexoActionType<?, ?, ?> actionType;
-	private final FlexoModelObject focusedObject;
-	private final Vector<? extends FlexoModelObject> globalSelection;
+	private final FlexoObject focusedObject;
+	private final Vector<? extends FlexoObject> globalSelection;
 
-	public InactiveFlexoActionException(FlexoActionType<?, ?, ?> actionType, FlexoModelObject focusedObject,
-			Vector<? extends FlexoModelObject> globalSelection) {
+	public InactiveFlexoActionException(FlexoActionType<?, ?, ?> actionType, FlexoObject focusedObject,
+			Vector<? extends FlexoObject> globalSelection) {
 		super("Action " + actionType + " is not active for " + focusedObject + " and " + globalSelection);
 		this.actionType = actionType;
 		this.focusedObject = focusedObject;
@@ -23,11 +23,11 @@ public class InactiveFlexoActionException extends FlexoException {
 		return actionType;
 	}
 
-	public FlexoModelObject getFocusedObject() {
+	public FlexoObject getFocusedObject() {
 		return focusedObject;
 	}
 
-	public Vector<? extends FlexoModelObject> getGlobalSelection() {
+	public Vector<? extends FlexoObject> getGlobalSelection() {
 		return globalSelection;
 	}
 

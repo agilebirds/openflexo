@@ -2,13 +2,13 @@ package org.openflexo.rest.client;
 
 import java.io.File;
 
+import org.openflexo.ApplicationContext;
 import org.openflexo.model.annotations.Getter;
 import org.openflexo.model.annotations.ModelEntity;
 import org.openflexo.model.annotations.Setter;
 import org.openflexo.toolbox.FileResource;
 import org.openflexo.view.controller.FlexoServerAddressBook;
 import org.openflexo.view.controller.FlexoServerInstance;
-import org.openflexo.view.controller.FlexoServerInstanceManager;
 
 public class WebServiceURLDialog {
 
@@ -55,6 +55,11 @@ public class WebServiceURLDialog {
 	}
 
 	private ServerRestClientParameter clientParameter;
+	private final ApplicationContext applicationContext;
+
+	public WebServiceURLDialog(ApplicationContext applicationContext) {
+		this.applicationContext = applicationContext;
+	}
 
 	public ServerRestClientParameter getClientParameter() {
 		return clientParameter;
@@ -65,6 +70,6 @@ public class WebServiceURLDialog {
 	}
 
 	public FlexoServerAddressBook getAddressBook() {
-		return FlexoServerInstanceManager.getInstance().getAddressBook();
+		return applicationContext.getFlexoServerInstanceManager().getAddressBook();
 	}
 }

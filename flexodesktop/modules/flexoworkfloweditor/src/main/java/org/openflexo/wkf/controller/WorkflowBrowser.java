@@ -26,8 +26,9 @@ import org.openflexo.components.browser.BrowserElementType;
 import org.openflexo.components.browser.BrowserFilter.BrowserFilterStatus;
 import org.openflexo.components.browser.ProjectBrowser;
 import org.openflexo.foundation.FlexoEditor;
-import org.openflexo.foundation.FlexoModelObject;
-import org.openflexo.foundation.rm.FlexoProject;
+import org.openflexo.foundation.FlexoObject;
+import org.openflexo.foundation.FlexoProjectObject;
+import org.openflexo.foundation.FlexoProject;
 import org.openflexo.foundation.wkf.WKFObject;
 import org.openflexo.foundation.wkf.WorkflowModelObject;
 import org.openflexo.module.UserType;
@@ -59,7 +60,7 @@ public class WorkflowBrowser extends ProjectBrowser {
 	}
 
 	@Override
-	public void fireObjectSelected(FlexoModelObject object) {
+	public void fireObjectSelected(FlexoObject object) {
 		if (object instanceof WKFObject) {
 			object = ((WKFObject) object).getProcess();
 		}
@@ -73,7 +74,9 @@ public class WorkflowBrowser extends ProjectBrowser {
 
 	@Override
 	protected boolean activateBrowsingFor(BrowserElement newElement) {
-		return newElement.getObject().getProject() == getRootObject().getProject()
+		return newElement.getObject() instanceof FlexoProjectObject
+				&& getRootObject() instanceof FlexoProjectObject
+				&& ((FlexoProjectObject) newElement.getObject()).getProject() == ((FlexoProjectObject) getRootObject()).getProject()
 				&& (!(newElement.getObject() instanceof WorkflowModelObject) || !((WorkflowModelObject) newElement.getObject())
 						.getWorkflow().isCache()) && super.activateBrowsingFor(newElement);
 	}
@@ -109,9 +112,9 @@ public class WorkflowBrowser extends ProjectBrowser {
 		setFilterStatus(BrowserElementType.DKV_MODEL, BrowserFilterStatus.HIDE);
 		setFilterStatus(BrowserElementType.MENU_ITEM, BrowserFilterStatus.HIDE);
 		setFilterStatus(BrowserElementType.WS_LIBRARY, BrowserFilterStatus.HIDE);
-		setFilterStatus(BrowserElementType.ONTOLOGY_LIBRARY, BrowserFilterStatus.HIDE);
-		setFilterStatus(BrowserElementType.PROJECT_ONTOLOGY, BrowserFilterStatus.HIDE);
-		setFilterStatus(BrowserElementType.CALC_LIBRARY, BrowserFilterStatus.HIDE);
+		// setFilterStatus(BrowserElementType.ONTOLOGY_LIBRARY, BrowserFilterStatus.HIDE);
+		// setFilterStatus(BrowserElementType.PROJECT_ONTOLOGY, BrowserFilterStatus.HIDE);
+		// setFilterStatus(BrowserElementType.CALC_LIBRARY, BrowserFilterStatus.HIDE);
 		setFilterStatus(BrowserElementType.OE_SHEMA_LIBRARY, BrowserFilterStatus.HIDE);
 		setFilterStatus(BrowserElementType.ROLE_LIST, BrowserFilterStatus.HIDE);
 		setFilterStatus(BrowserElementType.PROJECT, BrowserFilterStatus.HIDE, true);

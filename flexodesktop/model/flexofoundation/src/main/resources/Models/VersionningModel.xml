@@ -2,30 +2,30 @@
 
 <model> 
 	
-  <entity name="org.openflexo.foundation.xml.FlexoXMLMappings$ModelVersions" xmlTag="versions"> 
+  <entity name="org.openflexo.foundation.xml.XMLSerializationService$ModelVersions" xmlTag="versions"> 
     <property name="classModels" xmlTag="class" type="hashtable" key="name"/> 
     <property name="releaseModels" xmlTag="release" type="hashtable" key="identifier"/> 
   </entity>
    
-  <entity name="org.openflexo.foundation.xml.FlexoXMLMappings$ClassModels" xmlTag="class"> 
+  <entity name="org.openflexo.foundation.xml.XMLSerializationService$ClassModels" xmlTag="class"> 
     <property name="name" xmlTag="name" attribute="YES"/> 
     <property name="latestVersion" xmlTag="latestVersion" attribute="YES"/> 
     <property name="classModelVersions" xmlTag="version" type="hashtable" key="version"/> 
   </entity>
    
-  <entity name="org.openflexo.foundation.xml.FlexoXMLMappings$ClassModelVersion" xmlTag="version"> 
+  <entity name="org.openflexo.foundation.xml.XMLSerializationService$ClassModelVersion" xmlTag="version"> 
     <property name="version" xmlTag="id" attribute="YES"/> 
     <property name="modelFile" xmlTag="modelFile" attribute="YES"/> 
     <property name="needsManualConversion" xmlTag="needsManualConversion" attribute="YES"/> 
     <property name="toVersion" xmlTag="toVersion" attribute="YES"/> 
   </entity>
    
-  <entity name="org.openflexo.foundation.xml.FlexoXMLMappings$ReleaseModels" xmlTag="release"> 
+  <entity name="org.openflexo.foundation.xml.XMLSerializationService$ReleaseModels" xmlTag="release"> 
     <property name="identifier" xmlTag="identifier" attribute="YES"/> 
     <property name="classModels" xmlTag="release_class" type="hashtable" key="name"/> 
   </entity>
 	
-  <entity name="org.openflexo.foundation.xml.FlexoXMLMappings$ReleaseClassModel" xmlTag="release_class"> 
+  <entity name="org.openflexo.foundation.xml.XMLSerializationService$ReleaseClassModel" xmlTag="release_class"> 
     <property name="name" xmlTag="name" attribute="YES"/> 
     <property name="version" xmlTag="version" attribute="YES"/> 
   </entity>

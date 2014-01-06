@@ -1,0 +1,108 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<Panel layout="gridbag" titleFont="Lucida Grande,0,11" darkLevel="0" data="" dataClassName="org.openflexo.foundation.view.action.CreateView" controllerClassName="org.openflexo.view.controller.FlexoFIBController" visible="" font="Lucida Grande,0,11" width="800" height="500" name="main">
+  <Label label="create_new_view" align="center" index="0" data="" constraints="gridbag(anchor=center;fill=horizontal;gridHeight=1;gridWidth=0;gridX=-1;gridY=-1;index=0;insetsBottom=20;insetsLeft=0;insetsRight=0;insetsTop=20;padX=0;padY=0;weightX=1.0;weightY=0.0)" visible="" font="Lucida Grande,1,15" format="" icon="" tooltip="" localize="true" enable="" clickAction="" doubleClickAction="" rightClickAction="" enterPressedAction="" valueChangedAction="" valueTransform="" valueValidator="">
+    <LocalizedDictionary/>
+  </Label>
+  <Label label="new_view_title" index="1" data="" constraints="gridbag(anchor=east;fill=none;gridHeight=1;gridWidth=1;gridX=-1;gridY=-1;index=1;insetsBottom=10;insetsLeft=10;insetsRight=10;insetsTop=0;padX=0;padY=0;weightX=0.0;weightY=0.0)" visible="" format="" icon="" tooltip="" localize="true" enable="" clickAction="" doubleClickAction="" rightClickAction="" enterPressedAction="" valueChangedAction="" valueTransform="" valueValidator=""/>
+  <TextField index="2" data="data.newViewTitle" constraints="gridbag(anchor=center;fill=horizontal;gridHeight=1;gridWidth=0;gridX=-1;gridY=-1;index=2;insetsBottom=10;insetsLeft=0;insetsRight=20;insetsTop=0;padX=0;padY=0;weightX=1.0;weightY=0.0)" visible="" name="ViewNameTextField" format="" icon="" tooltip="" localize="true" enable="" clickAction="" doubleClickAction="" rightClickAction="" enterPressedAction="" valueChangedAction="" valueTransform="" valueValidator="" columns="6" text="TextField" editable=""/>
+  <SplitPanel index="3" data="" constraints="gridbag(anchor=center;fill=both;gridHeight=1;gridWidth=0;gridX=-1;gridY=-1;index=3;insetsBottom=0;insetsLeft=10;insetsRight=10;insetsTop=0;padX=0;padY=0;weightX=1.0;weightY=1.0)" visible="">
+    <RowSplit name="RowSplit" weight="0.0">
+      <Leaf name="browser" weight="0.2948435412166979"/>
+      <Divider/>
+      <ColSplit name="ColSplit" weight="0.7051564485109709">
+        <Leaf name="description" weight="0.20000000298023224"/>
+        <Divider/>
+        <RowSplit name="RowSplit" weight="0.800000011920929">
+          <Leaf name="screenshot" weight="0.800000011920929"/>
+          <Divider/>
+          <Leaf name="exampleList" weight="0.20000000298023224"/>
+        </RowSplit>
+      </ColSplit>
+    </RowSplit>
+    <Browser root="data.project.serviceManager.viewPointLibrary" iteratorClassName="org.openflexo.foundation.rm.ViewPointResource" visibleRowCount="3" rowHeight="18" boundToSelectionManager="false" selectionMode="DiscontiguousTreeSelection" selected="data.viewpointResource" showFooter="false" rootVisible="true" showRootsHandle="true" format="" icon="" tooltip="" localize="true" enable="" manageDynamicModel="true" opaque="false" clickAction="" doubleClickAction="" rightClickAction="" enterPressedAction="" valueChangedAction="" valueTransform="" valueValidator="" name="ViewPointBrowser" index="3" data="" constraints="split(anchor=center;fill=both;gridHeight=2;gridWidth=1;gridX=-1;gridY=-1;index=3;insetsBottom=0;insetsLeft=10;insetsRight=10;insetsTop=0;padX=0;padY=0;splitIdentifier=browser;weightX=1.0;weightY=1.0)" visible="" width="300" height="400">
+      <BrowserElement dataClassName="org.openflexo.foundation.viewpoint.ViewPointLibrary" label="&quot;Viewpoint Library&quot;" icon="controller.iconForObject(viewPointLibrary)" tooltip="" enabled="" visible="" isEditable="false" editableLabel="" filtered="false" defaultVisible="true" dynamicFont="" name="viewPointLibrary">
+        <Children data="viewPointLibrary.resourceCenterService.resourceCenters" visible="" cast="child.viewPointRepository.rootFolder" name="resourceCenters"/>
+      </BrowserElement>
+      <BrowserElement dataClassName="org.openflexo.foundation.resource.RepositoryFolder" label="viewPointFolder.name" icon="controller.iconForObject(viewPointFolder)" tooltip="" enabled="" visible="" isEditable="false" editableLabel="" filtered="false" defaultVisible="true" dynamicFont="" name="viewPointFolder">
+        <Children data="viewPointFolder.children" visible="" cast="" name="subFolders"/>
+        <Children data="viewPointFolder.resources" visible="" cast="" name="viewPoints"/>
+      </BrowserElement>
+      <BrowserElement dataClassName="org.openflexo.foundation.rm.ViewPointResource" label="viewPoint.name" icon="controller.iconForObject(viewPoint)" tooltip="" enabled="" visible="" isEditable="false" editableLabel="" filtered="false" defaultVisible="true" dynamicFont="" name="viewPoint">
+        <Children data="viewPoint.contents" visible="viewPoint.isLoaded" cast="" name="subResources"/>
+      </BrowserElement>
+    </Browser>
+    <TextArea columns="6" rows="2" text="TextArea" index="3" data="ViewPointBrowser.selected.viewPoint.description" constraints="split(anchor=center;fill=both;gridHeight=1;gridWidth=0;gridX=1;gridY=2;index=3;insetsBottom=10;insetsLeft=0;insetsRight=10;insetsTop=0;padX=0;padY=0;splitIdentifier=description;weightX=1.0;weightY=0.2)" visible="" useScrollBar="true" horizontalScrollbarPolicy="HORIZONTAL_SCROLLBAR_AS_NEEDED" verticalScrollbarPolicy="VERTICAL_SCROLLBAR_AS_NEEDED" format="" icon="" tooltip="" localize="true" enable="data.useViewPoint" clickAction="" doubleClickAction="" rightClickAction="" enterPressedAction="" valueChangedAction="" valueTransform="" valueValidator="" editable=""/>
+    <Table iteratorClassName="org.openflexo.foundation.rm.VirtualModelResource" visibleRowCount="3" rowHeight="18" autoSelectFirstRow="true" createNewRowOnClick="false" boundToSelectionManager="false" showFooter="true" selectionMode="SingleSelection" selected="" textSelectionColor="255,255,255" textNonSelectionColor="0,0,0" backgroundSelectionColor="26,96,206" backgroundSecondarySelectionColor="173,215,255" backgroundNonSelectionColor="255,255,255" format="" icon="" tooltip="" localize="true" enable="data.useViewPoint" manageDynamicModel="true" opaque="false" clickAction="" doubleClickAction="" rightClickAction="" enterPressedAction="" valueChangedAction="" valueTransform="" valueValidator="" name="VirtualModelTable" index="0" data="ViewPointBrowser.selected.virtualModelResources" constraints="split(index=0;location=east;splitIdentifier=exampleList)" visible="">
+      <IconColumn data="controller.iconForObject(iterator)" format="" title="icon" columnWidth="30" resizable="false" displayTitle="false" color="" bgColor="" tooltip="" valueChangedAction="" name="icon"/>
+      <LabelColumn data="iterator.name" format="" title="virtual_model" columnWidth="120" resizable="true" displayTitle="true" color="" bgColor="" tooltip="" valueChangedAction="" name="label"/>
+      <LocalizedDictionary/>
+    </Table>
+    <Panel layout="gridbag" border="rounded3d" borderTitle="" borderTop="2" borderBottom="2" borderRight="2" titleFont="Lucida Grande,0,11" darkLevel="0" index="0" data="" constraints="split(index=0;location=center;splitIdentifier=screenshot)" visible="">
+      <Panel layout="border" titleFont="Lucida Grande,0,11" darkLevel="0" index="0" data="($org.openflexo.foundation.rm.DiagramSpecificationResource)VirtualModelTable.selected" dataClassName="org.openflexo.foundation.rm.DiagramSpecificationResource" constraints="gridbag(anchor=center;fill=both;gridHeight=1;gridWidth=1;gridX=-1;gridY=-1;index=0;insetsBottom=0;insetsLeft=0;insetsRight=0;insetsTop=0;location=center;padX=0;padY=0;splitIdentifier=screenshot;weightX=1.0;weightY=1.0)" visible="(VirtualModelTable.selected.resourceDataClass.simpleName = &quot;DiagramSpecification&quot;)" name="DiagramSpecificationPanel">
+        <Image sizeAdjustment="FitToAvailableSizeRespectRatio" align="center" imageWidth="400" imageHeight="32" index="0" data="DiagramSpecificationPanel.data.exampleDiagramResources.get(0).exampleDiagram.screenshotImage.image" constraints="border(index=0;location=center;splitIdentifier=screenshot)" visible="(DiagramSpecificationPanel.data.exampleDiagramResources.size &gt; 0)" useScrollBar="true" horizontalScrollbarPolicy="HORIZONTAL_SCROLLBAR_AS_NEEDED" verticalScrollbarPolicy="VERTICAL_SCROLLBAR_AS_NEEDED" format="" icon="" tooltip="" localize="true" enable="" clickAction="" doubleClickAction="" rightClickAction="" enterPressedAction="" valueChangedAction="" valueTransform="" valueValidator=""/>
+      </Panel>
+    </Panel>
+  </SplitPanel>
+  <Label label="label" align="center" index="5" data="data.errorMessage" constraints="gridbag(anchor=center;fill=horizontal;gridHeight=1;gridWidth=0;gridX=-1;gridY=-1;index=5;insetsBottom=0;insetsLeft=0;insetsRight=0;insetsTop=10;padX=0;padY=0;weightX=1.0;weightY=0.0)" visible="(!(data.isValid))" format="" icon="" tooltip="" localize="true" enable="" clickAction="" doubleClickAction="" rightClickAction="" enterPressedAction="" valueChangedAction="" valueTransform="" valueValidator="">
+    <Dependancy componentName="ViewPointBrowser"/>
+    <Dependancy componentName="ViewNameTextField"/>
+    <LocalizedDictionary/>
+  </Label>
+  <Panel layout="flow" hGap="5" vGap="5" flowAlignment="CENTER" borderTitle="Panel" titleFont="Lucida Grande,0,11" darkLevel="0" index="6" data="" constraints="gridbag(anchor=center;fill=horizontal;gridHeight=1;gridWidth=0;gridX=-1;gridY=-1;index=6;insetsBottom=0;insetsLeft=0;insetsRight=0;insetsTop=10;padX=0;padY=0;weightX=1.0;weightY=0.0)" visible="">
+    <Button action="controller.validateAndDispose()" buttonIcon="" buttonType="Trigger" label="validate" format="" icon="" tooltip="" localize="true" enable="data.isValid" opaque="false" clickAction="" doubleClickAction="" rightClickAction="" enterPressedAction="" valueChangedAction="" valueTransform="" valueValidator="" index="0" data="" constraints="flow(index=0)" visible="" font="Lucida Grande,0,13">
+      <Dependancy componentName="ViewPointBrowser"/>
+      <Dependancy componentName="ViewNameTextField"/>
+      <Dependancy componentName="NoCalcCheckBox"/>
+      <LocalizedDictionary/>
+    </Button>
+    <Button action="controller.cancelAndDispose()" buttonIcon="" buttonType="Trigger" label="Cancel" format="" icon="" tooltip="" localize="true" enable="" opaque="false" clickAction="" doubleClickAction="" rightClickAction="" enterPressedAction="" valueChangedAction="" valueTransform="" valueValidator="" index="1" data="" constraints="flow(index=1)" visible="" font="Lucida Grande,0,13">
+      <LocalizedDictionary/>
+    </Button>
+  </Panel>
+  <LocalizedDictionary>
+    <Localized key="uri" lang="English">URI</Localized>
+    <Localized key="description" lang="English">Description</Localized>
+    <Localized key="uri" lang="French">URI</Localized>
+    <Localized key="description" lang="French">Description</Localized>
+    <Localized key="uri" lang="Dutch">URI</Localized>
+    <Localized key="description" lang="Dutch">Description</Localized>
+    <Localized key="edition_pattern" lang="French">Edition pattern</Localized>
+    <Localized key="ontologic_calc" lang="French">Calque ontologique</Localized>
+    <Localized key="edition_pattern" lang="English">Edition pattern</Localized>
+    <Localized key="ontologic_calc" lang="English">Ontologic calc</Localized>
+    <Localized key="validate" lang="English">Validate</Localized>
+    <Localized key="label" lang="English">Label</Localized>
+    <Localized key="validate" lang="French">Valider</Localized>
+    <Localized key="label" lang="French">Label</Localized>
+    <Localized key="Cancel" lang="French">Annuler</Localized>
+    <Localized key="validate" lang="Dutch">Validate</Localized>
+    <Localized key="label" lang="Dutch">Label</Localized>
+    <Localized key="create_ontologic_view_without_view_point" lang="French">Créer une nouvelle vue non conforme à un point de vue particulier</Localized>
+    <Localized key="create_ontologic_view_without_view_point" lang="English">Create view without viewpoint</Localized>
+    <Localized key="new_view_title" lang="French">Titre de la vue</Localized>
+    <Localized key="new_view_title" lang="English">View title</Localized>
+    <Localized key="no_view_title_defined" lang="English">Please enter title for newly created view</Localized>
+    <Localized key="no_folder_defined" lang="English">No folder defined</Localized>
+    <Localized key="a_view_with_that_name_already_exists" lang="English">A view with that name already exist. Please choose another name</Localized>
+    <Localized key="no_view_name_defined" lang="French">Aucun nom défini pour cette nouvelle vue</Localized>
+    <Localized key="no_view_point_selected" lang="French">Veuillez choisir un view point</Localized>
+    <Localized key="no_folder_defined" lang="French">Pas de dossier sélectionné</Localized>
+    <Localized key="a_view_with_that_name_already_exists" lang="French">Ce nom de vue est déjà utilisé, veuillez en choisir un autre.</Localized>
+    <Localized key="example_diagram" lang="English">Example diagram</Localized>
+    <Localized key="example_diagram" lang="French">Diagrame d'exemple</Localized>
+    <Localized key="example_diagram" lang="Dutch">example_diagram</Localized>
+    <Localized key="Cancel" lang="English">Cancel</Localized>
+    <Localized key="Cancel" lang="Dutch">Cancel</Localized>
+    <Localized key="new_view_title" lang="Dutch">new_view_title</Localized>
+    <Localized key="create_ontologic_view_without_view_point" lang="Dutch">create_ontologic_view_without_view_point</Localized>
+    <Localized key="create_new_view" lang="English">Creates new view</Localized>
+    <Localized key="create_new_view" lang="French">Créer une nouvelle vue</Localized>
+    <Localized key="create_new_view" lang="Dutch">create_new_view</Localized>
+    <Localized key="no_view_title_defined" lang="French">Veuillez entrer un titre</Localized>
+    <Localized key="no_view_name_defined" lang="English">No name defined for this view</Localized>
+    <Localized key="no_view_point_selected" lang="English">Please choose a view point</Localized>
+    <Localized key="virtual_model" lang="English">virtual_model</Localized>
+    <Localized key="virtual_model" lang="French">virtual_model</Localized>
+    <Localized key="virtual_model" lang="Dutch">virtual_model</Localized>
+  </LocalizedDictionary>
+</Panel>

@@ -1,0 +1,124 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<Diagram id="1">
+  <DrawingGraphicalRepresentation id="2" text="" isMultilineAllowed="false" isReadOnly="false" isSelectable="true" isFocusable="true" relativeTextX="0.5" relativeTextY="0.5" absoluteTextX="0.0" absoluteTextY="0.0" width="1000.0" height="1000.0" selectionColor="0,0,255" focusColor="255,0,0" backgroundColor="255,255,255">
+    <TextStyle id="3" font="SansSerif,0,11" color="0,0,0" orientation="0" isBackgroundColored="false" backgroundColor="255,255,255" />
+  </DrawingGraphicalRepresentation>
+  <Shape id="4">
+    <ShapeGraphicalRepresentation id="5" isMultilineAllowed="false" isReadOnly="false" isSelectable="true" isFocusable="true" relativeTextX="0.5" relativeTextY="0.5" absoluteTextX="0.0" absoluteTextY="0.0" x="78.0" y="166.0" width="100.0" height="80.0" isVisible="true" locationConstraints="FREELY_MOVABLE" dimensionConstraints="FREELY_RESIZABLE" drawShadow="true" shadowDarkness="150" shadowDepth="2" shadowBlur="4" layer="1" isFloatingLabel="true">
+      <TextStyle id="6" font="SansSerif,0,11" color="0,0,0" orientation="0" isBackgroundColored="false" backgroundColor="255,255,255" />
+      <ForegroundStyle id="7" noStroke="false" color="0,0,0" lineWidth="1.0" joinStyle="JOIN_MITER" capStyle="CAP_SQUARE" dashStyle="PLAIN_STROKE" useTransparency="false" transparencyLevel="0.5" />
+      <ColorBackgroundStyle id="8" color="255,255,255" useTransparency="false" transparencyLevel="0.5" />
+      <Border id="9" top="5" bottom="5" left="5" right="5" />
+      <LosangeShape id="10" nPoints="4" startAngle="90" />
+    </ShapeGraphicalRepresentation>
+  </Shape>
+  <Shape id="11">
+    <ShapeGraphicalRepresentation id="12" isMultilineAllowed="false" isReadOnly="false" isSelectable="true" isFocusable="true" relativeTextX="0.5" relativeTextY="0.5" absoluteTextX="0.0" absoluteTextY="0.0" x="281.0" y="48.0" width="80.0" height="80.0" isVisible="true" locationConstraints="FREELY_MOVABLE" dimensionConstraints="CONSTRAINED_DIMENSIONS" drawShadow="true" shadowDarkness="150" shadowDepth="2" shadowBlur="4" layer="1" isFloatingLabel="true">
+      <TextStyle id="13" font="SansSerif,0,11" color="0,0,0" orientation="0" isBackgroundColored="false" backgroundColor="255,255,255" />
+      <ForegroundStyle id="14" noStroke="false" color="0,0,0" lineWidth="1.0" joinStyle="JOIN_MITER" capStyle="CAP_SQUARE" dashStyle="PLAIN_STROKE" useTransparency="false" transparencyLevel="0.5" />
+      <ColorBackgroundStyle id="15" color="255,255,255" useTransparency="false" transparencyLevel="0.5" />
+      <Border id="16" top="5" bottom="5" left="5" right="5" />
+      <CircleShape id="17" />
+    </ShapeGraphicalRepresentation>
+  </Shape>
+  <Connector id="18">
+    <ConnectorGraphicalRepresentation id="19" text="WEST-NORTH" isMultilineAllowed="false" isReadOnly="false" isSelectable="true" isFocusable="true" relativeTextX="0.5" relativeTextY="0.5" absoluteTextX="10.0" absoluteTextY="-31.0" isVisible="true" layer="64" startSymbol="NONE" endSymbol="NONE" middleSymbol="ARROW" startSymbolSize="10.0" endSymbolSize="10.0" middleSymbolSize="10.0" debugCoveringArea="false">
+      <TextStyle id="20" font="SansSerif,0,11" color="0,0,0" orientation="0" isBackgroundColored="false" backgroundColor="255,255,255" />
+      <ForegroundStyle id="21" noStroke="false" color="0,0,0" lineWidth="1.0" joinStyle="JOIN_MITER" capStyle="CAP_SQUARE" dashStyle="PLAIN_STROKE" useTransparency="false" transparencyLevel="0.5" />
+      <StartMyShapeGraphicalRepresentation idref="12" />
+      <EndMyShapeGraphicalRepresentation idref="5" />
+      <RectPolylinConnector id="22" rectPolylinConstraints="ORIENTATIONS_FIXED" straightLineWhenPossible="true" adjustability="BASICALLY_ADJUSTABLE" startOrientation="WEST" endOrientation="NORTH" isRounded="false" arcSize="10" isStartingLocationFixed="false" isEndingLocationFixed="false" isStartingLocationDraggable="false" isEndingLocationDraggable="false" crossedControlPoint="0.09322033898305085,0.24183006535947713" />
+    </ConnectorGraphicalRepresentation>
+  </Connector>
+  <Shape id="23">
+    <ShapeGraphicalRepresentation id="24" isMultilineAllowed="false" isReadOnly="false" isSelectable="true" isFocusable="true" relativeTextX="0.5" relativeTextY="0.5" absoluteTextX="0.0" absoluteTextY="0.0" x="703.0" y="97.0" width="80.0" height="80.0" isVisible="true" locationConstraints="FREELY_MOVABLE" dimensionConstraints="CONSTRAINED_DIMENSIONS" drawShadow="true" shadowDarkness="150" shadowDepth="2" shadowBlur="4" layer="1" isFloatingLabel="true">
+      <TextStyle id="25" font="SansSerif,0,11" color="0,0,0" orientation="0" isBackgroundColored="false" backgroundColor="255,255,255" />
+      <ForegroundStyle id="26" noStroke="false" color="0,0,0" lineWidth="1.0" joinStyle="JOIN_MITER" capStyle="CAP_SQUARE" dashStyle="PLAIN_STROKE" useTransparency="false" transparencyLevel="0.5" />
+      <ColorBackgroundStyle id="27" color="255,255,255" useTransparency="false" transparencyLevel="0.5" />
+      <Border id="28" top="5" bottom="5" left="5" right="5" />
+      <CircleShape id="29" />
+    </ShapeGraphicalRepresentation>
+  </Shape>
+  <Shape id="30">
+    <ShapeGraphicalRepresentation id="31" isMultilineAllowed="false" isReadOnly="false" isSelectable="true" isFocusable="true" relativeTextX="0.5" relativeTextY="0.5" absoluteTextX="0.0" absoluteTextY="0.0" x="550.0" y="113.0" width="100.0" height="80.0" isVisible="true" locationConstraints="FREELY_MOVABLE" dimensionConstraints="FREELY_RESIZABLE" drawShadow="true" shadowDarkness="150" shadowDepth="2" shadowBlur="4" layer="1" isFloatingLabel="true">
+      <TextStyle id="32" font="SansSerif,0,11" color="0,0,0" orientation="0" isBackgroundColored="false" backgroundColor="255,255,255" />
+      <ForegroundStyle id="33" noStroke="false" color="0,0,0" lineWidth="1.0" joinStyle="JOIN_MITER" capStyle="CAP_SQUARE" dashStyle="PLAIN_STROKE" useTransparency="false" transparencyLevel="0.5" />
+      <ColorBackgroundStyle id="34" color="255,255,255" useTransparency="false" transparencyLevel="0.5" />
+      <Border id="35" top="5" bottom="5" left="5" right="5" />
+      <LosangeShape id="36" nPoints="4" startAngle="90" />
+    </ShapeGraphicalRepresentation>
+  </Shape>
+  <Connector id="37">
+    <ConnectorGraphicalRepresentation id="38" text="WEST-SOUTH" isMultilineAllowed="false" isReadOnly="false" isSelectable="true" isFocusable="true" relativeTextX="0.5" relativeTextY="0.5" absoluteTextX="-13.0" absoluteTextY="28.0" isVisible="true" layer="64" startSymbol="NONE" endSymbol="NONE" middleSymbol="ARROW" startSymbolSize="10.0" endSymbolSize="10.0" middleSymbolSize="10.0" debugCoveringArea="false">
+      <TextStyle id="39" font="SansSerif,0,11" color="0,0,0" orientation="0" isBackgroundColored="false" backgroundColor="255,255,255" />
+      <ForegroundStyle id="40" noStroke="false" color="0,0,0" lineWidth="1.0" joinStyle="JOIN_MITER" capStyle="CAP_SQUARE" dashStyle="PLAIN_STROKE" useTransparency="false" transparencyLevel="0.5" />
+      <StartMyShapeGraphicalRepresentation idref="24" />
+      <EndMyShapeGraphicalRepresentation idref="31" />
+      <RectPolylinConnector id="41" rectPolylinConstraints="ORIENTATIONS_FIXED" straightLineWhenPossible="true" adjustability="BASICALLY_ADJUSTABLE" startOrientation="WEST" endOrientation="SOUTH" isRounded="false" arcSize="10" isStartingLocationFixed="false" isEndingLocationFixed="false" isStartingLocationDraggable="false" isEndingLocationDraggable="false" crossedControlPoint="0.569672131147541,1.3271028037383177" />
+    </ConnectorGraphicalRepresentation>
+  </Connector>
+  <Shape id="42">
+    <ShapeGraphicalRepresentation id="43" isMultilineAllowed="false" isReadOnly="false" isSelectable="true" isFocusable="true" relativeTextX="0.5" relativeTextY="0.5" absoluteTextX="0.0" absoluteTextY="0.0" x="111.0" y="321.0" width="80.0" height="80.0" isVisible="true" locationConstraints="FREELY_MOVABLE" dimensionConstraints="CONSTRAINED_DIMENSIONS" drawShadow="true" shadowDarkness="150" shadowDepth="2" shadowBlur="4" layer="1" isFloatingLabel="true">
+      <TextStyle id="44" font="SansSerif,0,11" color="0,0,0" orientation="0" isBackgroundColored="false" backgroundColor="255,255,255" />
+      <ForegroundStyle id="45" noStroke="false" color="0,0,0" lineWidth="1.0" joinStyle="JOIN_MITER" capStyle="CAP_SQUARE" dashStyle="PLAIN_STROKE" useTransparency="false" transparencyLevel="0.5" />
+      <ColorBackgroundStyle id="46" color="255,255,255" useTransparency="false" transparencyLevel="0.5" />
+      <Border id="47" top="5" bottom="5" left="5" right="5" />
+      <CircleShape id="48" />
+    </ShapeGraphicalRepresentation>
+  </Shape>
+  <Shape id="49">
+    <ShapeGraphicalRepresentation id="50" isMultilineAllowed="false" isReadOnly="false" isSelectable="true" isFocusable="true" relativeTextX="0.5" relativeTextY="0.5" absoluteTextX="0.0" absoluteTextY="0.0" x="208.0" y="412.0" width="100.0" height="80.0" isVisible="true" locationConstraints="FREELY_MOVABLE" dimensionConstraints="FREELY_RESIZABLE" drawShadow="true" shadowDarkness="150" shadowDepth="2" shadowBlur="4" layer="1" isFloatingLabel="true">
+      <TextStyle id="51" font="SansSerif,0,11" color="0,0,0" orientation="0" isBackgroundColored="false" backgroundColor="255,255,255" />
+      <ForegroundStyle id="52" noStroke="false" color="0,0,0" lineWidth="1.0" joinStyle="JOIN_MITER" capStyle="CAP_SQUARE" dashStyle="PLAIN_STROKE" useTransparency="false" transparencyLevel="0.5" />
+      <ColorBackgroundStyle id="53" color="255,255,255" useTransparency="false" transparencyLevel="0.5" />
+      <Border id="54" top="5" bottom="5" left="5" right="5" />
+      <LosangeShape id="55" nPoints="4" startAngle="90" />
+    </ShapeGraphicalRepresentation>
+  </Shape>
+  <Connector id="56">
+    <ConnectorGraphicalRepresentation id="57" text="EAST_NORTH" isMultilineAllowed="false" isReadOnly="false" isSelectable="true" isFocusable="true" relativeTextX="0.5" relativeTextY="0.5" absoluteTextX="-2.0" absoluteTextY="-14.0" isVisible="true" layer="64" startSymbol="NONE" endSymbol="NONE" middleSymbol="ARROW" startSymbolSize="10.0" endSymbolSize="10.0" middleSymbolSize="10.0" debugCoveringArea="false">
+      <TextStyle id="58" font="SansSerif,0,11" color="0,0,0" orientation="0" isBackgroundColored="false" backgroundColor="255,255,255" />
+      <ForegroundStyle id="59" noStroke="false" color="0,0,0" lineWidth="1.0" joinStyle="JOIN_MITER" capStyle="CAP_SQUARE" dashStyle="PLAIN_STROKE" useTransparency="false" transparencyLevel="0.5" />
+      <StartMyShapeGraphicalRepresentation idref="43" />
+      <EndMyShapeGraphicalRepresentation idref="50" />
+      <RectPolylinConnector id="60" rectPolylinConstraints="ORIENTATIONS_FIXED" straightLineWhenPossible="true" adjustability="BASICALLY_ADJUSTABLE" startOrientation="EAST" endOrientation="NORTH" isRounded="false" arcSize="10" isStartingLocationFixed="false" isEndingLocationFixed="false" isStartingLocationDraggable="false" isEndingLocationDraggable="false" crossedControlPoint="0.9134615384615385,0.16483516483516486" />
+    </ConnectorGraphicalRepresentation>
+  </Connector>
+  <Shape id="61">
+    <ShapeGraphicalRepresentation id="62" isMultilineAllowed="false" isReadOnly="false" isSelectable="true" isFocusable="true" relativeTextX="0.5" relativeTextY="0.5" absoluteTextX="0.0" absoluteTextY="0.0" x="677.0" y="326.0" width="80.0" height="80.0" isVisible="true" locationConstraints="FREELY_MOVABLE" dimensionConstraints="CONSTRAINED_DIMENSIONS" drawShadow="true" shadowDarkness="150" shadowDepth="2" shadowBlur="4" layer="1" isFloatingLabel="true">
+      <TextStyle id="63" font="SansSerif,0,11" color="0,0,0" orientation="0" isBackgroundColored="false" backgroundColor="255,255,255" />
+      <ForegroundStyle id="64" noStroke="false" color="0,0,0" lineWidth="1.0" joinStyle="JOIN_MITER" capStyle="CAP_SQUARE" dashStyle="PLAIN_STROKE" useTransparency="false" transparencyLevel="0.5" />
+      <ColorBackgroundStyle id="65" color="255,255,255" useTransparency="false" transparencyLevel="0.5" />
+      <Border id="66" top="5" bottom="5" left="5" right="5" />
+      <CircleShape id="67" />
+    </ShapeGraphicalRepresentation>
+  </Shape>
+  <Shape id="68">
+    <ShapeGraphicalRepresentation id="69" isMultilineAllowed="false" isReadOnly="false" isSelectable="true" isFocusable="true" relativeTextX="0.5" relativeTextY="0.5" absoluteTextX="0.0" absoluteTextY="0.0" x="578.0" y="386.0" width="100.0" height="80.0" isVisible="true" locationConstraints="FREELY_MOVABLE" dimensionConstraints="FREELY_RESIZABLE" drawShadow="true" shadowDarkness="150" shadowDepth="2" shadowBlur="4" layer="1" isFloatingLabel="true">
+      <TextStyle id="70" font="SansSerif,0,11" color="0,0,0" orientation="0" isBackgroundColored="false" backgroundColor="255,255,255" />
+      <ForegroundStyle id="71" noStroke="false" color="0,0,0" lineWidth="1.0" joinStyle="JOIN_MITER" capStyle="CAP_SQUARE" dashStyle="PLAIN_STROKE" useTransparency="false" transparencyLevel="0.5" />
+      <ColorBackgroundStyle id="72" color="255,255,255" useTransparency="false" transparencyLevel="0.5" />
+      <Border id="73" top="5" bottom="5" left="5" right="5" />
+      <LosangeShape id="74" nPoints="4" startAngle="90" />
+    </ShapeGraphicalRepresentation>
+  </Shape>
+  <Connector id="75">
+    <ConnectorGraphicalRepresentation id="76" text="EAST_SOUTH" isMultilineAllowed="false" isReadOnly="false" isSelectable="true" isFocusable="true" relativeTextX="0.5" relativeTextY="0.5" absoluteTextX="21.0" absoluteTextY="14.0" isVisible="true" layer="64" startSymbol="NONE" endSymbol="NONE" middleSymbol="ARROW" startSymbolSize="10.0" endSymbolSize="10.0" middleSymbolSize="10.0" debugCoveringArea="false">
+      <TextStyle id="77" font="SansSerif,0,11" color="0,0,0" orientation="0" isBackgroundColored="false" backgroundColor="255,255,255" />
+      <ForegroundStyle id="78" noStroke="false" color="0,0,0" lineWidth="1.0" joinStyle="JOIN_MITER" capStyle="CAP_SQUARE" dashStyle="PLAIN_STROKE" useTransparency="false" transparencyLevel="0.5" />
+      <StartMyShapeGraphicalRepresentation idref="62" />
+      <EndMyShapeGraphicalRepresentation idref="69" />
+      <RectPolylinConnector id="79" rectPolylinConstraints="ORIENTATIONS_FIXED" straightLineWhenPossible="true" adjustability="BASICALLY_ADJUSTABLE" startOrientation="EAST" endOrientation="SOUTH" isRounded="false" arcSize="10" isStartingLocationFixed="false" isEndingLocationFixed="false" isStartingLocationDraggable="false" isEndingLocationDraggable="false" crossedControlPoint="1.4947368421052631,1.1655629139072847" />
+    </ConnectorGraphicalRepresentation>
+  </Connector>
+  <Shape id="80">
+    <ShapeGraphicalRepresentation id="81" text="Test&#xA;Start and end orientations are strongly constrained: test orthogonal orientations&#xA;Connectors are adjustable by a single drag.&#xA;For all of the four situations described here, test that all moves (shapes and/or connector) result in a new layout&#xA;where start and end orientations are respected. Example for situation1, polylin must&#xA;always start from west and arrive to north, whatever relative positions or overlapping&#xA;the 2 shapes are. There are numerous cases (16 for each), so move your mouse.&#xA;" isMultilineAllowed="true" isReadOnly="false" isSelectable="true" isFocusable="true" relativeTextX="0.5" relativeTextY="0.5" absoluteTextX="0.0" absoluteTextY="0.0" x="222.0" y="541.0" width="607.0" height="119.0" isVisible="true" locationConstraints="FREELY_MOVABLE" dimensionConstraints="FREELY_RESIZABLE" drawShadow="true" shadowDarkness="150" shadowDepth="2" shadowBlur="4" layer="1" isFloatingLabel="false">
+      <TextStyle id="82" font="SansSerif,0,11" color="0,0,0" orientation="0" isBackgroundColored="false" backgroundColor="255,255,255" />
+      <ForegroundStyle id="83" noStroke="false" color="0,0,0" lineWidth="1.0" joinStyle="JOIN_MITER" capStyle="CAP_SQUARE" dashStyle="PLAIN_STROKE" useTransparency="false" transparencyLevel="0.5" />
+      <ColorBackgroundStyle id="84" color="255,255,255" useTransparency="false" transparencyLevel="0.5" />
+      <Border id="85" top="5" bottom="5" left="5" right="5" />
+      <RectangleShape id="86" isRounded="false" arcSize="30.0" />
+    </ShapeGraphicalRepresentation>
+  </Shape>
+</Diagram>
+

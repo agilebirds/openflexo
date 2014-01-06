@@ -14,13 +14,13 @@ import org.openflexo.dg.ProjectDocGenerator;
 import org.openflexo.dg.docx.ProjectDocDocxGenerator;
 import org.openflexo.dg.html.ProjectDocHTMLGenerator;
 import org.openflexo.foundation.DefaultFlexoEditor;
-import org.openflexo.foundation.FlexoModelObject;
+import org.openflexo.foundation.FlexoObject;
 import org.openflexo.foundation.action.FlexoAction;
 import org.openflexo.foundation.action.ValidateProject;
 import org.openflexo.foundation.cg.CGRepository;
 import org.openflexo.foundation.cg.DGRepository;
 import org.openflexo.foundation.cg.GenerationRepository;
-import org.openflexo.foundation.rm.FlexoProject;
+import org.openflexo.foundation.FlexoProject;
 import org.openflexo.foundation.utils.FlexoProgressFactory;
 import org.openflexo.generator.AbstractProjectGenerator;
 import org.openflexo.generator.ProjectGenerator;
@@ -47,7 +47,7 @@ public class FlexoBuilderEditor extends DefaultFlexoEditor implements ProjectGen
 	private final FlexoExternalMainWithProject externalMainWithProject;
 
 	public FlexoBuilderEditor(FlexoExternalMainWithProject externalMainWithProject, FlexoProject project) {
-		super(project);
+		super(project, null);
 		this.externalMainWithProject = externalMainWithProject;
 	}
 
@@ -97,7 +97,7 @@ public class FlexoBuilderEditor extends DefaultFlexoEditor implements ProjectGen
 	protected Throwable exception;
 
 	@Override
-	public <A extends FlexoAction<A, T1, T2>, T1 extends FlexoModelObject, T2 extends FlexoModelObject> A performAction(final A action,
+	public <A extends FlexoAction<A, T1, T2>, T1 extends FlexoObject, T2 extends FlexoObject> A performAction(final A action,
 			EventObject event) {
 		if (action.getActionType() == ValidateProject.actionType) {
 			return action;
@@ -147,7 +147,7 @@ public class FlexoBuilderEditor extends DefaultFlexoEditor implements ProjectGen
 		doNextTodo(null);
 	}
 
-	public <A extends FlexoAction<?, T1, T2>, T1 extends FlexoModelObject, T2 extends FlexoModelObject> void doNextTodo(final A action) {
+	public <A extends FlexoAction<?, T1, T2>, T1 extends FlexoObject, T2 extends FlexoObject> void doNextTodo(final A action) {
 		if (action != null && (!action.hasActionExecutionSucceeded() || exception != null)) {
 			externalMainWithProject.handleActionFailed(action);
 		} else {

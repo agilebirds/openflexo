@@ -19,13 +19,15 @@
  */
 package org.openflexo.foundation.viewpoint.inspector;
 
-import org.openflexo.antar.binding.AbstractBinding.BindingEvaluationContext;
-import org.openflexo.antar.binding.BindingDefinition;
-import org.openflexo.antar.binding.BindingDefinition.BindingDefinitionType;
-import org.openflexo.foundation.ontology.OntologyClass;
-import org.openflexo.foundation.ontology.OntologyObjectProperty;
-import org.openflexo.foundation.viewpoint.ViewPoint.ViewPointBuilder;
-import org.openflexo.foundation.viewpoint.binding.ViewPointDataBinding;
+import java.lang.reflect.InvocationTargetException;
+
+import org.openflexo.antar.binding.BindingEvaluationContext;
+import org.openflexo.antar.binding.DataBinding;
+import org.openflexo.antar.binding.DataBinding.BindingDefinitionType;
+import org.openflexo.antar.expr.NullReferenceException;
+import org.openflexo.antar.expr.TypeMismatchException;
+import org.openflexo.foundation.ontology.IFlexoOntologyClass;
+import org.openflexo.foundation.ontology.IFlexoOntologyObjectProperty;
 
 /**
  * Represents an inspector entry for an ontology object property
@@ -37,17 +39,15 @@ public class ObjectPropertyInspectorEntry extends PropertyInspectorEntry {
 
 	private String rangeURI;
 
-	private ViewPointDataBinding rangeValue;
+	private DataBinding<IFlexoOntologyClass> rangeValue;
 
-	private BindingDefinition RANGE_VALUE = new BindingDefinition("rangeValue", OntologyClass.class, BindingDefinitionType.GET, false);
-
-	public ObjectPropertyInspectorEntry(ViewPointBuilder builder) {
-		super(builder);
+	public ObjectPropertyInspectorEntry() {
+		super();
 	}
 
 	@Override
 	public Class getDefaultDataClass() {
-		return OntologyObjectProperty.class;
+		return IFlexoOntologyObjectProperty.class;
 	}
 
 	@Override
@@ -63,30 +63,29 @@ public class ObjectPropertyInspectorEntry extends PropertyInspectorEntry {
 		this.rangeURI = domainURI;
 	}
 
-	public OntologyClass getRange() {
-		getViewPoint().loadWhenUnloaded();
-		return getViewPoint().getViewpointOntology().getClass(_getRangeURI());
+	public IFlexoOntologyClass getRange() {
+		return getVirtualModel().getOntologyClass(_getRangeURI());
 	}
 
-	public void setRange(OntologyClass c) {
+	public void setRange(IFlexoOntologyClass c) {
 		_setRangeURI(c != null ? c.getURI() : null);
 	}
 
-	public BindingDefinition getRangeValueBindingDefinition() {
-		return RANGE_VALUE;
-	}
-
-	public ViewPointDataBinding getRangeValue() {
+	public DataBinding<IFlexoOntologyClass> getRangeValue() {
 		if (rangeValue == null) {
-			rangeValue = new ViewPointDataBinding(this, InspectorEntryBindingAttribute.rangeValue, getRangeValueBindingDefinition());
+			rangeValue = new DataBinding<IFlexoOntologyClass>(this, IFlexoOntologyClass.class, BindingDefinitionType.GET);
+			rangeValue.setBindingName("rangeValue");
 		}
 		return rangeValue;
 	}
 
-	public void setRangeValue(ViewPointDataBinding rangeValue) {
-		rangeValue.setOwner(this);
-		rangeValue.setBindingAttribute(InspectorEntryBindingAttribute.rangeValue);
-		rangeValue.setBindingDefinition(getRangeValueBindingDefinition());
+	public void setRangeValue(DataBinding<IFlexoOntologyClass> rangeValue) {
+		if (rangeValue != null) {
+			rangeValue.setOwner(this);
+			rangeValue.setBindingName("rangeValue");
+			rangeValue.setDeclaredType(IFlexoOntologyClass.class);
+			rangeValue.setBindingDefinitionType(BindingDefinitionType.GET);
+		}
 		this.rangeValue = rangeValue;
 	}
 
@@ -105,9 +104,17 @@ public class ObjectPropertyInspectorEntry extends PropertyInspectorEntry {
 		}
 	}
 
-	public OntologyClass evaluateRangeValue(BindingEvaluationContext parameterRetriever) {
+	public IFlexoOntologyClass evaluateRangeValue(BindingEvaluationContext parameterRetriever) {
 		if (getRangeValue().isValid()) {
-			return (OntologyClass) getRangeValue().getBindingValue(parameterRetriever);
+			try {
+				return getRangeValue().getBindingValue(parameterRetriever);
+			} catch (TypeMismatchException e) {
+				e.printStackTrace();
+			} catch (NullReferenceException e) {
+				e.printStackTrace();
+			} catch (InvocationTargetException e) {
+				e.printStackTrace();
+			}
 		}
 		return null;
 	}

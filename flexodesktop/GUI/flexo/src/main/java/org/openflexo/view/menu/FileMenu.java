@@ -27,7 +27,6 @@ import java.beans.PropertyChangeEvent;
 import java.beans.PropertyChangeListener;
 import java.io.File;
 import java.util.Arrays;
-import java.util.Enumeration;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 
@@ -37,17 +36,12 @@ import javax.swing.JOptionPane;
 import javax.swing.KeyStroke;
 
 import org.openflexo.FlexoCst;
-import org.openflexo.GeneralPreferences;
-import org.openflexo.components.AskParametersDialog;
 import org.openflexo.components.NewProjectComponent;
 import org.openflexo.components.OpenProjectComponent;
 import org.openflexo.foundation.FlexoEditor;
-import org.openflexo.foundation.action.ImportProject;
+import org.openflexo.foundation.FlexoProject;
 import org.openflexo.foundation.action.ValidateProject;
-import org.openflexo.foundation.param.CheckboxParameter;
-import org.openflexo.foundation.param.ParameterDefinition;
-import org.openflexo.foundation.rm.FlexoProject;
-import org.openflexo.foundation.rm.SaveResourceExceptionList;
+import org.openflexo.foundation.resource.SaveResourceExceptionList;
 import org.openflexo.foundation.utils.OperationCancelledException;
 import org.openflexo.foundation.utils.ProjectInitializerException;
 import org.openflexo.foundation.utils.ProjectLoadingCancelledException;
@@ -126,9 +120,7 @@ public class FileMenu extends FlexoMenu {
 	public void updateRecentProjectMenu() {
 		if (recentProjectMenu != null) {
 			recentProjectMenu.removeAll();
-			Enumeration<File> en = GeneralPreferences.getLastOpenedProjects().elements();
-			while (en.hasMoreElements()) {
-				File f = en.nextElement();
+			for (File f : getController().getApplicationContext().getGeneralPreferences().getLastOpenedProjects()) {
 				recentProjectMenu.add(new ProjectItem(f));
 			}
 		}
@@ -193,10 +185,14 @@ public class FileMenu extends FlexoMenu {
 
 		@Override
 		public void actionPerformed(ActionEvent arg0) {
-			File projectDirectory = NewProjectComponent.getProjectDirectory();
+			File projectDirectory = NewProjectComponent.getProjectDirectory(getController().getApplicationContext());
 			if (projectDirectory != null) {
-				getController().getProjectLoader().newProject(projectDirectory);
-
+				try {
+					getController().getProjectLoader().newProject(projectDirectory);
+				} catch (ProjectInitializerException e) {
+					e.printStackTrace();
+					FlexoController.notify(e.getMessage());
+				}
 			}
 		}
 	}
@@ -216,7 +212,7 @@ public class FileMenu extends FlexoMenu {
 
 		@Override
 		public void actionPerformed(ActionEvent arg0) {
-			File projectDirectory = OpenProjectComponent.getProjectDirectory();
+			File projectDirectory = OpenProjectComponent.getProjectDirectory(getController().getApplicationContext());
 			if (projectDirectory != null) {
 				try {
 					getProjectLoader().loadProject(projectDirectory);
@@ -242,7 +238,7 @@ public class FileMenu extends FlexoMenu {
 	}
 
 	public class RecentProjectAction extends AbstractAction {
-		private File projectDirectory;
+		private final File projectDirectory;
 
 		public RecentProjectAction(File projectDirectory) {
 			super();
@@ -280,7 +276,9 @@ public class FileMenu extends FlexoMenu {
 		public void actionPerformed(ActionEvent e) {
 			FlexoEditor editor = getController().getEditor();
 			if (editor != null) {
-				editor.performActionType(ImportProject.actionType, editor.getProject(), null, e);
+				logger.warning("Please implement this");
+				// TODO
+				// editor.performActionType(ImportProject.actionType, editor.getProject(), null, e);
 			}
 		}
 
@@ -310,7 +308,7 @@ public class FileMenu extends FlexoMenu {
 			if (getController() == null || getController().getProject() == null) {
 				return;
 			}
-			if (getController().getProject().hasUnsaveStorageResources()) {
+			if (getController().getProject().hasUnsavedResources()) {
 				Cursor c = getController().getFlexoFrame().getCursor();
 				FileMenu.this._controller.getFlexoFrame().setCursor(Cursor.WAIT_CURSOR);
 				try {
@@ -323,6 +321,7 @@ public class FileMenu extends FlexoMenu {
 					getController().getFlexoFrame().setCursor(c);
 				}
 			}
+			getController().reviewModifiedResources();
 		}
 
 		@Override
@@ -411,20 +410,23 @@ public class FileMenu extends FlexoMenu {
 				.localizedForKey("would_you_like_to_check_your_project_consistency_first") + "?");
 		switch (i) {
 		case JOptionPane.YES_OPTION:
-			ValidateProject validate = ValidateProject.actionType.makeNewAction(project, null, getController().getEditor());
+			logger.warning("Please implement this (save for server)");
+			// TODO
+			ValidateProject validate = ValidateProject.actionType.makeNewAction(null, null, getController().getEditor());
+			// ValidateProject validate = ValidateProject.actionType.makeNewAction(project, null, getController().getEditor());
 			validate.doAction();
 			if (validate.getErrorsNb() > 0) {
 				StringBuilder sb = new StringBuilder();
-				if (validate.getIeValidationReport().getErrorNb() > 0) {
+				if (validate.getIeValidationReport() != null & validate.getIeValidationReport().getErrorNb() > 0) {
 					sb.append(FlexoLocalization.localizedForKey("there_are_errors_in_your_components") + "\n");
 				}
-				if (validate.getWkfValidationReport().getErrorNb() > 0) {
+				if (validate.getWkfValidationReport() != null && validate.getWkfValidationReport().getErrorNb() > 0) {
 					sb.append(FlexoLocalization.localizedForKey("there_are_errors_in_your_processes") + "\n");
 				}
-				if (validate.getDmValidationReport().getErrorNb() > 0) {
+				if (validate.getDmValidationReport() != null && validate.getDmValidationReport().getErrorNb() > 0) {
 					sb.append(FlexoLocalization.localizedForKey("there_are_errors_in_your_data_model") + "\n");
 				}
-				if (validate.getDkvValidationReport().getErrorNb() > 0) {
+				if (validate.getDkvValidationReport() != null && validate.getDkvValidationReport().getErrorNb() > 0) {
 					sb.append(FlexoLocalization.localizedForKey("there_are_errors_in_the_dkv") + "\n");
 				}
 				sb.append(FlexoLocalization.localizedForKey("would_you_like_to_continue_anyway") + "?");
@@ -432,8 +434,10 @@ public class FileMenu extends FlexoMenu {
 					return false;
 				}
 			} else {
-				if (GeneralPreferences.getNotifyValidProject()) {
-					ParameterDefinition[] params = new ParameterDefinition[1];
+				if (getController().getApplicationContext().getGeneralPreferences().getNotifyValidProject()) {
+					logger.warning("please reimplement this");
+					// TODO: please reimplement this
+					/*ParameterDefinition[] params = new ParameterDefinition[1];
 					CheckboxParameter dontNotify = new CheckboxParameter("dont_notify", "dont_notify_if_project_is_valid", false);
 					params[0] = dontNotify;
 					AskParametersDialog dialog = AskParametersDialog.createAskParametersDialog(project,
@@ -446,7 +450,7 @@ public class FileMenu extends FlexoMenu {
 						}
 					} else {
 						return false;
-					}
+					}*/
 				}
 			}
 			break;

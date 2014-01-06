@@ -1,0 +1,25 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<Panel layout="border" darkLevel="0" dataClassName="org.openflexo.components.ReviewUnsavedDialog$ReviewUnsavedModel">
+  <Table iteratorClassName="org.openflexo.foundation.resource.FlexoResource" visibleRowCount="3" rowHeight="18" autoSelectFirstRow="false" createNewRowOnClick="false" boundToSelectionManager="false" showFooter="true" selectionMode="MultipleIntervalSelection" localize="true" manageDynamicModel="true" name="resourcesTable" data="data.resourcesToSave.keySet" constraints="border(location=center)">
+    <CheckBoxColumn data="data.isSelected(iterator)" title="select" columnWidth="20" resizable="false" displayTitle="false" valueChangedAction="data.setSelected((!(data.isSelected(iterator))),iterator)" name="checkbox" />
+    <IconColumn data="data.getIcon(iterator)" title="icon" columnWidth="20" resizable="false" displayTitle="false" name="icon" />
+    <LabelColumn data="iterator.name" title="file" columnWidth="200" resizable="true" displayTitle="true" name="label" />
+    <LabelColumn data="iterator.version" title="version" columnWidth="50" resizable="false" displayTitle="true" name="label" />
+    <LabelColumn data="iterator.uRI" title="uri" columnWidth="200" resizable="true" displayTitle="true" name="label" />
+    <LabelColumn data="&quot;&quot;" title="last_saved_on" columnWidth="100" resizable="true" displayTitle="true" name="label" />
+    <Dependancy componentName="selectAllButton" />
+    <Dependancy componentName="deselectAllButton" />
+  </Table>
+  <Panel layout="flow" hGap="5" vGap="5" flowAlignment="CENTER" darkLevel="0" constraints="border(location=south)">
+    <Button action="data.selectAll()" buttonType="Trigger" label="select_all" localize="true" name="selectAllButton" constraints="flow()" />
+    <Button action="data.deselectAll()" buttonType="Trigger" label="deselect_all" localize="true" name="deselectAllButton" constraints="flow()" />
+    <Button action="controller.cancelAndDispose()" buttonType="Trigger" label="cancel" localize="true" constraints="flow()" />
+    <Button action="controller.validateAndDispose()" buttonType="Trigger" label="validate" localize="true" data="((data.getNbOfFilesToSave() &gt; 0) ? &quot;Validate&quot; : &quot;Skip&quot;)" constraints="flow()">
+      <Dependancy componentName="resourcesTable" />
+    </Button>
+  </Panel>
+  <Label label="please_select_resources_to_save" align="center" constraints="border(location=north)" width="215" height="50" localize="true">
+    <LocalizedDictionary />
+  </Label>
+  <LocalizedDictionary />
+</Panel>

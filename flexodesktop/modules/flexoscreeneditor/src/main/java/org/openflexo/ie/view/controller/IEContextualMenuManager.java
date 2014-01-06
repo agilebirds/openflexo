@@ -22,7 +22,7 @@ package org.openflexo.ie.view.controller;
 import java.awt.Component;
 import java.awt.event.MouseEvent;
 
-import org.openflexo.foundation.FlexoModelObject;
+import org.openflexo.foundation.FlexoObject;
 import org.openflexo.ie.view.DropZoneTopComponent;
 import org.openflexo.ie.view.IEWOComponentView;
 import org.openflexo.ie.view.widget.ButtonPanel;
@@ -40,7 +40,7 @@ public class IEContextualMenuManager extends ContextualMenuManager {
 	}
 
 	@Override
-	public FlexoModelObject getFocusedObject(Component focusedComponent, MouseEvent e) {
+	public FlexoObject getFocusedObject(Component focusedComponent, MouseEvent e) {
 		if (focusedComponent instanceof IETDWidgetView) {
 			return ((IETDWidgetView) focusedComponent).td();
 		}

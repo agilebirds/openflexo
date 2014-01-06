@@ -32,7 +32,7 @@ import org.openflexo.foundation.dm.DMSet;
 import org.openflexo.foundation.dm.DMSet.PackageReference.ClassReference;
 import org.openflexo.foundation.dm.DMSet.PackageReference.ClassReference.MethodReference;
 import org.openflexo.foundation.dm.DMSet.PackageReference.ClassReference.PropertyReference;
-import org.openflexo.foundation.rm.FlexoProject;
+import org.openflexo.foundation.FlexoProject;
 import org.openflexo.javaparser.FJPDMSet.FJPPackageReference.FJPClassReference;
 import org.openflexo.logging.FlexoLogger;
 

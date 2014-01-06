@@ -21,12 +21,12 @@ package org.openflexo.view;
 
 import javax.swing.JPanel;
 
-import org.openflexo.foundation.FlexoModelObject;
+import org.openflexo.foundation.FlexoObject;
 import org.openflexo.localization.FlexoLocalization;
 import org.openflexo.view.controller.FlexoController;
 import org.openflexo.view.controller.model.FlexoPerspective;
 
-public class EmptyPanel<O extends FlexoModelObject> extends JPanel implements ModuleView<O> {
+public class EmptyPanel<O extends FlexoObject> extends JPanel implements ModuleView<O> {
 
 	private FlexoController controller;
 	private FlexoPerspective perspective;
@@ -96,7 +96,7 @@ public class EmptyPanel<O extends FlexoModelObject> extends JPanel implements Mo
 
 	public String getTitle() {
 		if (title == null) {
-			return FlexoLocalization.localizedForKey(getRepresentedObject().getClassNameKey());
+			return FlexoLocalization.localizedForKey(getRepresentedObject().getClass().getSimpleName());
 		}
 		return title;
 	}

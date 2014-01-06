@@ -22,6 +22,7 @@ package org.openflexo.foundation.viewpoint;
 import java.util.Vector;
 
 import org.openflexo.antar.binding.BindingModel;
+import org.openflexo.foundation.technologyadapter.ModelSlot;
 
 public interface ActionContainer {
 
@@ -31,27 +32,29 @@ public interface ActionContainer {
 
 	public BindingModel getInferedBindingModel();
 
-	public Vector<EditionAction> getActions();
+	public Vector<EditionAction<?,?>> getActions();
 
-	public void setActions(Vector<EditionAction> actions);
+	public void setActions(Vector<EditionAction<?,?>> actions);
 
-	public void addToActions(EditionAction action);
+	public void addToActions(EditionAction<?,?> action);
 
-	public void removeFromActions(EditionAction action);
+	public void removeFromActions(EditionAction<?,?> action);
 
-	public int getIndex(EditionAction action);
+	public int getIndex(EditionAction<?,?> action);
 
-	public void insertActionAtIndex(EditionAction action, int index);
+	public void insertActionAtIndex(EditionAction<?,?> action, int index);
 
-	public void actionFirst(EditionAction a);
+	public void actionFirst(EditionAction<?,?> a);
 
-	public void actionUp(EditionAction a);
+	public void actionUp(EditionAction<?,?> a);
 
-	public void actionDown(EditionAction a);
+	public void actionDown(EditionAction<?,?> a);
 
-	public void actionLast(EditionAction a);
+	public void actionLast(EditionAction<?,?> a);
 
-	public AddShape createAddShapeAction();
+	public <A extends EditionAction<?,?>> A createAction(Class<A> actionClass, ModelSlot<?> modelSlot);
+
+	/*public AddShape createAddShapeAction();
 
 	public AddClass createAddClassAction();
 
@@ -71,7 +74,7 @@ public interface ActionContainer {
 
 	public GraphicalAction createGraphicalAction();
 
-	public AddDiagram createAddDiagramAction();
+	public CreateDiagram createAddDiagramAction();
 
 	public AddEditionPattern createAddEditionPatternAction();
 
@@ -79,8 +82,9 @@ public interface ActionContainer {
 
 	public IterationAction createIterationAction();
 
-	public DeleteAction createDeleteAction();
+	public DeleteAction createDeleteAction();*/
 
-	public EditionAction deleteAction(EditionAction anAction);
+	public EditionAction<?,?> deleteAction(EditionAction<?,?> anAction);
 
+	public void variableAdded(AssignableAction action);
 }

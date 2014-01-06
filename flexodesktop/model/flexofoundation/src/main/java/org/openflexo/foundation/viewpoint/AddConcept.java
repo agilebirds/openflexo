@@ -20,25 +20,28 @@
 package org.openflexo.foundation.viewpoint;
 
 import java.lang.reflect.Type;
+import java.util.List;
 import java.util.logging.Logger;
 
-import org.openflexo.foundation.ontology.OntologyClass;
-import org.openflexo.foundation.viewpoint.ViewPoint.ViewPointBuilder;
+import org.openflexo.foundation.ontology.IFlexoOntologyClass;
+import org.openflexo.foundation.technologyadapter.TypeAwareModelSlot;
+import org.openflexo.foundation.view.TypeAwareModelSlotInstance;
+import org.openflexo.foundation.view.action.EditionSchemeAction;
 import org.openflexo.logging.FlexoLogger;
 
-public abstract class AddConcept extends AssignableAction {
+public abstract class AddConcept<MS extends TypeAwareModelSlot<?, ?>, T> extends AssignableAction<MS, T> {
 
 	protected static final Logger logger = FlexoLogger.getLogger(AddConcept.class.getPackage().getName());
 
-	public AddConcept(ViewPointBuilder builder) {
-		super(builder);
+	public AddConcept() {
+		super();
 	}
 
-	public abstract OntologyClass getOntologyClass();
+	public abstract IFlexoOntologyClass getOntologyClass();
 
-	public abstract void setOntologyClass(OntologyClass ontologyClass);
+	public abstract void setOntologyClass(IFlexoOntologyClass ontologyClass);
 
-	/*public OntologyObject getOntologyObject(FlexoProject project)
+	/*public IFlexoOntologyConcept getOntologyObject(FlexoProject project)
 	{
 		getCalc().loadWhenUnloaded();
 		if (StringUtils.isEmpty(getConceptURI())) return null;
@@ -65,5 +68,26 @@ public abstract class AddConcept extends AssignableAction {
 
 	@Override
 	public abstract Type getAssignableType();
+
+	/**
+	 * Overrides parent method by returning default model slot if model slot is not defined for this action
+	 */
+	@Override
+	public MS getModelSlot() {
+		MS returned = super.getModelSlot();
+		if (returned == null && getVirtualModel() != null) {
+			@SuppressWarnings("rawtypes")
+			List<TypeAwareModelSlot> msList = getVirtualModel().getModelSlots(TypeAwareModelSlot.class);
+			if (msList.size() > 0) {
+				return (MS) msList.get(0);
+			}
+		}
+		return returned;
+	}
+
+	@Override
+	public TypeAwareModelSlotInstance<?, ?, MS> getModelSlotInstance(EditionSchemeAction action) {
+		return (TypeAwareModelSlotInstance<?, ?, MS>) super.getModelSlotInstance(action);
+	}
 
 }

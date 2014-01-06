@@ -1,0 +1,20 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<ecore:EPackage xmi:version="2.0"
+    xmlns:xmi="http://www.omg.org/XMI" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+    xmlns:ecore="http://www.eclipse.org/emf/2002/Ecore" name="technologyadapter"
+    nsURI="http://technologyadapter/1.0" nsPrefix="technologyadapter">
+  <eClassifiers xsi:type="ecore:EClass" name="TechnologyAdapter">
+    <eStructuralFeatures xsi:type="ecore:EReference" name="EReference0" eType="#//ModelSlot"/>
+    <eStructuralFeatures xsi:type="ecore:EReference" name="&lt;&lt;exposes>>" lowerBound="1"
+        upperBound="-1" eType="#//ModelSlot"/>
+  </eClassifiers>
+  <eClassifiers xsi:type="ecore:EClass" name="ModelSlot">
+    <eStructuralFeatures xsi:type="ecore:EReference" name="&lt;&lt;exposes>>" upperBound="-1"
+        eType="#//PatternRole"/>
+    <eStructuralFeatures xsi:type="ecore:EReference" name="&lt;&lt;exposes>>" upperBound="-1"
+        eType="#//EditionAction"/>
+  </eClassifiers>
+  <eClassifiers xsi:type="ecore:EClass" name="TypeSafeModelSlot" eSuperTypes="#//ModelSlot"/>
+  <eClassifiers xsi:type="ecore:EClass" name="PatternRole"/>
+  <eClassifiers xsi:type="ecore:EClass" name="EditionAction"/>
+</ecore:EPackage>

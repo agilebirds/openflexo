@@ -23,33 +23,35 @@ import java.util.Vector;
 import java.util.logging.Logger;
 
 import org.openflexo.foundation.FlexoEditor;
-import org.openflexo.foundation.FlexoModelObject;
+import org.openflexo.foundation.FlexoObject.FlexoObjectImpl;
 import org.openflexo.foundation.action.FlexoAction;
 import org.openflexo.foundation.action.FlexoActionType;
-import org.openflexo.foundation.view.ViewObject;
+import org.openflexo.foundation.view.EditionPatternInstance;
+import org.openflexo.foundation.view.VirtualModelInstanceObject;
 
-public class VECopy extends FlexoAction<VECopy, ViewObject, ViewObject> {
+public class VECopy extends FlexoAction<VECopy, VirtualModelInstanceObject, VirtualModelInstanceObject> {
 
 	private static final Logger logger = Logger.getLogger(VECopy.class.getPackage().getName());
 
-	public static FlexoActionType<VECopy, ViewObject, ViewObject> actionType = new FlexoActionType<VECopy, ViewObject, ViewObject>("copy",
-			FlexoActionType.editGroup) {
+	public static FlexoActionType<VECopy, VirtualModelInstanceObject, VirtualModelInstanceObject> actionType = new FlexoActionType<VECopy, VirtualModelInstanceObject, VirtualModelInstanceObject>(
+			"copy", FlexoActionType.editGroup) {
 
 		/**
 		 * Factory method
 		 */
 		@Override
-		public VECopy makeNewAction(ViewObject focusedObject, Vector<ViewObject> globalSelection, FlexoEditor editor) {
+		public VECopy makeNewAction(VirtualModelInstanceObject focusedObject, Vector<VirtualModelInstanceObject> globalSelection,
+				FlexoEditor editor) {
 			return new VECopy(focusedObject, globalSelection, editor);
 		}
 
 		@Override
-		public boolean isVisibleForSelection(ViewObject object, Vector<ViewObject> globalSelection) {
+		public boolean isVisibleForSelection(VirtualModelInstanceObject object, Vector<VirtualModelInstanceObject> globalSelection) {
 			return isEnabledForSelection(object, globalSelection);
 		}
 
 		@Override
-		public boolean isEnabledForSelection(ViewObject object, Vector<ViewObject> globalSelection) {
+		public boolean isEnabledForSelection(VirtualModelInstanceObject object, Vector<VirtualModelInstanceObject> globalSelection) {
 
 			return true;
 		}
@@ -57,10 +59,10 @@ public class VECopy extends FlexoAction<VECopy, ViewObject, ViewObject> {
 	};
 
 	static {
-		FlexoModelObject.addActionForClass(VECopy.actionType, ViewObject.class);
+		FlexoObjectImpl.addActionForClass(VECopy.actionType, EditionPatternInstance.class);
 	}
 
-	VECopy(ViewObject focusedObject, Vector<ViewObject> globalSelection, FlexoEditor editor) {
+	VECopy(VirtualModelInstanceObject focusedObject, Vector<VirtualModelInstanceObject> globalSelection, FlexoEditor editor) {
 		super(actionType, focusedObject, globalSelection, editor);
 	}
 

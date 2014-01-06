@@ -24,8 +24,9 @@ import javax.swing.JComponent;
 import javax.swing.JLabel;
 import javax.swing.JPanel;
 
-import org.openflexo.foundation.FlexoModelObject;
-import org.openflexo.foundation.rm.FlexoProject;
+import org.openflexo.foundation.FlexoObject;
+import org.openflexo.foundation.FlexoProjectObject;
+import org.openflexo.foundation.FlexoProject;
 import org.openflexo.foundation.wkf.RoleList;
 import org.openflexo.icon.WKFIconLibrary;
 import org.openflexo.localization.FlexoLocalization;
@@ -74,7 +75,7 @@ public class RolePerspective extends FlexoPerspective {
 	public JComponent getTopRightView() {
 		if (getCurrentRoleListView() != null) {
 			if (getCurrentRoleListView().getDrawing().isEditable()) {
-				return getCurrentRoleListView().getController().getPalette().getPaletteViewInScrollPane();
+			return getCurrentRoleListView().getController().getPalette().getPaletteViewInScrollPane();
 			} else {
 				return new GlassPaneWrapper(getCurrentRoleListView().getController().getPalette().getPaletteViewInScrollPane());
 			}
@@ -89,10 +90,10 @@ public class RolePerspective extends FlexoPerspective {
 				return _controller.getDisconnectedDocInspectorPanel();
 			} else {
 				return new GlassPaneWrapper(_controller.getDisconnectedDocInspectorPanel());
-			}
-		} else {
-			return topRightDummy;
 		}
+		} else {
+		return topRightDummy;
+	}
 	}
 
 	/**
@@ -106,20 +107,20 @@ public class RolePerspective extends FlexoPerspective {
 	}
 
 	@Override
-	public RoleList getDefaultObject(FlexoModelObject proposedObject) {
-		if (proposedObject != null) {
-			return proposedObject.getProject().getWorkflow().getRoleList();
+	public RoleList getDefaultObject(FlexoObject proposedObject) {
+		if (proposedObject instanceof FlexoProjectObject) {
+			return ((FlexoProjectObject) proposedObject).getProject().getWorkflow().getRoleList();
 		}
 		return null;
 	}
 
 	@Override
-	public boolean hasModuleViewForObject(FlexoModelObject object) {
+	public boolean hasModuleViewForObject(FlexoObject object) {
 		return object instanceof RoleList;
 	}
 
 	@Override
-	public ModuleView<?> createModuleViewForObject(FlexoModelObject object, FlexoController controller, boolean editable) {
+	public ModuleView<?> createModuleViewForObject(FlexoObject object, FlexoController controller, boolean editable) {
 		if (object instanceof RoleList) {
 			RoleEditorView drawingView = new RoleEditorController((RoleList) object, _controller).getDrawingView();
 			drawingView.getDrawing().setEditable(editable);
@@ -130,7 +131,7 @@ public class RolePerspective extends FlexoPerspective {
 	}
 
 	@Override
-	public ModuleView<?> createModuleViewForObject(FlexoModelObject object, FlexoController controller) {
+	public ModuleView<?> createModuleViewForObject(FlexoObject object, FlexoController controller) {
 		return createModuleViewForObject(object, controller, false);
 	}
 

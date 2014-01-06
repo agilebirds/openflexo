@@ -25,7 +25,7 @@ package org.openflexo.foundation.ontology.dm;
  * @author sguerin
  * 
  */
-public class URINameChanged extends OEDataModification {
+public class URINameChanged extends OntologyDataModification {
 
 	public static final String URI_NAME_KEY = "uriName";
 

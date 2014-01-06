@@ -1,4 +1,4 @@
-<inspector title = "Shape" inspectedClassName="org.openflexo.foundation.viewpoint.ExampleDrawingShape">
+<inspector title = "Shape" inspectedClassName="org.openflexo.foundation.view.diagram.viewpoint.ExampleDiagramShape">
 
 	<tab name="Basic" index="0" layout="DEFAULT">
 		<property name="graphicalRepresentation.text" label="text" widget="TEXT_FIELD" constraint="0">
@@ -61,7 +61,7 @@
 	</tab>
 
 	<tab name="Advanced" index="1" layout="DEFAULT">
-		<property name="graphicalRepresentation.multilineText" label="text" widget="TEXT_AREA" constraint="7" depends="labelIsBoundToOntologicConcept,graphicalRepresentation.isMultilineAllowed" conditional="labelIsBoundToOntologicConcept=FALSE AND graphicalRepresentation.isMultilineAllowed=true">
+		<property name="graphicalRepresentation.text" label="text" widget="TEXT_AREA" constraint="7" depends="labelIsBoundToOntologicConcept,graphicalRepresentation.isMultilineAllowed" conditional="labelIsBoundToOntologicConcept=FALSE AND graphicalRepresentation.isMultilineAllowed=true">
 			<param name="columns" value="10"/>
 		</property>
 		<property name="graphicalRepresentation.isMultilineAllowed" label="multiple_lines" widget="CHECKBOX" constraint="8">

@@ -20,7 +20,8 @@ import java.util.zip.ZipException;
 import org.apache.commons.io.IOUtils;
 import org.openflexo.builders.FlexoExternalMain;
 import org.openflexo.foundation.FlexoEditor;
-import org.openflexo.foundation.rm.FlexoProject;
+import org.openflexo.foundation.FlexoServiceImpl;
+import org.openflexo.foundation.FlexoProject;
 import org.openflexo.foundation.rm.FlexoProject.FlexoProjectReferenceLoader;
 import org.openflexo.foundation.rm.FlexoProjectReference;
 import org.openflexo.foundation.utils.ProjectInitializerException;
@@ -29,7 +30,7 @@ import org.openflexo.module.ProjectLoader;
 import org.openflexo.toolbox.FileUtils;
 import org.openflexo.toolbox.ZipUtils;
 
-public class FlexoBuilderProjectReferenceLoader implements FlexoProjectReferenceLoader {
+public class FlexoBuilderProjectReferenceLoader extends FlexoServiceImpl implements FlexoProjectReferenceLoader {
 
 	private String serverURL;
 	private String login;
@@ -45,6 +46,10 @@ public class FlexoBuilderProjectReferenceLoader implements FlexoProjectReference
 		this.serverURL = serverURL;
 		this.login = login;
 		this.password = password;
+	}
+
+	@Override
+	public void initialize() {
 	}
 
 	@Override

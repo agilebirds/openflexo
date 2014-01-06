@@ -58,7 +58,7 @@ public class EditGeneratedFile extends GCAction<EditGeneratedFile, CGFile> {
 	};
 
 	static {
-		FlexoModelObject.addActionForClass(EditGeneratedFile.actionType, CGFile.class);
+		TestModelObject.addActionForClass(EditGeneratedFile.actionType, CGFile.class);
 	}
 
 	private FileContentEditor fileContentEditor;

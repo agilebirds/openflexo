@@ -21,21 +21,20 @@ package org.openflexo.foundation.viewpoint;
 
 import java.lang.reflect.Type;
 
-import org.openflexo.foundation.ontology.OntologicDataType;
-import org.openflexo.foundation.ontology.OntologyDataProperty;
-import org.openflexo.foundation.viewpoint.ViewPoint.ViewPointBuilder;
+import org.openflexo.foundation.ontology.BuiltInDataType;
+import org.openflexo.foundation.ontology.IFlexoOntologyDataProperty;
 
 public class DataPropertyParameter extends PropertyParameter {
 
-	private OntologicDataType dataType;
+	private BuiltInDataType dataType;
 
-	public DataPropertyParameter(ViewPointBuilder builder) {
-		super(builder);
+	public DataPropertyParameter() {
+		super();
 	}
 
 	@Override
 	public Type getType() {
-		return OntologyDataProperty.class;
+		return IFlexoOntologyDataProperty.class;
 	};
 
 	@Override
@@ -43,11 +42,11 @@ public class DataPropertyParameter extends PropertyParameter {
 		return WidgetType.DATA_PROPERTY;
 	}
 
-	public OntologicDataType getDataType() {
+	public BuiltInDataType getDataType() {
 		return dataType;
 	}
 
-	public void setDataType(OntologicDataType dataType) {
+	public void setDataType(BuiltInDataType dataType) {
 		this.dataType = dataType;
 	}
 

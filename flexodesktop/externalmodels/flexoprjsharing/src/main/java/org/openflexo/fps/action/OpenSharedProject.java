@@ -24,7 +24,7 @@ import java.util.Vector;
 import java.util.logging.Logger;
 
 import org.openflexo.foundation.FlexoEditor;
-import org.openflexo.foundation.FlexoModelObject;
+import org.openflexo.foundation.FlexoObject;
 import org.openflexo.foundation.action.FlexoActionType;
 import org.openflexo.fps.CVSModule;
 import org.openflexo.fps.CVSRepository;
@@ -60,9 +60,9 @@ public class OpenSharedProject extends CVSAction<OpenSharedProject, FPSObject> {
 	};
 
 	static {
-		FlexoModelObject.addActionForClass(actionType, CVSRepositoryList.class);
-		FlexoModelObject.addActionForClass(actionType, CVSRepository.class);
-		FlexoModelObject.addActionForClass(actionType, CVSModule.class);
+		FlexoObject.addActionForClass(actionType, CVSRepositoryList.class);
+		FlexoObject.addActionForClass(actionType, CVSRepository.class);
+		FlexoObject.addActionForClass(actionType, CVSModule.class);
 	}
 
 	private SharedProject _newProject;

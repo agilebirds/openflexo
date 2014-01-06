@@ -51,7 +51,7 @@ import org.netbeans.lib.cvsclient.util.IgnoreFileFilter;
 import org.openflexo.foundation.FlexoEditor;
 import org.openflexo.foundation.Inspectors;
 import org.openflexo.foundation.utils.FlexoProgress;
-import org.openflexo.foundation.xml.FlexoXMLMappings;
+import org.openflexo.foundation.xml.XMLSerializationService;
 import org.openflexo.fps.CVSFile.RevisionRetrieverListener;
 import org.openflexo.fps.action.CommitFiles;
 import org.openflexo.fps.dm.CVSStatusChanged;
@@ -70,7 +70,7 @@ public class SharedProject extends CVSAbstractFile implements CVSContainer {
 	private CVSModule _module;
 	private File _localDirectory;
 	private String _localName;
-	private FlexoXMLMappings _mappings; // used by xml diff algo
+	private XMLSerializationService _mappings; // used by xml diff algo
 	// private GlobalOptions _globalOptions;
 
 	private StandardAdminHandler _adminHandler;
@@ -1089,9 +1089,9 @@ public class SharedProject extends CVSAbstractFile implements CVSContainer {
 		}
 	}
 
-	public FlexoXMLMappings getFlexoXMLMappings() {
+	public XMLSerializationService getFlexoXMLMappings() {
 		if (_mappings == null) {
-			_mappings = new FlexoXMLMappings();
+			_mappings = XMLSerializationService.createInstance();
 		}
 		return _mappings;
 	}

@@ -27,9 +27,9 @@ import org.openflexo.antar.ControlGraph;
 import org.openflexo.antar.Flow;
 import org.openflexo.antar.Nop;
 import org.openflexo.antar.Sequence;
-import org.openflexo.antar.expr.DefaultExpressionParser;
 import org.openflexo.antar.expr.Expression;
 import org.openflexo.antar.expr.Variable;
+import org.openflexo.antar.expr.parser.ExpressionParser;
 import org.openflexo.foundation.bindings.AbstractBinding;
 import org.openflexo.foundation.bindings.BindingAssignment;
 import org.openflexo.foundation.bindings.BindingExpression;
@@ -211,7 +211,7 @@ public class BPELControlGraphBuilder extends ControlGraphBuilder {
 			expr = new Variable((String) ((StaticBinding) value).getValue());
 		} else {
 			try {
-				expr = new DefaultExpressionParser().parse(value.toString(), null);
+				expr = ExpressionParser.parse(value.toString());
 			} catch (Exception e) {
 				System.out.println("Could not parse expression... " + value.toString());
 				e.printStackTrace();

@@ -20,17 +20,25 @@
 package org.openflexo.components.widget;
 
 import java.io.File;
+import java.util.Observable;
+import java.util.Observer;
 import java.util.logging.Logger;
 
 import javax.swing.SwingUtilities;
 
-import org.openflexo.foundation.ontology.FlexoOntology;
-import org.openflexo.foundation.ontology.OntologyClass;
-import org.openflexo.foundation.rm.FlexoProject;
+import org.openflexo.components.widget.OntologyBrowserModel.OntologyBrowserModelRecomputed;
+import org.openflexo.foundation.ontology.IFlexoOntology;
+import org.openflexo.foundation.ontology.IFlexoOntologyClass;
+import org.openflexo.foundation.technologyadapter.FlexoModelResource;
+import org.openflexo.foundation.technologyadapter.InformationSpace;
+import org.openflexo.foundation.technologyadapter.TechnologyAdapter;
 import org.openflexo.toolbox.FileResource;
+import org.openflexo.view.controller.IFlexoOntologyTechnologyAdapterController;
+import org.openflexo.view.controller.TechnologyAdapterController;
+import org.openflexo.view.controller.TechnologyAdapterControllerService;
 
 /**
- * Widget allowing to select an OntologyClass<br>
+ * Widget allowing to select an IFlexoOntologyClass<br>
  * 
  * This widget provides many configuration options:
  * <ul>
@@ -45,20 +53,21 @@ import org.openflexo.toolbox.FileResource;
  * 
  */
 @SuppressWarnings("serial")
-public class FIBClassSelector extends FIBModelObjectSelector<OntologyClass> {
+public class FIBClassSelector extends FIBFlexoObjectSelector<IFlexoOntologyClass> {
 	static final Logger logger = Logger.getLogger(FIBClassSelector.class.getPackage().getName());
 
 	public static final FileResource FIB_FILE = new FileResource("Fib/FIBClassSelector.fib");
 
-	private FlexoOntology context;
-	private OntologyClass rootClass;
+	private InformationSpace informationSpace;
+	private IFlexoOntology context;
+	private IFlexoOntologyClass rootClass;
 	private boolean hierarchicalMode = true;
 	private boolean strictMode = false;
-	private boolean showOWLAndRDFConcepts = false;
 
-	private OntologyBrowserModel model = null;
+	protected OntologyBrowserModel model = null;
+	private TechnologyAdapter technologyAdapter;
 
-	public FIBClassSelector(OntologyClass editedObject) {
+	public FIBClassSelector(IFlexoOntologyClass editedObject) {
 		super(editedObject);
 	}
 
@@ -74,12 +83,26 @@ public class FIBClassSelector extends FIBModelObjectSelector<OntologyClass> {
 	}
 
 	@Override
-	public Class<OntologyClass> getRepresentedType() {
-		return OntologyClass.class;
+	public Class<IFlexoOntologyClass> getRepresentedType() {
+		return IFlexoOntologyClass.class;
+	}
+
+	public InformationSpace getInformationSpace() {
+		// Still use legacy: if InformationSpace is not specified by project, retrieve IS from ServiceManager
+		if (informationSpace == null && getServiceManager() != null) {
+			informationSpace = getServiceManager().getInformationSpace();
+		}
+		return informationSpace;
+	}
+
+	@CustomComponentParameter(name = "informationSpace", type = CustomComponentParameter.Type.OPTIONAL)
+	public void setInformationSpace(InformationSpace informationSpace) {
+		// System.out.println("Sets InformationSpace with " + informationSpace);
+		this.informationSpace = informationSpace;
 	}
 
 	@Override
-	public String renderedString(OntologyClass editedObject) {
+	public String renderedString(IFlexoOntologyClass editedObject) {
 		if (editedObject != null) {
 			return editedObject.getName();
 		}
@@ -96,21 +119,20 @@ public class FIBClassSelector extends FIBModelObjectSelector<OntologyClass> {
 	@CustomComponentParameter(name = "contextOntologyURI", type = CustomComponentParameter.Type.MANDATORY)
 	public void setContextOntologyURI(String ontologyURI) {
 		// logger.info("Sets ontology with " + ontologyURI);
-		if (getProject() != null) {
-			FlexoOntology context = getProject().getResourceCenter().getOpenFlexoResourceCenter().retrieveBaseOntologyLibrary()
-					.getOntology(ontologyURI);
-			if (context != null) {
-				setContext(context);
+		if (getInformationSpace() != null) {
+			FlexoModelResource<?, ?, ?> modelResource = getInformationSpace().getModelWithURI(ontologyURI);
+			if (modelResource != null && modelResource.getModel() instanceof IFlexoOntology) {
+				setContext((IFlexoOntology) modelResource.getModel());
 			}
 		}
 	}
 
-	public FlexoOntology getContext() {
+	public IFlexoOntology getContext() {
 		return context;
 	}
 
 	@CustomComponentParameter(name = "context", type = CustomComponentParameter.Type.MANDATORY)
-	public void setContext(FlexoOntology context) {
+	public void setContext(IFlexoOntology context) {
 		this.context = context;
 		update();
 	}
@@ -126,19 +148,19 @@ public class FIBClassSelector extends FIBModelObjectSelector<OntologyClass> {
 	public void setRootClassURI(String aRootClassURI) {
 		// logger.info("Sets rootClassURI with " + aRootClassURI + " context=" + getContext());
 		if (getContext() != null) {
-			OntologyClass rootClass = getContext().getClass(aRootClassURI);
+			IFlexoOntologyClass rootClass = getContext().getClass(aRootClassURI);
 			if (rootClass != null) {
 				setRootClass(rootClass);
 			}
 		}
 	}
 
-	public OntologyClass getRootClass() {
+	public IFlexoOntologyClass getRootClass() {
 		return rootClass;
 	}
 
 	@CustomComponentParameter(name = "rootClass", type = CustomComponentParameter.Type.OPTIONAL)
-	public void setRootClass(OntologyClass rootClass) {
+	public void setRootClass(IFlexoOntologyClass rootClass) {
 		this.rootClass = rootClass;
 		update();
 	}
@@ -163,30 +185,40 @@ public class FIBClassSelector extends FIBModelObjectSelector<OntologyClass> {
 		update();
 	}
 
-	public boolean getShowOWLAndRDFConcepts() {
-		return showOWLAndRDFConcepts;
+	public TechnologyAdapter getTechnologyAdapter() {
+		return technologyAdapter;
 	}
 
-	@CustomComponentParameter(name = "showOWLAndRDFConcepts", type = CustomComponentParameter.Type.OPTIONAL)
-	public void setShowOWLAndRDFConcepts(boolean showOWLAndRDFConcepts) {
-		this.showOWLAndRDFConcepts = showOWLAndRDFConcepts;
-		update();
+	public void setTechnologyAdapter(TechnologyAdapter technologyAdapter) {
+		this.technologyAdapter = technologyAdapter;
+	}
+
+	/**
+	 * Build browser model Override this method when required
+	 * 
+	 * @return
+	 */
+	protected OntologyBrowserModel makeBrowserModel() {
+		OntologyBrowserModel returned = null;
+		if (getTechnologyAdapter() != null) {
+			// Use technology specific browser model
+			TechnologyAdapterController<?> technologyAdapterController = getTechnologyAdapter().getTechnologyAdapterService()
+					.getServiceManager().getService(TechnologyAdapterControllerService.class)
+					.getTechnologyAdapterController(technologyAdapter);
+			if (technologyAdapterController instanceof IFlexoOntologyTechnologyAdapterController) {
+				returned = ((IFlexoOntologyTechnologyAdapterController) technologyAdapterController).makeOntologyBrowserModel(getContext());
+			}
+		}
+		if (returned == null) {
+			// Use default
+			returned = new OntologyBrowserModel(getContext());
+		}
+		return returned;
 	}
 
 	public OntologyBrowserModel getModel() {
 		if (model == null) {
-			model = new OntologyBrowserModel(getContext()) {
-				@Override
-				public void recomputeStructure() {
-					super.recomputeStructure();
-					SwingUtilities.invokeLater(new Runnable() {
-						@Override
-						public void run() {
-							getPropertyChangeSupport().firePropertyChange("model", null, getModel());
-						}
-					});
-				}
-			};
+			model = makeBrowserModel();
 			model.setStrictMode(getStrictMode());
 			model.setHierarchicalMode(getHierarchicalMode());
 			model.setDisplayPropertiesInClasses(false);
@@ -196,8 +228,15 @@ public class FIBClassSelector extends FIBModelObjectSelector<OntologyClass> {
 			model.setShowObjectProperties(false);
 			model.setShowDataProperties(false);
 			model.setShowAnnotationProperties(false);
-			model.setShowOWLAndRDFConcepts(showOWLAndRDFConcepts);
 			model.recomputeStructure();
+			model.addObserver(new Observer() {
+				@Override
+				public void update(Observable o, Object arg) {
+					if (arg instanceof OntologyBrowserModelRecomputed) {
+						performFireModelUpdated();
+					}
+				}
+			});
 		}
 		return model;
 	}
@@ -206,22 +245,24 @@ public class FIBClassSelector extends FIBModelObjectSelector<OntologyClass> {
 		if (model != null) {
 			model.delete();
 			model = null;
-			// setEditedObject(this);
-			fireEditedObjectChanged();
+			performFireModelUpdated();
+		}
+	}
+
+	private boolean modelWillBeUpdated = false;
+
+	private void performFireModelUpdated() {
+		if (modelWillBeUpdated) {
+			return;
+		} else {
+			modelWillBeUpdated = true;
 			SwingUtilities.invokeLater(new Runnable() {
 				@Override
 				public void run() {
 					getPropertyChangeSupport().firePropertyChange("model", null, getModel());
+					modelWillBeUpdated = false;
 				}
 			});
-		}
-	}
-
-	@Override
-	public void setProject(FlexoProject project) {
-		super.setProject(project);
-		if (project != null) {
-			setContext(project.getProjectOntology());
 		}
 	}
 
@@ -242,17 +283,15 @@ public class FIBClassSelector extends FIBModelObjectSelector<OntologyClass> {
 					e.printStackTrace();
 				}
 
-				FlexoResourceCenter testResourceCenter = LocalResourceCenterImplementation
-						.instanciateTestLocalResourceCenterImplementation(new FileResource("TestResourceCenter"));
-				// selector.setContext(resourceCenter.retrieveBaseOntologyLibrary().getFlexoConceptOntology());
-				FlexoOntology o = testResourceCenter.retrieveBaseOntologyLibrary().getOntology(
+				ApplicationContext ac = new TestApplicationContext(new FileResource("TestResourceCenter"));
+
+				IFlexoOntology o = (IFlexoOntology) ac.getInformationSpace()
+						.getMetaModel("http://www.agilebirds.com/openflexo/ontologies/UML/UML2.owl").getMetaModelData();
 				// "http://www.thalesgroup.com/ontologies/sepel-ng/MappingSpecifications.owl");
 				// "http://www.cpmf.org/ontologies/cpmfInstance");
 				// "http://www.agilebirds.com/openflexo/ontologies/FlexoConceptsOntology.owl");
 				// "http://www.w3.org/2002/07/owl");
-						"http://www.agilebirds.com/openflexo/ontologies/UML/UML2.owl");
 				// "http://www.w3.org/2000/01/rdf-schema");
-				o.loadWhenUnloaded();
 
 				FIBClassSelector selector = new FIBClassSelector(null);
 

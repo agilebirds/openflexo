@@ -36,15 +36,16 @@ import java.util.logging.Logger;
 import javax.swing.JOptionPane;
 
 import org.openflexo.AdvancedPrefs;
-import org.openflexo.fge.DefaultDrawing;
 import org.openflexo.fge.GraphicalRepresentation;
 import org.openflexo.fge.geom.FGEPoint;
+import org.openflexo.fge.impl.DrawingImpl;
 import org.openflexo.fge.view.DrawingView;
 import org.openflexo.foundation.FlexoEditor;
 import org.openflexo.foundation.FlexoModelObject;
+import org.openflexo.foundation.FlexoObject;
 import org.openflexo.foundation.ie.IERegExp;
 import org.openflexo.foundation.rm.DuplicateResourceException;
-import org.openflexo.foundation.rm.FlexoProject;
+import org.openflexo.foundation.FlexoProject;
 import org.openflexo.foundation.rm.ProjectData;
 import org.openflexo.foundation.validation.ValidationModel;
 import org.openflexo.foundation.wkf.DuplicateRoleException;
@@ -129,7 +130,7 @@ public class WKFController extends FlexoController implements PrintManagingContr
 
 	public final FlexoPerspective WKF_INVADERS = new DocumentationPerspective(this, "wkf_invaders") {
 		@Override
-		public ModuleView<?> createModuleViewForObject(FlexoModelObject process, FlexoController controller) {
+		public ModuleView<?> createModuleViewForObject(FlexoObject process, FlexoController controller) {
 			if (process instanceof FlexoProcess) {
 				ProcessEditorController wkfController = new ProcessEditorController((WKFController) controller, (FlexoProcess) process);
 			}
@@ -338,7 +339,7 @@ public class WKFController extends FlexoController implements PrintManagingContr
 	 *            the object to focus on
 	 */
 	@Override
-	public void selectAndFocusObject(FlexoModelObject object) {
+	public void selectAndFocusObject(FlexoObject object) {
 		if (object instanceof WKFObject) {
 			setCurrentFlexoProcess(((WKFObject) object).getProcess());
 			getSelectionManager().setSelectedObject(object);
@@ -348,12 +349,12 @@ public class WKFController extends FlexoController implements PrintManagingContr
 	public void setCurrentFlexoProcess(FlexoProcess process) {
 		if (getCurrentPerspective() == PROCESS_EDITOR_PERSPECTIVE || getCurrentPerspective() == SWIMMING_LANE_PERSPECTIVE
 				|| getCurrentPerspective() == DOCUMENTATION_PERSPECTIVE) {
-			setCurrentEditedObjectAsModuleView(process);
+				setCurrentEditedObjectAsModuleView(process);
+			}
 		}
-	}
 
 	@Override
-	public void setCurrentEditedObjectAsModuleView(FlexoModelObject object) {
+	public void setCurrentEditedObjectAsModuleView(FlexoObject object) {
 		if (object instanceof FlexoProcessNode) {
 			object = ((FlexoProcessNode) object).getProcess(true);
 			if (object == null) {
@@ -378,7 +379,7 @@ public class WKFController extends FlexoController implements PrintManagingContr
 	}
 
 	@Override
-	public void setCurrentEditedObjectAsModuleView(FlexoModelObject object, FlexoPerspective perspective) {
+	public void setCurrentEditedObjectAsModuleView(FlexoObject object, FlexoPerspective perspective) {
 		if (object instanceof FlexoProcessNode) {
 			object = ((FlexoProcessNode) object).getProcess(true);
 			if (object == null) {
@@ -448,11 +449,11 @@ public class WKFController extends FlexoController implements PrintManagingContr
 
 	private void updateGraphicalRepresentationWithNewWKFPreferenceSettings() {
 		for (ModuleView<?> moduleView : getViews()) {
-			if (moduleView instanceof DrawingView && ((DrawingView<?>) moduleView).getDrawing() instanceof DefaultDrawing) {
-				DefaultDrawing<?> drawing = (DefaultDrawing<?>) ((DrawingView<?>) moduleView).getDrawing();
-				Enumeration<GraphicalRepresentation<?>> en = drawing.getAllGraphicalRepresentations();
+			if (moduleView instanceof DrawingView && ((DrawingView<?>) moduleView).getDrawing() instanceof DrawingImpl) {
+				DrawingImpl<?> drawing = (DrawingImpl<?>) ((DrawingView<?>) moduleView).getDrawing();
+				Enumeration<GraphicalRepresentation> en = drawing.getAllGraphicalRepresentations();
 				while (en.hasMoreElements()) {
-					GraphicalRepresentation<?> gr = en.nextElement();
+					GraphicalRepresentation gr = en.nextElement();
 					if (gr instanceof WKFObjectGR<?>) {
 						((WKFObjectGR<?>) gr).updatePropertiesFromWKFPreferences();
 					} else if (gr instanceof org.openflexo.wkf.swleditor.gr.WKFObjectGR<?>) {
@@ -589,13 +590,13 @@ public class WKFController extends FlexoController implements PrintManagingContr
 	}
 
 	@Override
-	public String getWindowTitleforObject(FlexoModelObject object) {
+	public String getWindowTitleforObject(FlexoObject object) {
 		if (object instanceof FlexoProcess) {
 			return ((FlexoProcess) object).getName();
 		} else if (object instanceof RoleList) {
 			return FlexoLocalization.localizedForKeyWithParams("roles");
 		} else if (object instanceof FlexoWorkflow) {
-			return object.getProject().getDisplayableName();
+			return ((FlexoWorkflow) object).getProject().getDisplayableName();
 		} else if (object instanceof FlexoProject) {
 			return ((FlexoProject) object).getDisplayName();
 		}

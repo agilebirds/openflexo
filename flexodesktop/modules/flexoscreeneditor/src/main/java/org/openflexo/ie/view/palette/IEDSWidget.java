@@ -37,7 +37,7 @@ import org.openflexo.foundation.ie.palette.FlexoIEPalette;
 import org.openflexo.foundation.ie.palette.FlexoIEPalette.FlexoIEPaletteWidget;
 import org.openflexo.foundation.ie.widget.IEAbstractWidget;
 import org.openflexo.foundation.ie.widget.IEWidget;
-import org.openflexo.foundation.rm.FlexoProject;
+import org.openflexo.foundation.FlexoProject;
 import org.openflexo.foundation.rm.XMLStorageResourceData;
 import org.openflexo.foundation.utils.FlexoCSS;
 import org.openflexo.foundation.validation.ValidationModel;
@@ -78,12 +78,13 @@ public class IEDSWidget extends IEAbstractWidget implements PaletteElement {
 	}
 
 	@Override
-	public void delete() {
+	public boolean delete() {
 		if (paletteWidget.canDeleteWidget()) {
 			paletteWidget.deleteWidget();
 		} else if (logger.isLoggable(Level.WARNING)) {
 			logger.warning("Cannot delete these kind of widgets");
 		}
+		return true;
 	}
 
 	// ==========================================================================
@@ -130,6 +131,7 @@ public class IEDSWidget extends IEAbstractWidget implements PaletteElement {
 	private FlexoProject _project;
 	private ComponentDefinition component;
 
+	@Override
 	public void setProject(FlexoProject prj) {
 		_project = prj;
 	}

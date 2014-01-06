@@ -19,15 +19,17 @@
  */
 package org.openflexo.antar.expr;
 
-import org.openflexo.antar.expr.BindingValueAsExpression.AbstractBindingPathElement;
-import org.openflexo.antar.expr.BindingValueAsExpression.MethodCallBindingPathElement;
-import org.openflexo.antar.expr.BindingValueAsExpression.NormalBindingPathElement;
+import org.openflexo.antar.binding.BindingPathElement;
+import org.openflexo.antar.expr.BindingValue.AbstractBindingPathElement;
+import org.openflexo.antar.expr.BindingValue.MethodCallBindingPathElement;
+import org.openflexo.antar.expr.BindingValue.NormalBindingPathElement;
 import org.openflexo.antar.expr.Constant.BooleanConstant;
 import org.openflexo.antar.expr.Constant.DateConstant;
 import org.openflexo.antar.expr.Constant.DurationConstant;
 import org.openflexo.antar.expr.Constant.EnumConstant;
 import org.openflexo.antar.expr.Constant.FloatConstant;
 import org.openflexo.antar.expr.Constant.IntegerConstant;
+import org.openflexo.antar.expr.Constant.ObjectConstant;
 import org.openflexo.antar.expr.Constant.StringConstant;
 import org.openflexo.antar.pp.ExpressionPrettyPrinter;
 import org.openflexo.toolbox.Duration;
@@ -77,17 +79,6 @@ public class DefaultExpressionPrettyPrinter extends ExpressionPrettyPrinter {
 	}
 
 	@Override
-	protected String makeStringRepresentation(Function function) {
-		StringBuffer args = new StringBuffer();
-		boolean isFirst = true;
-		for (Expression e : function.getArgs()) {
-			args.append((isFirst ? "" : ",") + getStringRepresentation(e));
-			isFirst = false;
-		}
-		return function.getName() + "(" + args + ")";
-	}
-
-	@Override
 	protected String makeStringRepresentation(UnaryOperatorExpression expression) {
 		try {
 			return "(" + getSymbol(expression.getOperator()) + "(" + getStringRepresentation(expression.getArgument()) + ")" + ")";
@@ -128,14 +119,33 @@ public class DefaultExpressionPrettyPrinter extends ExpressionPrettyPrinter {
 	}
 
 	@Override
-	protected String makeStringRepresentation(BindingValueAsExpression bv) {
-		StringBuffer sb = new StringBuffer();
-		boolean isFirst = true;
-		for (AbstractBindingPathElement e : bv.getBindingPath()) {
-			sb.append((isFirst ? "" : ".") + makeStringRepresentation(e));
-			isFirst = false;
+	protected String makeStringRepresentation(ObjectConstant constant) {
+		return "[Object:" + constant.getValue().toString() + "]";
+	}
+
+	@Override
+	protected String makeStringRepresentation(BindingValue bv) {
+		if (bv.isValid()) {
+			StringBuffer sb = new StringBuffer();
+			if (bv.getBindingVariable() != null) {
+				sb.append(bv.getBindingVariable().getVariableName());
+				for (BindingPathElement e : bv.getBindingPath()) {
+					sb.append("." + e.getSerializationRepresentation());
+				}
+			}
+			return sb.toString();
+
+		} else {
+			StringBuffer sb = new StringBuffer();
+			boolean isFirst = true;
+			if (bv != null) {
+				for (AbstractBindingPathElement e : bv.getParsedBindingPath()) {
+					sb.append((isFirst ? "" : ".") + makeStringRepresentation(e));
+					isFirst = false;
+				}
+			}
+			return sb.toString();
 		}
-		return sb.toString();
 	}
 
 	@Override
@@ -163,4 +173,24 @@ public class DefaultExpressionPrettyPrinter extends ExpressionPrettyPrinter {
 				+ " : " + getStringRepresentation(expression.getElseExpression()) + ")";
 	}
 
+	@Override
+	protected String makeStringRepresentation(CastExpression expression) {
+		return "(" + makeStringRepresentation(expression.getCastType()) + ")" + getStringRepresentation(expression.getArgument());
+	}
+
+	@Override
+	protected String makeStringRepresentation(TypeReference tr) {
+		StringBuffer sb = new StringBuffer();
+		sb.append("$" + tr.getBaseType());
+		if (tr.getParameters().size() > 0) {
+			sb.append("<");
+			boolean isFirst = true;
+			for (TypeReference param : tr.getParameters()) {
+				sb.append((isFirst ? "" : ",") + makeStringRepresentation(param));
+				isFirst = false;
+			}
+			sb.append(">");
+		}
+		return sb.toString();
+	}
 }

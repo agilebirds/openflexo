@@ -21,7 +21,7 @@ public interface Edge extends WKFObject {
 	public Edge init(@Parameter(START_NODE) AbstractNode start, @Parameter(END_NODE) AbstractNode end);
 
 	@Initializer
-	public Edge init(@Parameter(FlexoModelObject.NAME) String name, @Parameter(START_NODE) AbstractNode start,
+	public Edge init(@Parameter(TestModelObject.NAME) String name, @Parameter(START_NODE) AbstractNode start,
 			@Parameter(END_NODE) AbstractNode end);
 
 	@Override

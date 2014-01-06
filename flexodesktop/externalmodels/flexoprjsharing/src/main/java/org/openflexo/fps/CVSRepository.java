@@ -592,11 +592,12 @@ public class CVSRepository extends FPSObject implements CVSExplorable {
 	}
 
 	@Override
-	public final void delete() {
+	public final boolean delete() {
 		super.delete();
 		getCVSRepositoryLocationFile().delete();
 		getCVSRepositoryList().removeFromCVSRepositories(this);
 		deleteObservers();
+		return true;
 	}
 
 	public CVSModule getModuleNamed(String name) {

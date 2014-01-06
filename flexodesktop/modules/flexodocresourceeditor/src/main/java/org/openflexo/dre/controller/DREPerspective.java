@@ -13,7 +13,7 @@ import org.openflexo.dre.view.DocItemView;
 import org.openflexo.drm.DRMObject;
 import org.openflexo.drm.DocItem;
 import org.openflexo.drm.DocItemFolder;
-import org.openflexo.foundation.FlexoModelObject;
+import org.openflexo.foundation.FlexoObject;
 import org.openflexo.icon.DREIconLibrary;
 import org.openflexo.view.EmptyPanel;
 import org.openflexo.view.ModuleView;
@@ -49,17 +49,17 @@ class DREPerspective extends FlexoPerspective {
 	}
 
 	@Override
-	public DRMObject getDefaultObject(FlexoModelObject proposedObject) {
+	public DRMObject getDefaultObject(FlexoObject proposedObject) {
 		return null;
 	}
 
 	@Override
-	public boolean hasModuleViewForObject(FlexoModelObject object) {
+	public boolean hasModuleViewForObject(FlexoObject object) {
 		return true;
 	}
 
 	@Override
-	public ModuleView<?> createModuleViewForObject(FlexoModelObject object, FlexoController controller) {
+	public ModuleView<?> createModuleViewForObject(FlexoObject object, FlexoController controller) {
 		if (object instanceof DocItemFolder) {
 			if (((DocItemFolder) object).isRootFolder()) {
 				return new DocCenterView((DocItemFolder) object, (DREController) controller);
@@ -75,7 +75,7 @@ class DREPerspective extends FlexoPerspective {
 			}
 			return this.controller.docItemView;
 		} else {
-			return new EmptyPanel<FlexoModelObject>(controller, this, object);
+			return new EmptyPanel<FlexoObject>(controller, this, object);
 		}
 	}
 

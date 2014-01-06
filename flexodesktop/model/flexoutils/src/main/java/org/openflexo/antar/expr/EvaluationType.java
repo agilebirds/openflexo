@@ -19,7 +19,11 @@
  */
 package org.openflexo.antar.expr;
 
+import java.lang.reflect.Type;
+import java.util.Date;
+
 import org.openflexo.localization.FlexoLocalization;
+import org.openflexo.toolbox.Duration;
 
 public enum EvaluationType {
 	LITERAL, BOOLEAN, ARITHMETIC_INTEGER, ARITHMETIC_FLOAT, STRING, DATE, DURATION, ENUM;
@@ -92,4 +96,25 @@ public enum EvaluationType {
 		return this == DURATION || this == LITERAL;
 	}
 
+	public Type getType() {
+		if (this == LITERAL) {
+			return Object.class;
+		} else if (this == BOOLEAN) {
+			return Boolean.class;
+		} else if (this == ARITHMETIC_FLOAT) {
+			return Double.class;
+		} else if (this == ARITHMETIC_INTEGER) {
+			return Long.class;
+		} else if (this == STRING) {
+			return String.class;
+		} else if (this == DATE) {
+			return Date.class;
+		} else if (this == DURATION) {
+			return Duration.class;
+		} else if (this == ENUM) {
+			return Enum.class;
+		} else {
+			return Object.class;
+		}
+	}
 }

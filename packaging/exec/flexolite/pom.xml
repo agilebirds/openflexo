@@ -8,8 +8,8 @@
     <parent>
         <groupId>org.openflexo.packaging</groupId>
         <artifactId>exec</artifactId>
-        <version>1.5.2-SNAPSHOT</version>
-    </parent>
+        <version>1.7-SNAPSHOT</version>
+   </parent>
     <artifactId>flexolite</artifactId>
     <properties>
         <userType>lite</userType>

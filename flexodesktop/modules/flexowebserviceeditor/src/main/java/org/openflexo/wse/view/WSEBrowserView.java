@@ -23,7 +23,7 @@ import java.util.logging.Logger;
 
 import org.openflexo.ch.FCH;
 import org.openflexo.components.browser.view.BrowserView;
-import org.openflexo.foundation.FlexoModelObject;
+import org.openflexo.foundation.FlexoObject;
 import org.openflexo.wse.controller.WSEController;
 
 /**
@@ -42,11 +42,11 @@ public class WSEBrowserView extends BrowserView {
 	}
 
 	@Override
-	public void treeSingleClick(FlexoModelObject object) {
+	public void treeSingleClick(FlexoObject object) {
 	}
 
 	@Override
-	public void treeDoubleClick(FlexoModelObject object) {
+	public void treeDoubleClick(FlexoObject object) {
 		// Try to display object in view
 		getController().selectAndFocusObject(object);
 	}

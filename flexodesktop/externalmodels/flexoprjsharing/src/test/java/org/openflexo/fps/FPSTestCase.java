@@ -24,7 +24,8 @@ import java.io.IOException;
 import java.util.logging.Logger;
 
 import org.openflexo.foundation.FlexoEditor;
-import org.openflexo.foundation.FlexoTestCase;
+import org.openflexo.foundation.FlexoProject;
+import org.openflexo.foundation.AgileBirdsTestCase;
 import org.openflexo.foundation.ie.IEOperationComponent;
 import org.openflexo.foundation.ie.action.AddTab;
 import org.openflexo.foundation.ie.action.DropIEElement;
@@ -37,9 +38,9 @@ import org.openflexo.foundation.ie.widget.IEHTMLTableWidget;
 import org.openflexo.foundation.ie.widget.IESequenceTab;
 import org.openflexo.foundation.rm.FlexoOperationComponentResource;
 import org.openflexo.foundation.rm.FlexoProcessResource;
-import org.openflexo.foundation.rm.FlexoProject;
 import org.openflexo.foundation.rm.FlexoResourceManager;
 import org.openflexo.foundation.rm.SaveResourceException;
+import org.openflexo.foundation.utils.ProjectInitializerException;
 import org.openflexo.foundation.wkf.WKFElementType;
 import org.openflexo.foundation.wkf.action.AddSubProcess;
 import org.openflexo.foundation.wkf.action.DropWKFElement;
@@ -49,7 +50,7 @@ import org.openflexo.foundation.wkf.node.ActivityNode;
 import org.openflexo.foundation.wkf.node.OperationNode;
 import org.openflexo.foundation.wkf.node.SubProcessNode;
 
-public abstract class FPSTestCase extends FlexoTestCase {
+public abstract class FPSTestCase extends AgileBirdsTestCase {
 
 	protected static final String TEST_SUB_PROCESS = "TestSubProcess";
 	protected static final String TEST_SUB_PROCESS_2 = "TestSubProcess2";
@@ -112,7 +113,13 @@ public abstract class FPSTestCase extends FlexoTestCase {
 		logger.info("Project directory: " + projectDirectory.getAbsolutePath());
 		projectIdentifier = projectDirectory.getName().substring(0, projectDirectory.getName().length() - 4);
 		logger.info("Project identifier: " + projectIdentifier);
-		editor = FlexoResourceManager.initializeNewProject(projectDirectory, EDITOR_FACTORY, null);
+		try {
+			editor = FlexoResourceManager.initializeNewProject(projectDirectory, EDITOR_FACTORY, null);
+		} catch (ProjectInitializerException e) {
+			e.printStackTrace();
+			fail(e.getMessage());
+			return null;
+		}
 		createSubProcess(projectIdentifier, null, editor);
 		FlexoProject project = editor.getProject();
 		logger.info("Project has been SUCCESSFULLY created");

@@ -39,7 +39,7 @@ import org.openflexo.foundation.cg.DGRepository;
 import org.openflexo.foundation.cg.DuplicateCodeRepositoryNameException;
 import org.openflexo.foundation.cg.GenerationRepository;
 import org.openflexo.foundation.cg.action.AddGeneratedCodeRepository;
-import org.openflexo.foundation.rm.FlexoProject;
+import org.openflexo.foundation.FlexoProject;
 import org.openflexo.foundation.rm.FlexoResourceManager;
 import org.openflexo.foundation.utils.ProjectInitializerException;
 import org.openflexo.foundation.utils.ProjectLoadingCancelledException;

@@ -28,7 +28,7 @@ import org.openflexo.components.tabular.model.IconColumn;
 import org.openflexo.components.tabular.model.StringColumn;
 import org.openflexo.foundation.dm.DMModel;
 import org.openflexo.foundation.dm.DMRepositoryFolder;
-import org.openflexo.foundation.rm.FlexoProject;
+import org.openflexo.foundation.FlexoProject;
 import org.openflexo.icon.DMEIconLibrary;
 
 /**

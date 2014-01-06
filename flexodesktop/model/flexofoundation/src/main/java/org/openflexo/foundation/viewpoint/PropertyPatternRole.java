@@ -1,16 +1,39 @@
 package org.openflexo.foundation.viewpoint;
 
-import org.openflexo.foundation.ontology.OntologyClass;
-import org.openflexo.foundation.ontology.OntologyProperty;
-import org.openflexo.foundation.viewpoint.ViewPoint.ViewPointBuilder;
+import java.lang.reflect.Type;
 
-public class PropertyPatternRole extends OntologicObjectPatternRole {
+import org.openflexo.foundation.ontology.IFlexoOntologyClass;
+import org.openflexo.foundation.ontology.IFlexoOntologyStructuralProperty;
+import org.openflexo.foundation.ontology.SubPropertyOfProperty;
+import org.openflexo.foundation.technologyadapter.TypeAwareModelSlot;
+import org.openflexo.foundation.view.ActorReference;
+import org.openflexo.foundation.view.ConceptActorReference;
+import org.openflexo.foundation.view.EditionPatternInstance;
+import org.openflexo.foundation.viewpoint.FMLRepresentationContext.FMLRepresentationOutput;
+
+
+public abstract class PropertyPatternRole<T extends IFlexoOntologyStructuralProperty> extends OntologicObjectPatternRole<T> {
 
 	private String parentPropertyURI;
 	private String domainURI;
 
-	public PropertyPatternRole(ViewPointBuilder builder) {
-		super(builder);
+	public PropertyPatternRole() {
+		super();
+	}
+
+	@Override
+	public String getFMLRepresentation(FMLRepresentationContext context) {
+		FMLRepresentationOutput out = new FMLRepresentationOutput(context);
+		out.append("PatternRole " + getName() + " as Property " + " from " + getModelSlot().getMetaModelURI() + " ;", context);
+		return out.toString();
+	}
+
+	@Override
+	public Type getType() {
+		if (getParentProperty() == null) {
+			return IFlexoOntologyStructuralProperty.class;
+		}
+		return SubPropertyOfProperty.getSubPropertyOfProperty(getParentProperty());
 	}
 
 	public String _getParentPropertyURI() {
@@ -21,17 +44,14 @@ public class PropertyPatternRole extends OntologicObjectPatternRole {
 		this.parentPropertyURI = parentPropertyURI;
 	}
 
-	public OntologyProperty getParentProperty() {
-		if (getViewPoint() != null) {
-			getViewPoint().loadWhenUnloaded();
-			if (getViewPoint().getViewpointOntology() != null) {
-				return getViewPoint().getViewpointOntology().getProperty(_getParentPropertyURI());
-			}
+	public IFlexoOntologyStructuralProperty getParentProperty() {
+		if (getVirtualModel() != null) {
+			return getVirtualModel().getOntologyProperty(_getParentPropertyURI());
 		}
 		return null;
 	}
 
-	public void setParentProperty(OntologyProperty ontologyProperty) {
+	public void setParentProperty(IFlexoOntologyStructuralProperty ontologyProperty) {
 		parentPropertyURI = ontologyProperty != null ? ontologyProperty.getURI() : null;
 	}
 
@@ -43,18 +63,12 @@ public class PropertyPatternRole extends OntologicObjectPatternRole {
 		this.domainURI = domainURI;
 	}
 
-	public OntologyClass getDomain() {
-		getViewPoint().loadWhenUnloaded();
-		return getViewPoint().getViewpointOntology().getClass(_getDomainURI());
+	public IFlexoOntologyClass getDomain() {
+		return getVirtualModel().getOntologyClass(_getDomainURI());
 	}
 
-	public void setDomain(OntologyClass c) {
+	public void setDomain(IFlexoOntologyClass c) {
 		_setDomainURI(c != null ? c.getURI() : null);
-	}
-
-	@Override
-	public PatternRoleType getType() {
-		return PatternRoleType.Property;
 	}
 
 	@Override
@@ -66,8 +80,24 @@ public class PropertyPatternRole extends OntologicObjectPatternRole {
 	}
 
 	@Override
-	public Class<?> getAccessedClass() {
-		return OntologyProperty.class;
+	public ActorReference<T> makeActorReference(T object, EditionPatternInstance epi) {
+		return new ConceptActorReference<T>(object, this, epi);
+	}
+
+	@Override
+	public boolean defaultBehaviourIsToBeDeleted() {
+		return false;
+	}
+
+	@Override
+	public TypeAwareModelSlot getModelSlot() {
+		TypeAwareModelSlot returned = super.getModelSlot();
+		if (returned == null) {
+			if (getVirtualModel() != null && getVirtualModel().getModelSlots(TypeAwareModelSlot.class).size() > 0) {
+				return getVirtualModel().getModelSlots(TypeAwareModelSlot.class).get(0);
+			}
+		}
+		return returned;
 	}
 
 }

@@ -32,12 +32,12 @@ public class AnnotationMouseClickControl extends MouseClickControl {
 
 	private static final class CreateAnnotationAction extends MouseClickControlAction {
 		@Override
-		public MouseClickControlActionType getActionType() {
-			return MouseClickControlActionType.CUSTOM;
+		public PredefinedMouseClickControlActionType getActionType() {
+			return PredefinedMouseClickControlActionType.CUSTOM;
 		}
 
 		@Override
-		public boolean handleClick(GraphicalRepresentation<?> graphicalRepresentation, DrawingController<?> controller, MouseEvent event) {
+		public boolean handleClick(GraphicalRepresentation graphicalRepresentation, DrawingController controller, MouseEvent event) {
 			WKFPaletteElement annotation = ((ProcessEditorController) controller).getBasicPalette().getAnnotation();
 			if (annotation.acceptDragging(graphicalRepresentation)) {
 				annotation.elementDragged(graphicalRepresentation, new FGEPoint(event.getPoint().getX() / controller.getScale()

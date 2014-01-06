@@ -19,16 +19,15 @@
  */
 package org.openflexo.foundation.viewpoint.dm;
 
-import org.openflexo.foundation.ontology.dm.OEDataModification;
 import org.openflexo.foundation.viewpoint.EditionPattern;
 import org.openflexo.foundation.viewpoint.EditionScheme;
 
-public class EditionSchemeInserted extends OEDataModification {
+public class EditionSchemeInserted extends ViewPointDataModification {
 
 	private EditionPattern _parent;
 
 	public EditionSchemeInserted(EditionScheme editionScheme, EditionPattern parent) {
-		super(null, editionScheme);
+		super("editionSchemes", null, editionScheme);
 		_parent = parent;
 	}
 

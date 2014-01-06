@@ -26,7 +26,6 @@ import org.openflexo.antar.expr.Constant;
 import org.openflexo.antar.expr.Constant.BooleanConstant;
 import org.openflexo.antar.expr.DefaultExpressionPrettyPrinter;
 import org.openflexo.antar.expr.Expression;
-import org.openflexo.antar.expr.Function;
 import org.openflexo.antar.expr.OperatorNotSupportedException;
 import org.openflexo.antar.expr.UnaryOperatorExpression;
 import org.openflexo.antar.expr.Variable;
@@ -69,9 +68,6 @@ public class BPELPrettyPrinter extends DefaultExpressionPrettyPrinter {
 		}
 		if (expression instanceof Constant) {
 			return makeStringRepresentation((Constant) expression);
-		}
-		if (expression instanceof Function) {
-			return makeStringRepresentation((Function) expression);
 		}
 		if (expression instanceof UnaryOperatorExpression) {
 			return makeStringRepresentation((UnaryOperatorExpression) expression);
@@ -181,12 +177,6 @@ public class BPELPrettyPrinter extends DefaultExpressionPrettyPrinter {
 		BindingValue var = v.getBindingValue();
 		return makeStringRepresentation(var);
 
-	}
-
-	@Override
-	protected String makeStringRepresentation(Variable variable) {
-		return variable.getName();
-		// return writer.getBPELMessagePartFromFlexoVariable(variable.getName())[0];
 	}
 
 	@Override

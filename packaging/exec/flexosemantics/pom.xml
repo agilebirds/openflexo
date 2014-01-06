@@ -8,7 +8,7 @@
     <parent>
         <groupId>org.openflexo.packaging</groupId>
         <artifactId>exec</artifactId>
-        <version>1.5.2-SNAPSHOT</version>
+        <version>1.7-SNAPSHOT</version>
     </parent>
     <artifactId>flexosemantics</artifactId>
     <properties>
@@ -34,5 +34,161 @@
             <classifier>resources</classifier>
             <type>zip</type>
         </dependency>
+		<dependency>
+			<groupId>org.openflexo</groupId>
+			<artifactId>emfconnector</artifactId>
+			<scope>runtime</scope>
+		</dependency>
+        <dependency>
+            <groupId>org.openflexo</groupId>
+            <artifactId>emfconnector</artifactId>
+            <classifier>resources</classifier>
+            <type>zip</type>
+        </dependency>
+		<dependency>
+			<groupId>org.openflexo</groupId>
+			<artifactId>emfconnector-ui</artifactId>
+			<scope>runtime</scope>
+		</dependency>
+        <dependency>
+            <groupId>org.openflexo</groupId>
+            <artifactId>emfconnector-ui</artifactId>
+            <classifier>resources</classifier>
+            <type>zip</type>
+        </dependency>
+		<dependency>
+			<groupId>org.openflexo</groupId>
+			<artifactId>xsdconnector</artifactId>
+			<scope>runtime</scope>
+		</dependency>
+        <dependency>
+            <groupId>org.openflexo</groupId>
+            <artifactId>xsdconnector</artifactId>
+            <classifier>resources</classifier>
+            <type>zip</type>
+        </dependency>
+		<dependency>
+			<groupId>org.openflexo</groupId>
+			<artifactId>xsdconnector-ui</artifactId>
+			<scope>runtime</scope>
+		</dependency>
+        <dependency>
+            <groupId>org.openflexo</groupId>
+            <artifactId>xsdconnector-ui</artifactId>
+            <classifier>resources</classifier>
+            <type>zip</type>
+        </dependency>
+ 		<dependency>
+			<groupId>org.openflexo</groupId>
+			<artifactId>owlconnector</artifactId>
+			<scope>runtime</scope>
+		</dependency>
+        <dependency>
+            <groupId>org.openflexo</groupId>
+            <artifactId>owlconnector</artifactId>
+            <classifier>resources</classifier>
+            <type>zip</type>
+        </dependency>
+		<dependency>
+			<groupId>org.openflexo</groupId>
+			<artifactId>owlconnector-ui</artifactId>
+			<scope>runtime</scope>
+		</dependency>
+        <dependency>
+            <groupId>org.openflexo</groupId>
+            <artifactId>owlconnector-ui</artifactId>
+            <classifier>resources</classifier>
+            <type>zip</type>
+        </dependency>
+  		<dependency>
+			<groupId>org.openflexo</groupId>
+			<artifactId>excelconnector</artifactId>
+			<scope>runtime</scope>
+		</dependency>
+        <dependency>
+            <groupId>org.openflexo</groupId>
+            <artifactId>excelconnector</artifactId>
+            <classifier>resources</classifier>
+            <type>zip</type>
+        </dependency>
+   		<dependency>
+			<groupId>org.openflexo</groupId>
+			<artifactId>excelconnector-ui</artifactId>
+			<scope>runtime</scope>
+		</dependency>
+        <dependency>
+            <groupId>org.openflexo</groupId>
+            <artifactId>excelconnector-ui</artifactId>
+            <classifier>resources</classifier>
+            <type>zip</type>
+        </dependency>
+        <dependency>
+			<groupId>org.openflexo</groupId>
+			<artifactId>powerpointconnector</artifactId>
+			<scope>runtime</scope>
+		</dependency>
+        <dependency>
+            <groupId>org.openflexo</groupId>
+            <artifactId>powerpointconnector</artifactId>
+            <classifier>resources</classifier>
+            <type>zip</type>
+        </dependency>
+        <dependency>
+ 			<groupId>org.openflexo</groupId>
+ 			<artifactId>powerpointconnector-ui</artifactId>
+ 			<scope>runtime</scope>
+ 		</dependency>
+ 		<dependency>
+ 			<groupId>org.openflexo</groupId>
+ 			<artifactId>powerpointconnector-ui</artifactId>
+ 			<classifier>resources</classifier>
+ 			 <type>zip</type>
+ 		</dependency>
+        <!-- MDT-UML not yet functional --> 
+  		<!--  <dependency>
+			<groupId>org.openflexo</groupId>
+			<artifactId>mdtumlconnector</artifactId>
+			<scope>runtime</scope>
+		</dependency>
+        <dependency>
+            <groupId>org.openflexo</groupId>
+            <artifactId>mdtumlconnector</artifactId>
+            <classifier>resources</classifier>
+            <type>zip</type>
+        </dependency>
+		<dependency>
+			<groupId>org.openflexo</groupId>
+			<artifactId>mdtumlconnector-ui</artifactId>
+			<scope>runtime</scope>
+		</dependency>
+        <dependency>
+            <groupId>org.openflexo</groupId>
+            <artifactId>mdtumlconnector-ui</artifactId>
+            <classifier>resources</classifier>
+            <type>zip</type>
+        </dependency>-->
+        <!-- CSV not yet functional --> 
+ 		<!--  <dependency>
+			<groupId>org.openflexo</groupId>
+			<artifactId>csvconnector</artifactId>
+			<scope>runtime</scope>
+		</dependency>
+        <dependency>
+            <groupId>org.openflexo</groupId>
+            <artifactId>csvconnector</artifactId>
+            <classifier>resources</classifier>
+            <type>zip</type>
+        </dependency>
+		<dependency>
+			<groupId>org.openflexo</groupId>
+			<artifactId>csvconnector-ui</artifactId>
+			<scope>runtime</scope>
+		</dependency>
+        <dependency>
+            <groupId>org.openflexo</groupId>
+            <artifactId>csvconnector-ui</artifactId>
+            <classifier>resources</classifier>
+            <type>zip</type>
+        </dependency> -->
     </dependencies>
 </project>

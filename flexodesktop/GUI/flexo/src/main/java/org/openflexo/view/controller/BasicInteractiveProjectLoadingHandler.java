@@ -23,8 +23,8 @@ import java.io.File;
 import java.util.Vector;
 import java.util.logging.Logger;
 
-import org.openflexo.foundation.rm.FlexoProject;
-import org.openflexo.foundation.rm.FlexoXMLStorageResource;
+import org.openflexo.foundation.FlexoProject;
+import org.openflexo.foundation.resource.FlexoResource;
 import org.openflexo.foundation.utils.FlexoProgress;
 import org.openflexo.foundation.utils.ProjectLoadingCancelledException;
 import org.openflexo.icon.IconLibrary;
@@ -32,11 +32,12 @@ import org.openflexo.localization.FlexoLocalization;
 
 public class BasicInteractiveProjectLoadingHandler extends InteractiveProjectLoadingHandler {
 
+	@SuppressWarnings("unused")
 	private static final Logger logger = Logger.getLogger(BasicInteractiveProjectLoadingHandler.class.getPackage().getName());
 
 	private boolean alreadyAnswer = false;
 	private boolean convertProject = false;
-	private File _projectDirectory;
+	private final File _projectDirectory;
 
 	public BasicInteractiveProjectLoadingHandler(File projectDirectory) {
 		super();
@@ -74,7 +75,7 @@ public class BasicInteractiveProjectLoadingHandler extends InteractiveProjectLoa
 	}
 
 	@Override
-	public boolean upgradeResourceToLatestVersion(FlexoXMLStorageResource resource) throws ProjectLoadingCancelledException {
+	public boolean upgradeResourceToLatestVersion(FlexoResource<?> resource) throws ProjectLoadingCancelledException {
 		if (isPerformingAutomaticConversion()) {
 			return true;
 		}
@@ -87,7 +88,7 @@ public class BasicInteractiveProjectLoadingHandler extends InteractiveProjectLoa
 	}
 
 	@Override
-	public boolean useOlderMappingWhenLoadingFailure(FlexoXMLStorageResource resource) throws ProjectLoadingCancelledException {
+	public boolean useOlderMappingWhenLoadingFailure(FlexoResource<?> resource) throws ProjectLoadingCancelledException {
 		return true;
 	}
 

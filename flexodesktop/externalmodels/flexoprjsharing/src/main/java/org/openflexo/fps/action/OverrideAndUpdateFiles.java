@@ -26,7 +26,7 @@ import java.util.Vector;
 import java.util.logging.Logger;
 
 import org.openflexo.foundation.FlexoEditor;
-import org.openflexo.foundation.FlexoModelObject;
+import org.openflexo.foundation.FlexoObject;
 import org.openflexo.foundation.action.FlexoActionType;
 import org.openflexo.fps.CVSAbstractFile;
 import org.openflexo.fps.CVSAbstractFile.UpdateListener;
@@ -60,7 +60,7 @@ public class OverrideAndUpdateFiles extends MultipleFileCVSAction<OverrideAndUpd
 	};
 
 	static {
-		FlexoModelObject.addActionForClass(OverrideAndUpdateFiles.actionType, CVSAbstractFile.class);
+		FlexoObject.addActionForClass(OverrideAndUpdateFiles.actionType, CVSAbstractFile.class);
 	}
 
 	OverrideAndUpdateFiles(FPSObject focusedObject, Vector<FPSObject> globalSelection, FlexoEditor editor) {

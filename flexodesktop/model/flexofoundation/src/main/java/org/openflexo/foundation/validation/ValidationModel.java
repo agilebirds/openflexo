@@ -20,18 +20,19 @@
 package org.openflexo.foundation.validation;
 
 import java.text.Collator;
+import java.util.ArrayList;
+import java.util.Collection;
 import java.util.Collections;
 import java.util.Comparator;
 import java.util.Enumeration;
 import java.util.Hashtable;
+import java.util.List;
 import java.util.StringTokenizer;
 import java.util.Vector;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 
-import org.openflexo.foundation.CodeType;
-import org.openflexo.foundation.TargetType;
-import org.openflexo.foundation.rm.FlexoProject;
+import org.openflexo.foundation.FlexoProject;
 import org.openflexo.foundation.utils.FlexoListModel;
 import org.openflexo.localization.FlexoLocalization;
 
@@ -45,18 +46,16 @@ public abstract class ValidationModel extends FlexoListModel {
 
 	private static final Logger logger = Logger.getLogger(ValidationModel.class.getPackage().getName());
 
-	private Hashtable<Class, Vector<ValidationRule>> _rules;
+	private final Hashtable<Class, Vector<ValidationRule>> _rules;
 
-	private Hashtable<Class, ValidationRuleSet> _inheritedRules;
+	private final Hashtable<Class, ValidationRuleSet> _inheritedRules;
 
 	private boolean recomputeInheritedRules = true;
 
-	private FlexoProject _project;
-	private TargetType _targetType;
+	private final FlexoProject _project;
 
-	public ValidationModel(FlexoProject project, TargetType targetType) {
+	public ValidationModel(FlexoProject project) {
 		super();
-		_targetType = targetType;
 		_project = project;
 		_rules = new Hashtable<Class, Vector<ValidationRule>>();
 		_inheritedRules = new Hashtable<Class, ValidationRuleSet>();
@@ -93,6 +92,24 @@ public abstract class ValidationModel extends FlexoListModel {
 		return returned;
 	}
 
+	public Collection<Validable> retrieveAllEmbeddedValidableObjects(Validable o) {
+		List<Validable> returned = new ArrayList<Validable>();
+		appendAllEmbeddedValidableObjects(o, returned);
+		return returned;
+	}
+
+	private void appendAllEmbeddedValidableObjects(Validable o, Collection<Validable> c) {
+		if (o != null) {
+			c.add(o);
+			Collection<? extends Validable> embeddedObjects = o.getEmbeddedValidableObjects();
+			if (embeddedObjects != null) {
+				for (Validable o2 : embeddedObjects) {
+					appendAllEmbeddedValidableObjects(o2, c);
+				}
+			}
+		}
+	}
+
 	/**
 	 * Validate supplied Validable object by appending ValidationIssues object to supplied ValidationReport. Return true if no validation
 	 * issues were found, false otherwise
@@ -104,14 +121,13 @@ public abstract class ValidationModel extends FlexoListModel {
 		int addedIssues = 0;
 
 		// Get all the objects to validate
-		Vector<? extends Validable> allEmbeddedValidableObjects = object.getAllEmbeddedValidableObjects();
+		Collection<Validable> allEmbeddedValidableObjects = retrieveAllEmbeddedValidableObjects(object);
 
 		// logger.info("For object " + object + " objects to validate are: " + allEmbeddedValidableObjects);
 
 		// Remove duplicated objects
 		Vector<Validable> objectsToValidate = new Vector<Validable>();
-		for (Enumeration<? extends Validable> en = allEmbeddedValidableObjects.elements(); en.hasMoreElements();) {
-			Validable next = en.nextElement();
+		for (Validable next : allEmbeddedValidableObjects) {
 			if (!objectsToValidate.contains(next)) {
 				objectsToValidate.add(next);
 			}
@@ -176,7 +192,7 @@ public abstract class ValidationModel extends FlexoListModel {
 
 		ValidationRuleSet rules = getValidationRulesForObjectType(next.getClass());
 		if (logger.isLoggable(Level.FINE)) {
-			logger.fine("Validating " + next.getFullyQualifiedName() + " " + next.toString());
+			logger.fine("Validating " + next.toString() + " " + next.toString());
 		}
 
 		if (shouldNotifyValidationRules()) {
@@ -339,14 +355,14 @@ public abstract class ValidationModel extends FlexoListModel {
 			Class type1 = (Class) e1.nextElement();
 			Vector rulesForType = _rules.get(type1);
 			ValidationRuleSet ruleSet = new ValidationRuleSet(type1, rulesForType);
-			if (_project != null) {
+			/*if (_project != null) {
 				for (Enumeration e2 = rulesForType.elements(); e2.hasMoreElements();) {
 					ValidationRule rule = (ValidationRule) e2.nextElement();
 					if (!rule.isValidForTarget(getTargetType()) || filter != null && !filter.accept(rule)) {
 						ruleSet.removeRule(rule);
 					}
 				}
-			}
+			}*/
 			_inheritedRules.put(type1, ruleSet);
 		}
 		for (Enumeration<Class> e1 = _rules.keys(); e1.hasMoreElements();) {
@@ -372,7 +388,7 @@ public abstract class ValidationModel extends FlexoListModel {
 	}
 
 	private class ClassComparator implements Comparator<Class> {
-		private Collator collator;
+		private final Collator collator;
 
 		ClassComparator() {
 			collator = Collator.getInstance();
@@ -443,12 +459,12 @@ public abstract class ValidationModel extends FlexoListModel {
 		return _inheritedRules.get(_keys.elementAt(index));
 	}
 
-	public TargetType getTargetType() {
+	/*public TargetType getTargetType() {
 		return _targetType;
 	}
 
 	public void setTargetType(CodeType targetType) {
 		_targetType = targetType;
-	}
+	}*/
 
 }

@@ -1,108 +1,148 @@
+/*
+ * (c) Copyright 2010-2011 AgileBirds
+ *
+ * This file is part of OpenFlexo.
+ *
+ * OpenFlexo is free software: you can redistribute it and/or modify
+ * it under the terms of the GNU General Public License as published by
+ * the Free Software Foundation, either version 3 of the License, or
+ * (at your option) any later version.
+ *
+ * OpenFlexo is distributed in the hope that it will be useful,
+ * but WITHOUT ANY WARRANTY; without even the implied warranty of
+ * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE. See the
+ * GNU General Public License for more details.
+ *
+ * You should have received a copy of the GNU General Public License
+ * along with OpenFlexo. If not, see <http://www.gnu.org/licenses/>.
+ *
+ */
 package org.openflexo.foundation.viewpoint.binding;
 
+import java.lang.reflect.InvocationTargetException;
 import java.lang.reflect.Type;
-import java.util.Hashtable;
-import java.util.Vector;
+import java.util.List;
 import java.util.logging.Logger;
 
-import org.openflexo.antar.binding.AbstractBinding.BindingEvaluationContext;
-import org.openflexo.antar.binding.Bindable;
+import org.openflexo.antar.binding.BindingEvaluationContext;
 import org.openflexo.antar.binding.BindingPathElement;
-import org.openflexo.antar.binding.BindingVariable;
+import org.openflexo.antar.binding.DataBinding;
+import org.openflexo.antar.binding.Function.FunctionArgument;
+import org.openflexo.antar.binding.FunctionPathElement;
+import org.openflexo.antar.binding.TypeUtils;
+import org.openflexo.antar.expr.InvocationTargetTransformException;
+import org.openflexo.antar.expr.NullReferenceException;
+import org.openflexo.antar.expr.TypeMismatchException;
+import org.openflexo.foundation.view.EditionPatternInstance;
+import org.openflexo.foundation.view.action.ActionSchemeAction;
+import org.openflexo.foundation.view.action.ActionSchemeActionType;
+import org.openflexo.foundation.view.action.EditionSchemeAction;
+import org.openflexo.foundation.viewpoint.ActionScheme;
 import org.openflexo.foundation.viewpoint.EditionScheme;
-import org.openflexo.foundation.viewpoint.PatternRole;
+import org.openflexo.foundation.viewpoint.EditionSchemeParameter;
 
-public class EditionSchemePathElement<E extends Bindable> implements BindingVariable<EditionScheme> {
+/**
+ * Modelize a call for execution of an EditionScheme
+ * 
+ * @author sylvain
+ * 
+ */
+public class EditionSchemePathElement extends FunctionPathElement {
+
 	static final Logger logger = Logger.getLogger(EditionSchemePathElement.class.getPackage().getName());
 
-	private E container;
-	private EditionScheme editionScheme;
-
-	private EditionSchemeParameterListPathElement parametersElement;
-	private Hashtable<PatternRole, BindingPathElement> elements;
-	private Vector<BindingPathElement> allElements;
-
-	public EditionSchemePathElement(EditionScheme anEditionScheme, E container) {
-		this.editionScheme = anEditionScheme;
-		this.container = container;
-		elements = new Hashtable<PatternRole, BindingPathElement>();
-		allElements = new Vector<BindingPathElement>();
-		parametersElement = new EditionSchemeParameterListPathElement(editionScheme, this);
-		for (PatternRole pr : anEditionScheme.getEditionPattern().getPatternRoles()) {
-			BindingPathElement<?> newPathElement = PatternRolePathElement.makePatternRolePathElement(pr, editionScheme);
-			elements.put(pr, newPathElement);
-			allElements.add(newPathElement);
+	public EditionSchemePathElement(BindingPathElement parent, EditionScheme editionScheme, List<DataBinding<?>> args) {
+		super(parent, editionScheme, args);
+		if (editionScheme != null) {
+			for (FunctionArgument arg : editionScheme.getArguments()) {
+				DataBinding<?> argValue = getParameter(arg);
+				if (argValue != null && arg != null) {
+					argValue.setDeclaredType(arg.getArgumentType());
+				}
+			}
+			setType(editionScheme.getReturnType());
+		} else {
+			logger.warning("Inconsistent data: null EditionScheme");
 		}
 	}
 
-	public Vector<BindingPathElement> getAllElements() {
-		return allElements;
-	}
-
-	public BindingPathElement getPathElement(PatternRole pr) {
-		return elements.get(pr);
+	public EditionScheme getEditionScheme() {
+		return getFunction();
 	}
 
 	@Override
-	public Class<E> getDeclaringClass() {
-		if (container != null) {
-			return (Class<E>) container.getClass();
-		}
-		return null;
-	}
-
-	@Override
-	public Type getType() {
-		return EditionScheme.class;
-	}
-
-	@Override
-	public String getSerializationRepresentation() {
-		return editionScheme.getName();
-	}
-
-	@Override
-	public boolean isBindingValid() {
-		return true;
+	public EditionScheme getFunction() {
+		return (EditionScheme) super.getFunction();
 	}
 
 	@Override
 	public String getLabel() {
-		return getSerializationRepresentation();
+		return getEditionScheme().getSignature();
 	}
 
 	@Override
 	public String getTooltipText(Type resultingType) {
-		return editionScheme.getDescription();
+		return getEditionScheme().getDescription();
 	}
 
 	@Override
-	public boolean isSettable() {
-		return false;
-	}
+	public Object getBindingValue(Object target, BindingEvaluationContext context) throws TypeMismatchException, NullReferenceException,
+			InvocationTargetTransformException {
 
-	@Override
-	public E getContainer() {
-		return container;
-	}
+		// System.out.println("evaluate " + getMethodDefinition().getSignature() + " for " + target);
 
-	@Override
-	public String getVariableName() {
-		return getSerializationRepresentation();
-	}
+		Object[] args = new Object[getFunction().getArguments().size()];
+		int i = 0;
 
-	@Override
-	public EditionScheme getBindingValue(Object target, BindingEvaluationContext context) {
-		return editionScheme;
-	}
+		for (EditionSchemeParameter param : getFunction().getArguments()) {
+			try {
+				args[i] = TypeUtils.castTo(getParameter(param).getBindingValue(context), param.getType());
+			} catch (InvocationTargetException e) {
+				throw new InvocationTargetTransformException(e);
+			}
+			i++;
+		}
+		try {
+			logger.warning("Please implements execution of EditionSchemePathElement here !!!! context=" + context + " of "
+					+ context.getClass() + " target=" + target);
 
-	@Override
-	public void setBindingValue(EditionScheme value, Object target, BindingEvaluationContext context) {
-		// Not settable
-	}
+			if (context instanceof EditionSchemeAction && target instanceof EditionPatternInstance) {
 
-	public EditionScheme getEditionScheme() {
-		return editionScheme;
+				EditionSchemeAction action = (EditionSchemeAction) context;
+				EditionPatternInstance epi = (EditionPatternInstance) target;
+				logger.info("EPI: " + epi);
+				ActionSchemeActionType actionType = new ActionSchemeActionType((ActionScheme) getEditionScheme(), epi);
+				ActionSchemeAction actionSchemeAction = actionType.makeNewEmbeddedAction(epi.getVirtualModelInstance(), null, action);
+				for (EditionSchemeParameter p : getEditionScheme().getParameters()) {
+					DataBinding<?> param = getParameter(p);
+					Object paramValue = param.getBindingValue(context);
+					logger.info("For parameter " + param + " value is " + paramValue);
+					if (paramValue != null) {
+						actionSchemeAction.setParameterValue(p, paramValue);
+					}
+				}
+				actionSchemeAction.doAction();
+				if (actionSchemeAction.hasActionExecutionSucceeded()) {
+					logger.info("Successfully performed ActionScheme " + getEditionScheme() + " for " + epi);
+					return actionSchemeAction.getEditionPatternInstance();
+				}
+			}
+			// return getMethodDefinition().getMethod().invoke(target, args);
+		} catch (IllegalArgumentException e) {
+			StringBuffer warningMessage = new StringBuffer("While evaluating edition scheme " + getEditionScheme() + " exception occured: "
+					+ e.getMessage());
+			warningMessage.append(", object = " + target);
+			for (i = 0; i < getFunction().getArguments().size(); i++) {
+				warningMessage.append(", arg[" + i + "] = " + args[i]);
+			}
+			logger.warning(warningMessage.toString());
+			// e.printStackTrace();
+		} catch (InvocationTargetException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		}
+		return null;
+
 	}
 
 }

@@ -32,6 +32,7 @@ import java.util.logging.Logger;
 import javax.imageio.ImageIO;
 import javax.swing.JButton;
 import javax.swing.JCheckBox;
+import javax.swing.JComponent;
 import javax.swing.JFileChooser;
 import javax.swing.JLabel;
 import javax.swing.JPanel;
@@ -42,7 +43,8 @@ import javax.swing.SwingConstants;
 import javax.swing.event.ChangeEvent;
 import javax.swing.event.ChangeListener;
 
-import org.openflexo.foundation.gen.ScreenshotGenerator;
+import org.openflexo.foundation.FlexoObject;
+import org.openflexo.foundation.resource.ScreenshotBuilder;
 import org.openflexo.localization.FlexoLocalization;
 import org.openflexo.toolbox.FileUtils;
 import org.openflexo.view.FlexoDialog;
@@ -60,9 +62,9 @@ public class PrintPreviewDialog extends FlexoDialog {
 	protected ReturnedStatus status = ReturnedStatus.CONTINUE_PRINTING;
 	protected FlexoPrintableComponent _printableComponent;
 
-	private JTextField scaleTF;
-	private JLabel pagesLabel;
-	private JScrollPane scrollPane;
+	private final JTextField scaleTF;
+	private final JLabel pagesLabel;
+	private final JScrollPane scrollPane;
 
 	public PrintPreviewDialog(PrintManagingController controller, FlexoPrintableComponent printableProcessView) {
 		super(controller.getFlexoFrame(), true);
@@ -287,12 +289,13 @@ public class PrintPreviewDialog extends FlexoDialog {
 		_controller.getPrintManager().printPageable(_printableComponent.getPrintableDelegate());
 	}
 
+	private File dest = null;
+
 	public void saveAsJpeg() {
 		JFileChooser chooser = new JFileChooser();
 		chooser.setDialogType(JFileChooser.SAVE_DIALOG);
 		chooser.setDialogTitle(FlexoLocalization.localizedForKey("save_as_image", chooser));
 
-		File dest = null;
 		int returnVal = chooser.showSaveDialog(null);
 		if (returnVal == JFileChooser.CANCEL_OPTION) {
 			return;
@@ -319,7 +322,19 @@ public class PrintPreviewDialog extends FlexoDialog {
 			return;
 		}
 
-		ScreenshotGenerator.ScreenshotImage image = ScreenshotGenerator.getImage(getPrintableComponent().getFlexoModelObject());
+		ScreenshotBuilder builder = new ScreenshotBuilder<FlexoObject>() {
+			@Override
+			public JComponent getScreenshotComponent(FlexoObject object) {
+				return (JComponent) getPrintableComponent();
+			}
+
+			@Override
+			public String getScreenshotName(FlexoObject o) {
+				return dest.getName();
+			}
+		};
+
+		ScreenshotBuilder.ScreenshotImage<?> image = builder.getImage(getPrintableComponent().getFlexoObject());
 
 		try {
 			if (!dest.exists()) {

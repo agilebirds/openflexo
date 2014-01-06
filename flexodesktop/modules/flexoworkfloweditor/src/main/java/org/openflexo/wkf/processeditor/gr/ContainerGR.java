@@ -30,21 +30,21 @@ import java.util.logging.Logger;
 
 import javax.swing.SwingUtilities;
 
+import org.openflexo.fge.BackgroundStyle;
 import org.openflexo.fge.FGEConstants;
+import org.openflexo.fge.ForegroundStyle;
 import org.openflexo.fge.GraphicalRepresentation;
 import org.openflexo.fge.ShapeGraphicalRepresentation;
+import org.openflexo.fge.TextStyle;
+import org.openflexo.fge.ColorGradientBackgroundStyle.ColorGradientDirection;
+import org.openflexo.fge.ForegroundStyle.CapStyle;
+import org.openflexo.fge.ForegroundStyle.DashStyle;
+import org.openflexo.fge.ForegroundStyle.JoinStyle;
 import org.openflexo.fge.controller.CustomDragControlAction;
 import org.openflexo.fge.controller.DrawingController;
 import org.openflexo.fge.controller.MouseDragControl;
-import org.openflexo.fge.graphics.BackgroundStyle;
-import org.openflexo.fge.graphics.BackgroundStyle.ColorGradient.ColorGradientDirection;
 import org.openflexo.fge.graphics.DecorationPainter;
-import org.openflexo.fge.graphics.ForegroundStyle;
-import org.openflexo.fge.graphics.ForegroundStyle.CapStyle;
-import org.openflexo.fge.graphics.ForegroundStyle.DashStyle;
-import org.openflexo.fge.graphics.ForegroundStyle.JoinStyle;
-import org.openflexo.fge.graphics.TextStyle;
-import org.openflexo.fge.shapes.Shape.ShapeType;
+import org.openflexo.fge.shapes.ShapeSpecification.ShapeType;
 import org.openflexo.fge.view.ShapeView;
 import org.openflexo.foundation.DataModification;
 import org.openflexo.foundation.FlexoObservable;
@@ -245,7 +245,7 @@ public abstract class ContainerGR<O extends WKFObject> extends WKFObjectGR<O> im
 		public ContainerCloser() {
 			super("Closer", MouseButton.LEFT, new CustomDragControlAction() {
 				@Override
-				public boolean handleMousePressed(GraphicalRepresentation<?> graphicalRepresentation, DrawingController<?> controller,
+				public boolean handleMousePressed(GraphicalRepresentation graphicalRepresentation, DrawingController controller,
 						MouseEvent event) {
 					logger.info("handleMousePressed");
 					if (isInsideClosingBox(graphicalRepresentation, controller, event)) {
@@ -257,13 +257,13 @@ public abstract class ContainerGR<O extends WKFObject> extends WKFObjectGR<O> im
 				}
 
 				@Override
-				public boolean handleMouseReleased(GraphicalRepresentation<?> graphicalRepresentation, DrawingController<?> controller,
+				public boolean handleMouseReleased(GraphicalRepresentation graphicalRepresentation, DrawingController controller,
 						MouseEvent event, boolean isSignificativeDrag) {
 					return false;
 				}
 
 				@Override
-				public boolean handleMouseDragged(GraphicalRepresentation<?> graphicalRepresentation, DrawingController<?> controller,
+				public boolean handleMouseDragged(GraphicalRepresentation graphicalRepresentation, DrawingController controller,
 						MouseEvent event) {
 					return false;
 				}
@@ -271,16 +271,16 @@ public abstract class ContainerGR<O extends WKFObject> extends WKFObjectGR<O> im
 		}
 
 		@Override
-		public boolean isApplicable(GraphicalRepresentation<?> graphicalRepresentation, DrawingController<?> controller, MouseEvent e) {
+		public boolean isApplicable(GraphicalRepresentation graphicalRepresentation, DrawingController controller, MouseEvent e) {
 			return super.isApplicable(graphicalRepresentation, controller, e) && isInsideClosingBox(graphicalRepresentation, controller, e);
 		}
 
 	}
 
-	protected static boolean isInsideClosingBox(GraphicalRepresentation<?> graphicalRepresentation, DrawingController<?> controller,
+	protected static boolean isInsideClosingBox(GraphicalRepresentation graphicalRepresentation, DrawingController controller,
 			MouseEvent event) {
 		if (graphicalRepresentation instanceof ShapeGraphicalRepresentation) {
-			ShapeView view = (ShapeView) controller.getDrawingView().viewForObject(graphicalRepresentation);
+			ShapeView view = (ShapeView) controller.getDrawingView().viewForNode(graphicalRepresentation);
 			Rectangle closingBoxRect = new Rectangle(
 					(int) ((((ShapeGraphicalRepresentation) graphicalRepresentation).getWidth() - 20) * controller.getScale()),
 					(int) (5 * controller.getScale()), (int) (15 * controller.getScale()), (int) (15 * controller.getScale()));
@@ -384,10 +384,10 @@ public abstract class ContainerGR<O extends WKFObject> extends WKFObjectGR<O> im
 	private Vector<WKFConnectorGR> getAllContainedConnectors() {
 		Vector<WKFConnectorGR> returned = new Vector<WKFConnectorGR>();
 
-		Enumeration<GraphicalRepresentation<?>> en = getDrawing().getAllGraphicalRepresentations();
+		Enumeration<GraphicalRepresentation> en = getDrawing().getAllGraphicalRepresentations();
 
 		while (en.hasMoreElements()) {
-			GraphicalRepresentation<?> next = en.nextElement();
+			GraphicalRepresentation next = en.nextElement();
 			if (next instanceof WKFConnectorGR
 					&& ((WKFConnectorGR<?>) next).getStartObject() != null
 					&& ((WKFConnectorGR<?>) next).getEndObject() != null

@@ -23,7 +23,7 @@ import java.io.File;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 
-import org.openflexo.fge.connectors.rpc.RectPolylinConnector.RectPolylinAdjustability;
+import org.openflexo.fge.connectors.RectPolylinConnectorSpecification.RectPolylinAdjustability;
 import org.openflexo.foundation.utils.FlexoFont;
 import org.openflexo.localization.FlexoLocalization;
 import org.openflexo.module.Module;

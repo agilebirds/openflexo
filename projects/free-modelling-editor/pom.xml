@@ -1,0 +1,47 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<project xmlns="http://maven.apache.org/POM/4.0.0"
+         xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+         xsi:schemaLocation="http://maven.apache.org/POM/4.0.0
+                             http://maven.apache.org/maven-v4_0_0.xsd">
+    <modelVersion>4.0.0</modelVersion>
+	<parent>
+		<groupId>org.openflexo</groupId>
+		<artifactId>projects</artifactId>
+        <version>1.7-SNAPSHOT</version>
+	</parent>
+	<artifactId>free-modelling-editor</artifactId>
+	<name>Free Modelling Editor</name>
+	<build>
+		<plugins>
+			<plugin>
+				<groupId>org.apache.maven.plugins</groupId>
+				<artifactId>maven-assembly-plugin</artifactId>
+			</plugin>
+		</plugins>
+	</build>
+	<dependencies>
+		<dependency>
+			<groupId>org.openflexo</groupId>
+			<artifactId>diana-swing</artifactId>
+		</dependency>
+ 		<dependency>
+			<groupId>org.openflexo</groupId>
+			<artifactId>fib-swing</artifactId>
+		</dependency>
+ 		<dependency>
+			<groupId>org.openflexo</groupId>
+			<artifactId>fib-swing-editor</artifactId>
+		</dependency>
+       <dependency>
+                <groupId>org.dockingframes</groupId>
+                <artifactId>docking-frames-common</artifactId>
+                <version>1.1.1</version>
+        </dependency>
+         <!--  <dependency>
+                <groupId>org.dockingframes</groupId>
+                <artifactId>docking-frames-demo-app</artifactId>
+                <version>1.1.0</version>
+        </dependency>-->
+	</dependencies>
+</project>
+

@@ -23,9 +23,9 @@ import java.awt.Color;
 import java.util.Hashtable;
 import java.util.logging.Logger;
 
-import org.openflexo.fge.DefaultDrawing;
 import org.openflexo.fge.DrawingGraphicalRepresentation;
 import org.openflexo.fge.GraphicalRepresentation;
+import org.openflexo.fge.impl.DrawingImpl;
 import org.openflexo.foundation.DataModification;
 import org.openflexo.foundation.FlexoObservable;
 import org.openflexo.foundation.GraphicalFlexoObserver;
@@ -36,7 +36,7 @@ import org.openflexo.foundation.dm.ERDiagram;
 import org.openflexo.foundation.dm.dm.EntityAddedToDiagram;
 import org.openflexo.foundation.dm.dm.EntityRemovedFromDiagram;
 
-public class ERDiagramRepresentation extends DefaultDrawing<ERDiagram> implements GraphicalFlexoObserver, ERDiagramConstants {
+public class ERDiagramRepresentation extends DrawingImpl<ERDiagram> implements GraphicalFlexoObserver, ERDiagramConstants {
 
 	private static final Logger logger = Logger.getLogger(ERDiagramRepresentation.class.getPackage().getName());
 
@@ -96,8 +96,8 @@ public class ERDiagramRepresentation extends DefaultDrawing<ERDiagram> implement
 
 	@SuppressWarnings("unchecked")
 	@Override
-	public <O> GraphicalRepresentation<O> retrieveGraphicalRepresentation(O aDrawable) {
-		return (GraphicalRepresentation<O>) buildGraphicalRepresentation(aDrawable);
+	public <O> GraphicalRepresentation retrieveGraphicalRepresentation(O aDrawable) {
+		return (GraphicalRepresentation) buildGraphicalRepresentation(aDrawable);
 	}
 
 	private boolean isRelationship(DMProperty property) {
@@ -114,7 +114,7 @@ public class ERDiagramRepresentation extends DefaultDrawing<ERDiagram> implement
 		return entity != null && type != null && type.getBaseEntity() != null && getDiagram().getEntities().contains(type.getBaseEntity());
 	}
 
-	private GraphicalRepresentation<?> buildGraphicalRepresentation(Object aDrawable) {
+	private GraphicalRepresentation buildGraphicalRepresentation(Object aDrawable) {
 		if (aDrawable instanceof DMEntity) {
 			return new DMEntityGR((DMEntity) aDrawable, this);
 		} else if (aDrawable instanceof DMProperty) {

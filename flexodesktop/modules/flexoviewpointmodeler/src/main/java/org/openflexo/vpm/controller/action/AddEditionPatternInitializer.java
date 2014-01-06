@@ -38,13 +38,13 @@ public class AddEditionPatternInitializer extends ActionInitializer {
 
 	private static final Logger logger = Logger.getLogger(ControllerActionInitializer.class.getPackage().getName());
 
-	AddEditionPatternInitializer(CEDControllerActionInitializer actionInitializer) {
+	AddEditionPatternInitializer(VPMControllerActionInitializer actionInitializer) {
 		super(AddEditionPattern.actionType, actionInitializer);
 	}
 
 	@Override
-	protected CEDControllerActionInitializer getControllerActionInitializer() {
-		return (CEDControllerActionInitializer) super.getControllerActionInitializer();
+	protected VPMControllerActionInitializer getControllerActionInitializer() {
+		return (VPMControllerActionInitializer) super.getControllerActionInitializer();
 	}
 
 	@Override
@@ -64,7 +64,9 @@ public class AddEditionPatternInitializer extends ActionInitializer {
 		return new FlexoActionFinalizer<AddEditionPattern>() {
 			@Override
 			public boolean run(EventObject e, AddEditionPattern action) {
-				((VPMController) getController()).setCurrentEditedObjectAsModuleView(action.getNewEditionPattern());
+				if (action.switchNewlyCreatedEditionPattern) {
+					((VPMController) getController()).setCurrentEditedObjectAsModuleView(action.getNewEditionPattern());
+				}
 				return true;
 			}
 		};

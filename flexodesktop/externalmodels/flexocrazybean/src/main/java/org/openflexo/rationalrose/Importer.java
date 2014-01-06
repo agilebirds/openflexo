@@ -25,8 +25,9 @@ import java.util.Enumeration;
 import java.util.Hashtable;
 
 import org.openflexo.dataimporter.DataImporter;
+import org.openflexo.foundation.AgileBirdsObject;
 import org.openflexo.foundation.FlexoEditor;
-import org.openflexo.foundation.FlexoModelObject;
+import org.openflexo.foundation.FlexoProject;
 import org.openflexo.foundation.action.AddFlexoProperty;
 import org.openflexo.foundation.action.FlexoAction;
 import org.openflexo.foundation.dm.DMCardinality;
@@ -41,7 +42,6 @@ import org.openflexo.foundation.dm.DMVisibilityType;
 import org.openflexo.foundation.dm.DuplicateMethodSignatureException;
 import org.openflexo.foundation.dm.RationalRoseRepository;
 import org.openflexo.foundation.dm.action.CreateDMMethod;
-import org.openflexo.foundation.rm.FlexoProject;
 import org.openflexo.localization.FlexoLocalization;
 
 import cb.parser.EOModelExtractor;
@@ -78,7 +78,7 @@ public class Importer implements DataImporter {
 	private static final String RATIONAL_TYPE_ATTRIBUTE = "Rational type";
 
 	private FlexoProject project;
-	private FlexoAction<?, ? extends FlexoModelObject, ? extends FlexoModelObject> flexoAction;
+	private FlexoAction<?, ? extends AgileBirdsObject, ? extends AgileBirdsObject> flexoAction;
 	private Hashtable<String, DMEntity> entities;
 	private EOModelExtractor extractor;
 	private PetalFile tree;
@@ -87,7 +87,7 @@ public class Importer implements DataImporter {
 	public Object importInProject(FlexoProject project, File importedFile, Object[] parameters) {
 		String repositoryName = parameters.length >= 1 ? (String) parameters[0] : null;
 		String packageName = parameters.length >= 2 ? (String) parameters[1] : DMPackage.DEFAULT_PACKAGE_NAME;
-		flexoAction = parameters.length >= 3 ? (FlexoAction<?, ? extends FlexoModelObject, ? extends FlexoModelObject>) parameters[2]
+		flexoAction = parameters.length >= 3 ? (FlexoAction<?, ? extends AgileBirdsObject, ? extends AgileBirdsObject>) parameters[2]
 				: null;
 		this.project = project;
 
@@ -345,7 +345,7 @@ public class Importer implements DataImporter {
 	 * @param petalObject
 	 * @param modelObject
 	 */
-	private void extractProperties(cb.petal.PetalObject petalObject, FlexoModelObject modelObject) {
+	private void extractProperties(cb.petal.PetalObject petalObject, AgileBirdsObject modelObject) {
 		for (String name : petalObject.getNames()) {
 			if (propertyWithNameShouldBeIgnored(name)) {
 				continue;
@@ -432,7 +432,7 @@ public class Importer implements DataImporter {
 	 * @param attrib
 	 * @param prop
 	 */
-	private void addProperty(String name, String value, FlexoModelObject prop) {
+	private void addProperty(String name, String value, AgileBirdsObject prop) {
 		if (value == null || value.length() == 0) {
 			return;
 		}

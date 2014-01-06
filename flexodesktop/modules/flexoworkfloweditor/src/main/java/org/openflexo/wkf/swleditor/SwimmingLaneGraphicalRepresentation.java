@@ -53,7 +53,7 @@ public class SwimmingLaneGraphicalRepresentation extends DrawingGraphicalReprese
 	}
 
 	public void updateAllEdgeLayers() {
-		for (GraphicalRepresentation<?> processChild : getContainedGraphicalRepresentations()) {
+		for (GraphicalRepresentation processChild : getContainedGraphicalRepresentations()) {
 			if (processChild instanceof WKFConnectorGR<?>) {
 				((WKFConnectorGR<?>) processChild).updateLayer();
 			}

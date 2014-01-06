@@ -23,7 +23,7 @@ import java.io.File;
 
 import org.openflexo.components.widget.FIBProcessSelector;
 import org.openflexo.foundation.FlexoEditor;
-import org.openflexo.foundation.rm.FlexoProject;
+import org.openflexo.foundation.FlexoProject;
 import org.openflexo.toolbox.FileResource;
 
 public class FIBProcessSelectorEDITOR extends ProjectDialogEDITOR {

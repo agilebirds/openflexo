@@ -22,7 +22,7 @@ package org.openflexo.generator;
 import java.io.File;
 
 import org.openflexo.foundation.CodeType;
-import org.openflexo.foundation.rm.FlexoProject;
+import org.openflexo.foundation.FlexoProject;
 import org.openflexo.generator.exception.GenerationException;
 
 /**

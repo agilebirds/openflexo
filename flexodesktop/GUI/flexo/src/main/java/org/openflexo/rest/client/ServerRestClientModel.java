@@ -34,8 +34,8 @@ import org.openflexo.LocalDBAccess;
 import org.openflexo.components.ProgressWindow;
 import org.openflexo.fib.controller.FIBController;
 import org.openflexo.fib.controller.FIBDialog;
-import org.openflexo.foundation.rm.FlexoProject;
-import org.openflexo.foundation.rm.SaveResourceException;
+import org.openflexo.foundation.FlexoProject;
+import org.openflexo.foundation.resource.SaveResourceException;
 import org.openflexo.icon.IconLibrary;
 import org.openflexo.localization.FlexoLocalization;
 import org.openflexo.rest.client.WebServiceURLDialog.ServerRestClientParameter;
@@ -50,6 +50,7 @@ import org.openflexo.rest.client.model.TocEntryDefinition;
 import org.openflexo.rest.client.model.User;
 import org.openflexo.rest.client.model.UserType;
 import org.openflexo.toolbox.FileResource;
+import org.openflexo.toolbox.FlexoVersion;
 import org.openflexo.toolbox.HasPropertyChangeSupport;
 import org.openflexo.toolbox.Holder;
 import org.openflexo.view.controller.FlexoController;
@@ -169,7 +170,7 @@ public class ServerRestClientModel implements HasPropertyChangeSupport {
 		private static final String COMMENT = "comment";
 		private static final String PROJECT = "project";
 		private Project project;
-		private PropertyChangeSupport pcSupport;
+		private final PropertyChangeSupport pcSupport;
 		private String comment;
 
 		public NewProjectParameter() {
@@ -236,7 +237,7 @@ public class ServerRestClientModel implements HasPropertyChangeSupport {
 
 	}
 
-	private interface ServerRestClientOperation {
+	public interface ServerRestClientOperation {
 		/**
 		 * Performs the operation using the provided <code>client</code> and notifies the user through the provided <code>progress</code>.
 		 * 
@@ -267,7 +268,7 @@ public class ServerRestClientModel implements HasPropertyChangeSupport {
 		public int getSteps();
 	}
 
-	private class UpdateUserOperation implements ServerRestClientOperation {
+	public class UpdateUserOperation implements ServerRestClientOperation {
 		@Override
 		public void doOperation(ServerRestClient client, Progress progress) throws IOException, WebApplicationException {
 			try {
@@ -291,7 +292,19 @@ public class ServerRestClientModel implements HasPropertyChangeSupport {
 
 	}
 
-	private class UpdateServerProject implements ServerRestClientOperation {
+	public class UpdateServerProject implements ServerRestClientOperation {
+
+		private final boolean notifyUserIfProjectNotHandled;
+
+		public UpdateServerProject() {
+			this(true);
+		}
+
+		public UpdateServerProject(boolean notifyUserIfProjectNotHandled) {
+			super();
+			this.notifyUserIfProjectNotHandled = notifyUserIfProjectNotHandled;
+		}
+
 		@Override
 		public void doOperation(ServerRestClient client, Progress progress) throws IOException, WebApplicationException {
 			try {
@@ -304,12 +317,14 @@ public class ServerRestClientModel implements HasPropertyChangeSupport {
 				} else {
 					setServerProject(null);
 					setVersions(Collections.<ProjectVersion> emptyList());
-					SwingUtilities.invokeLater(new Runnable() {
-						@Override
-						public void run() {
-							FlexoController.notify(FlexoLocalization.localizedForKey("your_project_is_not_handled_by_the_server"));
-						}
-					});
+					if (notifyUserIfProjectNotHandled) {
+						SwingUtilities.invokeLater(new Runnable() {
+							@Override
+							public void run() {
+								FlexoController.notify(FlexoLocalization.localizedForKey("your_project_is_not_handled_by_the_server"));
+							}
+						});
+					}
 				}
 			} finally {
 				if (getServerProject() == null) {
@@ -332,7 +347,7 @@ public class ServerRestClientModel implements HasPropertyChangeSupport {
 
 	}
 
-	private class UpdateProjectEditionSession implements ServerRestClientOperation {
+	public class UpdateProjectEditionSession implements ServerRestClientOperation {
 		@Override
 		public void doOperation(ServerRestClient client, Progress progress) throws IOException, WebApplicationException {
 			if (serverProject == null) {
@@ -360,7 +375,7 @@ public class ServerRestClientModel implements HasPropertyChangeSupport {
 
 	}
 
-	private class UpdateVersions implements ServerRestClientOperation {
+	public class UpdateVersions implements ServerRestClientOperation {
 		@Override
 		public void doOperation(ServerRestClient client, Progress progress) throws IOException, WebApplicationException {
 			if (serverProject == null) {
@@ -392,7 +407,7 @@ public class ServerRestClientModel implements HasPropertyChangeSupport {
 		}
 	}
 
-	private class SendProjectToServer implements ServerRestClientOperation {
+	public class SendProjectToServer implements ServerRestClientOperation {
 
 		private final String comment;
 
@@ -402,12 +417,18 @@ public class ServerRestClientModel implements HasPropertyChangeSupport {
 
 		@Override
 		public void doOperation(ServerRestClient client, Progress progress) throws IOException, WebApplicationException {
+			if (user == null) {
+				return;
+			}
+			if (serverProject == null) {
+				return;
+			}
 			boolean success = false;
-			String oldVersion = flexoProject.getVersion();
+			FlexoVersion oldVersion = flexoProject.getVersion();
 			try {
 				ProgressWindow.showProgressWindow(FlexoLocalization.localizedForKey("retrieving_next_version"), 6);
 				String nextVersion = client.projectsProjectIDVersions(serverProject.getProjectId()).next().getAsTextPlain(String.class);
-				flexoProject.setVersion(nextVersion);
+				flexoProject.setVersion(new FlexoVersion(nextVersion));
 				File zipFile = null;
 				zipFile = File.createTempFile(StringUtils.rightPad(flexoProject.getProjectName(), 3, '_'), ".zip");
 				zipFile.deleteOnExit();
@@ -480,7 +501,7 @@ public class ServerRestClientModel implements HasPropertyChangeSupport {
 		}
 	}
 
-	private class GenerateDocumentation implements ServerRestClientOperation {
+	public class GenerateDocumentation implements ServerRestClientOperation {
 
 		private final DocGenerationChoice choice;
 		private final ProjectVersion version;
@@ -534,7 +555,7 @@ public class ServerRestClientModel implements HasPropertyChangeSupport {
 		}
 	}
 
-	private class GeneratePrototype implements ServerRestClientOperation {
+	public class GeneratePrototype implements ServerRestClientOperation {
 
 		private final ProjectVersion version;
 
@@ -565,7 +586,7 @@ public class ServerRestClientModel implements HasPropertyChangeSupport {
 
 	private class ValidationInProgress implements ServerRestClientOperation {
 
-		private ProjectVersion version;
+		private final ProjectVersion version;
 
 		public ValidationInProgress(ProjectVersion version) {
 			super();
@@ -622,9 +643,9 @@ public class ServerRestClientModel implements HasPropertyChangeSupport {
 	}
 	*/
 
-	private class CloseSession implements ServerRestClientOperation {
+	public class CloseSession implements ServerRestClientOperation {
 
-		private Session session;
+		private final Session session;
 
 		public CloseSession(Session session) {
 			super();
@@ -660,7 +681,7 @@ public class ServerRestClientModel implements HasPropertyChangeSupport {
 
 	public class CreateProjectAndUploadFirstVersion implements ServerRestClientOperation {
 
-		private NewProjectParameter newProjectParameter;
+		private final NewProjectParameter newProjectParameter;
 
 		public CreateProjectAndUploadFirstVersion(NewProjectParameter newProjectParameter) {
 			super();
@@ -756,8 +777,8 @@ public class ServerRestClientModel implements HasPropertyChangeSupport {
 
 	private PropertyChangeSupport pcSupport;
 
-	private int pageSize = 5;
-	private int page = 0;
+	private final int pageSize = 5;
+	private final int page = 0;
 	private ScheduledFuture<?> validationJobChecker;
 	private LoadingCache<String, List<Account>> accountCache;
 	private LoadingCache<String, List<User>> adminUserCache;
@@ -801,7 +822,11 @@ public class ServerRestClientModel implements HasPropertyChangeSupport {
 
 					}
 				});
-				return result.get();
+				if (result.get() != null) {
+					return result.get();
+				} else {
+					throw new RuntimeException("Could not load users for account " + account.getAccountName());
+				}
 			}
 		});
 		this.adminUserCache = CacheBuilder.newBuilder().build(new CacheLoader<String, List<User>>() {
@@ -848,7 +873,7 @@ public class ServerRestClientModel implements HasPropertyChangeSupport {
 		performOperationsInSwingWorker(true, false, operations);
 	}
 
-	private void performOperationsInSwingWorker(final boolean useProgressWindow, final boolean synchronous,
+	public void performOperationsInSwingWorker(final boolean useProgressWindow, final boolean synchronous,
 			final ServerRestClientOperation... operations) {
 		if (useProgressWindow) {
 			ProgressWindow.makeProgressWindow("", operations.length);
@@ -873,6 +898,9 @@ public class ServerRestClientModel implements HasPropertyChangeSupport {
 				if (dialog != null) {
 					dialog.setVisible(false);
 					dialog.dispose();
+				}
+				if (useProgressWindow) {
+					ProgressWindow.hideProgressWindow();
 				}
 			}
 		};

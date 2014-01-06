@@ -25,16 +25,16 @@ import java.util.logging.Logger;
 
 import javax.naming.InvalidNameException;
 
+import org.openflexo.fge.BackgroundStyle;
 import org.openflexo.fge.Drawing;
+import org.openflexo.fge.ForegroundStyle;
 import org.openflexo.fge.GraphicalRepresentation;
+import org.openflexo.fge.ShadowStyle;
 import org.openflexo.fge.ShapeGraphicalRepresentation;
-import org.openflexo.fge.graphics.BackgroundStyle;
+import org.openflexo.fge.TextStyle;
 import org.openflexo.fge.graphics.DecorationPainter;
-import org.openflexo.fge.graphics.ForegroundStyle;
-import org.openflexo.fge.graphics.ShadowStyle;
-import org.openflexo.fge.graphics.TextStyle;
 import org.openflexo.fge.shapes.Rectangle;
-import org.openflexo.fge.shapes.Shape.ShapeType;
+import org.openflexo.fge.shapes.ShapeSpecification.ShapeType;
 import org.openflexo.foundation.DataModification;
 import org.openflexo.foundation.FlexoObservable;
 import org.openflexo.foundation.GraphicalFlexoObserver;
@@ -61,7 +61,7 @@ public class DMPropertyGR extends ShapeGraphicalRepresentation<DMProperty> imple
 		super(ShapeType.RECTANGLE, aDMProperty, aDrawing);
 		// setText(getRole().getName());
 		setIsFloatingLabel(false);
-		getShape().setIsRounded(false);
+		getShapeSpecification().setIsRounded(false);
 		setDimensionConstraints(DimensionConstraints.UNRESIZABLE);
 		updateStyles();
 		setBorder(new ShapeGraphicalRepresentation.ShapeBorder(10, 10, 10, 10));
@@ -155,8 +155,8 @@ public class DMPropertyGR extends ShapeGraphicalRepresentation<DMProperty> imple
 	}
 
 	@Override
-	public Rectangle getShape() {
-		return (Rectangle) super.getShape();
+	public Rectangle getShapeSpecification() {
+		return (Rectangle) super.getShapeSpecification();
 	}
 
 	@Override
@@ -179,7 +179,7 @@ public class DMPropertyGR extends ShapeGraphicalRepresentation<DMProperty> imple
 
 	@Override
 	public double getWidth() {
-		GraphicalRepresentation<?> container = getContainerGraphicalRepresentation();
+		GraphicalRepresentation container = getContainerGraphicalRepresentation();
 		if (container instanceof DMEntityGR) {
 			return ((DMEntityGR) container).getWidth() - 1;
 		}

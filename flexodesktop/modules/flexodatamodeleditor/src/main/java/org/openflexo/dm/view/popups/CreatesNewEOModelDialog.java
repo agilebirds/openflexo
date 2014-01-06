@@ -42,7 +42,7 @@ import javax.swing.filechooser.FileFilter;
 
 import org.openflexo.foundation.dm.action.CreateDMEOModel;
 import org.openflexo.foundation.dm.eo.DMEOAdaptorType;
-import org.openflexo.foundation.rm.FlexoProject;
+import org.openflexo.foundation.FlexoProject;
 import org.openflexo.foundation.rm.ProjectRestructuration;
 import org.openflexo.localization.FlexoLocalization;
 import org.openflexo.swing.FileSelector;

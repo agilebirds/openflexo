@@ -429,6 +429,7 @@ public class PropertyModel extends ParametersContainerModelObject implements Inn
 		} catch (AccessorInvocationException e) {
 			throw e;
 		} catch (Exception e) {
+			e.printStackTrace();
 			if (logger.isLoggable(Level.WARNING)) {
 				logger.warning("getObjectValue() failed for property " + name + " for object " + inspectable.getClass().getName()
 						+ " : exception " + e.getMessage());

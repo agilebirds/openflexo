@@ -19,61 +19,54 @@
  */
 package org.openflexo.foundation.viewpoint;
 
-import org.openflexo.antar.binding.BindingDefinition;
-import org.openflexo.antar.binding.BindingDefinition.BindingDefinitionType;
-import org.openflexo.foundation.FlexoModelObject;
-import org.openflexo.foundation.Inspectors;
-import org.openflexo.foundation.ontology.EditionPatternReference;
-import org.openflexo.foundation.viewpoint.ViewPoint.ViewPointBuilder;
-import org.openflexo.foundation.viewpoint.binding.ViewPointDataBinding;
-import org.openflexo.foundation.viewpoint.inspector.InspectorBindingAttribute;
+import java.lang.reflect.InvocationTargetException;
 
+import org.flexo.model.TestModelObject;
+import org.openflexo.antar.binding.DataBinding;
+import org.openflexo.antar.binding.DataBinding.BindingDefinitionType;
+import org.openflexo.antar.expr.NullReferenceException;
+import org.openflexo.antar.expr.TypeMismatchException;
+import org.openflexo.foundation.view.EditionPatternInstance;
+import org.openflexo.foundation.viewpoint.annotations.FIBPanel;
+
+@FIBPanel("Fib/NavigationSchemePanel.fib")
 public class NavigationScheme extends AbstractActionScheme {
 
-	private ViewPointDataBinding targetObject;
+	private DataBinding<Object> targetObject;
 
-	public static enum NavigationSchemeBindingAttribute implements InspectorBindingAttribute {
-		targetObject
+	public NavigationScheme() {
+		super();
 	}
 
-	public NavigationScheme(ViewPointBuilder builder) {
-		super(builder);
-	}
-
-	@Override
-	public EditionSchemeType getEditionSchemeType() {
-		return EditionSchemeType.NavigationScheme;
-	}
-
-	@Override
-	public String getInspectorName() {
-		return Inspectors.VPM.NAVIGATION_SCHEME_INSPECTOR;
-	}
-
-	private BindingDefinition TARGET_OBJECT = new BindingDefinition("targetObject", FlexoModelObject.class, BindingDefinitionType.GET,
-			false);
-
-	public BindingDefinition getTargetObjectBindingDefinition() {
-		return TARGET_OBJECT;
-	}
-
-	public ViewPointDataBinding getTargetObject() {
+	public DataBinding<Object> getTargetObject() {
 		if (targetObject == null) {
-			targetObject = new ViewPointDataBinding(this, NavigationSchemeBindingAttribute.targetObject, getTargetObjectBindingDefinition());
+			targetObject = new DataBinding<Object>(this, TestModelObject.class, BindingDefinitionType.GET);
+			targetObject.setBindingName("targetObject");
 		}
 		return targetObject;
 	}
 
-	public void setTargetObject(ViewPointDataBinding targetObject) {
-		targetObject.setOwner(this);
-		targetObject.setBindingAttribute(NavigationSchemeBindingAttribute.targetObject);
-		targetObject.setBindingDefinition(getTargetObjectBindingDefinition());
+	public void setTargetObject(DataBinding<Object> targetObject) {
+		if (targetObject != null) {
+			targetObject.setOwner(this);
+			targetObject.setBindingName("targetObject");
+			targetObject.setDeclaredType(TestModelObject.class);
+			targetObject.setBindingDefinitionType(BindingDefinitionType.GET);
+		}
 		this.targetObject = targetObject;
 	}
 
-	public FlexoModelObject evaluateTargetObject(EditionPatternReference editionPatternReference) {
+	public TestModelObject evaluateTargetObject(EditionPatternInstance editionPatternInstance) {
 		if (getTargetObject().isValid()) {
-			return (FlexoModelObject) getTargetObject().getBindingValue(editionPatternReference);
+			try {
+				return (TestModelObject) getTargetObject().getBindingValue(editionPatternInstance);
+			} catch (TypeMismatchException e) {
+				e.printStackTrace();
+			} catch (NullReferenceException e) {
+				e.printStackTrace();
+			} catch (InvocationTargetException e) {
+				e.printStackTrace();
+			}
 		}
 		return null;
 	}

@@ -30,7 +30,7 @@ import org.openflexo.fge.controller.PaletteElement;
 import org.openflexo.fge.controller.PaletteElement.PaletteElementGraphicalRepresentation;
 import org.openflexo.fge.geom.FGEPoint;
 import org.openflexo.foundation.RepresentableFlexoModelObject;
-import org.openflexo.foundation.rm.FlexoProject;
+import org.openflexo.foundation.FlexoProject;
 import org.openflexo.foundation.wkf.DuplicateRoleException;
 import org.openflexo.foundation.wkf.FlexoWorkflow;
 import org.openflexo.foundation.wkf.Role;
@@ -110,8 +110,8 @@ public class RolePalette extends DrawingPalette {
 
 			@Override
 			public boolean elementDragged(GraphicalRepresentation gr, FGEPoint dropLocation) {
-				// MyDrawingElement container = (MyDrawingElement)gr.getDrawable();
-				// getController().addNewShape(new MyShape(getGraphicalRepresentation().getShapeType(), dropLocation,
+				// DiagramElement container = (DiagramElement)gr.getDrawable();
+				// getController().addNewShape(new Shape(getGraphicalRepresentation().getShapeType(), dropLocation,
 				// getController().getDrawing()),container);
 				logger.info("Dropping new role for " + gr.getDrawable());
 				FlexoWorkflow workflow = ((WorkflowModelObject) gr.getDrawable()).getWorkflow();

@@ -26,7 +26,7 @@ import java.util.logging.Logger;
 import javax.swing.JComponent;
 
 import org.openflexo.components.widget.CustomInspectorWidget;
-import org.openflexo.foundation.FlexoModelObject;
+import org.openflexo.foundation.FlexoObject;
 import org.openflexo.fps.CVSRepository;
 import org.openflexo.fps.controller.FPSController;
 import org.openflexo.inspector.AbstractController;
@@ -62,7 +62,7 @@ public class CVSRepositoryInspectorWidget extends CustomInspectorWidget<CVSRepos
 			}
 
 			@Override
-			public boolean isSelectable(FlexoModelObject object) {
+			public boolean isSelectable(FlexoObject object) {
 				boolean returned = super.isSelectable(object);
 				if (returned) {
 					if (hasValueForParameter("isSelectable")) {

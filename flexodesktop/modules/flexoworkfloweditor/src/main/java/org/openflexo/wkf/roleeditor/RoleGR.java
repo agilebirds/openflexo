@@ -25,24 +25,25 @@ import java.util.List;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 
+import org.openflexo.fge.BackgroundImageBackgroundStyle;
+import org.openflexo.fge.BackgroundImageBackgroundStyle.ImageBackgroundType;
+import org.openflexo.fge.BackgroundStyle;
+import org.openflexo.fge.ColorGradientBackgroundStyle.ColorGradientDirection;
 import org.openflexo.fge.Drawing;
 import org.openflexo.fge.FGEUtils;
+import org.openflexo.fge.ForegroundStyle;
 import org.openflexo.fge.GraphicalRepresentation;
 import org.openflexo.fge.ShapeGraphicalRepresentation;
+import org.openflexo.fge.TextStyle;
 import org.openflexo.fge.cp.ControlArea;
 import org.openflexo.fge.geom.FGEDimension;
 import org.openflexo.fge.geom.FGEGeometricObject.SimplifiedCardinalDirection;
 import org.openflexo.fge.geom.FGEPoint;
-import org.openflexo.fge.graphics.BackgroundStyle;
-import org.openflexo.fge.graphics.BackgroundStyle.BackgroundImage;
-import org.openflexo.fge.graphics.BackgroundStyle.BackgroundImage.ImageBackgroundType;
-import org.openflexo.fge.graphics.BackgroundStyle.ColorGradient.ColorGradientDirection;
 import org.openflexo.fge.graphics.DecorationPainter;
 import org.openflexo.fge.graphics.FGEShapeDecorationGraphics;
-import org.openflexo.fge.graphics.ForegroundStyle;
-import org.openflexo.fge.graphics.TextStyle;
+import org.openflexo.fge.impl.ShapeGraphicalRepresentationImpl;
 import org.openflexo.fge.shapes.Rectangle;
-import org.openflexo.fge.shapes.Shape.ShapeType;
+import org.openflexo.fge.shapes.ShapeSpecification.ShapeType;
 import org.openflexo.foundation.DataModification;
 import org.openflexo.foundation.FlexoObservable;
 import org.openflexo.foundation.GraphicalFlexoObserver;
@@ -57,7 +58,7 @@ import org.openflexo.foundation.wkf.dm.WKFAttributeDataModification;
 import org.openflexo.icon.WKFIconLibrary;
 import org.openflexo.toolbox.ConcatenedList;
 
-public class RoleGR extends ShapeGraphicalRepresentation<Role> implements GraphicalFlexoObserver {
+public class RoleGR extends ShapeGraphicalRepresentationImpl implements GraphicalFlexoObserver {
 
 	private static final Logger logger = Logger.getLogger(RoleGR.class.getPackage().getName());
 
@@ -149,7 +150,7 @@ public class RoleGR extends ShapeGraphicalRepresentation<Role> implements Graphi
 	public class RoleDecorationPainter implements DecorationPainter, Cloneable {
 		private Role role;
 		protected ForegroundStyle decorationForeground;
-		protected BackgroundImage decorationBackground;
+		protected BackgroundImageBackgroundStyle decorationBackground;
 		private boolean isSystemRole;
 
 		@Override
@@ -260,9 +261,9 @@ public class RoleGR extends ShapeGraphicalRepresentation<Role> implements Graphi
 
 	private void doDefaultLayout(int x, int y) {
 		boolean ok = true;
-		Enumeration<GraphicalRepresentation<?>> en = getDrawing().getAllGraphicalRepresentations();
+		Enumeration<GraphicalRepresentation> en = getDrawing().getAllGraphicalRepresentations();
 		while (en.hasMoreElements()) {
-			GraphicalRepresentation<?> gr = en.nextElement();
+			GraphicalRepresentation gr = en.nextElement();
 			if (gr instanceof RoleGR) {
 				RoleGR rgr = (RoleGR) gr;
 				if (rgr != this) {
@@ -355,7 +356,7 @@ public class RoleGR extends ShapeGraphicalRepresentation<Role> implements Graphi
 
 	@Override
 	public Rectangle getShape() {
-		return (Rectangle) super.getShape();
+		return (Rectangle) super.getShapeSpecification();
 	}
 
 	@Override

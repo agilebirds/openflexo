@@ -24,19 +24,23 @@ import java.util.logging.Logger;
 
 import javax.swing.Icon;
 
+import org.openflexo.fge.view.ShapeView;
 import org.openflexo.foundation.action.FlexoActionFinalizer;
 import org.openflexo.foundation.action.FlexoActionInitializer;
-import org.openflexo.foundation.view.ViewObject;
-import org.openflexo.foundation.view.action.AddShape;
+import org.openflexo.foundation.view.diagram.model.DiagramElement;
+import org.openflexo.foundation.view.diagram.model.DiagramShape;
 import org.openflexo.icon.VEIconLibrary;
 import org.openflexo.localization.FlexoLocalization;
+import org.openflexo.technologyadapter.diagram.model.action.AddShape;
 import org.openflexo.toolbox.StringUtils;
 import org.openflexo.ve.controller.VEController;
+import org.openflexo.ve.diagram.DiagramModuleView;
+import org.openflexo.view.ModuleView;
 import org.openflexo.view.controller.ActionInitializer;
 import org.openflexo.view.controller.ControllerActionInitializer;
 import org.openflexo.view.controller.FlexoController;
 
-public class AddShapeInitializer extends ActionInitializer {
+public class AddShapeInitializer extends ActionInitializer<AddShape, DiagramElement<?>, DiagramElement<?>> {
 
 	private static final Logger logger = Logger.getLogger(ControllerActionInitializer.class.getPackage().getName());
 
@@ -58,7 +62,7 @@ public class AddShapeInitializer extends ActionInitializer {
 					return true;
 				}
 
-				ViewObject parent = action.getParent();
+				DiagramElement<?> parent = action.getParent();
 				if (parent != null) {
 					String newName = FlexoController.askForString(FlexoLocalization.localizedForKey("name_for_new_shape"));
 					if (newName == null || StringUtils.isEmpty(newName)) {
@@ -78,6 +82,16 @@ public class AddShapeInitializer extends ActionInitializer {
 			@Override
 			public boolean run(EventObject e, AddShape action) {
 				((VEController) getController()).getSelectionManager().setSelectedObject(action.getNewShape());
+				
+				ModuleView<?> moduleView = getController().moduleViewForObject(action.getNewShape().getDiagram(), false);
+				ShapeView<DiagramShape> shape = ((DiagramModuleView) moduleView).getController().getDrawingView()
+						.shapeViewForObject(action.getNewShape().getGraphicalRepresentation());
+				if (action.getNewShape() != null) {
+					if (shape.getLabelView() != null) {
+						shape.getGraphicalRepresentation().setContinuousTextEditing(true);
+						shape.getLabelView().startEdition();
+					}
+				}
 				return true;
 			}
 		};

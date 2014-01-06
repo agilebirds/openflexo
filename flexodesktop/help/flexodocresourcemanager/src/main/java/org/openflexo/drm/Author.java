@@ -67,9 +67,4 @@ public class Author extends DRMObject {
 		this.identifier = identifier;
 	}
 
-	@Override
-	public String getClassNameKey() {
-		return "author";
-	}
-
 }

@@ -63,7 +63,9 @@ public class VPMFileMenu extends FileMenu {
 
 	@Override
 	public void quit() {
-		if (getCEDController().reviewModifiedResources()) {
+		if (getCEDController().getApplicationContext().getResourceManager().getUnsavedResources().size() == 0) {
+			super.quit();
+		} else if (getCEDController().reviewModifiedResources()) {
 			super.quit();
 		}
 

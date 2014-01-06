@@ -26,7 +26,7 @@ import java.util.List;
 import org.mockito.Mockito;
 import org.openflexo.components.SaveProjectsDialog;
 import org.openflexo.fib.editor.FIBAbstractEditor;
-import org.openflexo.foundation.rm.FlexoProject;
+import org.openflexo.foundation.FlexoProject;
 
 public class SaveProjectDialogEDITOR extends FIBAbstractEditor {
 

@@ -26,14 +26,14 @@ import java.util.logging.Logger;
 
 import javax.swing.ImageIcon;
 
+import org.openflexo.fge.BackgroundStyle;
+import org.openflexo.fge.ForegroundStyle;
 import org.openflexo.fge.GraphicalRepresentation;
 import org.openflexo.fge.ShapeGraphicalRepresentation;
 import org.openflexo.fge.geom.FGEGeometricObject.SimplifiedCardinalDirection;
 import org.openflexo.fge.geom.FGELine;
 import org.openflexo.fge.geom.FGEPoint;
-import org.openflexo.fge.graphics.BackgroundStyle;
 import org.openflexo.fge.graphics.FGEShapeGraphics;
-import org.openflexo.fge.graphics.ForegroundStyle;
 import org.openflexo.fge.graphics.ShapePainter;
 import org.openflexo.fge.notifications.ObjectHasMoved;
 import org.openflexo.fge.notifications.ObjectHasResized;
@@ -42,7 +42,7 @@ import org.openflexo.fge.notifications.ObjectResized;
 import org.openflexo.fge.notifications.ObjectWillMove;
 import org.openflexo.fge.notifications.ObjectWillResize;
 import org.openflexo.fge.notifications.ShapeChanged;
-import org.openflexo.fge.shapes.Shape.ShapeType;
+import org.openflexo.fge.shapes.ShapeSpecification.ShapeType;
 import org.openflexo.foundation.DataModification;
 import org.openflexo.foundation.FlexoObservable;
 import org.openflexo.foundation.wkf.dm.ObjectVisibilityChanged;
@@ -255,7 +255,7 @@ public class PortmapGR extends AbstractNodeGR<FlexoPortMap> {
 		super.notifyObjectHasMoved();
 		FlexoPortMap afterPortmap = null;
 		if (observedContainer != null) {
-			for (GraphicalRepresentation<?> gr : observedContainer.getContainedGraphicalRepresentations()) {
+			for (GraphicalRepresentation gr : observedContainer.getContainedGraphicalRepresentations()) {
 				if (gr instanceof PortmapGR && gr != this && gr.getIsVisible()) {
 					PortmapGR portmapGR = (PortmapGR) gr;
 					if (getOrientation().isVertical()) {

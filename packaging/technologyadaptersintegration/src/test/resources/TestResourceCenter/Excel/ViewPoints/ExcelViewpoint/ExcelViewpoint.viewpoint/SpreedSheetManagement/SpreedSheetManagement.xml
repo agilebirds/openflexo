@@ -1,0 +1,7 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<DiagramSpecification id="1" name="SpreedSheetManagement" modelVersion="1.0">
+  <LocalizedDictionary id="2" />
+  <DiagramModelSlot id="3" isRequired="true" isReadOnly="false" />
+  <DiagramModelSlot id="4" isRequired="true" isReadOnly="false" name="this" virtualModelURI="http://ExcelViewpoint/SpreedSheetManagement" />
+  <Inspector id="5" inspectorTitle="SpreedSheetManagement" />
+</DiagramSpecification>

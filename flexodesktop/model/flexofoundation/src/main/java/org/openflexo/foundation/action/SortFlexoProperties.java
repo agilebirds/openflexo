@@ -25,34 +25,34 @@ import java.util.Vector;
 
 import org.openflexo.foundation.FlexoEditor;
 import org.openflexo.foundation.FlexoException;
-import org.openflexo.foundation.FlexoModelObject;
+import org.openflexo.foundation.FlexoObject;
+import org.openflexo.foundation.FlexoObject.FlexoObjectImpl;
 import org.openflexo.foundation.FlexoProperty;
 
-public class SortFlexoProperties extends FlexoAction<SortFlexoProperties, FlexoModelObject, FlexoModelObject> {
+public class SortFlexoProperties extends FlexoAction<SortFlexoProperties, FlexoObject, FlexoObject> {
 
-	public static final FlexoActionType<SortFlexoProperties, FlexoModelObject, FlexoModelObject> actionType = new FlexoActionType<SortFlexoProperties, FlexoModelObject, FlexoModelObject>(
+	public static final FlexoActionType<SortFlexoProperties, FlexoObject, FlexoObject> actionType = new FlexoActionType<SortFlexoProperties, FlexoObject, FlexoObject>(
 			"sort_flexo_properties") {
 
 		@Override
-		public boolean isEnabledForSelection(FlexoModelObject object, Vector<FlexoModelObject> globalSelection) {
+		public boolean isEnabledForSelection(FlexoObject object, Vector<FlexoObject> globalSelection) {
 			return object != null;
 		}
 
 		@Override
-		public boolean isVisibleForSelection(FlexoModelObject object, Vector<FlexoModelObject> globalSelection) {
+		public boolean isVisibleForSelection(FlexoObject object, Vector<FlexoObject> globalSelection) {
 			return false;
 		}
 
 		@Override
-		public SortFlexoProperties makeNewAction(FlexoModelObject focusedObject, Vector<FlexoModelObject> globalSelection,
-				FlexoEditor editor) {
+		public SortFlexoProperties makeNewAction(FlexoObject focusedObject, Vector<FlexoObject> globalSelection, FlexoEditor editor) {
 			return new SortFlexoProperties(focusedObject, globalSelection, editor);
 		}
 
 	};
 
 	static {
-		FlexoModelObject.addActionForClass(actionType, FlexoModelObject.class);
+		FlexoObjectImpl.addActionForClass(actionType, FlexoObject.class);
 	}
 
 	private String name;
@@ -60,19 +60,19 @@ public class SortFlexoProperties extends FlexoAction<SortFlexoProperties, FlexoM
 
 	private FlexoProperty createdProperty;
 
-	public SortFlexoProperties(FlexoModelObject focusedObject, Vector<FlexoModelObject> globalSelection, FlexoEditor editor) {
+	public SortFlexoProperties(FlexoObject focusedObject, Vector<FlexoObject> globalSelection, FlexoEditor editor) {
 		super(actionType, focusedObject, globalSelection, editor);
 	}
 
 	@Override
 	protected void doAction(Object context) throws FlexoException {
-		Vector<FlexoModelObject> v = getGlobalSelectionAndFocusedObject();
-		for (FlexoModelObject object : v) {
+		Vector<FlexoObject> v = getGlobalSelectionAndFocusedObject();
+		for (FlexoObject object : v) {
 			sortPropertiesForObject(object);
 		}
 	}
 
-	private void sortPropertiesForObject(FlexoModelObject object) {
+	private void sortPropertiesForObject(FlexoObject object) {
 		Collections.sort(object.getCustomProperties(), new Comparator<FlexoProperty>() {
 
 			@Override

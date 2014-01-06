@@ -1,0 +1,12 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<xmi:XMI xmi:version="2.0" xmlns:xmi="http://www.omg.org/XMI" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xmlns:city2="http://www.thalesgroup.com/openflexo/emf/model/city2">
+<city2:City name="Lampaul-Plouarzel">
+  <houses xsi:type="city2:Mansion" owner="Christophe GUYCHARD" number="12"/>
+  <houses xsi:type="city2:Appartment" owner="Sylvain GUERIN" label="42B"/>
+  <mayor name="Jean-Pierre DUPOND"/>
+</city2:City>
+<city2:City name="Brest">
+</city2:City>
+<city2:City name="Lannilis">
+</city2:City>
+</xmi:XMI>

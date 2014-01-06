@@ -55,7 +55,7 @@ import org.openflexo.foundation.dm.DMPropertyImplementationType;
 import org.openflexo.foundation.dm.DMType;
 import org.openflexo.foundation.dm.WSDLRepository;
 import org.openflexo.foundation.rm.DuplicateResourceException;
-import org.openflexo.foundation.rm.FlexoProject;
+import org.openflexo.foundation.FlexoProject;
 import org.openflexo.foundation.wkf.DuplicateWKFObjectException;
 import org.openflexo.foundation.wkf.FlexoProcess;
 import org.openflexo.foundation.wkf.FlexoWorkflow;

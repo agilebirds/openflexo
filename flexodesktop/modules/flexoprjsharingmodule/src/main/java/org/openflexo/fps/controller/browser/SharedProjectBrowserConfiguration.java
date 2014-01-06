@@ -26,8 +26,8 @@ import org.openflexo.components.browser.BrowserElement;
 import org.openflexo.components.browser.BrowserElementFactory;
 import org.openflexo.components.browser.CustomBrowserFilter;
 import org.openflexo.components.browser.ProjectBrowser;
-import org.openflexo.foundation.FlexoModelObject;
-import org.openflexo.foundation.rm.FlexoProject;
+import org.openflexo.foundation.FlexoObject;
+import org.openflexo.foundation.FlexoProject;
 import org.openflexo.fps.CVSContainer;
 import org.openflexo.fps.CVSDirectory;
 import org.openflexo.fps.CVSFile;
@@ -58,7 +58,7 @@ class SharedProjectBrowserConfiguration implements BrowserConfiguration {
 		}
 
 		@Override
-		public boolean accept(FlexoModelObject object) {
+		public boolean accept(FlexoObject object) {
 			if (object instanceof CVSFile) {
 				return acceptFile((CVSFile) object);
 			}
@@ -144,7 +144,7 @@ class SharedProjectBrowserConfiguration implements BrowserConfiguration {
 	}
 
 	@Override
-	public FlexoModelObject getDefaultRootObject() {
+	public FlexoObject getDefaultRootObject() {
 		return _project;
 	}
 
@@ -160,7 +160,7 @@ class SharedProjectBrowserConfiguration implements BrowserConfiguration {
 		}
 
 		@Override
-		public BrowserElement makeNewElement(FlexoModelObject object, ProjectBrowser browser, BrowserElement parent) {
+		public BrowserElement makeNewElement(FlexoObject object, ProjectBrowser browser, BrowserElement parent) {
 			if (object instanceof SharedProject) {
 				return new SharedProjectElement((SharedProject) object, browser, parent);
 			} else if (object instanceof CVSDirectory) {

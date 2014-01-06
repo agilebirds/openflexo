@@ -21,33 +21,35 @@ package org.openflexo.vpm.fib.dialogs;
 
 import java.io.File;
 
+import org.openflexo.TestApplicationContext;
+import org.openflexo.components.widget.CommonFIB;
 import org.openflexo.fib.editor.FIBAbstractEditor;
-import org.openflexo.foundation.resource.DefaultResourceCenterService;
-import org.openflexo.foundation.resource.FlexoResourceCenter;
-import org.openflexo.foundation.viewpoint.ExampleDrawingConnector;
-import org.openflexo.foundation.viewpoint.ExampleDrawingShema;
+import org.openflexo.foundation.view.diagram.viewpoint.ExampleDiagram;
+import org.openflexo.foundation.view.diagram.viewpoint.ExampleDiagramConnector;
+import org.openflexo.foundation.view.diagram.viewpoint.action.DeclareExampleDiagramConnectorInEditionPattern;
 import org.openflexo.foundation.viewpoint.ViewPoint;
 import org.openflexo.foundation.viewpoint.ViewPointLibrary;
-import org.openflexo.foundation.viewpoint.action.DeclareConnectorInEditionPattern;
-import org.openflexo.vpm.CEDCst;
+import org.openflexo.toolbox.FileResource;
 
 public class DeclareConnectorInEditionPatternDialogEDITOR extends FIBAbstractEditor {
 
 	@Override
 	public Object[] getData() {
-		FlexoResourceCenter resourceCenter = DefaultResourceCenterService.getNewInstance().getOpenFlexoResourceCenter();
-		ViewPointLibrary calcLibrary = resourceCenter.retrieveViewPointLibrary();
-		ViewPoint calc1 = calcLibrary.getOntologyCalc("http://www.agilebirds.com/openflexo/ViewPoints/Basic/BasicOntology.owl");
-		calc1.loadWhenUnloaded();
-		ExampleDrawingShema shema = calc1.getShemas().firstElement();
-		ExampleDrawingConnector connector = (ExampleDrawingConnector) shema.getChilds().get(2);
-		DeclareConnectorInEditionPattern action = DeclareConnectorInEditionPattern.actionType.makeNewAction(connector, null, null);
+		TestApplicationContext testApplicationContext = new TestApplicationContext(
+				new FileResource("src/test/resources/TestResourceCenter"));
+		ViewPointLibrary viewPointLibrary = testApplicationContext.getViewPointLibrary();
+		ViewPoint calc1 = viewPointLibrary.getViewPoint("http://www.agilebirds.com/openflexo/ViewPoints/Basic/BasicOntology.owl");
+
+		ExampleDiagram shema = calc1.getDefaultDiagramSpecification().getExampleDiagrams().get(0);
+		ExampleDiagramConnector connector = (ExampleDiagramConnector) shema.getChilds().get(2);
+		DeclareExampleDiagramConnectorInEditionPattern action = DeclareExampleDiagramConnectorInEditionPattern.actionType.makeNewAction(
+				connector, null, null);
 		return makeArray(action);
 	}
 
 	@Override
 	public File getFIBFile() {
-		return CEDCst.DECLARE_CONNECTOR_IN_EDITION_PATTERN_DIALOG_FIB;
+		return CommonFIB.DECLARE_CONNECTOR_IN_EDITION_PATTERN_DIALOG_FIB;
 	}
 
 	public static void main(String[] args) {

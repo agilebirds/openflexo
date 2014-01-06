@@ -22,41 +22,43 @@ package org.openflexo.foundation.view.action;
 import java.util.Vector;
 
 import org.openflexo.foundation.FlexoEditor;
-import org.openflexo.foundation.FlexoModelObject;
+import org.openflexo.foundation.FlexoObject.FlexoObjectImpl;
 import org.openflexo.foundation.action.FlexoActionType;
 import org.openflexo.foundation.action.FlexoGUIAction;
-import org.openflexo.foundation.view.ViewObject;
+import org.openflexo.foundation.view.EditionPatternInstance;
+import org.openflexo.foundation.view.VirtualModelInstanceObject;
 
-public class VESelectAll extends FlexoGUIAction<VESelectAll, ViewObject, ViewObject> {
+public class VESelectAll extends FlexoGUIAction<VESelectAll, VirtualModelInstanceObject, VirtualModelInstanceObject> {
 
-	public static FlexoActionType<VESelectAll, ViewObject, ViewObject> actionType = new FlexoActionType<VESelectAll, ViewObject, ViewObject>(
+	public static FlexoActionType<VESelectAll, VirtualModelInstanceObject, VirtualModelInstanceObject> actionType = new FlexoActionType<VESelectAll, VirtualModelInstanceObject, VirtualModelInstanceObject>(
 			"select_all", FlexoActionType.editGroup) {
 
 		/**
 		 * Factory method
 		 */
 		@Override
-		public VESelectAll makeNewAction(ViewObject focusedObject, Vector<ViewObject> globalSelection, FlexoEditor editor) {
+		public VESelectAll makeNewAction(VirtualModelInstanceObject focusedObject, Vector<VirtualModelInstanceObject> globalSelection,
+				FlexoEditor editor) {
 			return new VESelectAll(focusedObject, globalSelection, editor);
 		}
 
 		@Override
-		public boolean isVisibleForSelection(ViewObject object, Vector<ViewObject> globalSelection) {
+		public boolean isVisibleForSelection(VirtualModelInstanceObject object, Vector<VirtualModelInstanceObject> globalSelection) {
 			return true;
 		}
 
 		@Override
-		public boolean isEnabledForSelection(ViewObject object, Vector<ViewObject> globalSelection) {
+		public boolean isEnabledForSelection(VirtualModelInstanceObject object, Vector<VirtualModelInstanceObject> globalSelection) {
 			return true;
 		}
 
 	};
 
 	static {
-		FlexoModelObject.addActionForClass(VESelectAll.actionType, ViewObject.class);
+		FlexoObjectImpl.addActionForClass(VESelectAll.actionType, EditionPatternInstance.class);
 	}
 
-	VESelectAll(ViewObject focusedObject, Vector<ViewObject> globalSelection, FlexoEditor editor) {
+	VESelectAll(VirtualModelInstanceObject focusedObject, Vector<VirtualModelInstanceObject> globalSelection, FlexoEditor editor) {
 		super(actionType, focusedObject, globalSelection, editor);
 	}
 

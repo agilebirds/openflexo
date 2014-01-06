@@ -22,7 +22,7 @@ package org.openflexo.ie.view.dkv;
 import org.openflexo.components.tabular.model.AbstractModel;
 import org.openflexo.foundation.FlexoModelObject;
 import org.openflexo.foundation.dkv.Domain;
-import org.openflexo.foundation.rm.FlexoProject;
+import org.openflexo.foundation.FlexoProject;
 
 /**
  * @author gpolet

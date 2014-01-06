@@ -7,9 +7,10 @@ import java.util.logging.Logger;
 import org.openflexo.fib.FIBLibrary;
 import org.openflexo.fib.controller.FIBController.Status;
 import org.openflexo.fib.controller.FIBDialog;
-import org.openflexo.foundation.rm.FlexoProject;
+import org.openflexo.foundation.FlexoProject;
 import org.openflexo.foundation.wkf.FlexoProcess;
 import org.openflexo.foundation.wkf.FlexoProcessNode;
+import org.openflexo.foundation.wkf.Role;
 import org.openflexo.foundation.wkf.action.AddSubProcess;
 import org.openflexo.foundation.wkf.node.SubProcessNode;
 import org.openflexo.localization.FlexoLocalization;
@@ -43,6 +44,9 @@ public class SubProcessSelectorDialog extends FIBDialog<SubProcessSelectorDialog
 		private String errorMessage;
 		private boolean showErrorMessage;
 		private boolean noParentProcess;
+
+		private boolean showRoleSelector;
+		private Role associatedWithRole;
 
 		public SubProcessSelectorData(FlexoProject project, WKFControllerActionInitializer controllerActionInitializer,
 				SubProcessNode subProcessNode, FlexoProcessNode process) {
@@ -211,19 +215,42 @@ public class SubProcessSelectorDialog extends FIBDialog<SubProcessSelectorDialog
 
 		public void setShowErrorMessage(boolean showErrorMessage) {
 			this.showErrorMessage = showErrorMessage;
+			propertyChangeSupport.firePropertyChange("showErrorMessage", !showErrorMessage, showErrorMessage);
+		}
+
+		public boolean isShowRoleSelector() {
+			return showRoleSelector;
+		}
+
+		public void setShowRoleSelector(boolean showRoleSelector) {
+			this.showRoleSelector = showRoleSelector;
+			propertyChangeSupport.firePropertyChange("showRoleSelector", !showRoleSelector, showRoleSelector);
+			// Next line is there because KVLibrary does not understand properly "is" prefix
+			propertyChangeSupport.firePropertyChange("isShowRoleSelector", !showRoleSelector, showRoleSelector);
+		}
+
+		public Role getAssociatedWithRole() {
+			return associatedWithRole;
+		}
+
+		public void setAssociatedWithRole(Role associatedWithRole) {
+			this.associatedWithRole = associatedWithRole;
+			propertyChangeSupport.firePropertyChange("associatedWithRole", null, associatedWithRole);
 		}
 
 	}
 
 	public SubProcessSelectorDialog(FlexoProject project, WKFControllerActionInitializer controllerActionInitializer,
-			SubProcessNode subProcessNode, FlexoProcessNode process) {
+			SubProcessNode subProcessNode, FlexoProcessNode process, Role associatedWithRole) {
 		super(FIBLibrary.instance().retrieveFIBComponent(FIB_FILE), new SubProcessSelectorData(project, controllerActionInitializer,
 				subProcessNode, process), controllerActionInitializer.getController().getFlexoFrame(), true, FlexoLocalization
 				.getMainLocalizer());
+		getData().setShowRoleSelector(associatedWithRole == null);
+		getData().setAssociatedWithRole(associatedWithRole);
 	}
 
 	public boolean askAndSetSubProcess() {
-		setSize(560, 270);
+		setSize(560, 300);
 		setLocationRelativeTo(getOwner());
 		while (true) {
 			setVisible(true);
@@ -233,6 +260,7 @@ public class SubProcessSelectorDialog extends FIBDialog<SubProcessSelectorDialog
 				if (getData().getErrorMessage() != null) {
 					continue;
 				}
+				getData().getSubProcessNode().setRole(getData().getAssociatedWithRole());
 				getData().getSubProcessNode().setName(getData().getSubProcessNodeName());
 				switch (getData().getChoice()) {
 				case BIND_EXISTING:

@@ -22,13 +22,13 @@ package org.openflexo.wkf.processeditor.gr;
 import java.awt.Color;
 import java.util.logging.Logger;
 
+import org.openflexo.fge.BackgroundImageBackgroundStyle;
+import org.openflexo.fge.BackgroundStyle;
+import org.openflexo.fge.ForegroundStyle;
 import org.openflexo.fge.GraphicalRepresentation;
 import org.openflexo.fge.controller.CustomClickControlAction;
 import org.openflexo.fge.controller.DrawingController;
 import org.openflexo.fge.controller.MouseClickControl;
-import org.openflexo.fge.graphics.BackgroundStyle;
-import org.openflexo.fge.graphics.BackgroundStyle.BackgroundImage;
-import org.openflexo.fge.graphics.ForegroundStyle;
 import org.openflexo.foundation.wkf.action.OpenExecutionPetriGraph;
 import org.openflexo.foundation.wkf.node.SelfExecutableActionNode;
 import org.openflexo.icon.WKFIconLibrary;
@@ -40,7 +40,7 @@ public class SelfExecActionNodeGR extends AbstractActionNodeGR {
 	private static final Logger logger = Logger.getLogger(SelfExecActionNodeGR.class.getPackage().getName());
 
 	private final ForegroundStyle foreground;
-	private final BackgroundImage background;
+	private final BackgroundImageBackgroundStyle background;
 
 	public SelfExecActionNodeGR(SelfExecutableActionNode actionNode, ProcessRepresentation aDrawing, boolean isInPalet) {
 		super(actionNode, aDrawing, isInPalet);
@@ -78,7 +78,7 @@ public class SelfExecActionNodeGR extends AbstractActionNodeGR {
 		public ExecutionPetriGraphOpener() {
 			super("ExecutionPetriGraphOpener", MouseButton.LEFT, 2, new CustomClickControlAction() {
 				@Override
-				public boolean handleClick(GraphicalRepresentation<?> graphicalRepresentation, DrawingController<?> controller,
+				public boolean handleClick(GraphicalRepresentation graphicalRepresentation, DrawingController controller,
 						java.awt.event.MouseEvent event) {
 					logger.info("Opening Execution petri graph by double-clicking");
 					OpenExecutionPetriGraph.actionType.makeNewAction(getActionNode(), null, getDrawing().getEditor()).doAction();

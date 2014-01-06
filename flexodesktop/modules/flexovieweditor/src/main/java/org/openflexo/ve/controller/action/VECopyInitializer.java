@@ -29,13 +29,13 @@ import javax.swing.KeyStroke;
 import org.openflexo.FlexoCst;
 import org.openflexo.foundation.action.FlexoActionFinalizer;
 import org.openflexo.foundation.action.FlexoActionInitializer;
-import org.openflexo.foundation.view.ViewObject;
 import org.openflexo.foundation.view.action.VECopy;
+import org.openflexo.foundation.view.diagram.model.DiagramElement;
 import org.openflexo.icon.IconLibrary;
 import org.openflexo.view.controller.ActionInitializer;
 import org.openflexo.view.controller.ControllerActionInitializer;
 
-public class VECopyInitializer extends ActionInitializer<VECopy, ViewObject, ViewObject> {
+public class VECopyInitializer extends ActionInitializer<VECopy, DiagramElement<?>, DiagramElement<?>> {
 
 	private static final Logger logger = Logger.getLogger(ControllerActionInitializer.class.getPackage().getName());
 

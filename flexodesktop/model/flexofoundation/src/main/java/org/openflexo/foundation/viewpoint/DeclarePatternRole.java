@@ -19,37 +19,36 @@
  */
 package org.openflexo.foundation.viewpoint;
 
+import java.lang.reflect.InvocationTargetException;
 import java.lang.reflect.Type;
 import java.util.logging.Logger;
 
-import org.openflexo.antar.binding.BindingDefinition;
-import org.openflexo.antar.binding.BindingDefinition.BindingDefinitionType;
+import org.openflexo.antar.binding.DataBinding;
+import org.openflexo.antar.binding.DataBinding.BindingDefinitionType;
+import org.openflexo.antar.expr.NullReferenceException;
+import org.openflexo.antar.expr.TypeMismatchException;
+import org.openflexo.foundation.FlexoObject;
+import org.openflexo.foundation.technologyadapter.ModelSlot;
 import org.openflexo.foundation.view.action.EditionSchemeAction;
-import org.openflexo.foundation.viewpoint.ViewPoint.ViewPointBuilder;
-import org.openflexo.foundation.viewpoint.binding.ViewPointDataBinding;
+import org.openflexo.foundation.viewpoint.FMLRepresentationContext.FMLRepresentationOutput;
+import org.openflexo.foundation.viewpoint.annotations.FIBPanel;
 
-public class DeclarePatternRole extends AssignableAction {
+@FIBPanel("Fib/DeclarePatternRolePanel.fib")
+public class DeclarePatternRole extends AssignableAction<ModelSlot<?>, FlexoObject> {
 
 	private static final Logger logger = Logger.getLogger(DeclarePatternRole.class.getPackage().getName());
 
-	public DeclarePatternRole(ViewPointBuilder builder) {
-		super(builder);
+	private DataBinding<Object> object;
+
+	public DeclarePatternRole() {
+		super();
 	}
 
 	@Override
-	public EditionActionType getEditionActionType() {
-		return EditionActionType.DeclarePatternRole;
-	}
-
-	/*@Override
-	public List<PatternRole> getAvailablePatternRoles() {
-		return getEditionPattern().getPatternRoles();
-	}*/
-
-	@Override
-	public String getInspectorName() {
-		// TODO Auto-generated method stub
-		return null;
+	public String getFMLRepresentation(FMLRepresentationContext context) {
+		FMLRepresentationOutput out = new FMLRepresentationOutput(context);
+		out.append(getAssignation().toString() + " = " + getObject().toString() + ";", context);
+		return out.toString();
 	}
 
 	@Override
@@ -58,28 +57,33 @@ public class DeclarePatternRole extends AssignableAction {
 	}
 
 	public Object getDeclaredObject(EditionSchemeAction action) {
-		return getObject().getBindingValue(action);
+		try {
+			return getObject().getBindingValue(action);
+		} catch (TypeMismatchException e) {
+			e.printStackTrace();
+		} catch (NullReferenceException e) {
+			e.printStackTrace();
+		} catch (InvocationTargetException e) {
+			e.printStackTrace();
+		}
+		return null;
 	}
 
-	private ViewPointDataBinding object;
-
-	private BindingDefinition OBJECT = new BindingDefinition("object", Object.class, BindingDefinitionType.GET, true);
-
-	public BindingDefinition getObjectBindingDefinition() {
-		return OBJECT;
-	}
-
-	public ViewPointDataBinding getObject() {
+	public DataBinding<Object> getObject() {
 		if (object == null) {
-			object = new ViewPointDataBinding(this, EditionActionBindingAttribute.object, getObjectBindingDefinition());
+			object = new DataBinding<Object>(this, Object.class, BindingDefinitionType.GET);
+			object.setBindingName("object");
 		}
 		return object;
 	}
 
-	public void setObject(ViewPointDataBinding object) {
-		object.setOwner(this);
-		object.setBindingAttribute(EditionActionBindingAttribute.object);
-		object.setBindingDefinition(getObjectBindingDefinition());
+	public void setObject(DataBinding<Object> object) {
+		if (object != null) {
+			object.setOwner(this);
+			object.setBindingName("object");
+			object.setDeclaredType(Object.class);
+			object.setBindingDefinitionType(BindingDefinitionType.GET);
+		}
 		this.object = object;
 	}
 
@@ -94,13 +98,8 @@ public class DeclarePatternRole extends AssignableAction {
 		}
 
 		@Override
-		public ViewPointDataBinding getBinding(DeclarePatternRole object) {
+		public DataBinding<Object> getBinding(DeclarePatternRole object) {
 			return object.getAssignation();
-		}
-
-		@Override
-		public BindingDefinition getBindingDefinition(DeclarePatternRole object) {
-			return object.getAssignationBindingDefinition();
 		}
 
 	}
@@ -111,15 +110,15 @@ public class DeclarePatternRole extends AssignableAction {
 		}
 
 		@Override
-		public ViewPointDataBinding getBinding(DeclarePatternRole object) {
+		public DataBinding<Object> getBinding(DeclarePatternRole object) {
 			return object.getObject();
 		}
 
-		@Override
-		public BindingDefinition getBindingDefinition(DeclarePatternRole object) {
-			return object.getObjectBindingDefinition();
-		}
+	}
 
+	@Override
+	public FlexoObject performAction(EditionSchemeAction action) {
+		return (FlexoObject) getDeclaredObject(action);
 	}
 
 }

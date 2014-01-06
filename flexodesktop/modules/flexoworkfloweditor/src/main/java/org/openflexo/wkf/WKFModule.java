@@ -31,11 +31,8 @@ import javax.swing.JComponent;
 
 import org.openflexo.ApplicationContext;
 import org.openflexo.components.ProgressWindow;
-import org.openflexo.components.browser.view.BrowserView.FlexoJTree;
 import org.openflexo.fge.Drawing;
-import org.openflexo.fge.controller.DrawingController;
 import org.openflexo.fge.view.DrawingView;
-import org.openflexo.foundation.FlexoModelObject;
 import org.openflexo.foundation.InspectorGroup;
 import org.openflexo.foundation.Inspectors;
 import org.openflexo.foundation.wkf.ActivityGroup;
@@ -81,9 +78,24 @@ import org.openflexo.wkf.view.WorkflowBrowserView;
  * @author sguerin
  */
 public class WKFModule extends FlexoModule implements ExternalWKFModule {
+
+	public static final String WKF_MODULE_SHORT_NAME = "WKF";
+
+	public static final String WKF_MODULE_NAME = "workflow_editor";
+
+	public static class WorkflowEditor extends Module {
+
+		protected WorkflowEditor() {
+			super(WKF_MODULE_NAME, WKF_MODULE_SHORT_NAME, "org.openflexo.wkf.WKFModule", "modules/flexoworkfloweditor", "10000", "wkf",
+					WKFIconLibrary.WKF_SMALL_ICON, WKFIconLibrary.WKF_MEDIUM_ICON, WKFIconLibrary.WKF_MEDIUM_ICON_WITH_HOVER,
+					WKFIconLibrary.WKF_BIG_ICON, true);
+		}
+
+	}
+
 	private static final InspectorGroup[] inspectorGroups = new InspectorGroup[] { Inspectors.WKF };
 
-	private Map<Drawing<? extends FlexoModelObject>, DrawingController<? extends Drawing<? extends FlexoModelObject>>> drawingControllers = new Hashtable<Drawing<? extends FlexoModelObject>, DrawingController<? extends Drawing<? extends FlexoModelObject>>>();
+	private final Map<Drawing<? extends FlexoModelObject>, DrawingController<? extends Drawing<? extends FlexoModelObject>>> drawingControllers = new Hashtable<Drawing<? extends FlexoModelObject>, DrawingController<? extends Drawing<? extends FlexoModelObject>>>();
 
 	public static enum ProcessRepresentation {
 		BASIC_EDITOR, SWIMMING_LANE;
@@ -128,7 +140,7 @@ public class WKFModule extends FlexoModule implements ExternalWKFModule {
 
 	private static class BPEScreenshotProcessRepresentationObjectVisibilityDelegate extends ProcessRepresentationDefaultVisibilityDelegate {
 
-		private WKFObject target;
+		private final WKFObject target;
 
 		public BPEScreenshotProcessRepresentationObjectVisibilityDelegate(WKFObject target) {
 			this.target = target;
@@ -203,7 +215,7 @@ public class WKFModule extends FlexoModule implements ExternalWKFModule {
 
 	private class SWLScreenshotProcessRepresentationObjectVisibilityDelegate extends SwimmingLaneRepresentationDefaultVisibilityDelegate {
 
-		private WKFObject target;
+		private final WKFObject target;
 
 		public SWLScreenshotProcessRepresentationObjectVisibilityDelegate(WKFObject target) {
 			this.target = target;
@@ -279,7 +291,7 @@ public class WKFModule extends FlexoModule implements ExternalWKFModule {
 	}
 
 	private class ScreenshotRetriever implements Callable<DrawingController<? extends Drawing<? extends FlexoModelObject>>> {
-		private FlexoModelObject target;
+		private final FlexoModelObject target;
 		private final boolean showAll;
 
 		protected ScreenshotRetriever(FlexoModelObject target, boolean showAll) {
@@ -403,7 +415,7 @@ public class WKFModule extends FlexoModule implements ExternalWKFModule {
 			public Void call() throws Exception {
 				if (screenshot != null) {
 					if (screenshot instanceof DrawingView) {
-						DrawingController<?> controller = ((DrawingView<?>) screenshot).getController();
+						DrawingController controller = ((DrawingView<?>) screenshot).getController();
 						drawingControllers.remove(controller.getDrawing());
 						controller.delete();
 					} else if (screenshot instanceof FlexoJTree) {

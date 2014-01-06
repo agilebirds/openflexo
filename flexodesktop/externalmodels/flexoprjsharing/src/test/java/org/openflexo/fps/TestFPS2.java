@@ -27,7 +27,7 @@ import junit.framework.AssertionFailedError;
 
 import org.openflexo.foundation.DefaultFlexoEditor;
 import org.openflexo.foundation.FlexoEditor;
-import org.openflexo.foundation.rm.FlexoProject;
+import org.openflexo.foundation.FlexoProject;
 import org.openflexo.foundation.rm.FlexoResourceManager;
 import org.openflexo.foundation.utils.ProjectInitializerException;
 import org.openflexo.foundation.utils.ProjectLoadingCancelledException;
@@ -66,7 +66,7 @@ public class TestFPS2 extends FPSTestCase {
 		CVSConsole.logger.setLevel(Level.FINE);
 	}
 
-	private static FlexoEditor EDITOR = new DefaultFlexoEditor(null);
+	private static FlexoEditor EDITOR = new DefaultFlexoEditor(null, null);
 
 	/**
 	 * Creates a new project in a temp directory

@@ -23,33 +23,38 @@ import java.util.Vector;
 
 import org.openflexo.foundation.FlexoEditor;
 import org.openflexo.foundation.FlexoException;
-import org.openflexo.foundation.FlexoModelObject;
+import org.openflexo.foundation.FlexoObject;
+import org.openflexo.foundation.FlexoObject.FlexoObjectImpl;
 import org.openflexo.foundation.FlexoProperty;
+import org.openflexo.foundation.InnerResourceData;
+import org.openflexo.foundation.resource.PamelaResource;
+import org.openflexo.localization.FlexoLocalization;
+import org.openflexo.model.factory.ModelFactory;
 
-public class AddFlexoProperty extends FlexoAction<AddFlexoProperty, FlexoModelObject, FlexoModelObject> {
+public class AddFlexoProperty extends FlexoAction<AddFlexoProperty, FlexoObject, FlexoObject> {
 
-	public static final FlexoActionType<AddFlexoProperty, FlexoModelObject, FlexoModelObject> actionType = new FlexoActionType<AddFlexoProperty, FlexoModelObject, FlexoModelObject>(
+	public static final FlexoActionType<AddFlexoProperty, FlexoObject, FlexoObject> actionType = new FlexoActionType<AddFlexoProperty, FlexoObject, FlexoObject>(
 			"add_flexo_property") {
 
 		@Override
-		public boolean isEnabledForSelection(FlexoModelObject object, Vector<FlexoModelObject> globalSelection) {
+		public boolean isEnabledForSelection(FlexoObject object, Vector<FlexoObject> globalSelection) {
 			return object != null;
 		}
 
 		@Override
-		public boolean isVisibleForSelection(FlexoModelObject object, Vector<FlexoModelObject> globalSelection) {
+		public boolean isVisibleForSelection(FlexoObject object, Vector<FlexoObject> globalSelection) {
 			return false;
 		}
 
 		@Override
-		public AddFlexoProperty makeNewAction(FlexoModelObject focusedObject, Vector<FlexoModelObject> globalSelection, FlexoEditor editor) {
+		public AddFlexoProperty makeNewAction(FlexoObject focusedObject, Vector<FlexoObject> globalSelection, FlexoEditor editor) {
 			return new AddFlexoProperty(focusedObject, globalSelection, editor);
 		}
 
 	};
 
 	static {
-		FlexoModelObject.addActionForClass(actionType, FlexoModelObject.class);
+		FlexoObjectImpl.addActionForClass(actionType, FlexoObject.class);
 	}
 
 	private String name;
@@ -59,23 +64,33 @@ public class AddFlexoProperty extends FlexoAction<AddFlexoProperty, FlexoModelOb
 
 	private FlexoProperty createdProperty;
 
-	public AddFlexoProperty(FlexoModelObject focusedObject, Vector<FlexoModelObject> globalSelection, FlexoEditor editor) {
+	public AddFlexoProperty(FlexoObject focusedObject, Vector<FlexoObject> globalSelection, FlexoEditor editor) {
 		super(actionType, focusedObject, globalSelection, editor);
 	}
 
 	@Override
 	protected void doAction(Object context) throws FlexoException {
 		if (getFocusedObject() != null) {
-			createdProperty = new FlexoProperty(getFocusedObject().getProject(), getFocusedObject());
-			if (getName() != null) {
-				createdProperty.setName(getName());
-			} else {
-				createdProperty.setName(getFocusedObject().getNextPropertyName());
+
+			if (getFocusedObject() instanceof InnerResourceData
+					&& ((InnerResourceData) getFocusedObject()).getResourceData().getResource() instanceof PamelaResource) {
+
+				ModelFactory factory = ((PamelaResource) ((InnerResourceData) getFocusedObject()).getResourceData().getResource())
+						.getFactory();
+
+				createdProperty = factory.newInstance(FlexoProperty.class);
+				createdProperty.setOwner(getFocusedObject());
+
+				if (getName() != null) {
+					createdProperty.setName(getName());
+				} else {
+					createdProperty.setName(getNextPropertyName(getFocusedObject()));
+				}
+				if (getValue() != null) {
+					createdProperty.setValue(getValue());
+				}
+				getFocusedObject().addToCustomProperties(createdProperty);
 			}
-			if (getValue() != null) {
-				createdProperty.setValue(getValue());
-			}
-			getFocusedObject().addToCustomProperties(createdProperty, isInsertSorted());
 		}
 	}
 
@@ -109,6 +124,16 @@ public class AddFlexoProperty extends FlexoAction<AddFlexoProperty, FlexoModelOb
 
 	public void setInsertSorted(boolean insertSorted) {
 		this.insertSorted = insertSorted;
+	}
+
+	public String getNextPropertyName(FlexoObject owner) {
+		String base = FlexoLocalization.localizedForKey("property");
+		String attempt = base;
+		int i = 1;
+		while (owner.getPropertyNamed(attempt) != null) {
+			attempt = base + "-" + i++;
+		}
+		return attempt;
 	}
 
 }

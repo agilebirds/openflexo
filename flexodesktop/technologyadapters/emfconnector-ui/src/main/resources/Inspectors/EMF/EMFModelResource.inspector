@@ -1,0 +1,25 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<Panel className="org.openflexo.inspector.FIBInspector" layout="border" titleFont="SansSerif,0,12" darkLevel="0" dataClassName="org.openflexo.technologyadapter.emf.rm.EMFModelResource" controllerClassName="org.openflexo.inspector.FIBInspectorController" font="SansSerif,0,12" name="Inspector">
+  <TabPanel name="Tab" constraints="border(location=center)">
+    <Tab title="Basic" layout="twocols" titleFont="SansSerif,0,11" darkLevel="0" index="0" font="SansSerif,0,11" useScrollBar="true" horizontalScrollbarPolicy="HORIZONTAL_SCROLLBAR_AS_NEEDED" verticalScrollbarPolicy="VERTICAL_SCROLLBAR_AS_NEEDED" name="BasicTab">
+      <Label label="name" index="0" constraints="twocols(expandHorizontally=false;expandVertically=false;index=0;location=left)" name="NameLabel" localize="true" />
+      <TextField index="1" data="data.name" constraints="twocols(expandHorizontally=true;expandVertically=false;index=1;location=right)" name="Name" readOnly="true" localize="true" columns="10" />
+      <Label label="uri" index="2" constraints="twocols(expandHorizontally=false;expandVertically=false;index=2;location=left)" name="URILabel" localize="true" />
+      <TextField index="3" data="data.URI" constraints="twocols(expandHorizontally=true;expandVertically=false;index=3;location=right)" name="URI" readOnly="true" localize="true" columns="10" />
+      <Label label="version" index="4" constraints="twocols(expandHorizontally=false;expandVertically=false;index=4;location=left)" name="VersionLabel" localize="true" />
+      <TextField index="5" data="data.version.toString" constraints="twocols(expandHorizontally=true;expandVertically=false;index=5;location=right)" name="Version" readOnly="true" localize="true" columns="10" />
+    </Tab>
+    <Tab title="Advanced" layout="twocols" titleFont="SansSerif,0,11" darkLevel="0" index="2" font="SansSerif,0,11" useScrollBar="true" horizontalScrollbarPolicy="HORIZONTAL_SCROLLBAR_AS_NEEDED" verticalScrollbarPolicy="VERTICAL_SCROLLBAR_AS_NEEDED" name="AdvancedTab" />
+  </TabPanel>
+  <LocalizedDictionary>
+    <Localized key="Advanced" lang="French">Avancé</Localized>
+    <Localized key="Basic" lang="French">Basique</Localized>
+    <Localized key="name" lang="English">Name</Localized>
+    <Localized key="name" lang="French">Nom</Localized>
+    <Localized key="name" lang="Dutch">Name</Localized>
+    <Localized key="uri" lang="English">URI</Localized>
+    <Localized key="uri" lang="French">URI</Localized>
+    <Localized key="uri" lang="Dutch">URI</Localized>
+  </LocalizedDictionary>
+  <Parameter name="title" value="EMF Model (unloaded)" />
+</Panel>

@@ -24,11 +24,12 @@ import java.util.Vector;
 
 import org.openflexo.fib.ProjectDialogEDITOR;
 import org.openflexo.foundation.FlexoEditor;
-import org.openflexo.foundation.rm.FlexoProject;
+import org.openflexo.foundation.FlexoProject;
 import org.openflexo.foundation.view.View;
-import org.openflexo.foundation.view.ViewElement;
-import org.openflexo.foundation.view.ViewShape;
-import org.openflexo.foundation.view.action.DeleteViewElements;
+import org.openflexo.foundation.view.diagram.action.DeleteDiagramElements;
+import org.openflexo.foundation.view.diagram.model.Diagram;
+import org.openflexo.foundation.view.diagram.model.DiagramElement;
+import org.openflexo.foundation.view.diagram.model.DiagramShape;
 import org.openflexo.toolbox.FileResource;
 import org.openflexo.ve.VECst;
 
@@ -38,26 +39,27 @@ public class DeleteViewElementsDialogEDITOR extends ProjectDialogEDITOR {
 	public Object[] getData() {
 		FlexoEditor editor = loadProject(new FileResource("Prj/TestVE.prj"));
 		FlexoProject project = editor.getProject();
-		View shema = project.getShemaLibrary().getShemaNamed("BasicOrganization").getShema();
-		ViewShape a = shema.getShapeNamed("A");
-		ViewShape b = a.getShapeNamed("B");
-		ViewShape c = a.getShapeNamed("C");
-		ViewShape x = b.getShapeNamed("X");
-		ViewShape worker1 = b.getShapeNamed("Worker");
-		ViewShape worker2 = b.getShapeNamed("Worker2");
-		ViewShape y = c.getShapeNamed("Y");
-		ViewShape z = a.getShapeNamed("Z");
-		Vector<ViewElement> selection = new Vector<ViewElement>();
+		View view = project.getViewLibrary().getViewResourceNamed("BasicOrganization").getView();
+		Diagram diagram = (Diagram) view.getVirtualModelInstances().get(0);
+		DiagramShape a = diagram.getRootPane().getShapeNamed("A");
+		DiagramShape b = a.getShapeNamed("B");
+		DiagramShape c = a.getShapeNamed("C");
+		DiagramShape x = b.getShapeNamed("X");
+		DiagramShape worker1 = b.getShapeNamed("Worker");
+		DiagramShape worker2 = b.getShapeNamed("Worker2");
+		DiagramShape y = c.getShapeNamed("Y");
+		DiagramShape z = a.getShapeNamed("Z");
+		Vector<DiagramElement> selection = new Vector<DiagramElement>();
 		selection.add(b);
 		selection.add(x);
 		selection.add(c);
-		DeleteViewElements action = DeleteViewElements.actionType.makeNewAction(null, selection, null);
+		DeleteDiagramElements action = DeleteDiagramElements.actionType.makeNewAction(null, selection, null);
 		return makeArray(action);
 	}
 
 	@Override
 	public File getFIBFile() {
-		return VECst.DELETE_VIEW_ELEMENTS_DIALOG_FIB;
+		return VECst.DELETE_DIAGRAM_ELEMENTS_DIALOG_FIB;
 	}
 
 	public static void main(String[] args) {

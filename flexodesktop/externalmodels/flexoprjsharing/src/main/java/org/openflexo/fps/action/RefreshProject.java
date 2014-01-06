@@ -23,7 +23,7 @@ import java.util.Vector;
 import java.util.logging.Logger;
 
 import org.openflexo.foundation.FlexoEditor;
-import org.openflexo.foundation.FlexoModelObject;
+import org.openflexo.foundation.FlexoObject;
 import org.openflexo.foundation.IOFlexoException;
 import org.openflexo.foundation.action.FlexoActionType;
 import org.openflexo.fps.FPSObject;
@@ -58,7 +58,7 @@ public class RefreshProject extends CVSAction<RefreshProject, SharedProject> {
 	};
 
 	static {
-		FlexoModelObject.addActionForClass(actionType, SharedProject.class);
+		FlexoObject.addActionForClass(actionType, SharedProject.class);
 	}
 
 	RefreshProject(SharedProject focusedObject, Vector<FPSObject> globalSelection, FlexoEditor editor) {

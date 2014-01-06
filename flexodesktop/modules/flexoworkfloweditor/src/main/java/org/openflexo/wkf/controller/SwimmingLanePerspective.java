@@ -26,8 +26,9 @@ import javax.swing.JComponent;
 import javax.swing.JPanel;
 import javax.swing.JSplitPane;
 
-import org.openflexo.foundation.FlexoModelObject;
-import org.openflexo.foundation.rm.FlexoProject;
+import org.openflexo.foundation.FlexoObject;
+import org.openflexo.foundation.FlexoProjectObject;
+import org.openflexo.foundation.FlexoProject;
 import org.openflexo.foundation.wkf.FlexoProcess;
 import org.openflexo.foundation.wkf.WKFObject;
 import org.openflexo.icon.WKFIconLibrary;
@@ -75,7 +76,7 @@ public class SwimmingLanePerspective extends FlexoPerspective {
 	public JComponent getTopRightView() {
 		if (getCurrentProcessView() != null) {
 			if (getCurrentProcessView().getDrawing().isEditable()) {
-				return getCurrentProcessView().getController().getPaletteView();
+			return getCurrentProcessView().getController().getPaletteView();
 			} else {
 				return new GlassPaneWrapper(getCurrentProcessView().getController().getPaletteView());
 			}
@@ -90,10 +91,10 @@ public class SwimmingLanePerspective extends FlexoPerspective {
 				return _controller.getDisconnectedDocInspectorPanel();
 			} else {
 				return new GlassPaneWrapper(_controller.getDisconnectedDocInspectorPanel());
-			}
-		} else {
-			return topRightDummy;
 		}
+		} else {
+		return topRightDummy;
+	}
 	}
 
 	public SwimmingLaneEditorController getControllerForProcess(FlexoProcess process) {
@@ -121,23 +122,23 @@ public class SwimmingLanePerspective extends FlexoPerspective {
 	}
 
 	@Override
-	public FlexoProcess getDefaultObject(FlexoModelObject proposedObject) {
+	public FlexoProcess getDefaultObject(FlexoObject proposedObject) {
 		if (proposedObject instanceof WKFObject) {
 			return ((WKFObject) proposedObject).getProcess();
-		} else if (proposedObject != null) {
-			return proposedObject.getProject().getRootFlexoProcess();
+		} else if (proposedObject instanceof FlexoProjectObject) {
+			return ((FlexoProjectObject) proposedObject).getProject().getRootFlexoProcess();
 		} else {
 			return null;
 		}
 	}
 
 	@Override
-	public boolean hasModuleViewForObject(FlexoModelObject object) {
+	public boolean hasModuleViewForObject(FlexoObject object) {
 		return object instanceof FlexoProcess;
 	}
 
 	@Override
-	public ModuleView<?> createModuleViewForObject(FlexoModelObject object, FlexoController controller, boolean editable) {
+	public ModuleView<?> createModuleViewForObject(FlexoObject object, FlexoController controller, boolean editable) {
 		if (object instanceof FlexoProcess) {
 			if (!SwimmingLaneRepresentation.loadAllReferencedRole((FlexoProcess) object)) {
 				return null;
@@ -151,7 +152,7 @@ public class SwimmingLanePerspective extends FlexoPerspective {
 	}
 
 	@Override
-	public ModuleView<?> createModuleViewForObject(FlexoModelObject process, FlexoController controller) {
+	public ModuleView<?> createModuleViewForObject(FlexoObject process, FlexoController controller) {
 		return createModuleViewForObject(process, controller, true);
 	}
 

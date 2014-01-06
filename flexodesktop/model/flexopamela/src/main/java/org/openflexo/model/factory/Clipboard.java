@@ -1,5 +1,6 @@
 package org.openflexo.model.factory;
 
+import java.util.ArrayList;
 import java.util.List;
 
 import org.openflexo.model.exceptions.ModelDefinitionException;
@@ -37,20 +38,49 @@ public class Clipboard {
 		return originalContents;
 	}
 
-	public Object getContents() {
+	public boolean doesOriginalContentsContains(Object o) {
+		for (Object oc : originalContents) {
+			if (o == oc) {
+				return true;
+			}
+		}
+		return false;
+	}
+
+	public Object getSingleContents() {
 		return contents;
+	}
+
+	public List<Object> getMultipleContents() {
+		return (List<Object>) contents;
 	}
 
 	public boolean isSingleObject() {
 		return isSingleObject;
 	}
 
-	public Class<?> getType() {
+	/**
+	 * Return an array storing all types involved as root elements in current Clipboard
+	 * 
+	 * @return
+	 */
+	public Class<?>[] getTypes() {
+		Class<?>[] returned;
 		if (isSingleObject()) {
-			return getContents().getClass();
+			returned = new Class[1];
+			returned[0] = getSingleContents().getClass();
 		} else {
-			return ((List) getContents()).get(0).getClass();
+			List<Class<?>> allTypes = new ArrayList<Class<?>>();
+			for (Object o : getMultipleContents()) {
+				Class<?> type = o.getClass();
+				if (!allTypes.contains(type)) {
+					allTypes.add(type);
+				}
+			}
+			returned = new Class[allTypes.size()];
+			allTypes.toArray(returned);
 		}
+		return returned;
 	}
 
 	public String debug() {

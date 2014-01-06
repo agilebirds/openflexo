@@ -106,13 +106,13 @@
 
   <entity name="org.openflexo.foundation.rm.FlexoEOModelResource" xmlTag="EOModel"/>
 
-  <entity name="org.openflexo.foundation.rm.FlexoProjectOntologyResource" xmlTag="ProjectOntology"/>
+ <!--   <entity name="org.openflexo.technologyadapter.owl.rm.OWLOntologyResource" xmlTag="ProjectOntology"/> -->
 
-  <entity name="org.openflexo.foundation.rm.FlexoOEShemaLibraryResource" xmlTag="ShemaLibrary"/>
+  <!--  <entity name="org.openflexo.foundation.rm.FlexoViewLibraryResource" xmlTag="ShemaLibrary"/>-->
 
-  <entity name="org.openflexo.foundation.rm.FlexoOEShemaResource" xmlTag="Shema">
+  <!--  <entity name="org.openflexo.foundation.rm.ViewResource" xmlTag="View">
 	 <property name="name" xmlTag="name" attribute="YES"/> 	
-  </entity>
+  </entity> -->
 
   <entity name="org.openflexo.foundation.rm.FlexoJarResource" xmlTag="JAR"/>
 

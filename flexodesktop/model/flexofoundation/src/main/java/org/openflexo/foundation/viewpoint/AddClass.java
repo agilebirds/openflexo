@@ -23,38 +23,29 @@ import java.lang.reflect.Type;
 import java.util.Vector;
 import java.util.logging.Logger;
 
-import org.openflexo.antar.binding.BindingDefinition;
-import org.openflexo.antar.binding.BindingDefinition.BindingDefinitionType;
-import org.openflexo.foundation.Inspectors;
-import org.openflexo.foundation.ontology.OntologyClass;
+import org.openflexo.antar.binding.DataBinding;
+import org.openflexo.foundation.ontology.IFlexoOntologyClass;
 import org.openflexo.foundation.ontology.SubClassOfClass;
+import org.openflexo.foundation.technologyadapter.TypeAwareModelSlot;
 import org.openflexo.foundation.validation.FixProposal;
 import org.openflexo.foundation.validation.ValidationError;
 import org.openflexo.foundation.validation.ValidationIssue;
 import org.openflexo.foundation.validation.ValidationRule;
-import org.openflexo.foundation.viewpoint.ViewPoint.ViewPointBuilder;
-import org.openflexo.foundation.viewpoint.binding.ViewPointDataBinding;
+import org.openflexo.foundation.viewpoint.annotations.FIBPanel;
 import org.openflexo.toolbox.StringUtils;
 
-public class AddClass extends AddConcept {
+@FIBPanel("Fib/AddClassPanel.fib")
+public abstract class AddClass<MS extends TypeAwareModelSlot<?, ?>, T extends IFlexoOntologyClass> extends AddConcept<MS, T> {
 
 	private static final Logger logger = Logger.getLogger(AddClass.class.getPackage().getName());
 
 	private String ontologyClassURI = null;
 
-	public AddClass(ViewPointBuilder builder) {
-		super(builder);
-	}
+	private DataBinding<String> className;
 
-	@Override
-	public EditionActionType getEditionActionType() {
-		return EditionActionType.AddClass;
+	public AddClass() {
+		super();
 	}
-
-	/*@Override
-	public List<ClassPatternRole> getAvailablePatternRoles() {
-		return getEditionPattern().getPatternRoles(ClassPatternRole.class);
-	}*/
 
 	@Override
 	public ClassPatternRole getPatternRole() {
@@ -69,14 +60,9 @@ public class AddClass extends AddConcept {
 	}
 
 	@Override
-	public OntologyClass getOntologyClass() {
-		if (getViewPoint() != null) {
-			getViewPoint().loadWhenUnloaded();
-		}
+	public IFlexoOntologyClass getOntologyClass() {
 		if (StringUtils.isNotEmpty(ontologyClassURI)) {
-			if (getViewPoint().getViewpointOntology() != null) {
-				return getViewPoint().getViewpointOntology().getClass(ontologyClassURI);
-			}
+			return getVirtualModel().getOntologyClass(ontologyClassURI);
 		} else {
 			if (getPatternRole() instanceof ClassPatternRole) {
 				return getPatternRole().getOntologicType();
@@ -85,8 +71,10 @@ public class AddClass extends AddConcept {
 		return null;
 	}
 
+	public abstract Class<T> getOntologyClassClass();
+
 	@Override
-	public void setOntologyClass(OntologyClass ontologyClass) {
+	public void setOntologyClass(IFlexoOntologyClass ontologyClass) {
 		if (ontologyClass != null) {
 			if (getPatternRole() instanceof ClassPatternRole) {
 				if (getPatternRole().getOntologicType().isSuperConceptOf(ontologyClass)) {
@@ -117,45 +105,28 @@ public class AddClass extends AddConcept {
 		this.ontologyClassURI = ontologyClassURI;
 	}
 
-	@Override
-	public String getInspectorName() {
-		return Inspectors.VPM.ADD_CLASS_INSPECTOR;
-	}
-
-	/*@Override
-	protected void updatePatternRoleType()
-	{
-		if (getPatternRole() == null) {
-			return;
-		}
-	}*/
-
-	private ViewPointDataBinding className;
-
-	private BindingDefinition CLASS_NAME = new BindingDefinition("className", String.class, BindingDefinitionType.GET, true);
-
-	public BindingDefinition getClassNameBindingDefinition() {
-		return CLASS_NAME;
-	}
-
-	public ViewPointDataBinding getClassName() {
+	public DataBinding<String> getClassName() {
 		if (className == null) {
-			className = new ViewPointDataBinding(this, EditionActionBindingAttribute.className, getClassNameBindingDefinition());
+			className = new DataBinding<String>(this, String.class, DataBinding.BindingDefinitionType.GET);
+			className.setBindingName("className");
 		}
 		return className;
 	}
 
-	public void setClassName(ViewPointDataBinding className) {
-		className.setOwner(this);
-		className.setBindingAttribute(EditionActionBindingAttribute.className);
-		className.setBindingDefinition(getClassNameBindingDefinition());
+	public void setClassName(DataBinding<String> className) {
+		if (className != null) {
+			className.setOwner(this);
+			className.setDeclaredType(String.class);
+			className.setBindingDefinitionType(DataBinding.BindingDefinitionType.GET);
+			className.setBindingName("className");
+		}
 		this.className = className;
 	}
 
 	@Override
 	public Type getAssignableType() {
 		if (getOntologyClass() == null) {
-			return OntologyClass.class;
+			return IFlexoOntologyClass.class;
 		}
 		return SubClassOfClass.getSubClassOfClass(getOntologyClass());
 	}
@@ -180,7 +151,7 @@ public class AddClass extends AddConcept {
 
 		protected static class SetsPatternRole extends FixProposal<AddClassActionMustDefineAnOntologyClass, AddClass> {
 
-			private ClassPatternRole patternRole;
+			private final ClassPatternRole patternRole;
 
 			public SetsPatternRole(ClassPatternRole patternRole) {
 				super("assign_action_to_pattern_role_($patternRole.patternRoleName)");
@@ -193,8 +164,8 @@ public class AddClass extends AddConcept {
 
 			@Override
 			protected void fixAction() {
-				AddClass action = getObject();
-				action.setAssignation(new ViewPointDataBinding(patternRole.getPatternRoleName()));
+				AddClass<?, ?> action = getObject();
+				action.setAssignation(new DataBinding<Object>(patternRole.getPatternRoleName()));
 			}
 
 		}
@@ -206,13 +177,8 @@ public class AddClass extends AddConcept {
 		}
 
 		@Override
-		public ViewPointDataBinding getBinding(AddClass object) {
+		public DataBinding<String> getBinding(AddClass object) {
 			return object.getClassName();
-		}
-
-		@Override
-		public BindingDefinition getBindingDefinition(AddClass object) {
-			return object.getClassNameBindingDefinition();
 		}
 
 	}

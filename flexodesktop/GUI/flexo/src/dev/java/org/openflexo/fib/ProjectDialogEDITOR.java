@@ -23,29 +23,34 @@ import java.io.File;
 
 import org.openflexo.fib.editor.FIBAbstractEditor;
 import org.openflexo.foundation.DefaultFlexoEditor;
+import org.openflexo.foundation.DefaultFlexoServiceManager;
 import org.openflexo.foundation.FlexoEditor;
 import org.openflexo.foundation.FlexoEditor.FlexoEditorFactory;
+import org.openflexo.foundation.FlexoServiceManager;
 import org.openflexo.foundation.resource.DefaultResourceCenterService;
 import org.openflexo.foundation.resource.FlexoResourceCenterService;
-import org.openflexo.foundation.rm.FlexoProject;
+import org.openflexo.foundation.FlexoProject;
 import org.openflexo.foundation.rm.FlexoResourceManager;
 import org.openflexo.foundation.utils.ProjectInitializerException;
 import org.openflexo.foundation.utils.ProjectLoadingCancelledException;
 
 public abstract class ProjectDialogEDITOR extends FIBAbstractEditor {
 
-	public static FlexoResourceCenterService getResourceCenter() {
-		if (resourceCenter == null) {
-			resourceCenter = DefaultResourceCenterService.getNewInstance();
+	public static FlexoResourceCenterService getResourceCenterService() {
+		if (resourceCenterService == null) {
+			resourceCenterService = DefaultResourceCenterService.getNewInstance();
 		}
-		return resourceCenter;
+		return resourceCenterService;
 	}
 
 	public static FlexoEditor loadProject(File prjDir) {
-		resourceCenter = DefaultResourceCenterService.getNewInstance();
+
+		FlexoServiceManager sm = new DefaultFlexoServiceManager();
+		resourceCenterService = sm.getResourceCenterService();
+
 		FlexoEditor editor = null;
 		try {
-			editor = FlexoResourceManager.initializeExistingProject(prjDir, EDITOR_FACTORY, getResourceCenter());
+			editor = FlexoResourceManager.initializeExistingProject(prjDir, EDITOR_FACTORY, sm);
 		} catch (ProjectLoadingCancelledException e) {
 			// TODO Auto-generated catch block
 			e.printStackTrace();
@@ -61,15 +66,15 @@ public abstract class ProjectDialogEDITOR extends FIBAbstractEditor {
 
 	protected static final FlexoEditorFactory EDITOR_FACTORY = new FlexoEditorFactory() {
 		@Override
-		public DefaultFlexoEditor makeFlexoEditor(FlexoProject project) {
-			return new FlexoTestEditor(project);
+		public DefaultFlexoEditor makeFlexoEditor(FlexoProject project, FlexoServiceManager sm) {
+			return new FlexoTestEditor(project, sm);
 		}
 	};
-	private static FlexoResourceCenterService resourceCenter;
+	private static FlexoResourceCenterService resourceCenterService;
 
 	public static class FlexoTestEditor extends DefaultFlexoEditor {
-		public FlexoTestEditor(FlexoProject project) {
-			super(project);
+		public FlexoTestEditor(FlexoProject project, FlexoServiceManager sm) {
+			super(project, sm);
 		}
 
 	}

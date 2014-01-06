@@ -25,14 +25,11 @@ import java.util.Set;
 import java.util.Vector;
 import java.util.logging.Logger;
 
-import org.openflexo.antar.binding.BindingDefinition;
-import org.openflexo.antar.binding.BindingFactory;
-import org.openflexo.antar.binding.StaticBinding;
-import org.openflexo.antar.expr.EvaluationType;
+import org.openflexo.antar.binding.BindingVariable;
+import org.openflexo.antar.binding.DataBinding;
 import org.openflexo.components.widget.FIBIndividualSelector;
 import org.openflexo.components.widget.FIBPropertySelector;
 import org.openflexo.fib.FIBLibrary;
-import org.openflexo.fib.model.DataBinding;
 import org.openflexo.fib.model.FIBCheckBox;
 import org.openflexo.fib.model.FIBCustom;
 import org.openflexo.fib.model.FIBCustom.FIBCustomAssignment;
@@ -47,18 +44,16 @@ import org.openflexo.fib.model.FIBTextField;
 import org.openflexo.fib.model.FIBWidget;
 import org.openflexo.fib.model.TwoColsLayoutConstraints;
 import org.openflexo.fib.model.TwoColsLayoutConstraints.TwoColsLayoutLocation;
-import org.openflexo.foundation.FlexoModelObject;
-import org.openflexo.foundation.ie.cl.OperationComponentDefinition;
-import org.openflexo.foundation.ontology.EditionPatternReference;
-import org.openflexo.foundation.ontology.OntologyClass;
+import org.openflexo.foundation.FlexoObject;
+import org.openflexo.foundation.ontology.IFlexoOntologyClass;
+import org.openflexo.foundation.utils.FlexoObjectReference;
+import org.openflexo.foundation.view.EditionPatternInstance;
 import org.openflexo.foundation.viewpoint.EditionPattern;
+import org.openflexo.foundation.viewpoint.EditionPatternInstanceType;
 import org.openflexo.foundation.viewpoint.LocalizedDictionary;
-import org.openflexo.foundation.viewpoint.binding.EditionPatternInstancePathElement;
 import org.openflexo.foundation.viewpoint.inspector.CheckboxInspectorEntry;
 import org.openflexo.foundation.viewpoint.inspector.ClassInspectorEntry;
 import org.openflexo.foundation.viewpoint.inspector.DataPropertyInspectorEntry;
-import org.openflexo.foundation.viewpoint.inspector.EditionPatternInspector;
-import org.openflexo.foundation.viewpoint.inspector.FlexoObjectInspectorEntry;
 import org.openflexo.foundation.viewpoint.inspector.IndividualInspectorEntry;
 import org.openflexo.foundation.viewpoint.inspector.InspectorEntry;
 import org.openflexo.foundation.viewpoint.inspector.IntegerInspectorEntry;
@@ -90,8 +85,9 @@ public class FIBInspector extends FIBPanel {
 
 	private FIBInspector superInspector;
 
-	private Vector<EditionPattern> currentEditionPatterns = new Vector<EditionPattern>();
-	private Hashtable<EditionPattern, FIBTab> tabsForEP = new Hashtable<EditionPattern, FIBTab>();
+	private final Vector<EditionPattern> currentEditionPatterns = new Vector<EditionPattern>();
+	private final Hashtable<EditionPattern, FIBTab> tabsForEPIReference = new Hashtable<EditionPattern, FIBTab>();
+	private final Hashtable<EditionPattern, FIBTab> tabsForEPI = new Hashtable<EditionPattern, FIBTab>();
 
 	public FIBInspector getSuperInspector() {
 		return superInspector;
@@ -118,7 +114,7 @@ public class FIBInspector extends FIBPanel {
 
 	protected void appendSuperInspector(FIBInspector superInspector) {
 		if (!superInspectorWereAppened) {
-			// System.out.println("Append "+superInspector+" to "+this);
+			// logger.info("> Append " + superInspector + " to " + this);
 			/*try {
 				System.out.println("Clone container:\n"+XMLCoder.encodeObjectWithMapping(superInspector, FIBLibrary.getFIBMapping(),StringEncoder.getDefaultInstance()));
 				System.out.println("Found this:\n"+XMLCoder.encodeObjectWithMapping((XMLSerializable)Cloner.cloneObjectWithMapping(superInspector, FIBLibrary.getFIBMapping()), FIBLibrary.getFIBMapping(),StringEncoder.getDefaultInstance()));
@@ -137,6 +133,7 @@ public class FIBInspector extends FIBPanel {
 			}*/
 			append((FIBPanel) Cloner.cloneObjectWithMapping(superInspector, FIBLibrary.getFIBMapping()));
 			superInspectorWereAppened = true;
+			// logger.info("< Appened " + superInspector + " to " + this);
 		}
 	}
 
@@ -163,12 +160,26 @@ public class FIBInspector extends FIBPanel {
 		return "Error ???";
 	}
 
-	private boolean ensureCreationOfTabForEP(EditionPattern ep) {
-		FIBTab returned = tabsForEP.get(ep);
+	private boolean ensureCreationOfTabForEPIReference(EditionPattern ep) {
+		FIBTab returned = tabsForEPIReference.get(ep);
 		if (returned == null) {
 			// System.out.println("Creating FIBTab for " + ep);
-			returned = makeFIBTab(ep, 0);
-			tabsForEP.put(ep, returned);
+			String epIdentifier = getEditionPatternIdentifierForEPIReference(ep);
+			returned = makeFIBTab(ep, epIdentifier);
+			tabsForEPIReference.put(ep, returned);
+			getTabPanel().addToSubComponents(returned, null, 0);
+			return true;
+		}
+		return false;
+	}
+
+	private boolean ensureCreationOfTabForEPI(EditionPattern ep) {
+		FIBTab returned = tabsForEPI.get(ep);
+		if (returned == null) {
+			// System.out.println("Creating FIBTab for " + ep);
+			String epIdentifier = getEditionPatternIdentifierForEPI(ep);
+			returned = makeFIBTab(ep, epIdentifier);
+			tabsForEPI.put(ep, returned);
 			getTabPanel().addToSubComponents(returned, null, 0);
 			return true;
 		}
@@ -184,7 +195,7 @@ public class FIBInspector extends FIBPanel {
 	 * @param object
 	 * @return a boolean indicating if a new tab was created
 	 */
-	protected boolean updateEditionPatternReferences(FlexoModelObject object) {
+	protected boolean updateFlexoObjectInspector(FlexoObject object) {
 
 		boolean returned = false;
 
@@ -192,23 +203,24 @@ public class FIBInspector extends FIBPanel {
 
 		Set<EditionPattern> editionPatternsToDisplay = new HashSet<EditionPattern>();
 
-		for (EditionPattern ep : tabsForEP.keySet()) {
-			if (object.getEditionPatternReference(ep) == null) {
-				tabsForEP.get(ep).setVisible(new DataBinding("false"));
+		for (EditionPattern ep : tabsForEPIReference.keySet()) {
+			if (object.getEditionPatternInstance(ep) == null) {
+				tabsForEPIReference.get(ep).setVisible(DataBinding.makeFalseBinding());
 			}
 		}
 
 		if (object.getEditionPatternReferences() != null) {
-			for (EditionPatternReference ref : object.getEditionPatternReferences()) {
-				editionPatternsToDisplay.add(ref.getEditionPattern());
-				if (ensureCreationOfTabForEP(ref.getEditionPattern())) {
+			for (FlexoObjectReference<EditionPatternInstance> ref : object.getEditionPatternReferences()) {
+				EditionPatternInstance epi = ref.getObject();
+				editionPatternsToDisplay.add(epi.getEditionPattern());
+				if (ensureCreationOfTabForEPIReference(epi.getEditionPattern())) {
 					returned = true;
 				}
-				FIBTab tab = tabsForEP.get(ref.getEditionPattern());
-				tab.setVisible(new DataBinding("true"));
-				currentEditionPatterns.add(ref.getEditionPattern());
+				FIBTab tab = tabsForEPIReference.get(epi.getEditionPattern());
+				tab.setVisible(DataBinding.makeTrueBinding());
+				currentEditionPatterns.add(epi.getEditionPattern());
 			}
-			updateBindingModel();
+			// updateBindingModel();
 		}
 
 		/*for (FIBComponent c : getTabPanel().getSubComponents()) {
@@ -249,92 +261,50 @@ public class FIBInspector extends FIBPanel {
 	 * Note: only object providing support as primary role are handled here
 	 * 
 	 * @param object
-	 * @return
+	 * @return a boolean indicating if a new tab was created
 	 */
-	@Deprecated
-	protected boolean updateEditionPatternReferences2(FlexoModelObject object) {
+	protected boolean updateEditionPatternInstanceInspector(EditionPatternInstance object) {
 
-		boolean needsChanges = false;
-
-		if (object.getEditionPatternReferences() == null) {
-			needsChanges = currentEditionPatterns.size() > 0;
-		} else {
-			/*System.out.println("*********** Object " + object);
-			System.out.println("References: " + object.getEditionPatternReferences().size());
-			for (EditionPatternReference ref : object.getEditionPatternReferences()) {
-				System.out.println(">>>>>>>>> Reference \n" + ref.getEditionPatternInstance().debug());
-			}*/
-			if (currentEditionPatterns.size() != object.getEditionPatternReferences().size()) {
-				needsChanges = true;
-			} else {
-				for (int i = 0; i < currentEditionPatterns.size(); i++) {
-					if (currentEditionPatterns.get(i) != object.getEditionPatternReferences().get(i).getEditionPattern()) {
-						needsChanges = true;
-						break;
-					}
-				}
-			}
-		}
-
-		/*if (object.providesSupportAsPrimaryRole() != previousObjectWasProvidingSupportAsPrimaryRole) {
-			needsChanges = true;
-		}*/
-
-		if (!needsChanges) {
-			// No changes detected, i can return
-			return false;
-		}
-
-		for (FIBTab tab : tabsForEP.values()) {
-			getTabPanel().removeFromSubComponents(tab);
-		}
+		boolean returned = false;
 
 		currentEditionPatterns.clear();
-		tabsForEP.clear();
 
-		// if (object.providesSupportAsPrimaryRole()) {
-		if (object.getEditionPatternReferences() != null) {
-			for (int refIndex = 0; refIndex < object.getEditionPatternReferences().size(); refIndex++) {
-				EditionPatternReference ref = object.getEditionPatternReferences().get(refIndex);
-				if (ref == null) {
-					logger.warning("Cannot find reference for EditionPattern refIndex=" + refIndex + ". Please investigate...");
-				} else {
-					if (ref.getEditionPattern() == null) {
-						logger.warning("Found reference for null EditionPattern refIndex=" + refIndex + ". Please investigate...");
-					} else {
-						EditionPatternInspector inspector = ref.getEditionPattern().getInspector();
-						FIBTab newTab = makeFIBTab(ref.getEditionPattern(), refIndex);
-						currentEditionPatterns.add(ref.getEditionPattern());
-						tabsForEP.put(ref.getEditionPattern(), newTab);
-						getTabPanel().addToSubComponents(newTab);
-					}
-				}
+		for (EditionPattern ep : tabsForEPI.keySet()) {
+			if (object.getEditionPattern() == ep) {
+				tabsForEPI.get(ep).setVisible(DataBinding.makeFalseBinding());
 			}
-			updateBindingModel();
 		}
-		// }
 
-		// previousObjectWasProvidingSupportAsPrimaryRole = object.providesSupportAsPrimaryRole();
+		if (ensureCreationOfTabForEPI(object.getEditionPattern())) {
+			returned = true;
+		}
+		FIBTab tab = tabsForEPI.get(object.getEditionPattern());
+		tab.setVisible(DataBinding.makeTrueBinding());
+		currentEditionPatterns.add(object.getEditionPattern());
 
-		return true;
+		// VERY IMPORTANT
+		// We MUST here redefine the type of inspected data
+		BindingVariable bv = getBindingModel().bindingVariableNamed("data");
+		if (bv != null && object != null) {
+			bv.setType(EditionPatternInstanceType.getEditionPatternInstanceType(object.getEditionPattern()));
+		}
 
+		return returned;
 	}
 
-	// private boolean previousObjectWasProvidingSupportAsPrimaryRole = false;
-
-	@Override
+	/*@Override
 	protected void createBindingModel() {
 		super.createBindingModel();
 		for (int i = 0; i < currentEditionPatterns.size(); i++) {
 			EditionPattern ep = currentEditionPatterns.get(i);
-			_bindingModel.addToBindingVariables(new EditionPatternInstancePathElement(ep, i, getDataClass()));
+			_bindingModel.addToBindingVariables(new EditionPatternInstanceBindingVariable(ep, i));
 		}
-	}
+	}*/
 
 	private FIBWidget makeWidget(final InspectorEntry entry, FIBTab newTab) {
 		if (entry instanceof TextFieldInspectorEntry) {
 			FIBTextField tf = new FIBTextField();
-			tf.setValidateOnReturn(true); // Avoid to many ontologies manipulations
+			tf.setValidateOnReturn(true); // Avoid too many ontologies manipulations
 			newTab.addToSubComponents(tf, new TwoColsLayoutConstraints(TwoColsLayoutLocation.right, true, false));
 			return tf;
 		} else if (entry instanceof TextAreaInspectorEntry) {
@@ -371,7 +341,7 @@ public class FIBInspector extends FIBPanel {
 						}
 					}, true));*/
 			// Quick and dirty hack to configure IndividualSelector: refactor this when new binding model will be in use
-			OntologyClass conceptClass = null;
+			IFlexoOntologyClass conceptClass = null;
 			if (individualEntry.getIsDynamicConceptValue()) {
 				// conceptClass = classEntry.evaluateConceptValue(action);
 				// TODO: implement proper scheme with new binding support
@@ -381,21 +351,11 @@ public class FIBInspector extends FIBPanel {
 			}
 			if (conceptClass != null) {
 				individualSelector.addToAssignments(new FIBCustomAssignment(individualSelector, new DataBinding("component.typeURI"),
-						new DataBinding('"' + conceptClass.getURI() + '"') {
-							@Override
-							public BindingFactory getBindingFactory() {
-								return entry.getBindingFactory();
-							}
-						}, true));
+						new DataBinding('"' + conceptClass.getURI() + '"'), true));
 			}
 			if (StringUtils.isNotEmpty(individualEntry.getRenderer())) {
 				individualSelector.addToAssignments(new FIBCustomAssignment(individualSelector, new DataBinding("component.renderer"),
-						new DataBinding('"' + individualEntry.getRenderer() + '"') {
-							@Override
-							public BindingFactory getBindingFactory() {
-								return entry.getBindingFactory();
-							}
-						}, true));
+						new DataBinding('"' + individualEntry.getRenderer() + '"'), true));
 			}
 
 			newTab.addToSubComponents(individualSelector, new TwoColsLayoutConstraints(TwoColsLayoutLocation.right, true, false));
@@ -406,8 +366,8 @@ public class FIBInspector extends FIBPanel {
 			classSelector.setComponentClass(org.openflexo.components.widget.FIBClassSelector.class);
 			// Quick and dirty hack to configure ClassSelector: refactor this when new binding model will be in use
 			// component.context = xxx
-			classSelector.addToAssignments(new FIBCustomAssignment(classSelector, new DataBinding("component.project"), new DataBinding(
-					"data.project"), true));
+			classSelector.addToAssignments(new FIBCustomAssignment(classSelector, new DataBinding<Object>("component.project"),
+					new DataBinding<Object>("data.project"), true));
 			/*classSelector.addToAssignments(new FIBCustomAssignment(classSelector, new DataBinding("component.contextOntologyURI"),
 					new DataBinding('"' + classEntry.getViewPoint().getViewpointOntology().getURI() + '"') {
 						@Override
@@ -416,7 +376,7 @@ public class FIBInspector extends FIBPanel {
 						}
 					}, true));*/
 			// Quick and dirty hack to configure ClassSelector: refactor this when new binding model will be in use
-			OntologyClass conceptClass = null;
+			IFlexoOntologyClass conceptClass = null;
 			if (classEntry.getIsDynamicConceptValue()) {
 				// conceptClass = classEntry.evaluateConceptValue(action);
 				// TODO: implement proper scheme with new binding support
@@ -425,13 +385,8 @@ public class FIBInspector extends FIBPanel {
 				conceptClass = classEntry.getConcept();
 			}
 			if (conceptClass != null) {
-				classSelector.addToAssignments(new FIBCustomAssignment(classSelector, new DataBinding("component.rootClassURI"),
-						new DataBinding('"' + conceptClass.getURI() + '"') {
-							@Override
-							public BindingFactory getBindingFactory() {
-								return entry.getBindingFactory();
-							}
-						}, true));
+				classSelector.addToAssignments(new FIBCustomAssignment(classSelector, new DataBinding<Object>("component.rootClassURI"),
+						new DataBinding<Object>('"' + conceptClass.getURI() + '"'), true));
 			}
 			newTab.addToSubComponents(classSelector, new TwoColsLayoutConstraints(TwoColsLayoutLocation.right, true, false));
 			return classSelector;
@@ -441,8 +396,8 @@ public class FIBInspector extends FIBPanel {
 			propertySelector.setComponentClass(FIBPropertySelector.class);
 			// Quick and dirty hack to configure FIBPropertySelector: refactor this when new binding model will be in use
 			// component.context = xxx
-			propertySelector.addToAssignments(new FIBCustomAssignment(propertySelector, new DataBinding("component.project"),
-					new DataBinding("data.project"), true));
+			propertySelector.addToAssignments(new FIBCustomAssignment(propertySelector, new DataBinding<Object>("component.project"),
+					new DataBinding<Object>("data.project"), true));
 			/*propertySelector.addToAssignments(new FIBCustomAssignment(propertySelector, new DataBinding("component.contextOntologyURI"),
 					new DataBinding('"' + propertyEntry.getViewPoint().getViewpointOntology().getURI() + '"') {
 						@Override
@@ -452,7 +407,7 @@ public class FIBInspector extends FIBPanel {
 					}, true));*/
 
 			// Quick and dirty hack to configure FIBPropertySelector: refactor this when new binding model will be in use
-			OntologyClass domainClass = null;
+			IFlexoOntologyClass domainClass = null;
 			if (propertyEntry.getIsDynamicDomainValue()) {
 				// domainClass = propertyEntry.evaluateDomainValue(action);
 				// TODO: implement proper scheme with new binding support
@@ -461,16 +416,11 @@ public class FIBInspector extends FIBPanel {
 				domainClass = propertyEntry.getDomain();
 			}
 			if (domainClass != null) {
-				propertySelector.addToAssignments(new FIBCustomAssignment(propertySelector, new DataBinding("component.domainClassURI"),
-						new DataBinding('"' + domainClass.getURI() + '"') {
-							@Override
-							public BindingFactory getBindingFactory() {
-								return entry.getBindingFactory();
-							}
-						}, true));
+				propertySelector.addToAssignments(new FIBCustomAssignment(propertySelector, new DataBinding<Object>(
+						"component.domainClassURI"), new DataBinding<Object>('"' + domainClass.getURI() + '"'), true));
 			}
 			if (propertyEntry instanceof ObjectPropertyInspectorEntry) {
-				OntologyClass rangeClass = null;
+				IFlexoOntologyClass rangeClass = null;
 				if (propertyEntry.getIsDynamicDomainValue()) {
 					// domainClass = propertyEntry.evaluateDomainValue(action);
 					// TODO: implement proper scheme with new binding support
@@ -479,21 +429,16 @@ public class FIBInspector extends FIBPanel {
 					rangeClass = ((ObjectPropertyInspectorEntry) propertyEntry).getRange();
 				}
 				if (rangeClass != null) {
-					propertySelector.addToAssignments(new FIBCustomAssignment(propertySelector, new DataBinding("component.rangeClassURI"),
-							new DataBinding('"' + rangeClass.getURI() + '"') {
-								@Override
-								public BindingFactory getBindingFactory() {
-									return entry.getBindingFactory();
-								}
-							}, true));
+					propertySelector.addToAssignments(new FIBCustomAssignment(propertySelector, new DataBinding<Object>(
+							"component.rangeClassURI"), new DataBinding<Object>('"' + rangeClass.getURI() + '"'), true));
 				}
 			}
 			if (propertyEntry instanceof ObjectPropertyInspectorEntry) {
-				propertySelector.addToAssignments(new FIBCustomAssignment(propertySelector, new DataBinding(
-						"component.selectDataProperties"), new DataBinding("false"), true));
+				propertySelector.addToAssignments(new FIBCustomAssignment(propertySelector, new DataBinding<Object>(
+						"component.selectDataProperties"), new DataBinding<Object>("false"), true));
 			} else if (propertyEntry instanceof DataPropertyInspectorEntry) {
-				propertySelector.addToAssignments(new FIBCustomAssignment(propertySelector, new DataBinding(
-						"component.selectObjectProperties"), new DataBinding("false"), true));
+				propertySelector.addToAssignments(new FIBCustomAssignment(propertySelector, new DataBinding<Object>(
+						"component.selectObjectProperties"), new DataBinding<Object>("false"), true));
 			}
 
 			// Quick and dirty hack to configure PropertySelector: refactor this when new binding model will be in use
@@ -506,108 +451,6 @@ public class FIBInspector extends FIBPanel {
 					}, true));*/
 			newTab.addToSubComponents(propertySelector, new TwoColsLayoutConstraints(TwoColsLayoutLocation.right, true, false));
 			return propertySelector;
-		} else if (entry instanceof FlexoObjectInspectorEntry) {
-			FlexoObjectInspectorEntry foEntry = (FlexoObjectInspectorEntry) entry;
-			switch (foEntry.getFlexoObjectType()) {
-			case Process:
-				FIBCustom processSelector = new FIBCustom();
-				processSelector.setComponentClass(org.openflexo.components.widget.FIBProcessSelector.class);
-				processSelector.addToAssignments(new FIBCustomAssignment(processSelector, new DataBinding("component.project"),
-						new DataBinding("data.project"), true));
-				newTab.addToSubComponents(processSelector, new TwoColsLayoutConstraints(TwoColsLayoutLocation.right, true, false));
-				return processSelector;
-			case ProcessFolder:
-				FIBCustom processFolderSelector = new FIBCustom();
-				processFolderSelector.setComponentClass(org.openflexo.components.widget.FIBProcessFolderSelector.class);
-				processFolderSelector.addToAssignments(new FIBCustomAssignment(processFolderSelector, new DataBinding("component.project"),
-						new DataBinding("data.project"), true));
-				newTab.addToSubComponents(processFolderSelector, new TwoColsLayoutConstraints(TwoColsLayoutLocation.right, true, false));
-				return processFolderSelector;
-			case Role:
-				FIBCustom roleSelector = new FIBCustom();
-				roleSelector.setComponentClass(org.openflexo.components.widget.FIBRoleSelector.class);
-				roleSelector.addToAssignments(new FIBCustomAssignment(roleSelector, new DataBinding("component.project"), new DataBinding(
-						"data.project"), true));
-				newTab.addToSubComponents(roleSelector, new TwoColsLayoutConstraints(TwoColsLayoutLocation.right, true, false));
-				return roleSelector;
-			case Activity:
-				FIBCustom activitySelector = new FIBCustom();
-				activitySelector.setComponentClass(org.openflexo.components.widget.ActivitySelector.class);
-				activitySelector.addToAssignments(new FIBCustomAssignment(activitySelector, new DataBinding("component.project"),
-						new DataBinding("data.project"), true));
-				newTab.addToSubComponents(activitySelector, new TwoColsLayoutConstraints(TwoColsLayoutLocation.right, true, false));
-				return activitySelector;
-			case Operation:
-				FIBCustom operationSelector = new FIBCustom();
-				operationSelector.setComponentClass(org.openflexo.components.widget.OperationSelector.class);
-				operationSelector.addToAssignments(new FIBCustomAssignment(operationSelector, new DataBinding("component.project"),
-						new DataBinding("data.project"), true));
-				newTab.addToSubComponents(operationSelector, new TwoColsLayoutConstraints(TwoColsLayoutLocation.right, true, false));
-				return operationSelector;
-			case Action:
-				FIBCustom actionSelector = new FIBCustom();
-				actionSelector.setComponentClass(org.openflexo.components.widget.ActionSelector.class);
-				actionSelector.addToAssignments(new FIBCustomAssignment(actionSelector, new DataBinding("component.project"),
-						new DataBinding("data.project"), true));
-				newTab.addToSubComponents(actionSelector, new TwoColsLayoutConstraints(TwoColsLayoutLocation.right, true, false));
-				return actionSelector;
-
-			case Screen:
-				FIBCustom componentSelector = new FIBCustom();
-				componentSelector.setComponentClass(org.openflexo.components.widget.FIBComponentSelector.class);
-				componentSelector.addToAssignments(new FIBCustomAssignment(componentSelector, new DataBinding("component.project"),
-						new DataBinding("data.project"), true));
-				class CustomStaticBinding extends StaticBinding<Class<OperationComponentDefinition>> {
-
-					@Override
-					public EvaluationType getEvaluationType() {
-						return EvaluationType.LITERAL;
-					}
-
-					@Override
-					public Class<OperationComponentDefinition> getValue() {
-						return OperationComponentDefinition.class;
-					}
-
-					@Override
-					public void setValue(Class<OperationComponentDefinition> aValue) {
-
-					}
-
-					@Override
-					public Class<Class<OperationComponentDefinition>> getStaticBindingClass() {
-						return (Class<Class<OperationComponentDefinition>>) getValue().getClass();
-					}
-
-					@Override
-					public StaticBinding<Class<OperationComponentDefinition>> clone() {
-						return new CustomStaticBinding();
-					}
-
-					@Override
-					public String getStringRepresentation() {
-						return getValue().getName();
-					}
-				}
-
-				final CustomStaticBinding binding = new CustomStaticBinding();
-				DataBinding value = new DataBinding(OperationComponentDefinition.class.getName()) {
-					@Override
-					public void setBindingDefinition(BindingDefinition bindingDefinition) {
-						super.setBindingDefinition(bindingDefinition);
-						binding.setBindingDefinition(bindingDefinition);
-					}
-				};
-				componentSelector.addToAssignments(new FIBCustomAssignment(componentSelector, new DataBinding("component.type"), value,
-						true));
-				newTab.addToSubComponents(componentSelector, new TwoColsLayoutConstraints(TwoColsLayoutLocation.right, true, false));
-				value.setBinding(binding);
-				binding.setBindingDefinition(value.getBindingDefinition());
-				return componentSelector;
-
-			default:
-				break;
-			}
 		}
 
 		FIBLabel unknown = new FIBLabel();
@@ -617,10 +460,9 @@ public class FIBInspector extends FIBPanel {
 
 	}
 
-	private FIBTab makeFIBTab(EditionPattern ep, int refIndex) {
+	private FIBTab makeFIBTab(EditionPattern ep, String epIdentifier) {
 		// logger.info("makeFIBTab " + refIndex + " for " + ep);
-		String epIdentifier = getEditionPatternIdentifier(ep, refIndex);
-		FIBTab newTab = createFIBTabForEditionPattern(ep, refIndex);
+		FIBTab newTab = createFIBTabForEditionPattern(ep);
 		appendInspectorEntries(ep, epIdentifier, newTab);
 		newTab.finalizeDeserialization();
 		return newTab;
@@ -640,22 +482,18 @@ public class FIBInspector extends FIBPanel {
 			label.setLabel(entryLabel);
 			newTab.addToSubComponents(label, new TwoColsLayoutConstraints(TwoColsLayoutLocation.left, false, false));
 			FIBWidget widget = makeWidget(entry, newTab);
-			widget.setData(new DataBinding(epIdentifier + "." + entry.getData().toString()) {
-				@Override
-				public BindingFactory getBindingFactory() {
-					return entry.getBindingFactory();
-				}
-			});
+			widget.setBindingFactory(entry.getBindingFactory());
+			widget.setData(new DataBinding<Object>(epIdentifier + "." + entry.getData().toString()));
 			widget.setReadOnly(entry.getIsReadOnly());
-
 		}
 	}
 
-	protected FIBTab createFIBTabForEditionPattern(EditionPattern ep, int refIndex) {
-		String epIdentifier = getEditionPatternIdentifier(ep, refIndex);
+	protected FIBTab createFIBTabForEditionPattern(EditionPattern ep) {
+		String epIdentifier = getEditionPatternIdentifierForEPIReference(ep);
 		FIBTab newTab = new FIBTab();
 		newTab.setTitle(ep.getInspector().getInspectorTitle());
 		newTab.setLayout(Layout.twocols);
+		newTab.setUseScrollBar(true);
 		// newTab.setDataClass(EditionPatternInstance.class);
 		// newTab.setData(new DataBinding("data.editionPatternReferences.get["+refIndex+"].editionPatternInstance"));
 		// newTab.setData(new DataBinding("data.editionPatternReferences.firstElement.editionPatternInstance"));
@@ -663,8 +501,13 @@ public class FIBInspector extends FIBPanel {
 		return newTab;
 	}
 
-	protected String getEditionPatternIdentifier(EditionPattern ep, int refIndex) {
-		return ep.getViewPoint().getName() + "_" + ep.getName() + "_" + refIndex;
+	protected String getEditionPatternIdentifierForEPIReference(EditionPattern ep) {
+		// Instead of just referencing ep name, reference the URI (in case of in same VP, many EP have same name)
+		return "data.getEditionPatternInstance(\"" + ep.getURI() + "\")";
+	}
+
+	protected String getEditionPatternIdentifierForEPI(EditionPattern ep) {
+		return "data";
 	}
 
 }

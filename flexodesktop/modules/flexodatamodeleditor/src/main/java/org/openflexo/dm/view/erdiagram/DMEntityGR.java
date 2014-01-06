@@ -22,16 +22,16 @@ package org.openflexo.dm.view.erdiagram;
 import java.awt.Color;
 import java.util.logging.Logger;
 
+import org.openflexo.fge.BackgroundStyle;
 import org.openflexo.fge.Drawing;
+import org.openflexo.fge.ForegroundStyle;
 import org.openflexo.fge.GraphicalRepresentation;
 import org.openflexo.fge.ShapeGraphicalRepresentation;
+import org.openflexo.fge.TextStyle;
 import org.openflexo.fge.geom.FGEPoint;
-import org.openflexo.fge.graphics.BackgroundStyle;
 import org.openflexo.fge.graphics.DecorationPainter;
-import org.openflexo.fge.graphics.ForegroundStyle;
-import org.openflexo.fge.graphics.TextStyle;
 import org.openflexo.fge.shapes.Rectangle;
-import org.openflexo.fge.shapes.Shape.ShapeType;
+import org.openflexo.fge.shapes.ShapeSpecification.ShapeType;
 import org.openflexo.foundation.DataModification;
 import org.openflexo.foundation.FlexoObservable;
 import org.openflexo.foundation.GraphicalFlexoObserver;
@@ -56,7 +56,7 @@ public class DMEntityGR extends ShapeGraphicalRepresentation<DMEntity> implement
 		super(ShapeType.RECTANGLE, aDMEntity, aDrawing);
 		// setText(getRole().getName());
 		setIsFloatingLabel(false);
-		getShape().setIsRounded(false);
+		getShapeSpecification().setIsRounded(false);
 		setDimensionConstraints(DimensionConstraints.FREELY_RESIZABLE);
 		updateStyles();
 		setBorder(new ShapeGraphicalRepresentation.ShapeBorder(ENTITY_BORDER, ENTITY_BORDER, ENTITY_BORDER, ENTITY_BORDER));
@@ -173,7 +173,7 @@ public class DMEntityGR extends ShapeGraphicalRepresentation<DMEntity> implement
 	{
 		super.setWidthNoNotification(aValue);
 		System.out.println("set width to "+aValue);
-		for (GraphicalRepresentation<?> child : getContainedGraphicalRepresentations()) {
+		for (GraphicalRepresentation child : getContainedGraphicalRepresentations()) {
 			if (child instanceof DMPropertyGR) {
 				((DMPropertyGR)child).notifyObjectHasResized();
 			}
@@ -250,8 +250,8 @@ public class DMEntityGR extends ShapeGraphicalRepresentation<DMEntity> implement
 	}
 
 	@Override
-	public Rectangle getShape() {
-		return (Rectangle) super.getShape();
+	public Rectangle getShapeSpecification() {
+		return (Rectangle) super.getShapeSpecification();
 	}
 
 	@Override
@@ -259,7 +259,7 @@ public class DMEntityGR extends ShapeGraphicalRepresentation<DMEntity> implement
 		if (observable == getEntity()) {
 			if (dataModification instanceof PropertyRegistered) {
 				getDrawing().updateGraphicalObjectsHierarchy();
-				for (GraphicalRepresentation<?> gr : getContainedGraphicalRepresentations()) {
+				for (GraphicalRepresentation gr : getContainedGraphicalRepresentations()) {
 					if (gr instanceof DMPropertyGR) {
 						((DMPropertyGR) gr).notifyObjectMoved();
 					}
@@ -268,7 +268,7 @@ public class DMEntityGR extends ShapeGraphicalRepresentation<DMEntity> implement
 				notifyShapeNeedsToBeRedrawn();
 			} else if (dataModification instanceof PropertyUnregistered) {
 				getDrawing().updateGraphicalObjectsHierarchy();
-				for (GraphicalRepresentation<?> gr : getContainedGraphicalRepresentations()) {
+				for (GraphicalRepresentation gr : getContainedGraphicalRepresentations()) {
 					if (gr instanceof DMPropertyGR) {
 						((DMPropertyGR) gr).notifyObjectMoved();
 					}
@@ -288,7 +288,7 @@ public class DMEntityGR extends ShapeGraphicalRepresentation<DMEntity> implement
 	@Override
 	public void notifyObjectHasResized() {
 		super.notifyObjectHasResized();
-		for (GraphicalRepresentation<?> gr : getContainedGraphicalRepresentations()) {
+		for (GraphicalRepresentation gr : getContainedGraphicalRepresentations()) {
 			if (gr instanceof DMPropertyGR) {
 				((DMPropertyGR) gr).notifyObjectResized();
 			}

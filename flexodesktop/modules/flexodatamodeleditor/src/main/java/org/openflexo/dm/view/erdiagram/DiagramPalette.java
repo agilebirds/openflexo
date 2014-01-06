@@ -80,8 +80,8 @@ public class DiagramPalette extends DrawingPalette {
 			}
 			public boolean elementDragged(GraphicalRepresentation gr, Point dropLocation)
 			{
-				//MyDrawingElement container = (MyDrawingElement)gr.getDrawable();
-				//getController().addNewShape(new MyShape(getGraphicalRepresentation().getShapeType(), dropLocation, getController().getDrawing()),container);
+				//DiagramElement container = (DiagramElement)gr.getDrawable();
+				//getController().addNewShape(new Shape(getGraphicalRepresentation().getShapeType(), dropLocation, getController().getDrawing()),container);
 				logger.info("Dropping new role for "+gr.getDrawable());
 				FlexoWorkflow workflow = ((WorkflowModelObject)gr.getDrawable()).getWorkflow();
 				AddRole addRole = AddRole.actionType.makeNewAction(workflow, null, getController().getWKFController().getEditor());

@@ -1,0 +1,4 @@
+<Image imageFile="Image.gif">
+	<Parameter name="x" value="130"/>
+	<Parameter name="y" value="210"/>
+</Image>

@@ -1,16 +1,17 @@
 package org.openflexo.view.controller.model;
 
 import org.openflexo.foundation.FlexoEditor;
-import org.openflexo.foundation.FlexoModelObject;
+import org.openflexo.foundation.FlexoObject;
+import org.openflexo.foundation.FlexoProjectObject;
 
 public class Location extends ControllerModelObject {
-	private final FlexoModelObject object;
+	private final FlexoObject object;
 
 	private final FlexoPerspective perspective;
 
 	private final FlexoEditor editor;
 
-	public Location(FlexoEditor context, FlexoModelObject object, FlexoPerspective perspective) {
+	public Location(FlexoEditor context, FlexoObject object, FlexoPerspective perspective) {
 		super();
 		this.editor = context;
 		this.object = object;
@@ -71,7 +72,7 @@ public class Location extends ControllerModelObject {
 		return true;
 	}
 
-	public FlexoModelObject getObject() {
+	public FlexoObject getObject() {
 		return object;
 	}
 
@@ -84,7 +85,11 @@ public class Location extends ControllerModelObject {
 	}
 
 	public boolean isEditable() {
-		return getObject().getProject() == null || getObject().getProject() == getEditor().getProject();
+		if (getObject() instanceof FlexoProjectObject) {
+			return ((FlexoProjectObject) getObject()).getProject() == getEditor().getProject()
+					|| ((FlexoProjectObject) getObject()).getProject() == null;
+		}
+		return true;
 	}
 
 }

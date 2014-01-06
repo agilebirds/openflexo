@@ -28,14 +28,14 @@ import javax.swing.KeyStroke;
 import org.openflexo.FlexoCst;
 import org.openflexo.foundation.action.FlexoActionFinalizer;
 import org.openflexo.foundation.action.FlexoActionInitializer;
-import org.openflexo.foundation.view.ViewConnector;
-import org.openflexo.foundation.view.ViewObject;
-import org.openflexo.foundation.view.ViewShape;
 import org.openflexo.foundation.view.action.VESelectAll;
+import org.openflexo.foundation.view.diagram.model.DiagramConnector;
+import org.openflexo.foundation.view.diagram.model.DiagramElement;
+import org.openflexo.foundation.view.diagram.model.DiagramShape;
 import org.openflexo.view.controller.ActionInitializer;
 import org.openflexo.view.controller.ControllerActionInitializer;
 
-public class VESelectAllInitializer extends ActionInitializer<VESelectAll, ViewObject, ViewObject> {
+public class VESelectAllInitializer extends ActionInitializer<VESelectAll, DiagramElement<?>, DiagramElement<?>> {
 
 	private static final Logger logger = Logger.getLogger(ControllerActionInitializer.class.getPackage().getName());
 
@@ -64,12 +64,12 @@ public class VESelectAllInitializer extends ActionInitializer<VESelectAll, ViewO
 			@Override
 			public boolean run(EventObject e, VESelectAll action) {
 				System.out.println("Select all with " + action.getFocusedObject());
-				ViewObject container = action.getFocusedObject();
-				if (action.getFocusedObject() instanceof ViewConnector) {
-					container = ((ViewConnector) action.getFocusedObject()).getParent();
-				} else if (action.getFocusedObject() instanceof ViewShape
-						&& ((ViewShape) action.getFocusedObject()).getChilds().size() == 0) {
-					container = ((ViewShape) action.getFocusedObject()).getParent();
+				DiagramElement<?> container = action.getFocusedObject();
+				if (action.getFocusedObject() instanceof DiagramConnector) {
+					container = ((DiagramConnector) action.getFocusedObject()).getParent();
+				} else if (action.getFocusedObject() instanceof DiagramShape
+						&& ((DiagramShape) action.getFocusedObject()).getChilds().size() == 0) {
+					container = ((DiagramShape) action.getFocusedObject()).getParent();
 				}
 				if (container != null) {
 					getControllerActionInitializer().getVESelectionManager().setSelectedObjects(container.getChilds());

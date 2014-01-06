@@ -24,19 +24,19 @@ import java.util.Iterator;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 
+import org.openflexo.fge.BackgroundStyle;
 import org.openflexo.fge.ConnectorGraphicalRepresentation;
+import org.openflexo.fge.ForegroundStyle;
 import org.openflexo.fge.GraphicalRepresentation;
+import org.openflexo.fge.TextStyle;
+import org.openflexo.fge.ForegroundStyle.DashStyle;
 import org.openflexo.fge.geom.FGEDimension;
 import org.openflexo.fge.geom.FGEPoint;
 import org.openflexo.fge.geom.FGESteppedDimensionConstraint;
-import org.openflexo.fge.graphics.BackgroundStyle;
 import org.openflexo.fge.graphics.FGEShapeGraphics;
-import org.openflexo.fge.graphics.ForegroundStyle;
-import org.openflexo.fge.graphics.ForegroundStyle.DashStyle;
 import org.openflexo.fge.graphics.ShapePainter;
-import org.openflexo.fge.graphics.TextStyle;
 import org.openflexo.fge.shapes.Rectangle;
-import org.openflexo.fge.shapes.Shape.ShapeType;
+import org.openflexo.fge.shapes.ShapeSpecification.ShapeType;
 import org.openflexo.foundation.DataModification;
 import org.openflexo.foundation.FlexoObservable;
 import org.openflexo.foundation.wkf.FlexoLevel;
@@ -80,7 +80,7 @@ public class AnnotationGR extends ArtefactGR<WKFAnnotation> {
 					for (WKFAssociation a : getAnnotation().getIncomingAssociations()) {
 						ConnectorGraphicalRepresentation<WKFAssociation> gr = (ConnectorGraphicalRepresentation<WKFAssociation>) getGraphicalRepresentation(a);
 						if (gr.getEndObject() == AnnotationGR.this) {
-							if (gr.getConnector().getEndLocation().x < 0.5) {
+							if (gr.getConnectorSpecification().getEndLocation().x < 0.5) {
 								drawLeft = true;
 							} else {
 								drawRight = true;
@@ -90,7 +90,7 @@ public class AnnotationGR extends ArtefactGR<WKFAnnotation> {
 					for (WKFAssociation a : getAnnotation().getOutgoingAssociations()) {
 						ConnectorGraphicalRepresentation<WKFAssociation> gr = (ConnectorGraphicalRepresentation<WKFAssociation>) getGraphicalRepresentation(a);
 						if (gr.getStartObject() == AnnotationGR.this) {
-							if (gr.getConnector().getStartLocation().x < 0.5) {
+							if (gr.getConnectorSpecification().getStartLocation().x < 0.5) {
 								drawLeft = true;
 							} else {
 								drawRight = true;
@@ -171,14 +171,14 @@ public class AnnotationGR extends ArtefactGR<WKFAnnotation> {
 		if (getAnnotation().isAnnotation()) {
 			super.doLayoutMethod3(x, y);
 		} else {
-			Iterator<GraphicalRepresentation<?>> i = null;
+			Iterator<GraphicalRepresentation> i = null;
 			double attemptX = x, attemptY = y;
 			boolean found = false;
 			while (!found) {
 				i = getContainerGraphicalRepresentation().getContainedGraphicalRepresentations().iterator();
 				found = true;
 				while (i.hasNext()) {
-					GraphicalRepresentation<?> gr = i.next();
+					GraphicalRepresentation gr = i.next();
 					if (gr instanceof AnnotationGR && ((AnnotationGR) gr).getDrawable().isBoundingBox()) {
 						AnnotationGR rgr = (AnnotationGR) gr;
 						if (rgr != this) {
@@ -243,7 +243,7 @@ public class AnnotationGR extends ArtefactGR<WKFAnnotation> {
 				getAnnotation().setDashStyle(DashStyle.DOT_LINES_DASHES);
 			}
 			setForeground(ForegroundStyle.makeStyle(getAnnotation().getBorderColor(), 1.0f, getAnnotation().getDashStyle()));
-			((Rectangle) getShape()).setIsRounded(getAnnotation().getIsRounded());
+			((Rectangle) getShapeSpecification()).setIsRounded(getAnnotation().getIsRounded());
 			setIsFloatingLabel(true);
 			setAdjustMinimalWidthToLabelWidth(false);
 			setAdjustMinimalHeightToLabelHeight(false);

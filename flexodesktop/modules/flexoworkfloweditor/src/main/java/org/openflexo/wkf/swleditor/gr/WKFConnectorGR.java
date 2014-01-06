@@ -21,16 +21,17 @@ package org.openflexo.wkf.swleditor.gr;
 
 import java.util.logging.Logger;
 
-import org.openflexo.fge.ConnectorGraphicalRepresentation;
 import org.openflexo.fge.ShapeGraphicalRepresentation;
-import org.openflexo.fge.connectors.Connector.ConnectorType;
+import org.openflexo.fge.connectors.ConnectorSpecification.ConnectorType;
 import org.openflexo.fge.geom.FGEPoint;
+import org.openflexo.fge.impl.ConnectorGraphicalRepresentationImpl;
 import org.openflexo.foundation.GraphicalFlexoObserver;
 import org.openflexo.foundation.wkf.WKFObject;
 import org.openflexo.wkf.swleditor.SWLEditorConstants;
 import org.openflexo.wkf.swleditor.SwimmingLaneRepresentation;
 
-public abstract class WKFConnectorGR<O> extends ConnectorGraphicalRepresentation<O> implements GraphicalFlexoObserver, SWLEditorConstants {
+public abstract class WKFConnectorGR<O> extends ConnectorGraphicalRepresentationImpl<O> implements GraphicalFlexoObserver,
+		SWLEditorConstants {
 
 	private static final Logger logger = Logger.getLogger(WKFConnectorGR.class.getPackage().getName());
 
@@ -76,7 +77,7 @@ public abstract class WKFConnectorGR<O> extends ConnectorGraphicalRepresentation
 	 * @param endObjGR
 	 * @return
 	 */
-	private int computeBestLayer(ShapeGraphicalRepresentation<?> startObjGR, ShapeGraphicalRepresentation<?> endObjGR) {
+	private int computeBestLayer(ShapeGraphicalRepresentation startObjGR, ShapeGraphicalRepresentation endObjGR) {
 		if (isConnectorFullyVisible(startObjGR, endObjGR)) {
 			return Math.max(startObjGR.getLayer(), endObjGR.getLayer()) + 1;
 		} else {
@@ -101,9 +102,9 @@ public abstract class WKFConnectorGR<O> extends ConnectorGraphicalRepresentation
 	 * @param endObjGR
 	 * @return
 	 */
-	protected boolean isConnectorFullyVisible(ShapeGraphicalRepresentation<?> startObjGR, ShapeGraphicalRepresentation<?> endObjGR) {
-		FGEPoint startLocation = getConnector().getStartLocation();
-		FGEPoint endLocation = getConnector().getEndLocation();
+	protected boolean isConnectorFullyVisible(ShapeGraphicalRepresentation startObjGR, ShapeGraphicalRepresentation endObjGR) {
+		FGEPoint startLocation = getConnectorSpecification().getStartLocation();
+		FGEPoint endLocation = getConnectorSpecification().getEndLocation();
 
 		if (startLocation == null) {
 			return true;
@@ -131,9 +132,9 @@ public abstract class WKFConnectorGR<O> extends ConnectorGraphicalRepresentation
 	 * @param endObjGR
 	 * @return
 	 */
-	protected int minimalLayerHiding(ShapeGraphicalRepresentation<?> startObjGR, ShapeGraphicalRepresentation<?> endObjGR) {
-		FGEPoint startLocation = getConnector().getStartLocation();
-		FGEPoint endLocation = getConnector().getEndLocation();
+	protected int minimalLayerHiding(ShapeGraphicalRepresentation startObjGR, ShapeGraphicalRepresentation endObjGR) {
+		FGEPoint startLocation = getConnectorSpecification().getStartLocation();
+		FGEPoint endLocation = getConnectorSpecification().getEndLocation();
 
 		if (startLocation == null) {
 			return -1;
@@ -142,8 +143,8 @@ public abstract class WKFConnectorGR<O> extends ConnectorGraphicalRepresentation
 			return -1;
 		}
 
-		ShapeGraphicalRepresentation<?> firstHiddingShape = startObjGR.shapeHiding(startLocation);
-		ShapeGraphicalRepresentation<?> secondHiddingShape = endObjGR.shapeHiding(endLocation);
+		ShapeGraphicalRepresentation firstHiddingShape = startObjGR.shapeHiding(startLocation);
+		ShapeGraphicalRepresentation secondHiddingShape = endObjGR.shapeHiding(endLocation);
 
 		if (firstHiddingShape == null) {
 			if (secondHiddingShape == null) {
@@ -166,7 +167,7 @@ public abstract class WKFConnectorGR<O> extends ConnectorGraphicalRepresentation
 	 * @param startObjGR
 	 * @param endObjGR
 	 */
-	private void updateLayer(ShapeGraphicalRepresentation<?> startObjGR, ShapeGraphicalRepresentation<?> endObjGR) {
+	private void updateLayer(ShapeGraphicalRepresentation startObjGR, ShapeGraphicalRepresentation endObjGR) {
 		if (startObjGR != null && endObjGR != null && !switchedToSelectionLayer) {
 			setLayer(computeBestLayer(startObjGR, endObjGR));
 		}

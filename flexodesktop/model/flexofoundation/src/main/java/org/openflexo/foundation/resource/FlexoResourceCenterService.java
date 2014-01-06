@@ -2,18 +2,30 @@ package org.openflexo.foundation.resource;
 
 import java.util.List;
 
+import org.openflexo.foundation.FlexoService;
+import org.openflexo.foundation.FlexoServiceManager;
 import org.openflexo.model.annotations.Adder;
 import org.openflexo.model.annotations.Getter;
 import org.openflexo.model.annotations.Getter.Cardinality;
 import org.openflexo.model.annotations.ModelEntity;
 import org.openflexo.model.annotations.Remover;
 import org.openflexo.model.annotations.Setter;
+import org.openflexo.model.factory.AccessibleProxyObject;
 
+/**
+ * This service implements access policy to resource centers in the context of a {@link FlexoServiceManager} (which, in interactive mode, is
+ * an ApplicationContext)
+ * 
+ * One {@link UserResourceCenter} is declared to be the user resource center
+ * 
+ * @author sylvain
+ * 
+ */
 @ModelEntity
-public interface FlexoResourceCenterService {
+public interface FlexoResourceCenterService extends FlexoService, AccessibleProxyObject {
 	public static final String RESOURCE_CENTERS = "resourceCenters";
 
-	@Getter(value = RESOURCE_CENTERS, cardinality = Cardinality.LIST)
+	@Getter(value = RESOURCE_CENTERS, cardinality = Cardinality.LIST, ignoreType = true)
 	public List<FlexoResourceCenter> getResourceCenters();
 
 	@Setter(RESOURCE_CENTERS)
@@ -25,7 +37,8 @@ public interface FlexoResourceCenterService {
 	@Remover(RESOURCE_CENTERS)
 	public void removeFromResourceCenters(FlexoResourceCenter resourceCenter);
 
-	public FlexoResourceCenter getUserResourceCenter();
-
-	public FlexoResourceCenter getOpenFlexoResourceCenter();
+	/**
+	 * Save all locations for registered resource centers on disk
+	 */
+	public void storeDirectoryResourceCenterLocations();
 }

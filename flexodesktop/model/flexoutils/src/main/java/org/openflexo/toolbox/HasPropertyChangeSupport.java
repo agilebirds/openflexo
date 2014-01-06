@@ -2,6 +2,12 @@ package org.openflexo.toolbox;
 
 import java.beans.PropertyChangeSupport;
 
+/**
+ * Implemented by all objects implementing support for property change
+ * 
+ * @author sylvain
+ * 
+ */
 public interface HasPropertyChangeSupport {
 
 	/**

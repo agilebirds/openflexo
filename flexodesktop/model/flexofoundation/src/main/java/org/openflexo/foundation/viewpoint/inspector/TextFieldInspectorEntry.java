@@ -19,7 +19,6 @@
  */
 package org.openflexo.foundation.viewpoint.inspector;
 
-import org.openflexo.foundation.viewpoint.ViewPoint.ViewPointBuilder;
 
 /**
  * Represents an inspector entry for a text field
@@ -29,8 +28,8 @@ import org.openflexo.foundation.viewpoint.ViewPoint.ViewPointBuilder;
  */
 public class TextFieldInspectorEntry extends InspectorEntry {
 
-	public TextFieldInspectorEntry(ViewPointBuilder builder) {
-		super(builder);
+	public TextFieldInspectorEntry() {
+		super();
 	}
 
 	@Override

@@ -21,7 +21,7 @@ package org.openflexo.wkf.processeditor.gr;
 
 import java.util.logging.Logger;
 
-import org.openflexo.fge.connectors.rpc.RectPolylinConnector;
+import org.openflexo.fge.connectors.RectPolylinConnectorSpecification;
 import org.openflexo.foundation.wkf.edge.TokenEdge;
 import org.openflexo.wkf.processeditor.ProcessRepresentation;
 
@@ -57,10 +57,10 @@ public class TokenEdgeGR extends EdgeGR<TokenEdge> {
 			// during big model restructurations (for example during a multiple delete)
 			return;
 		}
-		if (getConnector() instanceof RectPolylinConnector) {
+		if (getConnectorSpecification() instanceof RectPolylinConnectorSpecification) {
 			startOrientationFixed = false;
 			endOrientationFixed = false;
-			// ((RectPolylinConnector)getConnector()).setRectPolylinConstraints(RectPolylinConstraints.NONE);
+			// ((RectPolylinConnectorSpecification)getConnector()).setRectPolylinConstraints(RectPolylinConstraints.NONE);
 		}
 		super.refreshConnector();
 	}

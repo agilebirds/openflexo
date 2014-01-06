@@ -1,0 +1,378 @@
+<?xml version="1.0"?>
+
+
+<!DOCTYPE rdf:RDF [
+    <!ENTITY owl "http://www.w3.org/2002/07/owl#" >
+    <!ENTITY xsd "http://www.w3.org/2001/XMLSchema#" >
+    <!ENTITY owl2xml "http://www.w3.org/2006/12/owl2-xml#" >
+    <!ENTITY rdfs "http://www.w3.org/2000/01/rdf-schema#" >
+    <!ENTITY rdf "http://www.w3.org/1999/02/22-rdf-syntax-ns#" >
+    <!ENTITY SEPELInputModel1 "http://www.thalesgroup.com/ontologies/sepel-ng/SEPELInputModel1.owl#" >
+]>
+
+
+<rdf:RDF xmlns="http://www.thalesgroup.com/ontologies/sepel-ng/SEPELInputModel1.owl#"
+     xml:base="http://www.thalesgroup.com/ontologies/sepel-ng/SEPELInputModel1.owl"
+     xmlns:rdfs="http://www.w3.org/2000/01/rdf-schema#"
+     xmlns:owl2xml="http://www.w3.org/2006/12/owl2-xml#"
+     xmlns:SEPELInputModel1="http://www.thalesgroup.com/ontologies/sepel-ng/SEPELInputModel1.owl#"
+     xmlns:owl="http://www.w3.org/2002/07/owl#"
+     xmlns:xsd="http://www.w3.org/2001/XMLSchema#"
+     xmlns:rdf="http://www.w3.org/1999/02/22-rdf-syntax-ns#">
+    <owl:Ontology rdf:about=""/>
+    
+
+
+    <!-- 
+    ///////////////////////////////////////////////////////////////////////////////////////
+    //
+    // Object Properties
+    //
+    ///////////////////////////////////////////////////////////////////////////////////////
+     -->
+
+    
+
+
+    <!-- http://www.thalesgroup.com/ontologies/sepel-ng/SEPELInputModel1.owl#descriptionSpatiale -->
+
+    <owl:ObjectProperty rdf:about="#descriptionSpatiale">
+        <rdfs:range rdf:resource="#DescriptionSpatiale"/>
+        <rdfs:domain rdf:resource="#Etat"/>
+    </owl:ObjectProperty>
+    
+
+
+    <!-- http://www.thalesgroup.com/ontologies/sepel-ng/SEPELInputModel1.owl#descriptionSpectrale -->
+
+    <owl:ObjectProperty rdf:about="#descriptionSpectrale">
+        <rdfs:range rdf:resource="#DescriptionSpectrale"/>
+        <rdfs:domain rdf:resource="#Etat"/>
+    </owl:ObjectProperty>
+    
+
+
+    <!-- http://www.thalesgroup.com/ontologies/sepel-ng/SEPELInputModel1.owl#descriptionTemporelle -->
+
+    <owl:ObjectProperty rdf:about="#descriptionTemporelle">
+        <rdfs:range rdf:resource="#DescriptionTemporelle"/>
+        <rdfs:domain rdf:resource="#Etat"/>
+    </owl:ObjectProperty>
+    
+
+
+    <!-- http://www.thalesgroup.com/ontologies/sepel-ng/SEPELInputModel1.owl#direction -->
+
+    <owl:ObjectProperty rdf:about="#direction">
+        <rdfs:domain rdf:resource="#DescriptionSpatiale"/>
+        <rdfs:range rdf:resource="#Direction"/>
+        <rdfs:domain rdf:resource="#Intervalle"/>
+    </owl:ObjectProperty>
+    
+
+
+    <!-- http://www.thalesgroup.com/ontologies/sepel-ng/SEPELInputModel1.owl#etat -->
+
+    <owl:ObjectProperty rdf:about="#etat">
+        <rdfs:domain rdf:resource="#Emetteur"/>
+        <rdfs:range rdf:resource="#Etat"/>
+    </owl:ObjectProperty>
+    
+
+
+    <!-- http://www.thalesgroup.com/ontologies/sepel-ng/SEPELInputModel1.owl#frequence -->
+
+    <owl:ObjectProperty rdf:about="#frequence">
+        <rdfs:domain rdf:resource="#DescriptionSpectrale"/>
+        <rdfs:range rdf:resource="#Frequence"/>
+        <rdfs:domain rdf:resource="#GroupeFrequence"/>
+        <rdfs:domain rdf:resource="#Intervalle"/>
+    </owl:ObjectProperty>
+    
+
+
+    <!-- http://www.thalesgroup.com/ontologies/sepel-ng/SEPELInputModel1.owl#groupeFrequence -->
+
+    <owl:ObjectProperty rdf:about="#groupeFrequence">
+        <rdfs:domain rdf:resource="#DescriptionSpectrale"/>
+        <rdfs:range rdf:resource="#GroupeFrequence"/>
+        <rdfs:domain rdf:resource="#Intervalle"/>
+    </owl:ObjectProperty>
+    
+
+
+    <!-- http://www.thalesgroup.com/ontologies/sepel-ng/SEPELInputModel1.owl#intervalle -->
+
+    <owl:ObjectProperty rdf:about="#intervalle">
+        <rdfs:domain rdf:resource="#DescriptionTemporelle"/>
+        <rdfs:range rdf:resource="#Intervalle"/>
+    </owl:ObjectProperty>
+    
+
+
+    <!-- http://www.thalesgroup.com/ontologies/sepel-ng/SEPELInputModel1.owl#intervalleComplexe -->
+
+    <owl:ObjectProperty rdf:about="#intervalleComplexe">
+        <rdfs:range rdf:resource="#IntervalleComplexe"/>
+        <rdfs:domain rdf:resource="#IntervalleComplexe"/>
+    </owl:ObjectProperty>
+    
+
+
+    <!-- http://www.thalesgroup.com/ontologies/sepel-ng/SEPELInputModel1.owl#intervalleSimple -->
+
+    <owl:ObjectProperty rdf:about="#intervalleSimple">
+        <rdfs:domain rdf:resource="#IntervalleComplexe"/>
+        <rdfs:range rdf:resource="#IntervalleSimple"/>
+    </owl:ObjectProperty>
+    
+
+
+    <!-- http://www.thalesgroup.com/ontologies/sepel-ng/SEPELInputModel1.owl#max -->
+
+    <owl:ObjectProperty rdf:about="#max">
+        <rdfs:range rdf:resource="#Contenu"/>
+        <rdfs:domain rdf:resource="#Frequence"/>
+        <rdfs:domain rdf:resource="#IntervalleSimple"/>
+    </owl:ObjectProperty>
+    
+
+
+    <!-- http://www.thalesgroup.com/ontologies/sepel-ng/SEPELInputModel1.owl#min -->
+
+    <owl:ObjectProperty rdf:about="#min">
+        <rdfs:range rdf:resource="#Contenu"/>
+        <rdfs:domain rdf:resource="#Frequence"/>
+        <rdfs:domain rdf:resource="#IntervalleSimple"/>
+    </owl:ObjectProperty>
+    
+
+
+    <!-- 
+    ///////////////////////////////////////////////////////////////////////////////////////
+    //
+    // Data properties
+    //
+    ///////////////////////////////////////////////////////////////////////////////////////
+     -->
+
+    
+
+
+    <!-- http://www.thalesgroup.com/ontologies/sepel-ng/SEPELInputModel1.owl#unite -->
+
+    <owl:DatatypeProperty rdf:about="#unite">
+        <rdfs:domain rdf:resource="#Contenu"/>
+    </owl:DatatypeProperty>
+    
+
+
+    <!-- http://www.thalesgroup.com/ontologies/sepel-ng/SEPELInputModel1.owl#unit&#233; -->
+
+    <owl:DatatypeProperty rdf:about="#unit&#233;"/>
+    
+
+
+    <!-- http://www.thalesgroup.com/ontologies/sepel-ng/SEPELInputModel1.owl#valeur -->
+
+    <owl:DatatypeProperty rdf:about="#valeur">
+        <rdfs:domain rdf:resource="#Contenu"/>
+    </owl:DatatypeProperty>
+    
+
+
+    <!-- 
+    ///////////////////////////////////////////////////////////////////////////////////////
+    //
+    // Classes
+    //
+    ///////////////////////////////////////////////////////////////////////////////////////
+     -->
+
+    
+
+
+    <!-- http://www.thalesgroup.com/ontologies/sepel-ng/SEPELInputModel1.owl#Concept -->
+
+    <owl:Class rdf:about="#Concept">
+        <rdfs:subClassOf rdf:resource="#RootClassForInputModel1"/>
+    </owl:Class>
+    
+
+
+    <!-- http://www.thalesgroup.com/ontologies/sepel-ng/SEPELInputModel1.owl#Contenu -->
+
+    <owl:Class rdf:about="#Contenu">
+        <rdfs:label xml:lang="en">Content</rdfs:label>
+        <rdfs:label xml:lang="fr">Contenu</rdfs:label>
+        <rdfs:subClassOf rdf:resource="#RootClassForInputModel1"/>
+        <rdfs:subClassOf>
+            <owl:Restriction>
+                <owl:onProperty rdf:resource="#unit&#233;"/>
+                <owl:cardinality rdf:datatype="&xsd;nonNegativeInteger">1</owl:cardinality>
+            </owl:Restriction>
+        </rdfs:subClassOf>
+        <rdfs:subClassOf>
+            <owl:Restriction>
+                <owl:onProperty rdf:resource="#valeur"/>
+                <owl:cardinality rdf:datatype="&xsd;nonNegativeInteger">1</owl:cardinality>
+            </owl:Restriction>
+        </rdfs:subClassOf>
+    </owl:Class>
+    
+
+
+    <!-- http://www.thalesgroup.com/ontologies/sepel-ng/SEPELInputModel1.owl#DescriptionSpatiale -->
+
+    <owl:Class rdf:about="#DescriptionSpatiale">
+        <rdfs:label xml:lang="en"
+            >Spatial description</rdfs:label>
+        <rdfs:label xml:lang="fr"
+            >Description spaciale</rdfs:label>
+        <rdfs:subClassOf rdf:resource="#RootClassForInputModel1"/>
+    </owl:Class>
+    
+
+
+    <!-- http://www.thalesgroup.com/ontologies/sepel-ng/SEPELInputModel1.owl#DescriptionSpectrale -->
+
+    <owl:Class rdf:about="#DescriptionSpectrale">
+        <rdfs:label xml:lang="en"
+            >Spectral description</rdfs:label>
+        <rdfs:label xml:lang="fr"
+            >Description spectrale</rdfs:label>
+        <rdfs:subClassOf rdf:resource="#RootClassForInputModel1"/>
+    </owl:Class>
+    
+
+
+    <!-- http://www.thalesgroup.com/ontologies/sepel-ng/SEPELInputModel1.owl#DescriptionTemporelle -->
+
+    <owl:Class rdf:about="#DescriptionTemporelle">
+        <rdfs:subClassOf rdf:resource="#RootClassForInputModel1"/>
+    </owl:Class>
+    
+
+
+    <!-- http://www.thalesgroup.com/ontologies/sepel-ng/SEPELInputModel1.owl#Direction -->
+
+    <owl:Class rdf:about="#Direction">
+        <rdfs:subClassOf rdf:resource="#RootClassForInputModel1"/>
+    </owl:Class>
+    
+
+
+    <!-- http://www.thalesgroup.com/ontologies/sepel-ng/SEPELInputModel1.owl#Emetteur -->
+
+    <owl:Class rdf:about="#Emetteur">
+        <rdfs:subClassOf rdf:resource="#RootClassForInputModel1"/>
+    </owl:Class>
+    
+
+
+    <!-- http://www.thalesgroup.com/ontologies/sepel-ng/SEPELInputModel1.owl#Etat -->
+
+    <owl:Class rdf:about="#Etat">
+        <rdfs:subClassOf rdf:resource="#RootClassForInputModel1"/>
+    </owl:Class>
+    
+
+
+    <!-- http://www.thalesgroup.com/ontologies/sepel-ng/SEPELInputModel1.owl#Frequence -->
+
+    <owl:Class rdf:about="#Frequence">
+        <rdfs:subClassOf rdf:resource="#RootClassForInputModel1"/>
+        <rdfs:subClassOf>
+            <owl:Restriction>
+                <owl:onProperty rdf:resource="#min"/>
+                <owl:onClass rdf:resource="#Contenu"/>
+                <owl:qualifiedCardinality rdf:datatype="&xsd;nonNegativeInteger">1</owl:qualifiedCardinality>
+            </owl:Restriction>
+        </rdfs:subClassOf>
+        <rdfs:subClassOf>
+            <owl:Restriction>
+                <owl:onProperty rdf:resource="#max"/>
+                <owl:onClass rdf:resource="#Contenu"/>
+                <owl:qualifiedCardinality rdf:datatype="&xsd;nonNegativeInteger">1</owl:qualifiedCardinality>
+            </owl:Restriction>
+        </rdfs:subClassOf>
+    </owl:Class>
+    
+
+
+    <!-- http://www.thalesgroup.com/ontologies/sepel-ng/SEPELInputModel1.owl#GroupeFrequence -->
+
+    <owl:Class rdf:about="#GroupeFrequence">
+        <rdfs:subClassOf rdf:resource="#RootClassForInputModel1"/>
+    </owl:Class>
+    
+
+
+    <!-- http://www.thalesgroup.com/ontologies/sepel-ng/SEPELInputModel1.owl#Intervalle -->
+
+    <owl:Class rdf:about="#Intervalle">
+        <rdfs:subClassOf rdf:resource="#RootClassForInputModel1"/>
+        <rdfs:subClassOf>
+            <owl:Restriction>
+                <owl:onProperty rdf:resource="#frequence"/>
+                <owl:onClass rdf:resource="#Frequence"/>
+                <owl:maxQualifiedCardinality rdf:datatype="&xsd;nonNegativeInteger">1</owl:maxQualifiedCardinality>
+            </owl:Restriction>
+        </rdfs:subClassOf>
+        <rdfs:subClassOf>
+            <owl:Restriction>
+                <owl:onProperty rdf:resource="#groupeFrequence"/>
+                <owl:onClass rdf:resource="#GroupeFrequence"/>
+                <owl:maxQualifiedCardinality rdf:datatype="&xsd;nonNegativeInteger">1</owl:maxQualifiedCardinality>
+            </owl:Restriction>
+        </rdfs:subClassOf>
+        <rdfs:subClassOf>
+            <owl:Restriction>
+                <owl:onProperty rdf:resource="#direction"/>
+                <owl:onClass rdf:resource="#Direction"/>
+                <owl:maxQualifiedCardinality rdf:datatype="&xsd;nonNegativeInteger">1</owl:maxQualifiedCardinality>
+            </owl:Restriction>
+        </rdfs:subClassOf>
+    </owl:Class>
+    
+
+
+    <!-- http://www.thalesgroup.com/ontologies/sepel-ng/SEPELInputModel1.owl#IntervalleComplexe -->
+
+    <owl:Class rdf:about="#IntervalleComplexe">
+        <rdfs:subClassOf rdf:resource="#Intervalle"/>
+    </owl:Class>
+    
+
+
+    <!-- http://www.thalesgroup.com/ontologies/sepel-ng/SEPELInputModel1.owl#IntervalleSimple -->
+
+    <owl:Class rdf:about="#IntervalleSimple">
+        <rdfs:subClassOf rdf:resource="#Intervalle"/>
+        <rdfs:subClassOf>
+            <owl:Restriction>
+                <owl:onProperty rdf:resource="#max"/>
+                <owl:onClass rdf:resource="#Contenu"/>
+                <owl:qualifiedCardinality rdf:datatype="&xsd;nonNegativeInteger">1</owl:qualifiedCardinality>
+            </owl:Restriction>
+        </rdfs:subClassOf>
+        <rdfs:subClassOf>
+            <owl:Restriction>
+                <owl:onProperty rdf:resource="#min"/>
+                <owl:onClass rdf:resource="#Contenu"/>
+                <owl:qualifiedCardinality rdf:datatype="&xsd;nonNegativeInteger">1</owl:qualifiedCardinality>
+            </owl:Restriction>
+        </rdfs:subClassOf>
+    </owl:Class>
+    
+
+
+    <!-- http://www.thalesgroup.com/ontologies/sepel-ng/SEPELInputModel1.owl#RootClassForInputModel1 -->
+
+    <owl:Class rdf:about="#RootClassForInputModel1"/>
+</rdf:RDF>
+
+
+
+<!-- Generated by the OWL API (version 2.2.1.1138) http://owlapi.sourceforge.net -->
+

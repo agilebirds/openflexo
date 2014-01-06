@@ -1,7 +1,0 @@
-<inspector title = "Half-Band" inheritsfrom="Object.inspector" inspectedClassName="org.openflexo.fge.geomedit.gr.HalfBandGraphicalRepresentation">
-
-	<tab name="Data" index="0" layout="DEFAULT">
-
-	</tab>
-
-</inspector>

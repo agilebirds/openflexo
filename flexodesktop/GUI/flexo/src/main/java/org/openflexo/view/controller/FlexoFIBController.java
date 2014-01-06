@@ -31,16 +31,16 @@ import org.openflexo.Flexo;
 import org.openflexo.components.ProgressWindow;
 import org.openflexo.fib.controller.FIBController;
 import org.openflexo.fib.model.FIBComponent;
+import org.openflexo.fib.view.FIBView;
 import org.openflexo.foundation.DataModification;
 import org.openflexo.foundation.FlexoEditor;
-import org.openflexo.foundation.FlexoModelObject;
 import org.openflexo.foundation.FlexoObservable;
+import org.openflexo.foundation.FlexoProject;
 import org.openflexo.foundation.GraphicalFlexoObserver;
 import org.openflexo.foundation.action.ImportProject;
 import org.openflexo.foundation.action.RemoveImportedProject;
-import org.openflexo.foundation.rm.FlexoProject;
-import org.openflexo.foundation.rm.FlexoProjectReference;
-import org.openflexo.icon.OntologyIconLibrary;
+import org.openflexo.foundation.resource.FlexoProjectReference;
+import org.openflexo.foundation.technologyadapter.TechnologyAdapter;
 import org.openflexo.icon.UtilsIconLibrary;
 import org.openflexo.localization.FlexoLocalization;
 import org.openflexo.selection.SelectionManager;
@@ -65,12 +65,12 @@ public class FlexoFIBController extends FIBController implements GraphicalFlexoO
 	public static final ImageIcon ARROW_BOTTOM = UtilsIconLibrary.ARROW_BOTTOM_2;
 	public static final ImageIcon ARROW_TOP = UtilsIconLibrary.ARROW_TOP_2;
 
-	public static final ImageIcon ONTOLOGY_ICON = OntologyIconLibrary.ONTOLOGY_ICON;
+	/*public static final ImageIcon ONTOLOGY_ICON = OntologyIconLibrary.ONTOLOGY_ICON;
 	public static final ImageIcon ONTOLOGY_CLASS_ICON = OntologyIconLibrary.ONTOLOGY_CLASS_ICON;
 	public static final ImageIcon ONTOLOGY_INDIVIDUAL_ICON = OntologyIconLibrary.ONTOLOGY_INDIVIDUAL_ICON;
 	public static final ImageIcon ONTOLOGY_DATA_PROPERTY_ICON = OntologyIconLibrary.ONTOLOGY_DATA_PROPERTY_ICON;
 	public static final ImageIcon ONTOLOGY_OBJECT_PROPERTY_ICON = OntologyIconLibrary.ONTOLOGY_OBJECT_PROPERTY_ICON;
-	public static final ImageIcon ONTOLOGY_ANNOTATION_PROPERTY_ICON = OntologyIconLibrary.ONTOLOGY_ANNOTATION_PROPERTY_ICON;
+	public static final ImageIcon ONTOLOGY_ANNOTATION_PROPERTY_ICON = OntologyIconLibrary.ONTOLOGY_ANNOTATION_PROPERTY_ICON;*/
 
 	public FlexoFIBController(FIBComponent component) {
 		super(component);
@@ -81,6 +81,14 @@ public class FlexoFIBController extends FIBController implements GraphicalFlexoO
 	public FlexoFIBController(FIBComponent component, FlexoController controller) {
 		super(component);
 		this.controller = controller;
+	}
+
+	@Override
+	public void delete() {
+		if (getDataObject() instanceof FlexoObservable) {
+			((FlexoObservable) getDataObject()).deleteObserver(this);
+		}
+		super.delete();
 	}
 
 	public FlexoController getFlexoController() {
@@ -119,7 +127,20 @@ public class FlexoFIBController extends FIBController implements GraphicalFlexoO
 			});
 			return;
 		}
-		getRootView().updateDataObject(getDataObject());
+
+		FIBView rv = getRootView();
+		if (rv != null) {
+			// rv.updateDataObject(getDataObject());
+			rv.update();
+		}
+	}
+
+	public TechnologyAdapterController<?> getTechnologyAdapterController(TechnologyAdapter technologyAdapter) {
+		if (getFlexoController() != null) {
+			return getFlexoController().getApplicationContext().getTechnologyAdapterControllerService()
+					.getTechnologyAdapterController(technologyAdapter);
+		}
+		return null;
 	}
 
 	@Override
@@ -139,20 +160,20 @@ public class FlexoFIBController extends FIBController implements GraphicalFlexoO
 	}
 
 	public void singleClick(Object object) {
-		if (getFlexoController() != null && object instanceof FlexoModelObject) {
-			getFlexoController().objectWasClicked((FlexoModelObject) object);
+		if (getFlexoController() != null) {
+			getFlexoController().objectWasClicked(object);
 		}
 	}
 
 	public void doubleClick(Object object) {
-		if (getFlexoController() != null && object instanceof FlexoModelObject) {
-			getFlexoController().objectWasDoubleClicked((FlexoModelObject) object);
+		if (getFlexoController() != null) {
+			getFlexoController().objectWasDoubleClicked(object);
 		}
 	}
 
 	public void rightClick(Object object, MouseEvent e) {
-		if (getFlexoController() != null && object instanceof FlexoModelObject) {
-			getFlexoController().objectWasRightClicked((FlexoModelObject) object, e);
+		if (getFlexoController() != null) {
+			getFlexoController().objectWasRightClicked(object, e);
 		}
 	}
 
@@ -208,47 +229,21 @@ public class FlexoFIBController extends FIBController implements GraphicalFlexoO
 		return ARROW_BOTTOM;
 	}
 
-	public ImageIcon getOntologyIcon() {
-		return ONTOLOGY_ICON;
-	}
-
-	public ImageIcon getOntologyClassIcon() {
-		return ONTOLOGY_CLASS_ICON;
-	}
-
-	public ImageIcon getOntologyIndividualIcon() {
-		return ONTOLOGY_INDIVIDUAL_ICON;
-	}
-
-	public ImageIcon getOntologyDataPropertyIcon() {
-		return ONTOLOGY_DATA_PROPERTY_ICON;
-	}
-
-	public ImageIcon getOntologyObjectPropertyIcon() {
-		return ONTOLOGY_OBJECT_PROPERTY_ICON;
-	}
-
-	public ImageIcon getOntologyAnnotationPropertyIcon() {
-		return ONTOLOGY_ANNOTATION_PROPERTY_ICON;
-	}
-
 	public void importProject(FlexoProject project) {
-		ImportProject importProject = ImportProject.actionType.makeNewAction(project, null, getEditor());
+		// TODO: reimplement this properly when project will be a FlexoProjectObject
+		// ImportProject importProject = ImportProject.actionType.makeNewAction(project, null, getEditor());
+		ImportProject importProject = ImportProject.actionType.makeNewAction(null, null, getEditor());
 		importProject.doAction();
 	}
 
 	public void unimportProject(FlexoProject project, List<FlexoProjectReference> references) {
 		for (FlexoProjectReference ref : references) {
-			RemoveImportedProject removeProject = RemoveImportedProject.actionType.makeNewAction(project, null, getEditor());
+			// TODO: reimplement this properly when project will be a FlexoProjectObject
+			// RemoveImportedProject removeProject = RemoveImportedProject.actionType.makeNewAction(project, null, getEditor());
+			RemoveImportedProject removeProject = RemoveImportedProject.actionType.makeNewAction(null, null, getEditor());
 			removeProject.setProjectToRemoveURI(ref.getURI());
 			removeProject.doAction();
 		}
 	}
-
-	/*public void createOntologyClass(FlexoOntology ontology) {
-		System.out.println("Create class for " + ontology);
-		CreateOntologyClass action = CreateOntologyClass.actionType.makeNewAction(ontology, null, getEditor());
-		action.doAction();
-	}*/
 
 }

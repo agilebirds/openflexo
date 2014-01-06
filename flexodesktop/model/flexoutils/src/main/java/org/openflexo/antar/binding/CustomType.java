@@ -2,6 +2,12 @@ package org.openflexo.antar.binding;
 
 import java.lang.reflect.Type;
 
+/**
+ * This interface is implemented by all classes representing a type.
+ * 
+ * @author sylvain
+ * 
+ */
 public interface CustomType extends Type {
 
 	public String simpleRepresentation();

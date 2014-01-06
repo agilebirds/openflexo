@@ -29,7 +29,7 @@ import org.openflexo.components.browser.BrowserElementType;
 import org.openflexo.components.browser.ProjectBrowser;
 import org.openflexo.foundation.FlexoException;
 import org.openflexo.foundation.toc.TOCEntry;
-import org.openflexo.foundation.utils.FlexoModelObjectReference.ReferenceStatus;
+import org.openflexo.foundation.utils.FlexoObjectReference.ReferenceStatus;
 import org.openflexo.icon.DEIconLibrary;
 import org.openflexo.icon.IconFactory;
 import org.openflexo.icon.IconLibrary;

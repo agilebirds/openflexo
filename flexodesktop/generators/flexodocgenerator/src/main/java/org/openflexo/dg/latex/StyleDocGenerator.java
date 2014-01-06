@@ -26,7 +26,7 @@ import org.openflexo.dg.rm.GeneratedFileResourceFactory;
 import org.openflexo.dg.rm.LatexFileResource;
 import org.openflexo.dg.rm.StyleLatexFileResource;
 import org.openflexo.foundation.cg.DGRepository;
-import org.openflexo.foundation.rm.FlexoProject;
+import org.openflexo.foundation.FlexoProject;
 import org.openflexo.foundation.rm.ResourceType;
 import org.openflexo.foundation.rm.cg.CGRepositoryFileResource;
 

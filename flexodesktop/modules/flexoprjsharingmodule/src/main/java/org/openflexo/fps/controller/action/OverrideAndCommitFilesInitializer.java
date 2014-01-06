@@ -25,7 +25,7 @@ import java.util.logging.Logger;
 import org.openflexo.components.AskParametersDialog;
 import org.openflexo.foundation.action.FlexoActionFinalizer;
 import org.openflexo.foundation.action.FlexoActionInitializer;
-import org.openflexo.foundation.param.TextAreaParameter;
+import org.openflexo.foundation.viewpoint.TextAreaParameter;
 import org.openflexo.fps.action.OverrideAndCommitFiles;
 import org.openflexo.localization.FlexoLocalization;
 import org.openflexo.view.controller.ActionInitializer;

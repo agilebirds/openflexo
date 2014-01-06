@@ -1,0 +1,119 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<Panel layout="gridbag" titleFont="Lucida Grande,0,11" darkLevel="0" dataClassName="org.openflexo.foundation.view.action.CreateVirtualModelInstance" controllerClassName="org.openflexo.view.controller.FlexoFIBController" font="Lucida Grande,0,11" width="800" height="500" name="main">
+  <Panel layout="flow" hGap="5" vGap="5" flowAlignment="CENTER" borderTitle="Panel" titleFont="Lucida Grande,0,11" darkLevel="0" index="1" constraints="gridbag(anchor=center;fill=horizontal;gridHeight=1;gridWidth=0;gridX=-1;gridY=-1;index=0;insetsBottom=20;insetsLeft=0;insetsRight=0;insetsTop=20;padX=0;padY=0;weightX=1.0;weightY=0.0)">
+    <Label label="" index="0" data="((((&quot;Step &quot; + data.stepsNumber) + &quot; / &quot;) + data.stepsNumber) + &quot; - &quot;)" constraints="flow()" font="Lucida Grande,1,15" localize="true">
+      <Dependancy componentName="CreationSchemeBrowser" />
+    </Label>
+    <Label label="configure_initialization" align="center" index="0" constraints="flow(anchor=center;fill=horizontal;gridHeight=1;gridWidth=0;gridX=-1;gridY=-1;index=0;insetsBottom=20;insetsLeft=0;insetsRight=0;insetsTop=20;location=center;padX=0;padY=0;weightX=1.0;weightY=0.0)" font="Lucida Grande,1,15" localize="true">
+      <LocalizedDictionary />
+    </Label>
+  </Panel>
+  <Label label="diagram_name" index="1" constraints="gridbag(anchor=east;fill=none;gridHeight=1;gridWidth=1;gridX=-1;gridY=-1;index=1;insetsBottom=0;insetsLeft=10;insetsRight=10;insetsTop=0;padX=0;padY=0;weightX=0.0;weightY=0.0)" localize="true" />
+  <TextField index="3" data="data.newVirtualModelInstanceName" constraints="gridbag(anchor=center;fill=horizontal;gridHeight=1;gridWidth=0;gridX=-1;gridY=-1;index=2;insetsBottom=0;insetsLeft=0;insetsRight=20;insetsTop=0;padX=0;padY=0;weightX=1.0;weightY=0.0)" name="VirtualModelNameTextField" localize="true" columns="6" text="TextField" />
+  <Label label="diagram_title" index="3" constraints="gridbag(anchor=east;fill=none;gridHeight=1;gridWidth=1;gridX=-1;gridY=-1;index=3;insetsBottom=10;insetsLeft=10;insetsRight=10;insetsTop=5;padX=0;padY=0;weightX=0.0;weightY=0.0)" localize="true" />
+  <TextField index="3" data="data.newVirtualModelInstanceTitle" constraints="gridbag(anchor=center;fill=horizontal;gridHeight=1;gridWidth=0;gridX=-1;gridY=-1;index=4;insetsBottom=10;insetsLeft=0;insetsRight=20;insetsTop=5;padX=0;padY=0;weightX=1.0;weightY=0.0)" name="VirtualModelTitleTextField" localize="true" columns="7" text="TextField" />
+  <SplitPanel index="3" constraints="gridbag(anchor=center;fill=both;gridHeight=1;gridWidth=0;gridX=-1;gridY=-1;index=5;insetsBottom=0;insetsLeft=10;insetsRight=10;insetsTop=0;padX=0;padY=0;weightX=1.0;weightY=1.0)">
+    <RowSplit name="RowSplit" weight="0.0">
+      <Leaf name="browser" weight="0.2948435412166979" />
+      <Divider />
+      <ColSplit name="ColSplit" weight="0.7051564485109709">
+        <Leaf name="description" weight="0.20000000298023224" />
+        <Divider />
+        <Leaf name="screenshot" weight="0.800000011920929" />
+      </ColSplit>
+    </RowSplit>
+    <Panel layout="border" border="rounded3d" borderTitle="" borderTop="2" borderBottom="2" borderRight="2" titleFont="Lucida Grande,0,11" darkLevel="0" index="0" constraints="split(index=0;location=center;splitIdentifier=screenshot)">
+      <Custom componentClassName="org.openflexo.ve.widget.FIBParametersRetrieverWidget" localize="true" manageDynamicModel="true" name="ParametersRetriverWidget" data="data.creationSchemeAction" constraints="border(location=center)" visible="(CreationSchemeBrowser.selected != null)" />
+    </Panel>
+    <Panel layout="border" border="rounded3d" borderTitle="" borderTop="2" borderBottom="2" borderRight="2" titleFont="Lucida Grande,0,11" darkLevel="0" index="0" constraints="split(splitIdentifier=description)">
+      <Label label="label" align="center" data="CreationSchemeBrowser.selected.label" constraints="border(location=north)" font="SansSerif,1,12" localize="true" />
+      <Label label="label" align="center" data="CreationSchemeBrowser.selected.description" constraints="border(location=center)" localize="true" />
+    </Panel>
+    <Browser root="data.virtualModel" iteratorClassName="org.openflexo.foundation.viewpoint.CreationScheme" visibleRowCount="3" rowHeight="18" boundToSelectionManager="false" selectionMode="DiscontiguousTreeSelection" selected="data.creationScheme" showFooter="false" rootVisible="true" showRootsHandle="true" localize="true" manageDynamicModel="true" name="CreationSchemeBrowser" index="3" constraints="split(anchor=center;fill=both;gridHeight=2;gridWidth=1;gridX=-1;gridY=-1;index=3;insetsBottom=0;insetsLeft=10;insetsRight=10;insetsTop=0;padX=0;padY=0;splitIdentifier=browser;weightX=1.0;weightY=1.0)">
+      <BrowserElement dataClassName="org.openflexo.foundation.viewpoint.VirtualModel" label="virtualModel.name" icon="controller.iconForObject(virtualModel)" isEditable="false" filtered="false" defaultVisible="true" name="virtualModel">
+        <Children data="virtualModel.creationSchemes" name="children" />
+      </BrowserElement>
+      <BrowserElement dataClassName="org.openflexo.foundation.viewpoint.CreationScheme" label="creationScheme.name" icon="controller.iconForObject(creationScheme)" isEditable="false" filtered="false" defaultVisible="true" name="creationScheme" />
+    </Browser>
+  </SplitPanel>
+  <Label label="label" align="center" index="5" data="data.errorMessage" constraints="gridbag(anchor=center;fill=horizontal;gridHeight=1;gridWidth=0;gridX=-1;gridY=-1;index=6;insetsBottom=0;insetsLeft=0;insetsRight=0;insetsTop=10;padX=0;padY=0;weightX=1.0;weightY=0.0)" visible="(!(data.isValid))" localize="true">
+    <Dependancy componentName="CreationSchemeBrowser" />
+    <Dependancy componentName="VirtualModelNameTextField" />
+    <Dependancy componentName="VirtualModelTitleTextField" />
+    <LocalizedDictionary />
+  </Label>
+  <Panel layout="flow" hGap="5" vGap="5" flowAlignment="CENTER" borderTitle="Panel" titleFont="Lucida Grande,0,11" darkLevel="0" index="6" constraints="gridbag(anchor=center;fill=horizontal;gridHeight=1;gridWidth=0;gridX=-1;gridY=-1;index=7;insetsBottom=0;insetsLeft=0;insetsRight=0;insetsTop=10;padX=0;padY=0;weightX=1.0;weightY=0.0)">
+    <Button action="controller.backAndDispose()" buttonType="Trigger" label="back" localize="true" constraints="flow()" font="Lucida Grande,0,13" />
+    <Button action="controller.nextAndDispose()" buttonType="Trigger" label="next" localize="true" enable="false" index="0" constraints="flow(index=0)" font="Lucida Grande,0,13">
+      <Dependancy componentName="CreationSchemeBrowser" />
+      <Dependancy componentName="VirtualModelNameTextField" />
+      <Dependancy componentName="VirtualModelTitleTextField" />
+      <LocalizedDictionary />
+    </Button>
+    <Button action="controller.cancelAndDispose()" buttonType="Trigger" label="Cancel" localize="true" index="1" constraints="flow(index=1)" font="Lucida Grande,0,13">
+      <LocalizedDictionary />
+    </Button>
+    <Button action="controller.validateAndDispose()" buttonType="Trigger" label="finish" localize="true" enable="data.isActionValidable" index="1" constraints="flow()" font="Lucida Grande,0,13">
+      <Dependancy componentName="CreationSchemeBrowser" />
+      <Dependancy componentName="VirtualModelNameTextField" />
+      <Dependancy componentName="VirtualModelTitleTextField" />
+      <Dependancy componentName="ParametersRetriverWidget" />
+    </Button>
+  </Panel>
+  <LocalizedDictionary>
+    <Localized key="uri" lang="English">URI</Localized>
+    <Localized key="description" lang="English">Description</Localized>
+    <Localized key="uri" lang="French">URI</Localized>
+    <Localized key="description" lang="French">Description</Localized>
+    <Localized key="uri" lang="Dutch">URI</Localized>
+    <Localized key="description" lang="Dutch">Description</Localized>
+    <Localized key="validate" lang="English">Validate</Localized>
+    <Localized key="label" lang="English">Label</Localized>
+    <Localized key="validate" lang="French">Valider</Localized>
+    <Localized key="label" lang="French">Label</Localized>
+    <Localized key="Cancel" lang="French">Annuler</Localized>
+    <Localized key="validate" lang="Dutch">Validate</Localized>
+    <Localized key="label" lang="Dutch">Label</Localized>
+    <Localized key="no_view_title_defined" lang="English">Please enter title for newly created view</Localized>
+    <Localized key="no_folder_defined" lang="English">No folder defined</Localized>
+    <Localized key="no_view_name_defined" lang="French">Aucun nom défini pour cette nouvelle vue</Localized>
+    <Localized key="no_folder_defined" lang="French">Pas de dossier sélectionné</Localized>
+    <Localized key="example_diagram" lang="English">Example diagram</Localized>
+    <Localized key="example_diagram" lang="French">Diagrame d'exemple</Localized>
+    <Localized key="example_diagram" lang="Dutch">example_diagram</Localized>
+    <Localized key="Cancel" lang="English">Cancel</Localized>
+    <Localized key="Cancel" lang="Dutch">Cancel</Localized>
+    <Localized key="no_view_title_defined" lang="French">Veuillez entrer un titre</Localized>
+    <Localized key="no_view_name_defined" lang="English">No name defined for this view</Localized>
+    <Localized key="virtual_model" lang="English">Virtual model</Localized>
+    <Localized key="virtual_model" lang="French">Modèle virtual</Localized>
+    <Localized key="virtual_model" lang="Dutch">virtual_model</Localized>
+    <Localized key="virtual_model_name" lang="English">Virtual model name</Localized>
+    <Localized key="virtual_model_name" lang="French">Nom du modèle virtuel</Localized>
+    <Localized key="virtual_model_name" lang="Dutch">virtual_model_name</Localized>
+    <Localized key="virtual_model_title" lang="English">Virtual model title</Localized>
+    <Localized key="virtual_model_title" lang="French">Titre du modèle virtuel</Localized>
+    <Localized key="virtual_model_title" lang="Dutch">virtual_model_title</Localized>
+    <Localized key="finish" lang="English">Finish</Localized>
+    <Localized key="finish" lang="French">Terminer</Localized>
+    <Localized key="finish" lang="Dutch">Finish</Localized>
+    <Localized key="back" lang="English">&lt;&lt; Back</Localized>
+    <Localized key="back" lang="French">&lt;&lt; Précédent</Localized>
+    <Localized key="back" lang="Dutch">back</Localized>
+    <Localized key="next" lang="English">&gt;&gt; Next</Localized>
+    <Localized key="next" lang="French">&gt;&gt; Suivant</Localized>
+    <Localized key="next" lang="Dutch">next</Localized>
+    <Localized key="create_diagram" lang="English">Create diagram</Localized>
+    <Localized key="create_diagram" lang="French">Créer un diagramme</Localized>
+    <Localized key="create_diagram" lang="Dutch">create_diagram</Localized>
+    <Localized key="diagram_name" lang="English">Diagram name</Localized>
+    <Localized key="diagram_name" lang="French">Nom du diagramme</Localized>
+    <Localized key="diagram_name" lang="Dutch">Diagram name</Localized>
+    <Localized key="diagram_title" lang="English">Diagram title</Localized>
+    <Localized key="diagram_title" lang="French">Titre du diagramme</Localized>
+    <Localized key="diagram_title" lang="Dutch">diagram_title</Localized>
+    <Localized key="configure_initialization" lang="English">Configure diagram initialization</Localized>
+    <Localized key="configure_initialization" lang="French">Configurer l initialisation du diagramme</Localized>
+    <Localized key="configure_initialization" lang="Dutch">configure_initialization</Localized>
+  </LocalizedDictionary>
+</Panel>

@@ -23,19 +23,20 @@ import java.io.File;
 import java.util.List;
 import java.util.logging.Logger;
 
+import org.openflexo.antar.binding.DataBinding;
 import org.openflexo.fib.FIBLibrary;
-import org.openflexo.fib.model.DataBinding;
 import org.openflexo.fib.model.FIBBrowser;
 import org.openflexo.fib.model.FIBBrowserElement;
 import org.openflexo.fib.model.FIBComponent;
 import org.openflexo.fib.model.listener.FIBSelectionListener;
-import org.openflexo.foundation.FlexoModelObject;
+import org.openflexo.foundation.FlexoObject;
+import org.openflexo.foundation.FlexoObject.FlexoObjectImpl;
 import org.openflexo.foundation.action.FlexoActionType;
 import org.openflexo.foundation.utils.FlexoProgress;
 import org.openflexo.view.controller.FlexoController;
 
 /**
- * Please comment this class
+ * Implements a view showing a simple browser using FIB technology
  * 
  * @author sguerin
  * 
@@ -82,6 +83,19 @@ public abstract class FIBBrowserView<O> extends SelectionSynchronizedFIBView imp
 	}
 
 	@Override
+	public O getDataObject() {
+		return (O) super.getDataObject();
+	}
+
+	public O getRootObject() {
+		return getDataObject();
+	}
+
+	public void setRootObject(O obj) {
+		setDataObject(obj);
+	}
+
+	@Override
 	protected void initializeFIBComponent() {
 		super.initializeFIBComponent();
 		FIBBrowser browser = retrieveFIBBrowser(getFIBComponent());
@@ -90,20 +104,20 @@ public abstract class FIBBrowserView<O> extends SelectionSynchronizedFIBView imp
 			return;
 		}
 		if (!browser.getClickAction().isSet() || !browser.getClickAction().isValid()) {
-			browser.setClickAction(new DataBinding("controller.singleClick(" + browser.getName() + ".selected)"));
+			browser.setClickAction(new DataBinding<Object>("controller.singleClick(" + browser.getName() + ".selected)"));
 		}
 		if (!browser.getDoubleClickAction().isSet() || !browser.getDoubleClickAction().isValid()) {
-			browser.setDoubleClickAction(new DataBinding("controller.doubleClick(" + browser.getName() + ".selected)"));
+			browser.setDoubleClickAction(new DataBinding<Object>("controller.doubleClick(" + browser.getName() + ".selected)"));
 		}
 		if (!browser.getRightClickAction().isSet() || !browser.getRightClickAction().isValid()) {
-			browser.setRightClickAction(new DataBinding("controller.rightClick(" + browser.getName() + ".selected,event)"));
+			browser.setRightClickAction(new DataBinding<Object>("controller.rightClick(" + browser.getName() + ".selected,event)"));
 		}
 
 		for (FIBBrowserElement el : browser.getElements()) {
 			if (el.getDataClass() != null) {
-				if (FlexoModelObject.class.isAssignableFrom(el.getDataClass())) {
-					List<FlexoActionType> actionList = FlexoModelObject.getActionList(el.getDataClass());
-					for (FlexoActionType actionType : actionList) {
+				if (FlexoObject.class.isAssignableFrom(el.getDataClass())) {
+					List<FlexoActionType<?, ?, ?>> actionList = FlexoObjectImpl.getActionList(el.getDataClass());
+					for (FlexoActionType<?, ?, ?> actionType : actionList) {
 						el.addToActions(new FIBBrowserActionAdapter(actionType));
 					}
 				}

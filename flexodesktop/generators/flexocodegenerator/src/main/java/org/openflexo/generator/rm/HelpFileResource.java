@@ -25,7 +25,7 @@ import java.util.Enumeration;
 import org.openflexo.foundation.DataModification;
 import org.openflexo.foundation.FlexoObservable;
 import org.openflexo.foundation.FlexoObserver;
-import org.openflexo.foundation.rm.FlexoProject;
+import org.openflexo.foundation.FlexoProject;
 import org.openflexo.foundation.rm.FlexoProjectBuilder;
 import org.openflexo.foundation.rm.FlexoResource;
 import org.openflexo.foundation.rm.ResourceType;

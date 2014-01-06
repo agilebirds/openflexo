@@ -1,0 +1,57 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<Diagram id="1">
+  <DrawingGraphicalRepresentation id="2" identifier="root" isMultilineAllowed="false" isReadOnly="false" isSelectable="true" isFocusable="true" relativeTextX="0.5" relativeTextY="0.5" absoluteTextX="0.0" absoluteTextY="0.0" textAlignment="CENTER" width="1000.0" height="1000.0" drawWorkingArea="true" selectionColor="0,0,255" focusColor="255,0,0" backgroundColor="255,255,204">
+    <TextStyle id="3" font="Lucida Sans,0,11" color="0,0,0" orientation="0" isBackgroundColored="false" backgroundColor="255,255,255" />
+  </DrawingGraphicalRepresentation>
+  <Shape id="4">
+    <ShapeGraphicalRepresentation id="5" identifier="Employee" text="" isMultilineAllowed="false" isReadOnly="false" isSelectable="true" isFocusable="true" relativeTextX="0.5" relativeTextY="0.5" absoluteTextX="0.0" absoluteTextY="0.0" textAlignment="CENTER" x="53.0" y="144.0" width="368.89127940332753" height="115.82655487423352" isVisible="true" locationConstraints="FREELY_MOVABLE" dimensionConstraints="FREELY_RESIZABLE" layer="1" isFloatingLabel="false">
+      <TextStyle id="6" font="Lucida Sans,0,11" color="0,0,0" orientation="0" isBackgroundColored="false" backgroundColor="255,255,255" />
+      <ForegroundStyle id="7" noStroke="false" color="0,0,0" lineWidth="1.0" joinStyle="JOIN_MITER" capStyle="CAP_SQUARE" dashStyle="PLAIN_STROKE" useTransparency="false" transparencyLevel="0.5" />
+      <ColorBackgroundStyle id="8" color="255,255,255" useTransparency="false" transparencyLevel="0.5" />
+      <Border id="9" top="5" bottom="5" left="5" right="5" />
+      <ShadowStyle id="10" drawShadow="true" shadowDarkness="150" shadowDepth="2" shadowBlur="4" />
+      <RectangleShape id="11" isRounded="false" arcSize="30.0" />
+    </ShapeGraphicalRepresentation>
+    <Shape id="12">
+      <ShapeGraphicalRepresentation id="13" identifier="Employee-top" text="Employee" isMultilineAllowed="false" isReadOnly="false" isSelectable="false" isFocusable="false" relativeTextX="0.5" relativeTextY="0.5" absoluteTextX="0.0" absoluteTextY="0.0" textAlignment="CENTER" x="0.0" y="0.0" width="368.89127940332753" height="25.0" isVisible="true" locationConstraints="UNMOVABLE" dimensionConstraints="UNRESIZABLE" layer="1" isFloatingLabel="false" xConstraints="0" yConstraints="0" widthConstraints="Employee.width" heightConstraints="25">
+        <TextStyle id="14" font="Lucida Sans,1,12" color="0,0,0" orientation="0" isBackgroundColored="false" backgroundColor="255,255,255" />
+        <ForegroundStyle id="15" noStroke="false" color="0,0,0" lineWidth="1.0" joinStyle="JOIN_MITER" capStyle="CAP_SQUARE" dashStyle="PLAIN_STROKE" useTransparency="false" transparencyLevel="0.5" />
+        <ColorBackgroundStyle id="16" color="204,204,204" useTransparency="false" transparencyLevel="0.5" />
+        <Border id="17" top="5" bottom="5" left="5" right="5" />
+        <ShadowStyle id="18" drawShadow="false" shadowDarkness="150" shadowDepth="2" shadowBlur="4" />
+        <RectangleShape id="19" isRounded="false" arcSize="30.0" />
+      </ShapeGraphicalRepresentation>
+    </Shape>
+    <Shape id="20">
+      <ShapeGraphicalRepresentation id="21" identifier="employeeId" text="employeeId" isMultilineAllowed="false" isReadOnly="false" isSelectable="true" isFocusable="true" relativeTextX="0.0" relativeTextY="0.5" absoluteTextX="0.0" absoluteTextY="0.0" textAlignment="LEFT" x="0.0" y="25.0" width="368.89127940332753" height="20.0" isVisible="true" locationConstraints="UNMOVABLE" dimensionConstraints="UNRESIZABLE" layer="1" isFloatingLabel="false" xConstraints="0" yConstraints="25" widthConstraints="Employee.width" heightConstraints="20">
+        <TextStyle id="22" font="Lucida Sans,0,11" color="0,0,0" orientation="0" isBackgroundColored="false" backgroundColor="255,255,255" />
+        <ForegroundStyle id="23" noStroke="false" color="0,0,0" lineWidth="1.0" joinStyle="JOIN_MITER" capStyle="CAP_SQUARE" dashStyle="PLAIN_STROKE" useTransparency="false" transparencyLevel="0.5" />
+        <ImageBackgroundStyle id="24" scaleX="1.0" scaleY="1.0" deltaX="0.0" deltaY="0.0" imageBackgroundType="TRANSPARENT" imageBackgroundColor="255,255,255" useTransparency="false" transparencyLevel="0.5" />
+        <Border id="25" top="5" bottom="5" left="5" right="5" />
+        <ShadowStyle id="26" drawShadow="false" shadowDarkness="150" shadowDepth="2" shadowBlur="4" />
+        <RectangleShape id="27" isRounded="false" arcSize="30.0" />
+      </ShapeGraphicalRepresentation>
+      <Shape id="28">
+        <ShapeGraphicalRepresentation id="29" identifier="employeeId-key" text="" isMultilineAllowed="false" isReadOnly="false" isSelectable="true" isFocusable="true" relativeTextX="0.5" relativeTextY="0.5" absoluteTextX="0.0" absoluteTextY="0.0" textAlignment="CENTER" x="328.89127940332753" y="2.0" width="16.0" height="16.0" isVisible="true" locationConstraints="UNMOVABLE" dimensionConstraints="FREELY_RESIZABLE" layer="1" isFloatingLabel="false" xConstraints="(employeeId.width - 40)" yConstraints="2">
+          <TextStyle id="30" font="Lucida Sans,0,11" color="0,0,0" orientation="0" isBackgroundColored="false" backgroundColor="255,255,255" />
+          <ForegroundStyle id="31" noStroke="true" color="0,0,0" lineWidth="1.0" joinStyle="JOIN_MITER" capStyle="CAP_SQUARE" dashStyle="PLAIN_STROKE" useTransparency="false" transparencyLevel="0.5" />
+          <ImageBackgroundStyle id="32" imageFile="/Users/sylvain/Documents/workspace/Flexo/src/main/resources/Resources/DM/Key.gif" scaleX="1.0" scaleY="1.0" deltaX="0.0" deltaY="0.0" imageBackgroundType="TRANSPARENT" imageBackgroundColor="204,0,255" useTransparency="false" transparencyLevel="0.5" />
+          <Border id="33" top="5" bottom="5" left="5" right="5" />
+          <ShadowStyle id="34" drawShadow="false" shadowDarkness="150" shadowDepth="2" shadowBlur="4" />
+          <RectangleShape id="35" isRounded="false" arcSize="30.0" />
+        </ShapeGraphicalRepresentation>
+      </Shape>
+      <Shape id="36">
+        <ShapeGraphicalRepresentation id="37" identifier="employeeId-lock" text="" isMultilineAllowed="false" isReadOnly="false" isSelectable="true" isFocusable="true" relativeTextX="0.5" relativeTextY="0.5" absoluteTextX="0.0" absoluteTextY="0.0" textAlignment="CENTER" x="348.89127940332753" y="2.0" width="16.0" height="16.0" isVisible="true" locationConstraints="UNMOVABLE" dimensionConstraints="FREELY_RESIZABLE" layer="1" isFloatingLabel="false" xConstraints="(employeeId.width - 20)" yConstraints="2">
+          <TextStyle id="38" font="Lucida Sans,0,11" color="0,0,0" orientation="0" isBackgroundColored="false" backgroundColor="255,255,255" />
+          <ForegroundStyle id="39" noStroke="true" color="0,0,0" lineWidth="1.0" joinStyle="JOIN_MITER" capStyle="CAP_SQUARE" dashStyle="PLAIN_STROKE" useTransparency="false" transparencyLevel="0.5" />
+          <ImageBackgroundStyle id="40" imageFile="/Users/sylvain/Documents/workspace/Flexo/src/main/resources/Resources/Flexo/Diamond.gif" scaleX="1.0" scaleY="1.0" deltaX="0.0" deltaY="0.0" imageBackgroundType="TRANSPARENT" imageBackgroundColor="204,0,255" useTransparency="false" transparencyLevel="0.5" />
+          <Border id="41" top="5" bottom="5" left="5" right="5" />
+          <ShadowStyle id="42" drawShadow="false" shadowDarkness="150" shadowDepth="2" shadowBlur="4" />
+          <RectangleShape id="43" isRounded="false" arcSize="30.0" />
+        </ShapeGraphicalRepresentation>
+      </Shape>
+    </Shape>
+  </Shape>
+</Diagram>
+

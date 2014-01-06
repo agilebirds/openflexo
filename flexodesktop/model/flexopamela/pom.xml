@@ -6,7 +6,7 @@
 	<parent>
 		<groupId>org.openflexo</groupId>
 		<artifactId>model</artifactId>
-		<version>1.5.2-SNAPSHOT</version>
+        <version>1.7-SNAPSHOT</version>
 	</parent>
 	<artifactId>flexopamela</artifactId>
 	<name>Model :: FlexoPamela</name>
@@ -27,7 +27,7 @@
 		</dependency>
 		<dependency>
 			<groupId>org.jdom</groupId>
-			<artifactId>jdom</artifactId>
+			<artifactId>jdom2</artifactId>
 		</dependency>
 		<dependency>
 			<groupId>com.google.guava</groupId>

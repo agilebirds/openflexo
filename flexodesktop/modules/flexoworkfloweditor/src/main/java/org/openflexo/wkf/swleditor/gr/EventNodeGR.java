@@ -23,18 +23,18 @@ import java.awt.Color;
 import java.awt.Font;
 import java.awt.geom.AffineTransform;
 
+import org.openflexo.fge.BackgroundStyle;
 import org.openflexo.fge.FGEConstants;
+import org.openflexo.fge.ForegroundStyle;
 import org.openflexo.fge.GraphicalRepresentation;
+import org.openflexo.fge.ShadowStyle;
 import org.openflexo.fge.ShapeGraphicalRepresentation;
+import org.openflexo.fge.TextStyle;
 import org.openflexo.fge.geom.FGEGeometricObject.Filling;
 import org.openflexo.fge.geom.FGERectangle;
 import org.openflexo.fge.geom.area.FGEArea;
-import org.openflexo.fge.graphics.BackgroundStyle;
-import org.openflexo.fge.graphics.ForegroundStyle;
-import org.openflexo.fge.graphics.ShadowStyle;
-import org.openflexo.fge.graphics.TextStyle;
 import org.openflexo.fge.shapes.Circle;
-import org.openflexo.fge.shapes.Shape.ShapeType;
+import org.openflexo.fge.shapes.ShapeSpecification.ShapeType;
 import org.openflexo.foundation.DataModification;
 import org.openflexo.foundation.FlexoObservable;
 import org.openflexo.foundation.wkf.FlexoLevel;
@@ -132,7 +132,7 @@ public class EventNodeGR extends PetriGraphNodeGR<EventNode> {
 		setBackground(background);
 	}
 
-	private GraphicalRepresentation<?> parentGR = null;
+	private GraphicalRepresentation parentGR = null;
 	private FGEArea parentOutline = null;
 
 	@Override
@@ -145,13 +145,13 @@ public class EventNodeGR extends PetriGraphNodeGR<EventNode> {
 				return super.getLocationConstrainedArea();
 			}
 		} else {
-			GraphicalRepresentation<?> parent = getContainerGraphicalRepresentation();
+			GraphicalRepresentation parent = getContainerGraphicalRepresentation();
 			if (parentGR == null || parent != parentGR) {
 				if (parent != null && parent instanceof ShapeGraphicalRepresentation) {
-					parentOutline = ((ShapeGraphicalRepresentation<?>) parent).getShape().getOutline();
+					parentOutline = ((ShapeGraphicalRepresentation) parent).getShapeSpecification().getOutline();
 					parentOutline = parentOutline.transform(AffineTransform.getScaleInstance(
-							((ShapeGraphicalRepresentation<?>) parent).getWidth(), ((ShapeGraphicalRepresentation<?>) parent).getHeight()));
-					ShapeBorder parentBorder = ((ShapeGraphicalRepresentation<?>) parent).getBorder();
+							((ShapeGraphicalRepresentation) parent).getWidth(), ((ShapeGraphicalRepresentation) parent).getHeight()));
+					ShapeBorder parentBorder = ((ShapeGraphicalRepresentation) parent).getBorder();
 					parentOutline = parentOutline.transform(AffineTransform.getTranslateInstance(parentBorder.left - 20,
 							parentBorder.top - 20));
 					// System.out.println("Rebuild outline = "+parentOutline);
@@ -177,7 +177,7 @@ public class EventNodeGR extends PetriGraphNodeGR<EventNode> {
 
 	@Override
 	public Circle getShape() {
-		return (Circle) super.getShape();
+		return (Circle) super.getShapeSpecification();
 	}
 
 	@Override

@@ -22,14 +22,14 @@ package org.openflexo.view.controller.action;
 import java.util.EventObject;
 import java.util.logging.Logger;
 
-import org.openflexo.foundation.FlexoModelObject;
+import org.openflexo.foundation.FlexoProjectObject;
 import org.openflexo.foundation.action.FlexoActionFinalizer;
 import org.openflexo.foundation.action.FlexoActionInitializer;
 import org.openflexo.foundation.action.LoadAllImportedProject;
 import org.openflexo.view.controller.ActionInitializer;
 import org.openflexo.view.controller.ControllerActionInitializer;
 
-public class LoadAllImportedProjectInitializer extends ActionInitializer<LoadAllImportedProject, FlexoModelObject, FlexoModelObject> {
+public class LoadAllImportedProjectInitializer extends ActionInitializer<LoadAllImportedProject, FlexoProjectObject, FlexoProjectObject> {
 
 	@SuppressWarnings("unused")
 	private static final Logger logger = Logger.getLogger(LoadAllImportedProjectInitializer.class.getPackage().getName());

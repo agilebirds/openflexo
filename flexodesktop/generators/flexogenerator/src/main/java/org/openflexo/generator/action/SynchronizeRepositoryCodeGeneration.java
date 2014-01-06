@@ -77,7 +77,7 @@ public class SynchronizeRepositoryCodeGeneration extends GCAction<SynchronizeRep
 	};
 
 	static {
-		FlexoModelObject.addActionForClass(SynchronizeRepositoryCodeGeneration.actionType, GenerationRepository.class);
+		TestModelObject.addActionForClass(SynchronizeRepositoryCodeGeneration.actionType, GenerationRepository.class);
 	}
 
 	SynchronizeRepositoryCodeGeneration(GenerationRepository focusedObject, Vector<CGObject> globalSelection, FlexoEditor editor) {

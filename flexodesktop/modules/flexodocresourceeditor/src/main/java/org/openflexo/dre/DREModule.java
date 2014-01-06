@@ -20,11 +20,12 @@
 package org.openflexo.dre;
 
 import org.openflexo.ApplicationContext;
+import org.openflexo.ch.DocResourceManager;
 import org.openflexo.components.ProgressWindow;
 import org.openflexo.dre.controller.DREController;
-import org.openflexo.drm.DocResourceManager;
 import org.openflexo.foundation.InspectorGroup;
 import org.openflexo.foundation.Inspectors;
+import org.openflexo.icon.DREIconLibrary;
 import org.openflexo.localization.FlexoLocalization;
 import org.openflexo.module.FlexoModule;
 import org.openflexo.module.Module;
@@ -37,6 +38,21 @@ import org.openflexo.view.controller.FlexoController;
  * @author yourname
  */
 public class DREModule extends FlexoModule implements ExternalDREModule {
+
+	public static final String DRE_MODULE_SHORT_NAME = "DRE";
+
+	public static final String DRE_MODULE_NAME = "doc_resource_manager";
+
+	public static class DocResourceEditor extends Module {
+
+		public DocResourceEditor() {
+			super(DRE_MODULE_NAME, DRE_MODULE_SHORT_NAME, "org.openflexo.dre.DREModule", "modules/flexodocresourceeditor", "10010", "dre",
+					DREIconLibrary.DRE_SMALL_ICON, DREIconLibrary.DRE_MEDIUM_ICON, DREIconLibrary.DRE_MEDIUM_ICON_WITH_HOVER,
+					DREIconLibrary.DRE_BIG_ICON, false);
+		}
+
+	}
+
 	private static final InspectorGroup[] inspectorGroups = new InspectorGroup[] { Inspectors.DRE };
 
 	public DREModule(ApplicationContext applicationContext) {

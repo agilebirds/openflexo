@@ -83,7 +83,7 @@ public class DropWKFElementInitializer extends ActionInitializer {
 					node.setProcess(process);
 					if (node.getSubProcess() == null) {
 						return new SubProcessSelectorDialog(process.getProject(), getControllerActionInitializer(), node,
-								process.getProcessNode()).askAndSetSubProcess();
+								process.getProcessNode(), action.getRoleToAssociate()).askAndSetSubProcess();
 					}
 				}
 
@@ -178,7 +178,7 @@ public class DropWKFElementInitializer extends ActionInitializer {
 				}
 				DrawingView<?> drawingView = (DrawingView<?>) moduleView;
 				Drawing<?> drawing = drawingView.getDrawing();
-				ShapeGraphicalRepresentation<?> newNodeGR = (ShapeGraphicalRepresentation<?>) drawing.getGraphicalRepresentation(action
+				ShapeGraphicalRepresentation newNodeGR = (ShapeGraphicalRepresentation) drawing.getGraphicalRepresentation(action
 						.getObject());
 				if (newNodeGR == null) {
 					if (logger.isLoggable(Level.WARNING)) {
@@ -186,7 +186,7 @@ public class DropWKFElementInitializer extends ActionInitializer {
 					}
 					return true;
 				}
-				final ShapeView<?> view = drawingView.shapeViewForObject(newNodeGR);
+				final ShapeView<?> view = drawingView.shapeViewForNode(newNodeGR);
 				if (view == null) {
 					if (logger.isLoggable(Level.WARNING)) {
 						logger.warning("Cannot build view for newly created node insertion");

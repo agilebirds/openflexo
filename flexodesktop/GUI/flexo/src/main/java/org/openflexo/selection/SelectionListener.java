@@ -19,7 +19,7 @@
  */
 package org.openflexo.selection;
 
-import org.openflexo.foundation.FlexoModelObject;
+import org.openflexo.foundation.FlexoObject;
 
 /**
  * Implemented by components back-synchronized with a SelectionManager This means that this component, once registered in a
@@ -35,7 +35,7 @@ public interface SelectionListener {
 	 * @param object
 	 *            : the object that has been added to selection
 	 */
-	public void fireObjectSelected(FlexoModelObject object);
+	public void fireObjectSelected(FlexoObject object);
 
 	/**
 	 * Notified that supplied object has been removed from selection
@@ -43,7 +43,7 @@ public interface SelectionListener {
 	 * @param object
 	 *            : the object that has been removed from selection
 	 */
-	public void fireObjectDeselected(FlexoModelObject object);
+	public void fireObjectDeselected(FlexoObject object);
 
 	/**
 	 * Notified selection has been resetted

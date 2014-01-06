@@ -19,12 +19,10 @@
  */
 package org.openflexo.foundation.viewpoint.inspector;
 
-import org.openflexo.antar.binding.BindingDefinition;
-import org.openflexo.antar.binding.BindingDefinition.BindingDefinitionType;
-import org.openflexo.foundation.ontology.OntologyClass;
-import org.openflexo.foundation.ontology.OntologyProperty;
-import org.openflexo.foundation.viewpoint.ViewPoint.ViewPointBuilder;
-import org.openflexo.foundation.viewpoint.binding.ViewPointDataBinding;
+import org.openflexo.antar.binding.DataBinding;
+import org.openflexo.antar.binding.DataBinding.BindingDefinitionType;
+import org.openflexo.foundation.ontology.IFlexoOntologyClass;
+import org.openflexo.foundation.ontology.IFlexoOntologyStructuralProperty;
 
 /**
  * Represents an inspector entry for an ontology property
@@ -36,18 +34,16 @@ public class PropertyInspectorEntry extends InspectorEntry {
 
 	private String parentPropertyURI;
 	private String domainURI;
+	private boolean isDynamicDomainValueSet = false;
+	private DataBinding<IFlexoOntologyClass> domainValue;
 
-	private ViewPointDataBinding domainValue;
-
-	private BindingDefinition DOMAIN_VALUE = new BindingDefinition("domainValue", OntologyClass.class, BindingDefinitionType.GET, false);
-
-	public PropertyInspectorEntry(ViewPointBuilder builder) {
-		super(builder);
+	public PropertyInspectorEntry() {
+		super();
 	}
 
 	@Override
 	public Class getDefaultDataClass() {
-		return OntologyProperty.class;
+		return IFlexoOntologyStructuralProperty.class;
 	}
 
 	@Override
@@ -63,14 +59,11 @@ public class PropertyInspectorEntry extends InspectorEntry {
 		this.parentPropertyURI = parentPropertyURI;
 	}
 
-	public OntologyProperty getParentProperty() {
-		if (getViewPoint() != null) {
-			getViewPoint().loadWhenUnloaded();
-		}
-		return getViewPoint().getViewpointOntology().getProperty(_getParentPropertyURI());
+	public IFlexoOntologyStructuralProperty getParentProperty() {
+		return getVirtualModel().getOntologyProperty(_getParentPropertyURI());
 	}
 
-	public void setParentProperty(OntologyProperty ontologyProperty) {
+	public void setParentProperty(IFlexoOntologyStructuralProperty ontologyProperty) {
 		parentPropertyURI = ontologyProperty != null ? ontologyProperty.getURI() : null;
 	}
 
@@ -82,36 +75,31 @@ public class PropertyInspectorEntry extends InspectorEntry {
 		this.domainURI = domainURI;
 	}
 
-	public OntologyClass getDomain() {
-		if (getViewPoint() != null) {
-			getViewPoint().loadWhenUnloaded();
-		}
-		return getViewPoint().getViewpointOntology().getClass(_getDomainURI());
+	public IFlexoOntologyClass getDomain() {
+		return getVirtualModel().getOntologyClass(_getDomainURI());
 	}
 
-	public void setDomain(OntologyClass c) {
+	public void setDomain(IFlexoOntologyClass c) {
 		_setDomainURI(c != null ? c.getURI() : null);
 	}
 
-	public BindingDefinition getDomainValueBindingDefinition() {
-		return DOMAIN_VALUE;
-	}
-
-	public ViewPointDataBinding getDomainValue() {
+	public DataBinding<IFlexoOntologyClass> getDomainValue() {
 		if (domainValue == null) {
-			domainValue = new ViewPointDataBinding(this, InspectorEntryBindingAttribute.domainValue, getDomainValueBindingDefinition());
+			domainValue = new DataBinding<IFlexoOntologyClass>(this, IFlexoOntologyClass.class, BindingDefinitionType.GET);
+			domainValue.setBindingName("domainValue");
 		}
 		return domainValue;
 	}
 
-	public void setDomainValue(ViewPointDataBinding domainValue) {
-		domainValue.setOwner(this);
-		domainValue.setBindingAttribute(InspectorEntryBindingAttribute.domainValue);
-		domainValue.setBindingDefinition(getDomainValueBindingDefinition());
+	public void setDomainValue(DataBinding<IFlexoOntologyClass> domainValue) {
+		if (domainValue != null) {
+			domainValue.setOwner(this);
+			domainValue.setBindingName("domainValue");
+			domainValue.setDeclaredType(IFlexoOntologyClass.class);
+			domainValue.setBindingDefinitionType(BindingDefinitionType.GET);
+		}
 		this.domainValue = domainValue;
 	}
-
-	private boolean isDynamicDomainValueSet = false;
 
 	public boolean getIsDynamicDomainValue() {
 		return getDomainValue().isSet() || isDynamicDomainValueSet;

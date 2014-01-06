@@ -5,6 +5,7 @@ import java.lang.reflect.ParameterizedType;
 import java.util.Arrays;
 import java.util.List;
 
+import org.openflexo.antar.binding.ReflectionUtils;
 import org.openflexo.antar.binding.TypeUtils;
 import org.openflexo.model.StringConverterLibrary.Converter;
 import org.openflexo.model.annotations.Adder;
@@ -53,6 +54,8 @@ public class ModelProperty<I> {
 	private Method adderMethod;
 	private Method removerMethod;
 
+	private Cardinality cardinality;
+
 	/* Computed values of the model property */
 	private Class<?> type;
 	private Class<?> keyType;
@@ -76,15 +79,27 @@ public class ModelProperty<I> {
 		Method setterMethod = null;
 		Method adderMethod = null;
 		Method removerMethod = null;
-		for (Method m : modelEntity.getImplementedInterface().getDeclaredMethods()) {
+		Class<I> implementedInterface = modelEntity.getImplementedInterface();
+		for (Method m : implementedInterface.getDeclaredMethods()) {
 			Getter aGetter = m.getAnnotation(Getter.class);
 			Setter aSetter = m.getAnnotation(Setter.class);
 			Adder anAdder = m.getAnnotation(Adder.class);
 			Remover aRemover = m.getAnnotation(Remover.class);
+			if (aGetter == null && aSetter == null && anAdder == null && aRemover == null) {
+				for (Method m1 : ReflectionUtils.getOverridenMethods(m)) {
+					aGetter = m1.getAnnotation(Getter.class);
+					aSetter = m1.getAnnotation(Setter.class);
+					anAdder = m1.getAnnotation(Adder.class);
+					aRemover = m1.getAnnotation(Remover.class);
+					if (aGetter != null || aSetter != null || anAdder != null || aRemover != null) {
+						break;
+					}
+				}
+			}
 			if (aGetter != null && aGetter.value().equals(propertyIdentifier)) {
 				if (getter != null) {
 					throw new ModelDefinitionException("Duplicate getter '" + propertyIdentifier + "' defined for interface "
-							+ modelEntity.getImplementedInterface());
+							+ implementedInterface);
 				} else {
 					getter = aGetter;
 					getterMethod = m;
@@ -99,7 +114,7 @@ public class ModelProperty<I> {
 			if (aSetter != null && aSetter.value().equals(propertyIdentifier)) {
 				if (setter != null) {
 					throw new ModelDefinitionException("Duplicate setter '" + propertyIdentifier + "' defined for interface "
-							+ modelEntity.getImplementedInterface());
+							+ implementedInterface);
 				} else {
 					setter = aSetter;
 					setterMethod = m;
@@ -109,7 +124,7 @@ public class ModelProperty<I> {
 			if (anAdder != null && anAdder.value().equals(propertyIdentifier)) {
 				if (adder != null) {
 					throw new ModelDefinitionException("Duplicate adder '" + propertyIdentifier + "' defined for interface "
-							+ modelEntity.getImplementedInterface());
+							+ implementedInterface);
 				} else {
 					adder = anAdder;
 					adderMethod = m;
@@ -119,7 +134,7 @@ public class ModelProperty<I> {
 			if (aRemover != null && aRemover.value().equals(propertyIdentifier)) {
 				if (remover != null) {
 					throw new ModelDefinitionException("Duplicate remover '" + propertyIdentifier + "' defined for interface "
-							+ modelEntity.getImplementedInterface());
+							+ implementedInterface);
 				} else {
 					remover = aRemover;
 					removerMethod = m;
@@ -165,6 +180,7 @@ public class ModelProperty<I> {
 				addPastingPoint = pastingPoint;
 			}
 		}
+
 		if (getter != null) {
 			switch (getCardinality()) {
 			case SINGLE:
@@ -220,7 +236,7 @@ public class ModelProperty<I> {
 		}
 
 		if (isSerializable() && ignoreType()) {
-			throw new ModelDefinitionException("Inconsistent property '" + propertyIdentifier
+			throw new ModelDefinitionException("Inconsistent property '" + propertyIdentifier + " for " + getModelEntity()
 					+ "'. It cannot be serializable (annotation XMLAttribute or XMLElement) and ignored. "
 					+ "If it is string convertable, mark it with the attribute 'stringConvertable'.");
 		}
@@ -257,9 +273,11 @@ public class ModelProperty<I> {
 						+ getSetterMethod().toString() + " must have exactly 1 parameter");
 			}
 
-			if (!TypeUtils.isTypeAssignableFrom(getGetterMethod().getReturnType(), getSetterMethod().getParameterTypes()[0])) {
+			if (!TypeUtils.isTypeAssignableFrom(getGetterMethod().getReturnType(), getSetterMethod().getParameterTypes()[0])
+					&& !TypeUtils.isTypeAssignableFrom(getSetterMethod().getParameterTypes()[0], getGetterMethod().getReturnType())) {
 				throw new ModelDefinitionException("Invalid setter method for property '" + propertyIdentifier + "': method "
-						+ getSetterMethod().toString() + " parameter must be assignable to " + getGetterMethod().getReturnType().getName());
+						+ getSetterMethod().toString() + " parameter must be assignable from or to "
+						+ getGetterMethod().getReturnType().getName());
 			}
 		}
 
@@ -349,7 +367,7 @@ public class ModelProperty<I> {
 				return "Cardinality " + getCardinality() + " is not equal to " + property.getCardinality();
 			}
 		}
-		if (!getGetter().inverse().equals(Getter.UNDEFINED) && !property.getGetter().inverse().equals(Getter.UNDEFINED)
+		if (hasInverseProperty() && !property.getGetter().inverse().equals(Getter.UNDEFINED)
 				&& !getGetter().inverse().equals(property.getGetter().inverse())) {
 			if (rulingProperty == null || rulingProperty.getGetter() == null
 					|| rulingProperty.getGetter().inverse().equals(Getter.UNDEFINED)) {
@@ -536,8 +554,8 @@ public class ModelProperty<I> {
 		Embedded embedded = null;
 		ComplexEmbedded complexEmbedded = null;
 		CloningStrategy cloningStrategy = null;
-		PastingPoint setPastingPoint = null;
-		PastingPoint addPastingPoint = null;
+		// PastingPoint setPastingPoint = null;
+		// PastingPoint addPastingPoint = null;
 		Method getterMethod = null;
 		Method setterMethod = null;
 		Method adderMethod = null;
@@ -712,7 +730,16 @@ public class ModelProperty<I> {
 				xmlElement = property.getXMLElement();
 			}
 		}
-		// TODO: combine pasting points
+
+		addPastingPoint = property.getAddPastingPoint();
+		setPastingPoint = property.getSetPastingPoint();
+
+		if (rulingProperty.getAddPastingPoint() != null) {
+			addPastingPoint = rulingProperty.getAddPastingPoint();
+		}
+		if (rulingProperty.getSetPastingPoint() != null) {
+			setPastingPoint = rulingProperty.getSetPastingPoint();
+		}
 
 		return new ModelProperty<I>(getModelEntity(), getPropertyIdentifier(), getter, setter, adder, remover, xmlAttribute, xmlElement,
 				returnedValue, embedded, complexEmbedded, cloningStrategy, setPastingPoint, addPastingPoint, getterMethod, setterMethod,
@@ -822,28 +849,23 @@ public class ModelProperty<I> {
 		return cardinality;
 	}
 
-	private ModelProperty<?> inverseProperty = null;
-	private Cardinality cardinality;
-
-	public ModelProperty getInverseProperty() throws ModelDefinitionException {
-		if (inverseProperty == null) {
-			findInverseProperty();
-		}
-		return inverseProperty;
+	public boolean hasInverseProperty() {
+		return !getGetter().inverse().equals(Getter.UNDEFINED);
 	}
 
-	private void findInverseProperty() throws ModelDefinitionException {
-		if (!getGetter().inverse().equals(Getter.UNDEFINED)) {
-			ModelEntity<?> oppositeEntity = getAccessedEntity();
+	public <T> ModelProperty<? super T> getInverseProperty(ModelEntity<T> oppositeEntity) throws ModelDefinitionException {
+		if (hasInverseProperty()) {
 			if (oppositeEntity == null) {
 				throw new ModelDefinitionException(getModelEntity() + ": Cannot find opposite entity " + getType());
 			}
-			inverseProperty = oppositeEntity.getModelProperty(getGetter().inverse());
+			ModelProperty<? super T> inverseProperty = oppositeEntity.getModelProperty(getGetter().inverse());
 			if (inverseProperty == null) {
 				throw new ModelDefinitionException(getModelEntity() + ": Cannot find inverse property " + getGetter().inverse() + " for "
 						+ oppositeEntity.getImplementedInterface().getSimpleName());
 			}
+			return inverseProperty;
 		}
+		return null;
 	}
 
 	@Override

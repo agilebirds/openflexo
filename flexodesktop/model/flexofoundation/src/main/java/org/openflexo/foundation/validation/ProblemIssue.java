@@ -19,6 +19,7 @@
  */
 package org.openflexo.foundation.validation;
 
+import java.util.Collection;
 import java.util.Enumeration;
 import java.util.Vector;
 import java.util.logging.Level;
@@ -93,9 +94,10 @@ public abstract class ProblemIssue<R extends ValidationRule<R, V>, V extends Val
 			Validable relatedValidable = (Validable) e.nextElement();
 			allIssuesToRemove.addAll(getValidationReport().issuesRegarding(relatedValidable));
 		}
-		if (getObject().getAllEmbeddedValidableObjects() != null) {
-			for (Enumeration e = getObject().getAllEmbeddedValidableObjects().elements(); e.hasMoreElements();) {
-				Validable embeddedValidable = (Validable) e.nextElement();
+		Collection<Validable> allEmbeddedValidableObjects = getValidationReport().getValidationModel().retrieveAllEmbeddedValidableObjects(
+				getObject());
+		if (allEmbeddedValidableObjects != null) {
+			for (Validable embeddedValidable : allEmbeddedValidableObjects) {
 				allIssuesToRemove.addAll(getValidationReport().issuesRegarding(embeddedValidable));
 			}
 		}

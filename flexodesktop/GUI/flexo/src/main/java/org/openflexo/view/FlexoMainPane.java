@@ -41,8 +41,7 @@ import javax.swing.ScrollPaneConstants;
 import javax.swing.border.MatteBorder;
 import javax.swing.event.ChangeListener;
 
-import org.openflexo.AdvancedPrefs;
-import org.openflexo.ch.FCH;
+import org.openflexo.foundation.FlexoProjectObject;
 import org.openflexo.icon.IconFactory;
 import org.openflexo.icon.IconLibrary;
 import org.openflexo.swing.TabbedPane;
@@ -131,8 +130,7 @@ public class FlexoMainPane extends JPanel implements PropertyChangeListener {
 			@Override
 			public Icon getTabHeaderIcon(Location tab) {
 				ImageIcon iconForObject = getController().iconForObject(tab.getObject());
-				if (iconForObject != null && tab.getObject() != null
-						&& (tab.getEditor() == null || tab.getObject().getProject() != tab.getEditor().getProject())) {
+				if (iconForObject != null && tab.getObject() != null && tab.getObject() instanceof FlexoProjectObject && !tab.isEditable()) {
 					iconForObject = IconFactory.getImageIcon(iconForObject, IconLibrary.LOCKED);
 				}
 				return iconForObject;
@@ -156,13 +154,21 @@ public class FlexoMainPane extends JPanel implements PropertyChangeListener {
 				if (tab.getObject() == null || tab.getObject().isDeleted()) {
 					return false;
 				}
-				if (!AdvancedPrefs.getShowAllTabs()
+				if (!getController().getApplicationContext().getAdvancedPrefs().getShowAllTabs()
 						&& (tab.getEditor() == null || !tab.getEditor().equals(getController().getControllerModel().getCurrentEditor()))) {
 					return false;
 				}
 				ModuleView<?> view = getController().moduleViewForLocation(tab, true);
 				return view != null && !(view instanceof EmptyPanel);
 			}
+			/*public boolean isTabHeaderVisible(ModuleView<?> tab) {
+				return !(tab instanceof org.openflexo.view.EmptyPanel<?>)
+						&& (AdvancedPrefs.getShowAllTabs() || tab.getRepresentedObject() != null
+								&& (!(tab.getRepresentedObject() instanceof FlexoProjectObject)
+										|| ((FlexoProjectObject) tab.getRepresentedObject()).getProject() == null || !((FlexoProjectObject) tab
+											.getRepresentedObject()).getProject().equals(
+										FlexoMainPane.this.controller.getControllerModel().getCurrentProject())));
+			}*/
 
 		});
 		tabbedPane.setUseTabBody(false);
@@ -295,7 +301,13 @@ public class FlexoMainPane extends JPanel implements PropertyChangeListener {
 					logger.severe("willShow call failed on " + moduleView);
 				}
 			}
-			FCH.setHelpItem((JComponent) moduleView, FCH.getModuleViewItemFor(controller.getModule(), moduleView));
+			getController()
+					.getApplicationContext()
+					.getDocResourceManager()
+					.setHelpItem(
+							(JComponent) moduleView,
+							getController().getApplicationContext().getDocResourceManager()
+									.getModuleViewItemFor(controller.getModule(), moduleView));
 			newCenterView.setBorder(MODULE_VIEW_BORDER);
 		} else {
 			newCenterView = new JPanel();
@@ -317,7 +329,7 @@ public class FlexoMainPane extends JPanel implements PropertyChangeListener {
 			controller.getCurrentPerspective().notifyModuleViewDisplayed(moduleView);
 		}
 		if (controller.getFlexoFrame().isValid()) {
-			FCH.validateWindow(controller.getFlexoFrame());
+			getController().getApplicationContext().getDocResourceManager().validateWindow(controller.getFlexoFrame());
 		}
 	}
 

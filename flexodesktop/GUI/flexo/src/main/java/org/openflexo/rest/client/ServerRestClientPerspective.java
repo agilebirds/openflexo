@@ -6,8 +6,10 @@ import org.openflexo.fib.FIBLibrary;
 import org.openflexo.fib.controller.FIBController;
 import org.openflexo.fib.model.FIBComponent;
 import org.openflexo.fib.view.FIBView;
-import org.openflexo.foundation.FlexoModelObject;
-import org.openflexo.foundation.rm.FlexoProject;
+import org.openflexo.foundation.FlexoObject;
+import org.openflexo.foundation.FlexoObject;
+import org.openflexo.foundation.FlexoProjectObject;
+import org.openflexo.foundation.FlexoProject;
 import org.openflexo.localization.FlexoLocalization;
 import org.openflexo.toolbox.ImageIconResource;
 import org.openflexo.view.DefaultModuleView;
@@ -33,9 +35,9 @@ public class ServerRestClientPerspective extends FlexoPerspective {
 	}
 
 	@Override
-	public ModuleView<?> createModuleViewForObject(FlexoModelObject object, FlexoController controller) {
+	public ModuleView<?> createModuleViewForObject(FlexoObject object, FlexoController controller) {
 		if (object instanceof FlexoProject) {
-			ServerRestClientModel model = new ServerRestClientModel(controller, object.getProject());
+			ServerRestClientModel model = new ServerRestClientModel(controller, (FlexoProject) object);
 			controller.getApplicationContext().getServerRestService().init();
 			model.refresh();
 			FIBComponent component = FIBLibrary.instance().retrieveFIBComponent(ServerRestClientModel.FIB_FILE);
@@ -45,7 +47,7 @@ public class ServerRestClientPerspective extends FlexoPerspective {
 			} else if (component.getControllerClass() != null) {
 				logger.warning("Controller for component " + component + " is not an instanceof FlexoFIBController");
 			}
-			FIBView<?, ?> view = fibController.buildView(component);
+			FIBView<?, ?, ?> view = fibController.buildView(component);
 			fibController.setDataObject(model);
 			return new DefaultModuleView<FlexoProject>(controller, (FlexoProject) object, view, this);
 		} else {
@@ -54,13 +56,17 @@ public class ServerRestClientPerspective extends FlexoPerspective {
 	}
 
 	@Override
-	public boolean hasModuleViewForObject(FlexoModelObject object) {
+	public boolean hasModuleViewForObject(FlexoObject object) {
 		return object instanceof FlexoProject;
 	}
 
 	@Override
-	public FlexoModelObject getDefaultObject(FlexoModelObject proposedObject) {
-		return proposedObject.getProject();
+	public FlexoObject getDefaultObject(FlexoObject proposedObject) {
+		if (proposedObject instanceof FlexoProjectObject) {
+			return ((FlexoProjectObject) proposedObject).getProject();
+		} else {
+			return null;
+		}
 	}
 
 }

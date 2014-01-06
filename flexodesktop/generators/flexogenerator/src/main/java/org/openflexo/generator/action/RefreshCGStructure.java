@@ -66,7 +66,7 @@ public class RefreshCGStructure extends GCAction<RefreshCGStructure, CGObject> {
 	};
 
 	static {
-		FlexoModelObject.addActionForClass(RefreshCGStructure.actionType, CGObject.class);
+		TestModelObject.addActionForClass(RefreshCGStructure.actionType, CGObject.class);
 	}
 
 	RefreshCGStructure(CGObject focusedObject, Vector<CGObject> globalSelection, FlexoEditor editor) {

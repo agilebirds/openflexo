@@ -1,13 +1,12 @@
 package org.openflexo.antar.binding;
 
+import java.lang.reflect.InvocationTargetException;
 import java.lang.reflect.Type;
 import java.util.ArrayList;
 import java.util.List;
 
 import junit.framework.TestCase;
 
-import org.openflexo.antar.binding.AbstractBinding.BindingEvaluationContext;
-import org.openflexo.antar.binding.BindingDefinition.BindingDefinitionType;
 import org.openflexo.antar.expr.NullReferenceException;
 import org.openflexo.antar.expr.TypeMismatchException;
 
@@ -15,7 +14,7 @@ import com.google.common.reflect.TypeToken;
 
 public class TestBinding extends TestCase {
 
-	private static final DefaultBindingFactory BINDING_FACTORY = new DefaultBindingFactory();
+	private static final BindingFactory BINDING_FACTORY = new JavaBindingFactory();
 	private static final TestBindingContext BINDING_CONTEXT = new TestBindingContext();
 	private static final TestBindingModel BINDING_MODEL = new TestBindingModel();
 
@@ -46,8 +45,6 @@ public class TestBinding extends TestCase {
 		@Override
 		public Object getValue(BindingVariable variable) {
 
-			System.out.println("Value for " + variable + " ?");
-
 			if (variable.getVariableName().equals("aString")) {
 				return aString;
 			} else if (variable.getVariableName().equals("aBoolean")) {
@@ -59,6 +56,14 @@ public class TestBinding extends TestCase {
 			}
 			return null;
 		}
+
+		@Override
+		public void notifiedBindingChanged(DataBinding<?> dataBinding) {
+		}
+
+		@Override
+		public void notifiedBindingDecoded(DataBinding<?> dataBinding) {
+		}
 	}
 
 	// String aString;
@@ -67,10 +72,10 @@ public class TestBinding extends TestCase {
 	public static class TestBindingModel extends BindingModel {
 		public TestBindingModel() {
 			super();
-			addToBindingVariables(new BindingVariableImpl(BINDING_CONTEXT, "aString", String.class));
-			addToBindingVariables(new BindingVariableImpl(BINDING_CONTEXT, "aBoolean", Boolean.TYPE));
-			addToBindingVariables(new BindingVariableImpl(BINDING_CONTEXT, "anInt", Integer.TYPE));
-			addToBindingVariables(new BindingVariableImpl(BINDING_CONTEXT, "aList", new TypeToken<List<String>>() {
+			addToBindingVariables(new BindingVariable("aString", String.class));
+			addToBindingVariables(new BindingVariable("aBoolean", Boolean.TYPE));
+			addToBindingVariables(new BindingVariable("anInt", Integer.TYPE));
+			addToBindingVariables(new BindingVariable("aList", new TypeToken<List<String>>() {
 			}.getType()));
 		}
 	}
@@ -194,22 +199,30 @@ public class TestBinding extends TestCase {
 
 		System.out.println("Evaluate " + bindingPath);
 
-		AbstractBinding binding = BINDING_FACTORY.convertFromString(bindingPath, BINDING_CONTEXT);
-		binding.setBindingDefinition(new BindingDefinition("test", expectedType, BindingDefinitionType.GET, true));
+		DataBinding<?> dataBinding = new DataBinding<Object>(bindingPath, BINDING_CONTEXT, expectedType,
+				DataBinding.BindingDefinitionType.GET);
 
-		System.out.println("Parsed " + binding + " as " + binding.getClass());
+		/*	BINDING_FACTORY.setBindable(BINDING_CONTEXT);
+			AbstractBinding binding = BINDING_FACTORY.convertFromString(bindingPath);
+			binding.setBindingDefinition(new BindingDefinition("test", expectedType, BindingDefinitionType.GET, true));*/
 
-		if (!binding.isBindingValid()) {
-			fail(binding.invalidBindingReason());
+		System.out
+				.println("Parsed " + dataBinding + " as " + dataBinding.getExpression() + " of " + dataBinding.getExpression().getClass());
+
+		if (!dataBinding.isValid()) {
+			fail(dataBinding.invalidBindingReason());
 		}
 
 		Object evaluation = null;
 		try {
-			evaluation = binding.getBindingValue(BINDING_CONTEXT);
+			evaluation = dataBinding.getBindingValue(BINDING_CONTEXT);
 		} catch (TypeMismatchException e) {
 			e.printStackTrace();
 			fail();
 		} catch (NullReferenceException e) {
+			e.printStackTrace();
+			fail();
+		} catch (InvocationTargetException e) {
 			e.printStackTrace();
 			fail();
 		}
@@ -293,11 +306,19 @@ public class TestBinding extends TestCase {
 	}
 
 	public void test12() {
-		TestBindingContext.aString = "";
 		genericTest("anInt > 2 ? 'anInt > 2' : 'anInt<=2' ", String.class, "anInt > 2");
 	}
 
 	public void test13() {
 		genericTest("aString != null", Boolean.TYPE, true);
+	}
+
+	public void test14() {
+		genericTest("1", Integer.TYPE, 1);
+	}
+
+	public void test15() {
+		TestBindingContext.aString = "foo";
+		genericTest("aString.length", Integer.TYPE, 3);
 	}
 }

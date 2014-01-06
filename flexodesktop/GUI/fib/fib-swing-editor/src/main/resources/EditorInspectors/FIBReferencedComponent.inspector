@@ -1,0 +1,21 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<Panel className="org.openflexo.fib.editor.controller.FIBInspector" layout="border" darkLevel="0" dataClassName="org.openflexo.fib.model.FIBReferencedComponent" name="Inspector">
+  <TabPanel name="Tab" constraints="border(location=center)">
+    <Tab title="Basic" layout="twocols" titleFont="SansSerif,0,11" darkLevel="0" index="0" font="SansSerif,0,11" useScrollBar="true" horizontalScrollbarPolicy="HORIZONTAL_SCROLLBAR_AS_NEEDED" verticalScrollbarPolicy="VERTICAL_SCROLLBAR_AS_NEEDED" name="BasicTab">
+      <Label label="file" constraints="twocols(location=left)" localize="true" />
+      <File isDirectory="false" localize="true" data="data.componentFile" constraints="twocols(expandHorizontally=true;location=right)" />
+      <Label label="assignments" align="center" constraints="twocols(expandHorizontally=true;location=center)" localize="true" />
+      <Table iteratorClassName="org.openflexo.fib.model.FIBReferencedComponent$FIBReferenceAssignment" visibleRowCount="5" rowHeight="20" autoSelectFirstRow="false" createNewRowOnClick="false" boundToSelectionManager="false" showFooter="true" selectionMode="MultipleIntervalSelection" localize="true" manageDynamicModel="true" name="AssignmentsTable" data="data.assignments" constraints="twocols(expandHorizontally=true;expandVertically=true;location=center)">
+        <CustomColumn componentClassName="org.openflexo.fib.utils.BindingSelector" customRendering="false" disableTerminateEditOnFocusLost="false" data="iterator.variable" title="Variable" columnWidth="200" resizable="true" displayTitle="true">
+          <ColumnAssignment variable="component.bindable" value="iterator" />
+        </CustomColumn>
+        <CustomColumn componentClassName="org.openflexo.fib.utils.BindingSelector" customRendering="false" disableTerminateEditOnFocusLost="false" data="iterator.value" title="Value" columnWidth="200" resizable="true" displayTitle="true">
+          <ColumnAssignment variable="component.bindable" value="data" />
+        </CustomColumn>
+        <AddAction method="data.createAssignment()" name="new_assignment" />
+        <RemoveAction method="data.deleteAssignment(selected)" name="delete_assignment" />
+      </Table>
+    </Tab>
+  </TabPanel>
+  <Parameter name="title" value="Referenced component" />
+</Panel>

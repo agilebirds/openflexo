@@ -126,8 +126,8 @@ public class ModelEntity {
 	 * @exception InvalidModelException
 	 *                if an error occurs
 	 */
-	public ModelEntity(String aName, String someXMLTags, boolean abstractFlag, String aFinalizer, XMLMapping anXMLMapping)
-			throws InvalidModelException {
+	public ModelEntity(String aName, String someXMLTags, boolean abstractFlag, String aFinalizer, XMLMapping anXMLMapping,
+			boolean permissive) throws InvalidModelException {
 
 		super();
 
@@ -135,7 +135,7 @@ public class ModelEntity {
 		finalizer = aFinalizer;
 		parseXMLTags(someXMLTags);
 		isAbstract = abstractFlag;
-		init(anXMLMapping);
+		init(anXMLMapping, permissive);
 	}
 
 	/**
@@ -147,6 +147,18 @@ public class ModelEntity {
 	 *                if an error occurs
 	 */
 	public ModelEntity(Node anEntityNode, XMLMapping anXMLMapping) throws InvalidModelException {
+		this(anEntityNode, anXMLMapping, false);
+	}
+
+	/**
+	 * Creates a new <code>ModelEntity</code> instance, given a node <code>anEntityNode</code>
+	 * 
+	 * @param anEntityNode
+	 *            a <code>Node</code> value
+	 * @exception InvalidModelException
+	 *                if an error occurs
+	 */
+	public ModelEntity(Node anEntityNode, XMLMapping anXMLMapping, boolean permissive) throws InvalidModelException {
 
 		super();
 
@@ -188,7 +200,7 @@ public class ModelEntity {
 			}
 		}
 
-		init(anXMLMapping);
+		init(anXMLMapping, permissive);
 
 		if (genericTypingStoredIn != null) {
 			// System.out.println("genericTypingStoredIn="+genericTypingStoredIn);
@@ -204,15 +216,36 @@ public class ModelEntity {
 						setDescription(tempNode.getFirstChild().getNodeValue());
 					}
 				} else if (tempNode.getNodeName().equals(XMLMapping.propertyLabel)) {
-					ModelProperty newModelProperty = new ModelProperty(tempNode, this);
-					if (modelProperties.get(newModelProperty.getName()) != null) {
-						throw new InvalidModelException("Duplicate property " + newModelProperty.getName() + " found in model file");
-					} else {
-						modelProperties.put(newModelProperty.getName(), newModelProperty);
-						orderedModelProperties.add(newModelProperty);
+					try {
+						ModelProperty newModelProperty = new ModelProperty(tempNode, this, permissive);
+						if (modelProperties != null) {
+							if (modelProperties.get(newModelProperty.getName()) != null) {
+								throw new InvalidModelException("Duplicate property " + newModelProperty.getName() + " found in model file");
+							} else {
+								modelProperties.put(newModelProperty.getName(), newModelProperty);
+								orderedModelProperties.add(newModelProperty);
+							}
+						}
+					} catch (InvalidKeyValuePropertyException e) {
+						if (!permissive) {
+							throw e;
+						} else {
+							System.err.println("[XMLCODE_ISSUE] " + e.getMessage());
+						}
+					} catch (InvalidModelException e) {
+						if (!permissive) {
+							throw e;
+						} else {
+							System.err.println("[XMLCODE_ISSUE] " + e.getMessage());
+						}
 					}
 				} else {
-					throw new InvalidModelException("Invalid tag '" + tempNode.getNodeName() + "' found in model file for tag 'entity'");
+					if (!permissive) {
+						throw new InvalidModelException("Invalid tag '" + tempNode.getNodeName() + "' found in model file for tag 'entity'");
+					} else {
+						System.err.println("[XMLCODE_ISSUE] " + "Invalid tag '" + tempNode.getNodeName()
+								+ "' found in model file for tag 'entity'");
+					}
 				}
 			} else if (tempNode.getNodeType() == Node.TEXT_NODE) {
 				// Non significative text will be simply ignored
@@ -242,7 +275,7 @@ public class ModelEntity {
 	 * 
 	 * @param anXMLMapping
 	 */
-	private void init(XMLMapping anXMLMapping) {
+	private void init(XMLMapping anXMLMapping, boolean permissive) {
 		Class<XMLSerializable> XMLSerialisableClass = org.openflexo.xmlcode.XMLSerializable.class;
 
 		model = anXMLMapping;
@@ -252,7 +285,12 @@ public class ModelEntity {
 			try {
 				relatedClass = Class.forName(getName());
 			} catch (ClassNotFoundException e) {
-				throw new InvalidModelException("Class " + getName() + " not found.");
+				if (!permissive) {
+					throw new InvalidModelException("Class " + getName() + " not found.");
+				} else {
+					System.err.println("[XMLCODE_ISSUE] " + "Class " + getName() + " not found.");
+					return;
+				}
 			}
 
 			// Looking for constructors
@@ -269,19 +307,28 @@ public class ModelEntity {
 			if (!model.serializeOnly) {
 				if (!hasConstructorWithoutParameter() && !hasConstructorWithParameter() && !isAbstract()) {
 					if (!model.hasBuilderClass()) {
-						throw new InvalidModelException(
-								"Class "
-										+ getName()
-										+ " cannot be instanciated directly (check that this class has a constructor with no arguments [public "
-										+ getName()
-										+ "()] and that this class is not abstract. If this class should never be instanciated directly, declares it as abstract (see abtract xml tag).");
+						String message = "Class "
+								+ getName()
+								+ " cannot be instanciated directly (check that this class has a constructor with no arguments [public "
+								+ getName()
+								+ "()] and that this class is not abstract. If this class should never be instanciated directly, declares it as abstract (see abtract xml tag).";
+						if (!permissive) {
+							throw new InvalidModelException(message);
+						} else {
+							System.err.println("[XMLCODE_ISSUE] " + message);
+						}
 					} else {
-						throw new InvalidModelException(
-								"Class "
-										+ getName()
-										+ " cannot be instanciated directly or with a parameter of "
-										+ model.builderClass().getName()
-										+ " and this class is not abstract. If this class should never be instanciated directly, declares it as abstract (see abtract xml tag).");
+						String message = "Class "
+								+ getName()
+								+ " cannot be instanciated directly or with a parameter of "
+								+ model.builderClass().getName()
+								+ " and this class is not abstract. If this class should never be instanciated directly, declares it as abstract (see abtract xml tag).";
+						if (!permissive) {
+							throw new InvalidModelException(message);
+
+						} else {
+							System.err.println("[XMLCODE_ISSUE] " + message);
+						}
 					}
 				}
 			}
@@ -311,8 +358,13 @@ public class ModelEntity {
 				}
 
 				if (!hasInitializerWithoutParameter() && !hasFinalizerWithParameter()) {
-					throw new InvalidModelException("Class " + getName() + " does not implement specified decoding initializing method : "
-							+ initializer);
+					if (!permissive) {
+						throw new InvalidModelException("Class " + getName()
+								+ " does not implement specified decoding initializing method : " + initializer);
+					} else {
+						System.err.println("[XMLCODE_ISSUE] " + "Class " + getName()
+								+ " does not implement specified decoding initializing method : " + initializer);
+					}
 				}
 			}
 
@@ -341,8 +393,13 @@ public class ModelEntity {
 				}
 
 				if (!hasFinalizerWithoutParameter() && !hasFinalizerWithParameter()) {
-					throw new InvalidModelException("Class " + getName() + " does not implement specified decoding finalizing method : "
-							+ finalizer);
+					if (!permissive) {
+						throw new InvalidModelException("Class " + getName()
+								+ " does not implement specified decoding finalizing method : " + finalizer);
+					} else {
+						System.err.println("[XMLCODE_ISSUE] " + "Class " + getName()
+								+ " does not implement specified decoding finalizing method : " + finalizer);
+					}
 				}
 			}
 		} catch (InvalidModelException e) {
@@ -353,7 +410,11 @@ public class ModelEntity {
 		}
 
 		if (!XMLSerialisableClass.isAssignableFrom(relatedClass)) {
-			throw new InvalidModelException("Class " + getName() + " MUST implement XMLSerializable interface");
+			if (!permissive) {
+				throw new InvalidModelException("Class " + getName() + " MUST implement XMLSerializable interface");
+			} else {
+				System.err.println("[XMLCODE_ISSUE] " + "Class " + getName() + " MUST implement XMLSerializable interface");
+			}
 		}
 
 		modelProperties = new LinkedHashMap<String, ModelProperty>();
@@ -371,6 +432,7 @@ public class ModelEntity {
 		_availableContexts.addAll(locallyDefinedContexts);
 
 		_xmlTagsForContext = new Hashtable<String, String[]>();
+
 	}
 
 	/**
@@ -411,7 +473,7 @@ public class ModelEntity {
 			Vector inheritedContexts = parent.getAvailableContexts();
 			for (Enumeration en = inheritedContexts.elements(); en.hasMoreElements();) {
 				String next = (String) en.nextElement();
-				if (!_availableContexts.contains(next)) {
+				if (_availableContexts != null && !_availableContexts.contains(next)) {
 					_availableContexts.add(next);
 				}
 			}
@@ -494,7 +556,7 @@ public class ModelEntity {
 		if (definedXMLTags == null) {
 			return null;
 		}
-		if (derivedXMLTags == null) {
+		if (derivedXMLTags == null && getAvailableContexts() != null) {
 			if (getAvailableContexts().size() == 0) {
 				derivedXMLTags = definedXMLTags;
 			} else {
@@ -587,11 +649,17 @@ public class ModelEntity {
 	 * @return a <code>Vector</code> value
 	 */
 	public Enumeration<ModelProperty> getModelProperties() {
+		if (orderedModelProperties == null) {
+			return null;
+		}
 		return orderedModelProperties.elements();
 		// return modelProperties.elements();
 	}
 
 	public Iterator<ModelProperty> getModelPropertiesIterator() {
+		if (orderedModelProperties == null) {
+			return null;
+		}
 		return orderedModelProperties.iterator();
 		// return modelProperties.elements();
 	}
@@ -603,6 +671,9 @@ public class ModelEntity {
 	 */
 	public ModelProperty getModelPropertyWithName(String aPropertyName) {
 
+		if (modelProperties == null) {
+			return null;
+		}
 		return modelProperties.get(aPropertyName);
 	}
 
@@ -695,6 +766,12 @@ public class ModelEntity {
 	 * Returns a boolean indicating if entity represents a class which inherits from specified ModelEntity's represented class
 	 */
 	public boolean inheritsFrom(ModelEntity aModelEntity) {
+		if (getRelatedClass() == null) {
+			return false;
+		}
+		if (aModelEntity.getRelatedClass() == null) {
+			return false;
+		}
 		return aModelEntity.getRelatedClass().isAssignableFrom(getRelatedClass());
 	}
 
@@ -709,31 +786,34 @@ public class ModelEntity {
 
 		else {
 			// _availableContexts = null;
-			for (Enumeration<ModelProperty> e = parentModelEntity.getModelProperties(); e.hasMoreElements();) {
-				ModelProperty parentModelProperty = e.nextElement();
-				if (getModelPropertyWithName(parentModelProperty.getName()) != null) {
-					// This entity already has this property defined,
-					// which overrides the parent one > do nothing
-				} else {
-					modelProperties.put(parentModelProperty.getName(), parentModelProperty);
-					orderedModelProperties.add(parentModelProperty);
-					inheritedModelProperties.put(parentModelProperty.getName(), parentModelEntity);
-					// System.out.println ("Setting property
-					// "+parentModelProperty.getName()+" for "+getName()+" as
-					// property inherited from "+parentModelEntity.getName());
+			if (parentModelEntity.getModelProperties() != null) {
+				for (Enumeration<ModelProperty> e = parentModelEntity.getModelProperties(); e.hasMoreElements();) {
+					ModelProperty parentModelProperty = e.nextElement();
+					if (getModelPropertyWithName(parentModelProperty.getName()) != null) {
+						// This entity already has this property defined,
+						// which overrides the parent one > do nothing
+					} else if (modelProperties != null) {
+						modelProperties.put(parentModelProperty.getName(), parentModelProperty);
+						orderedModelProperties.add(parentModelProperty);
+						inheritedModelProperties.put(parentModelProperty.getName(), parentModelEntity);
+						// System.out.println ("Setting property
+						// "+parentModelProperty.getName()+" for "+getName()+" as
+						// property inherited from "+parentModelEntity.getName());
+					}
 				}
+				updateAvailableContexts(parentModelEntity);
 			}
-			updateAvailableContexts(parentModelEntity);
 			derivedXMLTags = null;
 		}
 	}
 
 	public void updateProperties() {
-		for (Enumeration e = getModelProperties(); e.hasMoreElements();) {
-			ModelProperty property = (ModelProperty) e.nextElement();
-			property.updateHandledXMLTags();
+		if (getModelProperties() != null) {
+			for (Enumeration e = getModelProperties(); e.hasMoreElements();) {
+				ModelProperty property = (ModelProperty) e.nextElement();
+				property.updateHandledXMLTags();
+			}
 		}
-
 	}
 
 	/**

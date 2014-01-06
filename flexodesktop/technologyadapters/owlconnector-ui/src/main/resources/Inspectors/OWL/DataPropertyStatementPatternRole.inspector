@@ -1,0 +1,19 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<Panel className="org.openflexo.inspector.FIBInspector" layout="border" titleFont="SansSerif,0,12" darkLevel="0" dataClassName="org.openflexo.technologyadapter.owl.viewpoint.DataPropertyStatementPatternRole" controllerClassName="org.openflexo.inspector.FIBInspectorController" font="SansSerif,0,12" name="Inspector">
+  <TabPanel name="Tab" constraints="border(location=center)">
+    <Tab title="Basic" layout="twocols" titleFont="SansSerif,0,11" darkLevel="0" index="0" font="SansSerif,0,11" useScrollBar="true" horizontalScrollbarPolicy="HORIZONTAL_SCROLLBAR_AS_NEEDED" verticalScrollbarPolicy="VERTICAL_SCROLLBAR_AS_NEEDED" name="BasicTab">
+      <Label label="property" index="6" constraints="twocols(expandHorizontally=false;expandVertically=false;index=6;insetsBottom=0;insetsLeft=2;insetsRight=2;insetsTop=5;location=left)" localize="true" />
+      <Custom componentClassName="org.openflexo.components.widget.FIBPropertySelector" localize="true" manageDynamicModel="true" index="7" data="data.dataProperty" constraints="twocols(expandHorizontally=true;expandVertically=false;index=7;insetsBottom=0;insetsLeft=2;insetsRight=2;insetsTop=0;location=right)">
+        <Assignment variable="component.context" value="data.modelSlot.metaModelResource.metaModelData" />
+        <Assignment variable="component.selectObjectProperties" value="$false" />
+        <Assignment variable="component.selectDataProperties" value="$true" />
+        <Assignment variable="component.selectAnnotationProperties" value="$false" />
+      </Custom>
+    </Tab>
+  </TabPanel>
+  <LocalizedDictionary>
+    <Localized key="Advanced" lang="French">Avancé</Localized>
+    <Localized key="Basic" lang="French">Basique</Localized>
+  </LocalizedDictionary>
+  <Parameter name="title" value="Data Property Statement Pattern Role" />
+</Panel>

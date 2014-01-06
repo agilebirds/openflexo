@@ -25,7 +25,7 @@ import java.util.logging.Logger;
 
 import org.openflexo.foundation.ie.OperationComponentInstance;
 import org.openflexo.foundation.rm.FlexoProcessResource;
-import org.openflexo.foundation.rm.FlexoProject;
+import org.openflexo.foundation.FlexoProject;
 import org.openflexo.foundation.rm.FlexoProjectBuilder;
 import org.openflexo.foundation.rm.FlexoResource;
 import org.openflexo.foundation.wkf.FlexoProcess;

@@ -1,0 +1,20 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<Panel className="org.openflexo.fib.editor.controller.FIBInspector" layout="border" darkLevel="0" dataClassName="org.openflexo.fib.model.FIBFile" name="Inspector">
+  <TabPanel name="Tab" constraints="border(location=center)">
+    <Tab title="Basic" layout="twocols" titleFont="SansSerif,0,11" darkLevel="0" index="0" font="SansSerif,0,11" useScrollBar="true" horizontalScrollbarPolicy="HORIZONTAL_SCROLLBAR_AS_NEEDED" verticalScrollbarPolicy="VERTICAL_SCROLLBAR_AS_NEEDED" name="BasicTab">
+      <Label label="mode" constraints="twocols(expandHorizontally=true;location=left)" localize="true" />
+      <DropDown data="data.mode" constraints="twocols(expandHorizontally=true;location=right)" localize="true" iteratorClassName="org.openflexo.fib.model.FIBFile$FileMode" autoSelectFirstRow="false" />
+      <Label label="filter" constraints="twocols(expandHorizontally=true;location=left)" localize="true" />
+      <TextField data="data.filter" constraints="twocols(expandHorizontally=true;location=right)" localize="true" columns="15" />
+      <Label label="title" constraints="twocols(expandHorizontally=true;location=left)" localize="true" />
+      <TextField data="data.title" constraints="twocols(expandHorizontally=true;location=right)" localize="true" columns="15" />
+      <CheckBox selected="false" data="data.directory" constraints="twocols(expandHorizontally=true;location=left)" localize="true" />
+      <Label label="select_directories_only" constraints="twocols(expandHorizontally=true;location=right)" localize="true" />
+      <Label label="default_directory" constraints="twocols(expandHorizontally=true;location=left)" localize="true" />
+      <File isDirectory="true" columns="15" localize="true" data="data.defaultDirectory" constraints="twocols(expandHorizontally=true;location=right)" />
+      <Label label="columns" constraints="twocols(location=left)" localize="true" />
+      <Number numberType="IntegerType" data="data.columns" constraints="twocols()" localize="true" />
+    </Tab>
+  </TabPanel>
+  <Parameter name="title" value="File/Directory Selector" />
+</Panel>

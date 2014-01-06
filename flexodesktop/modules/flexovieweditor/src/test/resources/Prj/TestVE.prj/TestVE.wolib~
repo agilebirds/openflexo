@@ -1,7 +1,0 @@
-<?xml version="1.0" encoding="UTF-8"?>
-<FlexoComponentLibrary id="SYL_383" userID="SYL" flexoID="383" dontGenerate="false" useSpecificDescriptions="false">
-  <FlexoComponentFolder id="SYL_384" componentPrefix="TES" docIndex="1" userID="SYL" flexoID="384" dontGenerate="false" useSpecificDescriptions="false">
-    <folderName>TestVE</folderName>
-  </FlexoComponentFolder>
-</FlexoComponentLibrary>
-

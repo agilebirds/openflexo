@@ -21,11 +21,11 @@ package org.openflexo.wkf.swleditor.gr;
 
 import java.awt.Color;
 
-import org.openflexo.fge.graphics.BackgroundStyle;
+import org.openflexo.fge.BackgroundStyle;
+import org.openflexo.fge.ForegroundStyle;
 import org.openflexo.fge.graphics.FGEShapeGraphics;
-import org.openflexo.fge.graphics.ForegroundStyle;
 import org.openflexo.fge.graphics.ShapePainter;
-import org.openflexo.fge.shapes.Shape.ShapeType;
+import org.openflexo.fge.shapes.ShapeSpecification.ShapeType;
 import org.openflexo.foundation.wkf.node.OperationNode;
 import org.openflexo.wkf.processeditor.ProcessEditorConstants;
 import org.openflexo.wkf.swleditor.SwimmingLaneRepresentation;

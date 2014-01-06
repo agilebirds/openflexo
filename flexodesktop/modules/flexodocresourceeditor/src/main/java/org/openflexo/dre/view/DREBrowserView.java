@@ -25,7 +25,7 @@ import java.util.logging.Logger;
 import org.openflexo.components.AskParametersPanel;
 import org.openflexo.components.browser.view.BrowserView;
 import org.openflexo.dre.controller.DREController;
-import org.openflexo.foundation.FlexoModelObject;
+import org.openflexo.foundation.FlexoObject;
 
 /**
  * Represents the view for the browser of this module
@@ -45,13 +45,13 @@ public class DREBrowserView extends BrowserView {
 	}
 
 	@Override
-	public void treeSingleClick(FlexoModelObject object) {
+	public void treeSingleClick(FlexoObject object) {
 		// Try to display object in view
 		getController().selectAndFocusObject(object);
 	}
 
 	@Override
-	public void treeDoubleClick(FlexoModelObject object) {
+	public void treeDoubleClick(FlexoObject object) {
 		// Try to display object in view
 		getController().selectAndFocusObject(object);
 	}

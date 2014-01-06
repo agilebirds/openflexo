@@ -26,8 +26,7 @@ import javax.swing.Icon;
 
 import org.openflexo.action.HelpAction;
 import org.openflexo.drm.DocItem;
-import org.openflexo.drm.DocResourceManager;
-import org.openflexo.foundation.FlexoModelObject;
+import org.openflexo.foundation.FlexoObject;
 import org.openflexo.foundation.action.FlexoActionFinalizer;
 import org.openflexo.foundation.action.FlexoActionInitializer;
 import org.openflexo.help.FlexoHelp;
@@ -38,7 +37,7 @@ import org.openflexo.view.controller.ActionInitializer;
 import org.openflexo.view.controller.ControllerActionInitializer;
 import org.openflexo.view.controller.FlexoController;
 
-public class HelpActionizer extends ActionInitializer<HelpAction, FlexoModelObject, FlexoModelObject> {
+public class HelpActionizer extends ActionInitializer<HelpAction, FlexoObject, FlexoObject> {
 
 	private static final java.util.logging.Logger logger = org.openflexo.logging.FlexoLogger.getLogger(HelpActionizer.class.getPackage()
 			.getName());
@@ -63,7 +62,8 @@ public class HelpActionizer extends ActionInitializer<HelpAction, FlexoModelObje
 			@Override
 			public boolean run(EventObject e, HelpAction action) {
 				if (action.getFocusedObject() instanceof InspectableObject) {
-					DocItem item = DocResourceManager.instance().getDocItemFor((InspectableObject) action.getFocusedObject());
+					DocItem item = getController().getApplicationContext().getDocResourceManager()
+							.getDocItemFor((InspectableObject) action.getFocusedObject());
 					if (item != null) {
 						try {
 							logger.info("Trying to display help for " + item.getIdentifier());

@@ -30,7 +30,6 @@ import javax.swing.JTabbedPane;
 import org.openflexo.foundation.validation.Validable;
 import org.openflexo.foundation.validation.ValidationReport;
 import org.openflexo.localization.FlexoLocalization;
-import org.openflexo.module.UserType;
 import org.openflexo.toolbox.PropertyChangeListenerRegistrationManager;
 import org.openflexo.view.FlexoDialog;
 import org.openflexo.view.FlexoFrame;
@@ -52,7 +51,7 @@ public class ConsistencyCheckDialog extends FlexoDialog implements ConsistencyCh
 
 	private ValidationModelViewer _validationModelViewer;
 
-	private PropertyChangeListenerRegistrationManager manager;
+	private final PropertyChangeListenerRegistrationManager manager;
 
 	public ConsistencyCheckDialog(FlexoController controller) {
 		this(controller, new ValidationReport(controller.getDefaultValidationModel()));
@@ -69,14 +68,12 @@ public class ConsistencyCheckDialog extends FlexoDialog implements ConsistencyCh
 		setTitle(title);
 		manager = new PropertyChangeListenerRegistrationManager();
 		getContentPane().setLayout(new BorderLayout());
-		_validationReportEditor = new ValidationReportEditor(this, validationReport);
-		_validationModelViewer = new ValidationModelViewer(this, validationReport.getValidationModel());
+		_validationReportEditor = new ValidationReportEditor(this, validationReport, controller.getApplicationContext());
+		_validationModelViewer = new ValidationModelViewer(this, validationReport.getValidationModel(), controller.getApplicationContext());
 
 		JTabbedPane contentPanel = new JTabbedPane();
 		contentPanel.add(FlexoLocalization.localizedForKey("validation_report"), _validationReportEditor);
-		if (UserType.isDevelopperRelease() || UserType.isMaintainerRelease()) {
-			contentPanel.add(FlexoLocalization.localizedForKey("validation_model"), _validationModelViewer);
-		}
+		contentPanel.add(FlexoLocalization.localizedForKey("validation_model"), _validationModelViewer);
 
 		getContentPane().add(contentPanel, BorderLayout.CENTER);
 

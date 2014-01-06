@@ -27,12 +27,12 @@ import javax.swing.JPanel;
 import org.openflexo.components.browser.ProjectBrowser.DMViewMode;
 import org.openflexo.components.browser.ProjectBrowser.ObjectAddedToSelectionEvent;
 import org.openflexo.dm.view.DMBrowserView;
-import org.openflexo.foundation.FlexoModelObject;
+import org.openflexo.foundation.FlexoObject;
 import org.openflexo.foundation.dm.DMEntity;
 import org.openflexo.foundation.dm.DMObject;
 import org.openflexo.foundation.dm.DMProperty;
 import org.openflexo.foundation.dm.ERDiagram;
-import org.openflexo.foundation.rm.FlexoProject;
+import org.openflexo.foundation.FlexoProject;
 import org.openflexo.icon.DMEIconLibrary;
 import org.openflexo.view.ModuleView;
 import org.openflexo.view.controller.FlexoController;
@@ -94,7 +94,7 @@ class PackagePerspective extends DMPerspective {
 	}
 
 	@Override
-	public DMObject getDefaultObject(FlexoModelObject proposedObject) {
+	public DMObject getDefaultObject(FlexoObject proposedObject) {
 		if (proposedObject instanceof DMObject && hasModuleViewForObject(proposedObject)) {
 			return (DMObject) proposedObject;
 		}
@@ -102,13 +102,13 @@ class PackagePerspective extends DMPerspective {
 	}
 
 	@Override
-	public boolean hasModuleViewForObject(FlexoModelObject object) {
+	public boolean hasModuleViewForObject(FlexoObject object) {
 		// Only DMProperty or Diagrams objects have no module view representation
 		return object instanceof DMProperty || object instanceof ERDiagram;
 	}
 
 	@Override
-	public ModuleView<?> createModuleViewForObject(FlexoModelObject object, FlexoController controller) {
+	public ModuleView<?> createModuleViewForObject(FlexoObject object, FlexoController controller) {
 		if (object instanceof DMObject) {
 			return _controller.createDMView((DMObject) object);
 		} else {

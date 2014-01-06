@@ -25,11 +25,11 @@ import java.util.logging.Logger;
 
 import org.openflexo.fge.FGEUtils;
 import org.openflexo.fge.GraphicalRepresentation;
+import org.openflexo.fge.TextStyle;
 import org.openflexo.fge.controller.CustomClickControlAction;
 import org.openflexo.fge.controller.DrawingController;
 import org.openflexo.fge.controller.MouseClickControl;
-import org.openflexo.fge.graphics.TextStyle;
-import org.openflexo.fge.shapes.Shape.ShapeType;
+import org.openflexo.fge.shapes.ShapeSpecification.ShapeType;
 import org.openflexo.foundation.wkf.Role;
 import org.openflexo.foundation.wkf.action.OpenOperationLevel;
 import org.openflexo.foundation.wkf.node.AbstractActivityNode;
@@ -106,7 +106,7 @@ public abstract class AbstractActivityNodeGR<O extends AbstractActivityNode> ext
 		public PetriGraphOpener() {
 			super("Opener", MouseButton.LEFT, 2, new CustomClickControlAction() {
 				@Override
-				public boolean handleClick(GraphicalRepresentation<?> graphicalRepresentation, DrawingController<?> controller,
+				public boolean handleClick(GraphicalRepresentation graphicalRepresentation, DrawingController controller,
 						java.awt.event.MouseEvent event) {
 					logger.info("Opening Operation petri graph by double-clicking");
 					OpenOperationLevel.actionType.makeNewAction(getAbstractActivityNode(), null, getDrawing().getEditor()).doAction();

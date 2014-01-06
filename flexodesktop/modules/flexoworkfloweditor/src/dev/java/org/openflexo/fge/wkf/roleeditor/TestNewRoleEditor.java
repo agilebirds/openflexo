@@ -34,11 +34,11 @@ import javax.swing.JPanel;
 import javax.swing.JScrollPane;
 
 import org.openflexo.fge.GraphicalRepresentation;
-import org.openflexo.fge.controller.DrawingController;
+import org.openflexo.fge.control.DrawingController;
 import org.openflexo.foundation.DefaultFlexoEditor;
 import org.openflexo.foundation.FlexoEditor;
 import org.openflexo.foundation.FlexoEditor.FlexoEditorFactory;
-import org.openflexo.foundation.rm.FlexoProject;
+import org.openflexo.foundation.FlexoProject;
 import org.openflexo.foundation.rm.FlexoResourceManager;
 import org.openflexo.foundation.utils.ProjectInitializerException;
 import org.openflexo.foundation.utils.ProjectLoadingCancelledException;

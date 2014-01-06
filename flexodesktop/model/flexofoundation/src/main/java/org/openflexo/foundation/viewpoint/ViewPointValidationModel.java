@@ -32,7 +32,7 @@ import org.openflexo.foundation.viewpoint.inspector.InspectorEntry;
 public class ViewPointValidationModel extends ValidationModel {
 
 	public ViewPointValidationModel() {
-		super(null, null);
+		super(null);
 
 		registerRule(new EditionPattern.EditionPatternShouldHaveRoles());
 		registerRule(new EditionPattern.EditionPatternShouldHaveEditionSchemes());
@@ -41,8 +41,8 @@ public class ViewPointValidationModel extends ValidationModel {
 		registerRule(new PatternRole.PatternRoleMustHaveAName());
 		registerRule(new ClassPatternRole.ClassPatternRoleMustDefineAValidConceptClass());
 		registerRule(new IndividualPatternRole.IndividualPatternRoleMustDefineAValidConceptClass());
-		registerRule(new DataPropertyStatementPatternRole.DataPropertyStatementPatternRoleMustDefineAValidProperty());
-		registerRule(new ObjectPropertyStatementPatternRole.ObjectPropertyStatementPatternRoleMustDefineAValidProperty());
+		// registerRule(new DataPropertyStatementPatternRole.DataPropertyStatementPatternRoleMustDefineAValidProperty());
+		// registerRule(new ObjectPropertyStatementPatternRole.ObjectPropertyStatementPatternRoleMustDefineAValidProperty());
 
 		registerRule(new InspectorEntry.DataBindingIsRequiredAndMustBeValid());
 
@@ -62,30 +62,30 @@ public class ViewPointValidationModel extends ValidationModel {
 		registerRule(new AddClass.AddClassActionMustDefineAnOntologyClass());
 		registerRule(new AddClass.URIBindingIsRequiredAndMustBeValid());
 
-		registerRule(new AddStatement.SubjectIsRequiredAndMustBeValid());
-		registerRule(new AddObjectPropertyStatement.AddObjectPropertyStatementActionMustDefineAnObjectProperty());
-		registerRule(new AddObjectPropertyStatement.ObjectIsRequiredAndMustBeValid());
-		registerRule(new AddDataPropertyStatement.AddDataPropertyStatementActionMustDefineADataProperty());
-		registerRule(new AddDataPropertyStatement.ValueIsRequiredAndMustBeValid());
+		// registerRule(new AddStatement.SubjectIsRequiredAndMustBeValid());
+		// registerRule(new AddObjectPropertyStatement.AddObjectPropertyStatementActionMustDefineAnObjectProperty());
+		// registerRule(new AddObjectPropertyStatement.ObjectIsRequiredAndMustBeValid());
+		// registerRule(new AddDataPropertyStatement.AddDataPropertyStatementActionMustDefineADataProperty());
+		// registerRule(new AddDataPropertyStatement.ValueIsRequiredAndMustBeValid());
 
-		registerRule(new AddShape.AddShapeActionMustAdressAValidShapePatternRole());
+		/*registerRule(new AddShape.AddShapeActionMustAdressAValidShapePatternRole());
 		registerRule(new AddShape.AddShapeActionMustHaveAValidContainer());
 
 		registerRule(new AddConnector.AddConnectorActionMustAdressAValidConnectorPatternRole());
 		registerRule(new AddConnector.AddConnectorActionMustHaveAValidStartingShape());
-		registerRule(new AddConnector.AddConnectorActionMustHaveAValidEndingShape());
+		registerRule(new AddConnector.AddConnectorActionMustHaveAValidEndingShape());*/
 
 		registerRule(new DeclarePatternRole.AssignationBindingIsRequiredAndMustBeValid());
 		registerRule(new DeclarePatternRole.ObjectBindingIsRequiredAndMustBeValid());
 
 		registerRule(new DeleteAction.ObjectToDeleteBindingIsRequiredAndMustBeValid());
 
-		registerRule(new GraphicalAction.GraphicalActionMustHaveASubject());
-		registerRule(new GraphicalAction.GraphicalActionMustDefineAValue());
+		// registerRule(new GraphicalAction.GraphicalActionMustHaveASubject());
+		// registerRule(new GraphicalAction.GraphicalActionMustDefineAValue());
 
-		registerRule(new AddEditionPattern.ViewBindingIsRequiredAndMustBeValid());
-		registerRule(new AddEditionPattern.AddEditionPatternMustAddressACreationScheme());
-		registerRule(new AddEditionPattern.AddEditionPatternParametersMustBeValid());
+		registerRule(new AddEditionPatternInstance.VirtualModelInstanceBindingIsRequiredAndMustBeValid());
+		registerRule(new AddEditionPatternInstance.AddEditionPatternInstanceMustAddressACreationScheme());
+		registerRule(new AddEditionPatternInstance.AddEditionPatternInstanceParametersMustBeValid());
 
 		registerRule(new ConditionalAction.ConditionBindingIsRequiredAndMustBeValid());
 		registerRule(new IterationAction.IterationBindingIsRequiredAndMustBeValid());

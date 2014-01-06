@@ -6,44 +6,44 @@ import java.util.Vector;
 
 import org.openflexo.foundation.FlexoEditor;
 import org.openflexo.foundation.FlexoException;
-import org.openflexo.foundation.FlexoModelObject;
-import org.openflexo.foundation.rm.FlexoProject;
-import org.openflexo.foundation.rm.FlexoProjectReference;
-import org.openflexo.foundation.utils.FlexoModelObjectReference;
+import org.openflexo.foundation.FlexoProject;
+import org.openflexo.foundation.FlexoProjectObject;
+import org.openflexo.foundation.resource.FlexoProjectReference;
+import org.openflexo.foundation.utils.FlexoObjectReference;
 
-public class RemoveImportedProject extends FlexoAction<RemoveImportedProject, FlexoModelObject, FlexoModelObject> {
+public class RemoveImportedProject extends FlexoAction<RemoveImportedProject, FlexoProjectObject, FlexoProjectObject> {
 
 	private static final java.util.logging.Logger logger = org.openflexo.logging.FlexoLogger.getLogger(RemoveImportedProject.class
 			.getPackage().getName());
 
-	public static final FlexoActionType<RemoveImportedProject, FlexoModelObject, FlexoModelObject> actionType = new FlexoActionType<RemoveImportedProject, FlexoModelObject, FlexoModelObject>(
+	public static final FlexoActionType<RemoveImportedProject, FlexoProjectObject, FlexoProjectObject> actionType = new FlexoActionType<RemoveImportedProject, FlexoProjectObject, FlexoProjectObject>(
 			"remove_project") {
 
 		@Override
-		public RemoveImportedProject makeNewAction(FlexoModelObject focusedObject, Vector<FlexoModelObject> globalSelection,
+		public RemoveImportedProject makeNewAction(FlexoProjectObject focusedObject, Vector<FlexoProjectObject> globalSelection,
 				FlexoEditor editor) {
 			return new RemoveImportedProject(focusedObject, globalSelection, editor);
 		}
 
 		@Override
-		public boolean isVisibleForSelection(FlexoModelObject object, Vector<FlexoModelObject> globalSelection) {
+		public boolean isVisibleForSelection(FlexoProjectObject object, Vector<FlexoProjectObject> globalSelection) {
 			return isEnabled(object, globalSelection);
 		}
 
 		@Override
-		public boolean isEnabledForSelection(FlexoModelObject object, Vector<FlexoModelObject> globalSelection) {
+		public boolean isEnabledForSelection(FlexoProjectObject object, Vector<FlexoProjectObject> globalSelection) {
 			return object != null && object.getProject() != null && object.getProject().getProjectData() != null
 					&& object.getProject().getProjectData().getImportedProjects().size() > 0;
 		}
 	};
 
 	static {
-		FlexoModelObject.addActionForClass(actionType, FlexoProject.class);
+		// FlexoObject.addActionForClass(actionType, FlexoProject.class);
 	}
 
 	private String projectToRemoveURI;
 
-	public RemoveImportedProject(FlexoModelObject focusedObject, Vector<FlexoModelObject> globalSelection, FlexoEditor editor) {
+	public RemoveImportedProject(FlexoProjectObject focusedObject, Vector<FlexoProjectObject> globalSelection, FlexoEditor editor) {
 		super(actionType, focusedObject, globalSelection, editor);
 	}
 
@@ -53,13 +53,13 @@ public class RemoveImportedProject extends FlexoAction<RemoveImportedProject, Fl
 			String projectToRemoveURI = getProjectToRemoveURI();
 			FlexoProjectReference projectReferenceWithURI = getProject().getProjectData().getProjectReferenceWithURI(projectToRemoveURI);
 			if (projectReferenceWithURI != null) {
-				List<FlexoModelObjectReference<?>> toDelete = new ArrayList<FlexoModelObjectReference<?>>();
-				for (FlexoModelObjectReference<?> ref : getProject().getObjectReferences()) {
-					if (projectToRemoveURI.equals(ref.getEnclosingProjectIdentifier())) {
+				List<FlexoObjectReference<?>> toDelete = new ArrayList<FlexoObjectReference<?>>();
+				for (FlexoObjectReference<?> ref : getProject().getObjectReferences()) {
+					if (projectToRemoveURI.equals(ref.getReferringProject(true).getURI())) {
 						toDelete.add(ref);
 					}
 				}
-				for (FlexoModelObjectReference<?> objectReference : toDelete) {
+				for (FlexoObjectReference<?> objectReference : toDelete) {
 					objectReference.delete();
 				}
 				projectReferenceWithURI.delete();

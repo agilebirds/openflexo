@@ -28,6 +28,7 @@ import org.openflexo.doceditor.view.DEMainPane;
 import org.openflexo.foundation.DataModification;
 import org.openflexo.foundation.FlexoEditor;
 import org.openflexo.foundation.FlexoModelObject;
+import org.openflexo.foundation.FlexoObject;
 import org.openflexo.foundation.FlexoObservable;
 import org.openflexo.foundation.FlexoObserver;
 import org.openflexo.foundation.cg.CGFile;
@@ -36,7 +37,7 @@ import org.openflexo.foundation.cg.GeneratedOutput;
 import org.openflexo.foundation.cg.GenerationRepository;
 import org.openflexo.foundation.cg.templates.CGTemplate;
 import org.openflexo.foundation.cg.templates.CGTemplateFile;
-import org.openflexo.foundation.rm.FlexoProject;
+import org.openflexo.foundation.FlexoProject;
 import org.openflexo.foundation.rm.cg.GenerationStatus;
 import org.openflexo.foundation.toc.TOCData;
 import org.openflexo.foundation.toc.TOCEntry;
@@ -170,7 +171,7 @@ public class DEController extends FlexoController implements FlexoObserver {
 	 *            : the object to focus on
 	 */
 	@Override
-	public void selectAndFocusObject(FlexoModelObject object) {
+	public void selectAndFocusObject(FlexoObject object) {
 		if (object instanceof TOCEntry || object instanceof TOCData) {
 			setCurrentEditedObjectAsModuleView(object);
 		}
@@ -185,7 +186,7 @@ public class DEController extends FlexoController implements FlexoObserver {
 	}
 
 	@Override
-	public String getWindowTitleforObject(FlexoModelObject object) {
+	public String getWindowTitleforObject(FlexoObject object) {
 		if (object instanceof GeneratedOutput) {
 			return FlexoLocalization.localizedForKey("generated_doc");
 		} else if (object instanceof GenerationRepository) {

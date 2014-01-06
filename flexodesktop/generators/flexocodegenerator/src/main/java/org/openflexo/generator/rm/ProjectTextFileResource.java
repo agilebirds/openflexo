@@ -22,7 +22,7 @@ package org.openflexo.generator.rm;
 import java.util.Date;
 import java.util.logging.Logger;
 
-import org.openflexo.foundation.rm.FlexoProject;
+import org.openflexo.foundation.FlexoProject;
 import org.openflexo.foundation.rm.FlexoProjectBuilder;
 import org.openflexo.foundation.rm.FlexoResource;
 import org.openflexo.foundation.rm.cg.TextFileResource;

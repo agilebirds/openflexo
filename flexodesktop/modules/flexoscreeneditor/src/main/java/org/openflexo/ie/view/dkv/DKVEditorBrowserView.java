@@ -21,7 +21,7 @@ package org.openflexo.ie.view.dkv;
 
 import org.openflexo.ch.FCH;
 import org.openflexo.components.browser.view.BrowserView;
-import org.openflexo.foundation.FlexoModelObject;
+import org.openflexo.foundation.FlexoObject;
 import org.openflexo.foundation.dkv.DKVObject;
 import org.openflexo.ie.view.controller.IEController;
 
@@ -46,7 +46,7 @@ public class DKVEditorBrowserView extends BrowserView {
 	 * @see org.openflexo.components.browser.view.BrowserView#treeSingleClick(org.openflexo.foundation.FlexoModelObject)
 	 */
 	@Override
-	public void treeSingleClick(FlexoModelObject object) {
+	public void treeSingleClick(FlexoObject object) {
 		if (object instanceof DKVObject) {
 			getController().selectAndFocusObject(object);
 		}
@@ -63,7 +63,7 @@ public class DKVEditorBrowserView extends BrowserView {
 	 * @see org.openflexo.components.browser.view.BrowserView#treeDoubleClick(org.openflexo.foundation.FlexoModelObject)
 	 */
 	@Override
-	public void treeDoubleClick(FlexoModelObject object) {
+	public void treeDoubleClick(FlexoObject object) {
 		if (object instanceof DKVObject) {
 			getController().selectAndFocusObject(object);
 		}

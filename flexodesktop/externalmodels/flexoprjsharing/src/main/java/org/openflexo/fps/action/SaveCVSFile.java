@@ -23,7 +23,7 @@ import java.util.Vector;
 import java.util.logging.Logger;
 
 import org.openflexo.foundation.FlexoEditor;
-import org.openflexo.foundation.FlexoModelObject;
+import org.openflexo.foundation.FlexoObject;
 import org.openflexo.foundation.action.FlexoActionType;
 import org.openflexo.foundation.rm.SaveResourceException;
 import org.openflexo.fps.CVSFile;
@@ -57,7 +57,7 @@ public class SaveCVSFile extends CVSAction<SaveCVSFile, CVSFile> {
 	};
 
 	static {
-		FlexoModelObject.addActionForClass(SaveCVSFile.actionType, CVSFile.class);
+		FlexoObject.addActionForClass(SaveCVSFile.actionType, CVSFile.class);
 	}
 
 	SaveCVSFile(CVSFile focusedObject, Vector<FPSObject> globalSelection, FlexoEditor editor) {

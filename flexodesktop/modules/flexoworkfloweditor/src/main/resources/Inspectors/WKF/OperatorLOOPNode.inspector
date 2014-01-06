@@ -1,15 +1,14 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <Panel className="org.openflexo.inspector.FIBInspector" layout="border" titleFont="SansSerif,0,12" darkLevel="0" dataClassName="org.openflexo.foundation.wkf.node.LOOPOperator" controllerClassName="org.openflexo.inspector.FIBInspectorController" font="SansSerif,0,12" name="Inspector">
   <TabPanel name="Tab" constraints="border(location=center)">
-    <Tab title="Basic" layout="twocols" titleFont="SansSerif,0,11" darkLevel="0" index="0" font="SansSerif,0,11" name="BasicTab"  opaque="false"/>
-    <Tab title="Data" layout="twocols" titleFont="SansSerif,0,11" darkLevel="0" index="3" font="SansSerif,0,11" name="DataTab" opaque="false">
+    <Tab title="Basic" layout="twocols" titleFont="SansSerif,0,11" darkLevel="0" index="0" font="SansSerif,0,11" opaque="false" useScrollBar="true" horizontalScrollbarPolicy="HORIZONTAL_SCROLLBAR_AS_NEEDED" verticalScrollbarPolicy="VERTICAL_SCROLLBAR_AS_NEEDED" name="BasicTab" />
+    <Tab title="Data" layout="twocols" titleFont="SansSerif,0,11" darkLevel="0" index="3" font="SansSerif,0,11" opaque="false" useScrollBar="true" horizontalScrollbarPolicy="HORIZONTAL_SCROLLBAR_AS_NEEDED" verticalScrollbarPolicy="VERTICAL_SCROLLBAR_AS_NEEDED" name="DataTab">
       <Label label="loop_type" index="4" constraints="twocols(expandHorizontally=false;expandVertically=false;index=0;insetsBottom=0;insetsLeft=2;insetsRight=2;insetsTop=5;location=left)" name="LoopTypeLabel" localize="true" />
       <DropDown index="5" data="data.loopType" constraints="twocols(expandHorizontally=false;expandVertically=false;index=1;insetsBottom=0;insetsLeft=2;insetsRight=2;insetsTop=0;location=right)" name="LoopType" localize="true" iteratorClassName="org.openflexo.foundation.wkf.node.LoopType" autoSelectFirstRow="false" />
       <Label label="condition" index="6" constraints="twocols(expandHorizontally=false;expandVertically=false;index=2;insetsBottom=0;insetsLeft=2;insetsRight=2;insetsTop=5;location=left)" visible="((data.loopType = &quot;WHILE&quot;) | (data.loopType = &quot;UNTIL&quot;))" name="ConditionLabel" localize="true">
         <Parameter name="visibleFor" value="MAINTAINER,DEVELOPER,ANALYST" />
       </Label>
       <Custom componentClassName="org.openflexo.components.widget.binding.BindingSelector" localize="true" manageDynamicModel="true" name="Condition" index="7" data="data.condition" constraints="twocols(expandHorizontally=true;expandVertically=false;index=3;insetsBottom=0;insetsLeft=2;insetsRight=2;insetsTop=0;location=right)" visible="((data.loopType = &quot;WHILE&quot;) | (data.loopType = &quot;UNTIL&quot;))">
-        <Assignment variable="component.bindingDefinition" value="data.CONDITION_BINDING_DEFINITION" />
         <Assignment variable="component.bindable" value="data" />
         <Parameter name="visibleFor" value="MAINTAINER,DEVELOPER,ANALYST" />
       </Custom>
@@ -17,7 +16,6 @@
         <Parameter name="visibleFor" value="MAINTAINER,DEVELOPER,ANALYST" />
       </Label>
       <Custom componentClassName="org.openflexo.components.widget.binding.BindingSelector" localize="true" manageDynamicModel="true" name="Iterator" index="9" data="data.iterator" constraints="twocols(expandHorizontally=true;expandVertically=false;index=5;insetsBottom=0;insetsLeft=2;insetsRight=2;insetsTop=0;location=right)" visible="(data.loopType = &quot;FOR_INCREMENT&quot;)">
-        <Assignment variable="component.bindingDefinition" value="data.ITERATOR_BINDING_DEFINITION" />
         <Assignment variable="component.bindable" value="data" />
         <Parameter name="visibleFor" value="MAINTAINER,DEVELOPER,ANALYST" />
       </Custom>
@@ -25,7 +23,6 @@
         <Parameter name="visibleFor" value="MAINTAINER,DEVELOPER,ANALYST" />
       </Label>
       <Custom componentClassName="org.openflexo.components.widget.binding.BindingSelector" localize="true" manageDynamicModel="true" name="BeginValue" index="11" data="data.beginValue" constraints="twocols(expandHorizontally=true;expandVertically=false;index=7;insetsBottom=0;insetsLeft=2;insetsRight=2;insetsTop=0;location=right)" visible="(data.loopType = &quot;FOR_INCREMENT&quot;)">
-        <Assignment variable="component.bindingDefinition" value="data.BEGIN_VALUE_BINDING_DEFINITION" />
         <Assignment variable="component.bindable" value="data" />
         <Parameter name="visibleFor" value="MAINTAINER,DEVELOPER,ANALYST" />
       </Custom>
@@ -33,7 +30,6 @@
         <Parameter name="visibleFor" value="MAINTAINER,DEVELOPER,ANALYST" />
       </Label>
       <Custom componentClassName="org.openflexo.components.widget.binding.BindingSelector" localize="true" manageDynamicModel="true" name="EndValue" index="13" data="data.endValue" constraints="twocols(expandHorizontally=true;expandVertically=false;index=9;insetsBottom=0;insetsLeft=2;insetsRight=2;insetsTop=0;location=right)" visible="(data.loopType = &quot;FOR_INCREMENT&quot;)">
-        <Assignment variable="component.bindingDefinition" value="data.END_VALUE_BINDING_DEFINITION" />
         <Assignment variable="component.bindable" value="data" />
         <Parameter name="visibleFor" value="MAINTAINER,DEVELOPER,ANALYST" />
       </Custom>
@@ -41,7 +37,6 @@
         <Parameter name="visibleFor" value="MAINTAINER,DEVELOPER,ANALYST" />
       </Label>
       <Custom componentClassName="org.openflexo.components.widget.binding.BindingSelector" localize="true" manageDynamicModel="true" name="IncrementValue" index="15" data="data.incrementValue" constraints="twocols(expandHorizontally=true;expandVertically=false;index=11;insetsBottom=0;insetsLeft=2;insetsRight=2;insetsTop=0;location=right)" visible="(data.loopType = &quot;FOR_INCREMENT&quot;)">
-        <Assignment variable="component.bindingDefinition" value="data.INCREMENT_VALUE_BINDING_DEFINITION" />
         <Assignment variable="component.bindable" value="data" />
         <Parameter name="visibleFor" value="MAINTAINER,DEVELOPER,ANALYST" />
       </Custom>
@@ -49,7 +44,6 @@
         <Parameter name="visibleFor" value="MAINTAINER,DEVELOPER,ANALYST" />
       </Label>
       <Custom componentClassName="org.openflexo.components.widget.binding.BindingSelector" localize="true" manageDynamicModel="true" name="IterationCollection" index="17" data="data.iterationCollection" constraints="twocols(expandHorizontally=true;expandVertically=false;index=13;insetsBottom=0;insetsLeft=2;insetsRight=2;insetsTop=0;location=right)" visible="(data.loopType = &quot;FOR_COLLECTION&quot;)">
-        <Assignment variable="component.bindingDefinition" value="data.ITERATION_COLLECTION_BINDING_DEFINITION" />
         <Assignment variable="component.bindable" value="data" />
         <Parameter name="visibleFor" value="MAINTAINER,DEVELOPER,ANALYST" />
       </Custom>
@@ -57,13 +51,12 @@
         <Parameter name="visibleFor" value="MAINTAINER,DEVELOPER,ANALYST" />
       </Label>
       <Custom componentClassName="org.openflexo.components.widget.binding.BindingSelector" localize="true" manageDynamicModel="true" name="CollectionItem" index="19" data="data.collectionItem" constraints="twocols(expandHorizontally=true;expandVertically=false;index=15;insetsBottom=0;insetsLeft=2;insetsRight=2;insetsTop=0;location=right)" visible="(data.loopType = &quot;FOR_COLLECTION&quot;)">
-        <Assignment variable="component.bindingDefinition" value="data.COLLECTION_ITEM_BINDING_DEFINITION" />
         <Assignment variable="component.bindable" value="data" />
         <Parameter name="visibleFor" value="MAINTAINER,DEVELOPER,ANALYST" />
       </Custom>
       <Parameter name="visibleFor" value="ANALYST,DEVELOPER,MAINTAINE" />
     </Tab>
-    <Tab title="Advanced" layout="twocols" titleFont="SansSerif,0,11" darkLevel="0" index="4" font="SansSerif,0,11" name="AdvancedTab" opaque="false">
+    <Tab title="Advanced" layout="twocols" titleFont="SansSerif,0,11" darkLevel="0" index="4" font="SansSerif,0,11" opaque="false" useScrollBar="true" horizontalScrollbarPolicy="HORIZONTAL_SCROLLBAR_AS_NEEDED" verticalScrollbarPolicy="VERTICAL_SCROLLBAR_AS_NEEDED" name="AdvancedTab">
       <Parameter name="visibleFor" value="SEMANTICS,SEMANTICSPLUS,ANALYST,DEVELOPER,MAINTAINER" />
     </Tab>
   </TabPanel>

@@ -22,7 +22,7 @@ package org.openflexo.dataimporter;
 import java.io.File;
 
 import org.openflexo.foundation.FlexoException;
-import org.openflexo.foundation.rm.FlexoProject;
+import org.openflexo.foundation.FlexoProject;
 
 public interface DataImporter {
 

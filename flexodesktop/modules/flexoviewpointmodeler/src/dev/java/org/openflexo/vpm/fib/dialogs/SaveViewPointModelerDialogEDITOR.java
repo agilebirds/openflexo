@@ -21,15 +21,10 @@ package org.openflexo.vpm.fib.dialogs;
 
 import java.io.File;
 
-import org.openflexo.ApplicationContext;
+import org.openflexo.TestApplicationContext;
+import org.openflexo.components.widget.CommonFIB;
 import org.openflexo.fib.editor.FIBAbstractEditor;
-import org.openflexo.foundation.FlexoEditor;
-import org.openflexo.foundation.resource.DefaultResourceCenterService;
-import org.openflexo.foundation.resource.FlexoResourceCenterService;
-import org.openflexo.foundation.rm.FlexoProject;
-import org.openflexo.foundation.rm.FlexoProject.FlexoProjectReferenceLoader;
-import org.openflexo.foundation.utils.ProjectLoadingHandler;
-import org.openflexo.vpm.CEDCst;
+import org.openflexo.toolbox.FileResource;
 import org.openflexo.vpm.VPMModule;
 import org.openflexo.vpm.controller.VPMController;
 
@@ -39,40 +34,9 @@ public class SaveViewPointModelerDialogEDITOR extends FIBAbstractEditor {
 	public Object[] getData() {
 		VPMController controller = null;
 		try {
-			VPMModule module = new VPMModule(new ApplicationContext() {
-
-				@Override
-				public FlexoEditor makeFlexoEditor(FlexoProject project) {
-					// TODO Auto-generated method stub
-					return null;
-				}
-
-				@Override
-				public ProjectLoadingHandler getProjectLoadingHandler(File projectDirectory) {
-					// TODO Auto-generated method stub
-					return null;
-				}
-
-				@Override
-				public FlexoEditor createApplicationEditor() {
-					// TODO Auto-generated method stub
-					return null;
-				}
-
-				@Override
-				protected FlexoProjectReferenceLoader createProjectReferenceLoader() {
-					// TODO Auto-generated method stub
-					return null;
-				}
-
-				@Override
-				protected FlexoResourceCenterService createResourceCenterService() {
-					return DefaultResourceCenterService.getNewInstance();
-				}
-			});
+			VPMModule module = new VPMModule(new TestApplicationContext(new FileResource("src/test/resources/TestResourceCenter")));
 			controller = module.getCEDController();
 		} catch (Exception e) {
-			// TODO Auto-generated catch block
 			e.printStackTrace();
 		}
 		return makeArray(controller);
@@ -80,7 +44,7 @@ public class SaveViewPointModelerDialogEDITOR extends FIBAbstractEditor {
 
 	@Override
 	public File getFIBFile() {
-		return CEDCst.SAVE_VPM_DIALOG_FIB;
+		return CommonFIB.REVIEW_UNSAVED_DIALOG_FIB;
 	}
 
 	public static void main(String[] args) {

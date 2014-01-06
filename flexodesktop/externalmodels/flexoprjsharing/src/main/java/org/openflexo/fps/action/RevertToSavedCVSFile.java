@@ -23,7 +23,7 @@ import java.util.Vector;
 import java.util.logging.Logger;
 
 import org.openflexo.foundation.FlexoEditor;
-import org.openflexo.foundation.FlexoModelObject;
+import org.openflexo.foundation.FlexoObject;
 import org.openflexo.foundation.action.FlexoActionType;
 import org.openflexo.fps.CVSFile;
 import org.openflexo.fps.FPSObject;
@@ -56,7 +56,7 @@ public class RevertToSavedCVSFile extends CVSAction<RevertToSavedCVSFile, CVSFil
 	};
 
 	static {
-		FlexoModelObject.addActionForClass(RevertToSavedCVSFile.actionType, CVSFile.class);
+		FlexoObject.addActionForClass(RevertToSavedCVSFile.actionType, CVSFile.class);
 	}
 
 	RevertToSavedCVSFile(CVSFile focusedObject, Vector<FPSObject> globalSelection, FlexoEditor editor) {

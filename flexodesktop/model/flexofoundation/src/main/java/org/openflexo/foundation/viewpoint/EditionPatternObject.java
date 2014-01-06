@@ -19,7 +19,7 @@
  */
 package org.openflexo.foundation.viewpoint;
 
-import org.openflexo.foundation.viewpoint.ViewPoint.ViewPointBuilder;
+import org.openflexo.foundation.viewpoint.NamedViewPointObject.NamedViewPointObjectImpl;
 
 /**
  * Represents an object which is part of the model of an EditionPattern
@@ -27,23 +27,49 @@ import org.openflexo.foundation.viewpoint.ViewPoint.ViewPointBuilder;
  * @author sylvain
  * 
  */
-public abstract class EditionPatternObject extends ViewPointObject {
+public abstract class EditionPatternObject extends NamedViewPointObjectImpl {
 
-	public EditionPatternObject(ViewPointBuilder builder) {
-		super(builder);
+	public EditionPatternObject() {
+		super();
 	}
 
 	public abstract EditionPattern getEditionPattern();
 
 	@Override
-	public String getFullyQualifiedName() {
-		return (getViewPoint() != null ? getViewPoint().getFullyQualifiedName() : "null") + "#"
+	public ViewPoint getViewPoint() {
+		if (getVirtualModel() != null) {
+			return getVirtualModel().getViewPoint();
+		}
+		if (getEditionPattern() != null && getEditionPattern() != this) {
+			return getEditionPattern().getViewPoint();
+		}
+		return null;
+	}
+
+	public VirtualModel getVirtualModel() {
+		if (getEditionPattern() != null) {
+			return getEditionPattern().getVirtualModel();
+		}
+		return null;
+	}
+
+	@Override
+	public String getStringRepresentation() {
+		return (getVirtualModel() != null ? getVirtualModel().getStringRepresentation() : "null") + "#"
 				+ (getEditionPattern() != null ? getEditionPattern().getName() : "null") + "." + getClass().getSimpleName();
 	}
 
 	@Override
-	public String getLanguageRepresentation() {
-		return "<not_implemented:" + getFullyQualifiedName() + ">";
+	public String getFMLRepresentation(FMLRepresentationContext context) {
+		return "<not_implemented:" + getStringRepresentation() + ">";
+	}
+
+	@Override
+	public void setChanged() {
+		super.setChanged();
+		if (getVirtualModel() != null) {
+			getVirtualModel().setIsModified();
+		}
 	}
 
 }

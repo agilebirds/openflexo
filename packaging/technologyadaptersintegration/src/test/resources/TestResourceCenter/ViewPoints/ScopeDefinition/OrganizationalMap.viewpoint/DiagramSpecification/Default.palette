@@ -1,0 +1,30 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<Palette id="1" index="0" name="Default">
+  <PaletteElement id="2" name="Organizational Unit" editionPattern="OrganizationalUnit">
+    <Parameter id="3" name="uri" value="&lt; Computed URI &gt;" />
+    <Parameter id="4" name="viewName" value="(organizationalUnit.organizationUnitName + &quot;Definition&quot;)" />
+    <ShapeGraphicalRepresentation id="5" className="org.openflexo.vpm.palette.PaletteElementGR" x="9.0" y="49.0" width="191.8407960199005" height="50.98901098901098" minimalWidth="0.0" minimalHeight="0.0" maximalWidth="Infinity" maximalHeight="Infinity" locationConstraints="FREELY_MOVABLE" dimensionConstraints="FREELY_RESIZABLE" adjustMinimalWidthToLabelWidth="true" adjustMinimalHeightToLabelHeight="true" adjustMaximalWidthToLabelWidth="false" adjustMaximalHeightToLabelHeight="false" isFloatingLabel="false" allowToLeaveBounds="true" identifier="object_0" layer="1" hasText="true" text="Organizational Unit" isMultilineAllowed="false" continuousTextEditing="true" relativeTextX="0.5" relativeTextY="0.5" absoluteTextX="0.0" absoluteTextY="0.0" textAlignment="CENTER" isSelectable="true" isFocusable="true" drawControlPointsWhenFocused="true" drawControlPointsWhenSelected="true" isReadOnly="false" isLabelEditable="true" isVisible="true">
+      <ForegroundStyle id="6" noStroke="false" color="1,96,176" lineWidth="2.000000001490116" joinStyle="JOIN_MITER" capStyle="CAP_SQUARE" dashStyle="PLAIN_STROKE" useTransparency="false" transparencyLevel="0.5" />
+      <ColorGradientBackgroundStyle id="7" color1="219,237,255" color2="255,255,255" direction="NORTH_SOUTH" useTransparency="false" transparencyLevel="0.5" />
+      <Border id="8" top="20" bottom="20" left="20" right="20" />
+      <RectangleShape id="9" isRounded="false" arcSize="30.0" />
+      <ShadowStyle id="10" drawShadow="true" shadowDarkness="150" shadowDepth="2" shadowBlur="4" />
+      <TextStyle id="11" font="Lucida Sans Demibold,1,12" color="0,102,153" orientation="0" isBackgroundColored="false" backgroundColor="255,255,255" />
+    </ShapeGraphicalRepresentation>
+  </PaletteElement>
+  <PaletteElement id="12" name="" editionPattern="Position">
+    <Parameter id="13" name="uri" value="&lt; Computed URI &gt;" />
+    <ShapeGraphicalRepresentation id="14" className="org.openflexo.vpm.palette.PaletteElementGR" x="20.0" y="122.0" width="174.0" height="53.0" minimalWidth="0.0" minimalHeight="0.0" maximalWidth="Infinity" maximalHeight="Infinity" locationConstraints="FREELY_MOVABLE" dimensionConstraints="FREELY_RESIZABLE" adjustMinimalWidthToLabelWidth="true" adjustMinimalHeightToLabelHeight="true" adjustMaximalWidthToLabelWidth="false" adjustMaximalHeightToLabelHeight="false" isFloatingLabel="false" allowToLeaveBounds="true" identifier="object_1" layer="1" hasText="true" text="" isMultilineAllowed="false" continuousTextEditing="true" relativeTextX="0.5" relativeTextY="0.5" absoluteTextX="0.0" absoluteTextY="0.0" textAlignment="CENTER" isSelectable="true" isFocusable="true" drawControlPointsWhenFocused="true" drawControlPointsWhenSelected="true" isReadOnly="false" isLabelEditable="true" isVisible="true">
+      <ForegroundStyle id="15" noStroke="true" color="0,0,0" lineWidth="1.0" joinStyle="JOIN_MITER" capStyle="CAP_SQUARE" dashStyle="PLAIN_STROKE" useTransparency="false" transparencyLevel="0.5" />
+      <ImageBackgroundStyle id="16" imageFile="PositionElement.png" scaleX="0.8969072164948454" scaleY="0.9814814814814815" deltaX="0.0" deltaY="0.0" imageBackgroundType="TRANSPARENT" imageBackgroundColor="255,255,255" fitToShape="true" useTransparency="false" transparencyLevel="0.5" />
+      <Border id="17" top="20" bottom="20" left="20" right="20" />
+      <RectangleShape idref="9" />
+      <ShadowStyle id="18" drawShadow="false" shadowDarkness="150" shadowDepth="2" shadowBlur="4" />
+      <TextStyle id="19" font="Lucida Sans,0,11" color="0,0,0" orientation="0" isBackgroundColored="false" backgroundColor="255,255,255" />
+    </ShapeGraphicalRepresentation>
+  </PaletteElement>
+  <DrawingGraphicalRepresentation id="20" className="org.openflexo.vpm.palette.PaletteGR" width="260.0" height="300.0" drawWorkingArea="true" selectionColor="0,0,255" focusColor="255,0,0" backgroundColor="255,255,255" identifier="root" layer="0" hasText="true" isMultilineAllowed="false" continuousTextEditing="true" relativeTextX="0.5" relativeTextY="0.5" absoluteTextX="0.0" absoluteTextY="0.0" textAlignment="CENTER" isSelectable="true" isFocusable="true" drawControlPointsWhenFocused="true" drawControlPointsWhenSelected="true" isReadOnly="false" isLabelEditable="true" isVisible="true">
+    <TextStyle id="21" font="Lucida Sans,0,11" color="0,0,0" orientation="0" isBackgroundColored="false" backgroundColor="255,255,255" />
+  </DrawingGraphicalRepresentation>
+</Palette>
+

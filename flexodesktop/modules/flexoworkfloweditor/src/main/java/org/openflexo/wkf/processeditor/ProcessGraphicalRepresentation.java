@@ -24,6 +24,7 @@ import java.awt.Color;
 import org.openflexo.fge.Drawing;
 import org.openflexo.fge.DrawingGraphicalRepresentation;
 import org.openflexo.fge.FGEConstants;
+import org.openflexo.fge.ForegroundStyle;
 import org.openflexo.fge.GraphicalRepresentation;
 import org.openflexo.fge.ShapeGraphicalRepresentation.DimensionConstraints;
 import org.openflexo.fge.ShapeGraphicalRepresentation.LocationConstraints;
@@ -35,7 +36,6 @@ import org.openflexo.fge.geom.area.FGEArea;
 import org.openflexo.fge.geom.area.FGEFiniteGrid;
 import org.openflexo.fge.graphics.DrawingDecorationPainter;
 import org.openflexo.fge.graphics.FGEDrawingDecorationGraphics;
-import org.openflexo.fge.graphics.ForegroundStyle;
 import org.openflexo.foundation.wkf.FlexoProcess;
 import org.openflexo.wkf.WKFPreferences;
 import org.openflexo.wkf.processeditor.gr.WKFConnectorGR;
@@ -106,7 +106,7 @@ public class ProcessGraphicalRepresentation extends DrawingGraphicalRepresentati
 
 	public void updateAlignOnGridOrGridSize() {
 		updateConstraints();
-		for (GraphicalRepresentation<?> gr : getContainedGraphicalRepresentations()) {
+		for (GraphicalRepresentation gr : getContainedGraphicalRepresentations()) {
 			if (gr instanceof WKFObjectGR && ((WKFObjectGR<?>) gr).getDimensionConstraints() != DimensionConstraints.CONTAINER) {
 				updateConstraintsForObject((WKFObjectGR<?>) gr);
 			}
@@ -154,11 +154,11 @@ public class ProcessGraphicalRepresentation extends DrawingGraphicalRepresentati
 						grid.origin.x -= gr.getBorder().left;
 						grid.origin.y -= gr.getBorder().top;
 					}
-					if (gr.getShape().getShape().getEmbeddingBounds().x > 0) {
-						grid.origin.x -= gr.getShape().getShape().getEmbeddingBounds().x * gr.getWidth();
+					if (gr.getShapeSpecification().getShapeSpecification().getEmbeddingBounds().x > 0) {
+						grid.origin.x -= gr.getShapeSpecification().getShapeSpecification().getEmbeddingBounds().x * gr.getWidth();
 					}
-					if (gr.getShape().getShape().getEmbeddingBounds().y > 0) {
-						grid.origin.y -= gr.getShape().getShape().getEmbeddingBounds().y * gr.getHeight();
+					if (gr.getShapeSpecification().getShapeSpecification().getEmbeddingBounds().y > 0) {
+						grid.origin.y -= gr.getShapeSpecification().getShapeSpecification().getEmbeddingBounds().y * gr.getHeight();
 					}
 					/*if (gr.getShadowStyle()!=null) {
 						grid.origin.x-=gr.getShadowStyle().getShadowDeep();
@@ -246,7 +246,7 @@ public class ProcessGraphicalRepresentation extends DrawingGraphicalRepresentati
 	}
 
 	public void updateAllEdgeLayers() {
-		for (GraphicalRepresentation<?> processChild : getContainedGraphicalRepresentations()) {
+		for (GraphicalRepresentation processChild : getContainedGraphicalRepresentations()) {
 			if (processChild instanceof WKFConnectorGR<?>) {
 				((WKFConnectorGR<?>) processChild).updateLayer();
 			}

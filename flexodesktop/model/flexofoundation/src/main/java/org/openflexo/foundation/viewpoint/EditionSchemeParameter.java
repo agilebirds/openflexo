@@ -19,50 +19,73 @@
  */
 package org.openflexo.foundation.viewpoint;
 
+import java.lang.reflect.InvocationTargetException;
 import java.lang.reflect.Type;
+import java.util.Collection;
 import java.util.logging.Logger;
 
-import org.openflexo.antar.binding.AbstractBinding.BindingEvaluationContext;
 import org.openflexo.antar.binding.BindingDefinition;
-import org.openflexo.antar.binding.BindingDefinition.BindingDefinitionType;
+import org.openflexo.antar.binding.BindingEvaluationContext;
 import org.openflexo.antar.binding.BindingModel;
-import org.openflexo.foundation.Inspectors;
-import org.openflexo.foundation.view.action.DropSchemeAction;
+import org.openflexo.antar.binding.DataBinding;
+import org.openflexo.antar.binding.DataBinding.BindingDefinitionType;
+import org.openflexo.antar.binding.Function;
+import org.openflexo.antar.binding.Function.FunctionArgument;
+import org.openflexo.antar.expr.NullReferenceException;
+import org.openflexo.antar.expr.TypeMismatchException;
+import org.openflexo.foundation.validation.Validable;
 import org.openflexo.foundation.view.action.EditionSchemeAction;
-import org.openflexo.foundation.viewpoint.ViewPoint.ViewPointBuilder;
-import org.openflexo.foundation.viewpoint.binding.ViewPointDataBinding;
-import org.openflexo.foundation.viewpoint.inspector.InspectorBindingAttribute;
 import org.openflexo.toolbox.StringUtils;
 
-public abstract class EditionSchemeParameter extends EditionSchemeObject implements InspectorBindingAttribute {
+public abstract class EditionSchemeParameter extends EditionSchemeObject implements FunctionArgument {
 
 	private static final Logger logger = Logger.getLogger(EditionSchemeParameter.class.getPackage().getName());
 
 	public static enum WidgetType {
-		URI, TEXT_FIELD, LOCALIZED_TEXT_FIELD, TEXT_AREA, INTEGER, FLOAT, CHECKBOX, DROPDOWN, INDIVIDUAL, CLASS, PROPERTY, OBJECT_PROPERTY, DATA_PROPERTY, FLEXO_OBJECT, LIST, EDITION_PATTERN;
+		URI,
+		TEXT_FIELD,
+		LOCALIZED_TEXT_FIELD,
+		TEXT_AREA,
+		INTEGER,
+		FLOAT,
+		CHECKBOX,
+		DROPDOWN,
+		INDIVIDUAL,
+		CLASS,
+		PROPERTY,
+		OBJECT_PROPERTY,
+		DATA_PROPERTY,
+		FLEXO_OBJECT,
+		LIST,
+		EDITION_PATTERN,
+		TECHNOLOGY_OBJECT;
 	}
 
-	private String name;
 	private String label;
-	private String description;
 	private boolean usePaletteLabelAsDefaultValue;
 
 	private EditionScheme _scheme;
 
-	private ViewPointDataBinding conditional;
-	private ViewPointDataBinding defaultValue;
+	private DataBinding<Boolean> conditional;
+	private DataBinding<Object> defaultValue;
 
-	public static enum ParameterBindingAttribute implements InspectorBindingAttribute {
-		conditional, baseURI, defaultValue, list, domainValue, rangeValue, parentClassValue, conceptValue
-	}
-
-	public EditionSchemeParameter(ViewPointBuilder builder) {
-		super(builder);
+	public EditionSchemeParameter() {
+		super();
 	}
 
 	@Override
-	public String getFullyQualifiedName() {
-		return (getViewPoint() != null ? getViewPoint().getFullyQualifiedName() : "null") + "#"
+	public String getURI() {
+		return getEditionScheme().getURI() + "." + getName();
+	}
+
+	@Override
+	public Collection<? extends Validable> getEmbeddedValidableObjects() {
+		return null;
+	}
+
+	@Override
+	public String getStringRepresentation() {
+		return (getVirtualModel() != null ? getVirtualModel().getStringRepresentation() : "null") + "#"
 				+ (getEditionPattern() != null ? getEditionPattern().getName() : "null") + "."
 				+ (getEditionScheme() != null ? getEditionScheme().getName() : "null") + "." + getName();
 	}
@@ -71,8 +94,10 @@ public abstract class EditionSchemeParameter extends EditionSchemeObject impleme
 
 	public abstract WidgetType getWidget();
 
-	private BindingDefinition CONDITIONAL = new BindingDefinition("conditional", Boolean.class, BindingDefinitionType.GET, false);
-	private BindingDefinition DEFAULT_VALUE = new BindingDefinition("defaultValue", Object.class, BindingDefinitionType.GET, false) {
+	private final BindingDefinition CONDITIONAL = new BindingDefinition("conditional", Boolean.class,
+			DataBinding.BindingDefinitionType.GET, false);
+	private final BindingDefinition DEFAULT_VALUE = new BindingDefinition("defaultValue", Object.class,
+			DataBinding.BindingDefinitionType.GET, false) {
 		@Override
 		public Type getType() {
 			return EditionSchemeParameter.this.getType();
@@ -101,31 +126,11 @@ public abstract class EditionSchemeParameter extends EditionSchemeObject impleme
 	}
 
 	@Override
-	public String getDescription() {
-		return description;
-	}
-
-	@Override
-	public void setDescription(String description) {
-		this.description = description;
-	}
-
-	@Override
-	public ViewPoint getViewPoint() {
+	public VirtualModel getVirtualModel() {
 		if (getScheme() != null) {
-			return getScheme().getViewPoint();
+			return getScheme().getVirtualModel();
 		}
 		return null;
-	}
-
-	@Override
-	public String getName() {
-		return name;
-	}
-
-	@Override
-	public void setName(String name) {
-		this.name = name;
 	}
 
 	public String getLabel() {
@@ -139,22 +144,25 @@ public abstract class EditionSchemeParameter extends EditionSchemeObject impleme
 		this.label = label;
 	}
 
-	@Override
-	public String getInspectorName() {
-		return Inspectors.VPM.EDITION_PATTERN_PARAMETER_INSPECTOR;
-	}
-
-	public boolean getUsePaletteLabelAsDefaultValue() {
+	/*public boolean getUsePaletteLabelAsDefaultValue() {
 		return usePaletteLabelAsDefaultValue;
 	}
 
 	public void setUsePaletteLabelAsDefaultValue(boolean usePaletteLabelAsDefaultValue) {
 		this.usePaletteLabelAsDefaultValue = usePaletteLabelAsDefaultValue;
-	}
+	}*/
 
 	public boolean evaluateCondition(BindingEvaluationContext parameterRetriever) {
 		if (getConditional().isValid()) {
-			return (Boolean) getConditional().getBindingValue(parameterRetriever);
+			try {
+				return getConditional().getBindingValue(parameterRetriever);
+			} catch (TypeMismatchException e) {
+				e.printStackTrace();
+			} catch (NullReferenceException e) {
+				e.printStackTrace();
+			} catch (InvocationTargetException e) {
+				e.printStackTrace();
+			}
 		}
 		return true;
 	}
@@ -168,18 +176,20 @@ public abstract class EditionSchemeParameter extends EditionSchemeObject impleme
 		return getScheme().getParameters().indexOf(this);
 	}
 
-	public ViewPointDataBinding getConditional() {
+	public DataBinding<Boolean> getConditional() {
 		if (conditional == null) {
-			conditional = new ViewPointDataBinding(this, ParameterBindingAttribute.conditional, getConditionalBindingDefinition());
+			conditional = new DataBinding<Boolean>(this, Boolean.class, DataBinding.BindingDefinitionType.GET);
+			conditional.setBindingName("conditional");
 		}
 		return conditional;
 	}
 
-	public void setConditional(ViewPointDataBinding conditional) {
+	public void setConditional(DataBinding<Boolean> conditional) {
 		if (conditional != null) {
 			conditional.setOwner(this);
-			conditional.setBindingAttribute(ParameterBindingAttribute.conditional);
-			conditional.setBindingDefinition(getConditionalBindingDefinition());
+			conditional.setDeclaredType(Boolean.class);
+			conditional.setBindingDefinitionType(DataBinding.BindingDefinitionType.GET);
+			conditional.setBindingName("conditional");
 		}
 		this.conditional = conditional;
 	}
@@ -194,32 +204,42 @@ public abstract class EditionSchemeParameter extends EditionSchemeObject impleme
 		return getScheme().getBindingModel();
 	}
 
-	public ViewPointDataBinding getDefaultValue() {
+	public DataBinding<Object> getDefaultValue() {
 		if (defaultValue == null) {
-			defaultValue = new ViewPointDataBinding(this, ParameterBindingAttribute.defaultValue, getDefaultValueBindingDefinition());
+			defaultValue = new DataBinding<Object>(this, Object.class, BindingDefinitionType.GET);
+			defaultValue.setBindingName("defaultValue");
 		}
 		return defaultValue;
 	}
 
-	public void setDefaultValue(ViewPointDataBinding defaultValue) {
+	public void setDefaultValue(DataBinding<Object> defaultValue) {
 		if (defaultValue != null) {
 			defaultValue.setOwner(this);
-			defaultValue.setBindingAttribute(ParameterBindingAttribute.defaultValue);
-			defaultValue.setBindingDefinition(getDefaultValueBindingDefinition());
+			defaultValue.setBindingName("defaultValue");
+			defaultValue.setDeclaredType(Object.class);
+			defaultValue.setBindingDefinitionType(BindingDefinitionType.GET);
 		}
 		this.defaultValue = defaultValue;
 	}
 
-	public Object getDefaultValue(EditionSchemeAction<?> action) {
-		ViewPointPaletteElement paletteElement = action instanceof DropSchemeAction ? ((DropSchemeAction) action).getPaletteElement()
-				: null;
+	public Object getDefaultValue(EditionSchemeAction<?, ?, ?> action) {
+		// DiagramPaletteElement paletteElement = action instanceof DropSchemeAction ? ((DropSchemeAction) action).getPaletteElement() :
+		// null;
 
 		// System.out.println("Default value for "+element.getName()+" ???");
-		if (getUsePaletteLabelAsDefaultValue() && paletteElement != null) {
+		/*if (getUsePaletteLabelAsDefaultValue() && paletteElement != null) {
 			return paletteElement.getName();
-		}
+		}*/
 		if (getDefaultValue().isValid()) {
-			return getDefaultValue().getBindingValue(action);
+			try {
+				return getDefaultValue().getBindingValue(action);
+			} catch (TypeMismatchException e) {
+				e.printStackTrace();
+			} catch (NullReferenceException e) {
+				e.printStackTrace();
+			} catch (InvocationTargetException e) {
+				e.printStackTrace();
+			}
 		}
 		return null;
 	}
@@ -227,15 +247,30 @@ public abstract class EditionSchemeParameter extends EditionSchemeObject impleme
 	private boolean isRequired = false;
 
 	public boolean getIsRequired() {
-		return false;
+		return isRequired;
 	}
 
-	public void setIsRequired(boolean flag) {
+	public final void setIsRequired(boolean flag) {
 		isRequired = flag;
 	}
 
 	public boolean isValid(EditionSchemeAction action, Object value) {
 		return !getIsRequired() || value != null;
+	}
+
+	@Override
+	public Function getFunction() {
+		return getEditionScheme();
+	}
+
+	@Override
+	public String getArgumentName() {
+		return getName();
+	}
+
+	@Override
+	public Type getArgumentType() {
+		return getType();
 	}
 
 }

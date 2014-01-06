@@ -36,7 +36,7 @@ import org.openflexo.view.controller.FlexoController;
 public class FIBViewPointLibraryBrowser extends FIBBrowserView<ViewPointLibrary> {
 	static final Logger logger = Logger.getLogger(FIBViewPointLibraryBrowser.class.getPackage().getName());
 
-	public static final FileResource FIB_FILE = new FileResource("Fib/FIBViewPointLibraryBrowser.fib");
+	public static final FileResource FIB_FILE = new FileResource("Fib/Widget/FIBViewPointLibraryBrowser.fib");
 
 	public FIBViewPointLibraryBrowser(ViewPointLibrary viewPointLibrary, FlexoController controller) {
 		super(viewPointLibrary, controller, FIB_FILE);
@@ -57,13 +57,26 @@ public class FIBViewPointLibraryBrowser extends FIBBrowserView<ViewPointLibrary>
 			e.printStackTrace();
 		}
 
-		final FlexoResourceCenter testResourceCenter = LocalResourceCenterImplementation
-				.instanciateTestLocalResourceCenterImplementation(new FileResource("TestResourceCenter"));
+		final FlexoServiceManager serviceManager = new DefaultFlexoServiceManager() {
+			@Override
+			protected FlexoProjectReferenceLoader createProjectReferenceLoader() {
+				return null;
+			}
+
+			@Override
+			protected FlexoEditor createApplicationEditor() {
+				return null;
+			}
+		};
+		final ViewPointLibrary viewPointLibrary = serviceManager.getViewPointLibrary();
+
+		// System.out.println("Resource centers=" + viewPointLibrary.getResourceCenterService().getResourceCenters());
+		// System.exit(-1);
 
 		FIBAbstractEditor editor = new FIBAbstractEditor() {
 			@Override
 			public Object[] getData() {
-				return makeArray(testResourceCenter.retrieveViewPointLibrary());
+				return makeArray(viewPointLibrary);
 			}
 
 			@Override
@@ -72,11 +85,12 @@ public class FIBViewPointLibraryBrowser extends FIBBrowserView<ViewPointLibrary>
 			}
 
 			@Override
-			public FIBController<ViewPointLibrary> makeNewController(FIBComponent component) {
-				return new FlexoFIBController<ViewPointLibrary>(component);
+			public FIBController makeNewController(FIBComponent component) {
+				return new FlexoFIBController(component);
 			}
 		};
 		editor.launch();
+
 	}*/
 
 }

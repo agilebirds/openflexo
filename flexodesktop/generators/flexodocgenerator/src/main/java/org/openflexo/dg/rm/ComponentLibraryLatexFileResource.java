@@ -25,7 +25,7 @@ import org.openflexo.dg.latex.DGLatexGenerator;
 import org.openflexo.foundation.FlexoObserver;
 import org.openflexo.foundation.cg.GenerationRepository;
 import org.openflexo.foundation.ie.cl.FlexoComponentLibrary;
-import org.openflexo.foundation.rm.FlexoProject;
+import org.openflexo.foundation.FlexoProject;
 import org.openflexo.foundation.rm.FlexoProjectBuilder;
 import org.openflexo.logging.FlexoLogger;
 

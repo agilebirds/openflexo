@@ -19,29 +19,28 @@
  */
 package org.openflexo.foundation.viewpoint;
 
+import java.lang.reflect.InvocationTargetException;
 import java.lang.reflect.Type;
 
-import org.openflexo.antar.binding.AbstractBinding.BindingEvaluationContext;
-import org.openflexo.antar.binding.BindingDefinition;
-import org.openflexo.antar.binding.BindingDefinition.BindingDefinitionType;
+import org.openflexo.antar.binding.BindingEvaluationContext;
+import org.openflexo.antar.binding.DataBinding;
+import org.openflexo.antar.binding.DataBinding.BindingDefinitionType;
+import org.openflexo.antar.expr.NullReferenceException;
+import org.openflexo.antar.expr.TypeMismatchException;
+import org.openflexo.foundation.ontology.IFlexoOntologyClass;
+import org.openflexo.foundation.ontology.IFlexoOntologyIndividual;
 import org.openflexo.foundation.ontology.IndividualOfClass;
-import org.openflexo.foundation.ontology.OntologyClass;
-import org.openflexo.foundation.ontology.OntologyIndividual;
-import org.openflexo.foundation.viewpoint.ViewPoint.ViewPointBuilder;
-import org.openflexo.foundation.viewpoint.binding.ViewPointDataBinding;
+import org.openflexo.foundation.technologyadapter.TypeAwareModelSlot;
 
-public class IndividualParameter extends EditionSchemeParameter {
+public class IndividualParameter extends InnerModelSlotParameter<TypeAwareModelSlot<?, ?>> {
 
 	private String conceptURI;
-
-	private ViewPointDataBinding conceptValue;
-
-	private BindingDefinition CONCEPT_VALUE = new BindingDefinition("conceptValue", OntologyClass.class, BindingDefinitionType.GET, false);
-
+	private DataBinding<IFlexoOntologyClass> conceptValue;
 	private String renderer;
+	private boolean isDynamicConceptValueSet = false;
 
-	public IndividualParameter(ViewPointBuilder builder) {
-		super(builder);
+	public IndividualParameter() {
+		super();
 	}
 
 	@Override
@@ -49,7 +48,7 @@ public class IndividualParameter extends EditionSchemeParameter {
 		if (getConcept() != null) {
 			return IndividualOfClass.getIndividualOfClass(getConcept());
 		}
-		return OntologyIndividual.class;
+		return IFlexoOntologyIndividual.class;
 	};
 
 	@Override
@@ -65,36 +64,31 @@ public class IndividualParameter extends EditionSchemeParameter {
 		this.conceptURI = conceptURI;
 	}
 
-	public OntologyClass getConcept() {
-		getViewPoint().loadWhenUnloaded();
-		return getViewPoint().getViewpointOntology().getClass(_getConceptURI());
+	public IFlexoOntologyClass getConcept() {
+		return getVirtualModel().getOntologyClass(_getConceptURI());
 	}
 
-	public void setConcept(OntologyClass c) {
+	public void setConcept(IFlexoOntologyClass c) {
 		_setConceptURI(c != null ? c.getURI() : null);
 	}
 
-	public BindingDefinition getConceptValueBindingDefinition() {
-		return CONCEPT_VALUE;
-	}
-
-	public ViewPointDataBinding getConceptValue() {
+	public DataBinding<IFlexoOntologyClass> getConceptValue() {
 		if (conceptValue == null) {
-			conceptValue = new ViewPointDataBinding(this, ParameterBindingAttribute.conceptValue, getConceptValueBindingDefinition());
+			conceptValue = new DataBinding<IFlexoOntologyClass>(this, IFlexoOntologyClass.class, BindingDefinitionType.GET);
+			conceptValue.setBindingName("conceptValue");
 		}
 		return conceptValue;
 	}
 
-	public void setConceptValue(ViewPointDataBinding conceptValue) {
+	public void setConceptValue(DataBinding<IFlexoOntologyClass> conceptValue) {
 		if (conceptValue != null) {
 			conceptValue.setOwner(this);
-			conceptValue.setBindingAttribute(ParameterBindingAttribute.conceptValue);
-			conceptValue.setBindingDefinition(getConceptValueBindingDefinition());
+			conceptValue.setBindingName("conceptValue");
+			conceptValue.setDeclaredType(IFlexoOntologyClass.class);
+			conceptValue.setBindingDefinitionType(BindingDefinitionType.GET);
 		}
 		this.conceptValue = conceptValue;
 	}
-
-	private boolean isDynamicConceptValueSet = false;
 
 	public boolean getIsDynamicConceptValue() {
 		return getConceptValue().isSet() || isDynamicConceptValueSet;
@@ -109,9 +103,17 @@ public class IndividualParameter extends EditionSchemeParameter {
 		}
 	}
 
-	public OntologyClass evaluateConceptValue(BindingEvaluationContext parameterRetriever) {
+	public IFlexoOntologyClass evaluateConceptValue(BindingEvaluationContext parameterRetriever) {
 		if (getConceptValue().isValid()) {
-			return (OntologyClass) getConceptValue().getBindingValue(parameterRetriever);
+			try {
+				return getConceptValue().getBindingValue(parameterRetriever);
+			} catch (TypeMismatchException e) {
+				e.printStackTrace();
+			} catch (NullReferenceException e) {
+				e.printStackTrace();
+			} catch (InvocationTargetException e) {
+				e.printStackTrace();
+			}
 		}
 		return null;
 	}
@@ -132,6 +134,20 @@ public class IndividualParameter extends EditionSchemeParameter {
 	 */
 	public void setRenderer(String renderer) {
 		this.renderer = renderer;
+	}
+
+	@Override
+	public TypeAwareModelSlot<?, ?> getModelSlot() {
+		if (super.getModelSlot() instanceof TypeAwareModelSlot) {
+			TypeAwareModelSlot<?, ?> returned = super.getModelSlot();
+			if (returned == null) {
+				if (getVirtualModel() != null && getVirtualModel().getModelSlots(TypeAwareModelSlot.class).size() > 0) {
+					return getVirtualModel().getModelSlots(TypeAwareModelSlot.class).get(0);
+				}
+			}
+			return returned;
+		}
+		return null;
 	}
 
 }

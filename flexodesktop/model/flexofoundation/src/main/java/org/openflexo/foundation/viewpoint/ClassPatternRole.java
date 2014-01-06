@@ -1,20 +1,37 @@
 package org.openflexo.foundation.viewpoint;
 
-import org.openflexo.foundation.ontology.OntologyClass;
+import java.lang.reflect.Type;
+
+import org.openflexo.foundation.ontology.IFlexoOntologyClass;
+import org.openflexo.foundation.ontology.SubClassOfClass;
 import org.openflexo.foundation.validation.ValidationError;
 import org.openflexo.foundation.validation.ValidationIssue;
 import org.openflexo.foundation.validation.ValidationRule;
-import org.openflexo.foundation.viewpoint.ViewPoint.ViewPointBuilder;
+import org.openflexo.foundation.view.ConceptActorReference;
+import org.openflexo.foundation.view.EditionPatternInstance;
+import org.openflexo.foundation.viewpoint.FMLRepresentationContext.FMLRepresentationOutput;
 
-public class ClassPatternRole extends OntologicObjectPatternRole {
 
-	public ClassPatternRole(ViewPointBuilder builder) {
-		super(builder);
+public abstract class ClassPatternRole<C extends IFlexoOntologyClass> extends OntologicObjectPatternRole<IFlexoOntologyClass> {
+
+	public ClassPatternRole() {
+		super();
 	}
 
 	@Override
-	public PatternRoleType getType() {
-		return PatternRoleType.Class;
+	public String getFMLRepresentation(FMLRepresentationContext context) {
+		FMLRepresentationOutput out = new FMLRepresentationOutput(context);
+		out.append("PatternRole " + getName() + " as Class conformTo " + getPreciseType() + " from " + "\""
+				+ getModelSlot().getMetaModelURI() + "\"" + " ;", context);
+		return out.toString();
+	}
+
+	@Override
+	public Type getType() {
+		if (getOntologicType() == null) {
+			return IFlexoOntologyClass.class;
+		}
+		return SubClassOfClass.getSubClassOfClass(getOntologicType());
 	}
 
 	@Override
@@ -23,11 +40,6 @@ public class ClassPatternRole extends OntologicObjectPatternRole {
 			return getOntologicType().getName();
 		}
 		return "";
-	}
-
-	@Override
-	public Class<?> getAccessedClass() {
-		return OntologyClass.class;
 	}
 
 	private String conceptURI;
@@ -40,18 +52,17 @@ public class ClassPatternRole extends OntologicObjectPatternRole {
 		this.conceptURI = conceptURI;
 	}
 
-	public OntologyClass getOntologicType() {
-		if (getViewPoint() != null) {
-			getViewPoint().loadWhenUnloaded();
-		}
-		if (getViewPoint().getViewpointOntology() != null) {
-			return getViewPoint().getViewpointOntology().getClass(_getConceptURI());
-		}
-		return null;
+	public IFlexoOntologyClass getOntologicType() {
+		return getVirtualModel().getOntologyClass(_getConceptURI());
 	}
 
-	public void setOntologicType(OntologyClass ontologyClass) {
+	public void setOntologicType(IFlexoOntologyClass ontologyClass) {
 		conceptURI = ontologyClass != null ? ontologyClass.getURI() : null;
+	}
+
+	@Override
+	public boolean defaultBehaviourIsToBeDeleted() {
+		return false;
 	}
 
 	public static class ClassPatternRoleMustDefineAValidConceptClass extends
@@ -70,4 +81,8 @@ public class ClassPatternRole extends OntologicObjectPatternRole {
 		}
 	}
 
+	@Override
+	public ConceptActorReference<IFlexoOntologyClass> makeActorReference(IFlexoOntologyClass object, EditionPatternInstance epi) {
+		return new ConceptActorReference<IFlexoOntologyClass>(object, this, epi);
+	}
 }

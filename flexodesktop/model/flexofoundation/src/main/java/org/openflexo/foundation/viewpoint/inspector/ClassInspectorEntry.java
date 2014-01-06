@@ -19,12 +19,14 @@
  */
 package org.openflexo.foundation.viewpoint.inspector;
 
-import org.openflexo.antar.binding.AbstractBinding.BindingEvaluationContext;
-import org.openflexo.antar.binding.BindingDefinition;
-import org.openflexo.antar.binding.BindingDefinition.BindingDefinitionType;
-import org.openflexo.foundation.ontology.OntologyClass;
-import org.openflexo.foundation.viewpoint.ViewPoint.ViewPointBuilder;
-import org.openflexo.foundation.viewpoint.binding.ViewPointDataBinding;
+import java.lang.reflect.InvocationTargetException;
+
+import org.openflexo.antar.binding.BindingEvaluationContext;
+import org.openflexo.antar.binding.DataBinding;
+import org.openflexo.antar.binding.DataBinding.BindingDefinitionType;
+import org.openflexo.antar.expr.NullReferenceException;
+import org.openflexo.antar.expr.TypeMismatchException;
+import org.openflexo.foundation.ontology.IFlexoOntologyClass;
 
 /**
  * Represents an inspector entry for an ontology class
@@ -35,18 +37,17 @@ import org.openflexo.foundation.viewpoint.binding.ViewPointDataBinding;
 public class ClassInspectorEntry extends InspectorEntry {
 
 	private String conceptURI;
+	private boolean isDynamicConceptValueSet = false;
 
-	private ViewPointDataBinding conceptValue;
+	private DataBinding<IFlexoOntologyClass> conceptValue;
 
-	private BindingDefinition CONCEPT_VALUE = new BindingDefinition("conceptValue", OntologyClass.class, BindingDefinitionType.GET, false);
-
-	public ClassInspectorEntry(ViewPointBuilder builder) {
-		super(builder);
+	public ClassInspectorEntry() {
+		super();
 	}
 
 	@Override
 	public Class getDefaultDataClass() {
-		return OntologyClass.class;
+		return IFlexoOntologyClass.class;
 	}
 
 	@Override
@@ -62,38 +63,31 @@ public class ClassInspectorEntry extends InspectorEntry {
 		this.conceptURI = conceptURI;
 	}
 
-	public OntologyClass getConcept() {
-		if (getViewPoint() != null) {
-			getViewPoint().loadWhenUnloaded();
-		}
-		return getViewPoint().getViewpointOntology().getClass(_getConceptURI());
+	public IFlexoOntologyClass getConcept() {
+		return getVirtualModel().getOntologyClass(_getConceptURI());
 	}
 
-	public void setConcept(OntologyClass c) {
+	public void setConcept(IFlexoOntologyClass c) {
 		_setConceptURI(c != null ? c.getURI() : null);
 	}
 
-	public BindingDefinition getConceptValueBindingDefinition() {
-		return CONCEPT_VALUE;
-	}
-
-	public ViewPointDataBinding getConceptValue() {
+	public DataBinding<IFlexoOntologyClass> getConceptValue() {
 		if (conceptValue == null) {
-			conceptValue = new ViewPointDataBinding(this, InspectorEntryBindingAttribute.conceptValue, getConceptValueBindingDefinition());
+			conceptValue = new DataBinding<IFlexoOntologyClass>(this, IFlexoOntologyClass.class, BindingDefinitionType.GET);
+			conceptValue.setBindingName("conceptValue");
 		}
 		return conceptValue;
 	}
 
-	public void setConceptValue(ViewPointDataBinding conceptValue) {
+	public void setConceptValue(DataBinding<IFlexoOntologyClass> conceptValue) {
 		if (conceptValue != null) {
 			conceptValue.setOwner(this);
-			conceptValue.setBindingAttribute(InspectorEntryBindingAttribute.conceptValue);
-			conceptValue.setBindingDefinition(getConceptValueBindingDefinition());
+			conceptValue.setBindingName("conceptValue");
+			conceptValue.setDeclaredType(IFlexoOntologyClass.class);
+			conceptValue.setBindingDefinitionType(BindingDefinitionType.GET);
 		}
 		this.conceptValue = conceptValue;
 	}
-
-	private boolean isDynamicConceptValueSet = false;
 
 	public boolean getIsDynamicConceptValue() {
 		return getConceptValue().isSet() || isDynamicConceptValueSet;
@@ -108,9 +102,17 @@ public class ClassInspectorEntry extends InspectorEntry {
 		}
 	}
 
-	public OntologyClass evaluateConceptValue(BindingEvaluationContext parameterRetriever) {
+	public IFlexoOntologyClass evaluateConceptValue(BindingEvaluationContext parameterRetriever) {
 		if (getConceptValue().isValid()) {
-			return (OntologyClass) getConceptValue().getBindingValue(parameterRetriever);
+			try {
+				return getConceptValue().getBindingValue(parameterRetriever);
+			} catch (TypeMismatchException e) {
+				e.printStackTrace();
+			} catch (NullReferenceException e) {
+				e.printStackTrace();
+			} catch (InvocationTargetException e) {
+				e.printStackTrace();
+			}
 		}
 		return null;
 	}

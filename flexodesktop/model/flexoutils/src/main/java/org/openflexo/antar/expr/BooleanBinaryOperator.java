@@ -24,6 +24,7 @@ import org.openflexo.antar.expr.Constant.BooleanConstant;
 import org.openflexo.antar.expr.Constant.DateConstant;
 import org.openflexo.antar.expr.Constant.DurationConstant;
 import org.openflexo.antar.expr.Constant.EnumConstant;
+import org.openflexo.antar.expr.Constant.ObjectConstant;
 import org.openflexo.antar.expr.Constant.ObjectSymbolicConstant;
 import org.openflexo.antar.expr.Constant.StringConstant;
 
@@ -36,7 +37,10 @@ public abstract class BooleanBinaryOperator extends BinaryOperator {
 		}
 
 		@Override
-		public Constant evaluate(Constant leftArg, Constant rightArg) throws TypeMismatchException {
+		public Constant evaluate(Constant leftArg, Constant rightArg) throws TypeMismatchException, NullReferenceException {
+			if (leftArg.equals(ObjectSymbolicConstant.NULL) || rightArg.equals(ObjectSymbolicConstant.NULL)) {
+				throw new NullReferenceException(this);
+			}
 			if (leftArg instanceof BooleanConstant && rightArg instanceof BooleanConstant) {
 				return BooleanConstant.get(((BooleanConstant) leftArg).getValue() && ((BooleanConstant) rightArg).getValue());
 			}
@@ -84,7 +88,10 @@ public abstract class BooleanBinaryOperator extends BinaryOperator {
 		}
 
 		@Override
-		public Constant evaluate(Constant leftArg, Constant rightArg) throws TypeMismatchException {
+		public Constant evaluate(Constant leftArg, Constant rightArg) throws TypeMismatchException, NullReferenceException {
+			if (leftArg.equals(ObjectSymbolicConstant.NULL) || rightArg.equals(ObjectSymbolicConstant.NULL)) {
+				throw new NullReferenceException(this);
+			}
 			if (leftArg instanceof BooleanConstant && rightArg instanceof BooleanConstant) {
 				return BooleanConstant.get(((BooleanConstant) leftArg).getValue() || ((BooleanConstant) rightArg).getValue());
 			}
@@ -135,6 +142,10 @@ public abstract class BooleanBinaryOperator extends BinaryOperator {
 		public Constant evaluate(Constant leftArg, Constant rightArg) throws TypeMismatchException {
 			// System.out.println("leftArg="+leftArg+" of "+leftArg.getEvaluationType());
 			// System.out.println("rightArg="+rightArg+" of "+rightArg.getEvaluationType());
+			if (leftArg instanceof ObjectConstant && rightArg instanceof ObjectConstant) {
+				return ((ObjectConstant) leftArg).getValue().equals(((ObjectConstant) rightArg).getValue()) ? Constant.BooleanConstant.TRUE
+						: Constant.BooleanConstant.FALSE;
+			}
 			if (leftArg instanceof BooleanConstant && rightArg instanceof BooleanConstant) {
 				return ((BooleanConstant) leftArg).getValue() == ((BooleanConstant) rightArg).getValue() ? Constant.BooleanConstant.TRUE
 						: Constant.BooleanConstant.FALSE;
@@ -183,6 +194,10 @@ public abstract class BooleanBinaryOperator extends BinaryOperator {
 				}
 				return Constant.BooleanConstant.FALSE;
 			}
+			// System.out.println("leftArg=" + leftArg + " of " + leftArg.getClass().getSimpleName() + " of " +
+			// leftArg.getEvaluationType());
+			// System.out.println("rightArg=" + rightArg + " of " + rightArg.getClass().getSimpleName() + " of "
+			// + rightArg.getEvaluationType());
 			throw new TypeMismatchException(this, leftArg.getEvaluationType(), rightArg.getEvaluationType(), EvaluationType.values());
 		}
 
@@ -249,7 +264,10 @@ public abstract class BooleanBinaryOperator extends BinaryOperator {
 		}
 
 		@Override
-		public Constant evaluate(Constant leftArg, Constant rightArg) throws TypeMismatchException {
+		public Constant evaluate(Constant leftArg, Constant rightArg) throws TypeMismatchException, NullReferenceException {
+			if (leftArg.equals(ObjectSymbolicConstant.NULL) || rightArg.equals(ObjectSymbolicConstant.NULL)) {
+				throw new NullReferenceException(this);
+			}
 			if (leftArg instanceof ArithmeticConstant && rightArg instanceof ArithmeticConstant) {
 				return ((ArithmeticConstant) leftArg).getArithmeticValue() < ((ArithmeticConstant) rightArg).getArithmeticValue() ? Constant.BooleanConstant.TRUE
 						: Constant.BooleanConstant.FALSE;
@@ -262,6 +280,10 @@ public abstract class BooleanBinaryOperator extends BinaryOperator {
 				return ((DurationConstant) leftArg).getDuration().lessThan(((DurationConstant) rightArg).getDuration()) ? Constant.BooleanConstant.TRUE
 						: Constant.BooleanConstant.FALSE;
 			}
+			// System.out.println("leftArg=" + leftArg + " of " + leftArg.getClass().getSimpleName() + " of " +
+			// leftArg.getEvaluationType());
+			// System.out.println("rightArg=" + rightArg + " of " + rightArg.getClass().getSimpleName() + " of "
+			// + rightArg.getEvaluationType());
 			throw new TypeMismatchException(this, leftArg.getEvaluationType(), rightArg.getEvaluationType(),
 					EvaluationType.ARITHMETIC_FLOAT, EvaluationType.ARITHMETIC_INTEGER, EvaluationType.DATE, EvaluationType.DURATION);
 		}
@@ -279,7 +301,10 @@ public abstract class BooleanBinaryOperator extends BinaryOperator {
 		}
 
 		@Override
-		public Constant evaluate(Constant leftArg, Constant rightArg) throws TypeMismatchException {
+		public Constant evaluate(Constant leftArg, Constant rightArg) throws TypeMismatchException, NullReferenceException {
+			if (leftArg.equals(ObjectSymbolicConstant.NULL) || rightArg.equals(ObjectSymbolicConstant.NULL)) {
+				throw new NullReferenceException(this);
+			}
 			if (leftArg instanceof ArithmeticConstant && rightArg instanceof ArithmeticConstant) {
 				return ((ArithmeticConstant) leftArg).getArithmeticValue() <= ((ArithmeticConstant) rightArg).getArithmeticValue() ? Constant.BooleanConstant.TRUE
 						: Constant.BooleanConstant.FALSE;
@@ -310,7 +335,10 @@ public abstract class BooleanBinaryOperator extends BinaryOperator {
 		}
 
 		@Override
-		public Constant evaluate(Constant leftArg, Constant rightArg) throws TypeMismatchException {
+		public Constant evaluate(Constant leftArg, Constant rightArg) throws TypeMismatchException, NullReferenceException {
+			if (leftArg.equals(ObjectSymbolicConstant.NULL) || rightArg.equals(ObjectSymbolicConstant.NULL)) {
+				throw new NullReferenceException(this);
+			}
 			if (leftArg instanceof ArithmeticConstant && rightArg instanceof ArithmeticConstant) {
 				return ((ArithmeticConstant) leftArg).getArithmeticValue() > ((ArithmeticConstant) rightArg).getArithmeticValue() ? Constant.BooleanConstant.TRUE
 						: Constant.BooleanConstant.FALSE;
@@ -323,8 +351,8 @@ public abstract class BooleanBinaryOperator extends BinaryOperator {
 				return ((DurationConstant) leftArg).getDuration().greaterThan(((DurationConstant) rightArg).getDuration()) ? Constant.BooleanConstant.TRUE
 						: Constant.BooleanConstant.FALSE;
 			}
-			// System.out.println("leftArg="+leftArg);
-			// System.out.println("rightArg="+rightArg);
+			// System.out.println("leftArg=" + leftArg + " of " + leftArg.getClass());
+			// System.out.println("rightArg=" + rightArg);
 			throw new TypeMismatchException(this, leftArg.getEvaluationType(), rightArg.getEvaluationType(),
 					EvaluationType.ARITHMETIC_FLOAT, EvaluationType.ARITHMETIC_INTEGER, EvaluationType.DATE, EvaluationType.DURATION);
 		}
@@ -342,7 +370,10 @@ public abstract class BooleanBinaryOperator extends BinaryOperator {
 		}
 
 		@Override
-		public Constant evaluate(Constant leftArg, Constant rightArg) throws TypeMismatchException {
+		public Constant evaluate(Constant leftArg, Constant rightArg) throws TypeMismatchException, NullReferenceException {
+			if (leftArg.equals(ObjectSymbolicConstant.NULL) || rightArg.equals(ObjectSymbolicConstant.NULL)) {
+				throw new NullReferenceException(this);
+			}
 			if (leftArg instanceof ArithmeticConstant && rightArg instanceof ArithmeticConstant) {
 				return ((ArithmeticConstant) leftArg).getArithmeticValue() >= ((ArithmeticConstant) rightArg).getArithmeticValue() ? Constant.BooleanConstant.TRUE
 						: Constant.BooleanConstant.FALSE;

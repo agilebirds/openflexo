@@ -25,7 +25,7 @@ import javax.swing.JPanel;
 
 import org.openflexo.foundation.dm.action.CreateDMRepository;
 import org.openflexo.foundation.dm.action.CreateProjectDatabaseRepository;
-import org.openflexo.foundation.rm.FlexoProject;
+import org.openflexo.foundation.FlexoProject;
 import org.openflexo.view.FlexoFrame;
 
 /**

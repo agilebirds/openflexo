@@ -67,7 +67,7 @@ public class ValidateProject extends GCAction<ValidateProject, GenerationReposit
 	};
 
 	static {
-		FlexoModelObject.addActionForClass(ValidateProject.actionType, GenerationRepository.class);
+		TestModelObject.addActionForClass(ValidateProject.actionType, GenerationRepository.class);
 	}
 
 	@Override

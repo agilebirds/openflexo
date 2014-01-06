@@ -26,7 +26,8 @@ import java.util.Vector;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 
-import org.openflexo.foundation.FlexoModelObject;
+import org.openflexo.foundation.FlexoObject;
+import org.openflexo.foundation.FlexoProject;
 import org.openflexo.foundation.TargetType;
 import org.openflexo.foundation.cg.GenerationRepository;
 import org.openflexo.foundation.cg.templates.CGTemplate;
@@ -35,7 +36,6 @@ import org.openflexo.foundation.cg.templates.CGTemplateSet;
 import org.openflexo.foundation.cg.templates.CGTemplates;
 import org.openflexo.foundation.cg.templates.CustomCGTemplateRepository;
 import org.openflexo.foundation.rm.FlexoMemoryResource;
-import org.openflexo.foundation.rm.FlexoProject;
 import org.openflexo.foundation.rm.FlexoProjectBuilder;
 import org.openflexo.foundation.rm.ResourceType;
 import org.openflexo.generator.exception.TemplateNotFoundException;
@@ -71,11 +71,11 @@ public class TemplateLocator extends FlexoMemoryResource {
 	 * @param builder
 	 */
 	public TemplateLocator(FlexoProjectBuilder builder) {
-		super(builder.project);
+		super(builder.project, builder.serviceManager);
 	}
 
 	public TemplateLocator(CGTemplates templates, AbstractProjectGenerator projectGenerator) {
-		super(templates.getProject());
+		super(templates.getProject(), templates.getProject().getServiceManager());
 		_templateDirectories = null;
 		_templateTable = new Hashtable<String, CGTemplate>();
 		_templates = templates;
@@ -180,7 +180,7 @@ public class TemplateLocator extends FlexoMemoryResource {
 	public boolean needsUpdateForResource(GenerationAvailableFileResource resource) {
 		Date requestDate = resource.getLastUpdate();
 		return needsUpdateForGenerator(requestDate,
-				(Generator<? extends FlexoModelObject, ? extends GenerationRepository>) resource.getGenerator());
+				(Generator<? extends FlexoObject, ? extends GenerationRepository>) resource.getGenerator());
 	}
 
 	/**
@@ -188,7 +188,7 @@ public class TemplateLocator extends FlexoMemoryResource {
 	 * @param generator
 	 * @return
 	 */
-	public boolean needsUpdateForGenerator(Date requestDate, Generator<? extends FlexoModelObject, ? extends GenerationRepository> generator) {
+	public boolean needsUpdateForGenerator(Date requestDate, Generator<? extends FlexoObject, ? extends GenerationRepository> generator) {
 		if (generator == null) {
 			return false;
 		}
@@ -203,7 +203,7 @@ public class TemplateLocator extends FlexoMemoryResource {
 		return false;
 	}
 
-	public boolean needsRegenerationBecauseOfTemplateChange(Generator<? extends FlexoModelObject, ? extends GenerationRepository> generator) {
+	public boolean needsRegenerationBecauseOfTemplateChange(Generator<? extends FlexoObject, ? extends GenerationRepository> generator) {
 		if (generator == null) {
 			return false;
 		}

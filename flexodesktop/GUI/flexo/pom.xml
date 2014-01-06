@@ -6,7 +6,7 @@
 	<parent>
 		<groupId>org.openflexo</groupId>
 		<artifactId>GUI</artifactId>
-		<version>1.5.2-SNAPSHOT</version>
+        <version>1.7-SNAPSHOT</version>
 	</parent>
 	<artifactId>flexo</artifactId>
 	<name>GUI :: Flexo</name>
@@ -80,15 +80,41 @@
 		</dependency>
 		<dependency>
 			<groupId>org.openflexo</groupId>
-			<artifactId>flexographicalengine</artifactId>
+			<artifactId>diana-swing</artifactId>
 		</dependency>
 		<dependency>
 			<groupId>org.openflexo</groupId>
-			<artifactId>flexointerfacebuilder</artifactId>
+			<artifactId>fib-core</artifactId>
 		</dependency>
 		<dependency>
 			<groupId>org.openflexo</groupId>
-			<artifactId>flexointerfacebuilder</artifactId>
+			<artifactId>fib-core</artifactId>
+			<classifier>resources</classifier>
+			<type>zip</type>
+		</dependency>
+		<dependency>
+			<groupId>org.openflexo</groupId>
+			<artifactId>fib-core</artifactId>
+			<classifier>tests</classifier>
+			<scope>test</scope>
+		</dependency>
+		<dependency>
+			<groupId>org.openflexo</groupId>
+			<artifactId>fib-swing</artifactId>
+		</dependency>
+		<dependency>
+			<groupId>org.openflexo</groupId>
+			<artifactId>fib-swing</artifactId>
+			<classifier>resources</classifier>
+			<type>zip</type>
+		</dependency>
+		<dependency>
+			<groupId>org.openflexo</groupId>
+			<artifactId>fib-swing-editor</artifactId>
+		</dependency>
+		<dependency>
+			<groupId>org.openflexo</groupId>
+			<artifactId>fib-swing-editor</artifactId>
 			<classifier>resources</classifier>
 			<type>zip</type>
 		</dependency>
@@ -106,7 +132,7 @@
 		</dependency>
 		<dependency>
 			<groupId>org.openflexo</groupId>
-			<artifactId>flexographicalengine</artifactId>
+			<artifactId>diana-swing</artifactId>
 			<classifier>resources</classifier>
 			<type>zip</type>
 		</dependency>
@@ -161,7 +187,13 @@
 		</dependency>
 		<dependency>
 			<groupId>org.openflexo</groupId>
-			<artifactId>flexointerfacebuilder</artifactId>
+			<artifactId>fib-core</artifactId>
+			<classifier>tests</classifier>
+			<scope>test</scope>
+		</dependency>
+		<dependency>
+			<groupId>org.openflexo</groupId>
+			<artifactId>fib-swing-editor</artifactId>
 			<classifier>tests</classifier>
 			<scope>test</scope>
 		</dependency>

@@ -22,11 +22,11 @@ package org.openflexo.application;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 
+import org.openflexo.ApplicationContext;
 import org.openflexo.Flexo;
 import org.openflexo.components.AboutDialog;
 import org.openflexo.foundation.utils.OperationCancelledException;
 import org.openflexo.module.ModuleLoader;
-import org.openflexo.prefs.PreferencesController;
 
 import com.apple.eawt.ApplicationAdapter;
 import com.apple.eawt.ApplicationEvent;
@@ -40,17 +40,18 @@ public class FlexoApplicationAdapter extends ApplicationAdapter {
 
 	private static final Logger logger = Logger.getLogger(FlexoApplicationAdapter.class.getPackage().getName());
 
-	private final ModuleLoader moduleLoader;
+	private final ApplicationContext applicationContext;
 
-	protected FlexoApplicationAdapter(ModuleLoader moduleLoader) {
+	protected FlexoApplicationAdapter(ApplicationContext applicationContext) {
 		super();
-		this.moduleLoader = moduleLoader;
+		this.applicationContext = applicationContext;
 	}
 
 	public ModuleLoader getModuleLoader() {
-		return moduleLoader;
+		return applicationContext.getModuleLoader();
 	}
 
+	@Override
 	public void handleAbout(ApplicationEvent event) {
 		if (logger.isLoggable(Level.FINE)) {
 			logger.fine("handleAbout");
@@ -59,15 +60,15 @@ public class FlexoApplicationAdapter extends ApplicationAdapter {
 		new AboutDialog();
 	}
 
+	@Override
 	public void handlePreferences(ApplicationEvent event) {
 		if (logger.isLoggable(Level.FINE)) {
 			logger.fine("handlePreferences");
 		}
-		if (PreferencesController.hasInstance()) {
-			PreferencesController.instance().showPreferences();
-		}
+		applicationContext.getPreferencesService().showPreferences();
 	}
 
+	@Override
 	public void handleQuit(ApplicationEvent event) {
 		if (logger.isLoggable(Level.FINE)) {
 			logger.fine("handleQuit");
@@ -78,6 +79,7 @@ public class FlexoApplicationAdapter extends ApplicationAdapter {
 		}
 	}
 
+	@Override
 	public void handleOpenFile(ApplicationEvent arg0) {
 		Flexo.setFileNameToOpen(arg0.getFilename());
 	}

@@ -36,6 +36,7 @@ import org.openflexo.components.browser.ProjectBrowser;
 import org.openflexo.components.tabular.model.EditableStringColumn;
 import org.openflexo.components.tabularbrowser.TabularBrowserModel;
 import org.openflexo.foundation.FlexoModelObject;
+import org.openflexo.foundation.FlexoObject;
 import org.openflexo.foundation.ie.ComponentInstance;
 import org.openflexo.foundation.ie.cl.FlexoComponentLibrary;
 import org.openflexo.foundation.ie.widget.IEBlocWidget;
@@ -45,7 +46,7 @@ import org.openflexo.foundation.ie.widget.IELabelWidget;
 import org.openflexo.foundation.ie.widget.IEStringWidget;
 import org.openflexo.foundation.ie.widget.IETextAreaWidget;
 import org.openflexo.foundation.ie.widget.IETextFieldWidget;
-import org.openflexo.foundation.rm.FlexoProject;
+import org.openflexo.foundation.FlexoProject;
 import org.openflexo.ie.view.controller.ComponentBrowser;
 import org.openflexo.ie.view.controller.IEController;
 import org.openflexo.selection.SelectionListener;
@@ -223,12 +224,12 @@ public class IEExampleValuesView extends JPanel implements SelectionSynchronized
 	}
 
 	@Override
-	public void fireObjectSelected(FlexoModelObject object) {
+	public void fireObjectSelected(FlexoObject object) {
 		getTabularBrowserView().fireObjectSelected(object);
 	}
 
 	@Override
-	public void fireObjectDeselected(FlexoModelObject object) {
+	public void fireObjectDeselected(FlexoObject object) {
 		getTabularBrowserView().fireObjectDeselected(object);
 	}
 

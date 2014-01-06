@@ -1,0 +1,15 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<Panel layout="twocols" darkLevel="0" dataClassName="org.openflexo.foundation.viewpoint.ViewPoint" controllerClassName="org.openflexo.view.controller.FlexoFIBController">
+  <Browser root="data" iteratorClassName="java.lang.Object" visibleRowCount="5" rowHeight="18" boundToSelectionManager="true" selectionMode="DiscontiguousTreeSelection" showFooter="true" rootVisible="true" showRootsHandle="true" localize="true" manageDynamicModel="true" clickAction="controller.singleClick(ExampleDiagramBrowser.selected)" doubleClickAction="controller.doubleClick(ExampleDiagramBrowser.selected)" rightClickAction="controller.rightClick(ExampleDiagramBrowser.selected,event)" name="ExampleDiagramBrowser" constraints="twocols(expandHorizontally=true;expandVertically=true;index=0;insetsBottom=0;insetsLeft=2;insetsRight=2;insetsTop=0;location=center)">
+    <BrowserElement dataClassName="org.openflexo.foundation.view.diagram.viewpoint.ExampleDiagram" label="exampleDiagram.name" icon="controller.iconForObject(exampleDiagram)" isEditable="false" filtered="false" defaultVisible="true" name="exampleDiagram">
+      <Children data="exampleDiagram.childs" name="childs" />
+    </BrowserElement>
+    <BrowserElement dataClassName="org.openflexo.foundation.view.diagram.viewpoint.ExampleDiagramShape" label="shape.name" icon="controller.iconForObject(shape)" isEditable="false" filtered="false" defaultVisible="true" name="shape">
+      <Children data="shape.childs" name="childs" />
+    </BrowserElement>
+    <BrowserElement dataClassName="org.openflexo.foundation.view.diagram.viewpoint.ExampleDiagramConnector" label="connector.name" icon="controller.iconForObject(connector)" isEditable="false" filtered="false" defaultVisible="true" name="connector">
+      <Children data="connector.childs" name="childs" />
+    </BrowserElement>
+  </Browser>
+  <LocalizedDictionary />
+</Panel>

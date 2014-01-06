@@ -19,95 +19,129 @@
  */
 package org.openflexo.foundation;
 
-import org.openflexo.foundation.rm.FlexoProject;
-import org.openflexo.foundation.rm.FlexoProjectBuilder;
-import org.openflexo.foundation.rm.XMLStorageResourceData;
-import org.openflexo.foundation.xml.FlexoBuilder;
-import org.openflexo.inspector.InspectableObject;
+import org.openflexo.model.annotations.Getter;
+import org.openflexo.model.annotations.ImplementationClass;
+import org.openflexo.model.annotations.ModelEntity;
+import org.openflexo.model.annotations.PropertyIdentifier;
+import org.openflexo.model.annotations.Setter;
+import org.openflexo.model.annotations.XMLAttribute;
 
-public class FlexoProperty extends FlexoModelObject implements InspectableObject {
+@ModelEntity
+@ImplementationClass(FlexoProperty.FlexoPropertyImpl.class)
+public interface FlexoProperty extends FlexoObject {
 
-	private FlexoModelObject owner;
+	@PropertyIdentifier(type = FlexoObject.class)
+	public static final String OWNER_KEY = "owner";
+	@PropertyIdentifier(type = String.class)
+	public static final String NAME_KEY = "name";
+	@PropertyIdentifier(type = String.class)
+	public static final String VALUE_KEY = "value";
 
-	private String name;
-	private String value;
+	@Getter(NAME_KEY)
+	@XMLAttribute
+	public String getName();
 
-	public FlexoProperty(FlexoBuilder<?> builder) {
-		this(builder.getProject());
-	}
+	@Setter(NAME_KEY)
+	public void setName(String name);
 
-	public FlexoProperty(FlexoProjectBuilder builder) {
-		this(builder.project);
-	}
+	@Getter(VALUE_KEY)
+	@XMLAttribute
+	public String getValue();
 
-	public FlexoProperty(FlexoProject project) {
-		super(project);
-	}
+	@Setter(VALUE_KEY)
+	public void setValue(String value);
 
-	public FlexoProperty(FlexoProject project, FlexoModelObject owner) {
-		this(project);
-		this.owner = owner;
-	}
+	@Getter(value = OWNER_KEY, ignoreType = true, inverse = FlexoObject.CUSTOM_PROPERTIES_KEY)
+	public FlexoObject getOwner();
 
-	@Override
-	public void delete() {
-		if (getOwner() != null) {
-			getOwner().removeFromCustomProperties(this);
+	@Setter(OWNER_KEY)
+	public void setOwner(FlexoObject owner);
+
+	public boolean booleanValue();
+
+	public void setBooleanValue(boolean flag);
+
+	public int integerValue();
+
+	public void setIntegerValue(int value);
+
+	public static abstract class FlexoPropertyImpl extends FlexoObservable implements FlexoProperty {
+
+		private FlexoObject owner;
+
+		private String name;
+		private String value;
+
+		/*public FlexoProperty(FlexoBuilder<?> builder) {
+			this(builder.getProject());
 		}
-		super.delete();
-	}
 
-	@Override
-	public String getName() {
-		return name;
-	}
+		public FlexoProperty(FlexoProjectBuilder builder) {
+			this(builder.project);
+		}*/
 
-	@Override
-	public void setName(String name) {
-		this.name = name;
-		setChanged();
-		notifyObservers(new DataModification("name", null, name));
-	}
-
-	public String getValue() {
-		return value;
-	}
-
-	public void setValue(String value) {
-		this.value = value;
-		setChanged();
-		notifyObservers(new DataModification("value", null, value));
-	}
-
-	public FlexoModelObject getOwner() {
-		return owner;
-	}
-
-	public void setOwner(FlexoModelObject owner) {
-		this.owner = owner;
-	}
-
-	@Override
-	public String getClassNameKey() {
-		return "flexo_property";
-	}
-
-	@Override
-	public String getFullyQualifiedName() {
-		return getOwner() != null ? getOwner().getFullyQualifiedName() : "No owner" + "." + name + "=" + value;
-	}
-
-	@Override
-	public XMLStorageResourceData getXMLResourceData() {
-		if (getOwner() != null) {
-			return getOwner().getXMLResourceData();
+		@Override
+		public boolean delete(Object... context) {
+			if (getOwner() != null) {
+				getOwner().removeFromCustomProperties(this);
+			}
+			return performSuperDelete(context);
 		}
-		return null;
+
+		@Override
+		public String getName() {
+			return name;
+		}
+
+		@Override
+		public void setName(String name) {
+			this.name = name;
+			setChanged();
+			notifyObservers(new DataModification("name", null, name));
+		}
+
+		@Override
+		public String getValue() {
+			return value;
+		}
+
+		@Override
+		public void setValue(String value) {
+			this.value = value;
+			setChanged();
+			notifyObservers(new DataModification("value", null, value));
+		}
+
+		@Override
+		public FlexoObject getOwner() {
+			return owner;
+		}
+
+		@Override
+		public void setOwner(FlexoObject owner) {
+			this.owner = owner;
+		}
+
+		@Override
+		public boolean booleanValue() {
+			return getValue() != null && getValue().equalsIgnoreCase("true");
+		}
+
+		@Override
+		public void setBooleanValue(boolean flag) {
+			setValue(flag ? "true" : "false");
+		}
+
+		@Override
+		public int integerValue() {
+			return Integer.parseInt(getValue());
+		}
+
+		@Override
+		public void setIntegerValue(int value) {
+			this.value = "" + value;
+		}
+
 	}
 
-	@Override
-	public String getInspectorName() {
-		// Never inspected on its own (always through the inspector of another model object)
-		return null;
-	}
 }

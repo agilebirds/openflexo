@@ -28,7 +28,6 @@ import java.util.Vector;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 
-import org.openflexo.foundation.rm.ResourceStatusModification;
 import org.openflexo.inspector.InspectableObject;
 import org.openflexo.inspector.InspectorObserver;
 import org.openflexo.toolbox.HasPropertyChangeSupport;
@@ -67,7 +66,7 @@ import org.openflexo.toolbox.HasPropertyChangeSupport;
  * 
  * 
  */
-public abstract class FlexoObservable extends FlexoObject implements HasPropertyChangeSupport {
+public abstract class FlexoObservable extends KVCFlexoObject implements HasPropertyChangeSupport {
 
 	private static final Logger logger = Logger.getLogger(FlexoObservable.class.getPackage().getName());
 
@@ -75,10 +74,10 @@ public abstract class FlexoObservable extends FlexoObject implements HasProperty
 
 	private boolean changed = false;
 
-	private Vector<WeakReference<FlexoObserver>> _flexoObservers;
-	private Vector<WeakReference<InspectorObserver>> _inspectorObservers;
+	private final Vector<WeakReference<FlexoObserver>> _flexoObservers;
+	private final Vector<WeakReference<InspectorObserver>> _inspectorObservers;
 
-	private PropertyChangeSupport _pcSupport;
+	private final PropertyChangeSupport _pcSupport;
 
 	/**
 	 * This hastable stores for all classes encountered as observers for this observable a property coded as a Boolean indicating if
@@ -240,7 +239,7 @@ public abstract class FlexoObservable extends FlexoObject implements HasProperty
 				 * progress 2) a recently unregistered FlexoObserver will be
 				 * wrongly notified when it doesn't care
 				 */
-				if (!changed && !(arg instanceof ResourceStatusModification)) {
+				if (!changed /*&& !(arg instanceof ResourceStatusModification)*/) {
 					return;
 				}
 				arrLocal1 = _flexoObservers.toArray(arrLocal1);
@@ -367,7 +366,7 @@ public abstract class FlexoObservable extends FlexoObject implements HasProperty
 	/**
 	 * Marks this <tt>Observable</tt> object as having been changed; the <tt>hasChanged</tt> method will now return <tt>true</tt>.
 	 */
-	protected synchronized void setChanged() {
+	public synchronized void setChanged() {
 		changed = true;
 	}
 
@@ -379,7 +378,7 @@ public abstract class FlexoObservable extends FlexoObject implements HasProperty
 	 * @see java.util.Observable#notifyFlexoObservers()
 	 * @see java.util.Observable#notifyFlexoObservers(java.lang.Object)
 	 */
-	protected synchronized void clearChanged() {
+	public synchronized void clearChanged() {
 		changed = false;
 	}
 

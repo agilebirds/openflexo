@@ -6,7 +6,7 @@
 	<parent>
 		<groupId>org.openflexo</groupId>
 		<artifactId>generators</artifactId>
-		<version>1.5.2-SNAPSHOT</version>
+        <version>1.7-SNAPSHOT</version>
 	</parent>
 	<artifactId>flexogenerator</artifactId>
 	<name>Generators :: FlexoGenerator</name>
@@ -26,6 +26,16 @@
 		<dependency>
 			<groupId>org.openflexo</groupId>
 			<artifactId>flexofoundation</artifactId>
+			<classifier>resources</classifier>
+			<type>zip</type>
+		</dependency>
+		<dependency>
+			<groupId>org.openflexo</groupId>
+			<artifactId>agilebirdsconnector</artifactId>
+		</dependency>
+		<dependency>
+			<groupId>org.openflexo</groupId>
+			<artifactId>agilebirdsconnector</artifactId>
 			<classifier>resources</classifier>
 			<type>zip</type>
 		</dependency>

@@ -16,7 +16,9 @@ import org.openflexo.doceditor.view.DERepositoryModuleView;
 import org.openflexo.doceditor.view.DETOCEntryModuleView;
 import org.openflexo.doceditor.view.TOCDataView;
 import org.openflexo.foundation.FlexoModelObject;
-import org.openflexo.foundation.rm.FlexoProject;
+import org.openflexo.foundation.FlexoObject;
+import org.openflexo.foundation.FlexoProjectObject;
+import org.openflexo.foundation.FlexoProject;
 import org.openflexo.foundation.toc.TOCData;
 import org.openflexo.foundation.toc.TOCEntry;
 import org.openflexo.foundation.toc.TOCRepository;
@@ -69,12 +71,12 @@ public class TOCPerspective extends FlexoPerspective {
 	}
 
 	@Override
-	public FlexoModelObject getDefaultObject(FlexoModelObject proposedObject) {
+	public FlexoModelObject getDefaultObject(FlexoObject proposedObject) {
 		if (proposedObject instanceof TOCEntry) {
 			return ((TOCEntry) proposedObject).getRepository();
 		}
-		if (proposedObject != null) {
-			FlexoProject project = proposedObject.getProject();
+		if (proposedObject instanceof FlexoProjectObject) {
+			FlexoProject project = ((FlexoProjectObject) proposedObject).getProject();
 			if (project != null) {
 				if (project.getTOCData().getRepositories().size() > 0) {
 					return project.getTOCData().getRepositories().firstElement();
@@ -87,12 +89,12 @@ public class TOCPerspective extends FlexoPerspective {
 	}
 
 	@Override
-	public boolean hasModuleViewForObject(FlexoModelObject object) {
+	public boolean hasModuleViewForObject(FlexoObject object) {
 		return object instanceof TOCEntry || object instanceof TOCRepository || object instanceof TOCData;
 	}
 
 	@Override
-	public ModuleView<? extends FlexoModelObject> createModuleViewForObject(FlexoModelObject object, FlexoController controller) {
+	public ModuleView<? extends FlexoModelObject> createModuleViewForObject(FlexoObject object, FlexoController controller) {
 		if (object instanceof TOCRepository) {
 			return new DERepositoryModuleView((TOCRepository) object, (DEController) controller, this);
 		} else if (object instanceof TOCData) {

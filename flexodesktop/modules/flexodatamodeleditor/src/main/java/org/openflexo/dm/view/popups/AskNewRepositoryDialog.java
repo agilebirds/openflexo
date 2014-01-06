@@ -43,7 +43,7 @@ import org.openflexo.FlexoCst;
 import org.openflexo.components.MultipleObjectSelectorPopup;
 import org.openflexo.foundation.dm.DMRegExp;
 import org.openflexo.foundation.dm.action.CreateDMRepository;
-import org.openflexo.foundation.rm.FlexoProject;
+import org.openflexo.foundation.FlexoProject;
 import org.openflexo.localization.FlexoLocalization;
 import org.openflexo.module.UserType;
 import org.openflexo.swing.FileSelector;

@@ -23,7 +23,7 @@ import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 import java.awt.event.MouseEvent;
 import java.io.File;
-import java.util.Vector;
+import java.util.List;
 import java.util.logging.Logger;
 
 import javax.swing.JMenuItem;
@@ -32,9 +32,13 @@ import javax.swing.JPopupMenu;
 import org.openflexo.antar.binding.BindingVariable;
 import org.openflexo.fib.FIBLibrary;
 import org.openflexo.fib.model.FIBComponent;
-import org.openflexo.foundation.FlexoModelObject;
-import org.openflexo.foundation.ontology.EditionPatternReference;
-import org.openflexo.foundation.viewpoint.binding.EditionPatternInstancePathElement;
+import org.openflexo.foundation.DataModification;
+import org.openflexo.foundation.FlexoObject;
+import org.openflexo.foundation.FlexoObservable;
+import org.openflexo.foundation.resource.ResourceLoaded;
+import org.openflexo.foundation.utils.FlexoObjectReference;
+import org.openflexo.foundation.view.EditionPatternInstance;
+import org.openflexo.foundation.viewpoint.binding.EditionPatternInstanceBindingVariable;
 import org.openflexo.logging.FlexoLogger;
 import org.openflexo.view.controller.FlexoFIBController;
 
@@ -62,11 +66,11 @@ public class FIBInspectorController extends FlexoFIBController {
 
 	@Override
 	public Object getValue(BindingVariable variable) {
-		if (variable instanceof EditionPatternInstancePathElement) {
-			if (getDataObject() instanceof FlexoModelObject) {
-				Vector<EditionPatternReference> refs = ((FlexoModelObject) getDataObject()).getEditionPatternReferences();
-				if (refs != null && ((EditionPatternInstancePathElement) variable).getIndex() < refs.size()) {
-					return refs.get(((EditionPatternInstancePathElement) variable).getIndex()).getEditionPatternInstance();
+		if (variable instanceof EditionPatternInstanceBindingVariable) {
+			if (getDataObject() instanceof FlexoObject) {
+				List<FlexoObjectReference<EditionPatternInstance>> refs = ((FlexoObject) getDataObject()).getEditionPatternReferences();
+				if (refs != null && ((EditionPatternInstanceBindingVariable) variable).getIndex() < refs.size()) {
+					return refs.get(((EditionPatternInstanceBindingVariable) variable).getIndex()).getObject();
 				}
 			}
 		}
@@ -100,4 +104,11 @@ public class FIBInspectorController extends FlexoFIBController {
 		}
 	}
 
+	@Override
+	public void update(FlexoObservable o, DataModification dataModification) {
+		super.update(o, dataModification);
+		if (dataModification instanceof ResourceLoaded) {
+			// System.out.println("Detected resource being loaded !");
+		}
+	}
 }

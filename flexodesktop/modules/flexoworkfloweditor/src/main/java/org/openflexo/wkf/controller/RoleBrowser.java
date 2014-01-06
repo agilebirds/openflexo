@@ -26,6 +26,7 @@ import org.openflexo.components.browser.BrowserElementType;
 import org.openflexo.components.browser.BrowserFilter.BrowserFilterStatus;
 import org.openflexo.components.browser.ProjectBrowser;
 import org.openflexo.foundation.FlexoEditor;
+import org.openflexo.foundation.FlexoProjectObject;
 
 /**
  * Browser for WKF module, browse only one process, with details
@@ -56,7 +57,9 @@ public class RoleBrowser extends ProjectBrowser {
 
 	@Override
 	protected boolean activateBrowsingFor(BrowserElement newElement) {
-		return newElement.getObject().getProject() == getRootObject().getProject() && super.activateBrowsingFor(newElement);
+		return newElement.getObject() instanceof FlexoProjectObject && getRootObject() instanceof FlexoProjectObject
+				&& ((FlexoProjectObject) newElement.getObject()).getProject() == ((FlexoProjectObject) getRootObject()).getProject()
+				&& super.activateBrowsingFor(newElement);
 	}
 
 	@Override
@@ -66,8 +69,6 @@ public class RoleBrowser extends ProjectBrowser {
 		setFilterStatus(BrowserElementType.DKV_MODEL, BrowserFilterStatus.HIDE);
 		setFilterStatus(BrowserElementType.MENU_ITEM, BrowserFilterStatus.HIDE);
 		setFilterStatus(BrowserElementType.WS_LIBRARY, BrowserFilterStatus.HIDE);
-		setFilterStatus(BrowserElementType.ONTOLOGY_LIBRARY, BrowserFilterStatus.HIDE);
-		setFilterStatus(BrowserElementType.CALC_LIBRARY, BrowserFilterStatus.HIDE);
 		setFilterStatus(BrowserElementType.OE_SHEMA_LIBRARY, BrowserFilterStatus.HIDE);
 		setFilterStatus(BrowserElementType.PROCESS, BrowserFilterStatus.HIDE);
 		setFilterStatus(BrowserElementType.PROJECT, BrowserFilterStatus.HIDE, true);

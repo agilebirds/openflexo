@@ -30,9 +30,8 @@ import org.openflexo.foundation.action.FlexoAction;
 import org.openflexo.foundation.action.FlexoActionType;
 import org.openflexo.foundation.action.FlexoUndoableAction;
 import org.openflexo.foundation.action.UndoManager;
-import org.openflexo.foundation.rm.DefaultFlexoResourceUpdateHandler;
-import org.openflexo.foundation.rm.FlexoProject;
-import org.openflexo.foundation.rm.ResourceUpdateHandler;
+import org.openflexo.foundation.resource.FlexoResource;
+import org.openflexo.foundation.resource.ResourceUpdateHandler;
 import org.openflexo.foundation.utils.FlexoProgressFactory;
 
 public class DefaultFlexoEditor implements FlexoEditor {
@@ -40,32 +39,45 @@ public class DefaultFlexoEditor implements FlexoEditor {
 	private static final java.util.logging.Logger logger = org.openflexo.logging.FlexoLogger.getLogger(DefaultFlexoEditor.class
 			.getPackage().getName());
 
-	private final FlexoProject _project;
-	private DefaultFlexoResourceUpdateHandler resourceUpdateHandler;
+	private final FlexoProject project;
+	private final FlexoServiceManager serviceManager;
+	private final ResourceUpdateHandler resourceUpdateHandler;
 
-	public DefaultFlexoEditor(FlexoProject project) {
-		_project = project;
-		if (_project != null) {
-			_project.addToEditors(this);
+	public DefaultFlexoEditor(FlexoProject project, FlexoServiceManager serviceManager) {
+		this.project = project;
+		this.serviceManager = serviceManager;
+		if (project != null) {
+			project.addToEditors(this);
 		}
-		resourceUpdateHandler = new DefaultFlexoResourceUpdateHandler();
+		resourceUpdateHandler = new ResourceUpdateHandler() {
+			@Override
+			public void resourceChanged(FlexoResource<?> resource) {
+				// TODO Auto-generated method stub
+
+			}
+		};
 	}
 
 	@Override
 	public final FlexoProject getProject() {
-		return _project;
+		return project;
 	}
 
 	@Override
-	public void notifyObjectCreated(FlexoModelObject object) {
+	public FlexoServiceManager getServiceManager() {
+		return serviceManager;
 	}
 
 	@Override
-	public void notifyObjectDeleted(FlexoModelObject object) {
+	public void notifyObjectCreated(FlexoObject object) {
 	}
 
 	@Override
-	public void notifyObjectChanged(FlexoModelObject object) {
+	public void notifyObjectDeleted(FlexoObject object) {
+	}
+
+	@Override
+	public void notifyObjectChanged(FlexoObject object) {
 	}
 
 	@Override
@@ -80,7 +92,7 @@ public class DefaultFlexoEditor implements FlexoEditor {
 	}
 
 	@Override
-	public void focusOn(FlexoModelObject object) {
+	public void focusOn(FlexoObject object) {
 		// Only interactive editor handle this
 	}
 
@@ -101,33 +113,33 @@ public class DefaultFlexoEditor implements FlexoEditor {
 	}
 
 	@Override
-	public <A extends FlexoAction<A, T1, T2>, T1 extends FlexoModelObject, T2 extends FlexoModelObject> A performActionType(
+	public <A extends FlexoAction<A, T1, T2>, T1 extends FlexoObject, T2 extends FlexoObject> A performActionType(
 			FlexoActionType<A, T1, T2> actionType, T1 focusedObject, Vector<T2> globalSelection, EventObject e) {
 		A action = actionType.makeNewAction(focusedObject, globalSelection, this);
 		return performAction(action, e);
 	}
 
 	@Override
-	public <A extends FlexoUndoableAction<A, T1, T2>, T1 extends FlexoModelObject, T2 extends FlexoModelObject> A performUndoActionType(
+	public <A extends FlexoUndoableAction<A, T1, T2>, T1 extends FlexoObject, T2 extends FlexoObject> A performUndoActionType(
 			FlexoActionType<A, T1, T2> actionType, T1 focusedObject, Vector<T2> globalSelection, EventObject e) {
 		A action = actionType.makeNewAction(focusedObject, globalSelection, this);
 		return performUndoAction(action, e);
 	}
 
 	@Override
-	public <A extends FlexoUndoableAction<A, T1, T2>, T1 extends FlexoModelObject, T2 extends FlexoModelObject> A performRedoActionType(
+	public <A extends FlexoUndoableAction<A, T1, T2>, T1 extends FlexoObject, T2 extends FlexoObject> A performRedoActionType(
 			FlexoActionType<A, T1, T2> actionType, T1 focusedObject, Vector<T2> globalSelection, EventObject e) {
 		A action = actionType.makeNewAction(focusedObject, globalSelection, this);
 		return performRedoAction(action, e);
 	}
 
 	@Override
-	public <A extends FlexoAction<A, T1, T2>, T1 extends FlexoModelObject, T2 extends FlexoModelObject> A performAction(A action,
-			EventObject e) {
+	public <A extends FlexoAction<A, T1, T2>, T1 extends FlexoObject, T2 extends FlexoObject> A performAction(A action, EventObject e) {
 		if (!action.getActionType().isEnabled(action.getFocusedObject(), action.getGlobalSelection())) {
 			return null;
 		}
-		if (action.getFocusedObject() != null && action.getFocusedObject().getProject() != getProject()) {
+		if (action.getFocusedObject() instanceof FlexoProjectObject
+				&& ((FlexoProjectObject) action.getFocusedObject()).getProject() != getProject()) {
 			if (logger.isLoggable(Level.WARNING)) {
 				logger.warning("Focused object project is not the same as my project. Refusing to edit and execute action "
 						+ action.getLocalizedName());
@@ -143,8 +155,8 @@ public class DefaultFlexoEditor implements FlexoEditor {
 	}
 
 	@Override
-	public <A extends FlexoUndoableAction<A, T1, T2>, T1 extends FlexoModelObject, T2 extends FlexoModelObject> A performUndoAction(
-			A action, EventObject e) {
+	public <A extends FlexoUndoableAction<A, T1, T2>, T1 extends FlexoObject, T2 extends FlexoObject> A performUndoAction(A action,
+			EventObject e) {
 		try {
 			return action.undoActionInContext();
 		} catch (FlexoException e1) {
@@ -154,8 +166,8 @@ public class DefaultFlexoEditor implements FlexoEditor {
 	}
 
 	@Override
-	public <A extends FlexoUndoableAction<A, T1, T2>, T1 extends FlexoModelObject, T2 extends FlexoModelObject> A performRedoAction(
-			A action, EventObject e) {
+	public <A extends FlexoUndoableAction<A, T1, T2>, T1 extends FlexoObject, T2 extends FlexoObject> A performRedoAction(A action,
+			EventObject e) {
 		try {
 			return action.redoActionInContext();
 		} catch (FlexoException e1) {
@@ -165,31 +177,31 @@ public class DefaultFlexoEditor implements FlexoEditor {
 	}
 
 	@Override
-	public <A extends FlexoAction<A, T1, T2>, T1 extends FlexoModelObject, T2 extends FlexoModelObject> KeyStroke getKeyStrokeFor(
+	public <A extends FlexoAction<A, T1, T2>, T1 extends FlexoObject, T2 extends FlexoObject> KeyStroke getKeyStrokeFor(
 			FlexoActionType<A, T1, T2> action) {
 		return null;
 	}
 
 	@Override
-	public <A extends FlexoAction<A, T1, T2>, T1 extends FlexoModelObject, T2 extends FlexoModelObject> boolean isActionEnabled(
+	public <A extends FlexoAction<A, T1, T2>, T1 extends FlexoObject, T2 extends FlexoObject> boolean isActionEnabled(
 			FlexoActionType<A, T1, T2> actionType, T1 focusedObject, Vector<T2> globalSelection) {
 		return actionType.isEnabled(focusedObject, globalSelection);
 	}
 
 	@Override
-	public <A extends FlexoAction<A, T1, T2>, T1 extends FlexoModelObject, T2 extends FlexoModelObject> boolean isActionVisible(
+	public <A extends FlexoAction<A, T1, T2>, T1 extends FlexoObject, T2 extends FlexoObject> boolean isActionVisible(
 			FlexoActionType<A, T1, T2> actionType, T1 focusedObject, Vector<T2> globalSelection) {
 		return true;
 	}
 
 	@Override
-	public <A extends FlexoAction<A, T1, T2>, T1 extends FlexoModelObject, T2 extends FlexoModelObject> Icon getEnabledIconFor(
+	public <A extends FlexoAction<A, T1, T2>, T1 extends FlexoObject, T2 extends FlexoObject> Icon getEnabledIconFor(
 			FlexoActionType<A, T1, T2> action) {
 		return null;
 	}
 
 	@Override
-	public <A extends FlexoAction<A, T1, T2>, T1 extends FlexoModelObject, T2 extends FlexoModelObject> Icon getDisabledIconFor(
+	public <A extends FlexoAction<A, T1, T2>, T1 extends FlexoObject, T2 extends FlexoObject> Icon getDisabledIconFor(
 			FlexoActionType<A, T1, T2> action) {
 		return null;
 	}

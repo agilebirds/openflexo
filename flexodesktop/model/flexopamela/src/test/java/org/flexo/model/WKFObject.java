@@ -12,7 +12,7 @@ import org.openflexo.model.annotations.Setter;
 @ModelEntity(isAbstract = true)
 @IntegrityConstraints({ @IntegrityConstraint("process != null") })
 @Modify(forward = WKFObject.PROCESS, synchWithForward = true)
-public interface WKFObject extends FlexoModelObject {
+public interface WKFObject extends TestModelObject {
 
 	public static final String PROCESS = "process";
 
@@ -24,6 +24,6 @@ public interface WKFObject extends FlexoModelObject {
 	public void setProcess(FlexoProcess aProcess);
 
 	@Override
-	@Setter(FlexoModelObject.FLEXO_ID)
+	@Setter(TestModelObject.FLEXO_ID)
 	public void setFlexoID(String flexoID);
 }

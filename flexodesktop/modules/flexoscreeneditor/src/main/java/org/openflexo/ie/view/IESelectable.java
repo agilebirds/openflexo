@@ -26,7 +26,7 @@ import org.openflexo.selection.SelectableView;
 /**
  * This interface defines behaviour of views representing Flexo objects able to be selected, responding to focus, and able to be selected
  * through a "rectangle selection". Those objects are implementing {@link org.openflexo.foundation.ie.widget.IEWidget} and could be
- * retrieved through {@link #getSelectedObject()}
+ * retrieved through {@link #getSelected()}
  * 
  * Note that this interface inherits from {@link org.openflexo.selection.SelectableView}
  * 

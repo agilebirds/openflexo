@@ -31,9 +31,13 @@ import java.util.logging.Logger;
 
 import javax.swing.SwingUtilities;
 
+import org.openflexo.fge.BackgroundStyle;
 import org.openflexo.fge.FGEUtils;
+import org.openflexo.fge.ForegroundStyle;
 import org.openflexo.fge.GraphicalRepresentation;
 import org.openflexo.fge.ShapeGraphicalRepresentation;
+import org.openflexo.fge.TextStyle;
+import org.openflexo.fge.ColorGradientBackgroundStyle.ColorGradientDirection;
 import org.openflexo.fge.controller.DrawingController;
 import org.openflexo.fge.cp.ControlArea;
 import org.openflexo.fge.geom.FGEDimension;
@@ -41,14 +45,8 @@ import org.openflexo.fge.geom.FGEGeometricObject.SimplifiedCardinalDirection;
 import org.openflexo.fge.geom.FGEPoint;
 import org.openflexo.fge.geom.FGERectangle;
 import org.openflexo.fge.geom.area.FGEHalfLine;
-import org.openflexo.fge.graphics.BackgroundStyle;
-import org.openflexo.fge.graphics.BackgroundStyle.BackgroundImage;
-import org.openflexo.fge.graphics.BackgroundStyle.BackgroundImage.ImageBackgroundType;
-import org.openflexo.fge.graphics.BackgroundStyle.ColorGradient.ColorGradientDirection;
 import org.openflexo.fge.graphics.DecorationPainter;
-import org.openflexo.fge.graphics.ForegroundStyle;
-import org.openflexo.fge.graphics.TextStyle;
-import org.openflexo.fge.shapes.Shape.ShapeType;
+import org.openflexo.fge.shapes.ShapeSpecification.ShapeType;
 import org.openflexo.fge.view.ShapeView;
 import org.openflexo.foundation.DataModification;
 import org.openflexo.foundation.FlexoObservable;
@@ -73,7 +71,6 @@ public class RoleContainerGR extends SWLObjectGR<Role> implements SWLContainerGR
 
 	protected BackgroundStyle background;
 	protected ForegroundStyle decorationForeground;
-	protected BackgroundImage decorationBackground;
 
 	private static final FileResource USER_ROLE_ICON = new FileResource("Resources/WKF/SmallRole.gif");
 	private static final FileResource SYSTEM_ROLE_ICON = new FileResource("Resources/WKF/SmallSystemRole.gif");
@@ -84,7 +81,7 @@ public class RoleContainerGR extends SWLObjectGR<Role> implements SWLContainerGR
 
 	public RoleContainerGR(Role role, SwimmingLaneRepresentation aDrawing) {
 		super(role, ShapeType.RECTANGLE, aDrawing);
-		((org.openflexo.fge.shapes.Rectangle) getShape()).setIsRounded(false);
+		((org.openflexo.fge.shapes.Rectangle) getShapeSpecification()).setIsRounded(false);
 		setLayer(SWLEditorConstants.ROLE_LAYER);
 
 		setMinimalWidth(180);
@@ -145,14 +142,14 @@ public class RoleContainerGR extends SWLObjectGR<Role> implements SWLContainerGR
 	}
 
 	/*@Override
-	public ShapeView<Role> makeShapeView(DrawingController<?> controller)
+	public ShapeView<Role> makeShapeView(DianaEditor controller)
 	{
 		return new RoleContainerView(this,controller);
 	}
 
 	public class RoleContainerView extends ShapeView<Role>
 	{
-		public RoleContainerView(RoleContainerGR aGraphicalRepresentation,DrawingController<?> controller)
+		public RoleContainerView(RoleContainerGR aGraphicalRepresentation,DianaEditor controller)
 		{
 			super(aGraphicalRepresentation,controller);
 			JButton plus = new JButton(IconLibrary.PLUS);
@@ -167,9 +164,9 @@ public class RoleContainerGR extends SWLObjectGR<Role> implements SWLContainerGR
 		}
 	}*/
 
-	protected static boolean isInsideRectangle(GraphicalRepresentation<?> graphicalRepresentation, DrawingController<?> controller,
+	protected static boolean isInsideRectangle(GraphicalRepresentation graphicalRepresentation, DrawingController controller,
 			MouseEvent event, FGERectangle rect) {
-		ShapeView view = (ShapeView) controller.getDrawingView().viewForObject(graphicalRepresentation);
+		ShapeView view = (ShapeView) controller.getDrawingView().viewForNode(graphicalRepresentation);
 		Rectangle boxRect = new Rectangle((int) (rect.getX() * controller.getScale()), (int) (rect.getY() * controller.getScale()),
 				(int) (rect.getWidth() * controller.getScale()), (int) (rect.getHeight() * controller.getScale()));
 		Point clickLocation = SwingUtilities.convertPoint((Component) event.getSource(), event.getPoint(), view);
@@ -201,19 +198,6 @@ public class RoleContainerGR extends SWLObjectGR<Role> implements SWLContainerGR
 
 		decorationForeground = ForegroundStyle.makeStyle(mainColor);
 		decorationForeground.setLineWidth(0.4);
-
-		if (getRole().getIsSystemRole()) {
-			decorationBackground = BackgroundStyle.makeImageBackground(SYSTEM_ROLE_ICON);
-		} else {
-			decorationBackground = BackgroundStyle.makeImageBackground(USER_ROLE_ICON);
-		}
-
-		decorationBackground.setImageBackgroundType(ImageBackgroundType.OPAQUE);
-		decorationBackground.setImageBackgroundColor(Color.WHITE);
-		decorationBackground.setDeltaX(16);
-		decorationBackground.setDeltaY(6);
-		decorationBackground.setUseTransparency(true);
-		decorationBackground.setTransparencyLevel(0.9f);
 	}
 
 	/*@Override
@@ -236,7 +220,7 @@ public class RoleContainerGR extends SWLObjectGR<Role> implements SWLContainerGR
 			if (r == getRole()) {
 				return returned;
 			}
-			GraphicalRepresentation<?> gr = getGraphicalRepresentation(r);
+			GraphicalRepresentation gr = getGraphicalRepresentation(r);
 			if (gr instanceof RoleContainerGR) { // What else could it be ???
 				RoleContainerGR roleGR = (RoleContainerGR)gr;
 				returned += roleGR.getHeight()+2*SWIMMING_LANE_BORDER;
@@ -345,9 +329,9 @@ public class RoleContainerGR extends SWLObjectGR<Role> implements SWLContainerGR
 		if (objectIsBeeingDragged) {
 			getDrawing().reindexObjectForNewVerticalLocation(getRole(), getY());
 			anchorLocation();
-			for (GraphicalRepresentation<?> gr : getDrawingGraphicalRepresentation().getContainedGraphicalRepresentations()) {
+			for (GraphicalRepresentation gr : getDrawingGraphicalRepresentation().getContainedGraphicalRepresentations()) {
 				if (gr instanceof ShapeGraphicalRepresentation && gr != this) {
-					((ShapeGraphicalRepresentation<?>) gr).notifyObjectHasMoved();
+					((ShapeGraphicalRepresentation) gr).notifyObjectHasMoved();
 				}
 			}
 		}

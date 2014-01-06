@@ -26,7 +26,6 @@ import java.io.IOException;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 
-import org.openflexo.foundation.xml.FlexoXMLMappings;
 import org.openflexo.localization.FlexoLocalization;
 import org.openflexo.toolbox.FlexoVersion;
 
@@ -109,7 +108,9 @@ public class FlexoProjectUtil {
 			if (logger.isLoggable(Level.FINE)) {
 				logger.fine("Version is " + v);
 			}
-			return FlexoXMLMappings.latestRelease().isLesserThan(v);
+			// TODO !!!
+			FlexoVersion applicationVersion = new FlexoVersion("1.7");
+			return applicationVersion.isLesserThan(v);
 		}
 	}
 

@@ -34,14 +34,13 @@ import javax.swing.KeyStroke;
 import javax.swing.filechooser.FileFilter;
 
 import org.openflexo.FlexoCst;
-import org.openflexo.GeneralPreferences;
+import org.openflexo.FlexoMainLocalizer;
 import org.openflexo.br.view.JIRAIssueReportDialog;
+import org.openflexo.ch.DocResourceManager;
 import org.openflexo.components.ProgressWindow;
 import org.openflexo.components.validation.ConsistencyCheckDialog;
-import org.openflexo.drm.DocResourceManager;
 import org.openflexo.fib.utils.FlexoLoggingViewer;
 import org.openflexo.foundation.DataModification;
-import org.openflexo.foundation.FlexoMainLocalizer;
 import org.openflexo.foundation.FlexoObservable;
 import org.openflexo.foundation.GraphicalFlexoObserver;
 import org.openflexo.foundation.validation.ValidationFinishedNotification;
@@ -56,10 +55,8 @@ import org.openflexo.localization.FlexoLocalization;
 import org.openflexo.logging.FlexoLogger;
 import org.openflexo.logging.FlexoLoggingManager;
 import org.openflexo.module.AutoSaveService;
-import org.openflexo.module.Module;
-import org.openflexo.module.UserType;
-import org.openflexo.prefs.FlexoPreferences;
 import org.openflexo.view.controller.FlexoController;
+import org.openflexo.view.controller.ResourceCenterEditor;
 import org.openflexo.view.controller.model.ControllerModel;
 
 /**
@@ -75,6 +72,8 @@ public class ToolsMenu extends FlexoMenu {
 	// ============================= Instance Variables
 	// =========================
 	// ==========================================================================
+
+	public JMenuItem manageResourceCenterItem;
 
 	public JMenuItem loggingItem;
 
@@ -93,21 +92,18 @@ public class ToolsMenu extends FlexoMenu {
 	public ToolsMenu(FlexoController controller) {
 		super("tools", controller);
 		addSpecificItems();
-		if (UserType.isDevelopperRelease() || UserType.isMaintainerRelease()) {
-			add(loggingItem = new LoggingItem());
-			add(localizedEditorItem = new LocalizedEditorItem());
-			add(rmItem = new ResourceManagerItem());
-			addSeparator();
-		}
+		add(manageResourceCenterItem = new ManageResourceCenterItem());
+		add(loggingItem = new LoggingItem());
+		add(localizedEditorItem = new LocalizedEditorItem());
+		add(rmItem = new ResourceManagerItem());
+		addSeparator();
 		add(submitBug = new SubmitBugItem());
-		if (getModuleLoader().allowsDocSubmission() && !getModuleLoader().isAvailable(Module.DRE_MODULE)) {
+		if (getModuleLoader().allowsDocSubmission()) {
 			addSeparator();
 			add(saveDocSubmissions = new SaveDocSubmissionItem());
 		}
-		if (UserType.isDevelopperRelease() || UserType.isMaintainerRelease()) {
-			addSeparator();
-			add(repairProject = new RepairProjectItem());
-		}
+		addSeparator();
+		add(repairProject = new RepairProjectItem());
 		add(timeTraveler = new TimeTraveler());
 	}
 
@@ -115,10 +111,34 @@ public class ToolsMenu extends FlexoMenu {
 		// No specific item here, please override this method when required
 	}
 
-	// ==========================================================================
-	// ========================== Logging
-	// =======================================
-	// ==========================================================================
+	// ===============================================================
+	// ===================== Resource Centers ========================
+	// ===============================================================
+
+	public class ManageResourceCenterItem extends FlexoMenuItem {
+
+		public ManageResourceCenterItem() {
+			super(new ManageResourceCenterAction(), "manage_resource_centers", KeyStroke.getKeyStroke(KeyEvent.VK_G, FlexoCst.META_MASK),
+					getController(), true);
+		}
+
+	}
+
+	public class ManageResourceCenterAction extends AbstractAction {
+		public ManageResourceCenterAction() {
+			super();
+		}
+
+		@Override
+		public void actionPerformed(ActionEvent arg0) {
+			ResourceCenterEditor.showResourceCenterEditor(getController().getApplicationContext().getResourceCenterService(),
+					getController().getFlexoFrame());
+		}
+	}
+
+	// ===============================================================
+	// ========================== Logging ============================
+	// ===============================================================
 
 	public class LoggingItem extends FlexoMenuItem {
 
@@ -194,7 +214,7 @@ public class ToolsMenu extends FlexoMenu {
 			if (getController().getProject() == null) {
 				return;
 			}
-			getController().getRMWindow(getController().getProject()).show();
+			// getController().getRMWindow(getController().getProject()).show();
 		}
 
 		@Override
@@ -233,7 +253,8 @@ public class ToolsMenu extends FlexoMenu {
 
 		@Override
 		public void actionPerformed(ActionEvent arg0) {
-			JIRAIssueReportDialog.newBugReport(getController().getModule(), getController().getProject());
+			JIRAIssueReportDialog.newBugReport(getController().getModule(), getController().getProject(), getController()
+					.getApplicationContext());
 		}
 
 	}
@@ -246,7 +267,7 @@ public class ToolsMenu extends FlexoMenu {
 
 	}
 
-	public static class SaveDocSubmissionAction extends AbstractAction {
+	public class SaveDocSubmissionAction extends AbstractAction {
 		public SaveDocSubmissionAction() {
 			super();
 		}
@@ -276,7 +297,7 @@ public class ToolsMenu extends FlexoMenu {
 					} else {
 						savedFile = chooser.getSelectedFile();
 					}
-					DocResourceManager drm = DocResourceManager.instance();
+					DocResourceManager drm = getController().getApplicationContext().getDocResourceManager();
 					drm.getSessionSubmissions().save(savedFile);
 					drm.getSessionSubmissions().clear();
 					FlexoController.notify(FlexoLocalization.localizedForKey("doc_submission_report_successfully_saved"));
@@ -337,11 +358,11 @@ public class ToolsMenu extends FlexoMenu {
 				if (dataModification instanceof ValidationInitNotification) {
 					ValidationInitNotification initNotification = (ValidationInitNotification) dataModification;
 					ProgressWindow.showProgressWindow(FlexoLocalization.localizedForKey("validating") + " "
-							+ initNotification.getRootObject().getFullyQualifiedName(), initNotification.getNbOfObjectToValidate());
+							+ initNotification.getRootObject().toString(), initNotification.getNbOfObjectToValidate());
 				} else if (dataModification instanceof ValidationProgressNotification) {
 					ValidationProgressNotification progressNotification = (ValidationProgressNotification) dataModification;
 					ProgressWindow.setProgressInstance(FlexoLocalization.localizedForKey("validating") + " "
-							+ progressNotification.getValidatedObject().getFullyQualifiedName());
+							+ progressNotification.getValidatedObject().toString());
 				} else if (dataModification instanceof ValidationSecondaryInitNotification) {
 					ValidationSecondaryInitNotification initNotification = (ValidationSecondaryInitNotification) dataModification;
 					ProgressWindow.resetSecondaryProgressInstance(initNotification.getNbOfRulesToApply());
@@ -410,8 +431,8 @@ public class ToolsMenu extends FlexoMenu {
 			} else {
 				if (FlexoController.confirm(FlexoLocalization.localizedForKey("time_traveling_is_disabled") + ". "
 						+ FlexoLocalization.localizedForKey("would_you_like_to_activate_it_now?"))) {
-					GeneralPreferences.setAutoSaveEnabled(true);
-					FlexoPreferences.savePreferences(true);
+					getController().getApplicationContext().getGeneralPreferences().setAutoSaveEnabled(true);
+					getController().getApplicationContext().getPreferencesService().savePreferences();
 					getAutoSaveService().showTimeTravelerDialog();
 				}
 			}

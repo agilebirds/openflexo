@@ -150,5 +150,4 @@ public class FlexoCst extends ColorCst {
 	public static Color otherLineColor = new Color(232, 237, 215);
 
 	public static final int LOADING_PROGRESS_STEPS = 26;
-
 }

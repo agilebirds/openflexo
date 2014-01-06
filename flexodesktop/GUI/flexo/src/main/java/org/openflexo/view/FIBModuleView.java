@@ -33,7 +33,7 @@ import javax.swing.SwingConstants;
 import org.openflexo.fib.FIBLibrary;
 import org.openflexo.fib.model.FIBComponent;
 import org.openflexo.fib.model.listener.FIBSelectionListener;
-import org.openflexo.foundation.FlexoModelObject;
+import org.openflexo.foundation.FlexoObject;
 import org.openflexo.foundation.GraphicalFlexoObserver;
 import org.openflexo.foundation.utils.FlexoProgress;
 import org.openflexo.selection.SelectionListener;
@@ -46,7 +46,7 @@ import org.openflexo.view.controller.model.FlexoPerspective;
  * @author sguerin
  * 
  */
-public abstract class FIBModuleView<O extends FlexoModelObject> extends SelectionSynchronizedFIBView implements
+public abstract class FIBModuleView<O extends FlexoObject> extends SelectionSynchronizedFIBView implements
 		SelectionSynchronizedModuleView<O>, GraphicalFlexoObserver, FIBSelectionListener, Scrollable {
 	static final Logger logger = Logger.getLogger(FIBModuleView.class.getPackage().getName());
 
@@ -91,6 +91,7 @@ public abstract class FIBModuleView<O extends FlexoModelObject> extends Selectio
 	@Override
 	public void deleteModuleView() {
 		deleteView();
+		getFIBController().delete();
 		getFlexoController().removeModuleView(this);
 	}
 

@@ -46,17 +46,23 @@ public class VECst {
 
 	// General
 	public static File ONTOLOGY_VIEW_FIB = new FileResource("Fib/OntologyView.fib");
+	public static File VIRTUAL_MODEL_INSTANCE_VIEW_FIB = new FileResource("Fib/VirtualModelInstanceView.fib");
 
-	// Shema edition
-	public static File ADD_VIEW_DIALOG_FIB = new FileResource("Fib/Dialog/AddViewDialog.fib");
-	public static File DELETE_VIEW_ELEMENTS_DIALOG_FIB = new FileResource("Fib/Dialog/DeleteViewElementsDialog.fib");
-	public static File REINDEX_VIEW_ELEMENTS_DIALOG_FIB = new FileResource("Fib/Dialog/ReindexViewElementsDialog.fib");
+	// View/VirtualModelInstance edition
+	public static File CREATE_VIEW_DIALOG_FIB = new FileResource("Fib/Dialog/CreateViewDialog.fib");
+	public static File CREATE_VIRTUAL_MODEL_INSTANCE_DIALOG_FIB = new FileResource("Fib/Dialog/CreateVirtualModelInstanceDialog.fib");
+	public static File CONFIGURE_FREE_MODEL_SLOT_INSTANCE_DIALOG_FIB = new FileResource(
+			"Fib/Dialog/ConfigureFreeModelSlotInstanceDialog.fib");
+	public static File CONFIGURE_TYPE_AWARE_MODEL_SLOT_INSTANCE_DIALOG_FIB = new FileResource(
+			"Fib/Dialog/ConfigureTypeAwareModelSlotInstanceDialog.fib");
+	public static File CONFIGURE_VIRTUAL_MODEL_SLOT_INSTANCE_DIALOG_FIB = new FileResource(
+			"Fib/Dialog/ConfigureVirtualModelSlotInstanceDialog.fib");
 
-	// Ontology edition
-	public static File CREATE_ONTOLOGY_CLASS_DIALOG_FIB = new FileResource("Fib/Dialog/CreateOntologyClassDialog.fib");
-	public static File CREATE_ONTOLOGY_INDIVIDUAL_FIB = new FileResource("Fib/Dialog/CreateOntologyIndividualDialog.fib");
-	public static File DELETE_ONTOLOGY_OBJECTS_DIALOG_FIB = new FileResource("Fib/Dialog/DeleteOntologyObjectsDialog.fib");
-	public static File CREATE_DATA_PROPERTY_DIALOG_FIB = new FileResource("Fib/Dialog/CreateDataPropertyDialog.fib");
-	public static File CREATE_OBJECT_PROPERTY_DIALOG_FIB = new FileResource("Fib/Dialog/CreateObjectPropertyDialog.fib");
+	// Diagram edition
+	public static File CREATE_DIAGRAM_DIALOG_FIB = new FileResource("Fib/Dialog/CreateDiagramDialog.fib");
+	public static File CHOOSE_AND_CONFIGURE_CREATION_SCHEME_DIALOG_FIB = new FileResource(
+			"Fib/Dialog/ChooseAndConfigureCreationSchemeDialog.fib");
+	public static File DELETE_DIAGRAM_ELEMENTS_DIALOG_FIB = new FileResource("Fib/Dialog/DeleteDiagramElementsDialog.fib");
+	public static File REINDEX_DIAGRAM_ELEMENTS_DIALOG_FIB = new FileResource("Fib/Dialog/ReindexDiagramElementsDialog.fib");
 
 }

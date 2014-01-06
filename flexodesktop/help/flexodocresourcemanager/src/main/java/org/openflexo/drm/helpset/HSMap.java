@@ -34,7 +34,7 @@ import org.openflexo.drm.DocItem;
 import org.openflexo.drm.DocItemFolder;
 import org.openflexo.drm.DocResourceCenter;
 import org.openflexo.drm.Language;
-import org.openflexo.foundation.FlexoObject;
+import org.openflexo.foundation.KVCFlexoObject;
 import org.openflexo.localization.FlexoLocalization;
 import org.openflexo.toolbox.FileResource;
 import org.openflexo.toolbox.FileUtils;
@@ -44,7 +44,7 @@ import org.openflexo.xmlcode.XMLMapping;
 import org.openflexo.xmlcode.XMLSerializable;
 import org.xml.sax.SAXException;
 
-public class HSMap extends FlexoObject implements XMLSerializable {
+public class HSMap extends KVCFlexoObject implements XMLSerializable {
 
 	protected static final Logger logger = Logger.getLogger(HSMap.class.getPackage().getName());
 
@@ -86,7 +86,7 @@ public class HSMap extends FlexoObject implements XMLSerializable {
 		return _entries;
 	}
 
-	public class HSMapEntry extends FlexoObject implements XMLSerializable {
+	public class HSMapEntry extends KVCFlexoObject implements XMLSerializable {
 		public DocItem docItem;
 		public String url;
 		public String target;

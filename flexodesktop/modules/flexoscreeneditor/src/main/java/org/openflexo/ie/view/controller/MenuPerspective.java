@@ -21,7 +21,7 @@ package org.openflexo.ie.view.controller;
 
 import javax.swing.ImageIcon;
 
-import org.openflexo.foundation.FlexoModelObject;
+import org.openflexo.foundation.FlexoObject;
 import org.openflexo.foundation.ie.menu.FlexoItemMenu;
 import org.openflexo.icon.SEIconLibrary;
 import org.openflexo.ie.view.FlexoMenuItemView;
@@ -62,7 +62,7 @@ class MenuPerspective extends FlexoPerspective {
 	}
 
 	@Override
-	public FlexoItemMenu getDefaultObject(FlexoModelObject proposedObject) {
+	public FlexoItemMenu getDefaultObject(FlexoObject proposedObject) {
 		if (proposedObject instanceof FlexoItemMenu) {
 			return (FlexoItemMenu) proposedObject;
 		}
@@ -70,12 +70,12 @@ class MenuPerspective extends FlexoPerspective {
 	}
 
 	@Override
-	public boolean hasModuleViewForObject(FlexoModelObject object) {
+	public boolean hasModuleViewForObject(FlexoObject object) {
 		return object instanceof FlexoItemMenu;
 	}
 
 	@Override
-	public ModuleView<FlexoItemMenu> createModuleViewForObject(FlexoModelObject object, FlexoController controller) {
+	public ModuleView<FlexoItemMenu> createModuleViewForObject(FlexoObject object, FlexoController controller) {
 		if (object instanceof FlexoItemMenu) {
 			FlexoItemMenu menu = (FlexoItemMenu) object;
 			if (menu.isRootMenu()) {

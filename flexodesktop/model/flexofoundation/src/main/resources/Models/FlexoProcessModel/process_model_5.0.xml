@@ -27,12 +27,12 @@
     <description>Root class for all objects of Flexo</description>
   </entity>
   
-  <entity name="org.openflexo.foundation.FlexoImportableObject" abstract="YES">
+ <!--   <entity name="org.openflexo.foundation.FlexoImportableObject" abstract="YES">
     <property name="isDeletedOnServer" xmlTag="isDeletedOnServer" attribute="YES" description="Unique ID generated and maintained by Flexo"/>
     <property name="URI" xmlTag="URI" attribute="YES" description=""/>
     <property name="versionURI" xmlTag="versionURI" attribute="YES" description=""/>
     <property name="URIFromSourceObject" xmlTag="URISource" attribute="YES" description="the URI of the object this object was issued from"/>
-  </entity>    
+  </entity>  -->  
 
   <entity name="org.openflexo.foundation.FlexoProperty" xmlTag="FlexoProperty">
      <property name="name" xmlTag="name" attribute="yes"/>

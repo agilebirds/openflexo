@@ -37,7 +37,6 @@ import org.openflexo.foundation.FlexoEditor;
 import org.openflexo.foundation.action.UndoManager;
 import org.openflexo.icon.IconLibrary;
 import org.openflexo.localization.FlexoLocalization;
-import org.openflexo.module.UserType;
 import org.openflexo.view.controller.FlexoController;
 import org.openflexo.view.controller.model.ControllerModel;
 
@@ -63,12 +62,11 @@ public class EditMenu extends FlexoMenu {
 	public EditMenu(FlexoController controller) {
 		super("edit", controller);
 		_controller = controller;
-		if (UserType.isMaintainerRelease() || UserType.isDevelopperRelease()) {
-			add(undoItem = new UndoItem());
-			add(redoItem = new RedoItem());
-			undoItem.setEnabled(false);
-			redoItem.setEnabled(false);
-		}
+
+		add(undoItem = new UndoItem());
+		add(redoItem = new RedoItem());
+		undoItem.setEnabled(false);
+		redoItem.setEnabled(false);
 	}
 
 	// ==============================================

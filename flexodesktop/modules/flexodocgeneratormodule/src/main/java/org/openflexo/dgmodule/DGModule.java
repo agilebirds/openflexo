@@ -38,6 +38,20 @@ public class DGModule extends FlexoModule {
 
 	private static final Logger logger = Logger.getLogger(DGModule.class.getPackage().getName());
 
+	public static final String DG_MODULE_SHORT_NAME = "DG";
+
+	public static final String DG_MODULE_NAME = "doc_generator";
+
+	public static class DocumentationGenerator extends Module {
+
+		public DocumentationGenerator() {
+			super(DG_MODULE_NAME, DG_MODULE_SHORT_NAME, "org.openflexo.dgmodule.DGModule", "modules/flexodocgenerator", "10004", "dg",
+					DGIconLibrary.DG_SMALL_ICON, DGIconLibrary.DG_MEDIUM_ICON, DGIconLibrary.DG_MEDIUM_ICON_WITH_HOVER,
+					DGIconLibrary.DG_BIG_ICON, true);
+		}
+
+	}
+
 	private static final InspectorGroup[] inspectorGroups = new InspectorGroup[] { Inspectors.GENERATORS, Inspectors.DE, Inspectors.DG };
 
 	public DGModule(ApplicationContext applicationContext) throws Exception {

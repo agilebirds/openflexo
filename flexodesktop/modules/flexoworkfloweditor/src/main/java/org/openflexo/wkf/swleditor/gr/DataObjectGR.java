@@ -23,22 +23,22 @@ import java.awt.Color;
 import java.util.List;
 import java.util.logging.Logger;
 
+import org.openflexo.fge.BackgroundStyle;
 import org.openflexo.fge.FGEUtils;
+import org.openflexo.fge.ForegroundStyle;
+import org.openflexo.fge.ForegroundStyle.CapStyle;
+import org.openflexo.fge.ForegroundStyle.DashStyle;
+import org.openflexo.fge.ForegroundStyle.JoinStyle;
 import org.openflexo.fge.cp.ControlArea;
 import org.openflexo.fge.cp.ShapeResizingControlPoint;
 import org.openflexo.fge.geom.FGEGeometricObject.CardinalDirection;
 import org.openflexo.fge.geom.FGEGeometricObject.Filling;
 import org.openflexo.fge.geom.FGEPoint;
 import org.openflexo.fge.geom.FGEPolygon;
-import org.openflexo.fge.graphics.BackgroundStyle;
 import org.openflexo.fge.graphics.FGEShapeGraphics;
-import org.openflexo.fge.graphics.ForegroundStyle;
-import org.openflexo.fge.graphics.ForegroundStyle.CapStyle;
-import org.openflexo.fge.graphics.ForegroundStyle.DashStyle;
-import org.openflexo.fge.graphics.ForegroundStyle.JoinStyle;
 import org.openflexo.fge.graphics.ShapePainter;
 import org.openflexo.fge.shapes.RegularPolygon;
-import org.openflexo.fge.shapes.Shape.ShapeType;
+import org.openflexo.fge.shapes.ShapeSpecification.ShapeType;
 import org.openflexo.foundation.DataModification;
 import org.openflexo.foundation.FlexoObservable;
 import org.openflexo.foundation.wkf.WKFDataObject;
@@ -78,7 +78,7 @@ public class DataObjectGR extends ArtefactGR<WKFDataObject> {
 
 	public DataObjectGR(WKFDataObject dataSource, SwimmingLaneRepresentation aDrawing) {
 		super(dataSource, ShapeType.POLYGON, aDrawing);
-		((RegularPolygon) getShape()).setPoints(fileShape.getPoints());
+		((RegularPolygon) getShapeSpecification()).setPoints(fileShape.getPoints());
 		setIsFloatingLabel(true);
 		setForeground(FOREGROUND);
 		setBackground(BACKGROUND);

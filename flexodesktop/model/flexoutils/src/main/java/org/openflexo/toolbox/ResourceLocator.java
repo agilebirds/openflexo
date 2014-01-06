@@ -146,9 +146,14 @@ public class ResourceLocator {
 						directoriesSearchOrder.add(preferredResourcePath);
 					}
 					File workingDirectory = new File(System.getProperty("user.dir"));
-					File flexoDesktopDirectory = findProjectDirectoryWithName(workingDirectory, "flexodesktop");
+					File flexoDesktopDirectory = findProjectDirectoryWithName(workingDirectory, "openflexo");
 					if (flexoDesktopDirectory != null) {
 						findAllFlexoProjects(flexoDesktopDirectory, directoriesSearchOrder);
+						File technologyadaptersintegrationDirectory = new File(flexoDesktopDirectory.getParentFile(),
+								"packaging/technologyadaptersintegration");
+						if (technologyadaptersintegrationDirectory != null) {
+							findAllFlexoProjects(technologyadaptersintegrationDirectory, directoriesSearchOrder);
+						}
 					}
 					directoriesSearchOrder.add(workingDirectory);
 				}
@@ -173,9 +178,13 @@ public class ResourceLocator {
 		if (new File(dir, "pom.xml").exists()) {
 			files.add(dir);
 			for (File f : dir.listFiles()) {
-				if (f.getName().startsWith("flexo")) {
+				if (f.getName().startsWith("flexo") || f.getName().contains("connector")
+						|| f.getName().equals("technologyadaptersintegration") || f.getName().startsWith("diana")
+						|| f.getName().startsWith("fib") || f.getName().startsWith("agilebirdsconnector") || f.getName().equals("projects")
+						|| f.getName().equals("free-modelling-editor")) {
 					addProjectResourceDirs(files, f);
-				} else if (f.isDirectory()) {
+				}
+				if (f.isDirectory()) {
 					findAllFlexoProjects(f, files);
 				}
 			}
@@ -188,7 +197,7 @@ public class ResourceLocator {
 		File file3 = new File(f.getAbsolutePath() + "/src/dev/resources");
 		// File file4 = new File(f.getAbsolutePath());
 		if (logger.isLoggable(Level.FINE)) {
-			logger.info("Adding directory " + file1.getAbsolutePath());
+			logger.fine("Adding directory " + file1.getAbsolutePath());
 		}
 		if (logger.isLoggable(Level.FINE)) {
 			logger.fine("Adding directory " + file2.getAbsolutePath());

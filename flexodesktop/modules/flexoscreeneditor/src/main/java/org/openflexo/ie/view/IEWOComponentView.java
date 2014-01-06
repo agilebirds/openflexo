@@ -44,7 +44,7 @@ import javax.swing.event.ChangeEvent;
 import javax.swing.event.ChangeListener;
 
 import org.openflexo.foundation.DataModification;
-import org.openflexo.foundation.FlexoModelObject;
+import org.openflexo.foundation.FlexoObject;
 import org.openflexo.foundation.FlexoObservable;
 import org.openflexo.foundation.GraphicalFlexoObserver;
 import org.openflexo.foundation.ObjectDeleted;
@@ -379,7 +379,7 @@ public class IEWOComponentView extends IEPanel implements GraphicalFlexoObserver
 	 *            : the object that has been added to selection
 	 */
 	@Override
-	public void fireObjectSelected(FlexoModelObject object) {
+	public void fireObjectSelected(FlexoObject object) {
 		if (object instanceof IEWidget && !(object instanceof IETRWidget)) {
 			IESelectable view = findViewForModel((IEWidget) object);
 			if (view != null) {
@@ -403,7 +403,7 @@ public class IEWOComponentView extends IEPanel implements GraphicalFlexoObserver
 	 *            : the object that has been removed from selection
 	 */
 	@Override
-	public void fireObjectDeselected(FlexoModelObject object) {
+	public void fireObjectDeselected(FlexoObject object) {
 		if (object instanceof IEWidget) {
 			IEWidgetView<?> view = findViewForModel((IEObject) object);
 			if (view != null) {

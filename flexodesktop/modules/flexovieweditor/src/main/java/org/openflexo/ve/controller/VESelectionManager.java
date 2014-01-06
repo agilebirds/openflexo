@@ -30,10 +30,11 @@ import org.openflexo.fge.controller.DrawingController;
 import org.openflexo.fge.geom.FGEPoint;
 import org.openflexo.fge.view.DrawingView;
 import org.openflexo.foundation.FlexoModelObject;
+import org.openflexo.foundation.FlexoObject;
 import org.openflexo.selection.PastingGraphicalContext;
 import org.openflexo.selection.SelectionManager;
-import org.openflexo.ve.shema.VEShemaModuleView;
-import org.openflexo.ve.shema.VEShemaView;
+import org.openflexo.ve.diagram.DiagramModuleView;
+import org.openflexo.ve.diagram.DiagramView;
 import org.openflexo.view.menu.FlexoMenuBar;
 
 /**
@@ -76,15 +77,15 @@ public class VESelectionManager extends SelectionManager {
 	 * @return FlexoModelObject
 	 */
 	@Override
-	public FlexoModelObject getRootFocusedObject() {
+	public FlexoObject getRootFocusedObject() {
 		return getVEController().getCurrentDisplayedObjectAsModuleView();
 	}
 
 	@Override
 	public FlexoModelObject getPasteContext() {
-		if (getVEController().getCurrentModuleView() instanceof VEShemaModuleView) {
-			VEShemaView v = ((VEShemaModuleView) getVEController().getCurrentModuleView()).getController().getDrawingView();
-			GraphicalRepresentation<?> gr = v.getController().getLastSelectedGR();
+		if (getVEController().getCurrentModuleView() instanceof DiagramModuleView) {
+			DiagramView v = ((DiagramModuleView) getVEController().getCurrentModuleView()).getController().getDrawingView();
+			GraphicalRepresentation gr = v.getController().getLastSelectedNode();
 			if (gr != null && gr.getDrawable() instanceof FlexoModelObject) {
 				return (FlexoModelObject) gr.getDrawable();
 			} else {
@@ -98,14 +99,14 @@ public class VESelectionManager extends SelectionManager {
 	@Override
 	public PastingGraphicalContext getPastingGraphicalContext() {
 		PastingGraphicalContext pgc = new PastingGraphicalContext();
-		if (getVEController().getCurrentModuleView() instanceof VEShemaModuleView) {
-			VEShemaView v = ((VEShemaModuleView) getVEController().getCurrentModuleView()).getController().getDrawingView();
-			DrawingController<?> controller = v.getController();
-			GraphicalRepresentation<?> target = controller.getLastSelectedGR();
+		if (getVEController().getCurrentModuleView() instanceof DiagramModuleView) {
+			DiagramView v = ((DiagramModuleView) getVEController().getCurrentModuleView()).getController().getDrawingView();
+			DrawingController controller = v.getController();
+			GraphicalRepresentation target = controller.getLastSelectedNode();
 			if (target == null) {
 				pgc.targetContainer = controller.getDrawingView();
 			} else {
-				pgc.targetContainer = (JComponent) v.viewForObject(target);
+				pgc.targetContainer = (JComponent) v.viewForNode(target);
 			}
 			if (controller.getLastClickedPoint() != null) {
 				pgc.precisePastingLocation = controller.getLastClickedPoint();

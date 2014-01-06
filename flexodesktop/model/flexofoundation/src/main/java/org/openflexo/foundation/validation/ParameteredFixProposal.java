@@ -19,11 +19,9 @@
  */
 package org.openflexo.foundation.validation;
 
+import java.util.Collection;
 import java.util.Hashtable;
 import java.util.logging.Logger;
-
-import org.openflexo.foundation.param.ParameterDefinition;
-import org.openflexo.foundation.param.TextFieldParameter;
 
 /**
  * Automatic fix proposal with parameters
@@ -35,39 +33,88 @@ public abstract class ParameteredFixProposal<R extends ValidationRule<R, V>, V e
 
 	private static final Logger logger = Logger.getLogger(ParameteredFixProposal.class.getPackage().getName());
 
-	// private Hashtable _params;
-	// private Hashtable _labels;
+	private Hashtable<String, ParameterDefinition<?>> parameters;
 
-	private Hashtable _parameters;
-	private ParameterDefinition[] _paramsArray;
-
-	public ParameteredFixProposal(String aMessage, ParameterDefinition[] parameters) {
+	public ParameteredFixProposal(String aMessage, ParameterDefinition<?>[] parameters) {
 		super(aMessage);
-		_parameters = new Hashtable();
+		this.parameters = new Hashtable<String, ParameterDefinition<?>>();
 		for (int i = 0; i < parameters.length; i++) {
-			_parameters.put(parameters[i].getName(), parameters[i]);
+			this.parameters.put(parameters[i].getName(), parameters[i]);
 		}
-		_paramsArray = parameters;
 	}
 
 	public ParameteredFixProposal(String aMessage, String paramName, String paramLabel, String paramDefaultValue) {
 		this(aMessage, singleParameterWith(paramName, paramLabel, paramDefaultValue));
 	}
 
-	private static ParameterDefinition[] singleParameterWith(String paramName, String paramLabel, String paramDefaultValue) {
-		ParameterDefinition[] returned = { new TextFieldParameter(paramName, paramLabel, paramDefaultValue) };
+	public StringParameter getStringParameter(String parameterName) {
+		for (ParameterDefinition<?> p : getParameters()) {
+			if (p instanceof StringParameter && ((StringParameter) p).getName().equals(parameterName)) {
+				return (StringParameter) p;
+			}
+		}
+		return null;
+	}
+
+	private static ParameterDefinition<?>[] singleParameterWith(String paramName, String paramLabel, String paramDefaultValue) {
+		ParameterDefinition<?>[] returned = { new StringParameter(paramName, paramLabel, paramDefaultValue) };
 		return returned;
 	}
 
 	public Object getValueForParameter(String name) {
-		return ((ParameterDefinition) _parameters.get(name)).getValue();
+		return ((ParameterDefinition<?>) parameters.get(name)).getValue();
 	}
 
-	public ParameterDefinition[] getParameters() {
-		return _paramsArray;
+	public Collection<ParameterDefinition<?>> getParameters() {
+		return parameters.values();
 	}
 
 	public void updateBeforeApply() {
 		// Override
+	}
+
+	public static class ParameterDefinition<T> {
+
+		private String name;
+		private String label;
+		private T value;
+
+		public ParameterDefinition(String name, String label, T value) {
+			super();
+			this.name = name;
+			this.label = label;
+			this.value = value;
+		}
+
+		public String getName() {
+			return name;
+		}
+
+		public void setName(String name) {
+			this.name = name;
+		}
+
+		public T getValue() {
+			return value;
+		}
+
+		public void setValue(T value) {
+			this.value = value;
+		}
+
+		public String getLabel() {
+			return label;
+		}
+
+		public void setLabel(String label) {
+			this.label = label;
+		}
+	}
+
+	public static class StringParameter extends ParameterDefinition<String> {
+
+		public StringParameter(String name, String label, String value) {
+			super(name, label, value);
+		}
 	}
 }

@@ -1,0 +1,18 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<Panel className="org.openflexo.inspector.FIBInspector" layout="border" titleFont="SansSerif,0,12" darkLevel="0" dataClassName="org.openflexo.foundation.view.diagram.viewpoint.DiagramSpecification" controllerClassName="org.openflexo.inspector.FIBInspectorController" font="SansSerif,0,12" name="Inspector">
+  <TabPanel name="Tab" constraints="border(location=center)">
+    <Tab title="Basic" layout="twocols" titleFont="SansSerif,0,11" darkLevel="0" index="0" font="SansSerif,0,11" useScrollBar="true" horizontalScrollbarPolicy="HORIZONTAL_SCROLLBAR_AS_NEEDED" verticalScrollbarPolicy="VERTICAL_SCROLLBAR_AS_NEEDED" name="BasicTab" />
+    <Tab title="Advanced" layout="twocols" titleFont="SansSerif,0,11" darkLevel="0" index="2" font="SansSerif,0,11" useScrollBar="true" horizontalScrollbarPolicy="HORIZONTAL_SCROLLBAR_AS_NEEDED" verticalScrollbarPolicy="VERTICAL_SCROLLBAR_AS_NEEDED" name="AdvancedTab" />
+  </TabPanel>
+  <LocalizedDictionary>
+    <Localized key="Advanced" lang="French">Avancé</Localized>
+    <Localized key="Basic" lang="French">Basique</Localized>
+    <Localized key="name" lang="English">Name</Localized>
+    <Localized key="name" lang="French">Nom</Localized>
+    <Localized key="name" lang="Dutch">Name</Localized>
+    <Localized key="uri" lang="English">URI</Localized>
+    <Localized key="uri" lang="French">URI</Localized>
+    <Localized key="uri" lang="Dutch">URI</Localized>
+  </LocalizedDictionary>
+  <Parameter name="title" value="Diagram Specification" />
+</Panel>

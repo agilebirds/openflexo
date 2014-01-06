@@ -1,0 +1,53 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<model builder="org.openflexo.foundation.viewpoint.ViewPoint$ViewPointBuilder"  handlesReferences="yes" serializationMode="pseudoTree">
+
+  <entity name="org.openflexo.foundation.FlexoProperty" xmlTag="FlexoProperty">
+     <property name="name" xmlTag="name" attribute="yes"/>
+     <property name="value" xmlTag="value" attribute="yes"/>
+  </entity>
+
+  <entity name="org.openflexo.foundation.FlexoObject" abstract="YES" finalizer="finalizeDeserialization">
+   <description>Root class for all objects of Flexo</description>
+  	<property name="userIdentifier" xmlTag="userID" attribute="YES" copyable="no" description="Unique ID of the user (used for team synchronization)"/>
+  	<property name="flexoID" xmlTag="flexoID" attribute="YES" copyable="no" description="Unique ID generated and maintained by Flexo"/>
+    <property name="docFormat" xmlTag="docFormat" attribute="YES" description=""/>
+    <property name="dontGenerate" xmlTag="dontGenerate" attribute="YES" description="Check this box, if you don't want this node to generate documentation"/>
+    <property name="description" xmlTag="description" attribute="YES" description="Defines widget name"/>
+    <property name="hasSpecificDescriptions" xmlTag="useSpecificDescriptions" attribute="YES" description="Wheter the specific descriptions should be used in the generated documentation or not"/>
+    <property name="specificDescriptions" xmlTag="specificDescriptions" type="hashtable" description="Hashtable(String,String) that contains a name of a DocType as a key, and a description specific to that DocType as the value"/>
+    <property name="customProperties" contains="org.openflexo.foundation.FlexoProperty" type="vector" primary="yes"/>
+    <property name="dynamicProperties" xmlTag="?" type="unmappedAttributes" description="Hashtable(String,String) that contains dynamic properties (data that are not handled by application, but need to be stored in the context of back compatibility)"/>
+    <!--  <property name="editionPatternReferences" type="vector" primary="yes" xmlTag="EditionPatternReference"/> -->
+  </entity>
+
+  <entity name="org.openflexo.foundation.viewpoint.ViewPointObject" abstract="YES" finalizer="finalizeDeserialization">
+   <description>Root class for all objects of ViewPoint model</description>
+  </entity>
+
+	<entity name="org.openflexo.foundation.viewpoint.NamedViewPointObject" abstract="yes">
+		<property name="name" xmlTag="name" attribute="YES" />
+		<property name="description" xmlTag="description" />
+	</entity>
+
+	<entity name="org.openflexo.foundation.viewpoint.ViewPoint"
+		xmlTag="ViewPoint" finalizer="finalizeDeserialization">
+		<property name="viewPointURI" xmlTag="uri" attribute="YES" />
+		<property name="version" xmlTag="version" attribute="YES" />
+		<property name="modelVersion" xmlTag="modelVersion" attribute="YES" />
+		<property name="localizedDictionary" xmlTag="LocalizedDictionary" />
+	</entity>
+
+	<entity name="org.openflexo.foundation.viewpoint.LocalizedDictionary"
+		xmlTag="LocalizedDictionary">
+		<property name="entries" type="vector" xmlTag="Localized" />
+	</entity>
+
+	<entity name="org.openflexo.foundation.viewpoint.LocalizedEntry"
+		xmlTag="Localized">
+		<property name="key" xmlTag="key" attribute="YES" />
+		<property name="language" xmlTag="lang" attribute="YES" />
+		<property name="value" text="yes" />
+	</entity>
+
+</model>

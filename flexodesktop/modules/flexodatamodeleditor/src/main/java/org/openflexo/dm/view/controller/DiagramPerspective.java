@@ -31,11 +31,12 @@ import org.openflexo.dm.view.DMBrowserView;
 import org.openflexo.dm.view.erdiagram.DiagramView;
 import org.openflexo.dm.view.erdiagram.ERDiagramController;
 import org.openflexo.foundation.FlexoModelObject;
+import org.openflexo.foundation.FlexoObject;
 import org.openflexo.foundation.dm.DMEntity;
 import org.openflexo.foundation.dm.DMObject;
 import org.openflexo.foundation.dm.ERDiagram;
 import org.openflexo.foundation.dm.ExternalRepository;
-import org.openflexo.foundation.rm.FlexoProject;
+import org.openflexo.foundation.FlexoProject;
 import org.openflexo.icon.DMEIconLibrary;
 import org.openflexo.view.ModuleView;
 import org.openflexo.view.controller.FlexoController;
@@ -65,7 +66,7 @@ public class DiagramPerspective extends DMPerspective {
 		browser.setDMViewMode(DMViewMode.Diagrams);
 		browserView = new DMBrowserView(browser, controller) {
 			@Override
-			public void treeDoubleClick(FlexoModelObject object) {
+			public void treeDoubleClick(FlexoObject object) {
 				super.treeDoubleClick(object);
 				if (object instanceof ERDiagram) {
 					focusOnDiagram((ERDiagram) object);
@@ -99,7 +100,7 @@ public class DiagramPerspective extends DMPerspective {
 	}
 
 	@Override
-	public ERDiagram getDefaultObject(FlexoModelObject proposedObject) {
+	public ERDiagram getDefaultObject(FlexoObject proposedObject) {
 		if (proposedObject instanceof ERDiagram) {
 			return (ERDiagram) proposedObject;
 		}
@@ -112,12 +113,12 @@ public class DiagramPerspective extends DMPerspective {
 	}
 
 	@Override
-	public boolean hasModuleViewForObject(FlexoModelObject object) {
+	public boolean hasModuleViewForObject(FlexoObject object) {
 		return object instanceof ERDiagram;
 	}
 
 	@Override
-	public ModuleView<?> createModuleViewForObject(FlexoModelObject diagram, FlexoController controller) {
+	public ModuleView<?> createModuleViewForObject(FlexoObject diagram, FlexoController controller) {
 		if (diagram instanceof ERDiagram) {
 			return new ERDiagramController((DMController) controller, (ERDiagram) diagram).getDrawingView();
 		} else {

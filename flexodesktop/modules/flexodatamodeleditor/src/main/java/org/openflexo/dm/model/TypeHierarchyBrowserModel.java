@@ -33,9 +33,10 @@ import org.openflexo.components.tabular.model.EditableStringColumn;
 import org.openflexo.components.tabular.model.StringColumn;
 import org.openflexo.components.tabularbrowser.TabularBrowserModel;
 import org.openflexo.foundation.FlexoModelObject;
+import org.openflexo.foundation.FlexoObject;
 import org.openflexo.foundation.dm.DMEntity;
 import org.openflexo.foundation.dm.eo.DMEOEntity;
-import org.openflexo.foundation.rm.FlexoProject;
+import org.openflexo.foundation.FlexoProject;
 
 public class TypeHierarchyBrowserModel extends TabularBrowserModel {
 
@@ -132,7 +133,7 @@ public class TypeHierarchyBrowserModel extends TabularBrowserModel {
 			}
 
 			@Override
-			public BrowserElement makeNewElement(FlexoModelObject object, ProjectBrowser browser, BrowserElement parent) {
+			public BrowserElement makeNewElement(FlexoObject object, ProjectBrowser browser, BrowserElement parent) {
 				if (object instanceof DMEOEntity) {
 					return new THDMEOEntityElement((DMEOEntity) object, browser, parent);
 				} else if (object instanceof DMEntity) {

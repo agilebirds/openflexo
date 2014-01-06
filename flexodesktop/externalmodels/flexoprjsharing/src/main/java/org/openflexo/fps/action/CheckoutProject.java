@@ -32,7 +32,7 @@ import org.netbeans.lib.cvsclient.connection.AuthenticationException;
 import org.netbeans.lib.cvsclient.event.CVSAdapter;
 import org.netbeans.lib.cvsclient.event.FileAddedEvent;
 import org.openflexo.foundation.FlexoEditor;
-import org.openflexo.foundation.FlexoModelObject;
+import org.openflexo.foundation.FlexoObject;
 import org.openflexo.foundation.IOFlexoException;
 import org.openflexo.foundation.action.FlexoActionType;
 import org.openflexo.fps.CVSConstants;
@@ -75,7 +75,7 @@ public class CheckoutProject extends CVSAction<CheckoutProject, CVSModule> {
 	};
 
 	static {
-		FlexoModelObject.addActionForClass(actionType, CVSModule.class);
+		FlexoObject.addActionForClass(actionType, CVSModule.class);
 	}
 
 	@Override

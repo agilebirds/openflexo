@@ -23,13 +23,13 @@ import java.awt.Color;
 
 import javax.swing.ImageIcon;
 
+import org.openflexo.fge.BackgroundStyle;
+import org.openflexo.fge.ForegroundStyle;
 import org.openflexo.fge.geom.FGECircle;
 import org.openflexo.fge.geom.FGEGeometricObject.Filling;
 import org.openflexo.fge.geom.FGEPoint;
 import org.openflexo.fge.geom.FGEPolygon;
-import org.openflexo.fge.graphics.BackgroundStyle;
 import org.openflexo.fge.graphics.FGEShapeGraphics;
-import org.openflexo.fge.graphics.ForegroundStyle;
 import org.openflexo.fge.graphics.ShapePainter;
 import org.openflexo.foundation.wkf.node.ExclusiveEventBasedOperator;
 import org.openflexo.wkf.processeditor.ProcessRepresentation;

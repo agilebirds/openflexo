@@ -40,12 +40,11 @@ import javax.swing.SwingConstants;
 import org.openflexo.FlexoCst;
 import org.openflexo.foundation.DataModification;
 import org.openflexo.foundation.FlexoEditor;
-import org.openflexo.foundation.FlexoModelObject;
+import org.openflexo.foundation.FlexoObject;
 import org.openflexo.foundation.FlexoObservable;
 import org.openflexo.foundation.FlexoObserver;
 import org.openflexo.foundation.ObjectDeleted;
 import org.openflexo.foundation.action.FlexoActionSource;
-import org.openflexo.foundation.rm.ResourceType;
 import org.openflexo.fps.CVSFile;
 import org.openflexo.fps.CVSFile.FileContentEditor;
 import org.openflexo.fps.CVSStatus;
@@ -500,7 +499,7 @@ public class CVSFileModuleView extends JPanel implements ModuleView<CVSFile>, Fl
 	}
 
 	@Override
-	public FlexoModelObject getFocusedObject() {
+	public FlexoObject getFocusedObject() {
 		return getRepresentedObject();
 	}
 

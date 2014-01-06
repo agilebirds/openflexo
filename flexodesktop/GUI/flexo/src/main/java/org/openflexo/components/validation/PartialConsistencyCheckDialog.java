@@ -51,7 +51,7 @@ public class PartialConsistencyCheckDialog extends FlexoDialog implements Consis
 		super(FlexoFrame.getActiveFrame(), true);
 		setTitle(title);
 		getContentPane().setLayout(new BorderLayout());
-		_validationReportEditor = new ValidationReportEditor(this, validationReport) {
+		_validationReportEditor = new ValidationReportEditor(this, validationReport, controller.getApplicationContext()) {
 			@Override
 			public String getCloseButtonName() {
 				return "done";
@@ -72,7 +72,7 @@ public class PartialConsistencyCheckDialog extends FlexoDialog implements Consis
 				}
 			}
 		};
-		_validationModelViewer = new ValidationModelViewer(this, validationReport.getValidationModel());
+		_validationModelViewer = new ValidationModelViewer(this, validationReport.getValidationModel(), controller.getApplicationContext());
 		_controller = controller;
 		_validationModelViewer.setValidationModel(validationReport.getValidationModel());
 

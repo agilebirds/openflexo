@@ -1,0 +1,75 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<Panel opaque="false" layout="twocols" titleFont="SansSerif,0,11" darkLevel="0" index="15" dataClassName="org.openflexo.technologyadapter.excel.viewpoint.editionaction.SelectExcelSheet" controllerClassName="org.openflexo.vpm.controller.VPMFIBController" constraints="gridbag(anchor=center;expandHorizontally=true;expandVertically=false;fill=both;gridHeight=0;gridWidth=0;gridX=-1;gridY=-1;index=15;insetsBottom=0;insetsLeft=0;insetsRight=0;insetsTop=0;location=center;padX=0;padY=0;weightX=1.0;weightY=1.0)" name="SelectExcelSheetPanel">
+  <Label label="action_type" align="right" index="0" constraints="twocols(expandHorizontally=true;expandVertically=false;index=0;insetsBottom=0;insetsLeft=2;insetsRight=2;insetsTop=5;location=left)" localize="true" />
+  <TextField index="1" data="data.class.simpleName" constraints="twocols(expandHorizontally=true;expandVertically=false;index=1;insetsBottom=0;insetsLeft=2;insetsRight=2;insetsTop=0;location=right)" readOnly="true" localize="true" columns="6" text="TextField" />
+  <Label label="model_slot" align="right" index="1" constraints="twocols(expandHorizontally=true;expandVertically=false;index=0;insetsBottom=0;insetsLeft=2;insetsRight=2;insetsTop=5;location=left)" localize="true" />
+  <TextField index="5" data="data.modelSlot.name" constraints="twocols(expandHorizontally=true;expandVertically=false;insetsBottom=0;insetsLeft=2;insetsRight=2;insetsTop=0;location=right)" readOnly="true" localize="true" columns="7" text="TextField" />
+  <Label label="Assign" index="2" constraints="twocols(expandHorizontally=true;expandVertically=false;index=2;insetsBottom=0;insetsLeft=2;insetsRight=2;insetsTop=5;location=left)" localize="true" />
+  <Panel layout="gridbag" hGap="5" vGap="5" flowAlignment="LEADING" borderTitle="Panel" darkLevel="0" index="3" constraints="twocols(expandHorizontally=true;expandVertically=false;index=3;insetsBottom=0;insetsLeft=2;insetsRight=2;insetsTop=0;location=right)" opaque="false">
+    <Custom componentClassName="org.openflexo.fib.utils.BindingSelector" localize="true" manageDynamicModel="true" name="AddSheetAssignationCC" index="3" data="data.assignation" constraints="gridbag(anchor=center;expandHorizontally=true;expandVertically=false;fill=horizontal;gridHeight=1;gridWidth=1;gridX=-1;gridY=-1;index=3;insetsBottom=0;insetsLeft=2;insetsRight=2;insetsTop=0;location=center;padX=0;padY=0;weightX=1.0;weightY=0.0)" visible="(!(data.isVariableDeclaration))" opaque="false">
+      <Assignment variable="component.bindable" value="data" />
+      <Dependancy componentName="isVariableDeclarationCB" />
+    </Custom>
+    <CheckBox selected="true" index="3" data="data.isVariableDeclaration" constraints="gridbag(anchor=center;fill=none;gridHeight=1;gridWidth=1;gridX=-1;gridY=-1;insetsBottom=0;insetsLeft=0;insetsRight=0;insetsTop=0;padX=0;padY=0;weightX=0.0;weightY=0.0)" name="isVariableDeclarationCB" localize="true" />
+    <Label label="to_variable" index="3" constraints="gridbag(anchor=center;fill=none;gridHeight=1;gridWidth=1;gridX=-1;gridY=-1;insetsBottom=0;insetsLeft=0;insetsRight=0;insetsTop=0;padX=0;padY=0;weightX=0.0;weightY=0.0)" localize="true" />
+    <TextField index="3" data="data.variableName" constraints="gridbag(anchor=center;fill=horizontal;gridHeight=1;gridWidth=1;gridX=-1;gridY=-1;insetsBottom=0;insetsLeft=0;insetsRight=0;insetsTop=0;padX=0;padY=0;weightX=1.0;weightY=0.0)" visible="data.isVariableDeclaration" localize="true" columns="7" text="TextField">
+      <Dependancy componentName="isVariableDeclarationCB" />
+    </TextField>
+  </Panel>
+  <Label label="conditional" align="right" index="4" constraints="twocols(expandHorizontally=true;expandVertically=false;index=4;insetsBottom=0;insetsLeft=2;insetsRight=2;insetsTop=5;location=left)" localize="true" />
+  <Custom componentClassName="org.openflexo.fib.utils.BindingSelector" localize="true" manageDynamicModel="true" index="5" data="data.conditional" constraints="twocols(expandHorizontally=true;expandVertically=false;index=5;insetsBottom=0;insetsLeft=2;insetsRight=2;insetsTop=0;location=right)" opaque="false">
+    <Assignment variable="component.bindable" value="data" />
+  </Custom>
+  <Label label="conditions" index="10" constraints="twocols(expandHorizontally=false;expandVertically=false;index=10;insetsBottom=0;insetsLeft=2;insetsRight=2;insetsTop=5;location=left)" localize="true" />
+  <Table iteratorClassName="org.openflexo.foundation.viewpoint.FetchRequestCondition" visibleRowCount="4" rowHeight="18" autoSelectFirstRow="false" createNewRowOnClick="false" boundToSelectionManager="false" showFooter="true" selectionMode="MultipleIntervalSelection" textSelectionColor="255,255,255" textNonSelectionColor="0,0,0" backgroundSelectionColor="26,96,206" backgroundSecondarySelectionColor="173,215,255" backgroundNonSelectionColor="255,255,255" localize="true" manageDynamicModel="true" name="ConditionsTable" index="11" data="data.conditions" constraints="twocols(expandHorizontally=true;expandVertically=true;index=11;insetsBottom=0;insetsLeft=2;insetsRight=2;insetsTop=0;location=right)" opaque="false">
+    <IconColumn data="controller.iconForObject(iterator)" title="icon" columnWidth="30" resizable="false" displayTitle="false" name="icon" />
+    <CustomColumn componentClassName="org.openflexo.fib.utils.BindingSelector" customRendering="false" disableTerminateEditOnFocusLost="false" data="iterator.condition" format="object.toString" title="condition" columnWidth="80" resizable="true" displayTitle="true">
+      <ColumnAssignment variable="component.bindable" value="iterator" />
+    </CustomColumn>
+    <AddAction method="data.createCondition" name="add_condition" />
+    <RemoveAction method="data.deleteCondition(selected)" name="remove_condition" />
+  </Table>
+  <Label label="description" index="14" constraints="twocols(expandHorizontally=true;expandVertically=false;index=14;insetsBottom=0;insetsLeft=2;insetsRight=2;insetsTop=5;location=left)" localize="true" />
+  <TextArea columns="6" rows="2" text="TextArea" index="15" data="data.description" constraints="twocols(expandHorizontally=true;expandVertically=true;index=15;insetsBottom=0;insetsLeft=2;insetsRight=2;insetsTop=0;location=right)" useScrollBar="true" horizontalScrollbarPolicy="HORIZONTAL_SCROLLBAR_AS_NEEDED" verticalScrollbarPolicy="VERTICAL_SCROLLBAR_AS_NEEDED" localize="true" />
+  <LocalizedDictionary>
+    <Localized key="description" lang="English">Description</Localized>
+    <Localized key="description" lang="French">Description</Localized>
+    <Localized key="description" lang="Dutch">Description</Localized>
+    <Localized key="action_type" lang="English">Action type</Localized>
+    <Localized key="action_type" lang="French">Type d'Action</Localized>
+    <Localized key="action_type" lang="Dutch">Action type</Localized>
+    <Localized key="Assign" lang="English">Assign</Localized>
+    <Localized key="Assign" lang="French">Assign</Localized>
+    <Localized key="Assign" lang="Dutch">Assign</Localized>
+    <Localized key="property" lang="English">Property</Localized>
+    <Localized key="property" lang="French">Propriété</Localized>
+    <Localized key="property" lang="Dutch">Property</Localized>
+    <Localized key="object" lang="English">Object</Localized>
+    <Localized key="object" lang="French">Objet</Localized>
+    <Localized key="object" lang="Dutch">Object</Localized>
+    <Localized key="conditional" lang="English">conditional</Localized>
+    <Localized key="conditional" lang="French">conditionnel</Localized>
+    <Localized key="conditional" lang="Dutch">conditional</Localized>
+    <Localized key="add_object_assertion" lang="English">Add object assertion</Localized>
+    <Localized key="add_object_assertion" lang="French">Ajouter une assertion de type 'objet'</Localized>
+    <Localized key="add_object_assertion" lang="Dutch">Add object assertion</Localized>
+    <Localized key="delete_object_assertion" lang="English">Delete the object assertion</Localized>
+    <Localized key="delete_object_assertion" lang="French">Effacer l' object assertion</Localized>
+    <Localized key="delete_object_assertion" lang="Dutch">Delete the object assertion</Localized>
+    <Localized key="value" lang="English">Value</Localized>
+    <Localized key="value" lang="French">Valeur</Localized>
+    <Localized key="value" lang="Dutch">Value</Localized>
+    <Localized key="add_data_assertion" lang="English">Add data assertion</Localized>
+    <Localized key="add_data_assertion" lang="French">Ajouter l'assertion de données</Localized>
+    <Localized key="add_data_assertion" lang="Dutch">Add data assertion</Localized>
+    <Localized key="delete_data_assertion" lang="English">Delete data assertion</Localized>
+    <Localized key="delete_data_assertion" lang="French">Supprimer l'assertion</Localized>
+    <Localized key="delete_data_assertion" lang="Dutch">Delete data assertion</Localized>
+    <Localized key="model_slot" lang="English">model_slot</Localized>
+    <Localized key="model_slot" lang="French">model_slot</Localized>
+    <Localized key="model_slot" lang="Dutch">model_slot</Localized>
+    <Localized key="ontology_class" lang="English">Ontology class</Localized>
+    <Localized key="ontology_class" lang="French">Classe ontologique</Localized>
+    <Localized key="ontology_class" lang="Dutch">Ontology class</Localized>
+  </LocalizedDictionary>
+</Panel>

@@ -27,7 +27,7 @@ import java.util.logging.Level;
 import java.util.logging.Logger;
 
 import org.openflexo.fge.GraphicalRepresentation;
-import org.openflexo.fge.shapes.Shape.ShapeType;
+import org.openflexo.fge.shapes.ShapeSpecification.ShapeType;
 import org.openflexo.foundation.GraphicalFlexoObserver;
 import org.openflexo.foundation.wkf.node.WKFNode;
 import org.openflexo.wkf.processeditor.ProcessEditorConstants;
@@ -103,8 +103,6 @@ public abstract class WKFNodeGR<O extends WKFNode> extends WKFObjectGR<O> implem
 	public void setAbsoluteTextYNoNotification(double posY) {
 		getNode().setLabelY(posY, SWIMMING_LANE_EDITOR);
 	}
-
-	private boolean isAlreadyDoingLayout = true;
 
 	public WKFNodeGR(O object, ShapeType shapeType, SwimmingLaneRepresentation aDrawing) {
 		super(object, shapeType, aDrawing);
@@ -218,14 +216,14 @@ public abstract class WKFNodeGR<O extends WKFNode> extends WKFObjectGR<O> implem
 	 * Performs dumb layout to try not to be on other views of this level
 	 */
 	protected void doLayoutMethod3(double x, double y) {
-		Iterator<GraphicalRepresentation<?>> en = null;
+		Iterator<GraphicalRepresentation> en = null;
 		double attemptX = x, attemptY = y;
 		boolean found = false;
 		while (!found) {
 			en = getContainerGraphicalRepresentation().getContainedGraphicalRepresentations().iterator();
 			found = true;
 			while (en.hasNext()) {
-				GraphicalRepresentation<?> gr = en.next();
+				GraphicalRepresentation gr = en.next();
 				if (gr instanceof WKFNodeGR<?>) {
 					WKFNodeGR<?> rgr = (WKFNodeGR<?>) gr;
 					if (rgr != this) {
@@ -283,7 +281,7 @@ public abstract class WKFNodeGR<O extends WKFNode> extends WKFObjectGR<O> implem
 	}
 
 	private void findSiblingGRFromNodeAndAddToVector(WKFNode node, List<WKFNodeGR<?>> vector) {
-		GraphicalRepresentation<?> gr = getGraphicalRepresentation(node);
+		GraphicalRepresentation gr = getGraphicalRepresentation(node);
 		while (gr != null && gr.getParentGraphicalRepresentation() != getParentGraphicalRepresentation()) {
 			gr = gr.getParentGraphicalRepresentation();
 		}

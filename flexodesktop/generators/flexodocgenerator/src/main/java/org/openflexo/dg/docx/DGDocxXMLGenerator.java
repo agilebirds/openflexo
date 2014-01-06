@@ -19,6 +19,7 @@
  */
 package org.openflexo.dg.docx;
 
+import java.lang.reflect.InvocationTargetException;
 import java.util.LinkedHashMap;
 import java.util.List;
 import java.util.Vector;
@@ -27,11 +28,14 @@ import java.util.logging.Logger;
 import java.util.regex.Pattern;
 
 import org.apache.velocity.VelocityContext;
-import org.openflexo.antar.binding.AbstractBinding.BindingEvaluationContext;
+import org.openflexo.antar.binding.BindingEvaluationContext;
 import org.openflexo.antar.binding.BindingVariable;
+import org.openflexo.antar.expr.NullReferenceException;
+import org.openflexo.antar.expr.TypeMismatchException;
 import org.openflexo.dg.latex.DocGeneratorConstants;
 import org.openflexo.dg.rm.DocxXmlFileResource;
 import org.openflexo.foundation.FlexoModelObject;
+import org.openflexo.foundation.FlexoObject;
 import org.openflexo.foundation.cg.CGSymbolicDirectory;
 import org.openflexo.foundation.cg.DGRepository;
 import org.openflexo.foundation.cg.generator.IFlexoResourceGenerator;
@@ -42,13 +46,13 @@ import org.openflexo.foundation.ie.IEPageComponent;
 import org.openflexo.foundation.ie.IEPopupComponent;
 import org.openflexo.foundation.ie.IETabComponent;
 import org.openflexo.foundation.ie.menu.FlexoNavigationMenu;
-import org.openflexo.foundation.ontology.EditionPatternInstance;
 import org.openflexo.foundation.rm.cg.CGRepositoryFileResource;
 import org.openflexo.foundation.toc.ConditionalSection;
 import org.openflexo.foundation.toc.IterationSection;
 import org.openflexo.foundation.toc.ModelObjectSection;
 import org.openflexo.foundation.toc.PredefinedSection;
 import org.openflexo.foundation.toc.TOCEntry;
+import org.openflexo.foundation.view.EditionPatternInstance;
 import org.openflexo.foundation.view.View;
 import org.openflexo.foundation.wkf.FlexoProcess;
 import org.openflexo.foundation.wkf.node.AbstractActivityNode;
@@ -195,7 +199,7 @@ public class DGDocxXMLGenerator<T extends FlexoModelObject> extends Generator<T,
 		} else if (object instanceof IEPageComponent) {
 			s = "PAGE-" + ((IEPageComponent) object).getName();
 		} else if (object instanceof EditionPatternInstance) {
-			s = ((EditionPatternInstance) object).getPattern().getName() + "-" + ((EditionPatternInstance) object).getInstanceId();
+			s = ((EditionPatternInstance) object).getEditionPattern().getName() + "-" + ((EditionPatternInstance) object).getFlexoID();
 		} else if (object instanceof FlexoModelObject) {
 			s = ((FlexoModelObject) object).getFullyQualifiedName();
 		} else if (object instanceof View) {
@@ -228,7 +232,16 @@ public class DGDocxXMLGenerator<T extends FlexoModelObject> extends Generator<T,
 	}
 
 	public List<Object> getIterableObjects(IterationSection iteration) {
-		Object listValue = iteration.getIteration().getBindingValue(this);
+		Object listValue = null;
+		try {
+			listValue = iteration.getIteration().getBindingValue(this);
+		} catch (TypeMismatchException e) {
+			e.printStackTrace();
+		} catch (NullReferenceException e) {
+			e.printStackTrace();
+		} catch (InvocationTargetException e) {
+			e.printStackTrace();
+		}
 		logger.info("getIterableObjects = " + listValue);
 		if (listValue instanceof List) {
 			return (List) listValue;
@@ -246,21 +259,37 @@ public class DGDocxXMLGenerator<T extends FlexoModelObject> extends Generator<T,
 		if (!iteration.getCondition().isSet() || !iteration.getCondition().isValid()) {
 			return true;
 		}
-		Object conditionValue = iteration.getCondition().getBindingValue(this);
-		logger.info("conditionValue = " + conditionValue);
-		return (Boolean) conditionValue;
+		Boolean conditionValue = true;
+		try {
+			conditionValue = iteration.getCondition().getBindingValue(this);
+		} catch (TypeMismatchException e) {
+			e.printStackTrace();
+		} catch (NullReferenceException e) {
+			e.printStackTrace();
+		} catch (InvocationTargetException e) {
+			e.printStackTrace();
+		}
+		return conditionValue;
 	}
 
 	public Boolean getCondition(ConditionalSection conditional) {
 		if (!conditional.getCondition().isSet() || !conditional.getCondition().isValid()) {
 			return true;
 		}
-		Object conditionValue = conditional.getCondition().getBindingValue(this);
-		logger.info("conditionValue = " + conditionValue);
-		return (Boolean) conditionValue;
+		Boolean conditionValue = true;
+		try {
+			conditionValue = conditional.getCondition().getBindingValue(this);
+		} catch (TypeMismatchException e) {
+			e.printStackTrace();
+		} catch (NullReferenceException e) {
+			e.printStackTrace();
+		} catch (InvocationTargetException e) {
+			e.printStackTrace();
+		}
+		return conditionValue;
 	}
 
-	public FlexoModelObject getAccessedModelObject(TOCEntry section) {
+	public FlexoObject getAccessedModelObject(TOCEntry section) {
 		if (section instanceof ModelObjectSection<?>) {
 			return getAccessedModelObject((ModelObjectSection<?>) section);
 		} else if (section.getObject() != null) {
@@ -276,7 +305,7 @@ public class DGDocxXMLGenerator<T extends FlexoModelObject> extends Generator<T,
 			case SCREENS:
 				return getProject().getFlexoComponentLibrary();
 			case VIEWS:
-				return getProject().getShemaLibrary();
+				return getProject().getViewLibrary();
 			}
 		}
 		if (logger.isLoggable(Level.SEVERE)) {
@@ -293,16 +322,22 @@ public class DGDocxXMLGenerator<T extends FlexoModelObject> extends Generator<T,
 		if (!section.getValue().isSet() || !section.getValue().isValid()) {
 			return null;
 		}
-		Object objectValue = section.getValue().getBindingValue(this);
-		logger.info("objectValue = " + objectValue);
+		Object objectValue = null;
+		try {
+			objectValue = section.getValue().getBindingValue(this);
+		} catch (TypeMismatchException e) {
+			e.printStackTrace();
+		} catch (NullReferenceException e) {
+			e.printStackTrace();
+		} catch (InvocationTargetException e) {
+			e.printStackTrace();
+		}
 		return (T) objectValue;
 	}
 
 	@Override
 	public Object getValue(BindingVariable variable) {
 		if (getVelocityContext() != null) {
-			System.out.println("For value " + variable.getVariableName() + " return "
-					+ getVelocityContext().get(variable.getVariableName()));
 			return getVelocityContext().get(variable.getVariableName());
 		}
 		return null;

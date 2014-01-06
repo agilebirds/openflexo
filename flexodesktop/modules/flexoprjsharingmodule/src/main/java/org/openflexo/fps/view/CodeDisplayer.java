@@ -25,7 +25,6 @@ import java.util.logging.Logger;
 import javax.swing.JComponent;
 
 import org.openflexo.diff.merge.DefaultMergedDocumentType;
-import org.openflexo.foundation.rm.ResourceType;
 import org.openflexo.fps.CVSFile;
 import org.openflexo.fps.controller.FPSController;
 import org.openflexo.jedit.cd.GenericCodeDisplayer;

@@ -19,6 +19,11 @@
  */
 package org.openflexo.prefs;
 
+import org.openflexo.model.annotations.Getter;
+import org.openflexo.model.annotations.ModelEntity;
+import org.openflexo.model.annotations.PropertyIdentifier;
+import org.openflexo.model.annotations.Setter;
+import org.openflexo.module.FlexoModule;
 import org.openflexo.module.Module;
 
 /**
@@ -27,26 +32,16 @@ import org.openflexo.module.Module;
  * @author sguerin
  * 
  */
-public abstract class ModulePreferences extends ContextPreferences {
+@ModelEntity(isAbstract = true)
+public interface ModulePreferences<M extends FlexoModule> extends PreferencesContainer {
 
-	protected Module module;
+	@PropertyIdentifier(type = Module.class)
+	public static final String MODULE_KEY = "module";
 
-	protected ModulePreferences(Module aModule) {
-		super();
-		module = aModule;
-	}
+	@Getter(value = MODULE_KEY)
+	public Module<M> getModule();
 
-	@Override
-	public String getName() {
-		return getModule().getName();
-	}
-
-	public Module getModule() {
-		return module;
-	}
-	/*
-	 * public File getInspectorDirectory() { return new
-	 * File(getModule().getDirectory(),File.separator+"Config"+File.separator+"Preferences"); }
-	 */
+	@Setter(MODULE_KEY)
+	public void setModule(Module<M> module);
 
 }

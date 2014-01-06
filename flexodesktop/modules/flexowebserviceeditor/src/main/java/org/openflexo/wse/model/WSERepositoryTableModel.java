@@ -28,7 +28,7 @@ import org.openflexo.components.tabular.model.AbstractModel;
 import org.openflexo.components.tabular.model.IconColumn;
 import org.openflexo.components.tabular.model.StringColumn;
 import org.openflexo.foundation.dm.DMRepository;
-import org.openflexo.foundation.rm.FlexoProject;
+import org.openflexo.foundation.FlexoProject;
 import org.openflexo.foundation.ws.WSRepository;
 import org.openflexo.foundation.ws.WSRepositoryFolder;
 import org.openflexo.foundation.ws.WSService;

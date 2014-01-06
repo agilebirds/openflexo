@@ -1,5 +1,0 @@
-<RadioButtonList name="PaletteRadioButtonList" staticList="Item-1 ,Item-2 ,Item-3 " autoSelectFirstRow="true">
-	<Parameter name="x" value="330"/>
-	<Parameter name="y" value="78"/>
-	<Parameter name="isPaletteElement" value="true"/>
-</RadioButtonList>

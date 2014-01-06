@@ -36,14 +36,14 @@ import org.openflexo.components.tabular.model.AbstractColumn;
 import org.openflexo.components.tabular.model.DropDownColumn;
 import org.openflexo.components.widget.MultipleObjectSelector.TabularBrowserConfiguration;
 import org.openflexo.dm.view.controller.DMController;
-import org.openflexo.foundation.FlexoModelObject;
+import org.openflexo.foundation.FlexoObject;
 import org.openflexo.foundation.dm.DMEntity;
 import org.openflexo.foundation.dm.DMMethod;
 import org.openflexo.foundation.dm.DMObject;
 import org.openflexo.foundation.dm.DMProperty;
 import org.openflexo.foundation.dm.action.CreateComponentFromEntity.DMAccessorWidget;
 import org.openflexo.foundation.ie.util.WidgetType;
-import org.openflexo.foundation.rm.FlexoProject;
+import org.openflexo.foundation.FlexoProject;
 import org.openflexo.localization.FlexoLocalization;
 
 public class SelectPropertiesAndMethodsPopup extends MultipleObjectSelectorPopup {
@@ -300,7 +300,7 @@ public class SelectPropertiesAndMethodsPopup extends MultipleObjectSelectorPopup
 		 * @see org.openflexo.components.widget.MultipleObjectSelector.TabularBrowserConfiguration#isSelectable(org.openflexo.foundation.FlexoModelObject)
 		 */
 		@Override
-		public boolean isSelectable(FlexoModelObject object) {
+		public boolean isSelectable(FlexoObject object) {
 			return object instanceof DMProperty || object instanceof DMMethod && ((DMMethod) object).getReturnType() != null;
 		}
 
@@ -309,7 +309,7 @@ public class SelectPropertiesAndMethodsPopup extends MultipleObjectSelectorPopup
 	@Override
 	public void performConfirm() {
 		super.performConfirm();
-		for (FlexoModelObject o : choicePanel.getSelectedObjects()) {
+		for (FlexoObject o : choicePanel.getSelectedObjects()) {
 			if (o instanceof DMProperty || o instanceof DMMethod) {
 				selectedAccessorWidgets.add(configuration.values.get(o));
 			}

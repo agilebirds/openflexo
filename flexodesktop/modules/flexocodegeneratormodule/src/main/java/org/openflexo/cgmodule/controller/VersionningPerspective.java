@@ -12,6 +12,7 @@ import org.openflexo.cgmodule.view.CGRepositoryModuleView;
 import org.openflexo.cgmodule.view.CGTemplateFileModuleView;
 import org.openflexo.cgmodule.view.GeneratedCodeModuleView;
 import org.openflexo.foundation.FlexoModelObject;
+import org.openflexo.foundation.FlexoObject;
 import org.openflexo.foundation.cg.CGFile;
 import org.openflexo.foundation.cg.CGObject;
 import org.openflexo.foundation.cg.CGRepository;
@@ -57,7 +58,7 @@ class VersionningPerspective extends FlexoPerspective {
 	}
 
 	@Override
-	public CGFile getDefaultObject(FlexoModelObject proposedObject) {
+	public CGFile getDefaultObject(FlexoObject proposedObject) {
 		if (proposedObject instanceof CGFile) {
 			return (CGFile) proposedObject;
 		}
@@ -65,13 +66,13 @@ class VersionningPerspective extends FlexoPerspective {
 	}
 
 	@Override
-	public boolean hasModuleViewForObject(FlexoModelObject object) {
+	public boolean hasModuleViewForObject(FlexoObject object) {
 		return object instanceof GeneratedOutput || object instanceof GenerationRepository || object instanceof CGFile
 				|| object instanceof CGTemplate;
 	}
 
 	@Override
-	public ModuleView<? extends FlexoModelObject> createModuleViewForObject(FlexoModelObject object, FlexoController controller) {
+	public ModuleView<? extends FlexoModelObject> createModuleViewForObject(FlexoObject object, FlexoController controller) {
 		if (object instanceof GeneratedOutput) {
 			return new GeneratedCodeModuleView((GeneratedOutput) object, (GeneratorController) controller);
 		}

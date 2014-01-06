@@ -32,17 +32,17 @@ import java.util.logging.Logger;
 import javax.swing.SwingUtilities;
 
 import org.openflexo.components.ProgressWindow;
-import org.openflexo.fge.DefaultDrawing;
 import org.openflexo.fge.DrawingGraphicalRepresentation;
 import org.openflexo.fge.GraphicalRepresentation;
 import org.openflexo.fge.ShapeGraphicalRepresentation;
+import org.openflexo.fge.impl.DrawingImpl;
 import org.openflexo.foundation.DataModification;
 import org.openflexo.foundation.FlexoEditor;
 import org.openflexo.foundation.FlexoModelObject;
 import org.openflexo.foundation.FlexoObservable;
 import org.openflexo.foundation.GraphicalFlexoObserver;
 import org.openflexo.foundation.RepresentableFlexoModelObject;
-import org.openflexo.foundation.utils.FlexoModelObjectReference;
+import org.openflexo.foundation.utils.FlexoObjectReference;
 import org.openflexo.foundation.wkf.ActionPetriGraph;
 import org.openflexo.foundation.wkf.ActivityPetriGraph;
 import org.openflexo.foundation.wkf.FlexoPetriGraph;
@@ -158,7 +158,7 @@ import org.openflexo.wkf.swleditor.gr.WKFObjectGR;
 
 import sun.awt.dnd.SunDragSourceContextPeer;
 
-public class SwimmingLaneRepresentation extends DefaultDrawing<FlexoProcess> implements GraphicalFlexoObserver, SWLEditorConstants {
+public class SwimmingLaneRepresentation extends DrawingImpl<FlexoProcess> implements GraphicalFlexoObserver, SWLEditorConstants {
 
 	protected static final Logger logger = Logger.getLogger(SwimmingLaneRepresentation.class.getPackage().getName());
 
@@ -367,7 +367,7 @@ public class SwimmingLaneRepresentation extends DefaultDrawing<FlexoProcess> imp
 	 */
 	public static String getRoleIndexContextedParameterForProcess(FlexoProcess process, RepresentableFlexoModelObject object) {
 		return SWLEditorConstants.SWIMMING_LANE_INDEX_KEY + "_"
-				+ FlexoModelObjectReference.getSerializationRepresentationForObject(object, false);
+				+ FlexoObjectReference.getSerializationRepresentationForObject(object, false);
 	}
 
 	/**
@@ -375,7 +375,7 @@ public class SwimmingLaneRepresentation extends DefaultDrawing<FlexoProcess> imp
 	 */
 	public static String getRoleNumberOfLaneContextedParameterForProcess(FlexoProcess process, RepresentableFlexoModelObject object) {
 		return SWLEditorConstants.SWIMMING_LANE_NB_KEY + "_"
-				+ FlexoModelObjectReference.getSerializationRepresentationForObject(object, false);
+				+ FlexoObjectReference.getSerializationRepresentationForObject(object, false);
 	}
 
 	/**
@@ -383,7 +383,7 @@ public class SwimmingLaneRepresentation extends DefaultDrawing<FlexoProcess> imp
 	 */
 	public static String getRoleLaneHeightContextedParameterForProcess(FlexoProcess process, RepresentableFlexoModelObject object) {
 		return SWLEditorConstants.SWIMMING_LANE_HEIGHT_KEY + "_"
-				+ FlexoModelObjectReference.getSerializationRepresentationForObject(object, false);
+				+ FlexoObjectReference.getSerializationRepresentationForObject(object, false);
 	}
 
 	public static boolean loadAllReferencedRole(FlexoProcess process) {
@@ -400,7 +400,7 @@ public class SwimmingLaneRepresentation extends DefaultDrawing<FlexoProcess> imp
 				return false;
 			}
 		}
-		for (FlexoModelObjectReference<Role> role : new ArrayList<FlexoModelObjectReference<Role>>(process.getVisibleRoles())) {
+		for (FlexoObjectReference<Role> role : new ArrayList<FlexoObjectReference<Role>>(process.getVisibleRoles())) {
 			role.getObject(true);
 		}
 		return true;
@@ -798,11 +798,11 @@ public class SwimmingLaneRepresentation extends DefaultDrawing<FlexoProcess> imp
 
 	@SuppressWarnings("unchecked")
 	@Override
-	public <O> GraphicalRepresentation<O> retrieveGraphicalRepresentation(O aDrawable) {
-		return (GraphicalRepresentation<O>) buildGraphicalRepresentation(aDrawable);
+	public <O> GraphicalRepresentation retrieveGraphicalRepresentation(O aDrawable) {
+		return (GraphicalRepresentation) buildGraphicalRepresentation(aDrawable);
 	}
 
-	private GraphicalRepresentation<?> buildGraphicalRepresentation(Object aDrawable) {
+	private GraphicalRepresentation buildGraphicalRepresentation(Object aDrawable) {
 		if (aDrawable instanceof Role) {
 			return new RoleContainerGR((Role) aDrawable, this);
 		}
@@ -969,65 +969,65 @@ public class SwimmingLaneRepresentation extends DefaultDrawing<FlexoProcess> imp
 			}
 		} else if (observable == getFlexoProcess().getWorkflow()) {
 			if (FlexoWorkflow.GraphicalProperties.SHOW_SHADOWS.getSerializationName().equals(dataModification.propertyName())) {
-				Enumeration<GraphicalRepresentation<?>> en = getAllGraphicalRepresentations();
+				Enumeration<GraphicalRepresentation> en = getAllGraphicalRepresentations();
 				while (en.hasMoreElements()) {
-					GraphicalRepresentation<?> gr = en.nextElement();
+					GraphicalRepresentation gr = en.nextElement();
 					if (gr instanceof WKFObjectGR<?>) {
 						((WKFObjectGR<?>) gr).updatePropertiesFromWKFPreferences();
 					}
 				}
 			} else if (FlexoWorkflow.GraphicalProperties.USE_TRANSPARENCY.getSerializationName().equals(dataModification.propertyName())) {
-				Enumeration<GraphicalRepresentation<?>> en = getAllGraphicalRepresentations();
+				Enumeration<GraphicalRepresentation> en = getAllGraphicalRepresentations();
 				while (en.hasMoreElements()) {
-					GraphicalRepresentation<?> gr = en.nextElement();
+					GraphicalRepresentation gr = en.nextElement();
 					if (gr instanceof ContainerGR<?>) {
 						((ContainerGR<?>) gr).updatePropertiesFromWKFPreferences();
 					}
 				}
 			} else if (FlexoWorkflow.GraphicalProperties.SHOW_WO_NAME.getSerializationName().equals(dataModification.propertyName())) {
-				Enumeration<GraphicalRepresentation<?>> en = getAllGraphicalRepresentations();
+				Enumeration<GraphicalRepresentation> en = getAllGraphicalRepresentations();
 				while (en.hasMoreElements()) {
-					GraphicalRepresentation<?> gr = en.nextElement();
+					GraphicalRepresentation gr = en.nextElement();
 					if (gr instanceof OperationNodeGR) {
 						((OperationNodeGR) gr).notifyShapeNeedsToBeRedrawn();
 					}
 				}
 			} else if (FlexoWorkflow.GraphicalProperties.ACTIVITY_FONT.getSerializationName().equals(dataModification.propertyName())) {
-				Enumeration<GraphicalRepresentation<?>> en = getAllGraphicalRepresentations();
+				Enumeration<GraphicalRepresentation> en = getAllGraphicalRepresentations();
 				while (en.hasMoreElements()) {
-					GraphicalRepresentation<?> gr = en.nextElement();
+					GraphicalRepresentation gr = en.nextElement();
 					if (gr instanceof AbstractActivityNodeGR<?> || gr instanceof PortGR) {
 						((WKFObjectGR<?>) gr).updatePropertiesFromWKFPreferences();
 					}
 				}
 			} else if (FlexoWorkflow.GraphicalProperties.OPERATION_FONT.getSerializationName().equals(dataModification.propertyName())) {
-				Enumeration<GraphicalRepresentation<?>> en = getAllGraphicalRepresentations();
+				Enumeration<GraphicalRepresentation> en = getAllGraphicalRepresentations();
 				while (en.hasMoreElements()) {
-					GraphicalRepresentation<?> gr = en.nextElement();
+					GraphicalRepresentation gr = en.nextElement();
 					if (gr instanceof AbstractOperationNodeGR) {
 						((AbstractOperationNodeGR) gr).updatePropertiesFromWKFPreferences();
 					}
 				}
 			} else if (FlexoWorkflow.GraphicalProperties.ACTION_FONT.getSerializationName().equals(dataModification.propertyName())) {
-				Enumeration<GraphicalRepresentation<?>> en = getAllGraphicalRepresentations();
+				Enumeration<GraphicalRepresentation> en = getAllGraphicalRepresentations();
 				while (en.hasMoreElements()) {
-					GraphicalRepresentation<?> gr = en.nextElement();
+					GraphicalRepresentation gr = en.nextElement();
 					if (gr instanceof AbstractActionNodeGR) {
 						((AbstractActionNodeGR) gr).updatePropertiesFromWKFPreferences();
 					}
 				}
 			} else if (FlexoWorkflow.GraphicalProperties.EVENT_FONT.getSerializationName().equals(dataModification.propertyName())) {
-				Enumeration<GraphicalRepresentation<?>> en = getAllGraphicalRepresentations();
+				Enumeration<GraphicalRepresentation> en = getAllGraphicalRepresentations();
 				while (en.hasMoreElements()) {
-					GraphicalRepresentation<?> gr = en.nextElement();
+					GraphicalRepresentation gr = en.nextElement();
 					if (gr instanceof EventNodeGR || gr instanceof OperatorGR<?>) {
 						((WKFObjectGR<?>) gr).updatePropertiesFromWKFPreferences();
 					}
 				}
 			} else if (FlexoWorkflow.GraphicalProperties.ROLE_FONT.getSerializationName().equals(dataModification.propertyName())) {
-				Enumeration<GraphicalRepresentation<?>> en = getAllGraphicalRepresentations();
+				Enumeration<GraphicalRepresentation> en = getAllGraphicalRepresentations();
 				while (en.hasMoreElements()) {
-					GraphicalRepresentation<?> gr = en.nextElement();
+					GraphicalRepresentation gr = en.nextElement();
 					if (gr instanceof NormalAbstractActivityNodeGR<?>) {
 						NormalAbstractActivityNodeGR<?> activityGR = (NormalAbstractActivityNodeGR<?>) gr;
 						activityGR.updatePropertiesFromWKFPreferences();
@@ -1035,9 +1035,9 @@ public class SwimmingLaneRepresentation extends DefaultDrawing<FlexoProcess> imp
 					}
 				}
 			} else if (FlexoWorkflow.GraphicalProperties.COMPONENT_FONT.getSerializationName().equals(dataModification.propertyName())) {
-				Enumeration<GraphicalRepresentation<?>> en = getAllGraphicalRepresentations();
+				Enumeration<GraphicalRepresentation> en = getAllGraphicalRepresentations();
 				while (en.hasMoreElements()) {
-					GraphicalRepresentation<?> gr = en.nextElement();
+					GraphicalRepresentation gr = en.nextElement();
 					if (gr instanceof OperationNodeGR) {
 						OperationNodeGR operationGR = (OperationNodeGR) gr;
 						operationGR.updatePropertiesFromWKFPreferences();
@@ -1046,9 +1046,9 @@ public class SwimmingLaneRepresentation extends DefaultDrawing<FlexoProcess> imp
 				}
 			} else if (FlexoWorkflow.GraphicalProperties.CONNECTOR_REPRESENTATION.getSerializationName().equals(
 					dataModification.propertyName())) {
-				Enumeration<GraphicalRepresentation<?>> en = getAllGraphicalRepresentations();
+				Enumeration<GraphicalRepresentation> en = getAllGraphicalRepresentations();
 				while (en.hasMoreElements()) {
-					GraphicalRepresentation<?> gr = en.nextElement();
+					GraphicalRepresentation gr = en.nextElement();
 					if (gr instanceof EdgeGR<?>) {
 						((EdgeGR<?>) gr).updatePropertiesFromWKFPreferences();
 					}
@@ -1092,9 +1092,9 @@ public class SwimmingLaneRepresentation extends DefaultDrawing<FlexoProcess> imp
 	protected void updateLocations() {
 		graphicalRepresentation.notifyObjectResized(null);
 		// getDrawingGraphicalRepresentation().notifyObjectHasResized();
-		for (GraphicalRepresentation<?> gr : getDrawingGraphicalRepresentation().getContainedGraphicalRepresentations()) {
+		for (GraphicalRepresentation gr : getDrawingGraphicalRepresentation().getContainedGraphicalRepresentations()) {
 			if (gr instanceof ShapeGraphicalRepresentation) {
-				((ShapeGraphicalRepresentation<?>) gr).notifyObjectHasMoved();
+				((ShapeGraphicalRepresentation) gr).notifyObjectHasMoved();
 			}
 		}
 	}
@@ -1102,10 +1102,10 @@ public class SwimmingLaneRepresentation extends DefaultDrawing<FlexoProcess> imp
 	private void updateDimensions() {
 		graphicalRepresentation.notifyObjectResized(null);
 		// getDrawingGraphicalRepresentation().notifyObjectHasResized();
-		for (GraphicalRepresentation<?> gr : getDrawingGraphicalRepresentation().getContainedGraphicalRepresentations()) {
+		for (GraphicalRepresentation gr : getDrawingGraphicalRepresentation().getContainedGraphicalRepresentations()) {
 			if (gr instanceof ShapeGraphicalRepresentation) {
-				((ShapeGraphicalRepresentation<?>) gr).notifyObjectHasMoved();
-				((ShapeGraphicalRepresentation<?>) gr).notifyObjectHasResized();
+				((ShapeGraphicalRepresentation) gr).notifyObjectHasMoved();
+				((ShapeGraphicalRepresentation) gr).notifyObjectHasResized();
 			}
 		}
 	}
@@ -1207,10 +1207,10 @@ public class SwimmingLaneRepresentation extends DefaultDrawing<FlexoProcess> imp
 
 	public double getHeight(RepresentableFlexoModelObject o) {
 		double defaultValue = getSwimmingLaneHeight(o) * getSwimmingLaneNb(o);
-		return getProcess().getHeight(FlexoModelObjectReference.getSerializationRepresentationForObject(o, false), defaultValue);
+		return getProcess().getHeight(FlexoObjectReference.getSerializationRepresentationForObject(o, false), defaultValue);
 	}
 
 	public void setHeight(RepresentableFlexoModelObject o, double height) {
-		getProcess().setHeight(height, FlexoModelObjectReference.getSerializationRepresentationForObject(o, false));
+		getProcess().setHeight(height, FlexoObjectReference.getSerializationRepresentationForObject(o, false));
 	}
 }

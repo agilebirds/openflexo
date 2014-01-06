@@ -22,7 +22,7 @@ package org.openflexo.foundation.help;
 import java.util.List;
 import java.util.Map;
 
-import org.openflexo.foundation.rm.FlexoProject;
+import org.openflexo.foundation.FlexoProject;
 
 public interface ApplicationHelpEntryPoint {
 

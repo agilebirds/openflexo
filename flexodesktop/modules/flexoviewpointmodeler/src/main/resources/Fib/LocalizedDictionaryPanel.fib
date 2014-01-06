@@ -1,0 +1,19 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<Panel opaque="false" layout="border" darkLevel="0" data="" dataClassName="org.openflexo.foundation.viewpoint.LocalizedDictionary" controllerClassName="org.openflexo.vpm.controller.VPMFIBController" constraints="border(location=center)" visible="">
+  <Table iteratorClassName="org.openflexo.foundation.viewpoint.LocalizedDictionary$DynamicEntry" autoSelectFirstRow="false" createNewRowOnClick="false" boundToSelectionManager="false" showFooter="true" selectionMode="MultipleIntervalSelection" selected="" textSelectionColor="255,255,255" textNonSelectionColor="0,0,0" backgroundSelectionColor="26,96,206" backgroundSecondarySelectionColor="173,215,255" backgroundNonSelectionColor="255,255,255" format="" icon="" tooltip="" localize="true" enable="" manageDynamicModel="true" clickAction="" doubleClickAction="" rightClickAction="" enterPressedAction="" valueChangedAction="" valueTransform="" valueValidator="" name="LocalizedTable" index="0" data="data.dynamicEntries" constraints="border(anchor=center;fill=none;gridHeight=1;gridWidth=1;gridX=-1;gridY=-1;index=0;insetsBottom=0;insetsLeft=0;insetsRight=0;insetsTop=0;location=center;padX=0;padY=0;weightX=0.0;weightY=0.0)" visible="">
+    <TextFieldColumn isEditable="" data="iterator.key" format="" title="key" columnWidth="100" resizable="true" displayTitle="true" color="" bgColor="" tooltip="" valueChangedAction="" name="textfield" />
+    <TextFieldColumn isEditable="" data="iterator.english" format="" title="english" columnWidth="100" resizable="true" displayTitle="true" color="" bgColor="" tooltip="" valueChangedAction="" name="textfield" />
+    <TextFieldColumn isEditable="" data="iterator.french" format="" title="french" columnWidth="100" resizable="true" displayTitle="true" color="" bgColor="" tooltip="" valueChangedAction="" name="textfield" />
+    <TextFieldColumn isEditable="" data="iterator.dutch" format="" title="dutch" columnWidth="100" resizable="true" displayTitle="true" color="" bgColor="" tooltip="" valueChangedAction="" name="textfield" />
+    <AddAction method="data.addEntry" isAvailable="" name="add_action" />
+    <RemoveAction method="data.deleteEntry(selected)" isAvailable="" name="delete_action" />
+    <Dependancy componentName="SearchNewLocalizationEntriesButton" />
+    <LocalizedDictionary />
+  </Table>
+  <Panel layout="flow" hGap="5" vGap="0" flowAlignment="CENTER" borderTitle="Panel" titleFont="SansSerif,0,11" darkLevel="0" index="1" data="" constraints="border(index=1;location=south)" visible="">
+    <Button action="data.viewPoint.localizedDictionary.searchNewEntries()" buttonIcon="" buttonType="Trigger" label="search_new_localization_entries" format="" icon="" tooltip="" localize="true" enable="" clickAction="data.viewPoint.localizedDictionary.searchNewEntries()" doubleClickAction="" rightClickAction="" enterPressedAction="" valueChangedAction="" valueTransform="" valueValidator="" name="SearchNewLocalizationEntriesButton" index="0" data="" constraints="flow(index=0)" visible="">
+      <LocalizedDictionary />
+    </Button>
+  </Panel>
+  <LocalizedDictionary />
+</Panel>

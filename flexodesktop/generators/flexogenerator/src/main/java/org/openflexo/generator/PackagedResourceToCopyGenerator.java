@@ -23,7 +23,7 @@ import java.util.Date;
 import java.util.Vector;
 import java.util.logging.Logger;
 
-import org.openflexo.foundation.FlexoModelObject;
+import org.openflexo.foundation.FlexoObject;
 import org.openflexo.foundation.cg.CGSymbolicDirectory;
 import org.openflexo.foundation.cg.GenerationRepository;
 import org.openflexo.foundation.cg.generator.GeneratedCopiedFile;
@@ -35,7 +35,7 @@ import org.openflexo.toolbox.FileFormat;
 import org.openflexo.toolbox.FileResource;
 import org.openflexo.toolbox.FileUtils;
 
-public class PackagedResourceToCopyGenerator<R extends GenerationRepository> extends Generator<FlexoModelObject, R> implements
+public class PackagedResourceToCopyGenerator<R extends GenerationRepository> extends Generator<FlexoObject, R> implements
 		IFlexoResourceGenerator {
 
 	private static final Logger logger = Logger.getLogger(PackagedResourceToCopyGenerator.class.getPackage().getName());

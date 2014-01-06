@@ -21,8 +21,15 @@ package org.openflexo.foundation;
 
 import java.io.IOException;
 
+/**
+ * Thrown when an IOException occurs
+ * 
+ * @author sylvain
+ * 
+ */
+@SuppressWarnings("serial")
 public class IOFlexoException extends FlexoException {
-	private IOException _targetException;
+	private final IOException _targetException;
 
 	public IOFlexoException(IOException targetException) {
 		super("I/O exception", "io_exception");
@@ -34,7 +41,7 @@ public class IOFlexoException extends FlexoException {
 	}
 
 	@Override
-	public Throwable getCause() {
+	public IOException getCause() {
 		return getTargetException();
 	}
 

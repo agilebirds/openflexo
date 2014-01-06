@@ -25,15 +25,16 @@ import java.util.Observable;
 import java.util.Observer;
 import java.util.logging.Logger;
 
+import javax.swing.ImageIcon;
 import javax.swing.JDialog;
 import javax.swing.WindowConstants;
 
-import org.openflexo.foundation.FlexoModelObject;
-import org.openflexo.foundation.view.ViewConnector;
-import org.openflexo.foundation.view.ViewShape;
+import org.openflexo.foundation.FlexoObject;
+import org.openflexo.foundation.view.EditionPatternInstance;
 import org.openflexo.inspector.ModuleInspectorController.InspectedObjectChanged;
 import org.openflexo.swing.WindowSynchronizer;
 import org.openflexo.utils.WindowBoundsSaver;
+import org.openflexo.view.controller.FlexoController;
 
 /**
  * Represent a JDialog showing inspector for the selection managed by an instance of ModuleInspectorController
@@ -63,7 +64,7 @@ public class FIBInspectorDialog extends JDialog implements Observer {
 		getContentPane().setLayout(new BorderLayout());
 		getContentPane().add(inspectorPanel, BorderLayout.CENTER);
 		setResizable(true);
-		new WindowBoundsSaver(this, "FIBInspector", new Rectangle(800, 400, 400, 400));
+		new WindowBoundsSaver(this, "FIBInspector", new Rectangle(800, 400, 400, 400), inspectorController.getFlexoController());
 	}
 
 	public void delete() {
@@ -77,9 +78,9 @@ public class FIBInspectorDialog extends JDialog implements Observer {
 
 	/*public void inspectObject(Object object) {
 		if (inspectorPanel.inspectObject(object)) {
-			if (object instanceof FlexoModelObject && (object instanceof ViewShape || object instanceof ViewConnector)
-					&& ((FlexoModelObject) object).getEditionPatternReferences().size() > 0) {
-				String newTitle = ((FlexoModelObject) object).getEditionPatternReferences().firstElement().getEditionPattern()
+			if (object instanceof FlexoObject && (object instanceof DiagramShape || object instanceof DiagramConnector)
+					&& ((FlexoObject) object).getEditionPatternReferences().size() > 0) {
+				String newTitle = ((FlexoObject) object).getEditionPatternReferences().firstElement().getEditionPattern()
 						.getInspector().getInspectorTitle();
 				setTitle(newTitle);
 			} else {
@@ -97,14 +98,28 @@ public class FIBInspectorDialog extends JDialog implements Observer {
 			setTitle(INSPECTOR_TITLE);
 		} else*/if (notification instanceof InspectedObjectChanged) {
 			Object object = ((InspectedObjectChanged) notification).getInspectedObject();
-			if (object instanceof FlexoModelObject && (object instanceof ViewShape || object instanceof ViewConnector)
-					&& ((FlexoModelObject) object).getEditionPatternReferences().size() > 0) {
-				String newTitle = ((FlexoModelObject) object).getEditionPatternReferences().firstElement().getEditionPattern()
+			if (object instanceof EditionPatternInstance) {
+				String newTitle = ((EditionPatternInstance) object).getEditionPattern().getInspector().getInspectorTitle();
+				setTitle(newTitle);
+			} else if (object instanceof FlexoObject /*&& (object instanceof DiagramShape || object instanceof DiagramConnector)*/
+					&& ((FlexoObject) object).getEditionPatternReferences().size() > 0) {
+				String newTitle = ((FlexoObject) object).getEditionPatternReferences().get(0).getObject().getEditionPattern()
 						.getInspector().getInspectorTitle();
 				setTitle(newTitle);
-			} else {
-				FIBInspector newInspector = inspectorController.inspectorForObject(object);
-				setTitle(newInspector.getParameter("title"));
+			} else if (getInspectorPanel() != null && getInspectorPanel().getCurrentlyDisplayedInspector() != null) {
+				setTitle(getInspectorPanel().getCurrentlyDisplayedInspector().getParameter("title"));
+			}
+			if (object instanceof FlexoObject) {
+				ImageIcon icon = FlexoController.statelessIconForObject(object);
+				if (icon != null) {
+					setIconImage(icon.getImage());
+				}
+				if (getInspectorPanel() != null && getInspectorPanel().getCurrentlyDisplayedInspector() != null
+						&& object.getClass() != getInspectorPanel().getCurrentlyDisplayedInspector().getDataClass()
+						&& !object.getClass().getSimpleName().contains("javassist")) {
+					setTitle(getInspectorPanel().getCurrentlyDisplayedInspector().getParameter("title") + " : "
+							+ object.getClass().getSimpleName());
+				}
 			}
 		}
 	}

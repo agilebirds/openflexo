@@ -6,7 +6,7 @@
 	<groupId>org.openflexo</groupId>
 	<artifactId>openflexo</artifactId>
 	<packaging>pom</packaging>
-	<version>1.5.2-SNAPSHOT</version>
+        <version>1.7-SNAPSHOT</version>
 	<name>OpenFlexo</name>
 	<organization>
 		<name>${organization.name}</name>
@@ -18,9 +18,9 @@
 		<compiler.target>1.6</compiler.target>
 		<hibernate.version>4.2.3.Final</hibernate.version>
 		<jersey.version>1.17.1</jersey.version>
-		<organization.name>AgileBirds</organization.name>
-		<organization.url>http://www.agilebirds.com/</organization.url>
-		<organization.logo>http://www.agilebirds.com/_Ressources/img/header_Logo.gif</organization.logo>
+		<organization.name>Openflexo</organization.name>
+		<organization.url>http://www.openflexo.org</organization.url>
+		<organization.logo>https://media.openflexo.org/images/OpenFlexo_Logo.png</organization.logo>
 		<!-- need this so that sonar run properly. don't know what the difference 
 			with source.encoding. todo : investigate difference between source.encoding 
 			and project.build.sourceEncoding -->
@@ -29,6 +29,9 @@
 		<resource.encoding>UTF-8</resource.encoding>
 		<source.encoding>UTF-8</source.encoding>
 		<swingx.version>1.6.3</swingx.version>
+		<javahelp.version>2.0.05</javahelp.version>
+		<diana.version>1.0-SNAPSHOT</diana.version>
+		<fib.version>1.0-SNAPSHOT</fib.version>
 	</properties>
 	<scm>
 		<connection>scm:git:ssh://git@github.com:agilebirds/openflexo.git</connection>
@@ -38,19 +41,20 @@
 		<module>flexodesktop</module>
 		<module>flexoserver</module>
 		<module>packaging</module>
+		<module>projects</module>
 	</modules>
 	<ciManagement>
 		<system>Jenkins</system>
-		<url>https://jenkins.openflexo.com/</url>
+		<url>https://jenkins.openflexo.org/</url>
 	</ciManagement>
-	<url>http://www.openflexo.com</url>
+	<url>http://www.openflexo.org</url>
 	<description>Openflexo is the open source business architecture platform that supports collaborative agile missions by seamlessly
         transforming multi-facet enterprise models into business oriented deliverables.
     </description>
 	<repositories>
 		<repository>
 			<id>openflexo</id>
-			<url>https://maven.openflexo.com/artifactory/openflexo-deps/</url>
+			<url>https://maven.openflexo.org/artifactory/openflexo-deps/</url>
 			<releases>
 				<enabled>true</enabled>
 			</releases>
@@ -64,12 +68,12 @@
 		<repository>
 			<id>openflexo-release</id>
 			<name>Open Flexo Releases</name>
-			<url>https://maven.openflexo.com/artifactory/openflexo-release/</url>
+			<url>https://maven.openflexo.org/artifactory/openflexo-release/</url>
 		</repository>
 		<snapshotRepository>
 			<id>openflexo-snapshot</id>
 			<name>Open Flexo Snapshots</name>
-			<url>https://maven.openflexo.com/artifactory/openflexo-snapshot/</url>
+			<url>https://maven.openflexo.org/artifactory/openflexo-snapshot/</url>
 		</snapshotRepository>
 	</distributionManagement>
 	<build>
@@ -285,49 +289,157 @@
 			</dependency>
 			<dependency>
 				<groupId>org.openflexo</groupId>
-				<artifactId>flexointerfacebuilder</artifactId>
+				<artifactId>fib-core</artifactId>
+				<version>${fib.version}</version>
+			</dependency>
+			<dependency>
+				<groupId>org.openflexo</groupId>
+				<artifactId>fib-core</artifactId>
+				<version>${fib.version}</version>
+				<classifier>tests</classifier>
+			</dependency>		
+			<dependency>
+				<groupId>org.openflexo</groupId>
+				<artifactId>fib-core</artifactId>
+				<version>${fib.version}</version>
+				<classifier>resources</classifier>
+				<type>zip</type>
+			</dependency>
+			<dependency>
+				<groupId>org.openflexo</groupId>
+				<artifactId>fib-swing</artifactId>
+				<version>${fib.version}</version>
+			</dependency>
+			<dependency>
+				<groupId>org.openflexo</groupId>
+				<artifactId>fib-swing</artifactId>
+				<version>${fib.version}</version>
+				<classifier>resources</classifier>
+				<type>zip</type>
+			</dependency>
+			<dependency>
+				<groupId>org.openflexo</groupId>
+				<artifactId>fib-swing-editor</artifactId>
+				<version>${fib.version}</version>
+			</dependency>
+			<dependency>
+				<groupId>org.openflexo</groupId>
+				<artifactId>fib-swing-editor</artifactId>
+				<version>${fib.version}</version>
+				<classifier>tests</classifier>
+			</dependency>		
+			<dependency>
+				<groupId>org.openflexo</groupId>
+				<artifactId>fib-swing-editor</artifactId>
+				<version>${fib.version}</version>
+				<classifier>resources</classifier>
+				<type>zip</type>
+			</dependency>
+		    <dependency>
+				<groupId>org.openflexo</groupId>
+				<artifactId>diana-geom</artifactId>
+				<version>${diana.version}</version>
+				<classifier>resources</classifier>
+				<type>zip</type>
+			</dependency>
+			<dependency>
+				<groupId>org.openflexo</groupId>
+				<artifactId>diana-geom</artifactId>
+				<version>${diana.version}</version>
+			</dependency>
+			<dependency>
+				<groupId>org.openflexo</groupId>
+				<artifactId>diana-api</artifactId>
+				<version>${diana.version}</version>
+				<classifier>resources</classifier>
+				<type>zip</type>
+			</dependency>
+			<dependency>
+				<groupId>org.openflexo</groupId>
+				<artifactId>diana-api</artifactId>
+				<version>${diana.version}</version>
+			</dependency>
+			<dependency>
+				<groupId>org.openflexo</groupId>
+				<artifactId>diana-core</artifactId>
+				<version>${diana.version}</version>
+				<classifier>resources</classifier>
+				<type>zip</type>
+			</dependency>
+			<dependency>
+				<groupId>org.openflexo</groupId>
+				<artifactId>diana-core</artifactId>
+				<version>${diana.version}</version>
+			</dependency>
+			<dependency>
+				<groupId>org.openflexo</groupId>
+				<artifactId>diana-swing</artifactId>
+				<version>${diana.version}</version>
+				<classifier>resources</classifier>
+				<type>zip</type>
+			</dependency>
+			<dependency>
+				<groupId>org.openflexo</groupId>
+				<artifactId>diana-swing</artifactId>
+				<version>${diana.version}</version>
+			</dependency>
+			<dependency>
+				<groupId>org.openflexo</groupId>
+				<artifactId>diana-drawing-editor</artifactId>
+				<version>${diana.version}</version>
+				<classifier>resources</classifier>
+				<type>zip</type>
+			</dependency>
+			<dependency>
+				<groupId>org.openflexo</groupId>
+				<artifactId>diana-drawing-editor</artifactId>
+				<version>${diana.version}</version>
+			</dependency>
+			<dependency>
+				<groupId>org.openflexo</groupId>
+				<artifactId>diana-geomedit</artifactId>
+				<version>${diana.version}</version>
+				<classifier>resources</classifier>
+				<type>zip</type>
+			</dependency>
+			<dependency>
+				<groupId>org.openflexo</groupId>
+				<artifactId>diana-geomedit</artifactId>
+				<version>${diana.version}</version>
+			</dependency>
+			<dependency>
+				<groupId>org.openflexo</groupId>
+				<artifactId>flexofoundation</artifactId>
 				<version>${project.version}</version>
 			</dependency>
 			<dependency>
 				<groupId>org.openflexo</groupId>
-				<artifactId>flexointerfacebuilder</artifactId>
+				<artifactId>flexofoundation</artifactId>
+				<version>${project.version}</version>
+				<classifier>resources</classifier>
+				<type>zip</type>
+			</dependency>
+			<dependency>
+				<groupId>org.openflexo</groupId>
+				<artifactId>flexofoundation</artifactId>
 				<version>${project.version}</version>
 				<classifier>tests</classifier>
 			</dependency>
 			<dependency>
 				<groupId>org.openflexo</groupId>
-				<artifactId>flexointerfacebuilder</artifactId>
+				<artifactId>flexodiagram</artifactId>
+				<version>${project.version}</version>
+			</dependency>
+			<dependency>
+				<groupId>org.openflexo</groupId>
+				<artifactId>flexodiagram</artifactId>
 				<version>${project.version}</version>
 				<classifier>resources</classifier>
 				<type>zip</type>
 			</dependency>
 			<dependency>
 				<groupId>org.openflexo</groupId>
-				<artifactId>flexographicalengine</artifactId>
-				<version>${project.version}</version>
-				<classifier>resources</classifier>
-				<type>zip</type>
-			</dependency>
-			<dependency>
-				<groupId>org.openflexo</groupId>
-				<artifactId>flexographicalengine</artifactId>
-				<version>${project.version}</version>
-			</dependency>
-			<dependency>
-				<groupId>org.openflexo</groupId>
-				<artifactId>flexofoundation</artifactId>
-				<version>${project.version}</version>
-			</dependency>
-			<dependency>
-				<groupId>org.openflexo</groupId>
-				<artifactId>flexofoundation</artifactId>
-				<version>${project.version}</version>
-				<classifier>resources</classifier>
-				<type>zip</type>
-			</dependency>
-			<dependency>
-				<groupId>org.openflexo</groupId>
-				<artifactId>flexofoundation</artifactId>
+				<artifactId>flexodiagram</artifactId>
 				<version>${project.version}</version>
 				<classifier>tests</classifier>
 			</dependency>
@@ -687,6 +799,211 @@
 				<type>zip</type>
 			</dependency>
 
+			<!-- Technology adaptors -->
+
+			<!--  AgileBirds Modeller -->
+			
+			<dependency>
+				<groupId>org.openflexo</groupId>
+				<artifactId>agilebirdsconnector</artifactId>
+				<version>${project.version}</version>
+			</dependency>
+			<dependency>
+				<groupId>org.openflexo</groupId>
+				<artifactId>agilebirdsconnector</artifactId>
+				<version>${project.version}</version>
+				<classifier>resources</classifier>
+				<type>zip</type>
+			</dependency>
+			<dependency>
+				<groupId>org.openflexo</groupId>
+				<artifactId>agilebirdsconnector</artifactId>
+				<version>${project.version}</version>
+				<classifier>tests</classifier>
+			</dependency>
+			<dependency>
+				<groupId>org.openflexo</groupId>
+				<artifactId>agilebirdsconnector-ui</artifactId>
+				<version>${project.version}</version>
+			</dependency>
+			<dependency>
+				<groupId>org.openflexo</groupId>
+				<artifactId>agilebirdsconnector-ui</artifactId>
+				<version>${project.version}</version>
+				<classifier>resources</classifier>
+				<type>zip</type>
+			</dependency>
+			
+			<!--  OWL -->
+			<dependency>
+				<groupId>org.openflexo</groupId>
+				<artifactId>owlconnector</artifactId>
+				<version>${project.version}</version>
+			</dependency>
+			<dependency>
+				<groupId>org.openflexo</groupId>
+				<artifactId>owlconnector</artifactId>
+				<version>${project.version}</version>
+				<classifier>resources</classifier>
+				<type>zip</type>
+			</dependency>
+			<dependency>
+				<groupId>org.openflexo</groupId>
+				<artifactId>owlconnector-ui</artifactId>
+				<version>${project.version}</version>
+			</dependency>
+			<dependency>
+				<groupId>org.openflexo</groupId>
+				<artifactId>owlconnector-ui</artifactId>
+				<version>${project.version}</version>
+				<classifier>resources</classifier>
+				<type>zip</type>
+			</dependency>
+			
+			<!--  EMF -->
+			<dependency>
+				<groupId>org.openflexo</groupId>
+				<artifactId>emfconnector</artifactId>
+				<version>${project.version}</version>
+			</dependency>
+			<dependency>
+				<groupId>org.openflexo</groupId>
+				<artifactId>emfconnector</artifactId>
+				<version>${project.version}</version>
+				<classifier>resources</classifier>
+				<type>zip</type>
+			</dependency>
+			<dependency>
+				<groupId>org.openflexo</groupId>
+				<artifactId>emfconnector-ui</artifactId>
+				<version>${project.version}</version>
+			</dependency>
+			<dependency>
+				<groupId>org.openflexo</groupId>
+				<artifactId>emfconnector-ui</artifactId>
+				<version>${project.version}</version>
+				<classifier>resources</classifier>
+				<type>zip</type>
+			</dependency>
+			
+			<!--  XML/XSD -->
+			<dependency>
+				<groupId>org.openflexo</groupId>
+				<artifactId>xsdconnector</artifactId>
+				<version>${project.version}</version>
+			</dependency>
+			<dependency>
+				<groupId>org.openflexo</groupId>
+				<artifactId>xsdconnector</artifactId>
+				<version>${project.version}</version>
+				<classifier>resources</classifier>
+				<type>zip</type>
+			</dependency><dependency>
+				<groupId>org.openflexo</groupId>
+				<artifactId>xmlconnector</artifactId>
+				<version>${project.version}</version>
+			</dependency>
+			<dependency>
+				<groupId>org.openflexo</groupId>
+				<artifactId>xmlconnector</artifactId>
+				<version>${project.version}</version>
+				<classifier>resources</classifier>
+				<type>zip</type>
+			</dependency>
+			<dependency>
+				<groupId>org.openflexo</groupId>
+				<artifactId>xsdconnector-ui</artifactId>
+				<version>${project.version}</version>
+			</dependency>
+			<dependency>
+				<groupId>org.openflexo</groupId>
+				<artifactId>xsdconnector-ui</artifactId>
+				<version>${project.version}</version>
+				<classifier>resources</classifier>
+				<type>zip</type>
+			</dependency>
+			
+			
+			<!--  Excel -->
+			<dependency>
+				<groupId>org.openflexo</groupId>
+				<artifactId>excelconnector</artifactId>
+				<version>${project.version}</version>
+			</dependency>
+			<dependency>
+				<groupId>org.openflexo</groupId>
+				<artifactId>excelconnector</artifactId>
+				<version>${project.version}</version>
+				<classifier>resources</classifier>
+				<type>zip</type>
+			</dependency>
+			<dependency>
+				<groupId>org.openflexo</groupId>
+				<artifactId>excelconnector-ui</artifactId>
+				<version>${project.version}</version>
+			</dependency>
+			<dependency>
+				<groupId>org.openflexo</groupId>
+				<artifactId>excelconnector-ui</artifactId>
+				<version>${project.version}</version>
+				<classifier>resources</classifier>
+				<type>zip</type>
+			</dependency>
+
+			<!--  CSV -->
+			<dependency>
+				<groupId>org.openflexo</groupId>
+				<artifactId>csvconnector</artifactId>
+				<version>${project.version}</version>
+			</dependency>
+			<dependency>
+				<groupId>org.openflexo</groupId>
+				<artifactId>csvconnector</artifactId>
+				<version>${project.version}</version>
+				<classifier>resources</classifier>
+				<type>zip</type>
+			</dependency>
+			<dependency>
+				<groupId>org.openflexo</groupId>
+				<artifactId>csvconnector-ui</artifactId>
+				<version>${project.version}</version>
+			</dependency>
+			<dependency>
+				<groupId>org.openflexo</groupId>
+				<artifactId>csvconnector-ui</artifactId>
+				<version>${project.version}</version>
+				<classifier>resources</classifier>
+				<type>zip</type>
+			</dependency>
+
+			<!--  Powerpoint -->
+			<dependency>
+				<groupId>org.openflexo</groupId>
+				<artifactId>powerpointconnector</artifactId>
+				<version>${project.version}</version>
+			</dependency>
+			<dependency>
+				<groupId>org.openflexo</groupId>
+				<artifactId>powerpointconnector</artifactId>
+				<version>${project.version}</version>
+				<classifier>resources</classifier>
+				<type>zip</type>
+			</dependency>
+			<dependency>
+				<groupId>org.openflexo</groupId>
+				<artifactId>powerpointconnector-ui</artifactId>
+				<version>${project.version}</version>
+			</dependency>
+			<dependency>
+				<groupId>org.openflexo</groupId>
+				<artifactId>powerpointconnector-ui</artifactId>
+				<version>${project.version}</version>
+				<classifier>resources</classifier>
+				<type>zip</type>
+			</dependency>
+
+			<!--  MDTUML -->
+
 			<!-- packaging -->
 			<dependency>
 				<groupId>org.openflexo.packaging</groupId>
@@ -750,6 +1067,56 @@
 				<artifactId>jersey-json</artifactId>
 				<version>${jersey.version}</version>
 			</dependency>
+			<dependency>
+				<groupId>org.openflexo.packaging</groupId>
+				<artifactId>flexolite</artifactId>
+				<version>${project.version}</version>
+				<classifier>packaging</classifier>
+				<type>zip</type>
+			</dependency>
+			<dependency>
+				<groupId>org.openflexo.packaging</groupId>
+				<artifactId>flexobusiness</artifactId>
+				<version>${project.version}</version>
+				<classifier>packaging</classifier>
+				<type>zip</type>
+			</dependency>
+			<dependency>
+				<groupId>org.openflexo.packaging</groupId>
+				<artifactId>flexobusinessplus</artifactId>
+				<version>${project.version}</version>
+				<classifier>packaging</classifier>
+				<type>zip</type>
+			</dependency>
+			<dependency>
+				<groupId>org.openflexo.packaging</groupId>
+				<artifactId>flexoenterprise</artifactId>
+				<version>${project.version}</version>
+				<classifier>packaging</classifier>
+				<type>zip</type>
+			</dependency>
+			<dependency>
+				<groupId>org.openflexo.packaging</groupId>
+				<artifactId>flexomaintainer</artifactId>
+				<version>${project.version}</version>
+				<classifier>packaging</classifier>
+				<type>zip</type>
+			</dependency>
+			<dependency>
+				<groupId>org.openflexo.packaging</groupId>
+				<artifactId>flexosemantics</artifactId>
+				<version>${project.version}</version>
+				<classifier>packaging</classifier>
+				<type>zip</type>
+			</dependency>
+			<dependency>
+				<groupId>org.openflexo.packaging</groupId>
+				<artifactId>flexosemanticsplus</artifactId>
+				<version>${project.version}</version>
+				<classifier>packaging</classifier>
+				<type>zip</type>
+			</dependency>
+
 			<!-- tests -->
 			<dependency>
 				<groupId>org.openflexo.test</groupId>
@@ -790,8 +1157,8 @@
 			</dependency>
 			<dependency>
 				<groupId>org.jdom</groupId>
-				<artifactId>jdom</artifactId>
-				<version>2.0.2</version>
+				<artifactId>jdom2</artifactId>
+				<version>2.0.4</version>
 			</dependency>
 			<dependency>
 				<groupId>com.sferyx.htmleditor</groupId>
@@ -886,7 +1253,7 @@
 			<dependency>
 				<groupId>javax.help</groupId>
 				<artifactId>javahelp</artifactId>
-				<version>2.0.02</version>
+				<version>2.0.05</version>
 			</dependency>
 			<dependency>
 				<groupId>org.openflexo.utils</groupId>
@@ -925,8 +1292,8 @@
 			</dependency>
 			<dependency>
 				<groupId>org.apache.poi</groupId>
-				<artifactId>poi-ooxml</artifactId>
-				<version>3.5-FINAL</version>
+			  <artifactId>poi-scratchpad</artifactId>
+			  <version>3.10-beta1</version>
 			</dependency>
 			<dependency>
 				<groupId>com.jcraft</groupId>
@@ -946,32 +1313,17 @@
 			<dependency>
 				<groupId>org.apache.xmlbeans</groupId>
 				<artifactId>xmlbeans-xmlpublic</artifactId>
-				<version>2.2.0</version>
+				<version>2.3.0</version>
 			</dependency>
 			<dependency>
 				<groupId>org.apache.xmlbeans</groupId>
 				<artifactId>xmlbeans-xpath</artifactId>
-				<version>2.2.0</version>
+				<version>2.3.0</version>
 			</dependency>
 			<dependency>
 				<groupId>org.eclipse.jdt</groupId>
 				<artifactId>core</artifactId>
 				<version>3.3.0-v_771</version>
-			</dependency>
-			<dependency>
-				<groupId>org.eclipse.core</groupId>
-				<artifactId>runtime</artifactId>
-				<version>3.3.100-v20070530</version>
-			</dependency>
-			<dependency>
-				<groupId>org.eclipse.equinox</groupId>
-				<artifactId>app</artifactId>
-				<version>1.0.0-v20070606</version>
-			</dependency>
-			<dependency>
-				<groupId>org.eclipse.equinox</groupId>
-				<artifactId>common</artifactId>
-				<version>3.3.0-v20070426</version>
 			</dependency>
 			<dependency>
 				<groupId>com.google.code.gson</groupId>
@@ -1007,6 +1359,86 @@
 				<groupId>sablecc</groupId>
 				<artifactId>sablecc</artifactId>
 				<version>3.2-1</version>
+			</dependency>
+			<dependency>
+				<groupId>org.eclipse.emf</groupId>
+				<artifactId>common</artifactId>
+				<version>2.7.0.v20120127</version>
+			</dependency>
+			<dependency>
+				<groupId> org.eclipse.core</groupId>
+				<artifactId>runtime</artifactId>
+				<version>3.3.100-v20070530</version>
+			</dependency>
+			<dependency>
+				<groupId>org.eclipse</groupId>
+				<artifactId>osgi</artifactId>
+				<version>3.3.0-v20070530</version>
+			</dependency>
+			<dependency>
+				<groupId>org.eclipse.equinox</groupId>
+				<artifactId>common</artifactId>
+				<version>3.3.0-v20070426</version>
+			</dependency>
+			<dependency>
+				<groupId>org.eclipse.core</groupId>
+				<artifactId>jobs</artifactId>
+				<version>3.3.0-v20070423</version>
+			</dependency>
+			<dependency>
+				<groupId>org.eclipse.equinox</groupId>
+				<artifactId>registry</artifactId>
+				<version>3.3.0-v20070522</version>
+			</dependency>
+			<dependency>
+				<groupId>org.eclipse.equinox</groupId>
+				<artifactId>preferences</artifactId>
+				<version>3.2.100-v20070522</version>
+			</dependency>
+			<dependency>
+				<groupId>org.eclipse.core</groupId>
+				<artifactId>contenttype</artifactId>
+				<version>3.2.100-v20070319</version>
+			</dependency>
+			<dependency>
+				<groupId>org.eclipse.equinox</groupId>
+				<artifactId>app</artifactId>
+				<version>1.0.0-v20070606</version>
+			</dependency>
+			<dependency>
+				<groupId>org.eclipse.emf</groupId>
+				<artifactId>ecore</artifactId>
+				<version>2.7.0.v20120127</version>
+			</dependency>
+			<dependency>
+				<groupId>org.eclipse.emf</groupId>
+				<artifactId>ecore-xmi</artifactId>
+				<version>2.7.0.v20120127</version>
+			</dependency>
+			<dependency>
+				<groupId>org.apache.poi</groupId>
+				<artifactId>poi</artifactId>
+				<version>3.10-beta2</version>
+			</dependency>
+			<dependency>
+		    	<groupId>org.apache.poi</groupId>
+		    	<artifactId>poi-ooxml</artifactId>
+		    	<version>3.8-beta4</version>
+			</dependency>
+			<dependency>
+				<groupId>org.apache.poi</groupId>
+				<artifactId>poi-ooxml-schemas</artifactId>
+				<version>3.10-beta2</version>
+			</dependency>
+			<dependency>
+				<groupId>org.apache.poi</groupId>
+				<artifactId>poi-ooxml-schemas</artifactId>
+				<version>3.10-beta2</version>
+			</dependency>
+			<dependency>
+				<groupId>org.apache.xbean</groupId>
+				<artifactId>xmlbean</artifactId>
+				<version>2.3.0</version>
 			</dependency>
 		</dependencies>
 	</dependencyManagement>

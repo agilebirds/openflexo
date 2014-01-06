@@ -24,37 +24,36 @@ import java.util.logging.Logger;
 
 import org.openflexo.foundation.FlexoEditor;
 import org.openflexo.foundation.FlexoException;
-import org.openflexo.foundation.FlexoModelObject;
-import org.openflexo.foundation.wkf.action.OpenPortRegistery;
-import org.openflexo.foundation.wkf.ws.PortRegistery;
+import org.openflexo.foundation.FlexoObject;
+import org.openflexo.foundation.FlexoObject.FlexoObjectImpl;
 import org.openflexo.xmlcode.AccessorInvocationException;
 
 /**
  * @author gpolet
  * 
  */
-public class SetPropertyAction extends FlexoUndoableAction<SetPropertyAction, FlexoModelObject, FlexoModelObject> {
+public class SetPropertyAction extends FlexoUndoableAction<SetPropertyAction, FlexoObject, FlexoObject> {
 
 	private static final Logger logger = Logger.getLogger(SetPropertyAction.class.getPackage().getName());
 
-	public static class SetPropertyActionType extends FlexoActionType<SetPropertyAction, FlexoModelObject, FlexoModelObject> {
+	public static class SetPropertyActionType extends FlexoActionType<SetPropertyAction, FlexoObject, FlexoObject> {
 
 		protected SetPropertyActionType(String actionName) {
 			super(actionName);
 		}
 
 		@Override
-		public boolean isEnabledForSelection(FlexoModelObject object, Vector<FlexoModelObject> globalSelection) {
+		public boolean isEnabledForSelection(FlexoObject object, Vector<FlexoObject> globalSelection) {
 			return true;
 		}
 
 		@Override
-		public boolean isVisibleForSelection(FlexoModelObject object, Vector<FlexoModelObject> globalSelection) {
+		public boolean isVisibleForSelection(FlexoObject object, Vector<FlexoObject> globalSelection) {
 			return false;
 		}
 
 		@Override
-		public SetPropertyAction makeNewAction(FlexoModelObject focusedObject, Vector<FlexoModelObject> globalSelection, FlexoEditor editor) {
+		public SetPropertyAction makeNewAction(FlexoObject focusedObject, Vector<FlexoObject> globalSelection, FlexoEditor editor) {
 			return new SetPropertyAction(focusedObject, globalSelection, editor);
 		}
 
@@ -83,7 +82,7 @@ public class SetPropertyAction extends FlexoUndoableAction<SetPropertyAction, Fl
 	private boolean performValidate = true;
 
 	static {
-		FlexoModelObject.addActionForClass(actionType, FlexoModelObject.class);
+		FlexoObjectImpl.addActionForClass(actionType, FlexoObject.class);
 	}
 
 	/**
@@ -92,7 +91,7 @@ public class SetPropertyAction extends FlexoUndoableAction<SetPropertyAction, Fl
 	 * @param globalSelection
 	 * @param editor
 	 */
-	protected SetPropertyAction(FlexoModelObject focusedObject, Vector<FlexoModelObject> globalSelection, FlexoEditor editor) {
+	protected SetPropertyAction(FlexoObject focusedObject, Vector<FlexoObject> globalSelection, FlexoEditor editor) {
 		super(actionType, focusedObject, globalSelection, editor);
 	}
 
@@ -125,13 +124,13 @@ public class SetPropertyAction extends FlexoUndoableAction<SetPropertyAction, Fl
 	@Override
 	protected void doAction(Object context) throws FlexoException {
 		previousValue = getFocusedObject().objectForKey(getKey());
-		if (getFocusedObject() instanceof PortRegistery && getKey().equals("isVisible")) {
+		/*if (getFocusedObject() instanceof PortRegistery && getKey().equals("isVisible")) {
 			if (previousValue != null && !previousValue.equals(getValue())) {
 				OpenPortRegistery.actionType.makeNewEmbeddedAction(((PortRegistery) getFocusedObject()).getProcess(), null, this)
 						.doAction();
 			}
 			return;
-		}
+		}*/
 		try {
 			getFocusedObject().setObjectForKey(getValue(), getKey());
 		} catch (AccessorInvocationException exception) {
@@ -162,7 +161,7 @@ public class SetPropertyAction extends FlexoUndoableAction<SetPropertyAction, Fl
 		this.value = value;
 	}
 
-	public static SetPropertyAction makeAction(FlexoModelObject object, String key, Object value, FlexoEditor editor) {
+	public static SetPropertyAction makeAction(FlexoObject object, String key, Object value, FlexoEditor editor) {
 		SetPropertyAction returned = actionType.makeNewAction(object, null, editor);
 		returned.setKey(key);
 		returned.setValue(value);

@@ -25,37 +25,36 @@ import java.util.logging.Logger;
 
 import javax.swing.Icon;
 
+import org.openflexo.components.widget.CommonFIB;
+import org.openflexo.fge.Drawing.ShapeNode;
+import org.openflexo.fge.ShadowStyle;
 import org.openflexo.fge.ShapeGraphicalRepresentation;
 import org.openflexo.fge.ShapeGraphicalRepresentation.ShapeBorder;
-import org.openflexo.fge.graphics.ShadowStyle;
-import org.openflexo.fge.view.ShapeView;
-import org.openflexo.fib.controller.FIBController.Status;
-import org.openflexo.fib.controller.FIBDialog;
+import org.openflexo.fge.swing.view.JShapeView;
 import org.openflexo.foundation.action.FlexoActionFinalizer;
 import org.openflexo.foundation.action.FlexoActionInitializer;
 import org.openflexo.foundation.gen.ScreenshotGenerator;
-import org.openflexo.foundation.viewpoint.action.PushToPalette;
+import org.openflexo.foundation.view.diagram.viewpoint.ExampleDiagramObject;
+import org.openflexo.foundation.view.diagram.viewpoint.ExampleDiagramShape;
+import org.openflexo.foundation.view.diagram.viewpoint.action.PushToPalette;
 import org.openflexo.icon.VPMIconLibrary;
-import org.openflexo.localization.FlexoLocalization;
-import org.openflexo.view.FlexoFrame;
 import org.openflexo.view.controller.ActionInitializer;
 import org.openflexo.view.controller.ControllerActionInitializer;
-import org.openflexo.vpm.CEDCst;
 import org.openflexo.vpm.controller.VPMController;
-import org.openflexo.vpm.drawingshema.CalcDrawingShemaController;
-import org.openflexo.vpm.drawingshema.CalcDrawingShemaModuleView;
+import org.openflexo.vpm.examplediagram.ExampleDiagramEditor;
+import org.openflexo.vpm.examplediagram.ExampleDiagramModuleView;
 
-public class PushToPaletteInitializer extends ActionInitializer {
+public class PushToPaletteInitializer extends ActionInitializer<PushToPalette, ExampleDiagramShape, ExampleDiagramObject> {
 
 	private static final Logger logger = Logger.getLogger(ControllerActionInitializer.class.getPackage().getName());
 
-	PushToPaletteInitializer(CEDControllerActionInitializer actionInitializer) {
+	PushToPaletteInitializer(VPMControllerActionInitializer actionInitializer) {
 		super(PushToPalette.actionType, actionInitializer);
 	}
 
 	@Override
-	protected CEDControllerActionInitializer getControllerActionInitializer() {
-		return (CEDControllerActionInitializer) super.getControllerActionInitializer();
+	protected VPMControllerActionInitializer getControllerActionInitializer() {
+		return (VPMControllerActionInitializer) super.getControllerActionInitializer();
 	}
 
 	@Override
@@ -68,26 +67,22 @@ public class PushToPaletteInitializer extends ActionInitializer {
 		return new FlexoActionInitializer<PushToPalette>() {
 			@Override
 			public boolean run(EventObject e, PushToPalette action) {
-				if (getController().getCurrentModuleView() instanceof CalcDrawingShemaModuleView
+				if (getController().getCurrentModuleView() instanceof ExampleDiagramModuleView
 						&& action.getFocusedObject().getGraphicalRepresentation() instanceof ShapeGraphicalRepresentation) {
-					CalcDrawingShemaController c = ((CalcDrawingShemaModuleView) getController().getCurrentModuleView()).getController();
-					ShapeGraphicalRepresentation gr = action.getFocusedObject().getGraphicalRepresentation();
-					ShapeView shapeView = c.getDrawingView().shapeViewForObject(gr);
+					ExampleDiagramEditor c = ((ExampleDiagramModuleView) getController().getCurrentModuleView()).getController();
+					ShapeNode<ExampleDiagramShape> shapeNode = c.getDrawing().getShapeNode(action.getFocusedObject());
+					JShapeView shapeView = c.getDrawingView().shapeViewForNode(shapeNode);
 					BufferedImage image = shapeView.getScreenshot();
+					ShapeGraphicalRepresentation gr = shapeNode.getGraphicalRepresentation();
 					ShapeBorder b = gr.getBorder();
 					ShadowStyle ss = gr.getShadowStyle();
-					action.setScreenshot(ScreenshotGenerator.makeImage(image, b.left, b.top,
+					action.setScreenshot(ScreenshotGenerator.makeImage(image, b.getLeft(), b.getTop(),
 							(int) gr.getWidth() + (ss.getDrawShadow() ? ss.getShadowBlur() : 0) + 1,
 							(int) gr.getHeight() + (ss.getDrawShadow() ? ss.getShadowBlur() : 0) + 1));
 					// action.setScreenshot(ScreenshotGenerator.trimImage(image));
 				}
 
-				FIBDialog dialog = FIBDialog.instanciateAndShowDialog(CEDCst.PUSH_TO_PALETTE_DIALOG_FIB, action,
-						FlexoFrame.getActiveFrame(), true, FlexoLocalization.getMainLocalizer());
-				if (dialog.getStatus() == Status.VALIDATED) {
-					return true;
-				}
-				return false;
+				return instanciateAndShowDialog(action, CommonFIB.PUSH_TO_PALETTE_DIALOG_FIB);
 			}
 		};
 	}
@@ -106,7 +101,7 @@ public class PushToPaletteInitializer extends ActionInitializer {
 
 	@Override
 	protected Icon getEnabledIcon() {
-		return VPMIconLibrary.CALC_PALETTE_ICON;
+		return VPMIconLibrary.DIAGRAM_PALETTE_ICON;
 	}
 
 }

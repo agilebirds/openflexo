@@ -32,14 +32,12 @@ import java.util.Vector;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 
-import org.openflexo.AdvancedPrefs;
+import org.openflexo.ApplicationContext;
 import org.openflexo.Flexo;
-import org.openflexo.GeneralPreferences;
 import org.openflexo.br.view.JIRAIssueReportDialog;
 import org.openflexo.ch.DefaultHelpRetriever;
 import org.openflexo.components.ProgressWindow;
-import org.openflexo.drm.DocResourceManager;
-import org.openflexo.foundation.FlexoModelObject;
+import org.openflexo.foundation.FlexoObject.FlexoObjectImpl;
 import org.openflexo.foundation.action.InvalidParametersException;
 import org.openflexo.foundation.action.NotImplementedException;
 import org.openflexo.help.FlexoHelp;
@@ -48,7 +46,6 @@ import org.openflexo.jedit.JEditTextArea;
 import org.openflexo.localization.FlexoLocalization;
 import org.openflexo.logging.FlexoLoggingManager;
 import org.openflexo.module.ModuleLoader;
-import org.openflexo.module.UserType;
 import org.openflexo.toolbox.ToolBox;
 import org.openflexo.utils.CancelException;
 import org.openflexo.utils.TooManyFailedAttemptException;
@@ -89,11 +86,14 @@ public class FlexoApplication {
 		eventProcessor = new EventProcessor();
 	}
 
-	public static void initialize(ModuleLoader moduleLoader) {
+	public static void initialize(ApplicationContext applicationContext) {
 		if (isInitialized) {
 			return;
 		}
+
 		isInitialized = true;
+
+		ModuleLoader moduleLoader = applicationContext.getModuleLoader();
 
 		JEditTextArea.DIALOG_FACTORY = FlexoDialog.DIALOG_FACTORY;
 		try {
@@ -107,7 +107,7 @@ public class FlexoApplication {
 				// ((com.apple.eawt.Application)application).setDockIconImage(ModuleLoader.getUserType().getIconImage().getImage());
 				Method setDockIconImage = application.getClass().getMethod("setDockIconImage", new Class[] { Image.class });
 				setDockIconImage.invoke(application, new Object[] { IconLibrary.OPENFLEXO_NOTEXT_128.getImage() });
-				applicationAdapter = new FlexoApplicationAdapter(moduleLoader);
+				applicationAdapter = new FlexoApplicationAdapter(applicationContext);
 
 				Method addApplicationListener = application.getClass().getMethod("addApplicationListener",
 						new Class[] { Class.forName("com.apple.eawt.ApplicationListener") });
@@ -118,11 +118,11 @@ public class FlexoApplication {
 		} catch (Exception e) {
 			e.printStackTrace();
 		}
-		FlexoHelp.configure(GeneralPreferences.getLanguage().getIdentifier(), UserType.getCurrentUserType().getIdentifier());
+		FlexoHelp
+				.configure(applicationContext.getGeneralPreferences().getLanguage().getIdentifier(), null/*UserType.getCurrentUserType().getIdentifier()*/);
 		FlexoHelp.reloadHelpSet();
-		FlexoModelObject.setCurrentUserIdentifier(GeneralPreferences.getUserIdentifier());// Loads the preferences
-		AdvancedPrefs.getEnableUndoManager(); // just load advanced prefs
-		FlexoModelObject.setHelpRetriever(new DefaultHelpRetriever(DocResourceManager.instance()));
+		FlexoObjectImpl.setCurrentUserIdentifier(applicationContext.getGeneralPreferences().getUserIdentifier());// Loads the preferences
+		FlexoObjectImpl.setHelpRetriever(new DefaultHelpRetriever(applicationContext.getDocResourceManager()));
 		// Thread myThread = new Thread(new FocusOwnerDisplayer());
 		// myThread.start();
 	}
@@ -132,7 +132,7 @@ public class FlexoApplication {
 
 		private boolean isReportingBug = false;
 
-		private Vector<String> exceptions = new Vector<String>();
+		private final Vector<String> exceptions = new Vector<String>();
 
 		public EventPreprocessor getPreprocessor() {
 			return _preprocessor;
@@ -229,7 +229,8 @@ public class FlexoApplication {
 								if (FlexoController.confirm(message)) {
 									FlexoFrame frame = FlexoFrame.getActiveFrame(false);
 									JIRAIssueReportDialog.newBugReport((Exception) exception, frame != null ? frame.getModule() : null,
-											frame != null ? frame.getController().getProject() : null);
+											frame != null ? frame.getController().getProject() : null, frame != null ? frame
+													.getController().getApplicationContext() : null);
 								}
 							} catch (HeadlessException e1) {
 								e1.printStackTrace();

@@ -31,7 +31,7 @@ import javax.swing.KeyStroke;
 
 import org.openflexo.FlexoCst;
 import org.openflexo.components.AskParametersDialog;
-import org.openflexo.foundation.FlexoModelObject;
+import org.openflexo.foundation.FlexoObject;
 import org.openflexo.foundation.action.FlexoActionFinalizer;
 import org.openflexo.foundation.action.FlexoActionInitializer;
 import org.openflexo.foundation.ie.IEObject;
@@ -43,7 +43,7 @@ import org.openflexo.foundation.ie.cl.FlexoComponentFolder;
 import org.openflexo.foundation.ie.widget.IEHyperlinkWidget;
 import org.openflexo.foundation.param.CheckboxListParameter;
 import org.openflexo.foundation.toc.TOCEntry;
-import org.openflexo.foundation.utils.FlexoModelObjectReference;
+import org.openflexo.foundation.utils.FlexoObjectReference;
 import org.openflexo.foundation.wkf.node.ActionNode;
 import org.openflexo.icon.IconLibrary;
 import org.openflexo.localization.FlexoLocalization;
@@ -75,14 +75,14 @@ public class IEDeleteInitializer extends ActionInitializer {
 				}
 				Vector<ComponentDefinition> components = new Vector<ComponentDefinition>();
 				Vector<FlexoComponentFolder> folders = new Vector<FlexoComponentFolder>();
-				Vector<FlexoModelObject> v = action.getGlobalSelectionAndFocusedObject();
+				Vector<FlexoObject> v = action.getGlobalSelectionAndFocusedObject();
 				if (logger.isLoggable(Level.FINE)) {
 					logger.fine("IE Delete with " + v);
 				}
 
-				Iterator<FlexoModelObject> i = v.iterator();
+				Iterator<FlexoObject> i = v.iterator();
 				while (i.hasNext()) {
-					FlexoModelObject object = i.next();
+					FlexoObject object = i.next();
 					if (object instanceof ComponentDefinition) {
 						if (!components.contains(object)) {
 							components.add((ComponentDefinition) object);
@@ -137,14 +137,14 @@ public class IEDeleteInitializer extends ActionInitializer {
 				}
 				if (doIt) {
 					HashSet<IEObject> visited = new HashSet<IEObject>();
-					Vector<FlexoModelObject> objects = action.getGlobalSelectionAndFocusedObject();
+					Vector<FlexoObject> objects = action.getGlobalSelectionAndFocusedObject();
 					Vector<TOCEntry> tocEntries = new Vector<TOCEntry>();
-					for (FlexoModelObject object : objects) {
+					for (FlexoObject object : objects) {
 						if (!object.isDeleted()) {
 							if (object instanceof IEObject) {
 								for (IObject o : ((IEObject) object).getAllEmbeddedIEObjects()) {
 									if (!visited.contains(o)) {
-										for (FlexoModelObjectReference ref : o.getReferencers()) {
+										for (FlexoObjectReference ref : o.getReferencers()) {
 											if (ref.getOwner() instanceof TOCEntry && !tocEntries.contains(ref.getOwner())) {
 												tocEntries.add((TOCEntry) ref.getOwner());
 											}
@@ -178,9 +178,9 @@ public class IEDeleteInitializer extends ActionInitializer {
 				}
 				if (doIt) {
 					HashSet<IEHyperlinkWidget> visited = new HashSet<IEHyperlinkWidget>();
-					Vector<FlexoModelObject> objects = action.getGlobalSelectionAndFocusedObject();
+					Vector<FlexoObject> objects = action.getGlobalSelectionAndFocusedObject();
 					Vector<ActionNode> actionNodes = new Vector<ActionNode>();
-					for (FlexoModelObject object : objects) {
+					for (FlexoObject object : objects) {
 						if (!object.isDeleted()) {
 							if (object instanceof IEObject) {
 								for (IObject o : ((IEObject) object).getAllEmbeddedIEObjects()) {

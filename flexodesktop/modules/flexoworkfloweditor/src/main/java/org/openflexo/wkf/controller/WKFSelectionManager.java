@@ -30,6 +30,7 @@ import org.openflexo.fge.controller.DrawingController;
 import org.openflexo.fge.geom.FGEPoint;
 import org.openflexo.fge.view.DrawingView;
 import org.openflexo.foundation.FlexoModelObject;
+import org.openflexo.foundation.FlexoObject;
 import org.openflexo.foundation.wkf.FlexoLevel;
 import org.openflexo.foundation.wkf.FlexoPetriGraph;
 import org.openflexo.foundation.wkf.LevelledObject;
@@ -85,7 +86,7 @@ public class WKFSelectionManager extends SelectionManager {
 	public boolean performSelectionCut() {
 		_clipboard.performSelectionCut(getSelection());
 		FlexoPetriGraph parent = null;
-		for (FlexoModelObject o : new Vector<FlexoModelObject>(getSelection())) {
+		for (FlexoObject o : new Vector<FlexoObject>(getSelection())) {
 			if (o instanceof PetriGraphNode) {
 				PetriGraphNode node = (PetriGraphNode) o;
 				if (parent == null) {
@@ -152,7 +153,7 @@ public class WKFSelectionManager extends SelectionManager {
 	@Override
 	public FlexoModelObject getPasteContext() {
 		if (getWKFController().getCurrentModuleView() instanceof DrawingView) {
-			GraphicalRepresentation<?> gr = ((DrawingView) getWKFController().getCurrentModuleView()).getController().getLastSelectedGR();
+			GraphicalRepresentation gr = ((DrawingView) getWKFController().getCurrentModuleView()).getController().getLastSelectedNode();
 			if (gr != null && gr.getDrawable() instanceof FlexoModelObject) {
 				return (FlexoModelObject) gr.getDrawable();
 			} else {
@@ -168,12 +169,12 @@ public class WKFSelectionManager extends SelectionManager {
 		PastingGraphicalContext pgc = new PastingGraphicalContext();
 		if (getWKFController().getCurrentModuleView() instanceof DrawingView) {
 			DrawingView<?> moduleView = (DrawingView<?>) getWKFController().getCurrentModuleView();
-			DrawingController<?> controller = moduleView.getController();
-			GraphicalRepresentation<?> target = controller.getLastSelectedGR();
+			DrawingController controller = moduleView.getController();
+			GraphicalRepresentation target = controller.getLastSelectedNode();
 			if (target == null) {
 				pgc.targetContainer = controller.getDrawingView();
 			} else {
-				pgc.targetContainer = (JComponent) moduleView.viewForObject(target);
+				pgc.targetContainer = (JComponent) moduleView.viewForNode(target);
 			}
 			if (controller.getLastClickedPoint() != null) {
 				pgc.precisePastingLocation = controller.getLastClickedPoint();

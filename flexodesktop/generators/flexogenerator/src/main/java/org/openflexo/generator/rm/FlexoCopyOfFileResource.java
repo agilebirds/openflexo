@@ -23,7 +23,7 @@ import java.util.logging.Logger;
 
 import org.openflexo.foundation.rm.FlexoCopiedResource;
 import org.openflexo.foundation.rm.FlexoFileResourceResource;
-import org.openflexo.foundation.rm.FlexoProject;
+import org.openflexo.foundation.FlexoProject;
 import org.openflexo.foundation.rm.FlexoProjectBuilder;
 import org.openflexo.foundation.rm.cg.CopyOfFileResource;
 import org.openflexo.generator.PackagedResourceToCopyGenerator;

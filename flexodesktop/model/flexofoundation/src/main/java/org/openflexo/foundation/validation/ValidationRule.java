@@ -21,8 +21,7 @@ package org.openflexo.foundation.validation;
 
 import java.util.logging.Logger;
 
-import org.openflexo.foundation.FlexoObject;
-import org.openflexo.foundation.TargetType;
+import org.openflexo.foundation.KVCFlexoObject;
 import org.openflexo.localization.FlexoLocalization;
 
 /**
@@ -31,7 +30,7 @@ import org.openflexo.localization.FlexoLocalization;
  * @author sguerin
  * 
  */
-public abstract class ValidationRule<R extends ValidationRule<R, V>, V extends Validable> extends FlexoObject {
+public abstract class ValidationRule<R extends ValidationRule<R, V>, V extends Validable> extends KVCFlexoObject {
 
 	@SuppressWarnings("unused")
 	private static final Logger logger = Logger.getLogger(ValidationRule.class.getPackage().getName());
@@ -40,9 +39,9 @@ public abstract class ValidationRule<R extends ValidationRule<R, V>, V extends V
 
 	private boolean isEnabled = true;
 
-	private String _ruleDescription;
+	private final String _ruleDescription;
 
-	private Class<? super V> _objectType;
+	private final Class<? super V> _objectType;
 
 	private String _typeName;
 
@@ -82,9 +81,9 @@ public abstract class ValidationRule<R extends ValidationRule<R, V>, V extends V
 		return _typeName;
 	}
 
-	public boolean isValidForTarget(TargetType targetType) {
+	/*public boolean isValidForTarget(TargetType targetType) {
 		return true;
-	}
+	}*/
 
 	public boolean getIsEnabled() {
 		return isEnabled;

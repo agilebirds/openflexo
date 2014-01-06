@@ -34,7 +34,7 @@ import org.openflexo.drm.DocItem;
 import org.openflexo.drm.DocItemFolder;
 import org.openflexo.drm.DocResourceCenter;
 import org.openflexo.drm.Language;
-import org.openflexo.foundation.FlexoObject;
+import org.openflexo.foundation.KVCFlexoObject;
 import org.openflexo.toolbox.FileResource;
 import org.openflexo.xmlcode.InvalidModelException;
 import org.openflexo.xmlcode.XMLCoder;
@@ -42,7 +42,7 @@ import org.openflexo.xmlcode.XMLMapping;
 import org.openflexo.xmlcode.XMLSerializable;
 import org.xml.sax.SAXException;
 
-public class HSToc extends FlexoObject implements XMLSerializable {
+public class HSToc extends KVCFlexoObject implements XMLSerializable {
 
 	protected static final Logger logger = Logger.getLogger(HSToc.class.getPackage().getName());
 
@@ -71,7 +71,7 @@ public class HSToc extends FlexoObject implements XMLSerializable {
 		return _rootEntry;
 	}
 
-	public class HSTocEntry extends FlexoObject implements XMLSerializable {
+	public class HSTocEntry extends KVCFlexoObject implements XMLSerializable {
 		public DocItem docItem;
 		public Vector<HSTocEntry> childs;
 		public String image;

@@ -19,8 +19,7 @@
  */
 package org.openflexo.foundation.viewpoint;
 
-import org.openflexo.foundation.Inspectors;
-import org.openflexo.foundation.viewpoint.ViewPoint.ViewPointBuilder;
+import org.openflexo.foundation.viewpoint.annotations.FIBPanel;
 
 /**
  * A CloningScheme represents a behavioural feature encoding the cloning of an EditionPattern
@@ -28,20 +27,11 @@ import org.openflexo.foundation.viewpoint.ViewPoint.ViewPointBuilder;
  * @author sylvain
  * 
  */
+@FIBPanel("Fib/CloningSchemePanel.fib")
 public class CloningScheme extends AbstractCreationScheme {
 
-	public CloningScheme(ViewPointBuilder builder) {
-		super(builder);
-	}
-
-	@Override
-	public EditionSchemeType getEditionSchemeType() {
-		return EditionSchemeType.CloningScheme;
-	}
-
-	@Override
-	public String getInspectorName() {
-		return Inspectors.VPM.CREATION_SCHEME_INSPECTOR;
+	public CloningScheme() {
+		super();
 	}
 
 }

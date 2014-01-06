@@ -1,0 +1,66 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<Panel opaque="false" layout="twocols" titleFont="SansSerif,0,12" darkLevel="0" data="" dataClassName="org.openflexo.foundation.viewpoint.EditionPattern" controllerClassName="org.openflexo.vpm.controller.VPMFIBController" visible="" font="SansSerif,0,12" name="EditionPatternPanel">
+  <Label label="edition_pattern" data="" constraints="twocols(expandHorizontally=true;expandVertically=false;insetsBottom=0;insetsLeft=2;insetsRight=2;insetsTop=5;location=left)" visible="" format="" icon="" tooltip="" localize="true" enable="" clickAction="" doubleClickAction="" rightClickAction="" enterPressedAction="" valueChangedAction="" valueTransform="" valueValidator=""/>
+  <TextField data="data.name" constraints="twocols(expandHorizontally=true;expandVertically=false;insetsBottom=0;insetsLeft=2;insetsRight=2;insetsTop=0;location=right)" visible="" format="" icon="" tooltip="" localize="true" enable="" clickAction="" doubleClickAction="" rightClickAction="" enterPressedAction="" valueChangedAction="" valueTransform="" valueValidator="" columns="7" text="TextField" editable=""/>
+  <Label label="parent" index="2" data="" constraints="twocols(expandHorizontally=false;expandVertically=false;index=2;insetsBottom=0;insetsLeft=2;insetsRight=2;insetsTop=5;location=left)" visible="" format="" icon="" tooltip="" localize="true" enable="" clickAction="" doubleClickAction="" rightClickAction="" enterPressedAction="" valueChangedAction="" valueTransform="" valueValidator=""/>
+  <Custom componentClassName="org.openflexo.components.widget.FIBEditionPatternSelector" format="" icon="" tooltip="" localize="true" enable="" manageDynamicModel="true" opaque="false" clickAction="" doubleClickAction="" rightClickAction="" enterPressedAction="" valueChangedAction="" valueTransform="" valueValidator="" index="3" data="data.parentEditionPattern" constraints="twocols(expandHorizontally=true;expandVertically=false;index=3;insetsBottom=0;insetsLeft=2;insetsRight=2;insetsTop=0;location=right)" visible="">
+    <Assignment variable="component.viewPointLibrary" value="data.viewPointLibrary"/>
+    <Assignment variable="component.viewPoint" value="data.viewPoint"/>
+  </Custom>
+  <Label label="pattern_roles" index="4" data="" constraints="twocols(expandHorizontally=false;expandVertically=false;index=4;insetsBottom=0;insetsLeft=2;insetsRight=2;insetsTop=5;location=left)" visible="" format="" icon="" tooltip="" localize="true" enable="" clickAction="" doubleClickAction="" rightClickAction="" enterPressedAction="" valueChangedAction="" valueTransform="" valueValidator=""/>
+  <Table iteratorClassName="org.openflexo.foundation.viewpoint.PatternRole" autoSelectFirstRow="true" createNewRowOnClick="false" boundToSelectionManager="true" showFooter="true" selectionMode="MultipleIntervalSelection" selected="" format="" icon="" tooltip="" localize="true" enable="" manageDynamicModel="true" opaque="false" clickAction="" doubleClickAction="" rightClickAction="" enterPressedAction="" valueChangedAction="" valueTransform="" valueValidator="" name="PatternRoleTable" index="5" data="data.patternRoles" constraints="twocols(expandHorizontally=true;expandVertically=true;index=5;insetsBottom=0;insetsLeft=2;insetsRight=2;insetsTop=0;location=right)" visible="">
+    <IconColumn data="controller.iconForObject(iterator)" format="" title="icon" columnWidth="25" resizable="false" displayTitle="false" color="" bgColor="" tooltip="" valueChangedAction="" name="icon"/>
+    <TextFieldColumn isEditable="" data="iterator.patternRoleName" format="" title="pattern_role" columnWidth="70" resizable="true" displayTitle="true" color="" bgColor="" tooltip="" valueChangedAction=""/>
+    <LabelColumn data="iterator.modelSlot.name" format="" title="model_slot" columnWidth="50" resizable="true" displayTitle="true" color="" bgColor="" tooltip="" valueChangedAction="" name="label"/>
+    <LabelColumn data="iterator.preciseType" format="" title="type" columnWidth="70" resizable="true" displayTitle="true" color="" bgColor="" tooltip="" valueChangedAction="" name="label"/>
+    <RemoveAction method="data.deletePatternRole(selected)" isAvailable="" name="delete"/>
+    <AddAction method="controller.createPatternRole(data)" isAvailable="" name="createPatternRole"/>
+  </Table>
+  <Label label="constraints" index="6" data="" constraints="twocols(expandHorizontally=false;expandVertically=false;index=4;insetsBottom=0;insetsLeft=2;insetsRight=2;insetsTop=5;location=left)" visible="" format="" icon="" tooltip="" localize="true" enable="" clickAction="" doubleClickAction="" rightClickAction="" enterPressedAction="" valueChangedAction="" valueTransform="" valueValidator=""/>
+  <Table iteratorClassName="org.openflexo.foundation.viewpoint.EditionPatternConstraint" visibleRowCount="4" rowHeight="18" autoSelectFirstRow="false" createNewRowOnClick="false" boundToSelectionManager="false" showFooter="true" selectionMode="MultipleIntervalSelection" selected="" textSelectionColor="255,255,255" textNonSelectionColor="0,0,0" backgroundSelectionColor="26,96,206" backgroundSecondarySelectionColor="173,215,255" backgroundNonSelectionColor="255,255,255" format="" icon="" tooltip="" localize="true" enable="" manageDynamicModel="true" opaque="false" clickAction="" doubleClickAction="" rightClickAction="" enterPressedAction="" valueChangedAction="" valueTransform="" valueValidator="" name="ConstraintsTable" index="5" data="data.editionPatternConstraints" constraints="twocols(expandHorizontally=true;expandVertically=true;index=7;insetsBottom=0;insetsLeft=2;insetsRight=2;insetsTop=0;location=right)" visible="">
+    <IconColumn data="controller.iconForObject(iterator)" format="" title="icon" columnWidth="30" resizable="false" displayTitle="false" color="" bgColor="" tooltip="" valueChangedAction="" name="icon"/>
+    <CustomColumn componentClassName="org.openflexo.fib.utils.BindingSelector" customRendering="false" disableTerminateEditOnFocusLost="false" data="iterator.constraint" format="" title="constraint" columnWidth="80" resizable="true" displayTitle="true" color="" bgColor="" tooltip="" valueChangedAction="" name="value">
+      <ColumnAssignment variable="component.bindable" value="data"/>
+    </CustomColumn>
+    <AddAction method="data.createConstraint" isAvailable="" name="add_constraint"/>
+    <RemoveAction method="data.deleteConstraint(selected)" isAvailable="" name="delete_constraint"/>
+  </Table>
+  <LocalizedDictionary>
+    <Localized key="constraint" lang="English">Constraints</Localized>
+    <Localized key="constraint" lang="French">Contraintes</Localized>
+    <Localized key="constraint" lang="Dutch">constraint</Localized>
+    <Localized key="add_constraint" lang="English">Add constraint</Localized>
+    <Localized key="add_constraint" lang="French">Ajouter une contrainte</Localized>
+    <Localized key="add_constraint" lang="Dutch">add_constraint</Localized>
+    <Localized key="delete_constraint" lang="English">delete_constraint</Localized>
+    <Localized key="delete_constraint" lang="French">delete_constraint</Localized>
+    <Localized key="delete_constraint" lang="Dutch">delete_constraint</Localized>
+    <Localized key="edition_pattern" lang="English">Edition Pattern</Localized>
+    <Localized key="edition_pattern" lang="French">Edition Pattern</Localized>
+    <Localized key="edition_pattern" lang="Dutch">edition pattern</Localized>
+    <Localized key="parent" lang="English">Parent</Localized>
+    <Localized key="parent" lang="French">Parent</Localized>
+    <Localized key="parent" lang="Dutch">Parent</Localized>
+    <Localized key="pattern_roles" lang="English">Pattern Roles</Localized>
+    <Localized key="pattern_roles" lang="French">Pattern Roles</Localized>
+    <Localized key="pattern_roles" lang="Dutch">pattern_roles</Localized>
+    <Localized key="pattern_role" lang="English">Pattern Role</Localized>
+    <Localized key="pattern_role" lang="French">Pattern Role</Localized>
+    <Localized key="pattern_role" lang="Dutch">Pattern Role</Localized>
+    <Localized key="model_slot" lang="English">model_slot</Localized>
+    <Localized key="model_slot" lang="French">model_slot</Localized>
+    <Localized key="model_slot" lang="Dutch">model_slot</Localized>
+    <Localized key="type" lang="English">Type</Localized>
+    <Localized key="type" lang="French">Type</Localized>
+    <Localized key="type" lang="Dutch">Type</Localized>
+    <Localized key="delete" lang="English">Delete</Localized>
+    <Localized key="delete" lang="French">Supprimer</Localized>
+    <Localized key="delete" lang="Dutch">Delete</Localized>
+    <Localized key="createPatternRole" lang="English">createPatternRole</Localized>
+    <Localized key="createPatternRole" lang="French">createPatternRole</Localized>
+    <Localized key="createPatternRole" lang="Dutch">createPatternRole</Localized>
+    <Localized key="constraints" lang="English">Constraints</Localized>
+    <Localized key="constraints" lang="French">Contraintes</Localized>
+    <Localized key="constraints" lang="Dutch">constraint</Localized>
+  </LocalizedDictionary>
+</Panel>

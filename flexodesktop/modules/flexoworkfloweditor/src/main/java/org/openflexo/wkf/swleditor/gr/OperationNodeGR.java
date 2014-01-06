@@ -23,19 +23,19 @@ import java.awt.Color;
 import java.awt.Dimension;
 import java.util.logging.Logger;
 
+import org.openflexo.fge.BackgroundStyle;
+import org.openflexo.fge.ForegroundStyle;
 import org.openflexo.fge.GraphicalRepresentation;
+import org.openflexo.fge.TextStyle;
+import org.openflexo.fge.ColorGradientBackgroundStyle.ColorGradientDirection;
 import org.openflexo.fge.controller.CustomClickControlAction;
 import org.openflexo.fge.controller.DrawingController;
 import org.openflexo.fge.controller.MouseClickControl;
 import org.openflexo.fge.geom.FGEPoint;
-import org.openflexo.fge.graphics.BackgroundStyle;
-import org.openflexo.fge.graphics.BackgroundStyle.ColorGradient.ColorGradientDirection;
 import org.openflexo.fge.graphics.FGEShapeGraphics;
-import org.openflexo.fge.graphics.ForegroundStyle;
 import org.openflexo.fge.graphics.ShapePainter;
-import org.openflexo.fge.graphics.TextStyle;
 import org.openflexo.fge.shapes.Rectangle;
-import org.openflexo.fge.shapes.Shape.ShapeType;
+import org.openflexo.fge.shapes.ShapeSpecification.ShapeType;
 import org.openflexo.foundation.DataModification;
 import org.openflexo.foundation.FlexoObservable;
 import org.openflexo.foundation.wkf.action.OpenActionLevel;
@@ -158,7 +158,7 @@ public class OperationNodeGR extends AbstractOperationNodeGR {
 
 	@Override
 	public Rectangle getShape() {
-		return (Rectangle) super.getShape();
+		return (Rectangle) super.getShapeSpecification();
 	}
 
 	@Override
@@ -186,7 +186,7 @@ public class OperationNodeGR extends AbstractOperationNodeGR {
 		public PetriGraphOpener() {
 			super("Opener", MouseButton.LEFT, 2, new CustomClickControlAction() {
 				@Override
-				public boolean handleClick(GraphicalRepresentation<?> graphicalRepresentation, DrawingController<?> controller,
+				public boolean handleClick(GraphicalRepresentation graphicalRepresentation, DrawingController controller,
 						java.awt.event.MouseEvent event) {
 					logger.info("Opening Operation petri graph by double-clicking");
 					OpenActionLevel.actionType.makeNewAction(getOperationNode(), null, getDrawing().getEditor()).doAction();
@@ -204,7 +204,7 @@ public class OperationNodeGR extends AbstractOperationNodeGR {
 		public OperationComponentOpener() {
 			super("Component opener", MouseButton.LEFT, 1, new CustomClickControlAction() {
 				@Override
-				public boolean handleClick(GraphicalRepresentation<?> graphicalRepresentation, DrawingController<?> controller,
+				public boolean handleClick(GraphicalRepresentation graphicalRepresentation, DrawingController controller,
 						java.awt.event.MouseEvent event) {
 					if (!getOperationNode().hasWOComponent()) {
 						return false;

@@ -1,0 +1,40 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<xs:schema xmlns:xs="http://www.w3.org/2001/XMLSchema" 
+		targetNamespace="http://www.example.org/Library" 
+		xmlns="http://www.example.org/Library"
+		xmlns:tns="http://www.example.org/Library" 
+		elementFormDefault="qualified">
+		
+<xs:element name="Library" type="LibraryType" />
+
+  <xs:complexType name="LibraryType">
+    <xs:sequence>
+      <xs:element name="name" type="xs:string" />
+      <xs:element maxOccurs="unbounded" minOccurs="0" name="writers" type="Writer" />
+      <xs:element maxOccurs="unbounded" minOccurs="0" name="books" type="Book" />
+    </xs:sequence>
+  </xs:complexType>
+  
+  <xs:complexType name="Book">
+    <xs:sequence>
+      <xs:element name="title" type="xs:string" />
+      <xs:element name="pages" type="xs:int" />
+      <xs:element name="category" type="BookCategory" />
+      <xs:element name="author" type="xs:anyURI" />
+    </xs:sequence>
+  </xs:complexType>
+  
+  <xs:complexType name="Writer">
+    <xs:sequence>
+      <xs:element name="name" type="xs:string" />
+      <xs:element maxOccurs="unbounded" minOccurs="0" name="books" type="xs:anyURI" />
+    </xs:sequence>
+  </xs:complexType>
+  <xs:simpleType name="BookCategory">
+    <xs:restriction base="xs:NCName">
+      <xs:enumeration value="Mystery" />
+      <xs:enumeration value="ScienceFiction" />
+      <xs:enumeration value="Biography" />
+    </xs:restriction>
+  </xs:simpleType>
+</xs:schema>

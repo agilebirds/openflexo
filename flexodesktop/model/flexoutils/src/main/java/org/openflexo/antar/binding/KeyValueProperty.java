@@ -23,18 +23,17 @@ package org.openflexo.antar.binding;
 import java.lang.reflect.Field;
 import java.lang.reflect.Method;
 import java.lang.reflect.Type;
+import java.util.ArrayList;
+import java.util.List;
 import java.util.Observable;
 import java.util.TreeSet;
 import java.util.logging.Logger;
 
-import org.openflexo.antar.binding.AbstractBinding.BindingEvaluationContext;
 import org.openflexo.toolbox.ToolBox;
-import org.openflexo.xmlcode.KeyValueCoder;
-import org.openflexo.xmlcode.KeyValueDecoder;
 
-public class KeyValueProperty extends Observable implements SimplePathElement<Object> {
+public class KeyValueProperty extends Observable {
 
-	static final Logger logger = Logger.getLogger(BindingValue.class.getPackage().getName());
+	static final Logger logger = Logger.getLogger(KeyValueProperty.class.getPackage().getName());
 
 	/** Stores property's name */
 	protected String name;
@@ -201,9 +200,9 @@ public class KeyValueProperty extends Observable implements SimplePathElement<Ob
 	 * </ul>
 	 * Returns corresponding method, null if no such method exist
 	 */
-	protected Method searchMatchingGetMethod(Class lastClass, String propertyName) {
+	protected Method searchMatchingGetMethod(Class aDeclaringClass, String propertyName) {
 
-		Method returnedMethod;
+		Method returnedMethod = null;
 		String propertyNameWithFirstCharToUpperCase = propertyName.substring(0, 1).toUpperCase()
 				+ propertyName.substring(1, propertyName.length());
 
@@ -217,7 +216,10 @@ public class KeyValueProperty extends Observable implements SimplePathElement<Ob
 
 		for (String trie : tries) {
 			try {
-				return lastClass.getMethod(trie, null);
+				returnedMethod = aDeclaringClass.getMethod(trie, null);
+				if (returnedMethod != null) {
+					return returnedMethod;
+				}
 			} catch (SecurityException err) {
 				// we continue
 			} catch (NoSuchMethodException err) {
@@ -225,6 +227,22 @@ public class KeyValueProperty extends Observable implements SimplePathElement<Ob
 			} catch (NoClassDefFoundError err) {
 				// we continue
 			}
+		}
+		
+		// manage static class methods
+				for (String trie : tries) {
+					try {
+						return ((Class) aDeclaringClass.getClass()).getMethod(trie, (Class<?>[]) null);
+					} catch (SecurityException err) {
+						// we continue
+					} catch (NoSuchMethodException err) {
+						// we continue
+					}
+				}
+
+		// If declaring class is interface, also lookup in Object class
+		if (returnedMethod == null && aDeclaringClass.isInterface()) {
+			return searchMatchingGetMethod(Object.class, propertyName);
 		}
 
 		// Debugging.debug ("No method matching "
@@ -245,36 +263,57 @@ public class KeyValueProperty extends Observable implements SimplePathElement<Ob
 	 * </ul>
 	 * Returns corresponding method, null if no such method exist
 	 */
-	protected Method searchMatchingSetMethod(Class declaringClass, String propertyName, Type aType) {
+	protected Method searchMatchingSetMethod(Class aDeclaringClass, String propertyName, Type aType) {
 		String propertyNameWithFirstCharToUpperCase = propertyName.substring(0, 1).toUpperCase()
 				+ propertyName.substring(1, propertyName.length());
-		String[] tries;
-		if (TypeUtils.isBoolean(aType) && propertyName.startsWith("is")) {
-			tries = new String[4];
-			String propertyNameWithFirstCharToUpperCase2 = propertyName.substring(2);
-			tries[2] = "set" + propertyNameWithFirstCharToUpperCase2;
-			tries[3] = "_set" + propertyNameWithFirstCharToUpperCase2;
-		} else {
-			tries = new String[2];
+		List<String> tries = new ArrayList<String>();
+		tries.add("set" + propertyNameWithFirstCharToUpperCase);
+		tries.add("_set" + propertyNameWithFirstCharToUpperCase);
+		if (TypeUtils.isBoolean(aType)) {
+			if (propertyName.startsWith("is")) {
+				String propertyNameWithFirstCharToUpperCase2 = propertyName.substring(2);
+				tries.add("set" + propertyNameWithFirstCharToUpperCase2);
+				tries.add("_set" + propertyNameWithFirstCharToUpperCase2);
+			} else if (propertyName.startsWith("_is")) {
+				String propertyNameWithFirstCharToUpperCase2 = propertyName.substring(3);
+				tries.add("set" + propertyNameWithFirstCharToUpperCase2);
+				tries.add("_set" + propertyNameWithFirstCharToUpperCase2);
+			}
 		}
-		tries[0] = "set" + propertyNameWithFirstCharToUpperCase;
-		tries[1] = "_set" + propertyNameWithFirstCharToUpperCase;
 
-		for (Method m : declaringClass.getMethods()) {
-			for (int i = 0; i < tries.length; i++) {
-				if (m.getName().equals(tries[i]) && m.getGenericParameterTypes().length == 1
-						&& m.getGenericParameterTypes()[0].equals(aType)) {
-					return m;
+		if (aType instanceof Class) {
+			for (Method m : aDeclaringClass.getMethods()) {
+				for (String t : tries) {
+					if (m.getName().equals(t) && m.getParameterTypes().length == 1 && m.getParameterTypes()[0].equals(aType)) {
+						return m;
+					}
+				}
+			}
+		} else {
+			for (Method m : aDeclaringClass.getMethods()) {
+				for (String t : tries) {
+					if (m.getName().equals(t) && m.getGenericParameterTypes().length == 1 && m.getGenericParameterTypes()[0].equals(aType)) {
+						return m;
+					}
 				}
 			}
 		}
 
+		// Find with super types (typed with generics)
 		Type superType = TypeUtils.getSuperType(aType);
 		if (superType != null) {
 			// Try with a super class
-			return searchMatchingSetMethod(declaringClass, propertyName, superType);
+			Method returned = searchMatchingSetMethod(aDeclaringClass, propertyName, superType);
+			if (returned != null) {
+				return returned;
+			}
 		}
 
+		// Finally try without generics
+		if (TypeUtils.getBaseClass(aType) != null && TypeUtils.getBaseClass(aType).getSuperclass() != null
+				&& TypeUtils.getBaseClass(aType).getSuperclass() != superType) {
+			return searchMatchingSetMethod(aDeclaringClass, propertyName, TypeUtils.getBaseClass(aType).getSuperclass());
+		}
 		/*
 		Class typeClass = TypeUtils.getBaseClass(aType);
 		
@@ -314,8 +353,7 @@ public class KeyValueProperty extends Observable implements SimplePathElement<Ob
 	/**
 	 * Returns related object class (never null)
 	 */
-	@Override
-	public Class getDeclaringClass() {
+	public Class<?> getDeclaringClass() {
 
 		return declaringClass;
 	}
@@ -331,7 +369,6 @@ public class KeyValueProperty extends Observable implements SimplePathElement<Ob
 	/**
 	 * Returns related type
 	 */
-	@Override
 	public Type getType() {
 		return type;
 	}
@@ -364,17 +401,10 @@ public class KeyValueProperty extends Observable implements SimplePathElement<Ob
 		return returnedTreeSet;
 	}
 
-	@Override
 	public String getSerializationRepresentation() {
 		return name;
 	}
 
-	@Override
-	public boolean isBindingValid() {
-		return true;
-	}
-
-	@Override
 	public boolean isSettable() {
 		return settable;
 	}
@@ -384,12 +414,10 @@ public class KeyValueProperty extends Observable implements SimplePathElement<Ob
 		return "KeyValueProperty: " + (declaringClass != null ? declaringClass.getSimpleName() : declaringType) + "." + name;
 	}
 
-	@Override
 	public String getLabel() {
 		return getName();
 	}
 
-	@Override
 	public String getTooltipText(Type resultingType) {
 		String returned = "<html>";
 		String resultingTypeAsString;
@@ -407,14 +435,25 @@ public class KeyValueProperty extends Observable implements SimplePathElement<Ob
 		return returned;
 	}
 
-	@Override
-	public Object getBindingValue(Object target, BindingEvaluationContext context) {
+	/*public Object getBindingValue(Object target, BindingEvaluationContext context) {
 		return KeyValueDecoder.objectForKey(target, getName());
 	}
 
-	@Override
 	public void setBindingValue(Object value, Object target, BindingEvaluationContext context) {
 		KeyValueCoder.setObjectForKey(target, value, getName());
+	}*/
+
+	/*public static void main(String[] args) {
+		KeyValueProperty kv1 = new KeyValueProperty(Object.class, "class", false);
+		System.out.println("kv1=" + kv1);
+		KeyValueProperty kv2 = new KeyValueProperty(KeyValueProperty.class, "class", false);
+		System.out.println("kv2=" + kv2);
+		KeyValueProperty kv3 = new KeyValueProperty(TestInterface.class, "class", false);
+		System.out.println("kv3=" + kv3);
 	}
+
+	public static interface TestInterface {
+
+	}*/
 
 }

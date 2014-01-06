@@ -4,7 +4,7 @@
 	<parent>
 		<groupId>org.openflexo</groupId>
 		<artifactId>openflexo</artifactId>
-		<version>1.5.2-SNAPSHOT</version>
+        <version>1.7-SNAPSHOT</version>
 	</parent>
 	<modelVersion>4.0.0</modelVersion>
 	<artifactId>flexodesktop</artifactId>
@@ -91,7 +91,7 @@
 		<module>model</module>
 		<module>modules</module>
 		<module>technologymodules</module>
+		<module>technologyadapters</module>
 		<module>jiraclient</module>
 	</modules>
 </project>
-

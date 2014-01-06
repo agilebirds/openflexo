@@ -90,11 +90,11 @@ public class OverrideWithVersion extends MultipleFileGCAction<OverrideWithVersio
 			"override_with_last_accepted_version", ContentSourceType.LastAccepted);
 
 	static {
-		FlexoModelObject.addActionForClass(overrideWithPureGeneration, CGObject.class);
-		FlexoModelObject.addActionForClass(overrideWithGeneratedMerge, CGObject.class);
-		FlexoModelObject.addActionForClass(overrideWithLastGenerated, CGObject.class);
-		FlexoModelObject.addActionForClass(overrideWithLastAccepted, CGObject.class);
-		FlexoModelObject.addActionForClass(CancelOverrideWithVersion.actionType, CGObject.class);
+		TestModelObject.addActionForClass(overrideWithPureGeneration, CGObject.class);
+		TestModelObject.addActionForClass(overrideWithGeneratedMerge, CGObject.class);
+		TestModelObject.addActionForClass(overrideWithLastGenerated, CGObject.class);
+		TestModelObject.addActionForClass(overrideWithLastAccepted, CGObject.class);
+		TestModelObject.addActionForClass(CancelOverrideWithVersion.actionType, CGObject.class);
 	}
 
 	public static OverrideWithVersionActionType getActionTypeFor(ContentSourceType contentSource) {

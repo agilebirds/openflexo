@@ -1,0 +1,54 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<Panel layout="gridbag" borderTop="5" borderBottom="5" titleFont="SansSerif,0,11" darkLevel="0" dataClassName="org.openflexo.fge.TextStyle" font="SansSerif,0,11" opaque="false" name="TextStylePanel">
+  <Panel layout="twocols" border="rounded3d" borderTop="2" borderBottom="2" borderLeft="10" borderRight="10" titleFont="SansSerif,0,11" darkLevel="0" index="0" constraints="gridbag(anchor=center;expandHorizontally=false;expandVertically=false;fill=both;gridHeight=1;gridWidth=0;gridX=-1;gridY=-1;index=0;insetsBottom=0;insetsLeft=2;insetsRight=2;insetsTop=0;location=center;padX=0;padY=0;weightX=1.0;weightY=1.0)" opaque="false" width="280" height="120" name="MainPanel">
+    <Label label="font" index="0" constraints="twocols(expandHorizontally=true;expandVertically=false;index=0;insetsBottom=0;insetsLeft=2;insetsRight=2;insetsTop=5;location=left;x=0;y=0)" localize="true">
+      <LocalizedDictionary />
+    </Label>
+    <Font sampleText="Sample for this font" allowsNull="false" localize="true" index="1" data="data.font" constraints="twocols(expandHorizontally=false;expandVertically=false;index=1;insetsBottom=2;insetsLeft=2;insetsRight=2;insetsTop=0;location=right;x=0;y=0)" />
+    <Label label="foreground" index="4" constraints="twocols(expandHorizontally=true;expandVertically=false;index=2;insetsBottom=0;insetsLeft=10;insetsRight=2;insetsTop=5;location=left;x=0;y=0)" localize="true">
+      <LocalizedDictionary />
+    </Label>
+      <Color allowsNull="false" index="0" data="data.color" constraints="twocols(expandHorizontally=false;expandVertically=false;index=3;insetsBottom=2;insetsLeft=2;insetsRight=2;insetsTop=0;location=right;x=0;y=0)" localize="true" />
+    <Label label="background" index="2" constraints="twocols(expandHorizontally=true;expandVertically=false;index=4;insetsBottom=0;insetsLeft=2;insetsRight=2;insetsTop=5;location=left;x=0;y=0)" localize="true">
+      <LocalizedDictionary />
+    </Label>
+    <Panel layout="flow" hGap="-1" vGap="1" flowAlignment="LEADING" borderTitle="Panel" titleFont="SansSerif,0,11" darkLevel="0" index="3" constraints="twocols(expandHorizontally=true;expandVertically=false;index=5;insetsBottom=2;insetsLeft=2;insetsRight=2;insetsTop=0;location=right;x=0;y=0)" opaque="false">
+      <Color allowsNull="false" index="0" data="data.backgroundColor" constraints="flow(index=0)" localize="true" enable="data.isBackgroundColored" />
+      <CheckBox negate="true" selected="true" index="1" data="data.isBackgroundColored" constraints="flow(index=1)" name="checkbox" localize="true" />
+      <Label label="transparent" index="2" constraints="flow(index=2)" localize="true">
+        <LocalizedDictionary />
+      </Label>
+    </Panel>
+    <Label label="orientation" index="6" constraints="twocols(expandHorizontally=true;expandVertically=false;index=6;insetsBottom=0;insetsLeft=2;insetsRight=2;insetsTop=5;location=left;x=0;y=0)" localize="true">
+      <LocalizedDictionary />
+    </Label>
+    <Number allowsNull="false" minValue="-180" maxValue="180" increment="5" numberType="IntegerType" columns="3" index="7" data="data.orientation" constraints="twocols(expandHorizontally=false;expandVertically=false;index=7;insetsBottom=0;insetsLeft=2;insetsRight=2;insetsTop=0;location=right;x=0;y=0)" name="LineWidth" localize="true"/>
+    <LocalizedDictionary />
+  </Panel>
+  <LocalizedDictionary>
+    <Localized key="font" lang="English">Font</Localized>
+    <Localized key="color" lang="English">Color</Localized>
+    <Localized key="orientation" lang="English">Orientation</Localized>
+    <Localized key="apply" lang="English">Apply</Localized>
+    <Localized key="cancel" lang="English">Cancel</Localized>
+    <Localized key="font" lang="French">Police</Localized>
+    <Localized key="color" lang="French">Couleur</Localized>
+    <Localized key="orientation" lang="French">Orientation</Localized>
+    <Localized key="apply" lang="French">Appliquer</Localized>
+    <Localized key="cancel" lang="French">Annuler</Localized>
+    <Localized key="font" lang="Dutch">Font</Localized>
+    <Localized key="color" lang="Dutch">Color</Localized>
+    <Localized key="orientation" lang="Dutch">Orientation</Localized>
+    <Localized key="apply" lang="Dutch">Apply</Localized>
+    <Localized key="cancel" lang="Dutch">Cancel</Localized>
+    <Localized key="background" lang="English">Background</Localized>
+    <Localized key="background" lang="French">Arrière-plan</Localized>
+    <Localized key="background" lang="Dutch">Background</Localized>
+    <Localized key="transparent" lang="English">Transparent</Localized>
+    <Localized key="transparent" lang="French">Transparent</Localized>
+    <Localized key="transparent" lang="Dutch">transparent</Localized>
+    <Localized key="foreground" lang="English">Foreground</Localized>
+    <Localized key="foreground" lang="French">Couleur d'avant-plan</Localized>
+    <Localized key="foreground" lang="Dutch">Foreground</Localized>
+  </LocalizedDictionary>
+</Panel>
