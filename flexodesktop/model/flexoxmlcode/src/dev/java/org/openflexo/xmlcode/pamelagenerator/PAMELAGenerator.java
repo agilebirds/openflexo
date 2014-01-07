@@ -9,6 +9,7 @@ import java.io.OutputStreamWriter;
 import java.io.StringReader;
 import java.nio.charset.Charset;
 import java.util.ArrayList;
+import java.util.Hashtable;
 import java.util.Iterator;
 import java.util.List;
 import java.util.StringTokenizer;
@@ -56,6 +57,8 @@ public class PAMELAGenerator {
 			e.printStackTrace();
 		}
 
+		Hashtable<File, String> sourcesToWrite = new Hashtable<File, String>();
+
 		Iterator<ModelEntity> it = xmlMapping.allModelEntitiesStoredByClassNames();
 
 		while (it.hasNext()) {
@@ -67,12 +70,17 @@ public class PAMELAGenerator {
 			} else {
 				System.out.println("Processing source file: " + sourceFile);
 				try {
-					generateEntity(entity, sourceFile);
+					String generatedSource = generateEntity(entity, sourceFile);
+					sourcesToWrite.put(sourceFile, generatedSource);
 				} catch (IOException e) {
 					// TODO Auto-generated catch block
 					e.printStackTrace();
 				}
 			}
+		}
+
+		for (File f : sourcesToWrite.keySet()) {
+			saveToFile(f, sourcesToWrite.get(f), null);
 		}
 
 		/*Class builderClass = xmlMapping.builderClass();
@@ -132,7 +140,7 @@ public class PAMELAGenerator {
 		return null;
 	}
 
-	private void generateEntity(ModelEntity entity, File sourceFile) throws IOException {
+	private String generateEntity(ModelEntity entity, File sourceFile) throws IOException {
 		ParsedJavaFile parsedJavaFile = new ParsedJavaFile(sourceFile);
 
 		String interfaceInnerSourceCode = buildInterfaceInnerSourceCode(entity);
@@ -174,7 +182,9 @@ public class PAMELAGenerator {
 		// File outputFile = new File(sourceFile.getParent(), entity.getRelatedClass().getSimpleName() + "2.java");
 		// saveToFile(outputFile, sb.toString(), null);
 
-		saveToFile(sourceFile, sb.toString(), null);
+		// saveToFile(sourceFile, sb.toString(), null);
+
+		return sb.toString();
 	}
 
 	private String buildInterfaceInnerSourceCode(ModelEntity entity) {
