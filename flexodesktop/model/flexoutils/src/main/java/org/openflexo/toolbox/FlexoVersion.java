@@ -73,6 +73,10 @@ public class FlexoVersion {
 
 	public boolean isBeta = false;
 
+	public static FlexoVersion versionByIncrementing(FlexoVersion v, int majorInc, int minorInc, int patchInc) {
+		return new FlexoVersion(v.major + majorInc, v.minor + minorInc, v.patch + patchInc, 0, false, false);
+	}
+
 	public FlexoVersion(int major, int minor, int patch, int rc, boolean isAlpha, boolean isBeta) {
 		this.major = major;
 		this.minor = minor;

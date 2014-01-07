@@ -19,6 +19,7 @@
  */
 package org.openflexo.drm;
 
+import java.io.File;
 import java.util.Vector;
 import java.util.logging.Logger;
 
@@ -97,9 +98,10 @@ public class DocSubmissionReport extends DRMObject {
 		}
 		return _dsrMapping;
 	}
-
+	*/
 	public static DocSubmissionReport load(DocResourceCenter drc, File docSubmissionReportFile) {
-		DocSubmissionReport report = null;
+		// TODO: reimplement this
+		/*DocSubmissionReport report = null;
 		StringEncoder.getDefaultInstance()._addConverter(ActionType.actionTypeConverter);
 		try {
 			FileInputStream in = new FileInputStream(docSubmissionReportFile);
@@ -108,11 +110,13 @@ public class DocSubmissionReport extends DRMObject {
 		} catch (Exception e) {
 			e.printStackTrace();
 		}
-		return report;
+		return report;*/
+		return null;
 	}
 
 	public boolean save(File docSubmissionReportFile) {
-		FileOutputStream out = null;
+		// TODO: reimplement this
+		/*FileOutputStream out = null;
 		try {
 			out = new FileOutputStream(docSubmissionReportFile);
 			XMLCoder.encodeObjectWithMapping(this, getDSRMapping(), out);
@@ -129,8 +133,9 @@ public class DocSubmissionReport extends DRMObject {
 					e.printStackTrace();
 				}
 			}
-		}
-	}*/
+		}*/
+		return false;
+	}
 
 	public void clear() {
 		getSubmissionActions().clear();
@@ -145,5 +150,4 @@ public class DocSubmissionReport extends DRMObject {
 	public String getIdentifier() {
 		return "DocSubmissionReport";
 	}
-
 }

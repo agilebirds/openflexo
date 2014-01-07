@@ -37,9 +37,8 @@ import org.openflexo.foundation.viewpoint.FMLRepresentationContext;
 import org.openflexo.foundation.viewpoint.NamedViewPointObject.NamedViewPointObjectImpl;
 import org.openflexo.foundation.viewpoint.ViewPoint;
 import org.openflexo.technologyadapter.excel.model.ExcelObject;
-import org.openflexo.xmlcode.XMLSerializable;
 
-public class BasicExcelModelSlotURIProcessor extends NamedViewPointObjectImpl implements XMLSerializable {
+public class BasicExcelModelSlotURIProcessor extends NamedViewPointObjectImpl {
 
 	private static final Logger logger = Logger.getLogger(BasicExcelModelSlotURIProcessor.class.getPackage().getName());
 

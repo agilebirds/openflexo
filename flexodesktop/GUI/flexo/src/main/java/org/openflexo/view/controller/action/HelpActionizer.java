@@ -31,7 +31,6 @@ import org.openflexo.foundation.action.FlexoActionFinalizer;
 import org.openflexo.foundation.action.FlexoActionInitializer;
 import org.openflexo.help.FlexoHelp;
 import org.openflexo.icon.IconLibrary;
-import org.openflexo.inspector.InspectableObject;
 import org.openflexo.localization.FlexoLocalization;
 import org.openflexo.view.controller.ActionInitializer;
 import org.openflexo.view.controller.ControllerActionInitializer;
@@ -51,7 +50,7 @@ public class HelpActionizer extends ActionInitializer<HelpAction, FlexoObject, F
 		return new FlexoActionInitializer<HelpAction>() {
 			@Override
 			public boolean run(EventObject e, HelpAction action) {
-				return action.getFocusedObject() instanceof InspectableObject;
+				return true;
 			}
 		};
 	}
@@ -61,22 +60,20 @@ public class HelpActionizer extends ActionInitializer<HelpAction, FlexoObject, F
 		return new FlexoActionFinalizer<HelpAction>() {
 			@Override
 			public boolean run(EventObject e, HelpAction action) {
-				if (action.getFocusedObject() instanceof InspectableObject) {
-					DocItem item = getController().getApplicationContext().getDocResourceManager()
-							.getDocItemFor((InspectableObject) action.getFocusedObject());
-					if (item != null) {
-						try {
-							logger.info("Trying to display help for " + item.getIdentifier());
-							FlexoHelp.getHelpBroker().setCurrentID(item.getIdentifier());
-							FlexoHelp.getHelpBroker().setDisplayed(true);
-						} catch (BadIDException exception) {
-							FlexoController.showError(FlexoLocalization.localizedForKey("sorry_no_help_available_for") + " "
-									+ item.getIdentifier());
-							return false;
-						}
-						return true;
+				DocItem item = getController().getApplicationContext().getDocResourceManager().getDocItemFor(action.getFocusedObject());
+				if (item != null) {
+					try {
+						logger.info("Trying to display help for " + item.getIdentifier());
+						FlexoHelp.getHelpBroker().setCurrentID(item.getIdentifier());
+						FlexoHelp.getHelpBroker().setDisplayed(true);
+					} catch (BadIDException exception) {
+						FlexoController.showError(FlexoLocalization.localizedForKey("sorry_no_help_available_for") + " "
+								+ item.getIdentifier());
+						return false;
 					}
+					return true;
 				}
+
 				return false;
 			}
 		};

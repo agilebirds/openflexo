@@ -26,16 +26,15 @@ import javax.swing.Icon;
 import org.openflexo.action.SubmitDocumentationAction;
 import org.openflexo.drm.DocItem;
 import org.openflexo.drm.DocItemAction;
-import org.openflexo.drm.DocItemVersion;
-import org.openflexo.drm.Language;
 import org.openflexo.drm.action.SubmitVersion;
 import org.openflexo.drm.ui.SubmitNewVersionPopup;
 import org.openflexo.foundation.FlexoObject;
 import org.openflexo.foundation.action.FlexoActionFinalizer;
 import org.openflexo.foundation.action.FlexoActionInitializer;
 import org.openflexo.icon.IconLibrary;
-import org.openflexo.inspector.InspectableObject;
 import org.openflexo.localization.FlexoLocalization;
+import org.openflexo.localization.Language;
+import org.openflexo.toolbox.FlexoVersion;
 import org.openflexo.view.controller.ActionInitializer;
 import org.openflexo.view.controller.ControllerActionInitializer;
 import org.openflexo.view.controller.FlexoController;
@@ -54,15 +53,11 @@ public class SubmitDocumentationActionizer extends ActionInitializer<SubmitDocum
 		return new FlexoActionInitializer<SubmitDocumentationAction>() {
 			@Override
 			public boolean run(EventObject e, SubmitDocumentationAction anAction) {
-				if (!(anAction.getFocusedObject() instanceof InspectableObject)) {
-					return false;
-				}
 				DocItem docItem;
 				if (anAction.getFocusedObject() instanceof DocItem) {
 					docItem = (DocItem) anAction.getFocusedObject();
 				} else {
-					docItem = getController().getApplicationContext().getDocResourceManager()
-							.getDocItemFor((InspectableObject) anAction.getFocusedObject());
+					docItem = getController().getApplicationContext().getDocResourceManager().getDocItemFor(anAction.getFocusedObject());
 				}
 				if (docItem == null) {
 					return false;
@@ -104,8 +99,7 @@ public class SubmitDocumentationActionizer extends ActionInitializer<SubmitDocum
 					title = FlexoLocalization.localizedForKey("submit_documentation");
 				} else {
 					title = FlexoLocalization.localizedForKey("review_documentation");
-					action.getVersion().setVersion(
-							DocItemVersion.Version.versionByIncrementing(lastAction.getVersion().getVersion(), 0, 0, 1));
+					action.getVersion().setVersion(FlexoVersion.versionByIncrementing(lastAction.getVersion().getVersion(), 0, 0, 1));
 				}
 				logger.warning("Please reimplement this");
 				// TODO: reimplement this

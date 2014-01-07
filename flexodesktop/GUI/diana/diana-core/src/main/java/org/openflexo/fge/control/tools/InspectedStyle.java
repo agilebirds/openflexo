@@ -22,6 +22,7 @@ package org.openflexo.fge.control.tools;
 import java.beans.PropertyChangeEvent;
 import java.beans.PropertyChangeListener;
 import java.beans.PropertyChangeSupport;
+import java.lang.reflect.Type;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
@@ -35,7 +36,6 @@ import org.openflexo.fge.FGEModelFactory;
 import org.openflexo.fge.GRParameter;
 import org.openflexo.fge.control.DianaInteractiveViewer;
 import org.openflexo.fge.notifications.FGEAttributeNotification;
-import org.openflexo.kvc.KVCObservableObject;
 import org.openflexo.logging.FlexoLogger;
 import org.openflexo.model.factory.CloneableProxyObject;
 import org.openflexo.model.factory.KeyValueCoding;
@@ -54,14 +54,14 @@ import org.openflexo.toolbox.HasPropertyChangeSupport;
  * 
  * @param <S>
  */
-public abstract class InspectedStyle<S extends KeyValueCoding> extends KVCObservableObject implements PropertyChangeListener {
+public abstract class InspectedStyle<S extends KeyValueCoding> implements HasPropertyChangeSupport, PropertyChangeListener {
 
 	private static final Logger logger = FlexoLogger.getLogger(InspectedStyle.class.getPackage().getName());
 
-	private DianaInteractiveViewer<?, ?, ?> controller;
+	private final DianaInteractiveViewer<?, ?, ?> controller;
 	private S defaultValue;
 
-	private PropertyChangeSupport pcSupport;
+	private final PropertyChangeSupport pcSupport;
 
 	private boolean isDeleted = false;
 
@@ -248,7 +248,7 @@ public abstract class InspectedStyle<S extends KeyValueCoding> extends KVCObserv
 		return defaultValue;
 	}
 
-	private List<S> inspectedStyles = new ArrayList<S>();
+	private final List<S> inspectedStyles = new ArrayList<S>();
 
 	/**
 	 * Called to "tell" inspected style that the selection has changed and then resulting inspected style might be updated<br>
@@ -324,8 +324,8 @@ public abstract class InspectedStyle<S extends KeyValueCoding> extends KVCObserv
 	protected <T> void _doFireChangedProperty(GRParameter<T> p, T oldValue, T newValue) {
 		pcSupport.firePropertyChange(p.getName(), oldValue, newValue);
 		// System.out.println("fired changed property " + p + " from " + oldValue + " to " + newValue);
-		setChanged();
-		notifyObservers(new FGEAttributeNotification<T>(p, oldValue, newValue));
+		// setChanged();
+		// notifyObservers(new FGEAttributeNotification<T>(p, oldValue, newValue));
 	}
 
 	protected <T> void forceFireChangedProperty(GRParameter<T> p) {
@@ -336,8 +336,8 @@ public abstract class InspectedStyle<S extends KeyValueCoding> extends KVCObserv
 			_doFireChangedProperty(p, storedValue, newValue);
 		} else { // otherwise, we force it
 			pcSupport.firePropertyChange(p.getName(), null, newValue);
-			setChanged();
-			notifyObservers(new FGEAttributeNotification<T>(p, null, newValue));
+			// setChanged();
+			// notifyObservers(new FGEAttributeNotification<T>(p, null, newValue));
 		}
 
 	}
@@ -362,6 +362,7 @@ public abstract class InspectedStyle<S extends KeyValueCoding> extends KVCObserv
 		this.shouldBeUpdated = shouldBeUpdated;
 	}
 
+	@Override
 	public PropertyChangeSupport getPropertyChangeSupport() {
 		return pcSupport;
 	}
@@ -388,6 +389,7 @@ public abstract class InspectedStyle<S extends KeyValueCoding> extends KVCObserv
 		return isDeleted;
 	}
 
+	@Override
 	public String getDeletedProperty() {
 		// Not relevant
 		return null;
@@ -558,4 +560,42 @@ public abstract class InspectedStyle<S extends KeyValueCoding> extends KVCObserv
 		// Not relevant
 		return this;
 	}
+
+	public boolean hasKey(String key) {
+		// Not relevant
+		return false;
+	}
+
+	/**
+	 * Return object matching supplied key, if this object responses to this key
+	 * 
+	 * @param key
+	 * @return
+	 */
+	public Object objectForKey(String key) {
+		// Not relevant
+		return null;
+	}
+
+	/**
+	 * Sets an object matching supplied key, if this object responses to this key
+	 * 
+	 * @param key
+	 * @return
+	 */
+	public void setObjectForKey(Object value, String key) {
+		// Not relevant
+	}
+
+	/**
+	 * Return type of key/value pair identified by supplied key identifier
+	 * 
+	 * @param key
+	 * @return
+	 */
+	public Type getTypeForKey(String key) {
+		return null;
+		// Not relevant
+	}
+
 }

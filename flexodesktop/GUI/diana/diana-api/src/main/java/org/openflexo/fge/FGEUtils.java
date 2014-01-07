@@ -39,6 +39,7 @@ import org.openflexo.fge.geom.FGERectPolylin;
 import org.openflexo.fge.geom.FGESteppedDimensionConstraint;
 import org.openflexo.model.StringConverterLibrary.Converter;
 import org.openflexo.model.annotations.StringConverter;
+import org.openflexo.model.converter.DataBindingConverter;
 import org.openflexo.toolbox.ColorUtils;
 
 public class FGEUtils {
@@ -196,7 +197,7 @@ public class FGEUtils {
 	}
 
 	@StringConverter
-	public static final Converter<DataBinding<?>> DATA_BINDING_CONVERTER = new DataBindingConverter(DataBinding.class);
+	public static final Converter<DataBinding<?>> DATA_BINDING_CONVERTER = new DataBindingConverter();
 
 	@StringConverter
 	public static final Converter<FGEPoint> POINT_CONVERTER = new PointConverter(FGEPoint.class);

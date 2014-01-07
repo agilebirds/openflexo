@@ -46,7 +46,6 @@ import org.openflexo.technologyadapter.xml.model.IXMLType;
 import org.openflexo.technologyadapter.xml.model.XMLIndividual;
 import org.openflexo.technologyadapter.xml.model.XMLModel;
 import org.openflexo.technologyadapter.xml.rm.XMLFileResource;
-import org.openflexo.xmlcode.XMLSerializable;
 
 /* Correct processing of XML Objects URIs needs to add an internal class to store
  * for each XMLType wich are the XML Elements (attributes or CDATA, or...) that will be 
@@ -55,7 +54,7 @@ import org.openflexo.xmlcode.XMLSerializable;
 
 // TODO Manage the fact that URI May Change
 
-public class XMLURIProcessor extends NamedViewPointObjectImpl implements XMLSerializable {
+public class XMLURIProcessor extends NamedViewPointObjectImpl {
 
 	private static final Logger logger = Logger.getLogger(XMLURIProcessor.class.getPackage().getName());
 

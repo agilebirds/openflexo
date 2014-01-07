@@ -55,6 +55,11 @@
 		    </dependency>
 		    <dependency>
 			   <groupId>org.openflexo</groupId>
+			   <artifactId>flexoxmlcode</artifactId>
+			   <version>1.7-SNAPSHOT</version>
+		    </dependency>
+		    <dependency>
+			   <groupId>org.openflexo</groupId>
 			   <artifactId>flexographicutils</artifactId>
 			   <version>1.7-SNAPSHOT</version>
 		    </dependency>

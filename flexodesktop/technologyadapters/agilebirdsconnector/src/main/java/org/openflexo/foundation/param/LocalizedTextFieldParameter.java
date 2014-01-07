@@ -19,9 +19,9 @@
  */
 package org.openflexo.foundation.param;
 
-import org.openflexo.inspector.LocalizedString;
 import org.openflexo.inspector.widget.DenaliWidget;
 import org.openflexo.inspector.widget.TextFieldWidget;
+import org.openflexo.localization.LocalizedString;
 
 public class LocalizedTextFieldParameter extends ParameterDefinition<LocalizedString> {
 

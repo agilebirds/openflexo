@@ -26,7 +26,6 @@ import org.openflexo.model.factory.CloneableProxyObject;
 import org.openflexo.model.factory.DeletableProxyObject;
 import org.openflexo.model.factory.KeyValueCoding;
 import org.openflexo.toolbox.HasPropertyChangeSupport;
-import org.openflexo.xmlcode.XMLSerializable;
 
 /**
  * Root interface for all model objects involved in Diana modelling layer
@@ -34,8 +33,8 @@ import org.openflexo.xmlcode.XMLSerializable;
  * @author sylvain
  * 
  */
-public interface FGEObject extends AccessibleProxyObject, DeletableProxyObject, CloneableProxyObject, XMLSerializable, Cloneable,
-		KeyValueCoding, FGEConstants, HasPropertyChangeSupport {
+public interface FGEObject extends AccessibleProxyObject, DeletableProxyObject, CloneableProxyObject, Cloneable, KeyValueCoding,
+		FGEConstants, HasPropertyChangeSupport {
 
 	// TODO: remove this, don't reference the factory in the object
 	@Deprecated

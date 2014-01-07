@@ -26,6 +26,10 @@
 		</dependency>
 		<dependency>
 			<groupId>org.openflexo</groupId>
+			<artifactId>flexoxmlcode</artifactId>
+		</dependency>
+		<dependency>
+			<groupId>org.openflexo</groupId>
 			<artifactId>flexoutils</artifactId>
 		</dependency>
 		<dependency>

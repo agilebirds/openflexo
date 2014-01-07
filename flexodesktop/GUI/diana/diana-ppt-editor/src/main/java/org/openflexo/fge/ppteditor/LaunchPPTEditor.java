@@ -27,11 +27,9 @@ import javax.swing.SwingUtilities;
 import javax.swing.UIManager;
 import javax.swing.UnsupportedLookAndFeelException;
 
-import org.openflexo.antar.binding.DataBinding;
 import org.openflexo.localization.FlexoLocalization;
 import org.openflexo.logging.FlexoLogger;
 import org.openflexo.logging.FlexoLoggingManager;
-import org.openflexo.xmlcode.StringEncoder;
 
 public class LaunchPPTEditor {
 
@@ -72,7 +70,7 @@ public class LaunchPPTEditor {
 			e.printStackTrace();
 		}
 
-		StringEncoder.getDefaultInstance()._addConverter(DataBinding.CONVERTER);
+		// StringEncoder.getDefaultInstance()._addConverter(DataBinding.CONVERTER);
 
 		PPTEditorApplication application = new PPTEditorApplication();
 		application.showMainPanel();

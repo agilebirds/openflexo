@@ -40,10 +40,10 @@ import javax.swing.event.DocumentEvent;
 import javax.swing.event.DocumentListener;
 
 import org.openflexo.inspector.AbstractController;
-import org.openflexo.inspector.LocalizedString;
 import org.openflexo.inspector.model.PropertyModel;
 import org.openflexo.localization.FlexoLocalization;
 import org.openflexo.localization.Language;
+import org.openflexo.localization.LocalizedString;
 import org.openflexo.toolbox.ToolBox;
 
 /**

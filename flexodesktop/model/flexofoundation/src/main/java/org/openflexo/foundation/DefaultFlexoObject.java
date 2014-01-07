@@ -129,12 +129,6 @@ public class DefaultFlexoObject extends FlexoObjectImpl {
 	}
 
 	@Override
-	public boolean hasKey(String key) {
-		// TODO Auto-generated method stub
-		return false;
-	}
-
-	@Override
 	public boolean performSuperDelete(Object... context) {
 		// TODO Auto-generated method stub
 		return false;
@@ -198,6 +192,12 @@ public class DefaultFlexoObject extends FlexoObjectImpl {
 	public Collection<? extends Validable> getEmbeddedValidableObjects() {
 		// TODO Auto-generated method stub
 		return null;
+	}
+
+	@Override
+	public boolean hasKey(String key) {
+		// TODO Auto-generated method stub
+		return false;
 	}
 
 	/**

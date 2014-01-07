@@ -28,7 +28,6 @@ import java.util.Vector;
 import java.util.logging.Logger;
 
 import org.openflexo.foundation.NameChanged;
-import org.openflexo.foundation.converter.OntologyObjectConverter;
 import org.openflexo.foundation.ontology.IFlexoOntologyAnnotation;
 import org.openflexo.foundation.ontology.IFlexoOntologyConcept;
 import org.openflexo.foundation.ontology.IFlexoOntologyConceptVisitor;
@@ -39,12 +38,11 @@ import org.openflexo.foundation.ontology.IFlexoOntologyStructuralProperty;
 import org.openflexo.foundation.ontology.dm.OntologyObjectStatementsChanged;
 import org.openflexo.foundation.ontology.dm.URIChanged;
 import org.openflexo.foundation.ontology.dm.URINameChanged;
-import org.openflexo.inspector.LocalizedString;
 import org.openflexo.localization.FlexoLocalization;
 import org.openflexo.localization.Language;
+import org.openflexo.localization.LocalizedString;
 import org.openflexo.technologyadapter.owl.OWLTechnologyAdapter;
 import org.openflexo.toolbox.StringUtils;
-import org.openflexo.xmlcode.StringConvertable;
 
 import com.hp.hpl.jena.ontology.OntResource;
 import com.hp.hpl.jena.rdf.model.Property;
@@ -53,8 +51,7 @@ import com.hp.hpl.jena.rdf.model.Statement;
 import com.hp.hpl.jena.rdf.model.StmtIterator;
 import com.hp.hpl.jena.util.ResourceUtils;
 
-public abstract class OWLConcept<R extends OntResource> extends OWLObject implements IFlexoOntologyConcept,
-		StringConvertable<IFlexoOntologyConcept> {
+public abstract class OWLConcept<R extends OntResource> extends OWLObject implements IFlexoOntologyConcept {
 
 	private static final Logger logger = Logger.getLogger(IFlexoOntologyConcept.class.getPackage().getName());
 
@@ -97,14 +94,6 @@ public abstract class OWLConcept<R extends OntResource> extends OWLObject implem
 		propertiesTakingMySelfAsDomain = new ArrayList<OWLProperty>();
 		declaredPropertiesTakingMySelfAsRange = new HashSet<OWLProperty>();
 		declaredPropertiesTakingMySelfAsDomain = new HashSet<OWLProperty>();
-	}
-
-	@Override
-	public OntologyObjectConverter getConverter() {
-		if (getOntologyLibrary() != null) {
-			return getOntologyLibrary().getOntologyObjectConverter();
-		}
-		return null;
 	}
 
 	protected abstract void update();

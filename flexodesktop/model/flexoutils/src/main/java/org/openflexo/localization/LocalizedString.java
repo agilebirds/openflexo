@@ -17,9 +17,8 @@
  * along with OpenFlexo. If not, see <http://www.gnu.org/licenses/>.
  *
  */
-package org.openflexo.inspector;
+package org.openflexo.localization;
 
-import org.openflexo.localization.Language;
 
 public class LocalizedString {
 
