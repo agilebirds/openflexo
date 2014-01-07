@@ -29,7 +29,6 @@ import java.util.Comparator;
 import java.util.Date;
 import java.util.LinkedList;
 import java.util.List;
-import java.util.Vector;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 
@@ -38,10 +37,6 @@ import javax.swing.SwingUtilities;
 import org.openflexo.foundation.FlexoProject;
 import org.openflexo.foundation.resource.FlexoResource;
 import org.openflexo.foundation.resource.SaveResourceException;
-import org.openflexo.inspector.InspectableObject;
-import org.openflexo.inspector.InspectorObserver;
-import org.openflexo.inspector.model.TabModel;
-import org.openflexo.kvc.KVCObject;
 import org.openflexo.localization.FlexoLocalization;
 import org.openflexo.logging.FlexoLogger;
 import org.openflexo.toolbox.FileUtils;
@@ -340,7 +335,7 @@ public class FlexoAutoSaveThread extends Thread {
 		}
 	}
 
-	public static class FlexoAutoSaveFile extends KVCObject implements InspectableObject {
+	public static class FlexoAutoSaveFile {
 
 		private final File directory;
 
@@ -403,57 +398,6 @@ public class FlexoAutoSaveThread extends Thread {
 		public String hours() {
 			long offset = System.currentTimeMillis() - creationDate.getTime();
 			return String.valueOf(Math.round((float) offset / (60 * 60 * 1000)));
-		}
-
-		/**
-		 * Overrides addInspectorObserver
-		 * 
-		 * @see org.openflexo.inspector.InspectableObject#addInspectorObserver(org.openflexo.inspector.InspectorObserver)
-		 */
-		@Override
-		public void addInspectorObserver(InspectorObserver obs) {
-
-		}
-
-		/**
-		 * Overrides deleteInspectorObserver
-		 * 
-		 * @see org.openflexo.inspector.InspectableObject#deleteInspectorObserver(org.openflexo.inspector.InspectorObserver)
-		 */
-		@Override
-		public void deleteInspectorObserver(InspectorObserver obs) {
-
-		}
-
-		/**
-		 * Overrides getInspectorName
-		 * 
-		 * @see org.openflexo.inspector.InspectableObject#getInspectorName()
-		 */
-		@Override
-		public String getInspectorName() {
-			return null;
-		}
-
-		/**
-		 * Overrides isDeleted
-		 * 
-		 * @see org.openflexo.inspector.InspectableObject#isDeleted()
-		 */
-		@Override
-		public boolean isDeleted() {
-			return false;
-		}
-
-		@Override
-		public String getInspectorTitle() {
-			return null;
-		}
-
-		@Override
-		public Vector<TabModel> inspectionExtraTabs() {
-			// TODO Auto-generated method stub
-			return null;
 		}
 	}
 

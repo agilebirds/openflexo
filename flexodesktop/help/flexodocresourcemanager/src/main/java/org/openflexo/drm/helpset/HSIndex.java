@@ -20,38 +20,27 @@
 package org.openflexo.drm.helpset;
 
 import java.io.File;
-import java.io.FileOutputStream;
-import java.io.IOException;
 import java.util.Enumeration;
 import java.util.Vector;
-import java.util.logging.Level;
 import java.util.logging.Logger;
-
-import javax.xml.parsers.ParserConfigurationException;
 
 import org.jdom2.DocType;
 import org.openflexo.drm.DocItem;
 import org.openflexo.drm.DocResourceCenter;
-import org.openflexo.drm.Language;
 import org.openflexo.foundation.KVCFlexoObject;
-import org.openflexo.toolbox.FileResource;
-import org.openflexo.xmlcode.InvalidModelException;
-import org.openflexo.xmlcode.XMLCoder;
-import org.openflexo.xmlcode.XMLMapping;
-import org.openflexo.xmlcode.XMLSerializable;
-import org.xml.sax.SAXException;
+import org.openflexo.localization.Language;
 
-public class HSIndex extends KVCFlexoObject implements XMLSerializable {
+public class HSIndex extends KVCFlexoObject {
 
 	private static final Logger logger = Logger.getLogger(HSIndex.class.getPackage().getName());
 
-	private DocResourceCenter _drc;
-	private Language _language;
+	private final DocResourceCenter _drc;
+	private final Language _language;
 	private Vector<HSIndexEntry> _rootEntries;
 	public String version = "1.0";
-	private File _indexFile;
+	private final File _indexFile;
 
-	private HelpSetConfiguration configuration;
+	private final HelpSetConfiguration configuration;
 
 	public HSIndex(DocResourceCenter drc, Language language, File indexFile, HelpSetConfiguration config) {
 		_drc = drc;
@@ -78,7 +67,7 @@ public class HSIndex extends KVCFlexoObject implements XMLSerializable {
 		return _rootEntries;
 	}
 
-	public class HSIndexEntry extends KVCFlexoObject implements XMLSerializable {
+	public class HSIndexEntry extends KVCFlexoObject {
 		public DocItem docItem;
 		public Vector entryChilds;
 		public String text;
@@ -102,17 +91,17 @@ public class HSIndex extends KVCFlexoObject implements XMLSerializable {
 	}
 
 	protected void generate() {
-		try {
-			FileOutputStream out = new FileOutputStream(_indexFile);
-			XMLCoder.encodeObjectWithMapping(this, getIndexMapping(), out, getIndexDocType());
-			out.flush();
-			out.close();
-		} catch (Exception e) {
-			e.printStackTrace();
-		}
+		/*	try {
+				FileOutputStream out = new FileOutputStream(_indexFile);
+				XMLCoder.encodeObjectWithMapping(this, getIndexMapping(), out, getIndexDocType());
+				out.flush();
+				out.close();
+			} catch (Exception e) {
+				e.printStackTrace();
+			}*/
 	}
 
-	private static XMLMapping _indexMapping;
+	/*private static XMLMapping _indexMapping;
 
 	public static XMLMapping getIndexMapping() {
 		if (_indexMapping == null) {
@@ -154,7 +143,7 @@ public class HSIndex extends KVCFlexoObject implements XMLSerializable {
 			}
 		}
 		return _indexMapping;
-	}
+	}*/
 
 	public static DocType getIndexDocType() {
 		return new DocType("index", "-//Sun Microsystems Inc.//DTD JavaHelp Index Version 1.0//EN",

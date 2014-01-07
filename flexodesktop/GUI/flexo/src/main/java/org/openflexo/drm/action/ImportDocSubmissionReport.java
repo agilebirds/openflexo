@@ -33,7 +33,7 @@ import org.openflexo.foundation.FlexoObject.FlexoObjectImpl;
 import org.openflexo.foundation.action.FlexoAction;
 import org.openflexo.foundation.action.FlexoActionType;
 
-public class ImportDocSubmissionReport extends FlexoAction {
+public class ImportDocSubmissionReport extends FlexoAction<ImportDocSubmissionReport, FlexoObject, FlexoObject> {
 
 	private static final Logger logger = Logger.getLogger(ImportDocSubmissionReport.class.getPackage().getName());
 
@@ -75,7 +75,8 @@ public class ImportDocSubmissionReport extends FlexoAction {
 	protected void doAction(Object context) {
 		logger.info("ImportDocSubmissionReport");
 		if (getDocSubmissionReport() != null) {
-			DocResourceManager.instance().importDocSubmissionReport(getDocSubmissionReport(), getActionsToImport());
+			DocResourceManager drm = getEditor().getServiceManager().getService(DocResourceManager.class);
+			drm.importDocSubmissionReport(getDocSubmissionReport(), getActionsToImport());
 		}
 	}
 
@@ -92,8 +93,10 @@ public class ImportDocSubmissionReport extends FlexoAction {
 	public DocSubmissionReport getDocSubmissionReport() {
 		if (_docSubmissionReport == null) {
 			if (getDocSubmissionReportFile() != null) {
-				DocResourceCenter drc = DocResourceManager.instance().getDocResourceCenter();
-				_docSubmissionReport = DocSubmissionReport.load(drc, getDocSubmissionReportFile());
+				DocResourceManager drm = getEditor().getServiceManager().getService(DocResourceManager.class);
+				DocResourceCenter drc = drm.getDocResourceCenter();
+				// TODO
+				// _docSubmissionReport = DocSubmissionReport.load(drc, getDocSubmissionReportFile());
 			}
 		}
 		return _docSubmissionReport;

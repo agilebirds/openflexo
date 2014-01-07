@@ -22,8 +22,8 @@ package org.openflexo.dre.controller.action;
 import java.util.EventObject;
 import java.util.logging.Logger;
 
-import org.openflexo.ch.DocResourceManager;
 import org.openflexo.components.AskParametersDialog;
+import org.openflexo.drm.DocResourceManager;
 import org.openflexo.drm.Language;
 import org.openflexo.drm.action.GenerateHelpSet;
 import org.openflexo.drm.helpset.DRMHelpSet;

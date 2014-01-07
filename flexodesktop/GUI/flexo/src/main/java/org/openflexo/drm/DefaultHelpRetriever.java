@@ -17,21 +17,18 @@
  * along with OpenFlexo. If not, see <http://www.gnu.org/licenses/>.
  *
  */
-package org.openflexo.ch;
+package org.openflexo.drm;
 
 import java.util.logging.Logger;
 
 import org.openflexo.ApplicationContext;
-import org.openflexo.drm.DocItem;
-import org.openflexo.drm.Language;
 import org.openflexo.foundation.FlexoObject;
 import org.openflexo.foundation.FlexoObject.FlexoObjectImpl.HelpRetriever;
-import org.openflexo.inspector.InspectableObject;
-import org.openflexo.inspector.widget.DenaliWidget;
+import org.openflexo.localization.Language;
 
 public class DefaultHelpRetriever implements HelpRetriever {
 
-	private static final Logger logger = Logger.getLogger(DenaliWidget.class.getPackage().getName());
+	private static final Logger logger = Logger.getLogger(DefaultHelpRetriever.class.getPackage().getName());
 
 	private final DocResourceManager docResourceManager;
 
@@ -45,17 +42,13 @@ public class DefaultHelpRetriever implements HelpRetriever {
 	 */
 	@Override
 	public String shortHelpForObject(FlexoObject object) {
-		if (!(object instanceof InspectableObject)) {
-			return null;
-		}
 		ApplicationContext applicationContext = (ApplicationContext) docResourceManager.getServiceManager();
-		Language language = docResourceManager.getLanguage(applicationContext.getGeneralPreferences().getLanguage());
+		Language language = applicationContext.getGeneralPreferences().getLanguage();
 
-		DocItem propertyModelItem = docResourceManager.getDocItemFor((InspectableObject) object);
+		DocItem propertyModelItem = docResourceManager.getDocItemFor(object);
 		if (propertyModelItem != null) {
 			if (propertyModelItem.getLastApprovedActionForLanguage(language) != null) {
-				return "<html>" + propertyModelItem.getLastApprovedActionForLanguage(language).getVersion().getShortHTMLDescription()
-						+ "</html>";
+				return "<html>" + propertyModelItem.getShortHTMLDescription() + "</html>";
 			}
 		}
 		return null;
@@ -67,17 +60,13 @@ public class DefaultHelpRetriever implements HelpRetriever {
 	 */
 	@Override
 	public String longHelpForObject(FlexoObject object) {
-		if (!(object instanceof InspectableObject)) {
-			return null;
-		}
 		ApplicationContext applicationContext = (ApplicationContext) docResourceManager.getServiceManager();
-		Language language = docResourceManager.getLanguage(applicationContext.getGeneralPreferences().getLanguage());
+		Language language = applicationContext.getGeneralPreferences().getLanguage();
 
-		DocItem propertyModelItem = docResourceManager.getDocItemFor((InspectableObject) object);
+		DocItem propertyModelItem = docResourceManager.getDocItemFor(object);
 		if (propertyModelItem != null) {
 			if (propertyModelItem.getLastApprovedActionForLanguage(language) != null) {
-				String returned = "<html>"
-						+ propertyModelItem.getLastApprovedActionForLanguage(language).getVersion().getFullHTMLDescription() + "</html>";
+				String returned = "<html>" + propertyModelItem.getFullHTMLDescription() + "</html>";
 				return returned;
 			}
 		}

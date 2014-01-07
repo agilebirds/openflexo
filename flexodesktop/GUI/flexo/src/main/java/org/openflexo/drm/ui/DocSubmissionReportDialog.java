@@ -17,7 +17,7 @@
  * along with OpenFlexo. If not, see <http://www.gnu.org/licenses/>.
  *
  */
-package org.openflexo.dre;
+package org.openflexo.drm.ui;
 
 import java.awt.BorderLayout;
 import java.awt.Color;
@@ -190,10 +190,10 @@ public class DocSubmissionReportDialog extends FlexoDialog {
 	}
 
 	protected class HTMLPreviewPanel extends JPanel {
-		private JPanel shortHTMLDescriptionPanel;
-		private JPanel fullHTMLDescriptionPanel;
-		private JLabel shortHTMLDescriptionLabel;
-		private JLabel fullHTMLDescriptionLabel;
+		private final JPanel shortHTMLDescriptionPanel;
+		private final JPanel fullHTMLDescriptionPanel;
+		private final JLabel shortHTMLDescriptionLabel;
+		private final JLabel fullHTMLDescriptionLabel;
 
 		protected HTMLPreviewPanel() {
 			super(new BorderLayout());
@@ -278,9 +278,9 @@ public class DocSubmissionReportDialog extends FlexoDialog {
 
 	public class DocSubmissionReportModel extends AbstractTableModel {
 
-		private DocSubmissionReport _report;
+		private final DocSubmissionReport _report;
 
-		private Vector<Boolean> _shouldImport;
+		private final Vector<Boolean> _shouldImport;
 
 		public DocSubmissionReportModel(DocSubmissionReport report) {
 			super();
@@ -364,7 +364,7 @@ public class DocSubmissionReportDialog extends FlexoDialog {
 			} else if (columnIndex == 4) {
 				return action.getLocalizedActionType();
 			} else if (columnIndex == 5) {
-				return action.getVersion().getLanguageId();
+				return action.getVersion().getLanguage().getIdentifier();
 			} else if (columnIndex == 6) {
 				return action.getVersion().getVersion();
 			} else if (columnIndex == 7) {

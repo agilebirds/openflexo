@@ -28,12 +28,11 @@ import org.openflexo.drm.Author;
 import org.openflexo.drm.DocItem;
 import org.openflexo.drm.DocItemAction;
 import org.openflexo.drm.DocItemVersion;
-import org.openflexo.drm.DocItemVersion.Version;
-import org.openflexo.drm.Language;
 import org.openflexo.foundation.FlexoEditor;
 import org.openflexo.foundation.FlexoObject.FlexoObjectImpl;
 import org.openflexo.foundation.action.FlexoAction;
 import org.openflexo.foundation.action.FlexoActionType;
+import org.openflexo.localization.Language;
 
 public class ApproveVersion extends FlexoAction<ApproveVersion, DocItem, DocItem> {
 
@@ -83,7 +82,7 @@ public class ApproveVersion extends FlexoAction<ApproveVersion, DocItem, DocItem
 	private DocItemAction _newAction;
 	private String _note;
 	private Vector<DocItemVersion> _versionsThatCanBeApproved;
-	private Version _newVersion;
+	private DocItemVersion _newVersion;
 
 	public Vector<DocItemVersion> getVersionsThatCanBeApproved() {
 		if (_versionsThatCanBeApproved == null) {
@@ -103,8 +102,8 @@ public class ApproveVersion extends FlexoAction<ApproveVersion, DocItem, DocItem
 	protected void doAction(Object context) {
 		if (getVersion() != null) {
 			logger.info("ApproveVersion");
-			if (_newVersion != null && !_newVersion.equals(getVersion().getVersion())) {
-				getVersion().setVersion(_newVersion);
+			if (_newVersion != null && !_newVersion.equals(getVersion())) {
+				setVersion(_newVersion);
 			}
 			_newAction = getDocItem().approveVersion(getVersion(), getAuthor(), getDocItem().getDocResourceCenter());
 			_newAction.setNote(getNote());
@@ -152,7 +151,7 @@ public class ApproveVersion extends FlexoAction<ApproveVersion, DocItem, DocItem
 		_note = note;
 	}
 
-	public void setNewVersion(Version version) {
+	public void setNewVersion(DocItemVersion version) {
 		_newVersion = version;
 	}
 

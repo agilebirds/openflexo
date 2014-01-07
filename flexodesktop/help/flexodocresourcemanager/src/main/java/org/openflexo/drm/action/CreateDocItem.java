@@ -74,8 +74,7 @@ public class CreateDocItem extends FlexoAction {
 	protected void doAction(Object context) {
 		logger.info("CreateDocItem");
 		if (getDocItemFolder() != null) {
-			_newDocItem = DocItem.createDocItem(getNewItemIdentifier(), getNewItemDescription(), getDocItemFolder(), getDocItemFolder()
-					.getDocResourceCenter(), false);
+			_newDocItem = DocItem.createDocItem(getNewItemIdentifier(), getNewItemDescription(), getDocItemFolder(), false);
 
 		}
 	}

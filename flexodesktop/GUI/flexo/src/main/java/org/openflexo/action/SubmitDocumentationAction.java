@@ -26,7 +26,6 @@ import org.openflexo.foundation.FlexoObject;
 import org.openflexo.foundation.FlexoObject.FlexoObjectImpl;
 import org.openflexo.foundation.action.FlexoActionType;
 import org.openflexo.foundation.action.FlexoGUIAction;
-import org.openflexo.inspector.InspectableObject;
 
 public class SubmitDocumentationAction extends FlexoGUIAction<SubmitDocumentationAction, FlexoObject, FlexoObject> {
 
@@ -52,7 +51,7 @@ public class SubmitDocumentationAction extends FlexoGUIAction<SubmitDocumentatio
 
 		@Override
 		public boolean isEnabledForSelection(FlexoObject object, Vector globalSelection) {
-			return allowsDocSubmission && object != null && object instanceof InspectableObject;
+			return allowsDocSubmission && object != null;
 		}
 
 		public boolean allowsDocSubmission() {

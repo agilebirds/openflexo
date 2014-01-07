@@ -27,59 +27,49 @@ import org.openflexo.localization.FlexoLocalization;
 
 public class DocItemAction extends DRMObject {
 
-	private DocItem item;
+	private DocItemVersion itemVersion;
 	private String authorId;
 	private Date actionDate;
 	private ActionType actionType;
-	private DocItemVersion version;
 	private String note;
 
-	public DocItemAction(DRMBuilder builder) {
-		this(builder.docResourceCenter);
-		initializeDeserialization(builder);
-	}
-
-	public DocItemAction(DocResourceCenter docResourceCenter) {
-		super(docResourceCenter);
+	public DocItemAction() {
+		super();
 	}
 
 	public static DocItemAction createSubmitAction(DocItemVersion version, Author author, DocResourceCenter docResourceCenter) {
-		DocItemAction newAction = new DocItemAction(docResourceCenter);
-		newAction.item = version.getItem();
+		DocItemAction newAction = new DocItemAction();
+		newAction.itemVersion = version;
 		newAction.authorId = author.getIdentifier();
 		newAction.actionDate = new Date();
 		newAction.actionType = ActionType.SUBMITTED;
-		newAction.version = version;
 		return newAction;
 	}
 
 	public static DocItemAction createReviewAction(DocItemVersion version, Author author, DocResourceCenter docResourceCenter) {
-		DocItemAction newAction = new DocItemAction(docResourceCenter);
-		newAction.item = version.getItem();
+		DocItemAction newAction = new DocItemAction();
+		newAction.itemVersion = version;
 		newAction.authorId = author.getIdentifier();
 		newAction.actionDate = new Date();
 		newAction.actionType = ActionType.REVIEWED;
-		newAction.version = version;
 		return newAction;
 	}
 
 	public static DocItemAction createApproveAction(DocItemVersion version, Author author, DocResourceCenter docResourceCenter) {
-		DocItemAction newAction = new DocItemAction(docResourceCenter);
-		newAction.item = version.getItem();
+		DocItemAction newAction = new DocItemAction();
+		newAction.itemVersion = version;
 		newAction.authorId = author.getIdentifier();
 		newAction.actionDate = new Date();
 		newAction.actionType = ActionType.APPROVED;
-		newAction.version = version;
 		return newAction;
 	}
 
 	public static DocItemAction createRefuseAction(DocItemVersion version, Author author, DocResourceCenter docResourceCenter) {
-		DocItemAction newAction = new DocItemAction(docResourceCenter);
-		newAction.item = version.getItem();
+		DocItemAction newAction = new DocItemAction();
+		newAction.itemVersion = version;
 		newAction.authorId = author.getIdentifier();
 		newAction.actionDate = new Date();
 		newAction.actionType = ActionType.REFUSED;
-		newAction.version = version;
 		return newAction;
 	}
 
@@ -111,21 +101,15 @@ public class DocItemAction extends DRMObject {
 	}
 
 	public DocItem getItem() {
-		return item;
-	}
-
-	public void setItem(DocItem item) {
-		this.item = item;
-		setChanged();
+		return itemVersion.getDocItem();
 	}
 
 	public DocItemVersion getVersion() {
-		return version;
+		return itemVersion;
 	}
 
 	public void setVersion(DocItemVersion version) {
-		this.version = version;
-		setChanged();
+		itemVersion = version;
 	}
 
 	public String getNote() {
@@ -159,7 +143,7 @@ public class DocItemAction extends DRMObject {
 	}
 
 	public boolean isApproved() {
-		for (Enumeration en = item.getActions().elements(); en.hasMoreElements();) {
+		for (Enumeration en = getItem().getActions().elements(); en.hasMoreElements();) {
 			DocItemAction next = (DocItemAction) en.nextElement();
 			if (next.getVersion() == getVersion() && next.getActionType() == ActionType.APPROVED) {
 				return true;
@@ -180,7 +164,7 @@ public class DocItemAction extends DRMObject {
 	}
 
 	public boolean isRefused() {
-		for (Enumeration en = item.getActions().elements(); en.hasMoreElements();) {
+		for (Enumeration en = getItem().getActions().elements(); en.hasMoreElements();) {
 			DocItemAction next = (DocItemAction) en.nextElement();
 			if (next.getVersion() == getVersion() && next.getActionType() == ActionType.REFUSED) {
 				return true;
@@ -212,7 +196,7 @@ public class DocItemAction extends DRMObject {
 	 */
 	@Override
 	public String getIdentifier() {
-		return getActionType().getName() + "_ON_" + getVersion().getIdentifier();
+		return getActionType().getName() + "_ON_" + getVersion();
 	}
 
 }

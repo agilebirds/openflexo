@@ -29,8 +29,8 @@ import javax.swing.ImageIcon;
 import org.openflexo.ApplicationContext;
 import org.openflexo.components.ProgressWindow;
 import org.openflexo.drm.DocItem;
-import org.openflexo.drm.Language;
 import org.openflexo.localization.FlexoLocalization;
+import org.openflexo.localization.Language;
 import org.openflexo.prefs.ModulePreferences;
 import org.openflexo.swing.FlexoSwingUtils;
 

@@ -21,8 +21,8 @@ package org.openflexo.wse.view;
 
 import java.util.logging.Logger;
 
-import org.openflexo.ch.FCH;
 import org.openflexo.components.browser.view.BrowserView;
+import org.openflexo.drm.FCH;
 import org.openflexo.foundation.FlexoObject;
 import org.openflexo.wse.controller.WSEController;
 

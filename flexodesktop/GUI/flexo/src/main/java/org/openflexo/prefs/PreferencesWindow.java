@@ -32,7 +32,6 @@ import javax.swing.JPanel;
 import javax.swing.JScrollPane;
 import javax.swing.SwingConstants;
 
-import org.openflexo.inspector.InspectorModelView;
 import org.openflexo.localization.FlexoLocalization;
 
 /**
@@ -65,7 +64,7 @@ public class PreferencesWindow extends JFrame {
 		getContentPane().add(_nothingToInspectLabel, BorderLayout.CENTER);
 	}
 
-	public void setTabPanel(InspectorModelView tabPanel) {
+	/*public void setTabPanel(InspectorModelView tabPanel) {
 		if (_currentScrollPane != null) {
 			getContentPane().remove(_currentScrollPane);
 		} else {
@@ -76,7 +75,7 @@ public class PreferencesWindow extends JFrame {
 		getContentPane().add(getButtonPanel(), BorderLayout.SOUTH);
 		getContentPane().validate();
 		currentTabPanel = tabPanel;
-	}
+	}*/
 
 	private JScrollPane getScrollPane(JComponent content) {
 		JScrollPane answer = new JScrollPane(content);
@@ -139,7 +138,7 @@ public class PreferencesWindow extends JFrame {
 		}
 	}
 
-	public InspectorModelView currentTabPanel;
+	// public InspectorModelView currentTabPanel;
 
 	private JScrollPane _currentScrollPane;
 

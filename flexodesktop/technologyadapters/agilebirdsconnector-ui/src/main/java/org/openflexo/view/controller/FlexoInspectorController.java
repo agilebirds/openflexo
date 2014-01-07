@@ -43,14 +43,14 @@ import javax.swing.WindowConstants;
 
 import org.apache.commons.io.IOUtils;
 import org.openflexo.GeneralPreferences;
-import org.openflexo.ch.DefaultInspectorHelpDelegate;
-import org.openflexo.ch.DocResourceManager;
 import org.openflexo.components.ProgressWindow;
+import org.openflexo.drm.DefaultInspectorHelpDelegate;
 import org.openflexo.drm.DocItem;
+import org.openflexo.drm.DocResourceManager;
+import org.openflexo.drm.HelpDelegate;
 import org.openflexo.drm.Language;
 import org.openflexo.foundation.InspectorGroup;
 import org.openflexo.foundation.Inspectors;
-import org.openflexo.inspector.HelpDelegate;
 import org.openflexo.inspector.InspectorController;
 import org.openflexo.inspector.InspectorDelegate;
 import org.openflexo.inspector.InspectorWidgetConfiguration;

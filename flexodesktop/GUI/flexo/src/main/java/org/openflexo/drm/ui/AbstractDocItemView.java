@@ -17,7 +17,7 @@
  * along with OpenFlexo. If not, see <http://www.gnu.org/licenses/>.
  *
  */
-package org.openflexo.dre;
+package org.openflexo.drm.ui;
 
 import java.awt.BorderLayout;
 import java.awt.Color;
@@ -62,12 +62,11 @@ import javax.swing.text.Document;
 import javax.swing.text.JTextComponent;
 import javax.swing.text.html.HTMLDocument;
 
-import org.openflexo.ch.DocResourceManager;
 import org.openflexo.drm.ActionType;
 import org.openflexo.drm.DocItem;
 import org.openflexo.drm.DocItemAction;
 import org.openflexo.drm.DocItemVersion;
-import org.openflexo.drm.Language;
+import org.openflexo.drm.DocResourceManager;
 import org.openflexo.drm.action.AddToEmbeddingChildItem;
 import org.openflexo.drm.action.AddToInheritanceChildItem;
 import org.openflexo.drm.action.AddToRelatedToItem;
@@ -78,6 +77,7 @@ import org.openflexo.foundation.FlexoEditor;
 import org.openflexo.foundation.FlexoObject;
 import org.openflexo.foundation.FlexoProject;
 import org.openflexo.localization.FlexoLocalization;
+import org.openflexo.localization.Language;
 import org.openflexo.view.controller.FlexoController;
 import org.openflexo.wysiwyg.FlexoWysiwyg;
 import org.openflexo.wysiwyg.FlexoWysiwygLight;
@@ -882,7 +882,7 @@ public abstract class AbstractDocItemView extends JPanel {
 				actionTF.setText(getCurrentAction().getActionType().getLocalizedName());
 				dateTF.setText(getCurrentAction().getLocalizedFullActionDate());
 				versionTF.setText(getCurrentAction().getVersion().getVersion().toString());
-				languageTF.setText(getCurrentAction().getVersion().getLanguageId());
+				languageTF.setText(getCurrentAction().getVersion().getLanguage().getIdentifier());
 				noteTA.setText(getCurrentAction().getNote());
 				noteTA.setEnabled(true);
 			}

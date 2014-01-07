@@ -23,11 +23,11 @@ import java.util.EventObject;
 import java.util.Vector;
 import java.util.logging.Logger;
 
-import org.openflexo.ch.DocResourceManager;
 import org.openflexo.components.AskParametersDialog;
-import org.openflexo.dre.AbstractDocItemView;
 import org.openflexo.drm.DocItemVersion;
+import org.openflexo.drm.DocResourceManager;
 import org.openflexo.drm.action.RefuseVersion;
+import org.openflexo.drm.ui.AbstractDocItemView;
 import org.openflexo.foundation.action.FlexoActionFinalizer;
 import org.openflexo.foundation.action.FlexoActionInitializer;
 import org.openflexo.foundation.param.DynamicDropDownParameter;

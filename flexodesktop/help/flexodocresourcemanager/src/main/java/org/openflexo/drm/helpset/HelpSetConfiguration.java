@@ -22,14 +22,14 @@ package org.openflexo.drm.helpset;
 import java.util.Vector;
 
 import org.openflexo.drm.DocItemFolder;
-import org.openflexo.drm.Language;
+import org.openflexo.localization.Language;
 
 public class HelpSetConfiguration {
 
-	private Language language;
-	private Vector<DocItemFolder> docItemFolders;
-	private String title;
-	private String distributionName;
+	private final Language language;
+	private final Vector<DocItemFolder> docItemFolders;
+	private final String title;
+	private final String distributionName;
 
 	public HelpSetConfiguration(String aTitle, Language aLanguage, String aDistributionName, Vector<DocItemFolder> someDocItemFolders) {
 		super();

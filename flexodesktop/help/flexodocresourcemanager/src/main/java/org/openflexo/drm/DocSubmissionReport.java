@@ -19,39 +19,18 @@
  */
 package org.openflexo.drm;
 
-import java.io.File;
-import java.io.FileInputStream;
-import java.io.FileOutputStream;
-import java.io.IOException;
 import java.util.Vector;
-import java.util.logging.Level;
 import java.util.logging.Logger;
 
-import javax.xml.parsers.ParserConfigurationException;
-
-import org.openflexo.toolbox.FileResource;
-import org.openflexo.xmlcode.InvalidModelException;
-import org.openflexo.xmlcode.StringEncoder;
-import org.openflexo.xmlcode.XMLCoder;
-import org.openflexo.xmlcode.XMLDecoder;
-import org.openflexo.xmlcode.XMLMapping;
-import org.openflexo.xmlcode.XMLSerializable;
-import org.xml.sax.SAXException;
-
-public class DocSubmissionReport extends DRMObject implements XMLSerializable {
+public class DocSubmissionReport extends DRMObject {
 
 	private static final Logger logger = Logger.getLogger(DocSubmissionReport.class.getPackage().getName());
 
 	private Vector<DocItemAction> _submissionActions;
 
-	public DocSubmissionReport(DocResourceCenter docResourceCenter) {
-		super(docResourceCenter);
+	public DocSubmissionReport() {
+		super();
 		_submissionActions = new Vector<DocItemAction>();
-	}
-
-	public DocSubmissionReport(DRMBuilder builder) {
-		this(builder.docResourceCenter);
-		initializeDeserialization(builder);
 	}
 
 	public Vector getSubmissionActions() {
@@ -74,7 +53,7 @@ public class DocSubmissionReport extends DRMObject implements XMLSerializable {
 		return _submissionActions.size();
 	}
 
-	private static XMLMapping _dsrMapping;
+	/*private static XMLMapping _dsrMapping;
 
 	public static XMLMapping getDSRMapping() {
 		if (_dsrMapping == null) {
@@ -151,7 +130,7 @@ public class DocSubmissionReport extends DRMObject implements XMLSerializable {
 				}
 			}
 		}
-	}
+	}*/
 
 	public void clear() {
 		getSubmissionActions().clear();

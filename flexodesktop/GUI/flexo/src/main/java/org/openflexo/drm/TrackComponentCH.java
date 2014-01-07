@@ -17,7 +17,7 @@
  * along with OpenFlexo. If not, see <http://www.gnu.org/licenses/>.
  *
  */
-package org.openflexo.ch;
+package org.openflexo.drm;
 
 import java.awt.Color;
 import java.awt.Component;

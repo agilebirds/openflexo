@@ -173,4 +173,13 @@ public class PreferencesService extends FlexoServiceImpl implements FlexoService
 	public PreferencesWindow getPreferencesWindow() {
 		return preferencesWindow;
 	}
+
+	public GeneralPreferences getGeneralPreferences() {
+		return getPreferences(GeneralPreferences.class);
+	}
+
+	public AdvancedPrefs getAdvancedPrefs() {
+		return getPreferences(AdvancedPrefs.class);
+	}
+
 }

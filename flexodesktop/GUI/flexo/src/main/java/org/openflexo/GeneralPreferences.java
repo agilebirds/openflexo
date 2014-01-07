@@ -40,7 +40,7 @@ import org.openflexo.model.annotations.ModelEntity;
 import org.openflexo.model.annotations.Setter;
 import org.openflexo.model.annotations.XMLAttribute;
 import org.openflexo.model.annotations.XMLElement;
-import org.openflexo.model.converter.RectangleConverter;
+import org.openflexo.model.converter.AWTRectangleConverter;
 import org.openflexo.prefs.PreferencesContainer;
 import org.openflexo.toolbox.StringUtils;
 
@@ -329,6 +329,8 @@ public interface GeneralPreferences extends PreferencesContainer {
 
 		private static final Logger logger = Logger.getLogger(GeneralPreferences.class.getPackage().getName());
 
+		private final AWTRectangleConverter RECTANGLE_CONVERTER = new AWTRectangleConverter();
+
 		@Override
 		public void setLanguage(Language language) {
 			performSuperSetter(LANGUAGE_KEY, language);
@@ -463,12 +465,12 @@ public interface GeneralPreferences extends PreferencesContainer {
 
 		@Override
 		public Rectangle getBoundForFrameWithID(String id) {
-			return RectangleConverter.instance.convertFromString(assertProperty(BOUNDS_FOR_FRAME + id).getValue());
+			return RECTANGLE_CONVERTER.convertFromString(assertProperty(BOUNDS_FOR_FRAME + id).getValue(), null);
 		}
 
 		@Override
 		public void setBoundForFrameWithID(String id, Rectangle bounds) {
-			assertProperty(BOUNDS_FOR_FRAME + id).setValue(RectangleConverter.instance.convertToString(bounds));
+			assertProperty(BOUNDS_FOR_FRAME + id).setValue(RECTANGLE_CONVERTER.convertToString(bounds));
 		}
 
 		@Override

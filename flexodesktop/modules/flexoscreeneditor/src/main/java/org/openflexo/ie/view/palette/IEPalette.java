@@ -29,7 +29,7 @@ package org.openflexo.ie.view.palette;
 import java.awt.Dimension;
 import java.util.logging.Logger;
 
-import org.openflexo.ch.FCH;
+import org.openflexo.drm.FCH;
 import org.openflexo.foundation.DataModification;
 import org.openflexo.foundation.FlexoObservable;
 import org.openflexo.foundation.FlexoObserver;

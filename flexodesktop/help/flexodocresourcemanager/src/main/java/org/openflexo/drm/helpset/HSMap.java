@@ -20,35 +20,26 @@
 package org.openflexo.drm.helpset;
 
 import java.io.File;
-import java.io.FileOutputStream;
 import java.io.IOException;
 import java.util.Enumeration;
 import java.util.Vector;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 
-import javax.xml.parsers.ParserConfigurationException;
-
 import org.jdom2.DocType;
 import org.openflexo.drm.DocItem;
 import org.openflexo.drm.DocItemFolder;
 import org.openflexo.drm.DocResourceCenter;
-import org.openflexo.drm.Language;
 import org.openflexo.foundation.KVCFlexoObject;
 import org.openflexo.localization.FlexoLocalization;
-import org.openflexo.toolbox.FileResource;
+import org.openflexo.localization.Language;
 import org.openflexo.toolbox.FileUtils;
-import org.openflexo.xmlcode.InvalidModelException;
-import org.openflexo.xmlcode.XMLCoder;
-import org.openflexo.xmlcode.XMLMapping;
-import org.openflexo.xmlcode.XMLSerializable;
-import org.xml.sax.SAXException;
 
-public class HSMap extends KVCFlexoObject implements XMLSerializable {
+public class HSMap extends KVCFlexoObject {
 
 	protected static final Logger logger = Logger.getLogger(HSMap.class.getPackage().getName());
 
-	private DocResourceCenter _drc;
+	private final DocResourceCenter _drc;
 	protected Language _language;
 	private Vector<HSMapEntry> _entries;
 	public String version = "1.0";
@@ -86,7 +77,7 @@ public class HSMap extends KVCFlexoObject implements XMLSerializable {
 		return _entries;
 	}
 
-	public class HSMapEntry extends KVCFlexoObject implements XMLSerializable {
+	public class HSMapEntry extends KVCFlexoObject {
 		public DocItem docItem;
 		public String url;
 		public String target;
@@ -115,9 +106,9 @@ public class HSMap extends KVCFlexoObject implements XMLSerializable {
 				}
 				StringBuilder sb = new StringBuilder();
 				DocItemFolder folder = docItem.getFolder();
-				while (folder != null && !folder.getDirectory().equals(docItem.getDocResourceCenter().getRootFolder().getDirectory())) {
+				while (folder != null && !folder.getDirectory().equals(docItem.getDocResourceCenter().getFolder().getDirectory())) {
 					sb.append("../");
-					folder = folder.getParentFolder();
+					folder = folder.getFolder();
 				}
 				contents.append("<!DOCTYPE HTML PUBLIC \"-//W3C//DTD HTML 4.0.1//EN\">\n");
 				contents.append("<HTML>\n");
@@ -138,9 +129,8 @@ public class HSMap extends KVCFlexoObject implements XMLSerializable {
 				while (inheritanceParent != null) {
 					if (!inheritanceParent.isPublished()) {
 						if (inheritanceParent.getLastApprovedActionForLanguage(_language) != null) {
-							inheritanceText = inheritanceParent.getLastApprovedActionForLanguage(_language).getVersion()
-									.getFullHTMLDescription()
-									+ "<br>" + inheritanceText;
+							inheritanceText = inheritanceParent.getLastApprovedActionForLanguage(_language).getVersion() + "<br>"
+									+ inheritanceText;
 						}
 					} else if (firstNonHiddenParent == null) {
 						firstNonHiddenParent = inheritanceParent;
@@ -150,7 +140,7 @@ public class HSMap extends KVCFlexoObject implements XMLSerializable {
 				contents.append(inheritanceText);
 
 				if (docItem.getLastApprovedActionForLanguage(_language) != null) {
-					contents.append(docItem.getLastApprovedActionForLanguage(_language).getVersion().getFullHTMLDescription());
+					contents.append(docItem.getLastApprovedActionForLanguage(_language).getVersion());
 				} else {
 					contents.append(FlexoLocalization.localizedForKeyAndLanguage("no_documentation", lang));
 				}
@@ -194,8 +184,7 @@ public class HSMap extends KVCFlexoObject implements XMLSerializable {
 								}
 								embeddedItemsAtThisLevel.append("<H3>" + subItemTitle + "</H3>\n");
 								if (next.getLastApprovedActionForLanguage(_language) != null) {
-									embeddedItemsAtThisLevel.append(next.getLastApprovedActionForLanguage(_language).getVersion()
-											.getFullHTMLDescription());
+									embeddedItemsAtThisLevel.append(next.getLastApprovedActionForLanguage(_language));
 								}/*
 									else {
 									   embeddedItemsAtThisLevel.append(FlexoLocalization.localizedForKeyAndLanguage("no_documentation",lang));
@@ -358,7 +347,7 @@ public class HSMap extends KVCFlexoObject implements XMLSerializable {
 	}
 
 	protected void generate() {
-		try {
+		/*try {
 			FileOutputStream out = new FileOutputStream(_mapFile);
 			XMLCoder.encodeObjectWithMapping(this, getMapMapping(), out, getMapDocType());
 			out.flush();
@@ -371,10 +360,10 @@ public class HSMap extends KVCFlexoObject implements XMLSerializable {
 			// if (next.docItem.isIncluded(configuration)) {
 			next.generate();
 			// }
-		}
+		}*/
 	}
 
-	private static XMLMapping _mapMapping;
+	/*private static XMLMapping _mapMapping;
 
 	public static XMLMapping getMapMapping() {
 		if (_mapMapping == null) {
@@ -416,7 +405,7 @@ public class HSMap extends KVCFlexoObject implements XMLSerializable {
 			}
 		}
 		return _mapMapping;
-	}
+	}*/
 
 	public static DocType getMapDocType() {
 		return new DocType("map", "-//Sun Microsystems Inc.//DTD JavaHelp Map Version 1.0//EN",

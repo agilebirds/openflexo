@@ -26,7 +26,6 @@ import org.openflexo.foundation.FlexoObject;
 import org.openflexo.foundation.FlexoObject.FlexoObjectImpl;
 import org.openflexo.foundation.action.FlexoActionType;
 import org.openflexo.foundation.action.FlexoGUIAction;
-import org.openflexo.inspector.InspectableObject;
 import org.openflexo.localization.FlexoLocalization;
 
 public class HelpAction extends FlexoGUIAction<HelpAction, FlexoObject, FlexoObject> {
@@ -49,7 +48,7 @@ public class HelpAction extends FlexoGUIAction<HelpAction, FlexoObject, FlexoObj
 
 		@Override
 		public boolean isEnabledForSelection(FlexoObject object, Vector<FlexoObject> globalSelection) {
-			return object instanceof InspectableObject;
+			return true;
 		}
 
 	};

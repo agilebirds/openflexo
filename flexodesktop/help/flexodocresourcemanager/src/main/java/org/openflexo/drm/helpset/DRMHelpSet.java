@@ -20,30 +20,22 @@
 package org.openflexo.drm.helpset;
 
 import java.io.File;
-import java.io.FileOutputStream;
 import java.io.IOException;
 import java.util.Vector;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 
-import javax.xml.parsers.ParserConfigurationException;
-
 import org.jdom2.DocType;
 import org.openflexo.drm.DocItemFolder;
 import org.openflexo.drm.DocResourceCenter;
-import org.openflexo.drm.Language;
 import org.openflexo.foundation.KVCFlexoObject;
 import org.openflexo.foundation.utils.FlexoProgress;
 import org.openflexo.localization.FlexoLocalization;
+import org.openflexo.localization.Language;
 import org.openflexo.toolbox.FileResource;
 import org.openflexo.toolbox.FileUtils;
-import org.openflexo.xmlcode.InvalidModelException;
-import org.openflexo.xmlcode.XMLCoder;
-import org.openflexo.xmlcode.XMLMapping;
-import org.openflexo.xmlcode.XMLSerializable;
-import org.xml.sax.SAXException;
 
-public class DRMHelpSet extends KVCFlexoObject implements XMLSerializable {
+public class DRMHelpSet extends KVCFlexoObject {
 
 	private static final Logger logger = Logger.getLogger(DRMHelpSet.class.getPackage().getName());
 
@@ -62,13 +54,13 @@ public class DRMHelpSet extends KVCFlexoObject implements XMLSerializable {
 
 	private File helpSetDirectory;
 
-	private DocResourceCenter _drc;
-	private HSIndex _hsIndex;
-	private HSMap _hsMap;
-	private HSToc _hsToc;
+	private final DocResourceCenter _drc;
+	private final HSIndex _hsIndex;
+	private final HSMap _hsMap;
+	private final HSToc _hsToc;
 
-	private String baseName;
-	private HelpSetConfiguration configuration;
+	private final String baseName;
+	private final HelpSetConfiguration configuration;
 
 	public DRMHelpSet(DocResourceCenter drc, File directory, String baseName, HelpSetConfiguration config) {
 		super();
@@ -139,22 +131,22 @@ public class DRMHelpSet extends KVCFlexoObject implements XMLSerializable {
 		return configuration.getLanguage();
 	}
 
-	public class Maps extends KVCFlexoObject implements XMLSerializable {
+	public class Maps extends KVCFlexoObject {
 		public String homeID = _hsToc.getRootEntry().docItem.getIdentifier();
 		public MapRef mapref = new MapRef();
 
-		public class MapRef extends KVCFlexoObject implements XMLSerializable {
+		public class MapRef extends KVCFlexoObject {
 			public String location = getMapFile().getName();
 		}
 	}
 
-	public static class View extends KVCFlexoObject implements XMLSerializable {
+	public static class View extends KVCFlexoObject {
 		public String name;
 		public String label;
 		public String type;
 		public ViewData viewData;
 
-		public static class ViewData extends KVCFlexoObject implements XMLSerializable {
+		public static class ViewData extends KVCFlexoObject {
 			public String dataType;
 			public String engine;
 
@@ -172,7 +164,7 @@ public class DRMHelpSet extends KVCFlexoObject implements XMLSerializable {
 		}
 	}
 
-	public static class Presentation extends KVCFlexoObject implements XMLSerializable {
+	public static class Presentation extends KVCFlexoObject {
 		public boolean isDefault = false;
 		public boolean displayviewimages = false;
 		public String name;
@@ -182,7 +174,7 @@ public class DRMHelpSet extends KVCFlexoObject implements XMLSerializable {
 		public String image;
 		public Toolbar toolbar;
 
-		public static class Location extends KVCFlexoObject implements XMLSerializable {
+		public static class Location extends KVCFlexoObject {
 			public int x;
 			public int y;
 
@@ -192,7 +184,7 @@ public class DRMHelpSet extends KVCFlexoObject implements XMLSerializable {
 			}
 		}
 
-		public static class Size extends KVCFlexoObject implements XMLSerializable {
+		public static class Size extends KVCFlexoObject {
 			public int width;
 			public int height;
 
@@ -202,7 +194,7 @@ public class DRMHelpSet extends KVCFlexoObject implements XMLSerializable {
 			}
 		}
 
-		public static class Toolbar extends KVCFlexoObject implements XMLSerializable {
+		public static class Toolbar extends KVCFlexoObject {
 			public Vector helpActions;
 
 			public Toolbar() {
@@ -213,7 +205,7 @@ public class DRMHelpSet extends KVCFlexoObject implements XMLSerializable {
 				helpActions.add(new HelpAction(helpAction));
 			}
 
-			public static class HelpAction extends KVCFlexoObject implements XMLSerializable {
+			public static class HelpAction extends KVCFlexoObject {
 				public String actionName;
 
 				public HelpAction(String helpAction) {
@@ -307,7 +299,7 @@ public class DRMHelpSet extends KVCFlexoObject implements XMLSerializable {
 		_hsMap.generate();// This will create HTML file also!
 		try {
 			FileUtils.copyFileToDir(new FileResource("Resources/FlexoHelpMasterStyle.css"), new File(getHelpSetDirectory(), "HTML/"
-					+ _drc.getRootFolder().getIdentifier() + "/"));
+					+ _drc.getFolder().getIdentifier() + "/"));
 		} catch (IOException e) {
 			e.printStackTrace();
 		}
@@ -325,12 +317,12 @@ public class DRMHelpSet extends KVCFlexoObject implements XMLSerializable {
 
 		Vector<String> v = new Vector<String>();
 		try {
-			v.add(_drc.getRootFolder().getDirectory().getCanonicalPath());
+			v.add(_drc.getFolder().getDirectory().getCanonicalPath());
 		} catch (IOException e1) {
 			e1.printStackTrace();
 		}
 		try {
-			scanForImages(_drc.getRootFolder().getDirectory().listFiles(), _drc.getRootFolder(), v, 0);
+			scanForImages(_drc.getFolder().getDirectory().listFiles(), _drc.getFolder(), v, 0);
 		} catch (IOException e1) {
 			e1.printStackTrace();
 		}
@@ -341,15 +333,15 @@ public class DRMHelpSet extends KVCFlexoObject implements XMLSerializable {
 				e.printStackTrace();
 			}
 		}
-		for (File f : _drc.getRootFolder().getDirectory().listFiles()) {
+		for (File f : _drc.getFolder().getDirectory().listFiles()) {
 			if (f.isDirectory()) {
 				try {
 					v.add(f.getCanonicalPath());
 					if (!f.getCanonicalFile().equals(_drc.getFTSFolder().getDirectory().getCanonicalFile())
 							&& !f.getCanonicalFile().equals(_drc.getModelFolder().getDirectory().getCanonicalFile())) {
-						scanForImages(f.listFiles(), _drc.getRootFolder(), v, 5);
+						scanForImages(f.listFiles(), _drc.getFolder(), v, 5);
 					} else {
-						scanForImages(f.listFiles(), _drc.getRootFolder(), v, 1);
+						scanForImages(f.listFiles(), _drc.getFolder(), v, 1);
 					}
 				} catch (IOException e) {
 					e.printStackTrace();
@@ -369,8 +361,8 @@ public class DRMHelpSet extends KVCFlexoObject implements XMLSerializable {
 				if (file.getName().toLowerCase().endsWith(".jpg") || file.getName().toLowerCase().endsWith(".jpeg")
 						|| file.getName().toLowerCase().endsWith(".png") || file.getName().toLowerCase().endsWith(".gif")) {
 					try {
-						FileUtils.copyFileToFile(file, new File(getHelpSetDirectory(), "HTML/" + _drc.getRootFolder().getIdentifier() + "/"
-								+ file.getAbsolutePath().substring(_drc.getRootFolder().getDirectory().getAbsolutePath().length())));
+						FileUtils.copyFileToFile(file, new File(getHelpSetDirectory(), "HTML/" + _drc.getFolder().getIdentifier() + "/"
+								+ file.getAbsolutePath().substring(_drc.getFolder().getDirectory().getAbsolutePath().length())));
 					} catch (IOException e) {
 						e.printStackTrace();
 					}
@@ -384,17 +376,17 @@ public class DRMHelpSet extends KVCFlexoObject implements XMLSerializable {
 	}
 
 	protected void generateHSFile() {
-		try {
+		/*try {
 			FileOutputStream out = new FileOutputStream(getHSFile());
 			XMLCoder.encodeObjectWithMapping(this, getHSMapping(), out, getHSDocType());
 			out.flush();
 			out.close();
 		} catch (Exception e) {
 			e.printStackTrace();
-		}
+		}*/
 	}
 
-	private static XMLMapping _hsMapping;
+	/*private static XMLMapping _hsMapping;
 
 	public static XMLMapping getHSMapping() {
 		if (_hsMapping == null) {
@@ -436,7 +428,7 @@ public class DRMHelpSet extends KVCFlexoObject implements XMLSerializable {
 			}
 		}
 		return _hsMapping;
-	}
+	}*/
 
 	public static DocType getHSDocType() {
 		return new DocType("helpset", "-//Sun Microsystems Inc.//DTD JavaHelp HelpSet Version 2.0//EN", "../dtd/helpset_2_0.dtd");

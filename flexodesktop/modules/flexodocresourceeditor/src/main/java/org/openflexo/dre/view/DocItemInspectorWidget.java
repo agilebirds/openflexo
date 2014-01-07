@@ -26,8 +26,8 @@ import java.util.logging.Logger;
 import javax.swing.JComponent;
 
 import org.openflexo.components.widget.CustomInspectorWidget;
-import org.openflexo.dre.DocItemSelector;
 import org.openflexo.drm.DocItem;
+import org.openflexo.drm.ui.DocItemSelector;
 import org.openflexo.foundation.FlexoObject;
 import org.openflexo.foundation.FlexoProject;
 import org.openflexo.inspector.AbstractController;

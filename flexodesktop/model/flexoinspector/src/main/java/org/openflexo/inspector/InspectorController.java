@@ -38,6 +38,7 @@ import java.util.logging.Logger;
 import javax.swing.JFrame;
 import javax.swing.JMenuBar;
 
+import org.openflexo.drm.HelpDelegate;
 import org.openflexo.inspector.model.InspectorMapping;
 import org.openflexo.inspector.model.InspectorModel;
 import org.openflexo.inspector.model.TabModel;

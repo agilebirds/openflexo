@@ -31,6 +31,7 @@ import org.openflexo.foundation.FlexoEditor;
 import org.openflexo.foundation.FlexoObject.FlexoObjectImpl;
 import org.openflexo.foundation.action.FlexoAction;
 import org.openflexo.foundation.action.FlexoActionType;
+import org.openflexo.prefs.PreferencesService;
 
 public class SubmitVersion extends FlexoAction<SubmitVersion, DocItem, DocItem> {
 
@@ -77,21 +78,24 @@ public class SubmitVersion extends FlexoAction<SubmitVersion, DocItem, DocItem> 
 	protected void doAction(Object context) {
 		if (getVersion() != null) {
 
-			DocItemAction lastAction = getDocItem().getLastActionForLanguage(getVersion().getLanguage());
+			DocItemAction lastAction = getDocItem().getLastActionForLanguage(
+					getEditor().getServiceManager().getService(PreferencesService.class).getGeneralPreferences().getLanguage());
 			if (lastAction == null) {
 				logger.info("SubmitVersion");
 				_newAction = DocItemAction.createSubmitAction(getVersion(), getAuthor(), getDocItem().getDocResourceCenter());
 				_newAction.setNote(getNote());
 				getDocItem().addToActions(_newAction);
 				getDocItem().addToVersions(getVersion());
-				DocResourceManager.instance().getSessionSubmissions().addToSubmissionActions(_newAction);
+				DocResourceManager drm = getEditor().getServiceManager().getService(DocResourceManager.class);
+				drm.getSessionSubmissions().addToSubmissionActions(_newAction);
 			} else {
 				logger.info("ReviewVersion");
 				_newAction = DocItemAction.createReviewAction(getVersion(), getAuthor(), getDocItem().getDocResourceCenter());
 				_newAction.setNote(getNote());
 				getDocItem().addToActions(_newAction);
 				getDocItem().addToVersions(getVersion());
-				DocResourceManager.instance().getSessionSubmissions().addToSubmissionActions(_newAction);
+				DocResourceManager drm = getEditor().getServiceManager().getService(DocResourceManager.class);
+				drm.getSessionSubmissions().addToSubmissionActions(_newAction);
 			}
 		}
 	}

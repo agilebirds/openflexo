@@ -19,8 +19,8 @@
  */
 package org.openflexo.ie.view.dkv;
 
-import org.openflexo.ch.FCH;
 import org.openflexo.components.browser.view.BrowserView;
+import org.openflexo.drm.FCH;
 import org.openflexo.foundation.FlexoObject;
 import org.openflexo.foundation.dkv.DKVObject;
 import org.openflexo.ie.view.controller.IEController;

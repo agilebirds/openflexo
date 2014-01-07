@@ -26,8 +26,8 @@ import java.util.logging.Logger;
 import javax.swing.JFileChooser;
 import javax.swing.filechooser.FileFilter;
 
-import org.openflexo.dre.DocSubmissionReportDialog;
 import org.openflexo.drm.action.ImportDocSubmissionReport;
+import org.openflexo.drm.ui.DocSubmissionReportDialog;
 import org.openflexo.foundation.action.FlexoActionFinalizer;
 import org.openflexo.foundation.action.FlexoActionInitializer;
 import org.openflexo.localization.FlexoLocalization;

@@ -28,11 +28,11 @@ import org.openflexo.drm.Author;
 import org.openflexo.drm.DocItem;
 import org.openflexo.drm.DocItemAction;
 import org.openflexo.drm.DocItemVersion;
-import org.openflexo.drm.Language;
 import org.openflexo.foundation.FlexoEditor;
 import org.openflexo.foundation.FlexoObject.FlexoObjectImpl;
 import org.openflexo.foundation.action.FlexoAction;
 import org.openflexo.foundation.action.FlexoActionType;
+import org.openflexo.localization.Language;
 
 public class RefuseVersion extends FlexoAction<RefuseVersion, DocItem, DocItem> {
 
@@ -67,7 +67,7 @@ public class RefuseVersion extends FlexoAction<RefuseVersion, DocItem, DocItem> 
 
 	protected static List<DocItemAction> getPendingActions(DocItem item) {
 		List<DocItemAction> returned = new ArrayList<DocItemAction>();
-		for (Language lang : item.getDocResourceCenter().getLanguages()) {
+		for (Language lang : Language.availableValues()) {
 			DocItemAction dia = item.getLastPendingActionForLanguage(lang);
 			if (dia != null) {
 				returned.add(dia);

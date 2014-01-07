@@ -37,8 +37,8 @@ import javax.swing.JLabel;
 import javax.swing.JPanel;
 import javax.swing.SwingConstants;
 
-import org.openflexo.ch.DefaultInspectorHelpDelegate;
-import org.openflexo.ch.DocResourceManager;
+import org.openflexo.drm.DefaultInspectorHelpDelegate;
+import org.openflexo.drm.DocResourceManager;
 import org.openflexo.foundation.FlexoObject;
 import org.openflexo.foundation.Inspectors;
 import org.openflexo.foundation.wkf.ExecutableWorkflowElement;

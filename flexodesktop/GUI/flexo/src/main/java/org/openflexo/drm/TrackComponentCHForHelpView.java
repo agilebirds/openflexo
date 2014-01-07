@@ -17,32 +17,40 @@
  * along with OpenFlexo. If not, see <http://www.gnu.org/licenses/>.
  *
  */
-package org.openflexo.ch;
+package org.openflexo.drm;
 
 import java.awt.Cursor;
+import java.awt.Point;
+import java.awt.Toolkit;
 import java.util.logging.Logger;
 
 import javax.swing.JComponent;
 
 import org.openflexo.ApplicationContext;
-import org.openflexo.action.SubmitDocumentationAction;
 import org.openflexo.drm.DocItem;
+import org.openflexo.help.FlexoHelp;
+import org.openflexo.icon.IconLibrary;
 import org.openflexo.view.FlexoFrame;
 
-public class TrackComponentCHForHelpSubmission extends TrackComponentCH {
+public class TrackComponentCHForHelpView extends TrackComponentCH {
 
-	private static final Logger logger = Logger.getLogger(TrackComponentCHForHelpSubmission.class.getPackage().getName());
+	private static final Logger logger = Logger.getLogger(TrackComponentCHForHelpView.class.getPackage().getName());
 
-	public TrackComponentCHForHelpSubmission(FlexoFrame frame, ApplicationContext applicationContext) {
+	private static Cursor HELP_CURSOR = Toolkit.getDefaultToolkit().createCustomCursor(IconLibrary.HELP_CURSOR.getImage(), new Point(8, 8),
+			"Help cursor");
+
+	public TrackComponentCHForHelpView(FlexoFrame frame, ApplicationContext applicationContext) {
 		super(frame, applicationContext);
-		frame.getContentPane().setCursor(Cursor.getPredefinedCursor(Cursor.HAND_CURSOR));
+		frame.getContentPane().setCursor(HELP_CURSOR);
 	}
 
 	@Override
 	public void applyTracking(JComponent component) {
 		DocItem item = getDocResourceManager().getDocForComponent(focusedComponent);
 		if (item != null) {
-			SubmitDocumentationAction.actionType.makeNewAction(item, null, getController().getEditor()).doAction();
+			FlexoHelp.getHelpBroker().setCurrentID(item.getIdentifier());
+			FlexoHelp.getHelpBroker().setDisplayed(true);
+			logger.info("Trying to display help for " + item.getIdentifier());
 		}
 	}
 

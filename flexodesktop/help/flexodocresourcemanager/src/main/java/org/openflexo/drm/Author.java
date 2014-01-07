@@ -25,17 +25,12 @@ public class Author extends DRMObject {
 	private String fullName;
 	private String email;
 
-	public Author(DRMBuilder builder) {
-		this(builder.docResourceCenter);
-		initializeDeserialization(builder);
-	}
-
-	public Author(DocResourceCenter docResourceCenter) {
-		super(docResourceCenter);
+	public Author() {
+		super();
 	}
 
 	protected static Author createAuthor(String anIdentifier, String aFullName, String anEmail, DocResourceCenter docResourceCenter) {
-		Author returned = new Author(docResourceCenter);
+		Author returned = new Author();
 		returned.identifier = anIdentifier;
 		returned.fullName = aFullName;
 		returned.email = anEmail;

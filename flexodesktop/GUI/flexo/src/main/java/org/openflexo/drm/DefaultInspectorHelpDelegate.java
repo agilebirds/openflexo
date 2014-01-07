@@ -17,26 +17,22 @@
  * along with OpenFlexo. If not, see <http://www.gnu.org/licenses/>.
  *
  */
-package org.openflexo.ch;
+package org.openflexo.drm;
 
 import java.util.logging.Logger;
 
 import javax.help.BadIDException;
 
 import org.openflexo.ApplicationContext;
-import org.openflexo.drm.DocItem;
-import org.openflexo.drm.Language;
+import org.openflexo.foundation.FlexoObject;
 import org.openflexo.help.FlexoHelp;
-import org.openflexo.inspector.HelpDelegate;
-import org.openflexo.inspector.InspectableObject;
-import org.openflexo.inspector.model.PropertyModel;
-import org.openflexo.inspector.widget.DenaliWidget;
 import org.openflexo.localization.FlexoLocalization;
+import org.openflexo.localization.Language;
 import org.openflexo.view.controller.FlexoController;
 
 public class DefaultInspectorHelpDelegate implements HelpDelegate {
 
-	private static final Logger logger = Logger.getLogger(DenaliWidget.class.getPackage().getName());
+	private static final Logger logger = Logger.getLogger(DefaultInspectorHelpDelegate.class.getPackage().getName());
 
 	private final DocResourceManager docResourceManager;
 
@@ -45,7 +41,7 @@ public class DefaultInspectorHelpDelegate implements HelpDelegate {
 	}
 
 	@Override
-	public boolean displayHelpFor(InspectableObject object) {
+	public boolean displayHelpFor(FlexoObject object) {
 		DocItem item = docResourceManager.getDocItemFor(object);
 		if (item != null) {
 			try {
@@ -62,10 +58,10 @@ public class DefaultInspectorHelpDelegate implements HelpDelegate {
 	}
 
 	@Override
-	public boolean isHelpAvailableFor(PropertyModel property) {
+	public boolean isHelpAvailableFor(Class<? extends FlexoObject> objectClass, String propertyName) {
 		ApplicationContext applicationContext = (ApplicationContext) docResourceManager.getServiceManager();
 		Language language = docResourceManager.getLanguage(applicationContext.getGeneralPreferences().getLanguage());
-		DocItem propertyModelItem = docResourceManager.getDocItemFor(property);
+		DocItem propertyModelItem = docResourceManager.getDocItemFor(objectClass);
 		if (propertyModelItem != null) {
 			if (propertyModelItem.getLastApprovedActionForLanguage(language) != null) {
 				return true;
@@ -75,13 +71,13 @@ public class DefaultInspectorHelpDelegate implements HelpDelegate {
 	}
 
 	@Override
-	public String getHelpFor(PropertyModel property) {
+	public String getHelpFor(Class<? extends FlexoObject> objectClass, String propertyName) {
 		ApplicationContext applicationContext = (ApplicationContext) docResourceManager.getServiceManager();
 		Language language = docResourceManager.getLanguage(applicationContext.getGeneralPreferences().getLanguage());
-		DocItem propertyModelItem = docResourceManager.getDocItemFor(property);
+		DocItem propertyModelItem = docResourceManager.getDocItemFor(objectClass);
 		if (propertyModelItem != null) {
 			if (propertyModelItem.getLastApprovedActionForLanguage(language) != null) {
-				return propertyModelItem.getLastApprovedActionForLanguage(language).getVersion().getFullHTMLDescription();
+				return propertyModelItem.getFullHTMLDescription();
 			}
 		}
 		return null;

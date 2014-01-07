@@ -35,7 +35,7 @@ public class AWTRectangleConverter extends Converter<Rectangle> {
 	/**
 	 * @param aClass
 	 */
-	private AWTRectangleConverter() {
+	public AWTRectangleConverter() {
 		super(Rectangle.class);
 	}
 

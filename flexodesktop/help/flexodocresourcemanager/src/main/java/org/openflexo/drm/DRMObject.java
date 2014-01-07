@@ -31,24 +31,25 @@ import org.openflexo.foundation.validation.Validable;
 import org.openflexo.foundation.validation.ValidationModel;
 import org.openflexo.foundation.validation.ValidationReport;
 
+// TODO: convert this model with PAMELA
 public abstract class DRMObject extends DefaultFlexoObject implements Validable {
 
 	static final Logger logger = Logger.getLogger(DRMObject.class.getPackage().getName());
 
-	protected DocResourceCenter _docResourceCenter;
+	private DocItemFolder folder;
 
-	public DRMObject(DocResourceCenter docResourceCenter) {
+	public DRMObject() {
 		super();
-		_docResourceCenter = docResourceCenter;
 	}
 
 	public DocResourceCenter getDocResourceCenter() {
-		return _docResourceCenter;
-	}
-
-	protected void initializeDeserialization(DRMBuilder builder) {
-		// TODO Auto-generated method stub
-		logger.warning("DRMObject deserialization not implemented yet");
+		if (getFolder() instanceof DocResourceCenter) {
+			return (DocResourceCenter) getFolder();
+		}
+		if (getFolder() != null) {
+			return getFolder().getDocResourceCenter();
+		}
+		return null;
 	}
 
 	// ==========================================================================
@@ -63,7 +64,10 @@ public abstract class DRMObject extends DefaultFlexoObject implements Validable 
 	 */
 	@Override
 	public ValidationModel getDefaultValidationModel() {
-		return DocResourceManager.instance().getDRMValidationModel();
+		if (getDocResourceCenter() != null) {
+			return getDocResourceCenter().getDefaultValidationModel();
+		}
+		return null;
 	}
 
 	/**
@@ -160,5 +164,13 @@ public abstract class DRMObject extends DefaultFlexoObject implements Validable 
 	}
 
 	public abstract String getIdentifier();
+
+	public DocItemFolder getFolder() {
+		return folder;
+	}
+
+	public void setFolder(DocItemFolder folder) {
+		this.folder = folder;
+	}
 
 }

@@ -19,11 +19,11 @@
  */
 package org.openflexo.ie.view;
 
-import org.openflexo.ch.FCH;
 import org.openflexo.components.browser.ProjectBrowser;
 import org.openflexo.components.browser.dnd.TreeDropTarget;
 import org.openflexo.components.browser.view.BrowserView;
 import org.openflexo.components.browser.view.BrowserViewCellRenderer;
+import org.openflexo.drm.FCH;
 import org.openflexo.foundation.FlexoObject;
 import org.openflexo.foundation.ie.cl.ComponentDefinition;
 import org.openflexo.foundation.ie.cl.ReusableComponentDefinition;

@@ -20,37 +20,26 @@
 package org.openflexo.drm.helpset;
 
 import java.io.File;
-import java.io.FileOutputStream;
-import java.io.IOException;
 import java.util.Enumeration;
 import java.util.Vector;
-import java.util.logging.Level;
 import java.util.logging.Logger;
-
-import javax.xml.parsers.ParserConfigurationException;
 
 import org.jdom2.DocType;
 import org.openflexo.drm.DocItem;
 import org.openflexo.drm.DocItemFolder;
 import org.openflexo.drm.DocResourceCenter;
-import org.openflexo.drm.Language;
 import org.openflexo.foundation.KVCFlexoObject;
-import org.openflexo.toolbox.FileResource;
-import org.openflexo.xmlcode.InvalidModelException;
-import org.openflexo.xmlcode.XMLCoder;
-import org.openflexo.xmlcode.XMLMapping;
-import org.openflexo.xmlcode.XMLSerializable;
-import org.xml.sax.SAXException;
+import org.openflexo.localization.Language;
 
-public class HSToc extends KVCFlexoObject implements XMLSerializable {
+public class HSToc extends KVCFlexoObject {
 
 	protected static final Logger logger = Logger.getLogger(HSToc.class.getPackage().getName());
 
-	private DocResourceCenter _drc;
+	private final DocResourceCenter _drc;
 	protected Language _language;
-	private HSTocEntry _rootEntry;
+	private final HSTocEntry _rootEntry;
 	public String version = "2.0";
-	private File _tocFile;
+	private final File _tocFile;
 
 	protected HelpSetConfiguration configuration;
 
@@ -59,7 +48,7 @@ public class HSToc extends KVCFlexoObject implements XMLSerializable {
 		_language = language;
 		_tocFile = tocFile;
 		configuration = config;
-		_rootEntry = new HSTocEntry(drc.getRootFolder());
+		_rootEntry = new HSTocEntry(drc.getFolder());
 		_rootEntry.image = "toplevelfolder";
 		_rootEntry.expand = true;
 		for (HSTocEntry next : _rootEntry.childs) {
@@ -71,7 +60,7 @@ public class HSToc extends KVCFlexoObject implements XMLSerializable {
 		return _rootEntry;
 	}
 
-	public class HSTocEntry extends KVCFlexoObject implements XMLSerializable {
+	public class HSTocEntry extends KVCFlexoObject {
 		public DocItem docItem;
 		public Vector<HSTocEntry> childs;
 		public String image;
@@ -151,59 +140,59 @@ public class HSToc extends KVCFlexoObject implements XMLSerializable {
 	}
 
 	protected void generate() {
-		try {
+		/*try {
 			FileOutputStream out = new FileOutputStream(_tocFile);
 			XMLCoder.encodeObjectWithMapping(this, getTocMapping(), out, getTocDocType());
 			out.flush();
 			out.close();
 		} catch (Exception e) {
 			e.printStackTrace();
-		}
+		}*/
 	}
 
-	private static XMLMapping _tocMapping;
+	/*	private static XMLMapping _tocMapping;
 
-	public static XMLMapping getTocMapping() {
-		if (_tocMapping == null) {
-			File hsTocModelFile;
-			hsTocModelFile = new FileResource("Models/HSTocModel.xml");
-			if (!hsTocModelFile.exists()) {
-				if (logger.isLoggable(Level.WARNING)) {
-					logger.warning("File " + hsTocModelFile.getAbsolutePath() + " doesn't exist. Maybe you have to check your paths ?");
-				}
-				return null;
-			} else {
-				try {
-					_tocMapping = new XMLMapping(hsTocModelFile);
-				} catch (InvalidModelException e) {
-					// Warns about the exception
+		public static XMLMapping getTocMapping() {
+			if (_tocMapping == null) {
+				File hsTocModelFile;
+				hsTocModelFile = new FileResource("Models/HSTocModel.xml");
+				if (!hsTocModelFile.exists()) {
 					if (logger.isLoggable(Level.WARNING)) {
-						logger.warning("Exception raised: " + e.getClass().getName() + ". See console for details.");
+						logger.warning("File " + hsTocModelFile.getAbsolutePath() + " doesn't exist. Maybe you have to check your paths ?");
 					}
-					e.printStackTrace();
-				} catch (IOException e) {
-					// Warns about the exception
-					if (logger.isLoggable(Level.WARNING)) {
-						logger.warning("Exception raised: " + e.getClass().getName() + ". See console for details.");
+					return null;
+				} else {
+					try {
+						_tocMapping = new XMLMapping(hsTocModelFile);
+					} catch (InvalidModelException e) {
+						// Warns about the exception
+						if (logger.isLoggable(Level.WARNING)) {
+							logger.warning("Exception raised: " + e.getClass().getName() + ". See console for details.");
+						}
+						e.printStackTrace();
+					} catch (IOException e) {
+						// Warns about the exception
+						if (logger.isLoggable(Level.WARNING)) {
+							logger.warning("Exception raised: " + e.getClass().getName() + ". See console for details.");
+						}
+						e.printStackTrace();
+					} catch (SAXException e) {
+						// Warns about the exception
+						if (logger.isLoggable(Level.WARNING)) {
+							logger.warning("Exception raised: " + e.getClass().getName() + ". See console for details.");
+						}
+						e.printStackTrace();
+					} catch (ParserConfigurationException e) {
+						// Warns about the exception
+						if (logger.isLoggable(Level.WARNING)) {
+							logger.warning("Exception raised: " + e.getClass().getName() + ". See console for details.");
+						}
+						e.printStackTrace();
 					}
-					e.printStackTrace();
-				} catch (SAXException e) {
-					// Warns about the exception
-					if (logger.isLoggable(Level.WARNING)) {
-						logger.warning("Exception raised: " + e.getClass().getName() + ". See console for details.");
-					}
-					e.printStackTrace();
-				} catch (ParserConfigurationException e) {
-					// Warns about the exception
-					if (logger.isLoggable(Level.WARNING)) {
-						logger.warning("Exception raised: " + e.getClass().getName() + ". See console for details.");
-					}
-					e.printStackTrace();
 				}
 			}
-		}
-		return _tocMapping;
-	}
+			return _tocMapping;
+		}*/
 
 	public static DocType getTocDocType() {
 		return new DocType("toc", "-//Sun Microsystems Inc.//DTD JavaHelp TOC Version 2.0//EN", "../dtd/toc_2_0.dtd");

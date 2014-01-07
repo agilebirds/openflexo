@@ -17,14 +17,14 @@
  * along with OpenFlexo. If not, see <http://www.gnu.org/licenses/>.
  *
  */
-package org.openflexo.dre;
+package org.openflexo.drm.ui;
 
 import java.awt.BorderLayout;
 
 import org.openflexo.drm.DocItem;
 import org.openflexo.drm.DocItemAction;
-import org.openflexo.drm.Language;
 import org.openflexo.foundation.FlexoEditor;
+import org.openflexo.localization.Language;
 
 public class SubmitNewVersionView extends AbstractDocItemView {
 

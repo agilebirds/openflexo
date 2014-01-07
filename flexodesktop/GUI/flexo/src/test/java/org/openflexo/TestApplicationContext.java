@@ -6,7 +6,7 @@ import java.io.File;
 import java.io.IOException;
 
 import org.openflexo.br.BugReportService;
-import org.openflexo.ch.DocResourceManager;
+import org.openflexo.drm.DocResourceManager;
 import org.openflexo.foundation.DefaultFlexoEditor;
 import org.openflexo.foundation.FlexoEditor;
 import org.openflexo.foundation.FlexoProject;

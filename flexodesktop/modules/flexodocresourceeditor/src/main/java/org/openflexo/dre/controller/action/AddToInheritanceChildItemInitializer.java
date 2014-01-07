@@ -23,10 +23,10 @@ import java.util.EventObject;
 import java.util.logging.Logger;
 
 import org.openflexo.components.AskParametersDialog;
-import org.openflexo.dre.AbstractDocItemView;
 import org.openflexo.drm.DocItem;
 import org.openflexo.drm.DocItemParameter;
 import org.openflexo.drm.action.AddToInheritanceChildItem;
+import org.openflexo.drm.ui.AbstractDocItemView;
 import org.openflexo.foundation.action.FlexoActionFinalizer;
 import org.openflexo.foundation.action.FlexoActionInitializer;
 import org.openflexo.foundation.param.ParameterDefinition;

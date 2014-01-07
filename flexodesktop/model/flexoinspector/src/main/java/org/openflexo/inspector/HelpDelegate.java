@@ -19,6 +19,7 @@
  */
 package org.openflexo.inspector;
 
+import org.openflexo.inspector.InspectableObject;
 import org.openflexo.inspector.model.PropertyModel;
 
 /**

@@ -37,6 +37,7 @@ import org.openflexo.model.annotations.XMLElement;
 import org.openflexo.prefs.PreferencesContainer;
 import org.openflexo.swing.FlexoFont;
 import org.openflexo.swing.LookAndFeel;
+import org.openflexo.swing.converter.LookAndFeelConverter;
 import org.openflexo.toolbox.ProxyUtils;
 import org.openflexo.toolbox.ToolBox;
 
@@ -371,6 +372,8 @@ public interface AdvancedPrefs extends PreferencesContainer {
 
 		private static final Logger logger = Logger.getLogger(GeneralPreferences.class.getPackage().getName());
 
+		private final LookAndFeelConverter LAF_CONVERTER = new LookAndFeelConverter();
+
 		@Override
 		public LookAndFeel getLookAndFeel() {
 			FlexoProperty p = assertProperty(ToolBox.getPLATFORM() + LOOK_AND_FEEL);
@@ -382,13 +385,13 @@ public interface AdvancedPrefs extends PreferencesContainer {
 			if (returned == null) {
 				returned = UIManager.getSystemLookAndFeelClassName();
 			}
-			setLookAndFeel(LookAndFeel.get(returned));
-			return LookAndFeel.get(returned);
+			setLookAndFeel(LAF_CONVERTER.convertFromString(returned, null));
+			return LAF_CONVERTER.convertFromString(returned, null);
 		}
 
 		@Override
 		public String getLookAndFeelAsString() {
-			return LookAndFeel.lookAndFeelConverter.convertToString(getLookAndFeel());
+			return LAF_CONVERTER.convertToString(getLookAndFeel());
 		}
 
 		@Override
@@ -396,8 +399,8 @@ public interface AdvancedPrefs extends PreferencesContainer {
 			if (value == null) {
 				value = LookAndFeel.getDefaultLookAndFeel();
 			}
-			assertProperty(ToolBox.getPLATFORM() + LOOK_AND_FEEL).setValue(LookAndFeel.lookAndFeelConverter.convertToString(value));
-			Flexo.initUILAF(LookAndFeel.lookAndFeelConverter.convertToString(value));
+			assertProperty(ToolBox.getPLATFORM() + LOOK_AND_FEEL).setValue(LAF_CONVERTER.convertToString(value));
+			Flexo.initUILAF(LAF_CONVERTER.convertToString(value));
 		}
 
 		private boolean isApplying = false;

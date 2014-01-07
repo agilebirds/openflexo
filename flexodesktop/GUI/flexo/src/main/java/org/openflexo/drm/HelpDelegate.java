@@ -17,25 +17,22 @@
  * along with OpenFlexo. If not, see <http://www.gnu.org/licenses/>.
  *
  */
-package org.openflexo.inspector;
+package org.openflexo.drm;
 
-import org.openflexo.drm.HelpDelegate;
-import org.openflexo.inspector.model.TabModel;
+import org.openflexo.foundation.FlexoObject;
 
 /**
+ * Interface used by widgets to delegate help management.
+ * 
  * @author sguerin
+ * 
  */
-public interface AbstractController {
-	public InspectorDelegate getDelegate();
+public interface HelpDelegate {
 
-	public HelpDelegate getHelpDelegate();
+	public boolean displayHelpFor(FlexoObject object);
 
-	public void notifiedInspectedObjectChange(InspectableObject newInspectedObject);
+	public boolean isHelpAvailableFor(Class<? extends FlexoObject> objectClass, String propertyName);
 
-	public boolean isTabPanelVisible(TabModel tab, InspectableObject inspectable);
-
-	public InspectorWidgetConfiguration getConfiguration();
-
-	public boolean handleException(InspectableObject inspectable, String propertyName, Object value, Throwable exception);
+	public String getHelpFor(Class<? extends FlexoObject> objectClass, String propertyName);
 
 }

@@ -22,6 +22,7 @@ package org.openflexo.drm;
 import java.util.Collections;
 import java.util.Comparator;
 import java.util.Enumeration;
+import java.util.List;
 import java.util.Map;
 import java.util.TreeMap;
 import java.util.Vector;
@@ -38,6 +39,7 @@ import org.openflexo.foundation.validation.ValidationIssue;
 import org.openflexo.foundation.validation.ValidationRule;
 import org.openflexo.foundation.validation.ValidationWarning;
 import org.openflexo.localization.FlexoLocalization;
+import org.openflexo.localization.Language;
 
 public class DocItem extends DRMObject {
 
@@ -54,9 +56,6 @@ public class DocItem extends DRMObject {
 	// String identifier for this item: name will be used as folder name in FS
 	private String identifier;
 
-	// Parent DocItemFolder
-	private DocItemFolder folder;
-
 	// Parent DocItem, related to inheritance
 	private DocItem inheritanceParentItem;
 
@@ -72,18 +71,18 @@ public class DocItem extends DRMObject {
 	// Vector of DocItem: related to items
 	private Vector<DocItem> relatedToItems;
 
-	// Description for this item
-	private String description;
-
 	// Localized titles for those items, where key is the identifier of the
 	// language, as String
 	private Map<String, String> titles;
 
 	// Versions registered for this item, as a Vector of DocItemVersion
-	private Vector<DocItemVersion> versions;
+	private List<DocItemVersion> versions;
 
 	// History for this item, as a Vector of DocItemAction
 	private Vector<DocItemAction> actions;
+
+	private String shortHTMLDescription;
+	private String fullHTMLDescription;
 
 	private boolean _isEmbedded = false;
 
@@ -110,11 +109,9 @@ public class DocItem extends DRMObject {
 		_isHidden = isHidden;
 	}
 
-	public DocItem(DocResourceCenter docResourceCenter) {
-		super(docResourceCenter);
+	public DocItem() {
+		super();
 		identifier = null;
-		description = null;
-		folder = null;
 		inheritanceParentItem = null;
 		inheritanceChildItems = new Vector<DocItem>();
 		embeddingParentItem = null;
@@ -125,21 +122,15 @@ public class DocItem extends DRMObject {
 		actions = new Vector<DocItemAction>();
 	}
 
-	public DocItem(DRMBuilder builder) {
-		this(builder.docResourceCenter);
-		initializeDeserialization(builder);
-	}
-
-	public static DocItem createDocItem(String anIdentifier, String aDescription, DocItemFolder folder,
-			DocResourceCenter docResourceCenter, boolean isEmbedded) {
+	public static DocItem createDocItem(String anIdentifier, String aDescription, DocItemFolder folder, boolean isEmbedded) {
+		DocResourceCenter docResourceCenter = folder.getDocResourceCenter();
 		if (docResourceCenter.getItemNamed(anIdentifier) != null) {
 			logger.warning("Could not create doc item " + anIdentifier + ": duplicated identifier");
 			return docResourceCenter.getItemNamed(anIdentifier);
 		}
 		logger.fine("Create DocItem " + anIdentifier + " in " + folder.getIdentifier());
-		DocItem returned = new DocItem(docResourceCenter);
+		DocItem returned = new DocItem();
 		returned.identifier = anIdentifier;
-		returned.description = aDescription;
 		if (folder != null) {
 			folder.addToItems(returned);
 		}
@@ -176,30 +167,10 @@ public class DocItem extends DRMObject {
 		if (inheritanceParentItem != null) {
 			inheritanceParentItem.removeFromInheritanceChildItems(this);
 		}
-		if (folder != null) {
-			folder.removeFromItems(this);
+		if (getFolder() != null) {
+			getFolder().removeFromItems(this);
 		}
 		return super.delete();
-	}
-
-	@Override
-	public String getDescription() {
-		return description;
-	}
-
-	@Override
-	public void setDescription(String description) {
-		this.description = description;
-		setChanged();
-	}
-
-	public DocItemFolder getFolder() {
-		return folder;
-	}
-
-	public void setFolder(DocItemFolder folder) {
-		this.folder = folder;
-		setChanged();
 	}
 
 	@Override
@@ -391,23 +362,21 @@ public class DocItem extends DRMObject {
 		setChanged();
 	}
 
-	public Vector<DocItemVersion> getVersions() {
+	public List<DocItemVersion> getVersions() {
 		return versions;
 	}
 
-	public void setVersions(Vector<DocItemVersion> versions) {
+	public void setVersions(List<DocItemVersion> versions) {
 		this.versions = versions;
 		setChanged();
 	}
 
 	public void addToVersions(DocItemVersion version) {
 		versions.add(version);
-		version.setItem(this);
 		setChanged();
 	}
 
 	public void removeFromVersions(DocItemVersion version) {
-		version.setItem(null);
 		versions.remove(version);
 		setChanged();
 	}
@@ -422,7 +391,7 @@ public class DocItem extends DRMObject {
 
 	public void addToActions(DocItemAction action) {
 		actions.add(action);
-		action.setItem(this);
+		// action.setItem(this);
 		setChanged();
 		notifyObservers(new StructureModified());
 		if (getFolder() != null) {
@@ -431,23 +400,13 @@ public class DocItem extends DRMObject {
 	}
 
 	public void removeFromActions(DocItemAction action) {
-		action.setItem(null);
+		// action.setItem(null);
 		actions.remove(action);
 		setChanged();
 		notifyObservers(new StructureModified());
 		if (getFolder() != null) {
 			getFolder().notifyStructureChanged();
 		}
-	}
-
-	public DocItemVersion getVersion(DocItemVersion.Version aVersion) {
-		for (Enumeration en = getVersions().elements(); en.hasMoreElements();) {
-			DocItemVersion next = (DocItemVersion) en.nextElement();
-			if (next.getVersion().equals(aVersion)) {
-				return next;
-			}
-		}
-		return null;
 	}
 
 	public DocItemAction submitVersion(DocItemVersion version, Author author, DocResourceCenter docResourceCenter) {
@@ -493,14 +452,14 @@ public class DocItem extends DRMObject {
 		DocItemFolder commonAncestor = aStartPosition.getFolder();
 		while (!commonAncestor.isAncestorOf(this)) {
 			prefixPath += "../";
-			commonAncestor = commonAncestor.getParentFolder();
+			commonAncestor = commonAncestor.getFolder();
 			// prefixPathIsFirst = false;
 		}
 		// OK, common ancestor is found
 		DocItemFolder currentFolder = getFolder();
 		while (currentFolder != commonAncestor) {
 			postfixPath = currentFolder.getIdentifier() + "/" + postfixPath;
-			currentFolder = currentFolder.getParentFolder();
+			currentFolder = currentFolder.getFolder();
 			// postfixPathIsFirst = false;
 		}
 		// Now, need to concatenate
@@ -568,7 +527,7 @@ public class DocItem extends DRMObject {
 		DocItemAction returned = null;
 		for (Enumeration en = getActions().elements(); en.hasMoreElements();) {
 			DocItemAction next = (DocItemAction) en.nextElement();
-			if (next.getVersion().getLanguage() == language && next.isApproved()) {
+			if (/*next.getVersion().getLanguage() == language &&*/next.isApproved()) {
 				returned = next;
 			}
 		}
@@ -579,7 +538,7 @@ public class DocItem extends DRMObject {
 		DocItemAction returned = null;
 		for (Enumeration en = getActions().elements(); en.hasMoreElements();) {
 			DocItemAction next = (DocItemAction) en.nextElement();
-			if (next.getVersion().getLanguage() == language && next.isPending()) {
+			if (/*next.getVersion().getLanguage() == language &&*/next.isPending()) {
 				returned = next;
 			}
 		}
@@ -590,9 +549,9 @@ public class DocItem extends DRMObject {
 		DocItemAction returned = null;
 		for (Enumeration en = getActions().elements(); en.hasMoreElements();) {
 			DocItemAction next = (DocItemAction) en.nextElement();
-			if (next.getVersion().getLanguage() == language) {
-				returned = next;
-			}
+			// if (next.getVersion().getLanguage() == language) {
+			returned = next;
+			// }
 		}
 		return returned;
 	}
@@ -687,7 +646,7 @@ public class DocItem extends DRMObject {
 				logger.warning("This implementation is not correct: you should not use FlexoAction primitive from the model !");
 				// TODO: Please implement this better later
 				// Used editor will be null
-				ApproveVersion approveAction = ApproveVersion.actionType.makeNewAction(version.getItem(), null);
+				ApproveVersion approveAction = ApproveVersion.actionType.makeNewAction(version.getDocItem(), null);
 				approveAction.setVersion(version);
 				approveAction.doAction();
 			}
@@ -697,5 +656,21 @@ public class DocItem extends DRMObject {
 
 	public boolean isIncluded(HelpSetConfiguration configuration) {
 		return getFolder().isIncluded(configuration);
+	}
+
+	public String getShortHTMLDescription() {
+		return shortHTMLDescription;
+	}
+
+	public void setShortHTMLDescription(String shortHTMLDescription) {
+		this.shortHTMLDescription = shortHTMLDescription;
+	}
+
+	public String getFullHTMLDescription() {
+		return fullHTMLDescription;
+	}
+
+	public void setFullHTMLDescription(String fullHTMLDescription) {
+		this.fullHTMLDescription = fullHTMLDescription;
 	}
 }

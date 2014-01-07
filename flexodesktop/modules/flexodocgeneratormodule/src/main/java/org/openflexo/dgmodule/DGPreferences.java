@@ -24,7 +24,7 @@ import java.util.logging.Level;
 import java.util.logging.Logger;
 
 import org.openflexo.doceditor.DEPreferences;
-import org.openflexo.module.GeneratedResourceModifiedChoice;
+import org.openflexo.foundation.rm.GeneratedResourceModifiedChoice;
 import org.openflexo.module.Module;
 import org.openflexo.toolbox.FileResource;
 import org.openflexo.toolbox.LatexUtils;

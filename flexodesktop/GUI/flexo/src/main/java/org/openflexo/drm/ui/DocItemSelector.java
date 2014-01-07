@@ -17,7 +17,7 @@
  * along with OpenFlexo. If not, see <http://www.gnu.org/licenses/>.
  *
  */
-package org.openflexo.dre;
+package org.openflexo.drm.ui;
 
 import java.io.File;
 

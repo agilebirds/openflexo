@@ -19,23 +19,20 @@
  */
 package org.openflexo.drm;
 
+import org.openflexo.model.ModelContextLibrary;
+import org.openflexo.model.exceptions.ModelDefinitionException;
+import org.openflexo.model.factory.ModelFactory;
+
 /**
- * Used only during XML serialization to build DRM
+ * {@link ModelFactory} used to handle DocResourceCenter model<br>
+ * Only one instance of this class should be used in a session
  * 
- * @author sguerin
+ * @author sylvain
  * 
  */
-public class DRMBuilder {
+public class DRMModelFactory extends ModelFactory {
 
-	public DocResourceCenter docResourceCenter = null;
-
-	public DRMBuilder() {
-		super();
+	public DRMModelFactory() throws ModelDefinitionException {
+		super(ModelContextLibrary.getModelContext(DocResourceCenter.class));
 	}
-
-	public DRMBuilder(DocResourceCenter docResourceCenter) {
-		this();
-		this.docResourceCenter = docResourceCenter;
-	}
-
 }

@@ -19,10 +19,9 @@
  */
 package org.openflexo.drm;
 
-import java.util.Enumeration;
-
 import org.openflexo.foundation.validation.Validable;
 import org.openflexo.foundation.validation.ValidationModel;
+import org.openflexo.localization.Language;
 
 /**
  * Please comment this class
@@ -32,12 +31,10 @@ import org.openflexo.foundation.validation.ValidationModel;
  */
 public class DRMValidationModel extends ValidationModel {
 
-	public DRMValidationModel() {
+	public DRMValidationModel(DocResourceCenter drc) {
 		super(null);
 
-		DocResourceCenter drc = DocResourceManager.instance().getDocResourceCenter();
-		for (Enumeration en = drc.getLanguages().elements(); en.hasMoreElements();) {
-			Language language = (Language) en.nextElement();
+		for (Language language : Language.availableValues()) {
 			registerRule(new DocItem.DocumentationShouldBeUpToDate(language));
 		}
 		registerRule(new DocItemFolder.DocItemFolderMustHavePrimaryItem());

@@ -30,7 +30,6 @@ import org.openflexo.foundation.DataModification;
 import org.openflexo.foundation.FlexoEditor;
 import org.openflexo.foundation.FlexoObject;
 import org.openflexo.foundation.FlexoObservable;
-import org.openflexo.foundation.InspectorGroup;
 import org.openflexo.foundation.utils.OperationCancelledException;
 import org.openflexo.view.FlexoFrame;
 import org.openflexo.view.controller.FlexoController;
@@ -91,8 +90,6 @@ public abstract class FlexoModule implements DataFlexoObserver {
 			return null;
 		}
 	}
-
-	public abstract InspectorGroup[] getInspectorGroups();
 
 	public final String getName() {
 		return getModule().getLocalizedName();

@@ -19,10 +19,10 @@
  */
 package org.openflexo.dm.view;
 
-import org.openflexo.ch.FCH;
 import org.openflexo.components.browser.view.BrowserView;
 import org.openflexo.dm.view.controller.DMBrowser;
 import org.openflexo.dm.view.controller.DMController;
+import org.openflexo.drm.FCH;
 import org.openflexo.foundation.FlexoObject;
 import org.openflexo.foundation.dm.DMObject;
 

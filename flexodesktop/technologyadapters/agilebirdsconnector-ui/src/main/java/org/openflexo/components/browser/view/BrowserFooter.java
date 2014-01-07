@@ -48,10 +48,10 @@ import javax.swing.event.MenuKeyEvent;
 import javax.swing.event.MenuKeyListener;
 
 import org.openflexo.FlexoCst;
-import org.openflexo.ch.FCH;
 import org.openflexo.components.browser.BrowserElement;
 import org.openflexo.components.browser.CustomBrowserFilter;
 import org.openflexo.components.browser.ElementTypeBrowserFilter;
+import org.openflexo.drm.FCH;
 import org.openflexo.foundation.FlexoEditor;
 import org.openflexo.foundation.FlexoObject;
 import org.openflexo.foundation.action.FlexoAction;

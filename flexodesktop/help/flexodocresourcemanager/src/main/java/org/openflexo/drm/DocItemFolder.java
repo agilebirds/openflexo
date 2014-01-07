@@ -49,12 +49,6 @@ public class DocItemFolder extends DRMObject {
 	// String identifier for this folder: name will be used as folder name in FS
 	private String identifier;
 
-	// Description for this folder
-	private String description;
-
-	// Parent DocItemFolder
-	private DocItemFolder parentFolder;
-
 	// Vector of DocItemFolder: childs
 	private Vector<DocItemFolder> childFolders;
 
@@ -65,16 +59,9 @@ public class DocItemFolder extends DRMObject {
 
 	private DocItem _primaryDocItem;
 
-	public DocItemFolder(DRMBuilder builder) {
-		this(builder.docResourceCenter);
-		initializeDeserialization(builder);
-	}
-
-	public DocItemFolder(DocResourceCenter docResourceCenter) {
-		super(docResourceCenter);
+	public DocItemFolder() {
+		super();
 		identifier = null;
-		description = null;
-		parentFolder = null;
 		childFolders = new Vector<DocItemFolder>();
 		items = new Vector<DocItem>();
 		itemCache = new HashMap<String, DocItem>();
@@ -83,9 +70,8 @@ public class DocItemFolder extends DRMObject {
 	public static DocItemFolder createDocItemFolder(String anIdentifier, String aDescription, DocItemFolder parent,
 			DocResourceCenter docResourceCenter) {
 		logger.info("Create DocItemFolder " + anIdentifier + " in " + parent);
-		DocItemFolder returned = new DocItemFolder(docResourceCenter);
+		DocItemFolder returned = new DocItemFolder();
 		returned.identifier = anIdentifier;
-		returned.description = aDescription;
 		if (parent != null) {
 			parent.addToChildFolders(returned);
 		}
@@ -115,8 +101,8 @@ public class DocItemFolder extends DRMObject {
 			DocItem it = (DocItem) en.nextElement();
 			it.delete();
 		}
-		if (parentFolder != null) {
-			parentFolder.removeFromChildFolders(this);
+		if (getFolder() != null) {
+			getFolder().removeFromChildFolders(this);
 		}
 		itemCache = null;
 		return super.delete();
@@ -126,26 +112,12 @@ public class DocItemFolder extends DRMObject {
 
 	public File getDirectory() {
 		if (directory == null) {
-			File parent;
-			if (getParentFolder() != null) {
-				parent = getParentFolder().getDirectory();
-			} else {
-				parent = DocResourceManager.getDocResourceCenterDirectory();
+			if (getFolder() != null) {
+				File parent = getFolder().getDirectory();
+				directory = new File(parent, identifier);
 			}
-			directory = new File(parent, identifier);
 		}
 		return directory;
-	}
-
-	@Override
-	public String getDescription() {
-		return description;
-	}
-
-	@Override
-	public void setDescription(String description) {
-		this.description = description;
-		setChanged();
 	}
 
 	@Override
@@ -183,7 +155,7 @@ public class DocItemFolder extends DRMObject {
 	}
 
 	public String getSerializationIdentifier() {
-		return (getParentFolder() != null ? getParentFolder().getSerializationIdentifier() : "Folder: ") + getIdentifier();
+		return (getFolder() != null ? getFolder().getSerializationIdentifier() : "Folder: ") + getIdentifier();
 	}
 
 	public String getPrimaryDocItemId() {
@@ -206,17 +178,7 @@ public class DocItemFolder extends DRMObject {
 	}
 
 	public void createDefaultPrimaryDocItem() {
-		_primaryDocItem = DocItem.createDocItem(getIdentifier(), FlexoLocalization.localizedForKey("no_description"), this,
-				getDocResourceCenter(), false);
-	}
-
-	public DocItemFolder getParentFolder() {
-		return parentFolder;
-	}
-
-	public void setParentFolder(DocItemFolder parentFolder) {
-		this.parentFolder = parentFolder;
-		setChanged();
+		_primaryDocItem = DocItem.createDocItem(getIdentifier(), FlexoLocalization.localizedForKey("no_description"), this, false);
 	}
 
 	private boolean itemsNeedsReordering = true;
@@ -305,7 +267,7 @@ public class DocItemFolder extends DRMObject {
 
 	public void addToChildFolders(DocItemFolder itemFolder) {
 		childFolders.add(itemFolder);
-		itemFolder.setParentFolder(this);
+		itemFolder.setFolder(this);
 		childFolderNeedsReordering = true;
 		setChanged();
 		notifyObservers(new DocItemFolderAdded(itemFolder));
@@ -323,7 +285,7 @@ public class DocItemFolder extends DRMObject {
 	}
 
 	public boolean isRootFolder() {
-		return getDocResourceCenter().getRootFolder() == this;
+		return getDocResourceCenter().getFolder() == this;
 	}
 
 	public String getNextDefautItemName() {
@@ -379,7 +341,7 @@ public class DocItemFolder extends DRMObject {
 	 * @return a Vector of Validable objects
 	 */
 	@Override
-	public List<DRMObject> getEmbeddedValidableObjects() {
+	public List<? extends DRMObject> getEmbeddedValidableObjects() {
 		List<DRMObject> returned = new ArrayList<DRMObject>();
 		returned.addAll(getChildFolders());
 		returned.addAll(getItems());
@@ -387,7 +349,7 @@ public class DocItemFolder extends DRMObject {
 	}
 
 	public String getRelativePath() {
-		return (getParentFolder() != null ? getParentFolder().getRelativePath() + "/" : "") + getIdentifier();
+		return (getFolder() != null ? getFolder().getRelativePath() + "/" : "") + getIdentifier();
 	}
 
 	public boolean isAncestorOf(DocItem anItem) {
@@ -476,8 +438,8 @@ public class DocItemFolder extends DRMObject {
 		if (configuration.getDocItemFolders().contains(this)) {
 			return true;
 		}
-		if (getParentFolder() != null) {
-			return getParentFolder().isDirectelyIncluded(configuration);
+		if (getFolder() != null) {
+			return getFolder().isDirectelyIncluded(configuration);
 		}
 		return false;
 	}

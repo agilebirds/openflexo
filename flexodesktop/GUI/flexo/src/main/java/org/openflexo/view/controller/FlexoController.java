@@ -90,7 +90,6 @@ import org.openflexo.foundation.FlexoProject;
 import org.openflexo.foundation.FlexoProjectObject;
 import org.openflexo.foundation.FlexoServiceManager;
 import org.openflexo.foundation.action.FlexoActionType;
-import org.openflexo.foundation.action.SetPropertyAction;
 import org.openflexo.foundation.resource.FlexoProjectReference;
 import org.openflexo.foundation.resource.FlexoResource;
 import org.openflexo.foundation.resource.FlexoResourceCenter;
@@ -127,9 +126,7 @@ import org.openflexo.icon.IconLibrary;
 import org.openflexo.icon.IconMarker;
 import org.openflexo.icon.VEIconLibrary;
 import org.openflexo.icon.VPMIconLibrary;
-import org.openflexo.inspector.InspectorDelegate;
 import org.openflexo.inspector.ModuleInspectorController;
-import org.openflexo.kvc.KeyValueCoding;
 import org.openflexo.localization.FlexoLocalization;
 import org.openflexo.module.FlexoModule;
 import org.openflexo.module.ModuleLoader;
@@ -1168,7 +1165,8 @@ public abstract class FlexoController implements PropertyChangeListener {
 		}
 	}
 
-	public class FlexoControllerInspectorDelegate implements InspectorDelegate {
+	// TODO: reimplement this !
+	/*public class FlexoControllerInspectorDelegate implements InspectorDelegate {
 
 		private KeyValueCoding target;
 
@@ -1176,11 +1174,6 @@ public abstract class FlexoController implements PropertyChangeListener {
 
 		private String localizedPropertyName;
 
-		/**
-		 * Overrides setObjectValue
-		 * 
-		 * @see org.openflexo.inspector.InspectorDelegate#setObjectValue(java.lang.Object)
-		 */
 		@Override
 		public boolean setObjectValue(Object value) {
 
@@ -1206,41 +1199,21 @@ public abstract class FlexoController implements PropertyChangeListener {
 			return false;
 		}
 
-		/**
-		 * Overrides handlesObjectOfClass
-		 * 
-		 * @see org.openflexo.inspector.InspectorDelegate#handlesObjectOfClass(java.lang.Class)
-		 */
 		@Override
 		public boolean handlesObjectOfClass(Class<?> c) {
 			return KeyValueCoding.class.isAssignableFrom(c);
 		}
 
-		/**
-		 * Overrides setKey
-		 * 
-		 * @see org.openflexo.inspector.InspectorDelegate#setKey(java.lang.String)
-		 */
 		@Override
 		public void setKey(String path) {
 			this.key = path;
 		}
 
-		/**
-		 * Overrides setObject
-		 * 
-		 * @see org.openflexo.inspector.InspectorDelegate#setObject(org.openflexo.inspector.InspectableObject)
-		 */
 		@Override
 		public void setTarget(KeyValueCoding object) {
 			this.target = object;
 		}
 
-		/**
-		 * Overrides performAction
-		 * 
-		 * @see org.openflexo.inspector.InspectorDelegate#performAction(java.lang.String, java.lang.Object)
-		 */
 		@Override
 		public boolean performAction(ActionEvent e, String actionName, Object object) {
 			if (object instanceof FlexoObject) {
@@ -1255,17 +1228,12 @@ public abstract class FlexoController implements PropertyChangeListener {
 			return false;
 		}
 
-		/**
-		 * Overrides setLocalizedPropertyName
-		 * 
-		 * @see org.openflexo.inspector.InspectorDelegate#setLocalizedPropertyName(java.lang.String)
-		 */
 		@Override
 		public void setLocalizedPropertyName(String name) {
 			localizedPropertyName = name;
 		}
 
-	}
+	}*/
 
 	public boolean isDisposed() {
 		return disposed;

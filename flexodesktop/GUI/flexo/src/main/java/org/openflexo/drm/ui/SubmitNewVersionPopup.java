@@ -17,7 +17,7 @@
  * along with OpenFlexo. If not, see <http://www.gnu.org/licenses/>.
  *
  */
-package org.openflexo.dre;
+package org.openflexo.drm.ui;
 
 import java.awt.BorderLayout;
 import java.awt.Dimension;
@@ -33,9 +33,9 @@ import javax.swing.JPanel;
 
 import org.openflexo.drm.DocItem;
 import org.openflexo.drm.DocItemVersion;
-import org.openflexo.drm.Language;
 import org.openflexo.foundation.FlexoEditor;
 import org.openflexo.localization.FlexoLocalization;
+import org.openflexo.localization.Language;
 import org.openflexo.view.FlexoDialog;
 
 /**

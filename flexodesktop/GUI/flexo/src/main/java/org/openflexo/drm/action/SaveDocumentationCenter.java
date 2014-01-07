@@ -62,7 +62,8 @@ public class SaveDocumentationCenter extends FlexoAction<SaveDocumentationCenter
 	@Override
 	protected void doAction(Object context) {
 		logger.info("SaveDocumentationCenter");
-		DocResourceManager.instance().save();
+		DocResourceManager drm = getEditor().getServiceManager().getService(DocResourceManager.class);
+		drm.save();
 	}
 
 }

@@ -25,8 +25,9 @@ import java.util.logging.Logger;
 
 import javax.swing.JFrame;
 
-import org.openflexo.ch.DefaultInspectorHelpDelegate;
-import org.openflexo.ch.DocResourceManager;
+import org.openflexo.drm.DefaultInspectorHelpDelegate;
+import org.openflexo.drm.DocResourceManager;
+import org.openflexo.drm.HelpDelegate;
 import org.openflexo.foundation.Inspectors;
 import org.openflexo.foundation.wkf.FlexoProcess;
 import org.openflexo.foundation.wkf.ws.AbstractInPort;
@@ -36,7 +37,6 @@ import org.openflexo.foundation.wkf.ws.InPort;
 import org.openflexo.foundation.wkf.ws.MessageDefinition;
 import org.openflexo.foundation.wkf.ws.OutPort;
 import org.openflexo.foundation.wkf.ws.ServiceMessageDefinition;
-import org.openflexo.inspector.HelpDelegate;
 import org.openflexo.inspector.InspectableObject;
 import org.openflexo.inspector.InspectorDelegate;
 import org.openflexo.inspector.InspectorWindow;

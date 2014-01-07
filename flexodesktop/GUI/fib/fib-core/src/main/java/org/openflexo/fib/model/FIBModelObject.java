@@ -46,10 +46,8 @@ import org.openflexo.fib.utils.LocalizedDelegateGUIImpl;
 import org.openflexo.toolbox.FileResource;
 import org.openflexo.toolbox.HasPropertyChangeSupport;
 import org.openflexo.toolbox.StringUtils;
-import org.openflexo.xmlcode.KeyValueDecoder;
-import org.openflexo.xmlcode.XMLSerializable;
 
-public abstract class FIBModelObject implements Bindable, XMLSerializable, HasPropertyChangeSupport {
+public abstract class FIBModelObject implements Bindable, HasPropertyChangeSupport {
 
 	private static final Logger logger = Logger.getLogger(FIBModelObject.class.getPackage().getName());
 
@@ -74,7 +72,7 @@ public abstract class FIBModelObject implements Bindable, XMLSerializable, HasPr
 
 	private List<FIBParameter> parameters = new Vector<FIBParameter>();
 
-	private PropertyChangeSupport pcSupport;
+	private final PropertyChangeSupport pcSupport;
 
 	public FIBModelObject() {
 		super();
@@ -470,7 +468,7 @@ public abstract class FIBModelObject implements Bindable, XMLSerializable, HasPr
 
 		protected static class DeleteBinding<C extends FIBModelObject> extends FixProposal<BindingMustBeValid<C>, C> {
 
-			private BindingMustBeValid rule;
+			private final BindingMustBeValid rule;
 
 			public DeleteBinding(BindingMustBeValid rule) {
 				super("delete_this_binding");

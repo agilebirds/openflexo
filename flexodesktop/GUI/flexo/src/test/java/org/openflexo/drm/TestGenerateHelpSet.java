@@ -1,3 +1,4 @@
+package org.openflexo.drm;
 /*
  * (c) Copyright 2010-2011 AgileBirds
  *

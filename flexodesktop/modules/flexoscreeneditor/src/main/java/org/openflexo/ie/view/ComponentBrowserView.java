@@ -21,10 +21,10 @@ package org.openflexo.ie.view;
 
 import java.util.Enumeration;
 
-import org.openflexo.ch.FCH;
 import org.openflexo.components.browser.ProjectBrowser;
 import org.openflexo.components.browser.dnd.TreeDropTarget;
 import org.openflexo.components.browser.view.BrowserView;
+import org.openflexo.drm.FCH;
 import org.openflexo.foundation.FlexoObject;
 import org.openflexo.foundation.ie.IEPageComponent;
 import org.openflexo.foundation.ie.widget.IESequenceTab;

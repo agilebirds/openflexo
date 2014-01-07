@@ -19,31 +19,24 @@
  */
 package org.openflexo.drm;
 
-import java.io.FileOutputStream;
-import java.io.IOException;
 import java.util.ArrayList;
 import java.util.Enumeration;
 import java.util.List;
 import java.util.Vector;
 
 import org.openflexo.drm.dm.DocResourceCenterIsModified;
-import org.openflexo.drm.dm.DocResourceCenterIsSaved;
 import org.openflexo.foundation.resource.FlexoResource;
 import org.openflexo.foundation.resource.ResourceData;
-import org.openflexo.xmlcode.StringEncoder;
-import org.openflexo.xmlcode.XMLCoder;
-import org.openflexo.xmlcode.XMLSerializable;
+import org.openflexo.foundation.validation.ValidationModel;
+import org.openflexo.localization.Language;
 
-public class DocResourceCenter extends DRMObject implements ResourceData<DocResourceCenter>, XMLSerializable {
+public class DocResourceCenter extends DocItemFolder implements ResourceData<DocResourceCenter> {
 
 	// Vector of Language objects
 	private Vector<Language> languages;
 
 	// Vector of Authors objects
 	private Vector<Author> authors;
-
-	// Root folder
-	private DocItemFolder rootFolder;
 
 	private FlexoResource<DocResourceCenter> resource;
 
@@ -71,18 +64,19 @@ public class DocResourceCenter extends DRMObject implements ResourceData<DocReso
 
 	public static final String RIGHT_VIEW_ID = "right-view";
 
-	public DocResourceCenter(DRMBuilder builder) {
-		this();
-		builder.docResourceCenter = this;
-		initializeDeserialization(builder);
-	}
+	private DRMValidationModel _drmValidationModel;
 
 	public DocResourceCenter() {
-		super(null);
-		_docResourceCenter = this;
-		rootFolder = null;
+		super();
 		languages = new Vector<Language>();
 		authors = new Vector<Author>();
+	}
+
+	public ValidationModel getDRMValidationModel() {
+		if (_drmValidationModel == null) {
+			_drmValidationModel = new DRMValidationModel(this);
+		}
+		return _drmValidationModel;
 	}
 
 	public Vector<Author> getAuthors() {
@@ -123,39 +117,30 @@ public class DocResourceCenter extends DRMObject implements ResourceData<DocReso
 		setChanged();
 	}
 
-	public DocItemFolder getRootFolder() {
-		return rootFolder;
-	}
-
-	public void setRootFolder(DocItemFolder rootFolder) {
-		this.rootFolder = rootFolder;
-		setChanged();
-	}
-
 	public static DocResourceCenter createDefaultDocResourceCenter() {
 		DocResourceCenter returned = new DocResourceCenter();
-		Language english = Language.createLanguage("ENGLISH", "english", returned);
-		Language french = Language.createLanguage("FRENCH", "french", returned);
+		Language english = Language.ENGLISH;
+		Language french = Language.FRENCH;
 		Author author = Author.createAuthor(System.getProperty("user.name"), "Noname", "Nomail", returned);
 		returned.addToLanguages(english);
 		returned.addToLanguages(french);
 		returned.addToAuthors(author);
 		DocItemFolder rootFolder = DocItemFolder.createDocItemFolder(DOC_RESOURCE_CENTER, "Root folder for Flexo documentation", null,
 				returned);
-		returned.setRootFolder(rootFolder);
+		returned.setFolder(rootFolder);
 		DocItemFolder flexoModelFolder = DocItemFolder.createDocItemFolder(FLEXO_MODEL, "Description of Flexo model", rootFolder, returned);
 		DocItemFolder flexoToolSetFolder = DocItemFolder.createDocItemFolder(FLEXO_TOOL_SET,
 				"Description for the FlexoToolSet application", rootFolder, returned);
 		DocItemFolder abstractModuleFolder = DocItemFolder.createDocItemFolder(ABSTRACT_MODULE, "Description of what is a module",
 				flexoToolSetFolder, returned);
 		DocItem abstractMainPaneItem = DocItem.createDocItem(ABSTRACT_MAIN_PANE, "Description of what is the main pane",
-				abstractModuleFolder, returned, false);
+				abstractModuleFolder, false);
 		DocItem abstractControlPanelItem = DocItem.createDocItem(ABSTRACT_CONTROL_PANEL, "Description of what is the control panel",
-				abstractModuleFolder, returned, false);
+				abstractModuleFolder, false);
 		DocItem abstractLeftViewItem = DocItem.createDocItem(ABSTRACT_LEFT_VIEW, "Description of what is the left view",
-				abstractModuleFolder, returned, false);
+				abstractModuleFolder, false);
 		DocItem abstractRightViewItem = DocItem.createDocItem(ABSTRACT_RIGHT_VIEW, "Description of what is the right view",
-				abstractModuleFolder, returned, false);
+				abstractModuleFolder, false);
 		abstractModuleFolder.getPrimaryDocItem().addToEmbeddingChildItems(abstractMainPaneItem);
 		abstractModuleFolder.getPrimaryDocItem().addToEmbeddingChildItems(abstractControlPanelItem);
 		abstractModuleFolder.getPrimaryDocItem().addToEmbeddingChildItems(abstractLeftViewItem);
@@ -170,14 +155,14 @@ public class DocResourceCenter extends DRMObject implements ResourceData<DocReso
 	}
 
 	public DocItemFolder getModelFolder() {
-		return getRootFolder().getItemFolderNamed("FlexoModel");
+		return getFolder().getItemFolderNamed("FlexoModel");
 	}
 
 	public DocItemFolder getFTSFolder() {
-		return getRootFolder().getItemFolderNamed("FlexoToolSet");
+		return getFolder().getItemFolderNamed("FlexoToolSet");
 	}
 
-	public void save() {
+	/*public void save() {
 		FileOutputStream out = null;
 		try {
 			initializeSerialization();
@@ -202,7 +187,7 @@ public class DocResourceCenter extends DRMObject implements ResourceData<DocReso
 		setChanged();
 		notifyObservers(new DocResourceCenterIsSaved());
 		clearIsModified(false);
-	}
+	}*/
 
 	private void initializeSerialization() {
 	}
@@ -238,11 +223,12 @@ public class DocResourceCenter extends DRMObject implements ResourceData<DocReso
 		return null;
 	}
 
+	@Override
 	public DocItem getItemNamed(String aName) {
-		if (getRootFolder() == null) {
+		if (getFolder() == null) {
 			return null;
 		}
-		return getRootFolder().getItemNamed(aName);
+		return getFolder().getItemNamed(aName);
 	}
 
 	@Override
@@ -253,18 +239,6 @@ public class DocResourceCenter extends DRMObject implements ResourceData<DocReso
 	@Override
 	public void setResource(FlexoResource<DocResourceCenter> resource) {
 		this.resource = resource;
-	}
-
-	/**
-	 * Return a vector of all embedded objects at this level does NOT include itself
-	 * 
-	 * @return a Vector of Validable objects
-	 */
-	@Override
-	public List<DocItemFolder> getEmbeddedValidableObjects() {
-		List<DocItemFolder> returned = new ArrayList<DocItemFolder>();
-		returned.add(getRootFolder());
-		return returned;
 	}
 
 	@Override
