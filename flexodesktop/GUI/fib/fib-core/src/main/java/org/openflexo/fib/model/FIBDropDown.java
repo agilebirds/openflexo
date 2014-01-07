@@ -21,18 +21,42 @@ package org.openflexo.fib.model;
 
 import java.util.logging.Logger;
 
-public class FIBDropDown extends FIBMultipleValues {
+import org.openflexo.model.annotations.Getter;
+import org.openflexo.model.annotations.ImplementationClass;
+import org.openflexo.model.annotations.ModelEntity;
+import org.openflexo.model.annotations.PropertyIdentifier;
+import org.openflexo.model.annotations.Setter;
+import org.openflexo.model.annotations.XMLAttribute;
+import org.openflexo.model.annotations.XMLElement;
 
-	public boolean showReset = false;
+@ModelEntity
+@ImplementationClass(FIBDropDown.FIBDropDownImpl.class)
+@XMLElement(xmlTag = "DropDown")
+public interface FIBDropDown extends FIBMultipleValues {
 
-	private static final Logger logger = Logger.getLogger(FIBDropDown.class.getPackage().getName());
+	@PropertyIdentifier(type = boolean.class)
+	public static final String SHOW_RESET_KEY = "showReset";
 
-	public FIBDropDown() {
+	@Getter(value = SHOW_RESET_KEY, defaultValue = "false")
+	@XMLAttribute
+	public boolean getShowReset();
+
+	@Setter(SHOW_RESET_KEY)
+	public void setShowReset(boolean showReset);
+
+	public static abstract class FIBDropDownImpl extends FIBMultipleValuesImpl implements FIBDropDown {
+
+		public boolean showReset = false;
+
+		private static final Logger logger = Logger.getLogger(FIBDropDown.class.getPackage().getName());
+
+		public FIBDropDownImpl() {
+		}
+
+		@Override
+		public String getBaseName() {
+			return "DropDown";
+		}
+
 	}
-
-	@Override
-	protected String getBaseName() {
-		return "DropDown";
-	}
-
 }

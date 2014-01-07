@@ -40,17 +40,23 @@ import org.openflexo.antar.binding.DataBinding;
 import org.openflexo.antar.binding.ParameterizedTypeImpl;
 import org.openflexo.fib.controller.FIBController;
 import org.openflexo.fib.view.widget.FIBCustomWidget;
+import org.openflexo.model.annotations.Adder;
+import org.openflexo.model.annotations.Finder;
+import org.openflexo.model.annotations.Getter;
+import org.openflexo.model.annotations.Getter.Cardinality;
+import org.openflexo.model.annotations.ImplementationClass;
+import org.openflexo.model.annotations.ModelEntity;
+import org.openflexo.model.annotations.PropertyIdentifier;
+import org.openflexo.model.annotations.Remover;
+import org.openflexo.model.annotations.Setter;
+import org.openflexo.model.annotations.XMLAttribute;
+import org.openflexo.model.annotations.XMLElement;
 import org.openflexo.swing.CustomPopup.ApplyCancelListener;
 
-public class FIBCustom extends FIBWidget {
-
-	private static final Logger logger = Logger.getLogger(FIBCustom.class.getPackage().getName());
-
-	public static enum Parameters implements FIBModelAttribute {
-		componentClass, assignments
-	}
-
-	public static final String COMPONENT_NAME = "component";
+@ModelEntity
+@ImplementationClass(FIBCustom.FIBCustomImpl.class)
+@XMLElement(xmlTag = "Custom")
+public interface FIBCustom extends FIBWidget {
 
 	public static interface FIBCustomComponent<V, C extends JComponent> {
 		@Documented
@@ -89,346 +95,410 @@ public class FIBCustom extends FIBWidget {
 		public void delete();
 	}
 
-	private Class componentClass;
-	private Class defaultDataClass = null;
+	@PropertyIdentifier(type = Class.class)
+	public static final String COMPONENT_CLASS_KEY = "componentClass";
+	@PropertyIdentifier(type = Vector.class)
+	public static final String ASSIGNMENTS_KEY = "assignments";
 
-	private Vector<FIBCustomAssignment> assignments;
+	@Getter(value = COMPONENT_CLASS_KEY)
+	@XMLAttribute(xmlTag = "componentClassName")
+	public Class getComponentClass();
 
-	public FIBCustom() {
-		assignments = new Vector<FIBCustomAssignment>();
-	}
+	@Setter(COMPONENT_CLASS_KEY)
+	public void setComponentClass(Class componentClass);
 
-	@Override
-	protected String getBaseName() {
-		return "CustomSelector";
-	}
+	@Getter(value = ASSIGNMENTS_KEY, cardinality = Cardinality.LIST, inverse = FIBCustomAssignment.OWNER_KEY)
+	public List<FIBCustomAssignment> getAssignments();
 
-	@Override
-	public Type getDataType() {
-		/*if (getData() != null && getData().isSet() && getData().isValid()) {
-			return getData().getAnalyzedType();
-		}*/
-		return getDefaultDataClass();
+	@Setter(ASSIGNMENTS_KEY)
+	public void setAssignments(List<FIBCustomAssignment> assignments);
 
-	}
+	@Adder(ASSIGNMENTS_KEY)
+	public void addToAssignments(FIBCustomAssignment aAssignment);
 
-	@Override
-	public Type getDefaultDataClass() {
-		if (getComponentClass() != null && defaultDataClass == null) {
-			defaultDataClass = getDataClassForComponent(getComponentClass());
-		}
-		if (defaultDataClass != null) {
-			return defaultDataClass;
-		}
-		return Object.class;
-	}
+	@Remover(ASSIGNMENTS_KEY)
+	public void removeFromAssignments(FIBCustomAssignment aAssignment);
 
-	public Class getComponentClass() {
-		return componentClass;
+	@Finder(collection = ASSIGNMENTS_KEY, attribute = FIBCustomAssignment.VARIABLE_KEY)
+	public FIBCustomAssignment getAssignent(String variableName);
 
-	}
+	public BindingModel getCustomComponentBindingModel();
 
-	public void setComponentClass(Class componentClass) {
-		FIBAttributeNotification<Class> notification = requireChange(Parameters.componentClass, componentClass);
-		if (notification != null) {
-			this.componentClass = componentClass;
-			if (componentClass != null) {
-				customComponentBindingModel = null;
-				createCustomComponentBindingModel();
-				for (Method m : componentClass.getMethods()) {
-					FIBCustomComponent.CustomComponentParameter annotation = m
-							.getAnnotation(FIBCustomComponent.CustomComponentParameter.class);
-					if (annotation != null) {
-						String variableName = COMPONENT_NAME + "." + annotation.name();
-						if (!hasAssignment(variableName)) {
-							addToAssignments(new FIBCustomAssignment(this, new DataBinding<Object>(variableName), null,
-									annotation.type() == FIBCustomComponent.CustomComponentParameter.Type.MANDATORY));
-						}
-					}
+	public static abstract class FIBCustomImpl extends FIBWidgetImpl implements FIBCustom {
 
-				}
-			}
-			hasChanged(notification);
-		}
-	}
+		private static final Logger logger = Logger.getLogger(FIBCustom.class.getPackage().getName());
 
-	public boolean hasAssignment(String variableName) {
-		return getAssignent(variableName) != null;
-	}
+		public static final String COMPONENT_NAME = "component";
 
-	public FIBCustomAssignment getAssignent(String variableName) {
-		for (FIBCustomAssignment a : assignments) {
-			if (variableName != null && variableName.equals(a.getVariable().toString())) {
-				return a;
-			}
-		}
-		return null;
-	}
+		private Class componentClass;
+		private Class defaultDataClass = null;
 
-	public Vector<FIBCustomAssignment> getAssignments() {
-		return assignments;
-	}
+		private List<FIBCustomAssignment> assignments;
 
-	public void setAssignments(Vector<FIBCustomAssignment> assignments) {
-		this.assignments = assignments;
-	}
-
-	public void addToAssignments(FIBCustomAssignment a) {
-		if (getAssignent(a.getVariable().toString()) != null) {
-			removeFromAssignments(getAssignent(a.getVariable().toString()));
-		}
-		a.setCustom(this);
-		assignments.add(a);
-		getPropertyChangeSupport().firePropertyChange(Parameters.assignments.name(), null, assignments);
-	}
-
-	public void removeFromAssignments(FIBCustomAssignment a) {
-		a.setCustom(null);
-		assignments.remove(a);
-		getPropertyChangeSupport().firePropertyChange(Parameters.assignments.name(), null, assignments);
-	}
-
-	private BindingModel customComponentBindingModel;
-
-	public BindingModel getCustomComponentBindingModel() {
-		if (customComponentBindingModel == null) {
-			createCustomComponentBindingModel();
-		}
-		return customComponentBindingModel;
-	}
-
-	private void createCustomComponentBindingModel() {
-		customComponentBindingModel = new BindingModel();
-
-		customComponentBindingModel.addToBindingVariables(new BindingVariable(COMPONENT_NAME, getComponentClass()));
-		// System.out.println("dataClass="+getDataClass()+" dataClassName="+dataClassName);
-	}
-
-	@Override
-	public void finalizeDeserialization() {
-		super.finalizeDeserialization();
-		for (FIBCustomAssignment assign : getAssignments()) {
-			assign.finalizeDeserialization();
-		}
-	}
-
-	@Override
-	public Type getDynamicAccessType() {
-		Type[] args = new Type[2];
-		args[0] = getDataType();
-		args[1] = getComponentClass();
-		return new ParameterizedTypeImpl(FIBCustomWidget.class, args);
-	}
-
-	@Override
-	public Boolean getManageDynamicModel() {
-		return true;
-	}
-
-	public FIBCustomAssignment createAssignment() {
-		logger.info("Called createAssignment()");
-		FIBCustomAssignment newAssignment = new FIBCustomAssignment();
-		addToAssignments(newAssignment);
-		return newAssignment;
-	}
-
-	public FIBCustomAssignment deleteAssignment(FIBCustomAssignment assignment) {
-		logger.info("Called deleteAssignment() with " + assignment);
-		removeFromAssignments(assignment);
-		return assignment;
-	}
-
-	public static class FIBCustomAssignment extends FIBModelObject {
-		@Deprecated
-		public static BindingDefinition VARIABLE = new BindingDefinition("variable", Object.class,
-				DataBinding.BindingDefinitionType.GET_SET, true);
-		@Deprecated
-		public BindingDefinition VALUE = new BindingDefinition("value", Object.class, DataBinding.BindingDefinitionType.GET, true);
-
-		public static enum Parameters implements FIBModelAttribute {
-			variable, value
-		}
-
-		private FIBCustom custom;
-
-		private DataBinding<?> variable;
-		private DataBinding<?> value;
-
-		private boolean mandatory = true;
-
-		@Override
-		public String toString() {
-			return "assignement(" + variable + "=" + value + ")";
-		}
-
-		public FIBCustomAssignment() {
-		}
-
-		public FIBCustomAssignment(FIBCustom custom, DataBinding<?> variable, DataBinding<?> value, boolean mandatory) {
-			this();
-			this.custom = custom;
-			this.mandatory = mandatory;
-			setVariable(variable);
-			setValue(value);
-		}
-
-		public boolean isMandatory() {
-			return mandatory;
-		}
-
-		public FIBCustom getCustom() {
-			return custom;
-		}
-
-		private void setCustom(FIBCustom custom) {
-			this.custom = custom;
-			if (value != null) {
-				value.setOwner(getCustom());
-			}
+		public FIBCustomImpl() {
+			assignments = new Vector<FIBCustomAssignment>();
 		}
 
 		@Override
-		public FIBComponent getComponent() {
-			return getCustom();
+		public String getBaseName() {
+			return "CustomSelector";
 		}
 
-		public DataBinding<?> getVariable() {
-			if (variable == null) {
-				variable = new DataBinding<Object>(this, Object.class, DataBinding.BindingDefinitionType.GET_SET);
-			}
-			return variable;
-		}
-
-		public void setVariable(DataBinding<?> variable) {
-			if (variable != null) {
-				variable.setOwner(this);
-				variable.setDeclaredType(Object.class);
-				variable.setBindingDefinitionType(DataBinding.BindingDefinitionType.GET_SET);
-			}
-			this.variable = variable;
-			if (custom != null && variable != null) {
-				variable.decode();
-			}
-			/*if (variable.isValid()) {
-				VALUE.setType(variable.getAnalyzedType());
-				if (value != null) {
-					value.setBindingDefinition(VALUE);
-				}
+		@Override
+		public Type getDataType() {
+			/*if (getData() != null && getData().isSet() && getData().isValid()) {
+				return getData().getAnalyzedType();
 			}*/
+			return getDefaultDataClass();
+
 		}
 
-		public DataBinding<?> getValue() {
-			if (value == null) {
-				value = new DataBinding<Object>(getCustom(), Object.class, DataBinding.BindingDefinitionType.GET);
+		@Override
+		public Type getDefaultDataClass() {
+			if (getComponentClass() != null && defaultDataClass == null) {
+				defaultDataClass = getDataClassForComponent(getComponentClass());
 			}
-			return value;
+			if (defaultDataClass != null) {
+				return defaultDataClass;
+			}
+			return Object.class;
 		}
 
-		public void setValue(DataBinding<?> value) {
-			if (value != null) {
-				value.setOwner(getCustom()); // Warning, still null while deserializing
-				value.setDeclaredType(Object.class);
-				value.setBindingDefinitionType(DataBinding.BindingDefinitionType.GET);
-				this.value = value;
-			} else {
-				getValue();
+		@Override
+		public Class getComponentClass() {
+			return componentClass;
+
+		}
+
+		@Override
+		public void setComponentClass(Class componentClass) {
+			FIBPropertyNotification<Class> notification = requireChange(COMPONENT_CLASS_KEY, componentClass);
+			if (notification != null) {
+				this.componentClass = componentClass;
+				if (componentClass != null) {
+					customComponentBindingModel = null;
+					createCustomComponentBindingModel();
+					for (Method m : componentClass.getMethods()) {
+						FIBCustomComponent.CustomComponentParameter annotation = m
+								.getAnnotation(FIBCustomComponent.CustomComponentParameter.class);
+						if (annotation != null) {
+							String variableName = COMPONENT_NAME + "." + annotation.name();
+							if (!hasAssignment(variableName)) {
+								FIBCustomAssignment newAssigment = getFactory().newInstance(FIBCustomAssignment.class);
+								newAssigment.setOwner(this);
+								newAssigment.setVariable(new DataBinding<Object>(variableName));
+								newAssigment.setValue(null);
+								newAssigment.setMandatory(annotation.type() == FIBCustomComponent.CustomComponentParameter.Type.MANDATORY);
+								addToAssignments(newAssigment);
+							}
+						}
+
+					}
+				}
+				hasChanged(notification);
 			}
+		}
+
+		public boolean hasAssignment(String variableName) {
+			return getAssignent(variableName) != null;
+		}
+
+		@Override
+		public FIBCustomAssignment getAssignent(String variableName) {
+			for (FIBCustomAssignment a : assignments) {
+				if (variableName != null && variableName.equals(a.getVariable().toString())) {
+					return a;
+				}
+			}
+			return null;
+		}
+
+		@Override
+		public List<FIBCustomAssignment> getAssignments() {
+			return assignments;
+		}
+
+		@Override
+		public void setAssignments(List<FIBCustomAssignment> assignments) {
+			this.assignments = assignments;
+		}
+
+		@Override
+		public void addToAssignments(FIBCustomAssignment a) {
+			if (getAssignent(a.getVariable().toString()) != null) {
+				removeFromAssignments(getAssignent(a.getVariable().toString()));
+			}
+			a.setOwner(this);
+			assignments.add(a);
+			getPropertyChangeSupport().firePropertyChange(ASSIGNMENTS_KEY, null, assignments);
+		}
+
+		@Override
+		public void removeFromAssignments(FIBCustomAssignment a) {
+			a.setOwner(null);
+			assignments.remove(a);
+			getPropertyChangeSupport().firePropertyChange(ASSIGNMENTS_KEY, null, assignments);
+		}
+
+		private BindingModel customComponentBindingModel;
+
+		@Override
+		public BindingModel getCustomComponentBindingModel() {
+			if (customComponentBindingModel == null) {
+				createCustomComponentBindingModel();
+			}
+			return customComponentBindingModel;
+		}
+
+		private void createCustomComponentBindingModel() {
+			customComponentBindingModel = new BindingModel();
+
+			customComponentBindingModel.addToBindingVariables(new BindingVariable(COMPONENT_NAME, getComponentClass()));
+			// System.out.println("dataClass="+getDataClass()+" dataClassName="+dataClassName);
 		}
 
 		@Override
 		public void finalizeDeserialization() {
 			super.finalizeDeserialization();
-
-			if (variable != null) {
-				variable.decode();
-			}
-			if (value != null) {
-				value.setOwner(getCustom());
-				value.decode();
+			for (FIBCustomAssignment assign : getAssignments()) {
+				assign.finalizeDeserialization();
 			}
 		}
 
 		@Override
-		public BindingModel getBindingModel() {
-			if (getCustom() != null) {
-				return getCustom().getCustomComponentBindingModel();
-			}
-			return null;
+		public Type getDynamicAccessType() {
+			Type[] args = new Type[2];
+			args[0] = getDataType();
+			args[1] = getComponentClass();
+			return new ParameterizedTypeImpl(FIBCustomWidget.class, args);
 		}
 
 		@Override
-		public List<? extends FIBModelObject> getEmbeddedObjects() {
-			return null;
+		public Boolean getManageDynamicModel() {
+			return true;
+		}
+
+		public FIBCustomAssignment createAssignment() {
+			logger.info("Called createAssignment()");
+			FIBCustomAssignment newAssignment = getFactory().newInstance(FIBCustomAssignment.class);
+			addToAssignments(newAssignment);
+			return newAssignment;
+		}
+
+		public FIBCustomAssignment deleteAssignment(FIBCustomAssignment assignment) {
+			logger.info("Called deleteAssignment() with " + assignment);
+			removeFromAssignments(assignment);
+			return assignment;
+		}
+
+		private static final Hashtable<Class<?>, Class<?>> DATA_CLASS_FOR_COMPONENT = new Hashtable<Class<?>, Class<?>>();
+
+		/**
+		 * Stuff to retrieve default data class from component class<br>
+		 * NB: this is STATIC !!!!
+		 * 
+		 * @param componentClass
+		 * @return
+		 */
+		private static Class<?> getDataClassForComponent(Class<?> componentClass) {
+			Class<?> returned = DATA_CLASS_FOR_COMPONENT.get(componentClass);
+			if (returned == null) {
+				logger.fine("Searching dataClass for " + componentClass);
+				FIBCustomComponent customComponent = null;
+				for (Constructor constructor : componentClass.getConstructors()) {
+					if (constructor.getGenericParameterTypes().length == 1) {
+						Object[] args = new Object[1];
+						args[0] = null;
+						try {
+							customComponent = (FIBCustomComponent) constructor.newInstance(args);
+							break;
+						} catch (IllegalArgumentException e) {
+							// TODO Auto-generated catch block
+							e.printStackTrace();
+							logger.warning("While trying to instanciate " + componentClass + " with null");
+						} catch (InstantiationException e) {
+							// TODO Auto-generated catch block
+							e.printStackTrace();
+						} catch (IllegalAccessException e) {
+							// TODO Auto-generated catch block
+							e.printStackTrace();
+						} catch (InvocationTargetException e) {
+							// TODO Auto-generated catch block
+							e.printStackTrace();
+						} catch (ClassCastException e) {
+							// TODO Auto-generated catch block
+							e.printStackTrace();
+						}
+					}
+				}
+				logger.fine("customComponent=" + customComponent);
+				if (customComponent != null) {
+					returned = customComponent.getRepresentedType();
+					DATA_CLASS_FOR_COMPONENT.put(componentClass, returned);
+					logger.fine("Found " + returned);
+					return returned;
+				}
+				return Object.class;
+			}
+			return returned;
 		}
 
 	}
 
-	/*public String getComponentClassName()
-	{
-		return componentClassName;
-	}
+	@ModelEntity
+	@ImplementationClass(FIBCustomAssignment.FIBCustomAssignmentImpl.class)
+	@XMLElement(xmlTag = "ColumnAssignment")
+	public static interface FIBCustomAssignment extends FIBModelObject {
+		@PropertyIdentifier(type = FIBCustomColumn.class)
+		public static final String OWNER_KEY = "owner";
+		@PropertyIdentifier(type = DataBinding.class)
+		public static final String VARIABLE_KEY = "variable";
+		@PropertyIdentifier(type = DataBinding.class)
+		public static final String VALUE_KEY = "value";
+		@PropertyIdentifier(type = Boolean.class)
+		public static final String MANDATORY_KEY = "mandatory";
 
-	public void setComponentClassName(String componentClassName)
-	{
-		FIBAttributeNotification<String> notification = requireChange(
-				Parameters.componentClassName, componentClassName);
-		if (notification != null) {
-			this.componentClassName = componentClassName;
-			defaultDataClass = null;
-			hasChanged(notification);
-		}
-	}*/
+		@Getter(value = OWNER_KEY, inverse = FIBCustom.ASSIGNMENTS_KEY)
+		public FIBCustom getOwner();
 
-	private static final Hashtable<Class<?>, Class<?>> DATA_CLASS_FOR_COMPONENT = new Hashtable<Class<?>, Class<?>>();
+		@Setter(OWNER_KEY)
+		public void setOwner(FIBCustom customColumn);
 
-	/**
-	 * Stuff to retrieve default data class from component class<br>
-	 * NB: this is STATIC !!!!
-	 * 
-	 * @param componentClass
-	 * @return
-	 */
-	private static Class<?> getDataClassForComponent(Class<?> componentClass) {
-		Class<?> returned = DATA_CLASS_FOR_COMPONENT.get(componentClass);
-		if (returned == null) {
-			logger.fine("Searching dataClass for " + componentClass);
-			FIBCustomComponent customComponent = null;
-			for (Constructor constructor : componentClass.getConstructors()) {
-				if (constructor.getGenericParameterTypes().length == 1) {
-					Object[] args = new Object[1];
-					args[0] = null;
-					try {
-						customComponent = (FIBCustomComponent) constructor.newInstance(args);
-						break;
-					} catch (IllegalArgumentException e) {
-						// TODO Auto-generated catch block
-						e.printStackTrace();
-						logger.warning("While trying to instanciate " + componentClass + " with null");
-					} catch (InstantiationException e) {
-						// TODO Auto-generated catch block
-						e.printStackTrace();
-					} catch (IllegalAccessException e) {
-						// TODO Auto-generated catch block
-						e.printStackTrace();
-					} catch (InvocationTargetException e) {
-						// TODO Auto-generated catch block
-						e.printStackTrace();
-					} catch (ClassCastException e) {
-						// TODO Auto-generated catch block
-						e.printStackTrace();
+		@Getter(value = VARIABLE_KEY)
+		@XMLAttribute
+		public DataBinding<Object> getVariable();
+
+		@Setter(VARIABLE_KEY)
+		public void setVariable(DataBinding<Object> variable);
+
+		@Getter(value = VALUE_KEY)
+		@XMLAttribute
+		public DataBinding<Object> getValue();
+
+		@Setter(VALUE_KEY)
+		public void setValue(DataBinding<Object> value);
+
+		@Getter(value = MANDATORY_KEY)
+		@XMLAttribute
+		public boolean isMandatory();
+
+		@Setter(MANDATORY_KEY)
+		public void setMandatory(boolean mandatory);
+
+		public void finalizeDeserialization();
+
+		public static abstract class FIBCustomAssignmentImpl extends FIBModelObjectImpl implements FIBCustomAssignment {
+			@Deprecated
+			public static BindingDefinition VARIABLE = new BindingDefinition("variable", Object.class,
+					DataBinding.BindingDefinitionType.GET_SET, true);
+			@Deprecated
+			public BindingDefinition VALUE = new BindingDefinition("value", Object.class, DataBinding.BindingDefinitionType.GET, true);
+
+			private DataBinding<Object> variable;
+			private DataBinding<Object> value;
+
+			private final boolean mandatory = true;
+
+			public FIBCustomAssignmentImpl() {
+			}
+
+			/*public FIBCustomAssignmentImpl(FIBCustomColumn customColumn, DataBinding<Object> variable, DataBinding<Object> value,
+					boolean mandatory) {
+				this();
+				this.mandatory = mandatory;
+				setVariable(variable);
+				setValue(value);
+			}*/
+
+			@Override
+			public boolean isMandatory() {
+				return mandatory;
+			}
+
+			@Override
+			public void setOwner(FIBCustom custom) {
+				performSuperSetter(OWNER_KEY, custom);
+				if (value != null) {
+					value.setOwner(custom);
+				}
+			}
+
+			@Override
+			public FIBComponent getComponent() {
+				if (getOwner() != null) {
+					return getOwner().getComponent();
+				}
+				return null;
+			}
+
+			@Override
+			public DataBinding<Object> getVariable() {
+				if (variable == null) {
+					variable = new DataBinding<Object>(this, Object.class, DataBinding.BindingDefinitionType.GET_SET);
+				}
+				return variable;
+			}
+
+			@Override
+			public void setVariable(DataBinding<Object> variable) {
+				if (variable != null) {
+					variable.setOwner(this);
+					variable.setDeclaredType(Object.class);
+					variable.setBindingDefinitionType(DataBinding.BindingDefinitionType.GET_SET);
+				}
+				this.variable = variable;
+				if (getOwner() != null && variable != null) {
+					variable.decode();
+				}
+				if (variable.isValid()) {
+					VALUE.setType(variable.getAnalyzedType());
+					if (value != null) {
+						value.setBindingDefinition(VALUE);
 					}
 				}
 			}
-			logger.fine("customComponent=" + customComponent);
-			if (customComponent != null) {
-				returned = customComponent.getRepresentedType();
-				DATA_CLASS_FOR_COMPONENT.put(componentClass, returned);
-				logger.fine("Found " + returned);
-				return returned;
+
+			@Override
+			public DataBinding<Object> getValue() {
+				if (value == null) {
+					value = new DataBinding<Object>(getOwner(), Object.class, DataBinding.BindingDefinitionType.GET);
+				}
+				return value;
 			}
-			return Object.class;
+
+			@Override
+			public void setValue(DataBinding<Object> value) {
+				if (value != null) {
+					value.setOwner(getOwner()); // Warning, still null while deserializing
+					value.setDeclaredType(Object.class);
+					value.setBindingDefinitionType(DataBinding.BindingDefinitionType.GET);
+					this.value = value;
+				} else {
+					getValue();
+				}
+			}
+
+			@Override
+			public void finalizeDeserialization() {
+
+				if (variable != null) {
+					variable.decode();
+				}
+				if (value != null) {
+					value.setOwner(getOwner());
+					value.decode();
+				}
+			}
+
+			@Override
+			public BindingModel getBindingModel() {
+				if (getOwner() != null) {
+					return getOwner().getCustomComponentBindingModel();
+				}
+				return null;
+			}
+
 		}
-		return returned;
 	}
 
 }

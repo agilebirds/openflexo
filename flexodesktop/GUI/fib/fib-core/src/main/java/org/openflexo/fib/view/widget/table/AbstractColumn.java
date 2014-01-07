@@ -57,8 +57,8 @@ public abstract class AbstractColumn<T, V> implements BindingEvaluationContext, 
 
 	private String title;
 	private int defaultWidth;
-	private boolean isResizable;
-	private boolean displayTitle;
+	private final boolean isResizable;
+	private final boolean displayTitle;
 
 	// private FIBTableModel fibTableModel;
 	private FIBTableColumn columnModel;
@@ -71,7 +71,7 @@ public abstract class AbstractColumn<T, V> implements BindingEvaluationContext, 
 
 	private FIBTableModel<T> tableModel;
 
-	private DynamicFormatter formatter;
+	private final DynamicFormatter formatter;
 
 	public AbstractColumn(FIBTableColumn columnModel, FIBTableModel<T> tableModel, FIBController controller) {
 		super();
@@ -99,14 +99,13 @@ public abstract class AbstractColumn<T, V> implements BindingEvaluationContext, 
 	@Override
 	public void propertyChange(PropertyChangeEvent evt) {
 		if (evt.getSource() == columnModel) {
-			if ((evt.getPropertyName().equals(FIBTableColumn.Parameters.columnWidth.name()))
-					|| (evt.getPropertyName().equals(FIBTableColumn.Parameters.data.name()))
-					|| (evt.getPropertyName().equals(FIBTableColumn.Parameters.displayTitle.name()))
-					|| (evt.getPropertyName().equals(FIBTableColumn.Parameters.font.name()))
-					|| (evt.getPropertyName().equals(FIBTableColumn.Parameters.resizable.name()))
-					|| (evt.getPropertyName().equals(FIBTableColumn.Parameters.title.name()))) {
-				if (controller.viewForComponent((FIBComponent) columnModel.getTable()) != null) {
-					((FIBTableWidget) controller.viewForComponent((FIBComponent) columnModel.getTable())).updateTable();
+			if ((evt.getPropertyName().equals(FIBTableColumn.COLUMN_WIDTH_KEY)) || (evt.getPropertyName().equals(FIBTableColumn.DATA_KEY))
+					|| (evt.getPropertyName().equals(FIBTableColumn.DISPLAY_TITLE_KEY))
+					|| (evt.getPropertyName().equals(FIBTableColumn.FONT_KEY))
+					|| (evt.getPropertyName().equals(FIBTableColumn.RESIZABLE_KEY))
+					|| (evt.getPropertyName().equals(FIBTableColumn.TITLE_KEY))) {
+				if (controller.viewForComponent((FIBComponent) columnModel.getOwner()) != null) {
+					((FIBTableWidget) controller.viewForComponent((FIBComponent) columnModel.getOwner())).updateTable();
 				}
 			}
 		}
@@ -119,7 +118,7 @@ public abstract class AbstractColumn<T, V> implements BindingEvaluationContext, 
 
 	public String getLocalized(String key) {
 		if (getController() != null) {
-			return FlexoLocalization.localizedForKey(getController().getLocalizerForComponent((FIBComponent) getColumnModel().getTable()),
+			return FlexoLocalization.localizedForKey(getController().getLocalizerForComponent((FIBComponent) getColumnModel().getOwner()),
 					key);
 		} else {
 			logger.warning("Controller not defined");

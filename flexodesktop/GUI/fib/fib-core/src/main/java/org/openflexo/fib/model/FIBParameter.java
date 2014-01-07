@@ -19,51 +19,34 @@
  */
 package org.openflexo.fib.model;
 
-import org.openflexo.xmlcode.XMLSerializable;
+import org.openflexo.model.annotations.Getter;
+import org.openflexo.model.annotations.ModelEntity;
+import org.openflexo.model.annotations.PropertyIdentifier;
+import org.openflexo.model.annotations.Setter;
+import org.openflexo.model.annotations.XMLAttribute;
+import org.openflexo.model.annotations.XMLElement;
 
-public class FIBParameter implements XMLSerializable {
+@ModelEntity
+@XMLElement(xmlTag = "Parameter")
+public interface FIBParameter {
 
-	private String name;
-	private String value;
+	@PropertyIdentifier(type = String.class)
+	public static final String NAME_KEY = "name";
+	@PropertyIdentifier(type = String.class)
+	public static final String VALUE_KEY = "value";
 
-	public FIBParameter() {
-		super();
-	}
+	@Getter(value = NAME_KEY)
+	@XMLAttribute
+	public String getName();
 
-	public FIBParameter(String name, String value) {
-		super();
-		this.setName(name);
-		this.setValue(value);
-	}
+	@Setter(NAME_KEY)
+	public void setName(String name);
 
-	/**
-	 * @return the name
-	 */
-	public String getName() {
-		return name;
-	}
+	@Getter(value = VALUE_KEY)
+	@XMLAttribute
+	public String getValue();
 
-	/**
-	 * @param name
-	 *            the name to set
-	 */
-	public void setName(String name) {
-		this.name = name;
-	}
-
-	/**
-	 * @return the value
-	 */
-	public String getValue() {
-		return value;
-	}
-
-	/**
-	 * @param value
-	 *            the value to set
-	 */
-	public void setValue(String value) {
-		this.value = value;
-	}
+	@Setter(VALUE_KEY)
+	public void setValue(String value);
 
 }

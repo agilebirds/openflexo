@@ -24,7 +24,18 @@ import java.lang.reflect.Type;
 
 import javax.swing.JFileChooser;
 
-public class FIBFile extends FIBWidget {
+import org.openflexo.model.annotations.Getter;
+import org.openflexo.model.annotations.ImplementationClass;
+import org.openflexo.model.annotations.ModelEntity;
+import org.openflexo.model.annotations.PropertyIdentifier;
+import org.openflexo.model.annotations.Setter;
+import org.openflexo.model.annotations.XMLAttribute;
+import org.openflexo.model.annotations.XMLElement;
+
+@ModelEntity
+@ImplementationClass(FIBFile.FIBFileImpl.class)
+@XMLElement(xmlTag = "File")
+public interface FIBFile extends FIBWidget {
 
 	public static enum FileMode {
 		OpenMode {
@@ -42,113 +53,183 @@ public class FIBFile extends FIBWidget {
 		public abstract int getMode();
 	}
 
-	private FileMode mode;
-	private String filter;
-	private String title;
-	private boolean directory = false;
-	private File defaultDirectory;
-	private Integer columns;
+	@PropertyIdentifier(type = FileMode.class)
+	public static final String MODE_KEY = "mode";
+	@PropertyIdentifier(type = String.class)
+	public static final String FILTER_KEY = "filter";
+	@PropertyIdentifier(type = String.class)
+	public static final String TITLE_KEY = "title";
+	@PropertyIdentifier(type = boolean.class)
+	public static final String DIRECTORY_KEY = "directory";
+	@PropertyIdentifier(type = File.class)
+	public static final String DEFAULT_DIRECTORY_KEY = "defaultDirectory";
+	@PropertyIdentifier(type = Integer.class)
+	public static final String COLUMNS_KEY = "columns";
 
-	public FIBFile() {
-	}
+	@Getter(value = MODE_KEY)
+	@XMLAttribute
+	public FileMode getMode();
 
-	@Override
-	protected String getBaseName() {
-		return "FileSelector";
-	}
+	@Setter(MODE_KEY)
+	public void setMode(FileMode mode);
 
-	@Override
-	public Type getDefaultDataClass() {
-		return File.class;
-	}
+	@Getter(value = FILTER_KEY)
+	@XMLAttribute
+	public String getFilter();
 
-	/**
-	 * @return the columns
-	 */
-	public Integer getColumns() {
-		return columns;
-	}
+	@Setter(FILTER_KEY)
+	public void setFilter(String filter);
 
-	/**
-	 * @param columns
-	 *            the columns to set
-	 */
-	public void setColumns(Integer columns) {
-		this.columns = columns;
-	}
+	@Getter(value = TITLE_KEY)
+	@XMLAttribute
+	public String getTitle();
 
-	/**
-	 * @return the defaultDirectory
-	 */
-	public File getDefaultDirectory() {
-		return defaultDirectory;
-	}
+	@Setter(TITLE_KEY)
+	public void setTitle(String title);
 
-	/**
-	 * @param defaultDirectory
-	 *            the defaultDirectory to set
-	 */
-	public void setDefaultDirectory(File defaultDirectory) {
-		this.defaultDirectory = defaultDirectory;
-	}
+	@Getter(value = DIRECTORY_KEY, defaultValue = "false")
+	@XMLAttribute(xmlTag = "isDirectory")
+	public boolean isDirectory();
 
-	/**
-	 * @return the filter
-	 */
-	public String getFilter() {
-		return filter;
-	}
+	@Setter(DIRECTORY_KEY)
+	public void setDirectory(boolean directory);
 
-	/**
-	 * @param filter
-	 *            the filter to set
-	 */
-	public void setFilter(String filter) {
-		this.filter = filter;
-	}
+	@Getter(value = DEFAULT_DIRECTORY_KEY)
+	@XMLAttribute
+	public File getDefaultDirectory();
 
-	/**
-	 * @return the directory
-	 */
-	public boolean isDirectory() {
-		return directory;
-	}
+	@Setter(DEFAULT_DIRECTORY_KEY)
+	public void setDefaultDirectory(File defaultDirectory);
 
-	/**
-	 * @param directory
-	 *            the directory to set
-	 */
-	public void setDirectory(boolean directory) {
-		this.directory = directory;
-	}
+	@Getter(value = COLUMNS_KEY)
+	@XMLAttribute
+	public Integer getColumns();
 
-	/**
-	 * @return the mode
-	 */
-	public FileMode getMode() {
-		return mode;
-	}
+	@Setter(COLUMNS_KEY)
+	public void setColumns(Integer columns);
 
-	/**
-	 * @param mode
-	 *            the mode to set
-	 */
-	public void setMode(FileMode mode) {
-		this.mode = mode;
-	}
+	public static abstract class FIBFileImpl extends FIBWidgetImpl implements FIBFile {
 
-	/**
-	 * @return the title
-	 */
-	public String getTitle() {
-		return title;
-	}
+		private FileMode mode;
+		private String filter;
+		private String title;
+		private boolean directory = false;
+		private File defaultDirectory;
+		private Integer columns;
 
-	/**
-	 * @param title
-	 *            the title to set
-	 */
-	public void setTitle(String title) {
-		this.title = title;
+		public FIBFileImpl() {
+		}
+
+		@Override
+		public String getBaseName() {
+			return "FileSelector";
+		}
+
+		@Override
+		public Type getDefaultDataClass() {
+			return File.class;
+		}
+
+		/**
+		 * @return the columns
+		 */
+		@Override
+		public Integer getColumns() {
+			return columns;
+		}
+
+		/**
+		 * @param columns
+		 *            the columns to set
+		 */
+		@Override
+		public void setColumns(Integer columns) {
+			this.columns = columns;
+		}
+
+		/**
+		 * @return the defaultDirectory
+		 */
+		@Override
+		public File getDefaultDirectory() {
+			return defaultDirectory;
+		}
+
+		/**
+		 * @param defaultDirectory
+		 *            the defaultDirectory to set
+		 */
+		@Override
+		public void setDefaultDirectory(File defaultDirectory) {
+			this.defaultDirectory = defaultDirectory;
+		}
+
+		/**
+		 * @return the filter
+		 */
+		@Override
+		public String getFilter() {
+			return filter;
+		}
+
+		/**
+		 * @param filter
+		 *            the filter to set
+		 */
+		@Override
+		public void setFilter(String filter) {
+			this.filter = filter;
+		}
+
+		/**
+		 * @return the directory
+		 */
+		@Override
+		public boolean isDirectory() {
+			return directory;
+		}
+
+		/**
+		 * @param directory
+		 *            the directory to set
+		 */
+		@Override
+		public void setDirectory(boolean directory) {
+			this.directory = directory;
+		}
+
+		/**
+		 * @return the mode
+		 */
+		@Override
+		public FileMode getMode() {
+			return mode;
+		}
+
+		/**
+		 * @param mode
+		 *            the mode to set
+		 */
+		@Override
+		public void setMode(FileMode mode) {
+			this.mode = mode;
+		}
+
+		/**
+		 * @return the title
+		 */
+		@Override
+		public String getTitle() {
+			return title;
+		}
+
+		/**
+		 * @param title
+		 *            the title to set
+		 */
+		@Override
+		public void setTitle(String title) {
+			this.title = title;
+		}
 	}
 }

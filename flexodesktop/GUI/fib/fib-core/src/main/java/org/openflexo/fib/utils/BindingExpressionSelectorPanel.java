@@ -29,7 +29,7 @@ import java.util.logging.Level;
 import javax.swing.JButton;
 
 import org.openflexo.antar.binding.DataBinding;
-import org.openflexo.fib.model.FIBModelObject;
+import org.openflexo.fib.model.FIBModelObject.FIBModelObjectImpl;
 import org.openflexo.localization.FlexoLocalization;
 import org.openflexo.swing.ButtonsControlPanel;
 import org.openflexo.toolbox.ToolBox;
@@ -79,7 +79,7 @@ public class BindingExpressionSelectorPanel extends AbstractBindingSelectorPanel
 		_controlPanel = new ButtonsControlPanel() {
 			@Override
 			public String localizedForKeyAndButton(String key, JButton component) {
-				return FlexoLocalization.localizedForKey(FIBModelObject.LOCALIZATION, key, component);
+				return FlexoLocalization.localizedForKey(FIBModelObjectImpl.LOCALIZATION, key, component);
 			}
 		};
 		_applyButton = _controlPanel.addButton("apply", new ActionListener() {

@@ -73,7 +73,7 @@ import org.openflexo.antar.expr.UnaryOperator;
 import org.openflexo.antar.expr.UnaryOperatorExpression;
 import org.openflexo.antar.expr.parser.ExpressionParser;
 import org.openflexo.antar.pp.ExpressionPrettyPrinter;
-import org.openflexo.fib.model.FIBModelObject;
+import org.openflexo.fib.model.FIBModelObject.FIBModelObjectImpl;
 import org.openflexo.localization.FlexoLocalization;
 import org.openflexo.swing.MouseOverButton;
 
@@ -210,18 +210,18 @@ public class BindingExpressionPanel extends JPanel implements FocusListener {
 		}
 
 		if (evaluationPanel != null && evaluationTA != null && evaluationPanel.isVisible()) {
-			evaluationTA.setText(FlexoLocalization.localizedForKey(FIBModelObject.LOCALIZATION, "cannot_evaluate"));
+			evaluationTA.setText(FlexoLocalization.localizedForKey(FIBModelObjectImpl.LOCALIZATION, "cannot_evaluate"));
 		}
 
 		if (dataBinding.getExpression() != null) {
 			if (expressionIsUndefined(dataBinding.getExpression())) {
 				status = ExpressionParsingStatus.UNDEFINED;
-				message = FlexoLocalization.localizedForKey(FIBModelObject.LOCALIZATION, UNDEFINED_EXPRESSION_MESSAGE);
+				message = FlexoLocalization.localizedForKey(FIBModelObjectImpl.LOCALIZATION, UNDEFINED_EXPRESSION_MESSAGE);
 				return;
 			} else {
 				for (BindingValue bv : dataBinding.getExpression().getAllBindingValues()) {
 					if (!bv.isValid()) {
-						message = FlexoLocalization.localizedForKey(FIBModelObject.LOCALIZATION, "invalid_binding") + " " + bv;
+						message = FlexoLocalization.localizedForKey(FIBModelObjectImpl.LOCALIZATION, "invalid_binding") + " " + bv;
 						status = ExpressionParsingStatus.INVALID;
 						return;
 					}
@@ -230,16 +230,16 @@ public class BindingExpressionPanel extends JPanel implements FocusListener {
 		}
 
 		if (dataBinding.getExpression() == null) {
-			message = FlexoLocalization.localizedForKey(FIBModelObject.LOCALIZATION, "cannot_parse") + " "
+			message = FlexoLocalization.localizedForKey(FIBModelObjectImpl.LOCALIZATION, "cannot_parse") + " "
 					+ dataBinding.getUnparsedBinding();
 			status = ExpressionParsingStatus.INVALID;
 		} else if ((undefinedOperator = firstOperatorWithUndefinedOperand(dataBinding.getExpression())) != null) {
 			status = ExpressionParsingStatus.INVALID;
 			try {
-				message = FlexoLocalization.localizedForKey(FIBModelObject.LOCALIZATION, UNDEFINED_OPERAND_FOR_OPERATOR) + " "
+				message = FlexoLocalization.localizedForKey(FIBModelObjectImpl.LOCALIZATION, UNDEFINED_OPERAND_FOR_OPERATOR) + " "
 						+ undefinedOperator.getLocalizedName() + " [" + pp.getSymbol(undefinedOperator) + "]";
 			} catch (OperatorNotSupportedException e) {
-				message = FlexoLocalization.localizedForKey(FIBModelObject.LOCALIZATION, UNDEFINED_OPERAND_FOR_OPERATOR) + " "
+				message = FlexoLocalization.localizedForKey(FIBModelObjectImpl.LOCALIZATION, UNDEFINED_OPERAND_FOR_OPERATOR) + " "
 						+ undefinedOperator.getLocalizedName() + " [?]";
 			}
 		} else {
@@ -253,17 +253,17 @@ public class BindingExpressionPanel extends JPanel implements FocusListener {
 							|| wantedEvaluationType == EvaluationType.ARITHMETIC_FLOAT
 							&& evaluationType == EvaluationType.ARITHMETIC_INTEGER) {
 						status = ExpressionParsingStatus.VALID;
-						message = FlexoLocalization.localizedForKey(FIBModelObject.LOCALIZATION, VALID_EXPRESSION) + " : "
+						message = FlexoLocalization.localizedForKey(FIBModelObjectImpl.LOCALIZATION, VALID_EXPRESSION) + " : "
 								+ evaluationType.getLocalizedName();
 					} else {
 						status = ExpressionParsingStatus.SYNTAXICALLY_VALID;
-						message = FlexoLocalization.localizedForKeyWithParams(FIBModelObject.LOCALIZATION,
+						message = FlexoLocalization.localizedForKeyWithParams(FIBModelObjectImpl.LOCALIZATION,
 								VALID_EXPRESSION_BUT_MISMATCH_TYPE, evaluationType.getLocalizedName(),
 								wantedEvaluationType.getLocalizedName());
 					}
 				} else {
 					status = ExpressionParsingStatus.VALID;
-					message = FlexoLocalization.localizedForKey(FIBModelObject.LOCALIZATION, VALID_EXPRESSION) + " : "
+					message = FlexoLocalization.localizedForKey(FIBModelObjectImpl.LOCALIZATION, VALID_EXPRESSION) + " : "
 							+ evaluationType.getLocalizedName();
 				}
 
@@ -385,7 +385,7 @@ public class BindingExpressionPanel extends JPanel implements FocusListener {
 		evaluationTA.setEditable(false);
 		evaluationTA.setLineWrap(true);
 
-		evaluationPanel.add(new JLabel(FlexoLocalization.localizedForKey(FIBModelObject.LOCALIZATION, "evaluation") + "  "),
+		evaluationPanel.add(new JLabel(FlexoLocalization.localizedForKey(FIBModelObjectImpl.LOCALIZATION, "evaluation") + "  "),
 				BorderLayout.WEST);
 		evaluationPanel.add(evaluationTA, BorderLayout.CENTER);
 
@@ -393,20 +393,22 @@ public class BindingExpressionPanel extends JPanel implements FocusListener {
 		showEvaluationButton.setBorder(BorderFactory.createEmptyBorder());
 		showEvaluationButton.setNormalIcon(FIBIconLibrary.TOGGLE_ARROW_BOTTOM_ICON);
 		showEvaluationButton.setMouseOverIcon(FIBIconLibrary.TOGGLE_ARROW_BOTTOM_SELECTED_ICON);
-		showEvaluationButton.setToolTipText(FlexoLocalization.localizedForKey(FIBModelObject.LOCALIZATION, "show_evaluation"));
+		showEvaluationButton.setToolTipText(FlexoLocalization.localizedForKey(FIBModelObjectImpl.LOCALIZATION, "show_evaluation"));
 		showEvaluationButton.addActionListener(new ActionListener() {
 			@Override
 			public void actionPerformed(ActionEvent e) {
 				if (!evaluationPanel.isVisible()) {
 					showEvaluationButton.setNormalIcon(FIBIconLibrary.TOGGLE_ARROW_TOP_ICON);
 					showEvaluationButton.setMouseOverIcon(FIBIconLibrary.TOGGLE_ARROW_TOP_SELECTED_ICON);
-					showEvaluationButton.setToolTipText(FlexoLocalization.localizedForKey(FIBModelObject.LOCALIZATION, "hide_evaluation"));
+					showEvaluationButton.setToolTipText(FlexoLocalization.localizedForKey(FIBModelObjectImpl.LOCALIZATION,
+							"hide_evaluation"));
 					evaluationPanel.setVisible(true);
 					_checkEditedExpression();
 				} else {
 					showEvaluationButton.setNormalIcon(FIBIconLibrary.TOGGLE_ARROW_BOTTOM_ICON);
 					showEvaluationButton.setMouseOverIcon(FIBIconLibrary.TOGGLE_ARROW_BOTTOM_SELECTED_ICON);
-					showEvaluationButton.setToolTipText(FlexoLocalization.localizedForKey(FIBModelObject.LOCALIZATION, "show_evaluation"));
+					showEvaluationButton.setToolTipText(FlexoLocalization.localizedForKey(FIBModelObjectImpl.LOCALIZATION,
+							"show_evaluation"));
 					evaluationPanel.setVisible(false);
 				}
 			}
@@ -452,21 +454,21 @@ public class BindingExpressionPanel extends JPanel implements FocusListener {
 		moreButton.setBorder(BorderFactory.createEmptyBorder());
 		moreButton.setNormalIcon(FIBIconLibrary.TOGGLE_ARROW_BOTTOM_ICON);
 		moreButton.setMouseOverIcon(FIBIconLibrary.TOGGLE_ARROW_BOTTOM_SELECTED_ICON);
-		moreButton.setToolTipText(FlexoLocalization.localizedForKey(FIBModelObject.LOCALIZATION, "show_more_operators"));
+		moreButton.setToolTipText(FlexoLocalization.localizedForKey(FIBModelObjectImpl.LOCALIZATION, "show_more_operators"));
 		moreButton.addActionListener(new ActionListener() {
 			@Override
 			public void actionPerformed(ActionEvent e) {
 				if (!mathControls.isVisible()) {
 					moreButton.setNormalIcon(FIBIconLibrary.TOGGLE_ARROW_TOP_ICON);
 					moreButton.setMouseOverIcon(FIBIconLibrary.TOGGLE_ARROW_TOP_SELECTED_ICON);
-					moreButton.setToolTipText(FlexoLocalization.localizedForKey(FIBModelObject.LOCALIZATION, "hide_extra_operators"));
+					moreButton.setToolTipText(FlexoLocalization.localizedForKey(FIBModelObjectImpl.LOCALIZATION, "hide_extra_operators"));
 					commonControls.remove(moreButton);
 					mathControls.add(moreButton);
 					mathControls.setVisible(true);
 				} else {
 					moreButton.setNormalIcon(FIBIconLibrary.TOGGLE_ARROW_BOTTOM_ICON);
 					moreButton.setMouseOverIcon(FIBIconLibrary.TOGGLE_ARROW_BOTTOM_SELECTED_ICON);
-					moreButton.setToolTipText(FlexoLocalization.localizedForKey(FIBModelObject.LOCALIZATION, "show_more_operators"));
+					moreButton.setToolTipText(FlexoLocalization.localizedForKey(FIBModelObjectImpl.LOCALIZATION, "show_more_operators"));
 					mathControls.remove(moreButton);
 					commonControls.add(moreButton);
 					mathControls.setVisible(false);
@@ -525,8 +527,9 @@ public class BindingExpressionPanel extends JPanel implements FocusListener {
 			});
 		}
 
-		returned.setBorder(BorderFactory.createTitledBorder(null, FlexoLocalization.localizedForKey(FIBModelObject.LOCALIZATION, title),
-				TitledBorder.CENTER, TitledBorder.TOP, new Font("SansSerif", Font.ITALIC, 8)));
+		returned.setBorder(BorderFactory.createTitledBorder(null,
+				FlexoLocalization.localizedForKey(FIBModelObjectImpl.LOCALIZATION, title), TitledBorder.CENTER, TitledBorder.TOP, new Font(
+						"SansSerif", Font.ITALIC, 8)));
 		return returned;
 	}
 
@@ -574,7 +577,7 @@ public class BindingExpressionPanel extends JPanel implements FocusListener {
 
 	protected abstract class ExpressionInnerPanel extends JPanel {
 
-		private DataBinding<?> innerDataBinding;
+		private final DataBinding<?> innerDataBinding;
 		protected Expression _representedExpression;
 		private BindingSelector _bindingSelector;
 

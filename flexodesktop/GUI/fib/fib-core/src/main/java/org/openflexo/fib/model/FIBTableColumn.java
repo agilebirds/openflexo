@@ -22,378 +22,540 @@ package org.openflexo.fib.model;
 import java.awt.Color;
 import java.awt.Font;
 import java.lang.reflect.Type;
-import java.util.List;
 import java.util.logging.Logger;
 
 import org.openflexo.antar.binding.Bindable;
 import org.openflexo.antar.binding.BindingDefinition;
+import org.openflexo.antar.binding.BindingFactory;
 import org.openflexo.antar.binding.BindingModel;
 import org.openflexo.antar.binding.BindingVariable;
 import org.openflexo.antar.binding.DataBinding;
 import org.openflexo.fib.model.validation.ValidationReport;
+import org.openflexo.model.annotations.Getter;
+import org.openflexo.model.annotations.ImplementationClass;
+import org.openflexo.model.annotations.ModelEntity;
+import org.openflexo.model.annotations.PropertyIdentifier;
+import org.openflexo.model.annotations.Setter;
+import org.openflexo.model.annotations.XMLAttribute;
 
-public abstract class FIBTableColumn extends FIBModelObject {
-
-	private static final Logger logger = Logger.getLogger(FIBTableColumn.class.getPackage().getName());
-
-	private FIBTableComponent table;
-
-	public static enum Parameters implements FIBModelAttribute {
-		data, format, tooltip, title, tooltipText, columnWidth, resizable, displayTitle, font, color, bgColor, valueChangedAction
-
-	}
+@ModelEntity(isAbstract = true)
+@ImplementationClass(FIBTableColumn.FIBTableColumnImpl.class)
+public abstract interface FIBTableColumn extends FIBModelObject {
 
 	public static enum ColumnType {
 		CheckBox, Custom, DropDown, Icon, Label, Number, TextField, Button;
 	}
 
-	@Deprecated
-	private static BindingDefinition DATA = new BindingDefinition("data", Object.class, DataBinding.BindingDefinitionType.GET, false);
-	@Deprecated
-	private static BindingDefinition TOOLTIP = new BindingDefinition("tooltip", String.class, DataBinding.BindingDefinitionType.GET, false);
-	@Deprecated
-	private static BindingDefinition FORMAT = new BindingDefinition("format", String.class, DataBinding.BindingDefinitionType.GET, false);
-	@Deprecated
-	private static BindingDefinition COLOR = new BindingDefinition("color", Color.class, DataBinding.BindingDefinitionType.GET, false);
-	@Deprecated
-	private static BindingDefinition BG_COLOR = new BindingDefinition("bgColor", Color.class, DataBinding.BindingDefinitionType.GET, false);
-	@Deprecated
-	private static BindingDefinition VALUE_CHANGED_ACTION = new BindingDefinition("valueChangedAction", Void.class,
-			DataBinding.BindingDefinitionType.EXECUTE, false);
+	@PropertyIdentifier(type = FIBTable.class)
+	public static final String OWNER_KEY = "owner";
+	@PropertyIdentifier(type = DataBinding.class)
+	public static final String DATA_KEY = "data";
+	@PropertyIdentifier(type = DataBinding.class)
+	public static final String FORMAT_KEY = "format";
+	@PropertyIdentifier(type = String.class)
+	public static final String TITLE_KEY = "title";
+	@PropertyIdentifier(type = Integer.class)
+	public static final String COLUMN_WIDTH_KEY = "columnWidth";
+	@PropertyIdentifier(type = Boolean.class)
+	public static final String RESIZABLE_KEY = "resizable";
+	@PropertyIdentifier(type = Boolean.class)
+	public static final String DISPLAY_TITLE_KEY = "displayTitle";
+	@PropertyIdentifier(type = Font.class)
+	public static final String FONT_KEY = "font";
+	@PropertyIdentifier(type = DataBinding.class)
+	public static final String COLOR_KEY = "color";
+	@PropertyIdentifier(type = DataBinding.class)
+	public static final String BG_COLOR_KEY = "bgColor";
+	@PropertyIdentifier(type = DataBinding.class)
+	public static final String TOOLTIP_KEY = "tooltip";
+	@PropertyIdentifier(type = String.class)
+	public static final String TOOLTIP_TEXT_KEY = "tooltipText";
+	@PropertyIdentifier(type = DataBinding.class)
+	public static final String VALUE_CHANGED_ACTION_KEY = "valueChangedAction";
 
-	private DataBinding<?> data;
-	private DataBinding<String> format;
-	private DataBinding<String> tooltip;
-	private DataBinding<Color> color;
-	private DataBinding<Color> bgColor;
-	private String title;
-	private String tooltipText;
-	private int columnWidth = 100;
-	private boolean resizable = true;
-	private boolean displayTitle = true;
-	private Font font;
-	private DataBinding<Void> valueChangedAction;
+	@Getter(value = OWNER_KEY, inverse = FIBTable.COLUMNS_KEY)
+	public FIBTable getOwner();
 
-	private final FIBFormatter formatter;
+	@Setter(OWNER_KEY)
+	public void setOwner(FIBTable customColumn);
 
-	public FIBTableColumn() {
-		formatter = new FIBFormatter();
-	}
+	@Getter(value = DATA_KEY)
+	@XMLAttribute
+	public DataBinding<?> getData();
 
-	public FIBTableComponent getTable() {
-		return table;
-	}
+	@Setter(DATA_KEY)
+	public void setData(DataBinding<?> data);
 
-	public void setTable(FIBTableComponent table) {
-		this.table = table;
-	}
+	@Getter(value = FORMAT_KEY)
+	@XMLAttribute
+	public DataBinding<String> getFormat();
 
-	public BindingDefinition getDataBindingDefinition() {
-		return DATA;
-	}
+	@Setter(FORMAT_KEY)
+	public void setFormat(DataBinding<String> format);
 
-	public BindingDefinition getTooltipBindingDefinition() {
-		return TOOLTIP;
-	}
+	@Getter(value = TITLE_KEY)
+	@XMLAttribute
+	public String getTitle();
 
-	public BindingDefinition getFormatBindingDefinition() {
-		return FORMAT;
-	}
+	@Setter(TITLE_KEY)
+	public void setTitle(String title);
 
-	public BindingDefinition getColorBindingDefinition() {
-		return COLOR;
-	}
+	@Getter(value = COLUMN_WIDTH_KEY)
+	@XMLAttribute
+	public Integer getColumnWidth();
 
-	public BindingDefinition getBgColorBindingDefinition() {
-		return BG_COLOR;
-	}
+	@Setter(COLUMN_WIDTH_KEY)
+	public void setColumnWidth(Integer columnWidth);
 
-	public BindingDefinition getValueChangedActionBindingDefinition() {
-		return VALUE_CHANGED_ACTION;
-	}
+	@Getter(value = RESIZABLE_KEY)
+	@XMLAttribute
+	public Boolean getResizable();
 
-	@Override
-	public FIBComponent getComponent() {
-		if (getTable() instanceof FIBTable) {
-			return ((FIBTable) getTable());
-		}
-		return null;
-	}
+	@Setter(RESIZABLE_KEY)
+	public void setResizable(Boolean resizable);
 
-	public DataBinding<?> getData() {
-		if (data == null) {
-			data = new DataBinding<Object>(this, Object.class, DataBinding.BindingDefinitionType.GET);
-		}
-		return data;
-	}
+	@Getter(value = DISPLAY_TITLE_KEY)
+	@XMLAttribute
+	public Boolean getDisplayTitle();
 
-	public void setData(DataBinding<?> data) {
-		if (data != null) {
-			data.setOwner(this);
-			data.setDeclaredType(Object.class);
-			data.setBindingDefinitionType(DataBinding.BindingDefinitionType.GET);
-		}
-		this.data = data;
-	}
+	@Setter(DISPLAY_TITLE_KEY)
+	public void setDisplayTitle(Boolean displayTitle);
 
-	public void finalizeTableDeserialization() {
-		logger.fine("finalizeDeserialization() for FIBTableColumn " + title);
-		if (data != null) {
-			data.decode();
-		}
-		if (tooltip != null) {
-			tooltip.decode();
-		}
-	}
+	@Getter(value = FONT_KEY)
+	@XMLAttribute
+	public Font getFont();
 
-	@Override
-	public BindingModel getBindingModel() {
-		if (getTable() != null) {
-			return getTable().getTableBindingModel();
-		}
-		return null;
-	}
+	@Setter(FONT_KEY)
+	public void setFont(Font font);
 
-	public Type getDataClass() {
-		if (getData() != null) {
-			return getData().getAnalyzedType();
-		}
-		return getDefaultDataClass();
-	}
+	@Getter(value = COLOR_KEY)
+	@XMLAttribute
+	public DataBinding<Color> getColor();
 
-	public abstract Type getDefaultDataClass();
+	@Setter(COLOR_KEY)
+	public void setColor(DataBinding<Color> color);
 
-	public String getTitle() {
-		return title;
-	}
+	@Getter(value = BG_COLOR_KEY)
+	@XMLAttribute
+	public DataBinding<Color> getBgColor();
 
-	public void setTitle(String title) {
-		FIBAttributeNotification<String> notification = requireChange(Parameters.title, title);
-		if (notification != null) {
-			this.title = title;
-			hasChanged(notification);
-		}
-	}
+	@Setter(BG_COLOR_KEY)
+	public void setBgColor(DataBinding<Color> bgColor);
 
-	public Integer getColumnWidth() {
-		return columnWidth;
-	}
+	@Getter(value = TOOLTIP_KEY)
+	@XMLAttribute
+	public DataBinding<String> getTooltip();
 
-	public void setColumnWidth(Integer columnWidth) {
-		FIBAttributeNotification<Integer> notification = requireChange(Parameters.columnWidth, columnWidth);
-		if (notification != null) {
-			this.columnWidth = columnWidth;
-			hasChanged(notification);
-		}
-	}
+	@Setter(TOOLTIP_KEY)
+	public void setTooltip(DataBinding<String> tooltip);
 
-	public Boolean getResizable() {
-		return resizable;
-	}
+	@Getter(value = TOOLTIP_TEXT_KEY)
+	@XMLAttribute
+	public String getTooltipText();
 
-	public void setResizable(Boolean resizable) {
-		FIBAttributeNotification<Boolean> notification = requireChange(Parameters.resizable, resizable);
-		if (notification != null) {
-			this.resizable = resizable;
-			hasChanged(notification);
-		}
-	}
+	@Setter(TOOLTIP_TEXT_KEY)
+	public void setTooltipText(String tooltipText);
 
-	public Boolean getDisplayTitle() {
-		return displayTitle;
-	}
+	@Getter(value = VALUE_CHANGED_ACTION_KEY)
+	@XMLAttribute
+	public DataBinding<?> getValueChangedAction();
 
-	public void setDisplayTitle(Boolean displayTitle) {
-		FIBAttributeNotification<Boolean> notification = requireChange(Parameters.displayTitle, displayTitle);
-		if (notification != null) {
-			this.displayTitle = displayTitle;
-			hasChanged(notification);
-		}
-	}
+	@Setter(VALUE_CHANGED_ACTION_KEY)
+	public void setValueChangedAction(DataBinding<?> valueChangedAction);
 
-	public Font retrieveValidFont() {
-		if (font == null && getTable() != null) {
-			return getTable().retrieveValidFont();
-		}
-		return getFont();
-	}
+	public void finalizeTableDeserialization();
 
-	public Font getFont() {
-		return font;
-	}
+	public Font retrieveValidFont();
 
-	public void setFont(Font font) {
-		FIBAttributeNotification<Font> notification = requireChange(Parameters.font, font);
-		if (notification != null) {
-			this.font = font;
-			hasChanged(notification);
-		}
-	}
+	public Type getDataClass();
 
-	public boolean getHasSpecificFont() {
-		return getFont() != null;
-	}
+	public static abstract class FIBTableColumnImpl extends FIBModelObjectImpl implements FIBTableColumn {
 
-	public void setHasSpecificFont(boolean aFlag) {
-		if (aFlag) {
-			setFont(retrieveValidFont());
-		} else {
-			setFont(null);
-		}
-	}
+		private static final Logger logger = Logger.getLogger(FIBTableColumn.class.getPackage().getName());
 
-	public abstract ColumnType getColumnType();
+		private FIBTableComponent table;
 
-	public DataBinding<String> getFormat() {
-		if (format == null) {
-			format = new DataBinding<String>(formatter, String.class, DataBinding.BindingDefinitionType.GET);
-		}
-		return format;
-	}
+		@Deprecated
+		private static BindingDefinition DATA = new BindingDefinition("data", Object.class, DataBinding.BindingDefinitionType.GET, false);
+		@Deprecated
+		private static BindingDefinition TOOLTIP = new BindingDefinition("tooltip", String.class, DataBinding.BindingDefinitionType.GET,
+				false);
+		@Deprecated
+		private static BindingDefinition FORMAT = new BindingDefinition("format", String.class, DataBinding.BindingDefinitionType.GET,
+				false);
+		@Deprecated
+		private static BindingDefinition COLOR = new BindingDefinition("color", Color.class, DataBinding.BindingDefinitionType.GET, false);
+		@Deprecated
+		private static BindingDefinition BG_COLOR = new BindingDefinition("bgColor", Color.class, DataBinding.BindingDefinitionType.GET,
+				false);
+		@Deprecated
+		private static BindingDefinition VALUE_CHANGED_ACTION = new BindingDefinition("valueChangedAction", Void.class,
+				DataBinding.BindingDefinitionType.EXECUTE, false);
 
-	public void setFormat(DataBinding<String> format) {
-		if (format != null) {
-			format.setOwner(formatter);
-			format.setDeclaredType(String.class);
-			format.setBindingDefinitionType(DataBinding.BindingDefinitionType.GET);
-		}
-		this.format = format;
-	}
+		private DataBinding<?> data;
+		private DataBinding<String> format;
+		private DataBinding<String> tooltip;
+		private DataBinding<Color> color;
+		private DataBinding<Color> bgColor;
+		private String title;
+		private String tooltipText;
+		private int columnWidth = 100;
+		private boolean resizable = true;
+		private boolean displayTitle = true;
+		private Font font;
+		private DataBinding<?> valueChangedAction;
 
-	public FIBFormatter getFormatter() {
-		return formatter;
-	}
+		private final FIBFormatter formatter;
 
-	private class FIBFormatter extends FIBModelObject implements Bindable {
-		private BindingModel formatterBindingModel = null;
-
-		@Override
-		public BindingModel getBindingModel() {
-			if (formatterBindingModel == null) {
-				createFormatterBindingModel();
-			}
-			return formatterBindingModel;
+		public FIBTableColumnImpl() {
+			formatter = new FIBFormatter();
 		}
 
-		private void createFormatterBindingModel() {
-			formatterBindingModel = new BindingModel(getTable().getTableBindingModel());
-			formatterBindingModel.addToBindingVariables(new BindingVariable("object", Object.class) {
-				@Override
-				public Type getType() {
-					return getDataClass();
-				}
-			});
+		public FIBTableComponent getTable() {
+			return table;
+		}
+
+		public void setTable(FIBTableComponent table) {
+			this.table = table;
+		}
+
+		public BindingDefinition getDataBindingDefinition() {
+			return DATA;
+		}
+
+		public BindingDefinition getTooltipBindingDefinition() {
+			return TOOLTIP;
+		}
+
+		public BindingDefinition getFormatBindingDefinition() {
+			return FORMAT;
+		}
+
+		public BindingDefinition getColorBindingDefinition() {
+			return COLOR;
+		}
+
+		public BindingDefinition getBgColorBindingDefinition() {
+			return BG_COLOR;
+		}
+
+		public BindingDefinition getValueChangedActionBindingDefinition() {
+			return VALUE_CHANGED_ACTION;
 		}
 
 		@Override
 		public FIBComponent getComponent() {
-			return FIBTableColumn.this.getComponent();
-		}
-
-		@Override
-		public List<? extends FIBModelObject> getEmbeddedObjects() {
+			if (getTable() instanceof FIBTable) {
+				return ((FIBTable) getTable());
+			}
 			return null;
 		}
 
-	}
-
-	public int getIndex() {
-		if (getTable() != null) {
-			return getTable().getColumns().indexOf(this);
+		@Override
+		public DataBinding<?> getData() {
+			if (data == null) {
+				data = new DataBinding<Object>(this, Object.class, DataBinding.BindingDefinitionType.GET);
+			}
+			return data;
 		}
-		return -1;
-	}
 
-	public String getTooltipText() {
-		return tooltipText;
-	}
-
-	public void setTooltipText(String tooltipText) {
-		FIBAttributeNotification<String> notification = requireChange(Parameters.tooltipText, tooltipText);
-		if (notification != null) {
-			this.tooltipText = tooltipText;
-			hasChanged(notification);
+		@Override
+		public void setData(DataBinding<?> data) {
+			if (data != null) {
+				data.setOwner(this);
+				data.setDeclaredType(Object.class);
+				data.setBindingDefinitionType(DataBinding.BindingDefinitionType.GET);
+			}
+			this.data = data;
 		}
-	}
 
-	public DataBinding<String> getTooltip() {
-		if (tooltip == null) {
-			tooltip = new DataBinding<String>(this, String.class, DataBinding.BindingDefinitionType.GET);
+		@Override
+		public void finalizeTableDeserialization() {
+			logger.fine("finalizeDeserialization() for FIBTableColumn " + title);
+			if (data != null) {
+				data.decode();
+			}
+			if (tooltip != null) {
+				tooltip.decode();
+			}
 		}
-		return tooltip;
-	}
 
-	public void setTooltip(DataBinding<String> tooltip) {
-		if (tooltip != null) {
-			tooltip.setOwner(this);
-			tooltip.setDeclaredType(String.class);
-			tooltip.setBindingDefinitionType(DataBinding.BindingDefinitionType.GET);
+		@Override
+		public BindingModel getBindingModel() {
+			if (getTable() != null) {
+				return getTable().getTableBindingModel();
+			}
+			return null;
 		}
-		this.tooltip = tooltip;
-	}
 
-	public DataBinding<Color> getColor() {
-		if (color == null) {
-			color = new DataBinding<Color>(this, Color.class, DataBinding.BindingDefinitionType.GET);
+		@Override
+		public Type getDataClass() {
+			if (getData() != null) {
+				return getData().getAnalyzedType();
+			}
+			return getDefaultDataClass();
 		}
-		return color;
-	}
 
-	public void setColor(DataBinding<Color> color) {
-		if (color != null) {
-			color.setOwner(this);
-			color.setDeclaredType(Color.class);
-			color.setBindingDefinitionType(DataBinding.BindingDefinitionType.GET);
+		public abstract Type getDefaultDataClass();
+
+		@Override
+		public String getTitle() {
+			return title;
 		}
-		this.color = color;
-	}
 
-	public DataBinding<Color> getBgColor() {
-		if (bgColor == null) {
-			bgColor = new DataBinding<Color>(this, Color.class, DataBinding.BindingDefinitionType.GET);
+		@Override
+		public void setTitle(String title) {
+			FIBPropertyNotification<String> notification = requireChange(TITLE_KEY, title);
+			if (notification != null) {
+				this.title = title;
+				hasChanged(notification);
+			}
 		}
-		return bgColor;
-	}
 
-	public void setBgColor(DataBinding<Color> bgColor) {
-		if (bgColor != null) {
-			bgColor.setOwner(this);
-			bgColor.setDeclaredType(Color.class);
-			bgColor.setBindingDefinitionType(DataBinding.BindingDefinitionType.GET);
+		@Override
+		public Integer getColumnWidth() {
+			return columnWidth;
 		}
-		this.bgColor = bgColor;
-	}
 
-	public DataBinding<Void> getValueChangedAction() {
-		if (valueChangedAction == null) {
-			valueChangedAction = new DataBinding<Void>(this, Void.class, DataBinding.BindingDefinitionType.EXECUTE);
+		@Override
+		public void setColumnWidth(Integer columnWidth) {
+			FIBPropertyNotification<Integer> notification = requireChange(COLUMN_WIDTH_KEY, columnWidth);
+			if (notification != null) {
+				this.columnWidth = columnWidth;
+				hasChanged(notification);
+			}
 		}
-		return valueChangedAction;
-	}
 
-	public void setValueChangedAction(DataBinding<Void> valueChangedAction) {
-		if (valueChangedAction != null) {
-			valueChangedAction.setOwner(this);
-			valueChangedAction.setDeclaredType(Void.class);
-			valueChangedAction.setBindingDefinitionType(DataBinding.BindingDefinitionType.EXECUTE);
+		@Override
+		public Boolean getResizable() {
+			return resizable;
 		}
-		this.valueChangedAction = valueChangedAction;
-	}
 
-	@Override
-	public List<? extends FIBModelObject> getEmbeddedObjects() {
-		return null;
-	}
+		@Override
+		public void setResizable(Boolean resizable) {
+			FIBPropertyNotification<Boolean> notification = requireChange(RESIZABLE_KEY, resizable);
+			if (notification != null) {
+				this.resizable = resizable;
+				hasChanged(notification);
+			}
+		}
 
-	@Override
-	protected void applyValidation(ValidationReport report) {
-		super.applyValidation(report);
-		performValidation(DataBindingMustBeValid.class, report);
-		performValidation(FormatBindingMustBeValid.class, report);
-		performValidation(TooltipBindingMustBeValid.class, report);
-		performValidation(ColorBindingMustBeValid.class, report);
-		performValidation(BgColorBindingMustBeValid.class, report);
-		performValidation(ValueChangedActionBindingMustBeValid.class, report);
+		@Override
+		public Boolean getDisplayTitle() {
+			return displayTitle;
+		}
+
+		@Override
+		public void setDisplayTitle(Boolean displayTitle) {
+			FIBPropertyNotification<Boolean> notification = requireChange(DISPLAY_TITLE_KEY, displayTitle);
+			if (notification != null) {
+				this.displayTitle = displayTitle;
+				hasChanged(notification);
+			}
+		}
+
+		@Override
+		public Font retrieveValidFont() {
+			if (font == null && getTable() != null) {
+				return getTable().retrieveValidFont();
+			}
+			return getFont();
+		}
+
+		@Override
+		public Font getFont() {
+			return font;
+		}
+
+		@Override
+		public void setFont(Font font) {
+			FIBPropertyNotification<Font> notification = requireChange(FONT_KEY, font);
+			if (notification != null) {
+				this.font = font;
+				hasChanged(notification);
+			}
+		}
+
+		public boolean getHasSpecificFont() {
+			return getFont() != null;
+		}
+
+		public void setHasSpecificFont(boolean aFlag) {
+			if (aFlag) {
+				setFont(retrieveValidFont());
+			} else {
+				setFont(null);
+			}
+		}
+
+		public abstract ColumnType getColumnType();
+
+		@Override
+		public DataBinding<String> getFormat() {
+			if (format == null) {
+				format = new DataBinding<String>(formatter, String.class, DataBinding.BindingDefinitionType.GET);
+			}
+			return format;
+		}
+
+		@Override
+		public void setFormat(DataBinding<String> format) {
+			if (format != null) {
+				format.setOwner(formatter);
+				format.setDeclaredType(String.class);
+				format.setBindingDefinitionType(DataBinding.BindingDefinitionType.GET);
+			}
+			this.format = format;
+		}
+
+		public FIBFormatter getFormatter() {
+			return formatter;
+		}
+
+		private class FIBFormatter implements Bindable {
+			private BindingModel formatterBindingModel = null;
+
+			@Override
+			public BindingModel getBindingModel() {
+				if (formatterBindingModel == null) {
+					createFormatterBindingModel();
+				}
+				return formatterBindingModel;
+			}
+
+			private void createFormatterBindingModel() {
+				formatterBindingModel = new BindingModel(getTable().getTableBindingModel());
+				formatterBindingModel.addToBindingVariables(new BindingVariable("object", Object.class) {
+					@Override
+					public Type getType() {
+						return getDataClass();
+					}
+				});
+			}
+
+			public FIBComponent getComponent() {
+				return FIBTableColumnImpl.this.getComponent();
+			}
+
+			@Override
+			public BindingFactory getBindingFactory() {
+				return getComponent().getBindingFactory();
+			}
+
+			@Override
+			public void notifiedBindingChanged(DataBinding<?> dataBinding) {
+			}
+
+			@Override
+			public void notifiedBindingDecoded(DataBinding<?> dataBinding) {
+			}
+
+		}
+
+		public int getIndex() {
+			if (getTable() != null) {
+				return getTable().getColumns().indexOf(this);
+			}
+			return -1;
+		}
+
+		@Override
+		public String getTooltipText() {
+			return tooltipText;
+		}
+
+		@Override
+		public void setTooltipText(String tooltipText) {
+			FIBPropertyNotification<String> notification = requireChange(TOOLTIP_TEXT_KEY, tooltipText);
+			if (notification != null) {
+				this.tooltipText = tooltipText;
+				hasChanged(notification);
+			}
+		}
+
+		@Override
+		public DataBinding<String> getTooltip() {
+			if (tooltip == null) {
+				tooltip = new DataBinding<String>(this, String.class, DataBinding.BindingDefinitionType.GET);
+			}
+			return tooltip;
+		}
+
+		@Override
+		public void setTooltip(DataBinding<String> tooltip) {
+			if (tooltip != null) {
+				tooltip.setOwner(this);
+				tooltip.setDeclaredType(String.class);
+				tooltip.setBindingDefinitionType(DataBinding.BindingDefinitionType.GET);
+			}
+			this.tooltip = tooltip;
+		}
+
+		@Override
+		public DataBinding<Color> getColor() {
+			if (color == null) {
+				color = new DataBinding<Color>(this, Color.class, DataBinding.BindingDefinitionType.GET);
+			}
+			return color;
+		}
+
+		@Override
+		public void setColor(DataBinding<Color> color) {
+			if (color != null) {
+				color.setOwner(this);
+				color.setDeclaredType(Color.class);
+				color.setBindingDefinitionType(DataBinding.BindingDefinitionType.GET);
+			}
+			this.color = color;
+		}
+
+		@Override
+		public DataBinding<Color> getBgColor() {
+			if (bgColor == null) {
+				bgColor = new DataBinding<Color>(this, Color.class, DataBinding.BindingDefinitionType.GET);
+			}
+			return bgColor;
+		}
+
+		@Override
+		public void setBgColor(DataBinding<Color> bgColor) {
+			if (bgColor != null) {
+				bgColor.setOwner(this);
+				bgColor.setDeclaredType(Color.class);
+				bgColor.setBindingDefinitionType(DataBinding.BindingDefinitionType.GET);
+			}
+			this.bgColor = bgColor;
+		}
+
+		@Override
+		public DataBinding<?> getValueChangedAction() {
+			if (valueChangedAction == null) {
+				valueChangedAction = new DataBinding<Void>(this, Void.class, DataBinding.BindingDefinitionType.EXECUTE);
+			}
+			return valueChangedAction;
+		}
+
+		@Override
+		public void setValueChangedAction(DataBinding<?> valueChangedAction) {
+			if (valueChangedAction != null) {
+				valueChangedAction.setOwner(this);
+				valueChangedAction.setDeclaredType(Void.class);
+				valueChangedAction.setBindingDefinitionType(DataBinding.BindingDefinitionType.EXECUTE);
+			}
+			this.valueChangedAction = valueChangedAction;
+		}
+
+		@Override
+		protected void applyValidation(ValidationReport report) {
+			super.applyValidation(report);
+			performValidation(DataBindingMustBeValid.class, report);
+			performValidation(FormatBindingMustBeValid.class, report);
+			performValidation(TooltipBindingMustBeValid.class, report);
+			performValidation(ColorBindingMustBeValid.class, report);
+			performValidation(BgColorBindingMustBeValid.class, report);
+			performValidation(ValueChangedActionBindingMustBeValid.class, report);
+		}
+
 	}
 
 	public static class DataBindingMustBeValid extends BindingMustBeValid<FIBTableColumn> {

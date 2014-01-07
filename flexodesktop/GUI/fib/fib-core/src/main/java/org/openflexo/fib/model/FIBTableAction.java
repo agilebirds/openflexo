@@ -19,137 +19,185 @@
  */
 package org.openflexo.fib.model;
 
-import java.util.List;
 import java.util.logging.Logger;
 
 import org.openflexo.antar.binding.BindingDefinition;
 import org.openflexo.antar.binding.BindingModel;
 import org.openflexo.antar.binding.DataBinding;
 import org.openflexo.fib.model.validation.ValidationReport;
+import org.openflexo.model.annotations.Getter;
+import org.openflexo.model.annotations.ImplementationClass;
+import org.openflexo.model.annotations.ModelEntity;
+import org.openflexo.model.annotations.PropertyIdentifier;
+import org.openflexo.model.annotations.Setter;
+import org.openflexo.model.annotations.XMLAttribute;
+import org.openflexo.model.annotations.XMLElement;
 
-public abstract class FIBTableAction extends FIBModelObject {
-
-	private static final Logger logger = Logger.getLogger(FIBTableAction.class.getPackage().getName());
-
-	private FIBTable table;
-
-	public static enum Parameters implements FIBModelAttribute {
-		method, isAvailable
-	}
+@ModelEntity(isAbstract = true)
+@ImplementationClass(FIBTableAction.FIBTableActionImpl.class)
+public abstract interface FIBTableAction extends FIBModelObject {
 
 	public static enum ActionType {
 		Add, Delete, Custom
 	}
 
-	private DataBinding<Object> method;
-	private DataBinding<Boolean> isAvailable;
+	@PropertyIdentifier(type = FIBTable.class)
+	public static final String OWNER_KEY = "owner";
 
-	@Deprecated
-	public static BindingDefinition METHOD = new BindingDefinition("method", Object.class, DataBinding.BindingDefinitionType.EXECUTE, false);
-	@Deprecated
-	public static BindingDefinition IS_AVAILABLE = new BindingDefinition("isAvailable", Boolean.class,
-			DataBinding.BindingDefinitionType.GET, false);
+	@PropertyIdentifier(type = DataBinding.class)
+	public static final String METHOD_KEY = "method";
+	@PropertyIdentifier(type = DataBinding.class)
+	public static final String IS_AVAILABLE_KEY = "isAvailable";
 
-	public FIBTable getTable() {
-		return table;
-	}
+	@Getter(value = OWNER_KEY, inverse = FIBTable.ACTIONS_KEY)
+	public FIBTable getOwner();
 
-	public void setTable(FIBTable table) {
-		this.table = table;
-	}
+	@Setter(OWNER_KEY)
+	public void setOwner(FIBTable table);
 
-	@Override
-	public FIBComponent getComponent() {
-		return getTable();
-	}
+	@Getter(value = METHOD_KEY)
+	@XMLAttribute
+	public DataBinding<Object> getMethod();
 
-	public DataBinding<Object> getMethod() {
-		if (method == null) {
-			method = new DataBinding<Object>(this, Object.class, DataBinding.BindingDefinitionType.EXECUTE);
-		}
-		return method;
-	}
+	@Setter(METHOD_KEY)
+	public void setMethod(DataBinding<Object> method);
 
-	public void setMethod(DataBinding<Object> method) {
-		if (method != null) {
-			method.setOwner(this);
-			method.setDeclaredType(Object.class);
-			method.setBindingDefinitionType(DataBinding.BindingDefinitionType.EXECUTE);
-		}
-		this.method = method;
-	}
+	@Getter(value = IS_AVAILABLE_KEY)
+	@XMLAttribute
+	public DataBinding<Boolean> getIsAvailable();
 
-	public DataBinding<Boolean> getIsAvailable() {
-		if (isAvailable == null) {
-			isAvailable = new DataBinding<Boolean>(this, Boolean.class, DataBinding.BindingDefinitionType.GET);
-		}
-		return isAvailable;
-	}
+	@Setter(IS_AVAILABLE_KEY)
+	public void setIsAvailable(DataBinding<Boolean> isAvailable);
 
-	public void setIsAvailable(DataBinding<Boolean> isAvailable) {
-		if (isAvailable != null) {
-			isAvailable.setOwner(this);
-			isAvailable.setDeclaredType(Boolean.class);
-			isAvailable.setBindingDefinitionType(DataBinding.BindingDefinitionType.GET);
-		}
-		this.isAvailable = isAvailable;
-	}
+	public static abstract class FIBTableActionImpl extends FIBModelObjectImpl implements FIBTableAction {
 
-	@Override
-	public BindingModel getBindingModel() {
-		if (getTable() != null) {
-			return getTable().getActionBindingModel();
-		}
-		return null;
-	}
+		private static final Logger logger = Logger.getLogger(FIBTableAction.class.getPackage().getName());
 
-	@Override
-	public void finalizeDeserialization() {
-		logger.fine("finalizeDeserialization() for FIBTableAction " + getName());
-		super.finalizeDeserialization();
-		if (method != null) {
-			method.decode();
-		}
-	}
+		private DataBinding<Object> method;
+		private DataBinding<Boolean> isAvailable;
 
-	@Override
-	public List<? extends FIBModelObject> getEmbeddedObjects() {
-		return null;
-	}
-
-	public abstract ActionType getActionType();
-
-	public static class FIBAddAction extends FIBTableAction {
+		@Deprecated
+		public static BindingDefinition METHOD = new BindingDefinition("method", Object.class, DataBinding.BindingDefinitionType.EXECUTE,
+				false);
+		@Deprecated
+		public static BindingDefinition IS_AVAILABLE = new BindingDefinition("isAvailable", Boolean.class,
+				DataBinding.BindingDefinitionType.GET, false);
 
 		@Override
-		public ActionType getActionType() {
-			return ActionType.Add;
+		public FIBTable getComponent() {
+			return getOwner();
 		}
-	}
-
-	public static class FIBRemoveAction extends FIBTableAction {
 
 		@Override
-		public ActionType getActionType() {
-			return ActionType.Delete;
+		public DataBinding<Object> getMethod() {
+			if (method == null) {
+				method = new DataBinding<Object>(this, Object.class, DataBinding.BindingDefinitionType.EXECUTE);
+			}
+			return method;
 		}
-	}
-
-	public static class FIBCustomAction extends FIBTableAction {
-
-		public boolean isStatic = false;
 
 		@Override
-		public ActionType getActionType() {
-			return ActionType.Custom;
+		public void setMethod(DataBinding<Object> method) {
+			if (method != null) {
+				method.setOwner(this);
+				method.setDeclaredType(Object.class);
+				method.setBindingDefinitionType(DataBinding.BindingDefinitionType.EXECUTE);
+			}
+			this.method = method;
+		}
+
+		@Override
+		public DataBinding<Boolean> getIsAvailable() {
+			if (isAvailable == null) {
+				isAvailable = new DataBinding<Boolean>(this, Boolean.class, DataBinding.BindingDefinitionType.GET);
+			}
+			return isAvailable;
+		}
+
+		@Override
+		public void setIsAvailable(DataBinding<Boolean> isAvailable) {
+			if (isAvailable != null) {
+				isAvailable.setOwner(this);
+				isAvailable.setDeclaredType(Boolean.class);
+				isAvailable.setBindingDefinitionType(DataBinding.BindingDefinitionType.GET);
+			}
+			this.isAvailable = isAvailable;
+		}
+
+		@Override
+		public BindingModel getBindingModel() {
+			if (getOwner() != null) {
+				return getOwner().getActionBindingModel();
+			}
+			return null;
+		}
+
+		public void finalizeDeserialization() {
+			logger.fine("finalizeDeserialization() for FIBTableAction " + getName());
+			if (method != null) {
+				method.decode();
+			}
+		}
+
+		public abstract ActionType getActionType();
+
+		@Override
+		protected void applyValidation(ValidationReport report) {
+			super.applyValidation(report);
+			performValidation(MethodBindingMustBeValid.class, report);
+			performValidation(IsAvailableBindingMustBeValid.class, report);
+		}
+
+	}
+
+	@ModelEntity
+	@ImplementationClass(FIBAddAction.FIBAddActionImpl.class)
+	@XMLElement(xmlTag = "AddAction")
+	public static interface FIBAddAction extends FIBTableAction {
+
+		public static abstract class FIBAddActionImpl extends FIBTableActionImpl implements FIBAddAction {
+
+			@Override
+			public ActionType getActionType() {
+				return ActionType.Add;
+			}
 		}
 	}
 
-	@Override
-	protected void applyValidation(ValidationReport report) {
-		super.applyValidation(report);
-		performValidation(MethodBindingMustBeValid.class, report);
-		performValidation(IsAvailableBindingMustBeValid.class, report);
+	@ModelEntity
+	@ImplementationClass(FIBRemoveAction.FIBRemoveActionImpl.class)
+	@XMLElement(xmlTag = "RemoveAction")
+	public static interface FIBRemoveAction extends FIBTableAction {
+
+		public static abstract class FIBRemoveActionImpl extends FIBTableActionImpl implements FIBRemoveAction {
+			@Override
+			public ActionType getActionType() {
+				return ActionType.Delete;
+			}
+		}
+	}
+
+	@ModelEntity
+	@ImplementationClass(FIBCustomAction.FIBCustomActionImpl.class)
+	@XMLElement(xmlTag = "CustomAction")
+	public static interface FIBCustomAction extends FIBTableAction {
+
+		@PropertyIdentifier(type = boolean.class)
+		public static final String IS_STATIC_KEY = "isStatic";
+
+		@Getter(value = IS_STATIC_KEY, defaultValue = "false")
+		@XMLAttribute
+		public boolean isStatic();
+
+		@Setter(IS_STATIC_KEY)
+		public void setStatic(boolean isStatic);
+
+		public static abstract class FIBCustomActionImpl extends FIBTableActionImpl implements FIBCustomAction {
+			@Override
+			public ActionType getActionType() {
+				return ActionType.Custom;
+			}
+		}
 	}
 
 	public static class MethodBindingMustBeValid extends BindingMustBeValid<FIBTableAction> {
@@ -173,5 +221,4 @@ public abstract class FIBTableAction extends FIBModelObject {
 			return object.getIsAvailable();
 		}
 	}
-
 }

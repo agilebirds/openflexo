@@ -21,15 +21,25 @@ package org.openflexo.fib.model;
 
 import java.lang.reflect.Type;
 
-public class FIBCheckBoxColumn extends FIBTableColumn {
+import org.openflexo.model.annotations.ImplementationClass;
+import org.openflexo.model.annotations.ModelEntity;
+import org.openflexo.model.annotations.XMLElement;
 
-	@Override
-	public Type getDefaultDataClass() {
-		return Boolean.class;
-	}
+@ModelEntity
+@ImplementationClass(FIBCheckBoxColumn.FIBCheckBoxColumnImpl.class)
+@XMLElement(xmlTag = "CheckBoxColumn")
+public interface FIBCheckBoxColumn extends FIBTableColumn {
 
-	@Override
-	public ColumnType getColumnType() {
-		return ColumnType.CheckBox;
+	public static abstract class FIBCheckBoxColumnImpl extends FIBTableColumnImpl implements FIBCheckBoxColumn {
+
+		@Override
+		public Type getDefaultDataClass() {
+			return Boolean.class;
+		}
+
+		@Override
+		public ColumnType getColumnType() {
+			return ColumnType.CheckBox;
+		}
 	}
 }

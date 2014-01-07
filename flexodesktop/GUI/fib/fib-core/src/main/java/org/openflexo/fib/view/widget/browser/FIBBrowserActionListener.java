@@ -68,8 +68,8 @@ public class FIBBrowserActionListener<T> implements ActionListener, BindingEvalu
 	@Override
 	public void propertyChange(PropertyChangeEvent evt) {
 		if (evt.getSource() == browserAction) {
-			if ((evt.getPropertyName().equals(FIBBrowserAction.Parameters.method.name()))
-					|| (evt.getPropertyName().equals(FIBBrowserAction.Parameters.isAvailable.name()))) {
+			if ((evt.getPropertyName().equals(FIBBrowserAction.METHOD_KEY))
+					|| (evt.getPropertyName().equals(FIBBrowserAction.IS_AVAILABLE_KEY))) {
 				widget.updateBrowser();
 			}
 		}
@@ -92,7 +92,7 @@ public class FIBBrowserActionListener<T> implements ActionListener, BindingEvalu
 	}
 
 	public boolean isStatic() {
-		return isCustomAction() && ((FIBCustomAction) browserAction).isStatic;
+		return isCustomAction() && ((FIBCustomAction) browserAction).isStatic();
 	}
 
 	public boolean isActive(Object selectedObject) {

@@ -19,32 +19,80 @@
  */
 package org.openflexo.fib.model;
 
-public class FIBTextArea extends FIBTextWidget {
+import org.openflexo.model.annotations.Getter;
+import org.openflexo.model.annotations.ImplementationClass;
+import org.openflexo.model.annotations.ModelEntity;
+import org.openflexo.model.annotations.PropertyIdentifier;
+import org.openflexo.model.annotations.Setter;
+import org.openflexo.model.annotations.XMLAttribute;
+import org.openflexo.model.annotations.XMLElement;
 
-	public Integer rows = null;
+@ModelEntity
+@ImplementationClass(FIBTextArea.FIBTextAreaImpl.class)
+@XMLElement(xmlTag = "TextArea")
+public interface FIBTextArea extends FIBTextWidget {
 
-	public FIBTextArea() {
-	}
+	@PropertyIdentifier(type = boolean.class)
+	public static final String VALIDATE_ON_RETURN_KEY = "validateOnReturn";
+	@PropertyIdentifier(type = Integer.class)
+	public static final String COLUMNS_KEY = "columns";
+	@PropertyIdentifier(type = Integer.class)
+	public static final String ROWS_KEY = "rows";
 
 	@Override
-	protected String getBaseName() {
-		return "TextArea";
+	@Getter(value = VALIDATE_ON_RETURN_KEY, defaultValue = "false")
+	@XMLAttribute
+	public boolean isValidateOnReturn();
+
+	@Override
+	@Setter(VALIDATE_ON_RETURN_KEY)
+	public void setValidateOnReturn(boolean validateOnReturn);
+
+	@Override
+	@Getter(value = COLUMNS_KEY)
+	@XMLAttribute
+	public Integer getColumns();
+
+	@Override
+	@Setter(COLUMNS_KEY)
+	public void setColumns(Integer columns);
+
+	@Getter(value = ROWS_KEY)
+	@XMLAttribute
+	public Integer getRows();
+
+	@Setter(ROWS_KEY)
+	public void setRows(Integer rows);
+
+	public static abstract class FIBTextAreaImpl extends FIBTextWidgetImpl implements FIBTextArea {
+
+		public Integer rows = null;
+
+		public FIBTextAreaImpl() {
+		}
+
+		@Override
+		public String getBaseName() {
+			return "TextArea";
+		}
+
+		/**
+		 * @return the rows
+		 */
+		@Override
+		public Integer getRows() {
+			return rows;
+		}
+
+		/**
+		 * @param rows
+		 *            the rows to set
+		 */
+		@Override
+		public void setRows(Integer rows) {
+			this.rows = rows;
+
+		}
+
 	}
-
-	/**
-	 * @return the rows
-	 */
-	public Integer getRows() {
-		return rows;
-	}
-
-	/**
-	 * @param rows
-	 *            the rows to set
-	 */
-	public void setRows(Integer rows) {
-		this.rows = rows;
-
-	}
-
 }

@@ -19,25 +19,50 @@
  */
 package org.openflexo.fib.model;
 
+import org.openflexo.model.annotations.Getter;
+import org.openflexo.model.annotations.ImplementationClass;
+import org.openflexo.model.annotations.ModelEntity;
+import org.openflexo.model.annotations.PropertyIdentifier;
+import org.openflexo.model.annotations.Setter;
+import org.openflexo.model.annotations.XMLAttribute;
+import org.openflexo.model.annotations.XMLElement;
 
-public class FIBTextField extends FIBTextWidget {
+@ModelEntity
+@ImplementationClass(FIBTextField.FIBTextFieldImpl.class)
+@XMLElement(xmlTag = "TextField")
+public interface FIBTextField extends FIBTextWidget {
 
-	private boolean passwd = false;
+	@PropertyIdentifier(type = boolean.class)
+	public static final String PASSWD_KEY = "passwd";
 
-	public FIBTextField() {
+	@Getter(value = PASSWD_KEY, defaultValue = "false")
+	@XMLAttribute
+	public boolean isPasswd();
+
+	@Setter(PASSWD_KEY)
+	public void setPasswd(boolean passwd);
+
+	public static abstract class FIBTextFieldImpl extends FIBTextWidgetImpl implements FIBTextField {
+
+		private boolean passwd = false;
+
+		public FIBTextFieldImpl() {
+		}
+
+		@Override
+		public String getBaseName() {
+			return "TextField";
+		}
+
+		@Override
+		public boolean isPasswd() {
+			return passwd;
+		}
+
+		@Override
+		public void setPasswd(boolean passwd) {
+			this.passwd = passwd;
+		}
+
 	}
-
-	@Override
-	protected String getBaseName() {
-		return "TextField";
-	}
-
-	public boolean isPasswd() {
-		return passwd;
-	}
-
-	public void setPasswd(boolean passwd) {
-		this.passwd = passwd;
-	}
-
 }

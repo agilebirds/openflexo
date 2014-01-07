@@ -22,37 +22,59 @@ package org.openflexo.fib.model;
 import java.awt.Color;
 import java.lang.reflect.Type;
 
-public class FIBColor extends FIBWidget {
+import org.openflexo.model.annotations.Getter;
+import org.openflexo.model.annotations.ImplementationClass;
+import org.openflexo.model.annotations.ModelEntity;
+import org.openflexo.model.annotations.PropertyIdentifier;
+import org.openflexo.model.annotations.Setter;
+import org.openflexo.model.annotations.XMLAttribute;
+import org.openflexo.model.annotations.XMLElement;
 
-	public static enum Parameters implements FIBModelAttribute {
-		allowsNull;
-	}
+@ModelEntity
+@ImplementationClass(FIBColor.FIBColorImpl.class)
+@XMLElement(xmlTag = "Color")
+public interface FIBColor extends FIBWidget {
 
-	private boolean allowsNull = false;
+	@PropertyIdentifier(type = boolean.class)
+	public static final String ALLOWS_NULL_KEY = "allowsNull";
 
-	public FIBColor() {
-	}
+	@Getter(value = ALLOWS_NULL_KEY, defaultValue = "false")
+	@XMLAttribute
+	public boolean getAllowsNull();
 
-	@Override
-	protected String getBaseName() {
-		return "ColorSelector";
-	}
+	@Setter(ALLOWS_NULL_KEY)
+	public void setAllowsNull(boolean allowsNull);
 
-	@Override
-	public Type getDefaultDataClass() {
-		return Color.class;
-	}
+	public static abstract class FIBColorImpl extends FIBWidgetImpl implements FIBColor {
 
-	public boolean getAllowsNull() {
-		return allowsNull;
-	}
+		private boolean allowsNull = false;
 
-	public void setAllowsNull(boolean allowsNull) {
-		FIBAttributeNotification<Boolean> notification = requireChange(Parameters.allowsNull, allowsNull);
-		if (notification != null) {
-			this.allowsNull = allowsNull;
-			hasChanged(notification);
+		public FIBColorImpl() {
 		}
-	}
 
+		@Override
+		public String getBaseName() {
+			return "ColorSelector";
+		}
+
+		@Override
+		public Type getDefaultDataClass() {
+			return Color.class;
+		}
+
+		@Override
+		public boolean getAllowsNull() {
+			return allowsNull;
+		}
+
+		@Override
+		public void setAllowsNull(boolean allowsNull) {
+			FIBPropertyNotification<Boolean> notification = requireChange(ALLOWS_NULL_KEY, allowsNull);
+			if (notification != null) {
+				this.allowsNull = allowsNull;
+				hasChanged(notification);
+			}
+		}
+
+	}
 }

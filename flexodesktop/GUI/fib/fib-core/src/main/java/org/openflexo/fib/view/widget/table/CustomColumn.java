@@ -43,8 +43,8 @@ import org.openflexo.antar.expr.NotSettableContextException;
 import org.openflexo.antar.expr.NullReferenceException;
 import org.openflexo.antar.expr.TypeMismatchException;
 import org.openflexo.fib.controller.FIBController;
-import org.openflexo.fib.model.FIBCustom;
 import org.openflexo.fib.model.FIBCustom.FIBCustomComponent;
+import org.openflexo.fib.model.FIBCustom.FIBCustomImpl;
 import org.openflexo.fib.model.FIBCustomColumn;
 import org.openflexo.fib.model.FIBCustomColumn.FIBCustomAssignment;
 import org.openflexo.swing.CustomPopup.ApplyCancelListener;
@@ -59,14 +59,14 @@ import org.openflexo.toolbox.ToolBox;
 public class CustomColumn<T, V> extends AbstractColumn<T, V> implements EditableColumn<T, V>, ApplyCancelListener {
 	private static final Logger logger = Logger.getLogger(CustomColumn.class.getPackage().getName());
 
-	private FIBCustomColumn _customColumn;
+	private final FIBCustomColumn _customColumn;
 
-	private FIBCustomComponent<V, ?> _viewCustomWidget;
+	private final FIBCustomComponent<V, ?> _viewCustomWidget;
 
-	private FIBCustomComponent<V, ?> _editCustomWidget;
+	private final FIBCustomComponent<V, ?> _editCustomWidget;
 
-	private boolean useCustomViewForCellRendering;
-	private boolean disableTerminateEditOnFocusLost;
+	private final boolean useCustomViewForCellRendering;
+	private final boolean disableTerminateEditOnFocusLost;
 
 	public CustomColumn(FIBCustomColumn columnModel, FIBTableModel<T> tableModel, FIBController controller) {
 		super(columnModel, tableModel, controller);
@@ -80,8 +80,8 @@ public class CustomColumn<T, V> extends AbstractColumn<T, V> implements Editable
 		}
 		_customCellRenderer = new CustomCellRenderer();
 		_customCellEditor = new CustomCellEditor();
-		useCustomViewForCellRendering = columnModel.customRendering;
-		disableTerminateEditOnFocusLost = columnModel.disableTerminateEditOnFocusLost;
+		useCustomViewForCellRendering = columnModel.isCustomRendering();
+		disableTerminateEditOnFocusLost = columnModel.isDisableTerminateEditOnFocusLost();
 	}
 
 	@Override
@@ -155,7 +155,7 @@ public class CustomColumn<T, V> extends AbstractColumn<T, V> implements Editable
 		return _customCellRenderer;
 	}
 
-	private CustomCellRenderer _customCellRenderer;
+	private final CustomCellRenderer _customCellRenderer;
 
 	protected class CustomCellRenderer extends FIBTableCellRenderer<T, V> {
 
@@ -265,7 +265,7 @@ public class CustomColumn<T, V> extends AbstractColumn<T, V> implements Editable
 		return _customCellEditor;
 	}
 
-	private CustomCellEditor _customCellEditor;
+	private final CustomCellEditor _customCellEditor;
 
 	protected class CustomCellEditor extends AbstractCellEditor implements TableCellEditor, ActionListener {
 		FIBCustomComponent<V, ?> _customWidget;
@@ -368,7 +368,7 @@ public class CustomColumn<T, V> extends AbstractColumn<T, V> implements Editable
 
 	@Override
 	public Object getValue(BindingVariable variable) {
-		if (variable.getVariableName().equals(FIBCustom.COMPONENT_NAME)) {
+		if (variable.getVariableName().equals(FIBCustomImpl.COMPONENT_NAME)) {
 			return _editCustomWidget;
 		} else {
 			return super.getValue(variable);

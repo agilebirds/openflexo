@@ -23,51 +23,72 @@ import java.lang.reflect.Type;
 
 import org.openflexo.antar.binding.BindingDefinition;
 import org.openflexo.antar.binding.DataBinding;
-import org.openflexo.antar.binding.DataBinding.BindingDefinitionType;
+import org.openflexo.model.annotations.Getter;
+import org.openflexo.model.annotations.ImplementationClass;
+import org.openflexo.model.annotations.ModelEntity;
+import org.openflexo.model.annotations.PropertyIdentifier;
+import org.openflexo.model.annotations.Setter;
+import org.openflexo.model.annotations.XMLAttribute;
+import org.openflexo.model.annotations.XMLElement;
 
-public class FIBTextFieldColumn extends FIBTableColumn {
+@ModelEntity
+@ImplementationClass(FIBTextFieldColumn.FIBTextFieldColumnImpl.class)
+@XMLElement(xmlTag = "TextFieldColumn")
+public interface FIBTextFieldColumn extends FIBTableColumn {
 
-	public static enum Parameters implements FIBModelAttribute {
-		isEditable
-	}
+	@PropertyIdentifier(type = DataBinding.class)
+	public static final String IS_EDITABLE_KEY = "isEditable";
 
-	@Deprecated
-	public static final BindingDefinition IS_EDITABLE = new BindingDefinition("isEditable", Boolean.class, DataBinding.BindingDefinitionType.GET, false);
+	@Getter(value = IS_EDITABLE_KEY)
+	@XMLAttribute
+	public DataBinding<Boolean> getIsEditable();
 
-	private DataBinding<Boolean> isEditable;
+	@Setter(IS_EDITABLE_KEY)
+	public void setIsEditable(DataBinding<Boolean> isEditable);
 
-	public DataBinding<Boolean> getIsEditable() {
-		if (isEditable == null) {
-			isEditable = new DataBinding<Boolean>(this, Boolean.class, DataBinding.BindingDefinitionType.GET);
+	public static abstract class FIBTextFieldColumnImpl extends FIBTableColumnImpl implements FIBTextFieldColumn {
+
+		@Deprecated
+		public static final BindingDefinition IS_EDITABLE = new BindingDefinition("isEditable", Boolean.class,
+				DataBinding.BindingDefinitionType.GET, false);
+
+		private DataBinding<Boolean> isEditable;
+
+		@Override
+		public DataBinding<Boolean> getIsEditable() {
+			if (isEditable == null) {
+				isEditable = new DataBinding<Boolean>(this, Boolean.class, DataBinding.BindingDefinitionType.GET);
+			}
+			return isEditable;
 		}
-		return isEditable;
-	}
 
-	public void setIsEditable(DataBinding<Boolean> isEditable) {
-		if (isEditable != null) {
-			isEditable.setOwner(this);
-			isEditable.setDeclaredType(Boolean.class);
-			isEditable.setBindingDefinitionType(DataBinding.BindingDefinitionType.GET);
+		@Override
+		public void setIsEditable(DataBinding<Boolean> isEditable) {
+			if (isEditable != null) {
+				isEditable.setOwner(this);
+				isEditable.setDeclaredType(Boolean.class);
+				isEditable.setBindingDefinitionType(DataBinding.BindingDefinitionType.GET);
+			}
+			this.isEditable = isEditable;
 		}
-		this.isEditable = isEditable;
-	}
 
-	@Override
-	public void finalizeTableDeserialization() {
-		super.finalizeTableDeserialization();
-		if (isEditable != null) {
-			isEditable.decode();
+		@Override
+		public void finalizeTableDeserialization() {
+			super.finalizeTableDeserialization();
+			if (isEditable != null) {
+				isEditable.decode();
+			}
 		}
-	}
 
-	@Override
-	public Type getDefaultDataClass() {
-		return String.class;
-	}
+		@Override
+		public Type getDefaultDataClass() {
+			return String.class;
+		}
 
-	@Override
-	public ColumnType getColumnType() {
-		return ColumnType.TextField;
-	}
+		@Override
+		public ColumnType getColumnType() {
+			return ColumnType.TextField;
+		}
 
+	}
 }

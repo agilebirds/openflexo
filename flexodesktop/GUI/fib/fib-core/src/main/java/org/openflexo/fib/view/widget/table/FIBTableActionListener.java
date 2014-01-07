@@ -73,8 +73,8 @@ public class FIBTableActionListener<T> implements ActionListener, BindingEvaluat
 	@Override
 	public void propertyChange(PropertyChangeEvent evt) {
 		if (evt.getSource() == tableAction) {
-			if ((evt.getPropertyName().equals(FIBTableAction.Parameters.method.name()))
-					|| (evt.getPropertyName().equals(FIBTableAction.Parameters.isAvailable.name()))) {
+			if ((evt.getPropertyName().equals(FIBTableAction.METHOD_KEY))
+					|| (evt.getPropertyName().equals(FIBTableAction.IS_AVAILABLE_KEY))) {
 				tableWidget.updateTable();
 			}
 		}
@@ -97,7 +97,7 @@ public class FIBTableActionListener<T> implements ActionListener, BindingEvaluat
 	}
 
 	public boolean isStatic() {
-		return isCustomAction() && ((FIBCustomAction) tableAction).isStatic;
+		return isCustomAction() && ((FIBCustomAction) tableAction).isStatic();
 	}
 
 	public boolean isActive(T selectedObject) {

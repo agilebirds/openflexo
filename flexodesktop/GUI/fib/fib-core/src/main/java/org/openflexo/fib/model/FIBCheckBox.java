@@ -21,49 +21,79 @@ package org.openflexo.fib.model;
 
 import java.lang.reflect.Type;
 
-public class FIBCheckBox extends FIBWidget {
+import org.openflexo.model.annotations.Getter;
+import org.openflexo.model.annotations.ImplementationClass;
+import org.openflexo.model.annotations.ModelEntity;
+import org.openflexo.model.annotations.PropertyIdentifier;
+import org.openflexo.model.annotations.Setter;
+import org.openflexo.model.annotations.XMLAttribute;
+import org.openflexo.model.annotations.XMLElement;
 
-	private boolean negate = false;
-	private boolean selected = false;
+@ModelEntity
+@ImplementationClass(FIBCheckBox.FIBCheckBoxImpl.class)
+@XMLElement(xmlTag = "CheckBox")
+public interface FIBCheckBox extends FIBWidget {
 
-	public static enum Parameters implements FIBModelAttribute {
-		negate, selected
-	}
+	@PropertyIdentifier(type = boolean.class)
+	public static final String NEGATE_KEY = "negate";
+	@PropertyIdentifier(type = boolean.class)
+	public static final String SELECTED_KEY = "selected";
 
-	public FIBCheckBox() {
-	}
+	@Getter(value = NEGATE_KEY, defaultValue = "false")
+	@XMLAttribute
+	public boolean getNegate();
 
-	@Override
-	protected String getBaseName() {
-		return "Checkbox";
-	}
+	@Setter(NEGATE_KEY)
+	public void setNegate(boolean negate);
 
-	@Override
-	public Type getDefaultDataClass() {
-		return Boolean.class;
-	}
+	@Getter(value = SELECTED_KEY, defaultValue = "false")
+	@XMLAttribute
+	public boolean getSelected();
 
-	public boolean getNegate() {
-		return negate;
-	}
+	@Setter(SELECTED_KEY)
+	public void setSelected(boolean selected);
 
-	public void setNegate(boolean negate) {
-		FIBAttributeNotification<Boolean> notification = requireChange(Parameters.negate, negate);
-		if (notification != null) {
-			this.negate = negate;
-			hasChanged(notification);
+	public static abstract class FIBCheckBoxImpl extends FIBWidgetImpl implements FIBCheckBox {
+
+		private boolean negate = false;
+		private boolean selected = false;
+
+		@Override
+		public String getBaseName() {
+			return "Checkbox";
 		}
-	}
 
-	public boolean getSelected() {
-		return selected;
-	}
+		@Override
+		public Type getDefaultDataClass() {
+			return Boolean.class;
+		}
 
-	public void setSelected(boolean selected) {
-		FIBAttributeNotification<Boolean> notification = requireChange(Parameters.selected, selected);
-		if (notification != null) {
-			this.selected = selected;
-			hasChanged(notification);
+		@Override
+		public boolean getNegate() {
+			return negate;
+		}
+
+		@Override
+		public void setNegate(boolean negate) {
+			FIBPropertyNotification<Boolean> notification = requireChange(NEGATE_KEY, negate);
+			if (notification != null) {
+				this.negate = negate;
+				hasChanged(notification);
+			}
+		}
+
+		@Override
+		public boolean getSelected() {
+			return selected;
+		}
+
+		@Override
+		public void setSelected(boolean selected) {
+			FIBPropertyNotification<Boolean> notification = requireChange(SELECTED_KEY, selected);
+			if (notification != null) {
+				this.selected = selected;
+				hasChanged(notification);
+			}
 		}
 	}
 }

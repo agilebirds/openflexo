@@ -19,56 +19,18 @@
  */
 package org.openflexo.fib.model;
 
+import org.openflexo.model.annotations.Getter;
+import org.openflexo.model.annotations.ImplementationClass;
+import org.openflexo.model.annotations.ModelEntity;
+import org.openflexo.model.annotations.PropertyIdentifier;
+import org.openflexo.model.annotations.Setter;
+import org.openflexo.model.annotations.XMLAttribute;
+import org.openflexo.model.annotations.XMLElement;
 
-public class FIBEditor extends FIBTextWidget {
-
-	public static enum Parameters implements FIBModelAttribute {
-		rows, tokenMarkerStyle
-	}
-
-	private Integer rows = null;
-	private FIBTokenMarkerStyle tokenMarkerStyle = FIBTokenMarkerStyle.None;
-
-	public FIBEditor() {
-	}
-
-	@Override
-	protected String getBaseName() {
-		return "Editor";
-	}
-
-	/**
-	 * @return the rows
-	 */
-	public Integer getRows() {
-		return rows;
-	}
-
-	/**
-	 * @param rows
-	 *            the rows to set
-	 */
-	public void setRows(Integer rows) {
-		FIBAttributeNotification<Integer> notification = requireChange(Parameters.rows, rows);
-		if (notification != null) {
-			this.rows = rows;
-			hasChanged(notification);
-		}
-		this.rows = rows;
-	}
-
-	public FIBTokenMarkerStyle getTokenMarkerStyle() {
-		return tokenMarkerStyle;
-	}
-
-	public void setTokenMarkerStyle(FIBTokenMarkerStyle tokenMarkerStyle) {
-		System.out.println("setTokenMarkerStyle with " + tokenMarkerStyle);
-		FIBAttributeNotification<FIBTokenMarkerStyle> notification = requireChange(Parameters.tokenMarkerStyle, tokenMarkerStyle);
-		if (notification != null) {
-			this.tokenMarkerStyle = tokenMarkerStyle;
-			hasChanged(notification);
-		}
-	}
+@ModelEntity
+@ImplementationClass(FIBEditor.FIBEditorImpl.class)
+@XMLElement(xmlTag = "Editor")
+public interface FIBEditor extends FIBTextWidget {
 
 	public static enum FIBTokenMarkerStyle {
 		None,
@@ -92,5 +54,109 @@ public class FIBEditor extends FIBTextWidget {
 		WOD,
 		XML,
 		FML /* Flexo Modelling Language */
+	}
+
+	@PropertyIdentifier(type = boolean.class)
+	public static final String VALIDATE_ON_RETURN_KEY = "validateOnReturn";
+	@PropertyIdentifier(type = Integer.class)
+	public static final String COLUMNS_KEY = "columns";
+	@PropertyIdentifier(type = Integer.class)
+	public static final String ROWS_KEY = "rows";
+	@PropertyIdentifier(type = String.class)
+	public static final String TEXT_KEY = "text";
+	@PropertyIdentifier(type = FIBTokenMarkerStyle.class)
+	public static final String TOKEN_MARKER_STYLE_KEY = "tokenMarkerStyle";
+
+	@Override
+	@Getter(value = VALIDATE_ON_RETURN_KEY, defaultValue = "false")
+	@XMLAttribute
+	public boolean isValidateOnReturn();
+
+	@Override
+	@Setter(VALIDATE_ON_RETURN_KEY)
+	public void setValidateOnReturn(boolean validateOnReturn);
+
+	@Override
+	@Getter(value = COLUMNS_KEY)
+	@XMLAttribute
+	public Integer getColumns();
+
+	@Override
+	@Setter(COLUMNS_KEY)
+	public void setColumns(Integer columns);
+
+	@Getter(value = ROWS_KEY)
+	@XMLAttribute
+	public Integer getRows();
+
+	@Setter(ROWS_KEY)
+	public void setRows(Integer rows);
+
+	@Override
+	@Getter(value = TEXT_KEY)
+	@XMLAttribute
+	public String getText();
+
+	@Override
+	@Setter(TEXT_KEY)
+	public void setText(String text);
+
+	@Getter(value = TOKEN_MARKER_STYLE_KEY)
+	@XMLAttribute
+	public FIBTokenMarkerStyle getTokenMarkerStyle();
+
+	@Setter(TOKEN_MARKER_STYLE_KEY)
+	public void setTokenMarkerStyle(FIBTokenMarkerStyle tokenMarkerStyle);
+
+	public static abstract class FIBEditorImpl extends FIBTextWidgetImpl implements FIBEditor {
+
+		private Integer rows = null;
+		private FIBTokenMarkerStyle tokenMarkerStyle = FIBTokenMarkerStyle.None;
+
+		public FIBEditorImpl() {
+		}
+
+		@Override
+		public String getBaseName() {
+			return "Editor";
+		}
+
+		/**
+		 * @return the rows
+		 */
+		@Override
+		public Integer getRows() {
+			return rows;
+		}
+
+		/**
+		 * @param rows
+		 *            the rows to set
+		 */
+		@Override
+		public void setRows(Integer rows) {
+			FIBPropertyNotification<Integer> notification = requireChange(ROWS_KEY, rows);
+			if (notification != null) {
+				this.rows = rows;
+				hasChanged(notification);
+			}
+			this.rows = rows;
+		}
+
+		@Override
+		public FIBTokenMarkerStyle getTokenMarkerStyle() {
+			return tokenMarkerStyle;
+		}
+
+		@Override
+		public void setTokenMarkerStyle(FIBTokenMarkerStyle tokenMarkerStyle) {
+			System.out.println("setTokenMarkerStyle with " + tokenMarkerStyle);
+			FIBPropertyNotification<FIBTokenMarkerStyle> notification = requireChange(TOKEN_MARKER_STYLE_KEY, tokenMarkerStyle);
+			if (notification != null) {
+				this.tokenMarkerStyle = tokenMarkerStyle;
+				hasChanged(notification);
+			}
+		}
+
 	}
 }

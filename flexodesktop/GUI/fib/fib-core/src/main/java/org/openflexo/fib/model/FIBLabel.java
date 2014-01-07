@@ -23,11 +23,18 @@ import java.lang.reflect.Type;
 
 import javax.swing.SwingConstants;
 
-public class FIBLabel extends FIBWidget {
+import org.openflexo.model.annotations.Getter;
+import org.openflexo.model.annotations.ImplementationClass;
+import org.openflexo.model.annotations.ModelEntity;
+import org.openflexo.model.annotations.PropertyIdentifier;
+import org.openflexo.model.annotations.Setter;
+import org.openflexo.model.annotations.XMLAttribute;
+import org.openflexo.model.annotations.XMLElement;
 
-	public static enum Parameters implements FIBModelAttribute {
-		label, align;
-	}
+@ModelEntity
+@ImplementationClass(FIBLabel.FIBLabelImpl.class)
+@XMLElement(xmlTag = "Label")
+public interface FIBLabel extends FIBWidget {
 
 	public static enum Align {
 		left {
@@ -51,55 +58,81 @@ public class FIBLabel extends FIBWidget {
 		public abstract int getAlign();
 	}
 
-	private String label;
-	private Align align = Align.left;
+	@PropertyIdentifier(type = String.class)
+	public static final String LABEL_KEY = "label";
+	@PropertyIdentifier(type = Align.class)
+	public static final String ALIGN_KEY = "align";
 
-	public FIBLabel() {
-		super();
-	}
+	@Getter(value = LABEL_KEY)
+	@XMLAttribute
+	public String getLabel();
 
-	public FIBLabel(String label) {
-		this();
-		this.label = label;
-	}
+	@Setter(LABEL_KEY)
+	public void setLabel(String label);
 
-	@Override
-	protected String getBaseName() {
-		return "Label";
-	}
+	@Getter(value = ALIGN_KEY)
+	@XMLAttribute
+	public Align getAlign();
 
-	@Override
-	public String getIdentifier() {
-		return getLabel();
-	}
+	@Setter(ALIGN_KEY)
+	public void setAlign(Align align);
 
-	@Override
-	public Type getDefaultDataClass() {
-		return String.class;
-	}
+	public static abstract class FIBLabelImpl extends FIBWidgetImpl implements FIBLabel {
 
-	public String getLabel() {
-		return label;
-	}
+		private String label;
+		private Align align = Align.left;
 
-	public void setLabel(String label) {
-		FIBAttributeNotification<String> notification = requireChange(Parameters.label, label);
-		if (notification != null) {
+		public FIBLabelImpl() {
+			super();
+		}
+
+		public FIBLabelImpl(String label) {
+			this();
 			this.label = label;
-			hasChanged(notification);
 		}
-	}
 
-	public Align getAlign() {
-		return align;
-	}
-
-	public void setAlign(Align align) {
-		FIBAttributeNotification<Align> notification = requireChange(Parameters.align, align);
-		if (notification != null) {
-			this.align = align;
-			hasChanged(notification);
+		@Override
+		public String getBaseName() {
+			return "Label";
 		}
-	}
 
+		@Override
+		public String getIdentifier() {
+			return getLabel();
+		}
+
+		@Override
+		public Type getDefaultDataClass() {
+			return String.class;
+		}
+
+		@Override
+		public String getLabel() {
+			return label;
+		}
+
+		@Override
+		public void setLabel(String label) {
+			FIBPropertyNotification<String> notification = requireChange(LABEL_KEY, label);
+			if (notification != null) {
+				this.label = label;
+				hasChanged(notification);
+			}
+		}
+
+		@Override
+		public Align getAlign() {
+			return align;
+		}
+
+		@Override
+		public void setAlign(Align align) {
+			FIBPropertyNotification<Align> notification = requireChange(ALIGN_KEY, align);
+			if (notification != null) {
+				this.align = align;
+				hasChanged(notification);
+			}
+		}
+
+	}
 }

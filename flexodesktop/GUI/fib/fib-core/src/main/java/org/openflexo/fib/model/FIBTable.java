@@ -27,8 +27,6 @@ import java.util.Collection;
 import java.util.List;
 import java.util.logging.Logger;
 
-import javax.swing.ListSelectionModel;
-
 import org.openflexo.antar.binding.BindingDefinition;
 import org.openflexo.antar.binding.BindingModel;
 import org.openflexo.antar.binding.BindingVariable;
@@ -40,628 +38,794 @@ import org.openflexo.fib.model.FIBTableAction.FIBAddAction;
 import org.openflexo.fib.model.FIBTableAction.FIBCustomAction;
 import org.openflexo.fib.model.FIBTableAction.FIBRemoveAction;
 import org.openflexo.fib.view.widget.FIBTableWidget;
-import org.openflexo.toolbox.ChainedCollection;
+import org.openflexo.model.annotations.Adder;
+import org.openflexo.model.annotations.Getter;
+import org.openflexo.model.annotations.Getter.Cardinality;
+import org.openflexo.model.annotations.ImplementationClass;
+import org.openflexo.model.annotations.ModelEntity;
+import org.openflexo.model.annotations.PropertyIdentifier;
+import org.openflexo.model.annotations.Remover;
+import org.openflexo.model.annotations.Setter;
+import org.openflexo.model.annotations.XMLAttribute;
+import org.openflexo.model.annotations.XMLElement;
 
-public class FIBTable extends FIBWidget implements FIBTableComponent /*implements DynamicAccess*/{
+@ModelEntity
+@ImplementationClass(FIBTable.FIBTableImpl.class)
+@XMLElement(xmlTag = "Table")
+public interface FIBTable extends FIBWidget, FIBTableComponent {
 
-	private static final Logger logger = Logger.getLogger(FIBTable.class.getPackage().getName());
+	@PropertyIdentifier(type = Class.class)
+	public static final String ITERATOR_CLASS_KEY = "iteratorClass";
+	@PropertyIdentifier(type = Integer.class)
+	public static final String VISIBLE_ROW_COUNT_KEY = "visibleRowCount";
+	@PropertyIdentifier(type = Integer.class)
+	public static final String ROW_HEIGHT_KEY = "rowHeight";
+	@PropertyIdentifier(type = boolean.class)
+	public static final String AUTO_SELECT_FIRST_ROW_KEY = "autoSelectFirstRow";
+	@PropertyIdentifier(type = boolean.class)
+	public static final String CREATE_NEW_ROW_ON_CLICK_KEY = "createNewRowOnClick";
+	@PropertyIdentifier(type = boolean.class)
+	public static final String BOUND_TO_SELECTION_MANAGER_KEY = "boundToSelectionManager";
+	@PropertyIdentifier(type = boolean.class)
+	public static final String SHOW_FOOTER_KEY = "showFooter";
+	@PropertyIdentifier(type = SelectionMode.class)
+	public static final String SELECTION_MODE_KEY = "selectionMode";
+	@PropertyIdentifier(type = DataBinding.class)
+	public static final String SELECTED_KEY = "selected";
+	@PropertyIdentifier(type = List.class)
+	public static final String COLUMNS_KEY = "columns";
+	@PropertyIdentifier(type = List.class)
+	public static final String ACTIONS_KEY = "actions";
+	@PropertyIdentifier(type = Color.class)
+	public static final String TEXT_SELECTION_COLOR_KEY = "textSelectionColor";
+	@PropertyIdentifier(type = Color.class)
+	public static final String TEXT_NON_SELECTION_COLOR_KEY = "textNonSelectionColor";
+	@PropertyIdentifier(type = Color.class)
+	public static final String BACKGROUND_SELECTION_COLOR_KEY = "backgroundSelectionColor";
+	@PropertyIdentifier(type = Color.class)
+	public static final String BACKGROUND_SECONDARY_SELECTION_COLOR_KEY = "backgroundSecondarySelectionColor";
+	@PropertyIdentifier(type = Color.class)
+	public static final String BACKGROUND_NON_SELECTION_COLOR_KEY = "backgroundNonSelectionColor";
 
-	@Deprecated
-	private BindingDefinition SELECTED;
+	@Getter(value = ITERATOR_CLASS_KEY)
+	@XMLAttribute(xmlTag = "iteratorClassName")
+	public Class getIteratorClass();
 
-	@Deprecated
-	public BindingDefinition getSelectedBindingDefinition() {
-		if (SELECTED == null) {
-			SELECTED = new BindingDefinition("selected", getIteratorType(), DataBinding.BindingDefinitionType.GET_SET, false);
+	@Setter(ITERATOR_CLASS_KEY)
+	public void setIteratorClass(Class iteratorClass);
+
+	@Getter(value = VISIBLE_ROW_COUNT_KEY)
+	@XMLAttribute
+	public Integer getVisibleRowCount();
+
+	@Setter(VISIBLE_ROW_COUNT_KEY)
+	public void setVisibleRowCount(Integer visibleRowCount);
+
+	@Getter(value = ROW_HEIGHT_KEY)
+	@XMLAttribute
+	public Integer getRowHeight();
+
+	@Setter(ROW_HEIGHT_KEY)
+	public void setRowHeight(Integer rowHeight);
+
+	@Getter(value = AUTO_SELECT_FIRST_ROW_KEY, defaultValue = "false")
+	@XMLAttribute
+	public boolean getAutoSelectFirstRow();
+
+	@Setter(AUTO_SELECT_FIRST_ROW_KEY)
+	public void setAutoSelectFirstRow(boolean autoSelectFirstRow);
+
+	@Getter(value = CREATE_NEW_ROW_ON_CLICK_KEY, defaultValue = "false")
+	@XMLAttribute
+	public boolean getCreateNewRowOnClick();
+
+	@Setter(CREATE_NEW_ROW_ON_CLICK_KEY)
+	public void setCreateNewRowOnClick(boolean createNewRowOnClick);
+
+	@Getter(value = BOUND_TO_SELECTION_MANAGER_KEY, defaultValue = "false")
+	@XMLAttribute
+	public boolean getBoundToSelectionManager();
+
+	@Setter(BOUND_TO_SELECTION_MANAGER_KEY)
+	public void setBoundToSelectionManager(boolean boundToSelectionManager);
+
+	@Getter(value = SHOW_FOOTER_KEY, defaultValue = "false")
+	@XMLAttribute
+	public boolean getShowFooter();
+
+	@Setter(SHOW_FOOTER_KEY)
+	public void setShowFooter(boolean showFooter);
+
+	@Getter(value = SELECTION_MODE_KEY)
+	@XMLAttribute
+	public SelectionMode getSelectionMode();
+
+	@Setter(SELECTION_MODE_KEY)
+	public void setSelectionMode(SelectionMode selectionMode);
+
+	@Getter(value = SELECTED_KEY)
+	@XMLAttribute
+	public DataBinding<Object> getSelected();
+
+	@Setter(SELECTED_KEY)
+	public void setSelected(DataBinding<Object> selected);
+
+	@Override
+	@Getter(value = COLUMNS_KEY, cardinality = Cardinality.LIST, inverse = FIBTableColumn.OWNER_KEY)
+	public List<FIBTableColumn> getColumns();
+
+	@Setter(COLUMNS_KEY)
+	public void setColumns(List<FIBTableColumn> columns);
+
+	@Adder(COLUMNS_KEY)
+	public void addToColumns(FIBTableColumn aColumn);
+
+	@Remover(COLUMNS_KEY)
+	public void removeFromColumns(FIBTableColumn aColumn);
+
+	@Getter(value = ACTIONS_KEY, cardinality = Cardinality.LIST, inverse = FIBTableAction.OWNER_KEY)
+	public List<FIBTableAction> getActions();
+
+	@Setter(ACTIONS_KEY)
+	public void setActions(List<FIBTableAction> actions);
+
+	@Adder(ACTIONS_KEY)
+	public void addToActions(FIBTableAction aAction);
+
+	@Remover(ACTIONS_KEY)
+	public void removeFromActions(FIBTableAction aAction);
+
+	@Getter(value = TEXT_SELECTION_COLOR_KEY)
+	@XMLAttribute
+	public Color getTextSelectionColor();
+
+	@Setter(TEXT_SELECTION_COLOR_KEY)
+	public void setTextSelectionColor(Color textSelectionColor);
+
+	@Getter(value = TEXT_NON_SELECTION_COLOR_KEY)
+	@XMLAttribute
+	public Color getTextNonSelectionColor();
+
+	@Setter(TEXT_NON_SELECTION_COLOR_KEY)
+	public void setTextNonSelectionColor(Color textNonSelectionColor);
+
+	@Getter(value = BACKGROUND_SELECTION_COLOR_KEY)
+	@XMLAttribute
+	public Color getBackgroundSelectionColor();
+
+	@Setter(BACKGROUND_SELECTION_COLOR_KEY)
+	public void setBackgroundSelectionColor(Color backgroundSelectionColor);
+
+	@Getter(value = BACKGROUND_SECONDARY_SELECTION_COLOR_KEY)
+	@XMLAttribute
+	public Color getBackgroundSecondarySelectionColor();
+
+	@Setter(BACKGROUND_SECONDARY_SELECTION_COLOR_KEY)
+	public void setBackgroundSecondarySelectionColor(Color backgroundSecondarySelectionColor);
+
+	@Getter(value = BACKGROUND_NON_SELECTION_COLOR_KEY)
+	@XMLAttribute
+	public Color getBackgroundNonSelectionColor();
+
+	@Setter(BACKGROUND_NON_SELECTION_COLOR_KEY)
+	public void setBackgroundNonSelectionColor(Color backgroundNonSelectionColor);
+
+	public BindingModel getActionBindingModel();
+
+	public FIBTableColumn getColumnWithTitle(String title);
+
+	public static abstract class FIBTableImpl extends FIBWidgetImpl implements FIBTable {
+
+		private static final Logger logger = Logger.getLogger(FIBTable.class.getPackage().getName());
+
+		@Deprecated
+		private BindingDefinition SELECTED;
+
+		@Deprecated
+		public BindingDefinition getSelectedBindingDefinition() {
+			if (SELECTED == null) {
+				SELECTED = new BindingDefinition("selected", getIteratorType(), DataBinding.BindingDefinitionType.GET_SET, false);
+			}
+			return SELECTED;
 		}
-		return SELECTED;
-	}
 
-	public static enum Parameters implements FIBModelAttribute {
-		iteratorClass,
-		visibleRowCount,
-		rowHeight,
-		createNewRowOnClick,
-		autoSelectFirstRow,
-		boundToSelectionManager,
-		selectionMode,
-		selected,
-		columns,
-		actions,
-		showFooter,
-		textSelectionColor,
-		textNonSelectionColor,
-		backgroundSelectionColor,
-		backgroundSecondarySelectionColor,
-		backgroundNonSelectionColor
-	}
+		private DataBinding<Object> selected;
 
-	public enum SelectionMode {
-		SingleSelection {
-			@Override
-			public int getMode() {
-				return ListSelectionModel.SINGLE_SELECTION;
-			}
-		},
-		SingleIntervalSelection {
-			@Override
-			public int getMode() {
-				return ListSelectionModel.SINGLE_INTERVAL_SELECTION;
-			}
-		},
-		MultipleIntervalSelection {
-			@Override
-			public int getMode() {
-				return ListSelectionModel.MULTIPLE_INTERVAL_SELECTION;
-			}
-		};
+		private Integer visibleRowCount;
+		private Integer rowHeight;
+		private boolean createNewRowOnClick = false;
+		private boolean autoSelectFirstRow = false;
+		private boolean boundToSelectionManager = false;
+		private boolean showFooter = true;
 
-		public abstract int getMode();
-	}
+		private SelectionMode selectionMode = SelectionMode.MultipleIntervalSelection;
 
-	private DataBinding<Object> selected;
+		private Class iteratorClass;
 
-	private Integer visibleRowCount;
-	private Integer rowHeight;
-	private boolean createNewRowOnClick = false;
-	private boolean autoSelectFirstRow = false;
-	private boolean boundToSelectionManager = false;
-	private boolean showFooter = true;
+		private List<FIBTableColumn> columns;
+		private List<FIBTableAction> actions;
 
-	private SelectionMode selectionMode = SelectionMode.MultipleIntervalSelection;
+		private BindingModel tableBindingModel;
+		private BindingModel actionBindingModel;
 
-	private Class iteratorClass;
+		private Color textSelectionColor;
+		private Color textNonSelectionColor;
+		private Color backgroundSelectionColor;
+		private Color backgroundSecondarySelectionColor;
+		private Color backgroundNonSelectionColor;
 
-	private List<FIBTableColumn> columns;
-	private List<FIBTableAction> actions;
-
-	private BindingModel tableBindingModel;
-	private BindingModel actionBindingModel;
-
-	private Color textSelectionColor;
-	private Color textNonSelectionColor;
-	private Color backgroundSelectionColor;
-	private Color backgroundSecondarySelectionColor;
-	private Color backgroundNonSelectionColor;
-
-	public FIBTable() {
-		columns = new ArrayList<FIBTableColumn>();
-		actions = new ArrayList<FIBTableAction>();
-	}
-
-	@Override
-	protected String getBaseName() {
-		return "Table";
-	}
-
-	public FIBTableColumn getColumnWithTitle(String title) {
-		for (FIBTableColumn c : columns) {
-			if (title.equals(c.getTitle())) {
-				return c;
-			}
+		public FIBTableImpl() {
+			columns = new ArrayList<FIBTableColumn>();
+			actions = new ArrayList<FIBTableAction>();
 		}
-		return null;
-	}
 
-	@Override
-	public List<FIBTableColumn> getColumns() {
-		return columns;
-	}
+		@Override
+		public String getBaseName() {
+			return "Table";
+		}
 
-	public void setColumns(List<FIBTableColumn> columns) {
-		this.columns = columns;
-	}
+		@Override
+		public FIBTableColumn getColumnWithTitle(String title) {
+			for (FIBTableColumn c : columns) {
+				if (title.equals(c.getTitle())) {
+					return c;
+				}
+			}
+			return null;
+		}
 
-	public void addToColumns(FIBTableColumn aColumn) {
-		aColumn.setTable(this);
-		columns.add(aColumn);
-		getPropertyChangeSupport().firePropertyChange(Parameters.columns.name(), null, columns);
-	}
+		@Override
+		public List<FIBTableColumn> getColumns() {
+			return columns;
+		}
 
-	public void removeFromColumns(FIBTableColumn aColumn) {
-		aColumn.setTable(null);
-		columns.remove(aColumn);
-		getPropertyChangeSupport().firePropertyChange(Parameters.columns.name(), null, columns);
-	}
+		@Override
+		public void setColumns(List<FIBTableColumn> columns) {
+			this.columns = columns;
+		}
 
-	public List<FIBTableAction> getActions() {
-		return actions;
-	}
+		@Override
+		public void addToColumns(FIBTableColumn aColumn) {
+			aColumn.setOwner(this);
+			columns.add(aColumn);
+			getPropertyChangeSupport().firePropertyChange(COLUMNS_KEY, null, columns);
+		}
 
-	public void setActions(List<FIBTableAction> actions) {
-		this.actions = actions;
-	}
+		@Override
+		public void removeFromColumns(FIBTableColumn aColumn) {
+			aColumn.setOwner(null);
+			columns.remove(aColumn);
+			getPropertyChangeSupport().firePropertyChange(COLUMNS_KEY, null, columns);
+		}
 
-	public void addToActions(FIBTableAction anAction) {
-		logger.fine("Add to actions " + anAction);
-		anAction.setTable(this);
-		actions.add(anAction);
-		getPropertyChangeSupport().firePropertyChange(Parameters.actions.name(), null, actions);
-	}
+		@Override
+		public List<FIBTableAction> getActions() {
+			return actions;
+		}
 
-	public void removeFromActions(FIBTableAction anAction) {
-		anAction.setTable(null);
-		actions.remove(anAction);
-		getPropertyChangeSupport().firePropertyChange(Parameters.actions.name(), null, actions);
-	}
+		@Override
+		public void setActions(List<FIBTableAction> actions) {
+			this.actions = actions;
+		}
 
-	@Override
-	public void updateBindingModel() {
-		super.updateBindingModel();
-		tableBindingModel = null;
-		actionBindingModel = null;
-	}
+		@Override
+		public void addToActions(FIBTableAction anAction) {
+			logger.fine("Add to actions " + anAction);
+			anAction.setOwner(this);
+			actions.add(anAction);
+			getPropertyChangeSupport().firePropertyChange(ACTIONS_KEY, null, actions);
+		}
 
-	@Override
-	public BindingModel getTableBindingModel() {
-		if (tableBindingModel == null) {
+		@Override
+		public void removeFromActions(FIBTableAction anAction) {
+			anAction.setOwner(null);
+			actions.remove(anAction);
+			getPropertyChangeSupport().firePropertyChange(ACTIONS_KEY, null, actions);
+		}
+
+		@Override
+		public void updateBindingModel() {
+			super.updateBindingModel();
+			tableBindingModel = null;
+			actionBindingModel = null;
+		}
+
+		@Override
+		public BindingModel getTableBindingModel() {
+			if (tableBindingModel == null) {
+				createTableBindingModel();
+			}
+			return tableBindingModel;
+		}
+
+		private void createTableBindingModel() {
+			tableBindingModel = new BindingModel(getBindingModel());
+
+			tableBindingModel.addToBindingVariables(new BindingVariable("iterator", getIteratorType()));
+			// System.out.println("dataClass="+getDataClass()+" dataClassName="+dataClassName);
+
+			// logger.info("******** Table: "+getName()+" Add BindingVariable: iterator type="+getIteratorClass());
+		}
+
+		@Override
+		public BindingModel getActionBindingModel() {
+			if (actionBindingModel == null) {
+				createActionBindingModel();
+			}
+			return actionBindingModel;
+		}
+
+		private void createActionBindingModel() {
+			actionBindingModel = new BindingModel(getBindingModel());
+
+			actionBindingModel.addToBindingVariables(new BindingVariable("selected", getIteratorType()));
+			// System.out.println("dataClass="+getDataClass()+" dataClassName="+dataClassName);
+
+			// logger.info("******** Table: "+getName()+" Add BindingVariable: iterator type="+getIteratorClass());
+		}
+
+		@Override
+		public void notifiedBindingModelRecreated() {
+			super.notifiedBindingModelRecreated();
 			createTableBindingModel();
-		}
-		return tableBindingModel;
-	}
-
-	private void createTableBindingModel() {
-		tableBindingModel = new BindingModel(getBindingModel());
-
-		tableBindingModel.addToBindingVariables(new BindingVariable("iterator", getIteratorType()));
-		// System.out.println("dataClass="+getDataClass()+" dataClassName="+dataClassName);
-
-		// logger.info("******** Table: "+getName()+" Add BindingVariable: iterator type="+getIteratorClass());
-	}
-
-	public BindingModel getActionBindingModel() {
-		if (actionBindingModel == null) {
 			createActionBindingModel();
 		}
-		return actionBindingModel;
-	}
 
-	private void createActionBindingModel() {
-		actionBindingModel = new BindingModel(getBindingModel());
-
-		actionBindingModel.addToBindingVariables(new BindingVariable("selected", getIteratorType()));
-		// System.out.println("dataClass="+getDataClass()+" dataClassName="+dataClassName);
-
-		// logger.info("******** Table: "+getName()+" Add BindingVariable: iterator type="+getIteratorClass());
-	}
-
-	@Override
-	public void notifiedBindingModelRecreated() {
-		super.notifiedBindingModelRecreated();
-		createTableBindingModel();
-		createActionBindingModel();
-	}
-
-	public DataBinding<Object> getSelected() {
-		if (selected == null) {
-			selected = new DataBinding<Object>(this, getIteratorType(), DataBinding.BindingDefinitionType.GET_SET);
-		}
-		return selected;
-	}
-
-	public void setSelected(DataBinding<Object> selected) {
-		if (selected != null) {
-			selected.setOwner(this);
-			selected.setDeclaredType(getIteratorType());
-			selected.setBindingDefinitionType(DataBinding.BindingDefinitionType.GET_SET);
-		}
-		this.selected = selected;
-	}
-
-	@Override
-	public void finalizeDeserialization() {
-		logger.fine("finalizeDeserialization() for FIBTable " + getName());
-
-		/*if (tableBindingModel == null)*/createTableBindingModel();
-		/*if (actionBindingModel == null)*/createActionBindingModel();
-
-		super.finalizeDeserialization();
-
-		for (FIBTableColumn column : getColumns()) {
-			column.finalizeTableDeserialization();
-		}
-		if (selected != null) {
-			selected.decode();
-		}
-	}
-
-	/*public boolean hasDynamicKeyValueProperty(String name) 
-	{
-		if (name.equals("selected")) return getDataClass() != null;
-		return false;
-	}
-	
-	private DynamicKeyValueProperty SELECTED_DKVP;
-	
-	public DynamicKeyValueProperty getDynamicKeyValueProperty(String name)
-	{
-		if (name.equals("selected")) {
-			if (SELECTED_DKVP == null) SELECTED_DKVP = new DynamicKeyValueProperty("selected", getClass(), getDataClass());
-			return SELECTED_DKVP;
-		}
-		return null;
-	}*/
-
-	private Type iteratorType;
-
-	public Type getIteratorType() {
-		Class<?> iteratorClass = getIteratorClass();
-		if (iteratorClass.getTypeParameters().length > 0) {
-			if (iteratorType == null) {
-				iteratorType = TypeUtils.makeInferedType(iteratorClass);
+		@Override
+		public DataBinding<Object> getSelected() {
+			if (selected == null) {
+				selected = new DataBinding<Object>(this, getIteratorType(), DataBinding.BindingDefinitionType.GET_SET);
 			}
-			return iteratorType;
+			return selected;
 		}
-		return iteratorClass;
-	}
 
-	public Class getIteratorClass() {
-		if (iteratorClass == null) {
-			iteratorClass = Object.class;
+		@Override
+		public void setSelected(DataBinding<Object> selected) {
+			if (selected != null) {
+				selected.setOwner(this);
+				selected.setDeclaredType(getIteratorType());
+				selected.setBindingDefinitionType(DataBinding.BindingDefinitionType.GET_SET);
+			}
+			this.selected = selected;
 		}
-		return iteratorClass;
 
-	}
+		@Override
+		public void finalizeDeserialization() {
+			logger.fine("finalizeDeserialization() for FIBTable " + getName());
 
-	public void setIteratorClass(Class iteratorClass) {
-		FIBAttributeNotification<Class> notification = requireChange(Parameters.iteratorClass, iteratorClass);
-		if (notification != null) {
-			this.iteratorClass = iteratorClass;
-			createTableBindingModel();
-			createActionBindingModel();
-			hasChanged(notification);
+			/*if (tableBindingModel == null)*/createTableBindingModel();
+			/*if (actionBindingModel == null)*/createActionBindingModel();
+
+			super.finalizeDeserialization();
+
+			for (FIBTableColumn column : getColumns()) {
+				column.finalizeTableDeserialization();
+			}
+			if (selected != null) {
+				selected.decode();
+			}
 		}
-	}
 
-	@Override
-	public Type getDefaultDataClass() {
-		Type[] args = new Type[1];
-		args[0] = new WilcardTypeImpl(getIteratorClass());
-		return new ParameterizedTypeImpl(Collection.class, args);
-	}
+		/*public boolean hasDynamicKeyValueProperty(String name) 
+		{
+			if (name.equals("selected")) return getDataClass() != null;
+			return false;
+		}
+		
+		private DynamicKeyValueProperty SELECTED_DKVP;
+		
+		public DynamicKeyValueProperty getDynamicKeyValueProperty(String name)
+		{
+			if (name.equals("selected")) {
+				if (SELECTED_DKVP == null) SELECTED_DKVP = new DynamicKeyValueProperty("selected", getClass(), getDataClass());
+				return SELECTED_DKVP;
+			}
+			return null;
+		}*/
 
-	@Override
-	public Type getDynamicAccessType() {
-		// Type[] args = new Type[2];
-		// args[0] = getDataType();
-		// args[1] = getIteratorType();
-		return new ParameterizedTypeImpl(FIBTableWidget.class, getIteratorType());
-	}
+		private Type iteratorType;
 
-	@Override
-	public Boolean getManageDynamicModel() {
-		return true;
-	}
+		public Type getIteratorType() {
+			Class<?> iteratorClass = getIteratorClass();
+			if (iteratorClass.getTypeParameters().length > 0) {
+				if (iteratorType == null) {
+					iteratorType = TypeUtils.makeInferedType(iteratorClass);
+				}
+				return iteratorType;
+			}
+			return iteratorClass;
+		}
 
-	@Override
-	public void notifiedBindingChanged(DataBinding<?> binding) {
-		logger.fine("notifyBindingChanged with " + binding);
-		super.notifiedBindingChanged(binding);
-		if (binding == getData()) {
-			if (getData() != null) {
-				Type accessedType = getData().getAnalyzedType();
-				if (accessedType instanceof ParameterizedType && ((ParameterizedType) accessedType).getActualTypeArguments().length > 0) {
-					Class newIteratorClass = TypeUtils.getBaseClass(((ParameterizedType) accessedType).getActualTypeArguments()[0]);
-					if (getIteratorClass() == null || !TypeUtils.isClassAncestorOf(newIteratorClass, getIteratorClass())) {
-						setIteratorClass(newIteratorClass);
+		@Override
+		public Class getIteratorClass() {
+			if (iteratorClass == null) {
+				iteratorClass = Object.class;
+			}
+			return iteratorClass;
+
+		}
+
+		@Override
+		public void setIteratorClass(Class iteratorClass) {
+			FIBPropertyNotification<Class> notification = requireChange(ITERATOR_CLASS_KEY, iteratorClass);
+			if (notification != null) {
+				this.iteratorClass = iteratorClass;
+				createTableBindingModel();
+				createActionBindingModel();
+				hasChanged(notification);
+			}
+		}
+
+		@Override
+		public Type getDefaultDataClass() {
+			Type[] args = new Type[1];
+			args[0] = new WilcardTypeImpl(getIteratorClass());
+			return new ParameterizedTypeImpl(Collection.class, args);
+		}
+
+		@Override
+		public Type getDynamicAccessType() {
+			// Type[] args = new Type[2];
+			// args[0] = getDataType();
+			// args[1] = getIteratorType();
+			return new ParameterizedTypeImpl(FIBTableWidget.class, getIteratorType());
+		}
+
+		@Override
+		public Boolean getManageDynamicModel() {
+			return true;
+		}
+
+		@Override
+		public void notifiedBindingChanged(DataBinding<?> binding) {
+			logger.fine("notifyBindingChanged with " + binding);
+			super.notifiedBindingChanged(binding);
+			if (binding == getData()) {
+				if (getData() != null) {
+					Type accessedType = getData().getAnalyzedType();
+					if (accessedType instanceof ParameterizedType && ((ParameterizedType) accessedType).getActualTypeArguments().length > 0) {
+						Class newIteratorClass = TypeUtils.getBaseClass(((ParameterizedType) accessedType).getActualTypeArguments()[0]);
+						if (getIteratorClass() == null || !TypeUtils.isClassAncestorOf(newIteratorClass, getIteratorClass())) {
+							setIteratorClass(newIteratorClass);
+						}
 					}
 				}
 			}
+
+		}
+
+		/*public String getIteratorClassName()
+		{
+			return iteratorClassName;
+		}
+		
+		public void setIteratorClassName(String iteratorClassName)
+		{
+			FIBPropertyNotification<String> notification = requireChange(
+					Parameters.iteratorClassName, iteratorClassName);
+			if (notification != null) {
+				this.iteratorClassName = iteratorClassName;
+				iteratorClass = null;
+				createTableBindingModel();
+				hasChanged(notification);
+			}
+		}*/
+
+		@Override
+		public boolean getAutoSelectFirstRow() {
+			return autoSelectFirstRow;
+		}
+
+		@Override
+		public void setAutoSelectFirstRow(boolean autoSelectFirstRow) {
+			FIBPropertyNotification<Boolean> notification = requireChange(AUTO_SELECT_FIRST_ROW_KEY, autoSelectFirstRow);
+			if (notification != null) {
+				this.autoSelectFirstRow = autoSelectFirstRow;
+				hasChanged(notification);
+			}
+		}
+
+		@Override
+		public Integer getVisibleRowCount() {
+			return visibleRowCount;
+		}
+
+		@Override
+		public void setVisibleRowCount(Integer visibleRowCount) {
+			FIBPropertyNotification<Integer> notification = requireChange(VISIBLE_ROW_COUNT_KEY, visibleRowCount);
+			if (notification != null) {
+				this.visibleRowCount = visibleRowCount;
+				hasChanged(notification);
+			}
+		}
+
+		@Override
+		public Integer getRowHeight() {
+			return rowHeight;
+		}
+
+		@Override
+		public void setRowHeight(Integer rowHeight) {
+			FIBPropertyNotification<Integer> notification = requireChange(ROW_HEIGHT_KEY, rowHeight);
+			if (notification != null) {
+				this.rowHeight = rowHeight;
+				hasChanged(notification);
+			}
+		}
+
+		@Override
+		public boolean getCreateNewRowOnClick() {
+			return createNewRowOnClick;
+		}
+
+		@Override
+		public void setCreateNewRowOnClick(boolean createNewRowOnClick) {
+			FIBPropertyNotification<Boolean> notification = requireChange(CREATE_NEW_ROW_ON_CLICK_KEY, createNewRowOnClick);
+			if (notification != null) {
+				this.createNewRowOnClick = createNewRowOnClick;
+				hasChanged(notification);
+			}
+		}
+
+		@Override
+		public boolean getShowFooter() {
+			return showFooter;
+		}
+
+		@Override
+		public void setShowFooter(boolean showFooter) {
+			FIBPropertyNotification<Boolean> notification = requireChange(SHOW_FOOTER_KEY, showFooter);
+			if (notification != null) {
+				this.showFooter = showFooter;
+				hasChanged(notification);
+			}
+		}
+
+		@Override
+		public boolean getBoundToSelectionManager() {
+			return boundToSelectionManager;
+		}
+
+		@Override
+		public void setBoundToSelectionManager(boolean boundToSelectionManager) {
+			FIBPropertyNotification<Boolean> notification = requireChange(BOUND_TO_SELECTION_MANAGER_KEY, boundToSelectionManager);
+			if (notification != null) {
+				this.boundToSelectionManager = boundToSelectionManager;
+				hasChanged(notification);
+			}
+		}
+
+		public FIBAddAction createAddAction() {
+			FIBAddAction newAction = getFactory().newInstance(FIBAddAction.class);
+			newAction.setName("add_action");
+			addToActions(newAction);
+			return newAction;
+		}
+
+		public FIBRemoveAction createRemoveAction() {
+			FIBRemoveAction newAction = getFactory().newInstance(FIBRemoveAction.class);
+			newAction.setName("delete_action");
+			addToActions(newAction);
+			return newAction;
+		}
+
+		public FIBCustomAction createCustomAction() {
+			FIBCustomAction newAction = getFactory().newInstance(FIBCustomAction.class);
+			newAction.setName("custom_action");
+			addToActions(newAction);
+			return newAction;
+		}
+
+		public FIBTableAction deleteAction(FIBTableAction actionToDelete) {
+			logger.info("Called deleteAction() with " + actionToDelete);
+			removeFromActions(actionToDelete);
+			return actionToDelete;
+		}
+
+		public FIBLabelColumn createLabelColumn() {
+			FIBLabelColumn newColumn = getFactory().newInstance(FIBLabelColumn.class);
+			newColumn.setName("label");
+			newColumn.setTitle("label");
+			addToColumns(newColumn);
+			return newColumn;
+		}
+
+		public FIBTextFieldColumn createTextFieldColumn() {
+			FIBTextFieldColumn newColumn = getFactory().newInstance(FIBTextFieldColumn.class);
+			newColumn.setName("textfield");
+			newColumn.setTitle("textfield");
+			addToColumns(newColumn);
+			return newColumn;
+		}
+
+		public FIBCheckBoxColumn createCheckBoxColumn() {
+			FIBCheckBoxColumn newColumn = getFactory().newInstance(FIBCheckBoxColumn.class);
+			newColumn.setName("checkbox");
+			newColumn.setTitle("checkbox");
+			addToColumns(newColumn);
+			return newColumn;
+		}
+
+		public FIBDropDownColumn createDropDownColumn() {
+			FIBDropDownColumn newColumn = getFactory().newInstance(FIBDropDownColumn.class);
+			newColumn.setName("dropdown");
+			newColumn.setTitle("dropdown");
+			addToColumns(newColumn);
+			return newColumn;
+		}
+
+		public FIBNumberColumn createNumberColumn() {
+			FIBNumberColumn newColumn = getFactory().newInstance(FIBNumberColumn.class);
+			newColumn.setName("number");
+			newColumn.setTitle("number");
+			addToColumns(newColumn);
+			return newColumn;
+		}
+
+		public FIBIconColumn createIconColumn() {
+			FIBIconColumn newColumn = getFactory().newInstance(FIBIconColumn.class);
+			newColumn.setName("icon");
+			newColumn.setTitle("icon");
+			addToColumns(newColumn);
+			return newColumn;
+		}
+
+		public FIBCustomColumn createCustomColumn() {
+			FIBCustomColumn newColumn = getFactory().newInstance(FIBCustomColumn.class);
+			newColumn.setName("custom");
+			newColumn.setTitle("custom");
+			addToColumns(newColumn);
+			return newColumn;
+		}
+
+		public FIBButtonColumn createButtonColumn() {
+			FIBButtonColumn newColumn = getFactory().newInstance(FIBButtonColumn.class);
+			newColumn.setName("button");
+			newColumn.setTitle("button");
+			addToColumns(newColumn);
+			return newColumn;
+		}
+
+		public FIBTableColumn deleteColumn(FIBTableColumn columnToDelete) {
+			logger.info("Called deleteColumn() with " + columnToDelete);
+			removeFromColumns(columnToDelete);
+			return columnToDelete;
+		}
+
+		public void moveToTop(FIBTableColumn c) {
+			if (c == null) {
+				return;
+			}
+			columns.remove(c);
+			columns.add(0, c);
+			getPropertyChangeSupport().firePropertyChange(COLUMNS_KEY, null, columns);
+		}
+
+		public void moveUp(FIBTableColumn c) {
+			if (c == null) {
+				return;
+			}
+			int index = columns.indexOf(c);
+			columns.remove(c);
+			columns.add(index - 1, c);
+			getPropertyChangeSupport().firePropertyChange(COLUMNS_KEY, null, columns);
+		}
+
+		public void moveDown(FIBTableColumn c) {
+			if (c == null) {
+				return;
+			}
+			int index = columns.indexOf(c);
+			columns.remove(c);
+			columns.add(index + 1, c);
+			getPropertyChangeSupport().firePropertyChange(COLUMNS_KEY, null, columns);
+		}
+
+		public void moveToBottom(FIBTableColumn c) {
+			if (c == null) {
+				return;
+			}
+			columns.remove(c);
+			columns.add(c);
+			getPropertyChangeSupport().firePropertyChange(COLUMNS_KEY, null, columns);
+		}
+
+		@Override
+		public SelectionMode getSelectionMode() {
+			return selectionMode;
+		}
+
+		@Override
+		public void setSelectionMode(SelectionMode selectionMode) {
+			FIBPropertyNotification<SelectionMode> notification = requireChange(SELECTION_MODE_KEY, selectionMode);
+			if (notification != null) {
+				this.selectionMode = selectionMode;
+				hasChanged(notification);
+			}
+		}
+
+		@Override
+		public Color getTextSelectionColor() {
+			return textSelectionColor;
+		}
+
+		@Override
+		public void setTextSelectionColor(Color textSelectionColor) {
+			FIBPropertyNotification<Color> notification = requireChange(TEXT_SELECTION_COLOR_KEY, textSelectionColor);
+			if (notification != null) {
+				this.textSelectionColor = textSelectionColor;
+				hasChanged(notification);
+			}
+		}
+
+		@Override
+		public Color getTextNonSelectionColor() {
+			return textNonSelectionColor;
+		}
+
+		@Override
+		public void setTextNonSelectionColor(Color textNonSelectionColor) {
+			FIBPropertyNotification<Color> notification = requireChange(TEXT_NON_SELECTION_COLOR_KEY, textNonSelectionColor);
+			if (notification != null) {
+				this.textNonSelectionColor = textNonSelectionColor;
+				hasChanged(notification);
+			}
+		}
+
+		@Override
+		public Color getBackgroundSelectionColor() {
+			return backgroundSelectionColor;
+		}
+
+		@Override
+		public void setBackgroundSelectionColor(Color backgroundSelectionColor) {
+			FIBPropertyNotification<Color> notification = requireChange(BACKGROUND_SELECTION_COLOR_KEY, backgroundSelectionColor);
+			if (notification != null) {
+				this.backgroundSelectionColor = backgroundSelectionColor;
+				hasChanged(notification);
+			}
+		}
+
+		@Override
+		public Color getBackgroundSecondarySelectionColor() {
+			return backgroundSecondarySelectionColor;
+		}
+
+		@Override
+		public void setBackgroundSecondarySelectionColor(Color backgroundSecondarySelectionColor) {
+			FIBPropertyNotification<Color> notification = requireChange(BACKGROUND_SECONDARY_SELECTION_COLOR_KEY,
+					backgroundSecondarySelectionColor);
+			if (notification != null) {
+				this.backgroundSecondarySelectionColor = backgroundSecondarySelectionColor;
+				hasChanged(notification);
+			}
+		}
+
+		@Override
+		public Color getBackgroundNonSelectionColor() {
+			return backgroundNonSelectionColor;
+		}
+
+		@Override
+		public void setBackgroundNonSelectionColor(Color backgroundNonSelectionColor) {
+			FIBPropertyNotification<Color> notification = requireChange(BACKGROUND_NON_SELECTION_COLOR_KEY, backgroundNonSelectionColor);
+			if (notification != null) {
+				this.backgroundNonSelectionColor = backgroundNonSelectionColor;
+				hasChanged(notification);
+			}
+		}
+
+		/**
+		 * Return a list of all bindings declared in the context of this component
+		 * 
+		 * @return
+		 */
+		@Override
+		public List<DataBinding<?>> getDeclaredBindings() {
+			List<DataBinding<?>> returned = super.getDeclaredBindings();
+			returned.add(getSelected());
+			return returned;
 		}
 
 	}
-
-	/*public String getIteratorClassName()
-	{
-		return iteratorClassName;
-	}
-	
-	public void setIteratorClassName(String iteratorClassName)
-	{
-		FIBAttributeNotification<String> notification = requireChange(
-				Parameters.iteratorClassName, iteratorClassName);
-		if (notification != null) {
-			this.iteratorClassName = iteratorClassName;
-			iteratorClass = null;
-			createTableBindingModel();
-			hasChanged(notification);
-		}
-	}*/
-
-	public boolean getAutoSelectFirstRow() {
-		return autoSelectFirstRow;
-	}
-
-	public void setAutoSelectFirstRow(boolean autoSelectFirstRow) {
-		FIBAttributeNotification<Boolean> notification = requireChange(Parameters.autoSelectFirstRow, autoSelectFirstRow);
-		if (notification != null) {
-			this.autoSelectFirstRow = autoSelectFirstRow;
-			hasChanged(notification);
-		}
-	}
-
-	public Integer getVisibleRowCount() {
-		return visibleRowCount;
-	}
-
-	public void setVisibleRowCount(Integer visibleRowCount) {
-		FIBAttributeNotification<Integer> notification = requireChange(Parameters.visibleRowCount, visibleRowCount);
-		if (notification != null) {
-			this.visibleRowCount = visibleRowCount;
-			hasChanged(notification);
-		}
-	}
-
-	public Integer getRowHeight() {
-		return rowHeight;
-	}
-
-	public void setRowHeight(Integer rowHeight) {
-		FIBAttributeNotification<Integer> notification = requireChange(Parameters.rowHeight, rowHeight);
-		if (notification != null) {
-			this.rowHeight = rowHeight;
-			hasChanged(notification);
-		}
-	}
-
-	public boolean getCreateNewRowOnClick() {
-		return createNewRowOnClick;
-	}
-
-	public void setCreateNewRowOnClick(boolean createNewRowOnClick) {
-		FIBAttributeNotification<Boolean> notification = requireChange(Parameters.createNewRowOnClick, createNewRowOnClick);
-		if (notification != null) {
-			this.createNewRowOnClick = createNewRowOnClick;
-			hasChanged(notification);
-		}
-	}
-
-	public boolean getShowFooter() {
-		return showFooter;
-	}
-
-	public void setShowFooter(boolean showFooter) {
-		FIBAttributeNotification<Boolean> notification = requireChange(Parameters.showFooter, showFooter);
-		if (notification != null) {
-			this.showFooter = showFooter;
-			hasChanged(notification);
-		}
-	}
-
-	public boolean getBoundToSelectionManager() {
-		return boundToSelectionManager;
-	}
-
-	public void setBoundToSelectionManager(boolean boundToSelectionManager) {
-		FIBAttributeNotification<Boolean> notification = requireChange(Parameters.boundToSelectionManager, boundToSelectionManager);
-		if (notification != null) {
-			this.boundToSelectionManager = boundToSelectionManager;
-			hasChanged(notification);
-		}
-	}
-
-	public FIBAddAction createAddAction() {
-		FIBAddAction newAction = new FIBAddAction();
-		newAction.setName("add_action");
-		addToActions(newAction);
-		return newAction;
-	}
-
-	public FIBRemoveAction createRemoveAction() {
-		FIBRemoveAction newAction = new FIBRemoveAction();
-		newAction.setName("delete_action");
-		addToActions(newAction);
-		return newAction;
-	}
-
-	public FIBCustomAction createCustomAction() {
-		FIBCustomAction newAction = new FIBCustomAction();
-		newAction.setName("custom_action");
-		addToActions(newAction);
-		return newAction;
-	}
-
-	public FIBTableAction deleteAction(FIBTableAction actionToDelete) {
-		logger.info("Called deleteAction() with " + actionToDelete);
-		removeFromActions(actionToDelete);
-		return actionToDelete;
-	}
-
-	public FIBLabelColumn createLabelColumn() {
-		FIBLabelColumn newColumn = new FIBLabelColumn();
-		newColumn.setName("label");
-		newColumn.setTitle("label");
-		addToColumns(newColumn);
-		return newColumn;
-	}
-
-	public FIBTextFieldColumn createTextFieldColumn() {
-		FIBTextFieldColumn newColumn = new FIBTextFieldColumn();
-		newColumn.setName("textfield");
-		newColumn.setTitle("textfield");
-		addToColumns(newColumn);
-		return newColumn;
-	}
-
-	public FIBCheckBoxColumn createCheckBoxColumn() {
-		FIBCheckBoxColumn newColumn = new FIBCheckBoxColumn();
-		newColumn.setName("checkbox");
-		newColumn.setTitle("checkbox");
-		addToColumns(newColumn);
-		return newColumn;
-	}
-
-	public FIBDropDownColumn createDropDownColumn() {
-		FIBDropDownColumn newColumn = new FIBDropDownColumn();
-		newColumn.setName("dropdown");
-		newColumn.setTitle("dropdown");
-		addToColumns(newColumn);
-		return newColumn;
-	}
-
-	public FIBNumberColumn createNumberColumn() {
-		FIBNumberColumn newColumn = new FIBNumberColumn();
-		newColumn.setName("number");
-		newColumn.setTitle("number");
-		addToColumns(newColumn);
-		return newColumn;
-	}
-
-	public FIBIconColumn createIconColumn() {
-		FIBIconColumn newColumn = new FIBIconColumn();
-		newColumn.setName("icon");
-		newColumn.setTitle("icon");
-		addToColumns(newColumn);
-		return newColumn;
-	}
-
-	public FIBCustomColumn createCustomColumn() {
-		FIBCustomColumn newColumn = new FIBCustomColumn();
-		newColumn.setName("custom");
-		newColumn.setTitle("custom");
-		addToColumns(newColumn);
-		return newColumn;
-	}
-
-	public FIBButtonColumn createButtonColumn() {
-		FIBButtonColumn newColumn = new FIBButtonColumn();
-		newColumn.setName("button");
-		newColumn.setTitle("button");
-		addToColumns(newColumn);
-		return newColumn;
-	}
-
-	public FIBTableColumn deleteColumn(FIBTableColumn columnToDelete) {
-		logger.info("Called deleteColumn() with " + columnToDelete);
-		removeFromColumns(columnToDelete);
-		return columnToDelete;
-	}
-
-	public void moveToTop(FIBTableColumn c) {
-		if (c == null) {
-			return;
-		}
-		columns.remove(c);
-		columns.add(0, c);
-		getPropertyChangeSupport().firePropertyChange(Parameters.columns.name(), null, columns);
-	}
-
-	public void moveUp(FIBTableColumn c) {
-		if (c == null) {
-			return;
-		}
-		int index = columns.indexOf(c);
-		columns.remove(c);
-		columns.add(index - 1, c);
-		getPropertyChangeSupport().firePropertyChange(Parameters.columns.name(), null, columns);
-	}
-
-	public void moveDown(FIBTableColumn c) {
-		if (c == null) {
-			return;
-		}
-		int index = columns.indexOf(c);
-		columns.remove(c);
-		columns.add(index + 1, c);
-		getPropertyChangeSupport().firePropertyChange(Parameters.columns.name(), null, columns);
-	}
-
-	public void moveToBottom(FIBTableColumn c) {
-		if (c == null) {
-			return;
-		}
-		columns.remove(c);
-		columns.add(c);
-		getPropertyChangeSupport().firePropertyChange(Parameters.columns.name(), null, columns);
-	}
-
-	public SelectionMode getSelectionMode() {
-		return selectionMode;
-	}
-
-	public void setSelectionMode(SelectionMode selectionMode) {
-		FIBAttributeNotification<SelectionMode> notification = requireChange(Parameters.selectionMode, selectionMode);
-		if (notification != null) {
-			this.selectionMode = selectionMode;
-			hasChanged(notification);
-		}
-	}
-
-	public Color getTextSelectionColor() {
-		return textSelectionColor;
-	}
-
-	public void setTextSelectionColor(Color textSelectionColor) {
-		FIBAttributeNotification<Color> notification = requireChange(Parameters.textSelectionColor, textSelectionColor);
-		if (notification != null) {
-			this.textSelectionColor = textSelectionColor;
-			hasChanged(notification);
-		}
-	}
-
-	public Color getTextNonSelectionColor() {
-		return textNonSelectionColor;
-	}
-
-	public void setTextNonSelectionColor(Color textNonSelectionColor) {
-		FIBAttributeNotification<Color> notification = requireChange(Parameters.textNonSelectionColor, textNonSelectionColor);
-		if (notification != null) {
-			this.textNonSelectionColor = textNonSelectionColor;
-			hasChanged(notification);
-		}
-	}
-
-	public Color getBackgroundSelectionColor() {
-		return backgroundSelectionColor;
-	}
-
-	public void setBackgroundSelectionColor(Color backgroundSelectionColor) {
-		FIBAttributeNotification<Color> notification = requireChange(Parameters.backgroundSelectionColor, backgroundSelectionColor);
-		if (notification != null) {
-			this.backgroundSelectionColor = backgroundSelectionColor;
-			hasChanged(notification);
-		}
-	}
-
-	public Color getBackgroundSecondarySelectionColor() {
-		return backgroundSecondarySelectionColor;
-	}
-
-	public void setBackgroundSecondarySelectionColor(Color backgroundSecondarySelectionColor) {
-		FIBAttributeNotification<Color> notification = requireChange(Parameters.backgroundSecondarySelectionColor,
-				backgroundSecondarySelectionColor);
-		if (notification != null) {
-			this.backgroundSecondarySelectionColor = backgroundSecondarySelectionColor;
-			hasChanged(notification);
-		}
-	}
-
-	public Color getBackgroundNonSelectionColor() {
-		return backgroundNonSelectionColor;
-	}
-
-	public void setBackgroundNonSelectionColor(Color backgroundNonSelectionColor) {
-		FIBAttributeNotification<Color> notification = requireChange(Parameters.backgroundNonSelectionColor, backgroundNonSelectionColor);
-		if (notification != null) {
-			this.backgroundNonSelectionColor = backgroundNonSelectionColor;
-			hasChanged(notification);
-		}
-	}
-
-	@Override
-	public Collection<? extends FIBModelObject> getEmbeddedObjects() {
-		return new ChainedCollection(getColumns(), getActions());
-	}
-
-	/**
-	 * Return a list of all bindings declared in the context of this component
-	 * 
-	 * @return
-	 */
-	public List<DataBinding<?>> getDeclaredBindings() {
-		List<DataBinding<?>> returned = super.getDeclaredBindings();
-		returned.add(getSelected());
-		return returned;
-	}
-
 }

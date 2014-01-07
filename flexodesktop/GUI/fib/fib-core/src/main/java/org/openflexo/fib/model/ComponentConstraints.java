@@ -148,8 +148,9 @@ public abstract class ComponentConstraints extends Hashtable<String, String> imp
 		String returned = super.put(key, value);
 
 		if (component != null && !ignoreNotif) {
-			FIBAttributeNotification<ComponentConstraints> notification = new FIBAttributeNotification<ComponentConstraints>(
-					FIBComponent.Parameters.constraints, this, this);
+			FIBPropertyNotification<ComponentConstraints> notification = new FIBPropertyNotification<ComponentConstraints>(
+					(FIBProperty<ComponentConstraints>) FIBProperty.getFIBProperty(FIBComponent.class, FIBComponent.CONSTRAINTS_KEY), this,
+					this);
 			component.notify(notification);
 		}
 

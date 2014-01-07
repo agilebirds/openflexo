@@ -29,86 +29,133 @@ import java.util.logging.Logger;
 
 import org.openflexo.localization.Language;
 import org.openflexo.localization.LocalizedDelegate;
+import org.openflexo.model.annotations.Adder;
+import org.openflexo.model.annotations.Getter;
+import org.openflexo.model.annotations.Getter.Cardinality;
+import org.openflexo.model.annotations.ImplementationClass;
+import org.openflexo.model.annotations.ModelEntity;
+import org.openflexo.model.annotations.PropertyIdentifier;
+import org.openflexo.model.annotations.Remover;
+import org.openflexo.model.annotations.Setter;
+import org.openflexo.model.annotations.XMLElement;
 import org.openflexo.toolbox.StringUtils;
 
-public class FIBLocalizedDictionary extends FIBModelObject implements LocalizedDelegate {
+@ModelEntity
+@ImplementationClass(FIBLocalizedDictionary.FIBLocalizedDictionaryImpl.class)
+@XMLElement(xmlTag = "LocalizedDictionary")
+public interface FIBLocalizedDictionary extends FIBModelObject, LocalizedDelegate {
 
-	private static final Logger logger = Logger.getLogger(FIBLocalizedDictionary.class.getPackage().getName());
+	@PropertyIdentifier(type = FIBComponent.class)
+	public static final String OWNER_KEY = "owner";
 
-	private FIBComponent _component;
-	private Vector<FIBLocalizedEntry> _entries;
-	private Hashtable<Language, Hashtable<String, String>> _values;
-	private Vector<DynamicEntry> dynamicEntries = null;
+	@PropertyIdentifier(type = List.class)
+	public static final String ENTRIES_KEY = "entries";
 
-	private boolean isSearchingNewEntries = false;
+	@Getter(value = OWNER_KEY, inverse = FIBComponent.LOCALIZED_DICTIONARY_KEY)
+	public FIBComponent getOwner();
 
-	public FIBLocalizedDictionary() {
-		_entries = new Vector<FIBLocalizedEntry>();
-		_values = new Hashtable<Language, Hashtable<String, String>>();
-	}
+	@Setter(OWNER_KEY)
+	public void setOwner(FIBComponent owner);
 
-	@Override
-	public FIBComponent getComponent() {
-		return _component;
-	}
+	@Getter(value = ENTRIES_KEY, cardinality = Cardinality.LIST, inverse = FIBLocalizedEntry.DICTIONARY_KEY)
+	public List<FIBLocalizedEntry> getEntries();
 
-	public void setComponent(FIBComponent component) {
-		_component = component;
-	}
+	@Setter(ENTRIES_KEY)
+	public void setEntries(List<FIBLocalizedEntry> entries);
 
-	public Vector<FIBLocalizedEntry> getEntries() {
-		return _entries;
-	}
+	@Adder(ENTRIES_KEY)
+	public void addToEntries(FIBLocalizedEntry aEntrie);
 
-	public void setEntries(Vector<FIBLocalizedEntry> someEntries) {
-		_entries = someEntries;
-	}
+	@Remover(ENTRIES_KEY)
+	public void removeFromEntries(FIBLocalizedEntry aEntrie);
 
-	public void addToEntries(FIBLocalizedEntry entry) {
-		entry.setLocalizedDictionary(this);
-		_entries.add(entry);
-		// logger.info("Add entry key:"+entry.getKey()+" lang="+entry.getLanguage()+" value:"+entry.getValue());
-		Language lang = Language.retrieveLanguage(entry.getLanguage());
-		if (lang == null) {
-			logger.warning("Undefined language: " + entry.getLanguage());
-			return;
+	public void append(FIBLocalizedDictionary aDict);
+
+	public void setParent(LocalizedDelegate parentLocalizedDelegate);
+
+	public void beginSearchNewLocalizationEntries();
+
+	public void endSearchNewLocalizationEntries();
+
+	public void refresh();
+
+	public static abstract class FIBLocalizedDictionaryImpl extends FIBModelObjectImpl implements FIBLocalizedDictionary {
+
+		private static final Logger logger = Logger.getLogger(FIBLocalizedDictionary.class.getPackage().getName());
+
+		private Vector<FIBLocalizedEntry> _entries;
+		private final Hashtable<Language, Hashtable<String, String>> _values;
+		private Vector<DynamicEntry> dynamicEntries = null;
+
+		private boolean isSearchingNewEntries = false;
+
+		public FIBLocalizedDictionaryImpl() {
+			_entries = new Vector<FIBLocalizedEntry>();
+			_values = new Hashtable<Language, Hashtable<String, String>>();
 		}
-		getDictForLang(lang).put(entry.getKey(), entry.getValue());
-	}
 
-	public void removeFromEntries(FIBLocalizedEntry entry) {
-		entry.setLocalizedDictionary(null);
-		_entries.remove(entry);
-	}
-
-	public void append(FIBLocalizedDictionary aDict) {
-		if (aDict == null) {
-			return;
+		@Override
+		public FIBComponent getComponent() {
+			return getOwner();
 		}
-		for (FIBLocalizedEntry entry : aDict.getEntries()) {
-			addToEntries(entry);
-		}
-	}
 
-	private FIBLocalizedEntry getEntry(Language language, String key) {
-		for (FIBLocalizedEntry entry : getEntries()) {
-			if (Language.retrieveLanguage(entry.getLanguage()) == language && key.equals(entry.getKey())) {
-				return entry;
+		@Override
+		public Vector<FIBLocalizedEntry> getEntries() {
+			return _entries;
+		}
+
+		public void setEntries(Vector<FIBLocalizedEntry> someEntries) {
+			_entries = someEntries;
+		}
+
+		@Override
+		public void addToEntries(FIBLocalizedEntry entry) {
+			entry.setLocalizedDictionary(this);
+			_entries.add(entry);
+			// logger.info("Add entry key:"+entry.getKey()+" lang="+entry.getLanguage()+" value:"+entry.getValue());
+			Language lang = Language.retrieveLanguage(entry.getLanguage());
+			if (lang == null) {
+				logger.warning("Undefined language: " + entry.getLanguage());
+				return;
+			}
+			getDictForLang(lang).put(entry.getKey(), entry.getValue());
+		}
+
+		@Override
+		public void removeFromEntries(FIBLocalizedEntry entry) {
+			entry.setLocalizedDictionary(null);
+			_entries.remove(entry);
+		}
+
+		@Override
+		public void append(FIBLocalizedDictionary aDict) {
+			if (aDict == null) {
+				return;
+			}
+			for (FIBLocalizedEntry entry : aDict.getEntries()) {
+				addToEntries(entry);
 			}
 		}
-		return null;
-	}
 
-	private Hashtable<String, String> getDictForLang(Language lang) {
-		Hashtable<String, String> dict = _values.get(lang);
-		if (dict == null) {
-			dict = new Hashtable<String, String>();
-			_values.put(lang, dict);
+		private FIBLocalizedEntry getEntry(Language language, String key) {
+			for (FIBLocalizedEntry entry : getEntries()) {
+				if (Language.retrieveLanguage(entry.getLanguage()) == language && key.equals(entry.getKey())) {
+					return entry;
+				}
+			}
+			return null;
 		}
-		return dict;
-	}
 
-	/*public String getDefaultValue(String key, Language language) {
+		private Hashtable<String, String> getDictForLang(Language lang) {
+			Hashtable<String, String> dict = _values.get(lang);
+			if (dict == null) {
+				dict = new Hashtable<String, String>();
+				_values.put(lang, dict);
+			}
+			return dict;
+		}
+
+		/*public String getDefaultValue(String key, Language language) {
 		if (mainLocalizer != null) {
 			return mainLocalizer.getLocalizedForKeyAndLanguage(key, language);
 		}
@@ -116,19 +163,19 @@ public class FIBLocalizedDictionary extends FIBModelObject implements LocalizedD
 		return key;
 		// logger.info("Searched default value for key "+key+" return "+FlexoLocalization.localizedForKey(key));
 		// return FlexoLocalization.localizedForKeyAndLanguage(key, language, false, false);
-	}*/
+		}*/
 
-	@Override
-	public String getLocalizedForKeyAndLanguage(String key, Language language) {
-		if (key == null || StringUtils.isEmpty(key)) {
-			return null;
-		}
-		// if (isSearchingNewEntries) logger.info("-------> called localizedForKeyAndLanguage() key="+key+" lang="+language);
+		@Override
+		public String getLocalizedForKeyAndLanguage(String key, Language language) {
+			if (key == null || StringUtils.isEmpty(key)) {
+				return null;
+			}
+			// if (isSearchingNewEntries) logger.info("-------> called localizedForKeyAndLanguage() key="+key+" lang="+language);
 
-		return getDictForLang(language).get(key);
+			return getDictForLang(language).get(key);
 
-		/*String returned = getDictForLang(language).get(key);
-		if (returned == null) {
+			/*String returned = getDictForLang(language).get(key);
+			if (returned == null) {
 			String defaultValue = getDefaultValue(key, language);
 			if (handleNewEntry(key, language)) {
 				if (!key.equals(defaultValue)) {
@@ -141,183 +188,187 @@ public class FIBLocalizedDictionary extends FIBModelObject implements LocalizedD
 				// dynamicEntries = null;
 			}
 			return defaultValue;
-		}
-		return returned;*/
-	}
-
-	public void setLocalizedForKeyAndLanguage(String key, String value, Language language) {
-		if (value == null) {
-			value = key;
-		}
-		getDictForLang(language).put(key, value);
-		FIBLocalizedEntry entry = getEntry(language, key);
-		if (entry == null) {
-			addToEntries(new FIBLocalizedEntry(this, key, language.getName(), value));
-		} else {
-			entry.setValue(value);
-		}
-	}
-
-	@Override
-	public boolean handleNewEntry(String key, Language language) {
-		// logger.warning(">>>>>>>>>>>>>>>>>>>>> Cannot find key "+key+" for language "+language);
-		return isSearchingNewEntries;
-		// return false;
-	}
-
-	public class DynamicEntry {
-		private String key;
-
-		public DynamicEntry(String aKey) {
-			key = aKey;
+			}
+			return returned;*/
 		}
 
-		public String getKey() {
-			return key;
-		}
-
-		public void setKey(String aKey) {
-			String englishValue = getEnglish();
-			String frenchValue = getFrench();
-			String dutchValue = getDutch();
-			key = aKey;
-			setEnglish(englishValue);
-			setFrench(frenchValue);
-			setDutch(dutchValue);
-		}
-
-		public String getEnglish() {
-			return getLocalizedForKeyAndLanguage(key, Language.ENGLISH);
-		}
-
-		public void setEnglish(String value) {
-			setLocalizedForKeyAndLanguage(key, value, Language.ENGLISH);
-		}
-
-		public String getFrench() {
-			return getLocalizedForKeyAndLanguage(key, Language.FRENCH);
-		}
-
-		public void setFrench(String value) {
-			setLocalizedForKeyAndLanguage(key, value, Language.FRENCH);
-		}
-
-		public String getDutch() {
-			return getLocalizedForKeyAndLanguage(key, Language.DUTCH);
-		}
-
-		public void setDutch(String value) {
-			setLocalizedForKeyAndLanguage(key, value, Language.DUTCH);
+		public void setLocalizedForKeyAndLanguage(String key, String value, Language language) {
+			if (value == null) {
+				value = key;
+			}
+			getDictForLang(language).put(key, value);
+			FIBLocalizedEntry entry = getEntry(language, key);
+			if (entry == null) {
+				FIBLocalizedEntry newEntry = getFactory().newInstance(FIBLocalizedEntry.class);
+				newEntry.setKey(key);
+				newEntry.setLanguage(language.getName());
+				newEntry.setValue(value);
+				addToEntries(newEntry);
+			} else {
+				entry.setValue(value);
+			}
 		}
 
 		@Override
-		public String toString() {
-			return "(key=" + key + "{en=" + getEnglish() + ";fr=" + getFrench() + ";du=" + getDutch() + "})";
+		public boolean handleNewEntry(String key, Language language) {
+			// logger.warning(">>>>>>>>>>>>>>>>>>>>> Cannot find key "+key+" for language "+language);
+			return isSearchingNewEntries;
+			// return false;
 		}
-	}
 
-	// This method is really not efficient, but only called in the context of locales editor
-	// This issue is not really severe.
-	private Vector<String> buildAllKeys() {
-		Vector<String> returned = new Vector<String>();
-		for (Language l : _values.keySet()) {
-			for (String key : _values.get(l).keySet()) {
-				if (!returned.contains(key)) {
-					returned.add(key);
+		public class DynamicEntry {
+			private String key;
+
+			public DynamicEntry(String aKey) {
+				key = aKey;
+			}
+
+			public String getKey() {
+				return key;
+			}
+
+			public void setKey(String aKey) {
+				String englishValue = getEnglish();
+				String frenchValue = getFrench();
+				String dutchValue = getDutch();
+				key = aKey;
+				setEnglish(englishValue);
+				setFrench(frenchValue);
+				setDutch(dutchValue);
+			}
+
+			public String getEnglish() {
+				return getLocalizedForKeyAndLanguage(key, Language.ENGLISH);
+			}
+
+			public void setEnglish(String value) {
+				setLocalizedForKeyAndLanguage(key, value, Language.ENGLISH);
+			}
+
+			public String getFrench() {
+				return getLocalizedForKeyAndLanguage(key, Language.FRENCH);
+			}
+
+			public void setFrench(String value) {
+				setLocalizedForKeyAndLanguage(key, value, Language.FRENCH);
+			}
+
+			public String getDutch() {
+				return getLocalizedForKeyAndLanguage(key, Language.DUTCH);
+			}
+
+			public void setDutch(String value) {
+				setLocalizedForKeyAndLanguage(key, value, Language.DUTCH);
+			}
+
+			@Override
+			public String toString() {
+				return "(key=" + key + "{en=" + getEnglish() + ";fr=" + getFrench() + ";du=" + getDutch() + "})";
+			}
+		}
+
+		// This method is really not efficient, but only called in the context of locales editor
+		// This issue is not really severe.
+		private Vector<String> buildAllKeys() {
+			Vector<String> returned = new Vector<String>();
+			for (Language l : _values.keySet()) {
+				for (String key : _values.get(l).keySet()) {
+					if (!returned.contains(key)) {
+						returned.add(key);
+					}
 				}
 			}
+			return returned;
 		}
-		return returned;
-	}
 
-	// This method is really not efficient, but only called in the context of locales editor
-	// Impact of this issue is not really severe.
-	public Vector<DynamicEntry> getDynamicEntries() {
-		if (dynamicEntries == null) {
-			dynamicEntries = new Vector<DynamicEntry>();
-			for (String key : buildAllKeys()) {
-				dynamicEntries.add(new DynamicEntry(key));
+		// This method is really not efficient, but only called in the context of locales editor
+		// Impact of this issue is not really severe.
+		public Vector<DynamicEntry> getDynamicEntries() {
+			if (dynamicEntries == null) {
+				dynamicEntries = new Vector<DynamicEntry>();
+				for (String key : buildAllKeys()) {
+					dynamicEntries.add(new DynamicEntry(key));
+				}
+				Collections.sort(dynamicEntries, new Comparator<DynamicEntry>() {
+					@Override
+					public int compare(DynamicEntry o1, DynamicEntry o2) {
+						return Collator.getInstance().compare(o1.key, o2.key);
+					}
+				});
 			}
+			return dynamicEntries;
+		}
+
+		/*private DynamicEntry getDynamicEntry(String key) {
+			if (key == null) {
+				return null;
+			}
+			for (DynamicEntry entry : getDynamicEntries()) {
+				if (key.equals(entry.key)) {
+					return entry;
+				}
+			}
+			return null;
+		}*/
+
+		@Override
+		public void refresh() {
+			logger.fine("Refresh called on FIBLocalizedDictionary " + Integer.toHexString(hashCode()));
+			dynamicEntries = null;
+			getPropertyChangeSupport().firePropertyChange("entries", null, getEntries());
+		}
+
+		public DynamicEntry addEntry() {
+			String key = "new_entry";
+			DynamicEntry newDynamicEntry = new DynamicEntry(key);
+			dynamicEntries.add(newDynamicEntry);
 			Collections.sort(dynamicEntries, new Comparator<DynamicEntry>() {
 				@Override
 				public int compare(DynamicEntry o1, DynamicEntry o2) {
 					return Collator.getInstance().compare(o1.key, o2.key);
 				}
 			});
-		}
-		return dynamicEntries;
-	}
-
-	private DynamicEntry getDynamicEntry(String key) {
-		if (key == null) {
 			return null;
 		}
-		for (DynamicEntry entry : getDynamicEntries()) {
-			if (key.equals(entry.key)) {
-				return entry;
+
+		public void deleteEntry(DynamicEntry entry) {
+			for (Language l : Language.availableValues()) {
+				_values.get(l).remove(entry.key);
+				FIBLocalizedEntry e = getEntry(l, entry.key);
+				if (e != null) {
+					_entries.remove(e);
+				}
 			}
+			refresh();
 		}
-		return null;
-	}
 
-	public void refresh() {
-		logger.fine("Refresh called on FIBLocalizedDictionary " + Integer.toHexString(hashCode()));
-		dynamicEntries = null;
-		getPropertyChangeSupport().firePropertyChange("entries", null, getEntries());
-	}
-
-	public DynamicEntry addEntry() {
-		String key = "new_entry";
-		DynamicEntry newDynamicEntry = new DynamicEntry(key);
-		dynamicEntries.add(newDynamicEntry);
-		Collections.sort(dynamicEntries, new Comparator<DynamicEntry>() {
-			@Override
-			public int compare(DynamicEntry o1, DynamicEntry o2) {
-				return Collator.getInstance().compare(o1.key, o2.key);
-			}
-		});
-		return null;
-	}
-
-	public void deleteEntry(DynamicEntry entry) {
-		for (Language l : Language.availableValues()) {
-			_values.get(l).remove(entry.key);
-			FIBLocalizedEntry e = getEntry(l, entry.key);
-			if (e != null) {
-				_entries.remove(e);
-			}
+		@Override
+		public void beginSearchNewLocalizationEntries() {
+			isSearchingNewEntries = true;
 		}
-		refresh();
+
+		@Override
+		public void endSearchNewLocalizationEntries() {
+			isSearchingNewEntries = false;
+		}
+
+		@Override
+		public boolean registerNewEntry(String key, Language language, String value) {
+			setLocalizedForKeyAndLanguage(key, value, language);
+			return true;
+		}
+
+		private LocalizedDelegate parentLocalizedDelegate;
+
+		@Override
+		public LocalizedDelegate getParent() {
+			return parentLocalizedDelegate;
+		}
+
+		@Override
+		public void setParent(LocalizedDelegate parentLocalizedDelegate) {
+			this.parentLocalizedDelegate = parentLocalizedDelegate;
+		}
+
 	}
-
-	public void beginSearchNewLocalizationEntries() {
-		isSearchingNewEntries = true;
-	}
-
-	public void endSearchNewLocalizationEntries() {
-		isSearchingNewEntries = false;
-	}
-
-	@Override
-	public List<? extends FIBModelObject> getEmbeddedObjects() {
-		return getEntries();
-	}
-
-	@Override
-	public boolean registerNewEntry(String key, Language language, String value) {
-		setLocalizedForKeyAndLanguage(key, value, language);
-		return true;
-	}
-
-	private LocalizedDelegate parentLocalizedDelegate;
-
-	@Override
-	public LocalizedDelegate getParent() {
-		return parentLocalizedDelegate;
-	}
-
-	public void setParent(LocalizedDelegate parentLocalizedDelegate) {
-		this.parentLocalizedDelegate = parentLocalizedDelegate;
-	}
-
 }

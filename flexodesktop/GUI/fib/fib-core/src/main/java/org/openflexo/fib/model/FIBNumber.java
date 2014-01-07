@@ -21,230 +21,327 @@ package org.openflexo.fib.model;
 
 import java.lang.reflect.Type;
 
-public class FIBNumber extends FIBWidget {
+import org.openflexo.model.annotations.Getter;
+import org.openflexo.model.annotations.ImplementationClass;
+import org.openflexo.model.annotations.ModelEntity;
+import org.openflexo.model.annotations.PropertyIdentifier;
+import org.openflexo.model.annotations.Setter;
+import org.openflexo.model.annotations.XMLAttribute;
+import org.openflexo.model.annotations.XMLElement;
 
-	public static enum Parameters implements FIBModelAttribute {
-		numberType, validateOnReturn, minValue, maxValue, increment, allowsNull, columns
-	}
-
-	private boolean allowsNull = false;
-	private boolean validateOnReturn = false;
-	private Number minValue;
-	private Number maxValue;
-	private Number increment;
-	private NumberType numberType = NumberType.IntegerType;
-	private Integer columns;
-
-	public FIBNumber() {
-	}
-
-	@Override
-	protected String getBaseName() {
-		return "NumberSelector";
-	}
+@ModelEntity
+@ImplementationClass(FIBNumber.FIBNumberImpl.class)
+@XMLElement(xmlTag = "Number")
+public interface FIBNumber extends FIBWidget {
 
 	public static enum NumberType {
 		ByteType, ShortType, IntegerType, LongType, FloatType, DoubleType;
 	}
 
-	public Number retrieveMinValue() {
-		if (minValue == null) {
+	@PropertyIdentifier(type = boolean.class)
+	public static final String VALIDATE_ON_RETURN_KEY = "validateOnReturn";
+	@PropertyIdentifier(type = boolean.class)
+	public static final String ALLOWS_NULL_KEY = "allowsNull";
+	@PropertyIdentifier(type = Number.class)
+	public static final String MIN_VALUE_KEY = "minValue";
+	@PropertyIdentifier(type = Number.class)
+	public static final String MAX_VALUE_KEY = "maxValue";
+	@PropertyIdentifier(type = Number.class)
+	public static final String INCREMENT_KEY = "increment";
+	@PropertyIdentifier(type = NumberType.class)
+	public static final String NUMBER_TYPE_KEY = "numberType";
+	@PropertyIdentifier(type = Integer.class)
+	public static final String COLUMNS_KEY = "columns";
+
+	@Getter(value = VALIDATE_ON_RETURN_KEY, defaultValue = "false")
+	@XMLAttribute
+	public boolean getValidateOnReturn();
+
+	@Setter(VALIDATE_ON_RETURN_KEY)
+	public void setValidateOnReturn(boolean validateOnReturn);
+
+	@Getter(value = ALLOWS_NULL_KEY, defaultValue = "false")
+	@XMLAttribute
+	public boolean getAllowsNull();
+
+	@Setter(ALLOWS_NULL_KEY)
+	public void setAllowsNull(boolean allowsNull);
+
+	@Getter(value = MIN_VALUE_KEY)
+	@XMLAttribute
+	public Number getMinValue();
+
+	@Setter(MIN_VALUE_KEY)
+	public void setMinValue(Number minValue);
+
+	@Getter(value = MAX_VALUE_KEY)
+	@XMLAttribute
+	public Number getMaxValue();
+
+	@Setter(MAX_VALUE_KEY)
+	public void setMaxValue(Number maxValue);
+
+	@Getter(value = INCREMENT_KEY)
+	@XMLAttribute
+	public Number getIncrement();
+
+	@Setter(INCREMENT_KEY)
+	public void setIncrement(Number increment);
+
+	@Getter(value = NUMBER_TYPE_KEY)
+	@XMLAttribute
+	public NumberType getNumberType();
+
+	@Setter(NUMBER_TYPE_KEY)
+	public void setNumberType(NumberType numberType);
+
+	@Getter(value = COLUMNS_KEY)
+	@XMLAttribute
+	public Integer getColumns();
+
+	@Setter(COLUMNS_KEY)
+	public void setColumns(Integer columns);
+
+	public Number retrieveMaxValue();
+
+	public Number retrieveMinValue();
+
+	public Number retrieveIncrement();
+
+	public static abstract class FIBNumberImpl extends FIBWidgetImpl implements FIBNumber {
+
+		private boolean allowsNull = false;
+		private boolean validateOnReturn = false;
+		private Number minValue;
+		private Number maxValue;
+		private Number increment;
+		private NumberType numberType = NumberType.IntegerType;
+		private Integer columns;
+
+		public FIBNumberImpl() {
+		}
+
+		@Override
+		public String getBaseName() {
+			return "NumberSelector";
+		}
+
+		@Override
+		public Number retrieveMinValue() {
+			if (minValue == null) {
+				switch (numberType) {
+				case ByteType:
+					minValue = Byte.MIN_VALUE;
+					break;
+				case ShortType:
+					minValue = Short.MIN_VALUE;
+					break;
+				case IntegerType:
+					minValue = Integer.MIN_VALUE;
+					break;
+				case LongType:
+					minValue = Long.MIN_VALUE;
+					break;
+				case FloatType:
+					minValue = -Float.MAX_VALUE;
+					break;
+				case DoubleType:
+					minValue = -Double.MAX_VALUE;
+					break;
+				default:
+					break;
+				}
+			}
+			return minValue;
+		}
+
+		@Override
+		public Number getMinValue() {
+			return minValue;
+		}
+
+		@Override
+		public void setMinValue(Number minValue) {
+			this.minValue = minValue;
+		}
+
+		@Override
+		public Number retrieveMaxValue() {
+			if (maxValue == null) {
+				switch (numberType) {
+				case ByteType:
+					maxValue = Byte.MAX_VALUE;
+					break;
+				case ShortType:
+					maxValue = Short.MAX_VALUE;
+					break;
+				case IntegerType:
+					maxValue = Integer.MAX_VALUE;
+					break;
+				case LongType:
+					maxValue = Long.MAX_VALUE;
+					break;
+				case FloatType:
+					maxValue = Float.MAX_VALUE;
+					break;
+				case DoubleType:
+					maxValue = Double.MAX_VALUE;
+					break;
+				default:
+					break;
+				}
+			}
+			return maxValue;
+		}
+
+		@Override
+		public Number getMaxValue() {
+			return maxValue;
+		}
+
+		@Override
+		public void setMaxValue(Number maxValue) {
+			this.maxValue = maxValue;
+		}
+
+		@Override
+		public Number retrieveIncrement() {
+			if (increment == null) {
+				switch (numberType) {
+				case ByteType:
+					increment = new Byte((byte) 1);
+					break;
+				case ShortType:
+					increment = new Short((short) 1);
+					break;
+				case IntegerType:
+					increment = new Integer(1);
+					break;
+				case LongType:
+					increment = new Long(1);
+					break;
+				case FloatType:
+					increment = new Float(1);
+					break;
+				case DoubleType:
+					increment = new Double(1);
+					break;
+				default:
+					break;
+				}
+			}
+			return increment;
+		}
+
+		@Override
+		public Number getIncrement() {
+			return increment;
+		}
+
+		@Override
+		public void setIncrement(Number increment) {
+			this.increment = increment;
+		}
+
+		@Override
+		public Type getDefaultDataClass() {
 			switch (numberType) {
 			case ByteType:
-				minValue = Byte.MIN_VALUE;
-				break;
+				return Byte.class;
 			case ShortType:
-				minValue = Short.MIN_VALUE;
-				break;
+				return Short.class;
 			case IntegerType:
-				minValue = Integer.MIN_VALUE;
-				break;
+				return Integer.class;
 			case LongType:
-				minValue = Long.MIN_VALUE;
-				break;
+				return Long.class;
 			case FloatType:
-				minValue = -Float.MAX_VALUE;
-				break;
+				return Float.class;
 			case DoubleType:
-				minValue = -Double.MAX_VALUE;
-				break;
+				return Double.class;
 			default:
-				break;
+				return Number.class;
 			}
 		}
-		return minValue;
-	}
 
-	public Number getMinValue() {
-		return minValue;
-	}
+		@Override
+		public NumberType getNumberType() {
+			return numberType;
+		}
 
-	public void setMinValue(Number minValue) {
-		this.minValue = minValue;
-	}
-
-	public Number retrieveMaxValue() {
-		if (maxValue == null) {
-			switch (numberType) {
-			case ByteType:
-				maxValue = Byte.MAX_VALUE;
-				break;
-			case ShortType:
-				maxValue = Short.MAX_VALUE;
-				break;
-			case IntegerType:
-				maxValue = Integer.MAX_VALUE;
-				break;
-			case LongType:
-				maxValue = Long.MAX_VALUE;
-				break;
-			case FloatType:
-				maxValue = Float.MAX_VALUE;
-				break;
-			case DoubleType:
-				maxValue = Double.MAX_VALUE;
-				break;
-			default:
-				break;
+		@Override
+		public void setNumberType(NumberType numberType) {
+			FIBPropertyNotification<NumberType> notification = requireChange(NUMBER_TYPE_KEY, numberType);
+			if (notification != null) {
+				this.numberType = numberType;
+				hasChanged(notification);
 			}
 		}
-		return maxValue;
-	}
 
-	public Number getMaxValue() {
-		return maxValue;
-	}
+		@Override
+		public boolean getValidateOnReturn() {
+			return validateOnReturn;
+		}
 
-	public void setMaxValue(Number maxValue) {
-		this.maxValue = maxValue;
-	}
-
-	public Number retrieveIncrement() {
-		if (increment == null) {
-			switch (numberType) {
-			case ByteType:
-				increment = new Byte((byte) 1);
-				break;
-			case ShortType:
-				increment = new Short((short) 1);
-				break;
-			case IntegerType:
-				increment = new Integer(1);
-				break;
-			case LongType:
-				increment = new Long(1);
-				break;
-			case FloatType:
-				increment = new Float(1);
-				break;
-			case DoubleType:
-				increment = new Double(1);
-				break;
-			default:
-				break;
+		@Override
+		public void setValidateOnReturn(boolean validateOnReturn) {
+			FIBPropertyNotification<Boolean> notification = requireChange(VALIDATE_ON_RETURN_KEY, validateOnReturn);
+			if (notification != null) {
+				this.validateOnReturn = validateOnReturn;
+				hasChanged(notification);
 			}
 		}
-		return increment;
-	}
 
-	public Number getIncrement() {
-		return increment;
-	}
-
-	public void setIncrement(Number increment) {
-		this.increment = increment;
-	}
-
-	@Override
-	public Type getDefaultDataClass() {
-		switch (numberType) {
-		case ByteType:
-			return Byte.class;
-		case ShortType:
-			return Short.class;
-		case IntegerType:
-			return Integer.class;
-		case LongType:
-			return Long.class;
-		case FloatType:
-			return Float.class;
-		case DoubleType:
-			return Double.class;
-		default:
-			return Number.class;
+		@Override
+		public boolean getAllowsNull() {
+			return allowsNull;
 		}
-	}
 
-	public NumberType getNumberType() {
-		return numberType;
-	}
-
-	public void setNumberType(NumberType numberType) {
-		FIBAttributeNotification<NumberType> notification = requireChange(Parameters.numberType, numberType);
-		if (notification != null) {
-			this.numberType = numberType;
-			hasChanged(notification);
+		@Override
+		public void setAllowsNull(boolean allowsNull) {
+			FIBPropertyNotification<Boolean> notification = requireChange(ALLOWS_NULL_KEY, allowsNull);
+			if (notification != null) {
+				this.allowsNull = allowsNull;
+				hasChanged(notification);
+			}
 		}
-	}
 
-	public boolean getValidateOnReturn() {
-		return validateOnReturn;
-	}
-
-	public void setValidateOnReturn(boolean validateOnReturn) {
-		FIBAttributeNotification<Boolean> notification = requireChange(Parameters.validateOnReturn, validateOnReturn);
-		if (notification != null) {
-			this.validateOnReturn = validateOnReturn;
-			hasChanged(notification);
+		@Override
+		public Integer getColumns() {
+			return columns;
 		}
-	}
 
-	public boolean getAllowsNull() {
-		return allowsNull;
-	}
-
-	public void setAllowsNull(boolean allowsNull) {
-		FIBAttributeNotification<Boolean> notification = requireChange(Parameters.allowsNull, allowsNull);
-		if (notification != null) {
-			this.allowsNull = allowsNull;
-			hasChanged(notification);
+		@Override
+		public void setColumns(Integer columns) {
+			FIBPropertyNotification<Integer> notification = requireChange(COLUMNS_KEY, columns);
+			if (notification != null) {
+				this.columns = columns;
+				hasChanged(notification);
+			}
 		}
-	}
 
-	public Integer getColumns() {
-		return columns;
-	}
-
-	public void setColumns(Integer columns) {
-		FIBAttributeNotification<Integer> notification = requireChange(Parameters.columns, columns);
-		if (notification != null) {
-			this.columns = columns;
-			hasChanged(notification);
+		public int getIncrementAsInteger() {
+			return getIncrement().intValue();
 		}
-	}
 
-	public int getIncrementAsInteger() {
-		return getIncrement().intValue();
-	}
+		public void setIncrementAsInteger(int incrementAsInteger) {
+			setIncrement(incrementAsInteger);
+		}
 
-	public void setIncrementAsInteger(int incrementAsInteger) {
-		setIncrement(incrementAsInteger);
-	}
+		public int getMinValueAsInteger() {
+			return getMinValue().intValue();
+		}
 
-	public int getMinValueAsInteger() {
-		return getMinValue().intValue();
-	}
+		public void setMinValueAsInteger(int minValueAsInteger) {
+			setMinValue(minValueAsInteger);
+		}
 
-	public void setMinValueAsInteger(int minValueAsInteger) {
-		setMinValue(minValueAsInteger);
-	}
+		public int getMaxValueAsInteger() {
+			return getMaxValue().intValue();
+		}
 
-	public int getMaxValueAsInteger() {
-		return getMaxValue().intValue();
-	}
+		public void setMaxValueAsInteger(int maxValueAsInteger) {
+			setMaxValue(maxValueAsInteger);
+		}
 
-	public void setMaxValueAsInteger(int maxValueAsInteger) {
-		setMaxValue(maxValueAsInteger);
 	}
-
 }

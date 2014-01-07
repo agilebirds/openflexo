@@ -21,7 +21,6 @@ package org.openflexo.fib.model;
 
 import java.awt.event.MouseEvent;
 import java.lang.reflect.Type;
-import java.util.Collection;
 import java.util.Enumeration;
 import java.util.List;
 
@@ -31,6 +30,7 @@ import javax.swing.tree.TreeNode;
 
 import org.openflexo.antar.binding.Bindable;
 import org.openflexo.antar.binding.BindingDefinition;
+import org.openflexo.antar.binding.BindingFactory;
 import org.openflexo.antar.binding.BindingModel;
 import org.openflexo.antar.binding.BindingVariable;
 import org.openflexo.antar.binding.DataBinding;
@@ -43,653 +43,836 @@ import org.openflexo.fib.model.validation.ValidationReport;
 import org.openflexo.fib.model.validation.ValidationRule;
 import org.openflexo.fib.model.validation.ValidationWarning;
 import org.openflexo.fib.view.FIBWidgetView;
+import org.openflexo.model.annotations.Getter;
+import org.openflexo.model.annotations.ImplementationClass;
+import org.openflexo.model.annotations.ModelEntity;
+import org.openflexo.model.annotations.PropertyIdentifier;
+import org.openflexo.model.annotations.Setter;
+import org.openflexo.model.annotations.XMLAttribute;
 import org.openflexo.toolbox.StringUtils;
 
-public abstract class FIBWidget extends FIBComponent {
+@ModelEntity(isAbstract = true)
+@ImplementationClass(FIBWidget.FIBWidgetImpl.class)
+public abstract interface FIBWidget extends FIBComponent {
 
-	@Deprecated
-	public static BindingDefinition TOOLTIP = new BindingDefinition("tooltip", String.class, DataBinding.BindingDefinitionType.GET, false);
-	@Deprecated
-	public static BindingDefinition ENABLE = new BindingDefinition("enable", Boolean.class, DataBinding.BindingDefinitionType.GET, false);
-	@Deprecated
-	public static BindingDefinition FORMAT = new BindingDefinition("format", String.class, DataBinding.BindingDefinitionType.GET, false);
-	@Deprecated
-	public static BindingDefinition ICON = new BindingDefinition("icon", Icon.class, DataBinding.BindingDefinitionType.GET, false);
-	@Deprecated
-	public static BindingDefinition VALUE_CHANGED_ACTION = new BindingDefinition("valueChangedAction", Void.class,
-			DataBinding.BindingDefinitionType.EXECUTE, false);
-	@Deprecated
-	public static BindingDefinition CLICK_ACTION = new BindingDefinition("clickAction", Void.class,
-			DataBinding.BindingDefinitionType.EXECUTE, false);
-	@Deprecated
-	public static BindingDefinition DOUBLE_CLICK_ACTION = new BindingDefinition("doubleClickAction", Void.class,
-			DataBinding.BindingDefinitionType.EXECUTE, false);
-	@Deprecated
-	public static final BindingDefinition RIGHT_CLICK_ACTION = new BindingDefinition("rightClickAction", Void.class,
-			DataBinding.BindingDefinitionType.EXECUTE, false);
-	@Deprecated
-	public static final BindingDefinition ENTER_PRESSED_ACTION = new BindingDefinition("enterPressedAction", Void.class,
-			DataBinding.BindingDefinitionType.EXECUTE, false);
+	@PropertyIdentifier(type = Boolean.class)
+	public static final String READ_ONLY_KEY = "readOnly";
+	@PropertyIdentifier(type = DataBinding.class)
+	public static final String FORMAT_KEY = "format";
+	@PropertyIdentifier(type = DataBinding.class)
+	public static final String ICON_KEY = "icon";
+	@PropertyIdentifier(type = DataBinding.class)
+	public static final String TOOLTIP_KEY = "tooltip";
+	@PropertyIdentifier(type = String.class)
+	public static final String TOOLTIP_TEXT_KEY = "tooltipText";
+	@PropertyIdentifier(type = Boolean.class)
+	public static final String LOCALIZE_KEY = "localize";
+	@PropertyIdentifier(type = DataBinding.class)
+	public static final String ENABLE_KEY = "enable";
+	@PropertyIdentifier(type = Boolean.class)
+	public static final String MANAGE_DYNAMIC_MODEL_KEY = "manageDynamicModel";
+	@PropertyIdentifier(type = DataBinding.class)
+	public static final String CLICK_ACTION_KEY = "clickAction";
+	@PropertyIdentifier(type = DataBinding.class)
+	public static final String DOUBLE_CLICK_ACTION_KEY = "doubleClickAction";
+	@PropertyIdentifier(type = DataBinding.class)
+	public static final String RIGHT_CLICK_ACTION_KEY = "rightClickAction";
+	@PropertyIdentifier(type = DataBinding.class)
+	public static final String ENTER_PRESSED_ACTION_KEY = "enterPressedAction";
+	@PropertyIdentifier(type = DataBinding.class)
+	public static final String VALUE_CHANGED_ACTION_KEY = "valueChangedAction";
+	@PropertyIdentifier(type = DataBinding.class)
+	public static final String VALUE_TRANSFORM_KEY = "valueTransform";
+	@PropertyIdentifier(type = DataBinding.class)
+	public static final String VALUE_VALIDATOR_KEY = "valueValidator";
 
-	public static enum Parameters implements FIBModelAttribute {
-		enable,
-		format,
-		icon,
-		tooltip,
-		tooltipText,
-		localize,
-		manageDynamicModel,
-		readOnly,
-		clickAction,
-		doubleClickAction,
-		rightClickAction,
-		enterPressedAction,
-		valueChangedAction
-	}
+	@Getter(value = READ_ONLY_KEY)
+	@XMLAttribute
+	public Boolean getReadOnly();
 
-	private DataBinding<String> tooltip;
+	@Setter(READ_ONLY_KEY)
+	public void setReadOnly(Boolean readOnly);
 
-	private DataBinding<Boolean> enable;
-	private DataBinding<String> format;
-	private DataBinding<Icon> icon;
+	@Getter(value = FORMAT_KEY)
+	@XMLAttribute
+	public DataBinding<String> getFormat();
 
-	private Boolean manageDynamicModel = false;
-	private Boolean readOnly = false;
-	private Boolean localize = true;
-	private String tooltipText;
-	private DataBinding<?> clickAction;
-	private DataBinding<?> doubleClickAction;
-	private DataBinding<?> rightClickAction;
-	private DataBinding<?> enterPressedAction;
-	private DataBinding<?> valueChangedAction;
-	private DataBinding<Boolean> valueValidator;
+	@Setter(FORMAT_KEY)
+	public void setFormat(DataBinding<String> format);
 
-	private final FIBFormatter formatter;
-	private final FIBValueBindable valueBindable;
-	private final FIBEventListener eventListener;
-	private DataBinding<Object> valueTransform;
+	@Getter(value = ICON_KEY)
+	@XMLAttribute
+	public DataBinding<Icon> getIcon();
 
-	public FIBWidget() {
-		super();
-		formatter = new FIBFormatter();
-		valueBindable = new FIBValueBindable();
-		eventListener = new FIBEventListener();
-	}
+	@Setter(ICON_KEY)
+	public void setIcon(DataBinding<Icon> icon);
 
-	@Override
-	public String getIdentifier() {
-		return null;
-	}
+	@Getter(value = TOOLTIP_KEY)
+	@XMLAttribute
+	public DataBinding<String> getTooltip();
 
-	@Override
-	public Enumeration children() {
-		return null;
-	}
+	@Setter(TOOLTIP_KEY)
+	public void setTooltip(DataBinding<String> tooltip);
 
-	@Override
-	public boolean getAllowsChildren() {
-		return false;
-	}
+	@Getter(value = TOOLTIP_TEXT_KEY)
+	@XMLAttribute
+	public String getTooltipText();
 
-	@Override
-	public TreeNode getChildAt(int childIndex) {
-		return null;
-	}
+	@Setter(TOOLTIP_TEXT_KEY)
+	public void setTooltipText(String tooltipText);
 
-	@Override
-	public int getChildCount() {
-		return 0;
-	}
+	@Getter(value = LOCALIZE_KEY)
+	@XMLAttribute
+	public Boolean getLocalize();
 
-	@Override
-	public int getIndex(TreeNode node) {
-		return -1;
-	}
+	@Setter(LOCALIZE_KEY)
+	public void setLocalize(Boolean localize);
 
-	@Override
-	public boolean isLeaf() {
-		return true;
-	}
+	@Getter(value = ENABLE_KEY)
+	@XMLAttribute
+	public DataBinding<Boolean> getEnable();
 
-	public DataBinding<String> getTooltip() {
-		if (tooltip == null) {
-			tooltip = new DataBinding<String>(this, String.class, DataBinding.BindingDefinitionType.GET);
-		}
-		return tooltip;
-	}
+	@Setter(ENABLE_KEY)
+	public void setEnable(DataBinding<Boolean> enable);
 
-	public void setTooltip(DataBinding<String> tooltip) {
-		if (tooltip != null) {
-			tooltip.setOwner(this);
-			tooltip.setDeclaredType(String.class);
-			tooltip.setBindingDefinitionType(DataBinding.BindingDefinitionType.GET);
-		}
-		this.tooltip = tooltip;
-	}
+	@Getter(value = MANAGE_DYNAMIC_MODEL_KEY)
+	@XMLAttribute
+	public Boolean getManageDynamicModel();
 
-	public DataBinding<Boolean> getEnable() {
-		if (enable == null) {
-			enable = new DataBinding<Boolean>(this, Boolean.class, DataBinding.BindingDefinitionType.GET);
-		}
-		return enable;
-	}
+	@Setter(MANAGE_DYNAMIC_MODEL_KEY)
+	public void setManageDynamicModel(Boolean manageDynamicModel);
 
-	public void setEnable(DataBinding<Boolean> enable) {
-		if (enable != null) {
-			enable.setOwner(this);
-			enable.setDeclaredType(Boolean.class);
-			enable.setBindingDefinitionType(DataBinding.BindingDefinitionType.GET);
-		}
-		this.enable = enable;
-	}
+	@Getter(value = CLICK_ACTION_KEY)
+	@XMLAttribute
+	public DataBinding<?> getClickAction();
 
-	@Override
-	public void finalizeDeserialization() {
-		super.finalizeDeserialization();
-		getEventListener().createEventListenerBindingModel();
-		if (enable != null) {
-			enable.decode();
-		}
-		if (format != null) {
-			format.decode();
-		}
-		if (icon != null) {
-			icon.decode();
-		}
-		if (tooltip != null) {
-			tooltip.decode();
-		}
-		if (clickAction != null) {
-			clickAction.decode();
-		}
-		if (doubleClickAction != null) {
-			doubleClickAction.decode();
-		}
-		if (rightClickAction != null) {
-			rightClickAction.decode();
-		}
-		if (enterPressedAction != null) {
-			enterPressedAction.decode();
-		}
-		if (valueChangedAction != null) {
-			valueChangedAction.decode();
-		}
-		if (valueTransform != null) {
-			valueTransform.decode();
-		}
-		if (valueValidator != null) {
-			valueValidator.decode();
-		}
-	}
+	@Setter(CLICK_ACTION_KEY)
+	public void setClickAction(DataBinding<?> clickAction);
 
-	@Override
-	public Type getDataType() {
-		/*if (getData() != null && getData().isSet()) {
-			return getData().getAnalyzedType();
-		}*/
-		return getDefaultDataClass();
+	@Getter(value = DOUBLE_CLICK_ACTION_KEY)
+	@XMLAttribute
+	public DataBinding<?> getDoubleClickAction();
 
-	}
+	@Setter(DOUBLE_CLICK_ACTION_KEY)
+	public void setDoubleClickAction(DataBinding<?> doubleClickAction);
 
-	@Override
-	public abstract Type getDefaultDataClass();
+	@Getter(value = RIGHT_CLICK_ACTION_KEY)
+	@XMLAttribute
+	public DataBinding<?> getRightClickAction();
 
-	@Override
-	public Type getDynamicAccessType() {
-		if (getManageDynamicModel()) {
-			if (getData() != null && getData().isSet()) {
-				return super.getDynamicAccessType();
-			} else {
-				Type[] args = new Type[3];
-				args[0] = new WilcardTypeImpl(FIBComponent.class);
-				args[1] = new WilcardTypeImpl(JComponent.class);
-				args[2] = getDataType();
-				return new ParameterizedTypeImpl(FIBWidgetView.class, args);
-			}
-		}
-		return null;
-	}
+	@Setter(RIGHT_CLICK_ACTION_KEY)
+	public void setRightClickAction(DataBinding<?> rightClickAction);
 
-	public Boolean getManageDynamicModel() {
-		return manageDynamicModel;
-	}
+	@Getter(value = ENTER_PRESSED_ACTION_KEY)
+	@XMLAttribute
+	public DataBinding<?> getEnterPressedAction();
 
-	public void setManageDynamicModel(Boolean manageDynamicModel) {
-		FIBAttributeNotification<Boolean> notification = requireChange(Parameters.manageDynamicModel, manageDynamicModel);
-		if (notification != null) {
-			this.manageDynamicModel = manageDynamicModel;
-			updateBindingModel();
-			hasChanged(notification);
-		}
-	}
+	@Setter(ENTER_PRESSED_ACTION_KEY)
+	public void setEnterPressedAction(DataBinding<?> enterPressedAction);
 
-	public Boolean getReadOnly() {
-		return readOnly;
-	}
+	@Getter(value = VALUE_CHANGED_ACTION_KEY)
+	@XMLAttribute
+	public DataBinding<?> getValueChangedAction();
 
-	public void setReadOnly(Boolean readOnly) {
-		FIBAttributeNotification<Boolean> notification = requireChange(Parameters.readOnly, readOnly);
-		if (notification != null) {
-			this.readOnly = readOnly;
-			hasChanged(notification);
-		}
-	}
+	@Setter(VALUE_CHANGED_ACTION_KEY)
+	public void setValueChangedAction(DataBinding<?> valueChangedAction);
 
-	public String getTooltipText() {
-		return tooltipText;
-	}
+	@Getter(value = VALUE_TRANSFORM_KEY)
+	@XMLAttribute
+	public DataBinding<Object> getValueTransform();
 
-	public void setTooltipText(String tooltipText) {
-		FIBAttributeNotification<String> notification = requireChange(Parameters.tooltipText, tooltipText);
-		if (notification != null) {
-			this.tooltipText = tooltipText;
-			hasChanged(notification);
-		}
-	}
+	@Setter(VALUE_TRANSFORM_KEY)
+	public void setValueTransform(DataBinding<Object> valueTransform);
 
-	public DataBinding<Object> getValueTransform() {
-		if (valueTransform == null) {
-			valueTransform = new DataBinding<Object>(valueBindable, getDataType(), BindingDefinitionType.GET) {
-				@Override
-				public Type getDeclaredType() {
-					return getDataType();
-				}
-			};
-		}
-		return valueTransform;
-	}
+	@Getter(value = VALUE_VALIDATOR_KEY)
+	@XMLAttribute
+	public DataBinding<Boolean> getValueValidator();
 
-	public void setValueTransform(DataBinding<Object> valueTransform) {
-		if (valueTransform != null) {
-			this.valueTransform = new DataBinding<Object>(valueTransform.toString(), this, valueTransform.getDeclaredType(),
-					valueTransform.getBindingDefinitionType()) {
-				@Override
-				public Type getDeclaredType() {
-					return getDataType();
-				}
-			};
-		} else {
-			this.valueTransform = null;
-		}
-	}
+	@Setter(VALUE_VALIDATOR_KEY)
+	public void setValueValidator(DataBinding<Boolean> valueValidator);
 
-	public FIBValueBindable getValueBindable() {
-		return valueBindable;
-	}
+	public boolean hasClickAction();
 
-	public DataBinding<String> getFormat() {
-		if (format == null) {
-			format = new DataBinding<String>(this, String.class, DataBinding.BindingDefinitionType.GET);
-		}
-		return format;
-	}
+	public boolean hasDoubleClickAction();
 
-	public void setFormat(DataBinding<String> format) {
-		FIBAttributeNotification<DataBinding<String>> notification = requireChange(Parameters.format, format);
-		if (notification != null) {
-			if (format != null) {
-				format.setOwner(formatter);
-				format.setDeclaredType(String.class);
-				format.setBindingDefinitionType(DataBinding.BindingDefinitionType.GET);
-			}
-			this.format = format;
-			hasChanged(notification);
-		}
-	}
+	public boolean hasRightClickAction();
 
-	public DataBinding<Icon> getIcon() {
-		if (icon == null) {
-			icon = new DataBinding<Icon>(formatter, Icon.class, DataBinding.BindingDefinitionType.GET);
-		}
-		return icon;
-	}
+	public boolean hasEnterPressedAction();
 
-	public void setIcon(DataBinding<Icon> icon) {
-		FIBAttributeNotification<DataBinding<Icon>> notification = requireChange(Parameters.icon, icon);
-		if (notification != null) {
-			if (icon != null) {
-				icon.setOwner(formatter);
-				icon.setDeclaredType(Icon.class);
-				icon.setBindingDefinitionType(DataBinding.BindingDefinitionType.GET);
-			}
-			this.icon = icon;
-			hasChanged(notification);
-		}
-	}
+	public static abstract class FIBWidgetImpl extends FIBComponentImpl implements FIBWidget {
 
-	public Boolean getLocalize() {
-		return localize;
-	}
+		@Deprecated
+		public static BindingDefinition TOOLTIP = new BindingDefinition("tooltip", String.class, DataBinding.BindingDefinitionType.GET,
+				false);
+		@Deprecated
+		public static BindingDefinition ENABLE = new BindingDefinition("enable", Boolean.class, DataBinding.BindingDefinitionType.GET,
+				false);
+		@Deprecated
+		public static BindingDefinition FORMAT = new BindingDefinition("format", String.class, DataBinding.BindingDefinitionType.GET, false);
+		@Deprecated
+		public static BindingDefinition ICON = new BindingDefinition("icon", Icon.class, DataBinding.BindingDefinitionType.GET, false);
+		@Deprecated
+		public static BindingDefinition VALUE_CHANGED_ACTION = new BindingDefinition("valueChangedAction", Void.class,
+				DataBinding.BindingDefinitionType.EXECUTE, false);
+		@Deprecated
+		public static BindingDefinition CLICK_ACTION = new BindingDefinition("clickAction", Void.class,
+				DataBinding.BindingDefinitionType.EXECUTE, false);
+		@Deprecated
+		public static BindingDefinition DOUBLE_CLICK_ACTION = new BindingDefinition("doubleClickAction", Void.class,
+				DataBinding.BindingDefinitionType.EXECUTE, false);
+		@Deprecated
+		public static final BindingDefinition RIGHT_CLICK_ACTION = new BindingDefinition("rightClickAction", Void.class,
+				DataBinding.BindingDefinitionType.EXECUTE, false);
+		@Deprecated
+		public static final BindingDefinition ENTER_PRESSED_ACTION = new BindingDefinition("enterPressedAction", Void.class,
+				DataBinding.BindingDefinitionType.EXECUTE, false);
 
-	public void setLocalize(Boolean localize) {
-		FIBAttributeNotification<Boolean> notification = requireChange(Parameters.localize, localize);
-		if (notification != null) {
-			this.localize = localize;
-			hasChanged(notification);
-		}
-	}
+		private DataBinding<String> tooltip;
 
-	public FIBFormatter getFormatter() {
-		return formatter;
-	}
+		private DataBinding<Boolean> enable;
+		private DataBinding<String> format;
+		private DataBinding<Icon> icon;
 
-	public Type getFormattedObjectType() {
-		return getDataType();
-	}
+		private Boolean manageDynamicModel = false;
+		private Boolean readOnly = false;
+		private Boolean localize = true;
+		private String tooltipText;
+		private DataBinding<?> clickAction;
+		private DataBinding<?> doubleClickAction;
+		private DataBinding<?> rightClickAction;
+		private DataBinding<?> enterPressedAction;
+		private DataBinding<?> valueChangedAction;
+		private DataBinding<Boolean> valueValidator;
 
-	@Override
-	public void notifiedBindingModelRecreated() {
-		super.notifiedBindingModelRecreated();
-		if (getFormatter() != null) {
-			getFormatter().notifiedBindingModelRecreated();
-		}
-	}
+		private final FIBFormatter formatter;
+		private final FIBValueBindable valueBindable;
+		private final FIBEventListener eventListener;
+		private DataBinding<Object> valueTransform;
 
-	private class FIBFormatter extends FIBModelObject implements Bindable {
-		private BindingModel formatterBindingModel = null;
-
-		public void notifiedBindingModelRecreated() {
-			createFormatterBindingModel();
+		public FIBWidgetImpl() {
+			super();
+			formatter = new FIBFormatter();
+			valueBindable = new FIBValueBindable();
+			eventListener = new FIBEventListener();
 		}
 
 		@Override
-		public BindingModel getBindingModel() {
-			if (formatterBindingModel == null) {
+		public String getIdentifier() {
+			return null;
+		}
+
+		@Override
+		public Enumeration children() {
+			return null;
+		}
+
+		@Override
+		public boolean getAllowsChildren() {
+			return false;
+		}
+
+		@Override
+		public TreeNode getChildAt(int childIndex) {
+			return null;
+		}
+
+		@Override
+		public int getChildCount() {
+			return 0;
+		}
+
+		@Override
+		public int getIndex(TreeNode node) {
+			return -1;
+		}
+
+		@Override
+		public boolean isLeaf() {
+			return true;
+		}
+
+		@Override
+		public DataBinding<String> getTooltip() {
+			if (tooltip == null) {
+				tooltip = new DataBinding<String>(this, String.class, DataBinding.BindingDefinitionType.GET);
+			}
+			return tooltip;
+		}
+
+		@Override
+		public void setTooltip(DataBinding<String> tooltip) {
+			if (tooltip != null) {
+				tooltip.setOwner(this);
+				tooltip.setDeclaredType(String.class);
+				tooltip.setBindingDefinitionType(DataBinding.BindingDefinitionType.GET);
+			}
+			this.tooltip = tooltip;
+		}
+
+		@Override
+		public DataBinding<Boolean> getEnable() {
+			if (enable == null) {
+				enable = new DataBinding<Boolean>(this, Boolean.class, DataBinding.BindingDefinitionType.GET);
+			}
+			return enable;
+		}
+
+		@Override
+		public void setEnable(DataBinding<Boolean> enable) {
+			if (enable != null) {
+				enable.setOwner(this);
+				enable.setDeclaredType(Boolean.class);
+				enable.setBindingDefinitionType(DataBinding.BindingDefinitionType.GET);
+			}
+			this.enable = enable;
+		}
+
+		@Override
+		public void finalizeDeserialization() {
+			super.finalizeDeserialization();
+			getEventListener().createEventListenerBindingModel();
+			if (enable != null) {
+				enable.decode();
+			}
+			if (format != null) {
+				format.decode();
+			}
+			if (icon != null) {
+				icon.decode();
+			}
+			if (tooltip != null) {
+				tooltip.decode();
+			}
+			if (clickAction != null) {
+				clickAction.decode();
+			}
+			if (doubleClickAction != null) {
+				doubleClickAction.decode();
+			}
+			if (rightClickAction != null) {
+				rightClickAction.decode();
+			}
+			if (enterPressedAction != null) {
+				enterPressedAction.decode();
+			}
+			if (valueChangedAction != null) {
+				valueChangedAction.decode();
+			}
+			if (valueTransform != null) {
+				valueTransform.decode();
+			}
+			if (valueValidator != null) {
+				valueValidator.decode();
+			}
+		}
+
+		@Override
+		public Type getDataType() {
+			/*if (getData() != null && getData().isSet()) {
+				return getData().getAnalyzedType();
+			}*/
+			return getDefaultDataClass();
+
+		}
+
+		@Override
+		public abstract Type getDefaultDataClass();
+
+		@Override
+		public Type getDynamicAccessType() {
+			if (getManageDynamicModel()) {
+				if (getData() != null && getData().isSet()) {
+					return super.getDynamicAccessType();
+				} else {
+					Type[] args = new Type[3];
+					args[0] = new WilcardTypeImpl(FIBComponent.class);
+					args[1] = new WilcardTypeImpl(JComponent.class);
+					args[2] = getDataType();
+					return new ParameterizedTypeImpl(FIBWidgetView.class, args);
+				}
+			}
+			return null;
+		}
+
+		@Override
+		public Boolean getManageDynamicModel() {
+			return manageDynamicModel;
+		}
+
+		@Override
+		public void setManageDynamicModel(Boolean manageDynamicModel) {
+			FIBPropertyNotification<Boolean> notification = requireChange(MANAGE_DYNAMIC_MODEL_KEY, manageDynamicModel);
+			if (notification != null) {
+				this.manageDynamicModel = manageDynamicModel;
+				updateBindingModel();
+				hasChanged(notification);
+			}
+		}
+
+		@Override
+		public Boolean getReadOnly() {
+			return readOnly;
+		}
+
+		@Override
+		public void setReadOnly(Boolean readOnly) {
+			FIBPropertyNotification<Boolean> notification = requireChange(READ_ONLY_KEY, readOnly);
+			if (notification != null) {
+				this.readOnly = readOnly;
+				hasChanged(notification);
+			}
+		}
+
+		@Override
+		public String getTooltipText() {
+			return tooltipText;
+		}
+
+		@Override
+		public void setTooltipText(String tooltipText) {
+			FIBPropertyNotification<String> notification = requireChange(TOOLTIP_TEXT_KEY, tooltipText);
+			if (notification != null) {
+				this.tooltipText = tooltipText;
+				hasChanged(notification);
+			}
+		}
+
+		@Override
+		public DataBinding<Object> getValueTransform() {
+			if (valueTransform == null) {
+				valueTransform = new DataBinding<Object>(valueBindable, getDataType(), BindingDefinitionType.GET) {
+					@Override
+					public Type getDeclaredType() {
+						return getDataType();
+					}
+				};
+			}
+			return valueTransform;
+		}
+
+		@Override
+		public void setValueTransform(DataBinding<Object> valueTransform) {
+			if (valueTransform != null) {
+				this.valueTransform = new DataBinding<Object>(valueTransform.toString(), this, valueTransform.getDeclaredType(),
+						valueTransform.getBindingDefinitionType()) {
+					@Override
+					public Type getDeclaredType() {
+						return getDataType();
+					}
+				};
+			} else {
+				this.valueTransform = null;
+			}
+		}
+
+		public FIBValueBindable getValueBindable() {
+			return valueBindable;
+		}
+
+		@Override
+		public DataBinding<String> getFormat() {
+			if (format == null) {
+				format = new DataBinding<String>(this, String.class, DataBinding.BindingDefinitionType.GET);
+			}
+			return format;
+		}
+
+		@Override
+		public void setFormat(DataBinding<String> format) {
+			FIBPropertyNotification<DataBinding<String>> notification = requireChange(FORMAT_KEY, format);
+			if (notification != null) {
+				if (format != null) {
+					format.setOwner(formatter);
+					format.setDeclaredType(String.class);
+					format.setBindingDefinitionType(DataBinding.BindingDefinitionType.GET);
+				}
+				this.format = format;
+				hasChanged(notification);
+			}
+		}
+
+		@Override
+		public DataBinding<Icon> getIcon() {
+			if (icon == null) {
+				icon = new DataBinding<Icon>(formatter, Icon.class, DataBinding.BindingDefinitionType.GET);
+			}
+			return icon;
+		}
+
+		@Override
+		public void setIcon(DataBinding<Icon> icon) {
+			FIBPropertyNotification<DataBinding<Icon>> notification = requireChange(ICON_KEY, icon);
+			if (notification != null) {
+				if (icon != null) {
+					icon.setOwner(formatter);
+					icon.setDeclaredType(Icon.class);
+					icon.setBindingDefinitionType(DataBinding.BindingDefinitionType.GET);
+				}
+				this.icon = icon;
+				hasChanged(notification);
+			}
+		}
+
+		@Override
+		public Boolean getLocalize() {
+			return localize;
+		}
+
+		@Override
+		public void setLocalize(Boolean localize) {
+			FIBPropertyNotification<Boolean> notification = requireChange(LOCALIZE_KEY, localize);
+			if (notification != null) {
+				this.localize = localize;
+				hasChanged(notification);
+			}
+		}
+
+		public FIBFormatter getFormatter() {
+			return formatter;
+		}
+
+		public Type getFormattedObjectType() {
+			return getDataType();
+		}
+
+		@Override
+		public void notifiedBindingModelRecreated() {
+			super.notifiedBindingModelRecreated();
+			if (getFormatter() != null) {
+				getFormatter().notifiedBindingModelRecreated();
+			}
+		}
+
+		private class FIBFormatter implements Bindable {
+			private BindingModel formatterBindingModel = null;
+
+			public void notifiedBindingModelRecreated() {
 				createFormatterBindingModel();
 			}
-			return formatterBindingModel;
-		}
 
-		private void createFormatterBindingModel() {
-			formatterBindingModel = new BindingModel(FIBWidget.this.getBindingModel());
-			formatterBindingModel.addToBindingVariables(new BindingVariable("object", Object.class) {
-				@Override
-				public Type getType() {
-					return getFormattedObjectType();
+			@Override
+			public BindingModel getBindingModel() {
+				if (formatterBindingModel == null) {
+					createFormatterBindingModel();
 				}
-			});
-		}
-
-		@Override
-		public FIBComponent getComponent() {
-			return FIBWidget.this;
-		}
-
-		@Override
-		public String toString() {
-			if (FIBWidget.this instanceof FIBDropDown) {
-				return "FIBFormatter[" + FIBWidget.this + "] iteratorClass=" + ((FIBDropDown) FIBWidget.this).getIteratorClass()
-						+ " dataType=" + ((FIBDropDown) FIBWidget.this).getDataType() + " obtained from "
-						+ ((FIBDropDown) FIBWidget.this).getDescription();
+				return formatterBindingModel;
 			}
-			return "FIBFormatter[" + FIBWidget.this + "]" + " dataType=" + FIBWidget.this.getDataType();
-		}
 
-		@Override
-		public void notifiedBindingChanged(DataBinding<?> binding) {
-			super.notifiedBindingChanged(binding);
-			if (binding == getFormat()) {
-				FIBWidget.this.notifiedBindingChanged(binding);
+			private void createFormatterBindingModel() {
+				formatterBindingModel = new BindingModel(FIBWidgetImpl.this.getBindingModel());
+				formatterBindingModel.addToBindingVariables(new BindingVariable("object", Object.class) {
+					@Override
+					public Type getType() {
+						return getFormattedObjectType();
+					}
+				});
 			}
-			super.notifiedBindingChanged(binding);
-		}
 
-		@Override
-		public List<? extends FIBModelObject> getEmbeddedObjects() {
-			return null;
-		}
-	}
-
-	private class FIBValueBindable extends FIBModelObject implements Bindable {
-		private BindingModel valueTransformerBindingModel = null;
-
-		@Override
-		public BindingModel getBindingModel() {
-			if (valueTransformerBindingModel == null) {
-				createValueTransformerBindingModel();
+			public FIBComponent getComponent() {
+				return FIBWidgetImpl.this;
 			}
-			return valueTransformerBindingModel;
-		}
 
-		private void createValueTransformerBindingModel() {
-			valueTransformerBindingModel = new BindingModel(FIBWidget.this.getBindingModel());
-			valueTransformerBindingModel.addToBindingVariables(new BindingVariable("value", Object.class) {
-				@Override
-				public Type getType() {
-					return getDataType();
+			@Override
+			public String toString() {
+				if (FIBWidgetImpl.this instanceof FIBDropDown) {
+					return "FIBFormatter[" + FIBWidgetImpl.this + "] iteratorClass="
+							+ ((FIBDropDown) FIBWidgetImpl.this).getIteratorClass() + " dataType="
+							+ ((FIBDropDown) FIBWidgetImpl.this).getDataType() + " obtained from "
+							+ ((FIBDropDown) FIBWidgetImpl.this).getDescription();
 				}
-			});
-		}
-
-		@Override
-		public FIBComponent getComponent() {
-			return FIBWidget.this;
-		}
-
-		@Override
-		public String toString() {
-			if (FIBWidget.this instanceof FIBDropDown) {
-				return "FIBValueBindable[" + FIBWidget.this + "] iteratorClass=" + ((FIBDropDown) FIBWidget.this).getIteratorClass()
-						+ " dataType=" + ((FIBDropDown) FIBWidget.this).getDataType() + " obtained from "
-						+ ((FIBDropDown) FIBWidget.this).getDescription();
+				return "FIBFormatter[" + FIBWidgetImpl.this + "]" + " dataType=" + FIBWidgetImpl.this.getDataType();
 			}
-			return "FIBValueBindable[" + FIBWidget.this + "]" + " dataType=" + FIBWidget.this.getDataType();
-		}
 
-		@Override
-		public void notifiedBindingChanged(DataBinding<?> binding) {
-			if (binding == getValueTransform()) {
-				FIBWidget.this.notifiedBindingChanged(binding);
-			} else if (binding == getValueValidator()) {
-				FIBWidget.this.notifiedBindingChanged(binding);
+			@Override
+			public void notifiedBindingChanged(DataBinding<?> binding) {
+				if (binding == getFormat()) {
+					FIBWidgetImpl.this.notifiedBindingChanged(binding);
+				}
 			}
-			super.notifiedBindingChanged(binding);
-		}
 
-		@Override
-		public List<? extends FIBModelObject> getEmbeddedObjects() {
-			return null;
-		}
-	}
-
-	@Override
-	public void updateBindingModel() {
-		super.updateBindingModel();
-		if (deserializationPerformed) {
-			getEventListener().createEventListenerBindingModel();
-			getFormatter().createFormatterBindingModel();
-		}
-	}
-
-	public FIBEventListener getEventListener() {
-		return eventListener;
-	}
-
-	private class FIBEventListener extends FIBModelObject implements Bindable {
-		private BindingModel eventListenerBindingModel = null;
-
-		@Override
-		public BindingModel getBindingModel() {
-			if (eventListenerBindingModel == null) {
-				createEventListenerBindingModel();
+			@Override
+			public BindingFactory getBindingFactory() {
+				return getComponent().getBindingFactory();
 			}
-			return eventListenerBindingModel;
-		}
 
-		private void createEventListenerBindingModel() {
-			eventListenerBindingModel = new BindingModel(FIBWidget.this.getBindingModel());
-			eventListenerBindingModel.addToBindingVariables(new BindingVariable("event", MouseEvent.class));
-		}
+			@Override
+			public void notifiedBindingDecoded(DataBinding<?> dataBinding) {
 
-		@Override
-		public FIBComponent getComponent() {
-			return FIBWidget.this;
-		}
-
-		@Override
-		public String toString() {
-			return "FIBEventListener[" + FIBWidget.this + "]";
-		}
-
-		@Override
-		public void notifiedBindingChanged(DataBinding<?> binding) {
-			super.notifiedBindingChanged(binding);
-			if (binding == getClickAction() || binding == getDoubleClickAction() || binding == getRightClickAction()) {
-				FIBWidget.this.notifiedBindingChanged(binding);
 			}
-			super.notifiedBindingChanged(binding);
+
+		}
+
+		private class FIBValueBindable implements Bindable {
+			private BindingModel valueTransformerBindingModel = null;
+
+			@Override
+			public BindingModel getBindingModel() {
+				if (valueTransformerBindingModel == null) {
+					createValueTransformerBindingModel();
+				}
+				return valueTransformerBindingModel;
+			}
+
+			private void createValueTransformerBindingModel() {
+				valueTransformerBindingModel = new BindingModel(FIBWidgetImpl.this.getBindingModel());
+				valueTransformerBindingModel.addToBindingVariables(new BindingVariable("value", Object.class) {
+					@Override
+					public Type getType() {
+						return getDataType();
+					}
+				});
+			}
+
+			public FIBComponent getComponent() {
+				return FIBWidgetImpl.this;
+			}
+
+			@Override
+			public String toString() {
+				if (FIBWidgetImpl.this instanceof FIBDropDown) {
+					return "FIBValueBindable[" + FIBWidgetImpl.this + "] iteratorClass="
+							+ ((FIBDropDown) FIBWidgetImpl.this).getIteratorClass() + " dataType="
+							+ ((FIBDropDown) FIBWidgetImpl.this).getDataType() + " obtained from "
+							+ ((FIBDropDown) FIBWidgetImpl.this).getDescription();
+				}
+				return "FIBValueBindable[" + FIBWidgetImpl.this + "]" + " dataType=" + FIBWidgetImpl.this.getDataType();
+			}
+
+			@Override
+			public void notifiedBindingChanged(DataBinding<?> binding) {
+				if (binding == getValueTransform()) {
+					FIBWidgetImpl.this.notifiedBindingChanged(binding);
+				} else if (binding == getValueValidator()) {
+					FIBWidgetImpl.this.notifiedBindingChanged(binding);
+				}
+			}
+
+			@Override
+			public BindingFactory getBindingFactory() {
+				return getComponent().getBindingFactory();
+			}
+
+			@Override
+			public void notifiedBindingDecoded(DataBinding<?> dataBinding) {
+
+			}
+
 		}
 
 		@Override
-		public List<? extends FIBModelObject> getEmbeddedObjects() {
-			return null;
+		public void updateBindingModel() {
+			super.updateBindingModel();
+			if (deserializationPerformed) {
+				getEventListener().createEventListenerBindingModel();
+				getFormatter().createFormatterBindingModel();
+			}
 		}
-	}
 
-	public DataBinding<Boolean> getValueValidator() {
-		if (valueValidator == null) {
-			valueValidator = new DataBinding<Boolean>(this, Boolean.class, DataBinding.BindingDefinitionType.GET);
+		public FIBEventListener getEventListener() {
+			return eventListener;
 		}
-		return valueValidator;
-	}
 
-	public void setValueValidator(DataBinding<Boolean> valueValidator) {
-		if (valueValidator != null) {
-			valueValidator.setOwner(this);
-			valueValidator.setDeclaredType(Boolean.class);
-			valueValidator.setBindingDefinitionType(DataBinding.BindingDefinitionType.GET);
+		private class FIBEventListener implements Bindable {
+			private BindingModel eventListenerBindingModel = null;
+
+			@Override
+			public BindingModel getBindingModel() {
+				if (eventListenerBindingModel == null) {
+					createEventListenerBindingModel();
+				}
+				return eventListenerBindingModel;
+			}
+
+			private void createEventListenerBindingModel() {
+				eventListenerBindingModel = new BindingModel(FIBWidgetImpl.this.getBindingModel());
+				eventListenerBindingModel.addToBindingVariables(new BindingVariable("event", MouseEvent.class));
+			}
+
+			public FIBComponent getComponent() {
+				return FIBWidgetImpl.this;
+			}
+
+			@Override
+			public String toString() {
+				return "FIBEventListener[" + FIBWidgetImpl.this + "]";
+			}
+
+			@Override
+			public void notifiedBindingChanged(DataBinding<?> binding) {
+				if (binding == getClickAction() || binding == getDoubleClickAction() || binding == getRightClickAction()) {
+					FIBWidgetImpl.this.notifiedBindingChanged(binding);
+				}
+			}
+
+			@Override
+			public BindingFactory getBindingFactory() {
+				return getComponent().getBindingFactory();
+			}
+
+			@Override
+			public void notifiedBindingDecoded(DataBinding<?> dataBinding) {
+
+			}
 		}
-		this.valueValidator = valueValidator;
-	}
 
-	public DataBinding<?> getValueChangedAction() {
-		if (valueChangedAction == null) {
-			valueChangedAction = new DataBinding<Object>(this, Object.class, DataBinding.BindingDefinitionType.EXECUTE);
+		@Override
+		public DataBinding<Boolean> getValueValidator() {
+			if (valueValidator == null) {
+				valueValidator = new DataBinding<Boolean>(this, Boolean.class, DataBinding.BindingDefinitionType.GET);
+			}
+			return valueValidator;
 		}
-		return valueChangedAction;
-	}
 
-	public void setValueChangedAction(DataBinding<?> valueChangedAction) {
-		if (valueChangedAction != null) {
-			valueChangedAction.setOwner(this);
-			valueChangedAction.setDeclaredType(Object.class);
-			valueChangedAction.setBindingDefinitionType(DataBinding.BindingDefinitionType.EXECUTE);
+		@Override
+		public void setValueValidator(DataBinding<Boolean> valueValidator) {
+			if (valueValidator != null) {
+				valueValidator.setOwner(this);
+				valueValidator.setDeclaredType(Boolean.class);
+				valueValidator.setBindingDefinitionType(DataBinding.BindingDefinitionType.GET);
+			}
+			this.valueValidator = valueValidator;
 		}
-		this.valueChangedAction = valueChangedAction;
-	}
 
-	public boolean hasClickAction() {
-		return clickAction != null && clickAction.isValid();
-	}
-
-	public final DataBinding<?> getClickAction() {
-		if (clickAction == null) {
-			clickAction = new DataBinding<Object>(eventListener, Object.class, DataBinding.BindingDefinitionType.EXECUTE);
+		@Override
+		public DataBinding<?> getValueChangedAction() {
+			if (valueChangedAction == null) {
+				valueChangedAction = new DataBinding<Object>(this, Object.class, DataBinding.BindingDefinitionType.EXECUTE);
+			}
+			return valueChangedAction;
 		}
-		return clickAction;
-	}
 
-	public final void setClickAction(DataBinding<?> clickAction) {
-		if (clickAction != null) {
-			clickAction.setOwner(eventListener);
-			clickAction.setDeclaredType(Object.class);
-			clickAction.setBindingDefinitionType(DataBinding.BindingDefinitionType.EXECUTE);
+		@Override
+		public void setValueChangedAction(DataBinding<?> valueChangedAction) {
+			if (valueChangedAction != null) {
+				valueChangedAction.setOwner(this);
+				valueChangedAction.setDeclaredType(Object.class);
+				valueChangedAction.setBindingDefinitionType(DataBinding.BindingDefinitionType.EXECUTE);
+			}
+			this.valueChangedAction = valueChangedAction;
 		}
-		this.clickAction = clickAction;
-	}
 
-	public boolean hasDoubleClickAction() {
-		return doubleClickAction != null && doubleClickAction.isValid();
-	}
-
-	public DataBinding<?> getDoubleClickAction() {
-		if (doubleClickAction == null) {
-			doubleClickAction = new DataBinding<Object>(eventListener, Object.class, DataBinding.BindingDefinitionType.EXECUTE);
+		@Override
+		public boolean hasClickAction() {
+			return clickAction != null && clickAction.isValid();
 		}
-		return doubleClickAction;
-	}
 
-	public void setDoubleClickAction(DataBinding<?> doubleClickAction) {
-		if (doubleClickAction != null) {
-			doubleClickAction.setOwner(eventListener);
-			doubleClickAction.setDeclaredType(Object.class);
-			doubleClickAction.setBindingDefinitionType(DataBinding.BindingDefinitionType.EXECUTE);
+		@Override
+		public final DataBinding<?> getClickAction() {
+			if (clickAction == null) {
+				clickAction = new DataBinding<Object>(eventListener, Object.class, DataBinding.BindingDefinitionType.EXECUTE);
+			}
+			return clickAction;
 		}
-		this.doubleClickAction = doubleClickAction;
-	}
 
-	public boolean hasRightClickAction() {
-		return rightClickAction != null && rightClickAction.isValid();
-	}
-
-	public DataBinding<?> getRightClickAction() {
-		if (rightClickAction == null) {
-			rightClickAction = new DataBinding<Object>(eventListener, Object.class, DataBinding.BindingDefinitionType.EXECUTE);
+		@Override
+		public final void setClickAction(DataBinding<?> clickAction) {
+			if (clickAction != null) {
+				clickAction.setOwner(eventListener);
+				clickAction.setDeclaredType(Object.class);
+				clickAction.setBindingDefinitionType(DataBinding.BindingDefinitionType.EXECUTE);
+			}
+			this.clickAction = clickAction;
 		}
-		return rightClickAction;
-	}
 
-	public void setRightClickAction(DataBinding<?> rightClickAction) {
-		if (rightClickAction != null) {
-			rightClickAction.setOwner(eventListener);
-			rightClickAction.setDeclaredType(Object.class);
-			rightClickAction.setBindingDefinitionType(DataBinding.BindingDefinitionType.EXECUTE);
+		@Override
+		public boolean hasDoubleClickAction() {
+			return doubleClickAction != null && doubleClickAction.isValid();
 		}
-		this.rightClickAction = rightClickAction;
-	}
 
-	public boolean hasEnterPressedAction() {
-		return enterPressedAction != null && enterPressedAction.isValid();
-	}
-
-	public DataBinding<?> getEnterPressedAction() {
-		if (enterPressedAction == null) {
-			enterPressedAction = new DataBinding<Object>(eventListener, Object.class, DataBinding.BindingDefinitionType.EXECUTE);
+		@Override
+		public DataBinding<?> getDoubleClickAction() {
+			if (doubleClickAction == null) {
+				doubleClickAction = new DataBinding<Object>(eventListener, Object.class, DataBinding.BindingDefinitionType.EXECUTE);
+			}
+			return doubleClickAction;
 		}
-		return enterPressedAction;
-	}
 
-	public void setEnterPressedAction(DataBinding<?> enterPressedAction) {
-		if (enterPressedAction != null) {
-			enterPressedAction.setOwner(eventListener);
-			enterPressedAction.setDeclaredType(Object.class);
-			enterPressedAction.setBindingDefinitionType(DataBinding.BindingDefinitionType.EXECUTE);
+		@Override
+		public void setDoubleClickAction(DataBinding<?> doubleClickAction) {
+			if (doubleClickAction != null) {
+				doubleClickAction.setOwner(eventListener);
+				doubleClickAction.setDeclaredType(Object.class);
+				doubleClickAction.setBindingDefinitionType(DataBinding.BindingDefinitionType.EXECUTE);
+			}
+			this.doubleClickAction = doubleClickAction;
 		}
-		this.enterPressedAction = enterPressedAction;
-	}
 
-	public boolean isPaletteElement() {
-		return getParameter("isPaletteElement") != null && getParameter("isPaletteElement").equalsIgnoreCase("true");
-	}
+		@Override
+		public boolean hasRightClickAction() {
+			return rightClickAction != null && rightClickAction.isValid();
+		}
 
-	@Override
-	public Collection<? extends FIBModelObject> getEmbeddedObjects() {
-		return null;
-	}
+		@Override
+		public DataBinding<?> getRightClickAction() {
+			if (rightClickAction == null) {
+				rightClickAction = new DataBinding<Object>(eventListener, Object.class, DataBinding.BindingDefinitionType.EXECUTE);
+			}
+			return rightClickAction;
+		}
 
-	/**
-	 * Return a list of all bindings declared in the context of this component
-	 * 
-	 * @return
-	 */
-	public List<DataBinding<?>> getDeclaredBindings() {
-		List<DataBinding<?>> returned = super.getDeclaredBindings();
-		returned.add(getEnable());
-		return returned;
-	}
+		@Override
+		public void setRightClickAction(DataBinding<?> rightClickAction) {
+			if (rightClickAction != null) {
+				rightClickAction.setOwner(eventListener);
+				rightClickAction.setDeclaredType(Object.class);
+				rightClickAction.setBindingDefinitionType(DataBinding.BindingDefinitionType.EXECUTE);
+			}
+			this.rightClickAction = rightClickAction;
+		}
 
-	@Override
-	protected void applyValidation(ValidationReport report) {
-		super.applyValidation(report);
-		performValidation(FIBWidgetDeclaredAsDynamicShouldHaveAName.class, report);
-		performValidation(TooltipBindingMustBeValid.class, report);
-		performValidation(EnableBindingMustBeValid.class, report);
-		performValidation(FormatBindingMustBeValid.class, report);
-		performValidation(IconBindingMustBeValid.class, report);
-		performValidation(ClickActionBindingMustBeValid.class, report);
-		performValidation(DoubleClickActionBindingMustBeValid.class, report);
-		performValidation(RightClickActionBindingMustBeValid.class, report);
-		performValidation(ValueChangeActionBindingMustBeValid.class, report);
+		@Override
+		public boolean hasEnterPressedAction() {
+			return enterPressedAction != null && enterPressedAction.isValid();
+		}
+
+		@Override
+		public DataBinding<?> getEnterPressedAction() {
+			if (enterPressedAction == null) {
+				enterPressedAction = new DataBinding<Object>(eventListener, Object.class, DataBinding.BindingDefinitionType.EXECUTE);
+			}
+			return enterPressedAction;
+		}
+
+		@Override
+		public void setEnterPressedAction(DataBinding<?> enterPressedAction) {
+			if (enterPressedAction != null) {
+				enterPressedAction.setOwner(eventListener);
+				enterPressedAction.setDeclaredType(Object.class);
+				enterPressedAction.setBindingDefinitionType(DataBinding.BindingDefinitionType.EXECUTE);
+			}
+			this.enterPressedAction = enterPressedAction;
+		}
+
+		public boolean isPaletteElement() {
+			return getParameter("isPaletteElement") != null && getParameter("isPaletteElement").equalsIgnoreCase("true");
+		}
+
+		/**
+		 * Return a list of all bindings declared in the context of this component
+		 * 
+		 * @return
+		 */
+		@Override
+		public List<DataBinding<?>> getDeclaredBindings() {
+			List<DataBinding<?>> returned = super.getDeclaredBindings();
+			returned.add(getEnable());
+			return returned;
+		}
+
+		@Override
+		protected void applyValidation(ValidationReport report) {
+			super.applyValidation(report);
+			performValidation(FIBWidgetDeclaredAsDynamicShouldHaveAName.class, report);
+			performValidation(TooltipBindingMustBeValid.class, report);
+			performValidation(EnableBindingMustBeValid.class, report);
+			performValidation(FormatBindingMustBeValid.class, report);
+			performValidation(IconBindingMustBeValid.class, report);
+			performValidation(ClickActionBindingMustBeValid.class, report);
+			performValidation(DoubleClickActionBindingMustBeValid.class, report);
+			performValidation(RightClickActionBindingMustBeValid.class, report);
+			performValidation(ValueChangeActionBindingMustBeValid.class, report);
+		}
+
 	}
 
 	public static class FIBWidgetDeclaredAsDynamicShouldHaveAName extends

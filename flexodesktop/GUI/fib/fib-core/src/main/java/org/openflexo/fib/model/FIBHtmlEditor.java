@@ -24,497 +24,585 @@ import java.util.List;
 import java.util.Vector;
 import java.util.logging.Logger;
 
+import org.openflexo.model.annotations.Adder;
+import org.openflexo.model.annotations.Getter;
+import org.openflexo.model.annotations.Getter.Cardinality;
+import org.openflexo.model.annotations.ImplementationClass;
+import org.openflexo.model.annotations.ModelEntity;
+import org.openflexo.model.annotations.PropertyIdentifier;
+import org.openflexo.model.annotations.Remover;
+import org.openflexo.model.annotations.Setter;
+import org.openflexo.model.annotations.XMLElement;
+
 import com.metaphaseeditor.MetaphaseEditorPanel;
 
-public class FIBHtmlEditor extends FIBWidget {
+@ModelEntity
+@ImplementationClass(FIBHtmlEditor.FIBHtmlEditorImpl.class)
+@XMLElement(xmlTag = "HTMLEditor")
+public interface FIBHtmlEditor extends FIBWidget {
 
-	@SuppressWarnings("unused")
-	private static final Logger logger = Logger.getLogger(FIBHtmlEditor.class.getPackage().getName());
+	@PropertyIdentifier(type = Vector.class)
+	public static final String OPTIONS_IN_LINE1_KEY = "optionsInLine1";
+	@PropertyIdentifier(type = Vector.class)
+	public static final String OPTIONS_IN_LINE2_KEY = "optionsInLine2";
+	@PropertyIdentifier(type = Vector.class)
+	public static final String OPTIONS_IN_LINE3_KEY = "optionsInLine3";
+	@PropertyIdentifier(type = Vector.class)
+	public static final String VISIBLE_AND_UNUSED_OPTIONS_KEY = "visibleAndUnusedOptions";
 
-	protected static String[] option_keys = { MetaphaseEditorPanel.SOURCE_PANEL_KEY, MetaphaseEditorPanel.SOURCE_BUTTON_KEY,
+	@Getter(value = OPTIONS_IN_LINE1_KEY, cardinality = Cardinality.LIST, inverse = FIBHtmlEditorOption.EDITOR_KEY)
+	public List<FIBHtmlEditorOption> getOptionsInLine1();
 
-	MetaphaseEditorPanel.PAGE_PANEL_KEY, MetaphaseEditorPanel.OPEN_BUTTON_KEY, MetaphaseEditorPanel.SAVE_BUTTON_KEY,
-			MetaphaseEditorPanel.NEW_BUTTON_KEY, MetaphaseEditorPanel.PREVIEW_BUTTON_KEY,
+	@Setter(OPTIONS_IN_LINE1_KEY)
+	public void setOptionsInLine1(List<FIBHtmlEditorOption> optionsInLine1);
 
-			MetaphaseEditorPanel.EDIT_PANEL_KEY, MetaphaseEditorPanel.CUT_BUTTON_KEY, MetaphaseEditorPanel.COPY_BUTTON_KEY,
-			MetaphaseEditorPanel.PASTE_BUTTON_KEY, MetaphaseEditorPanel.PASTE_AS_TEXT_BUTTON_KEY,
+	@Adder(OPTIONS_IN_LINE1_KEY)
+	public void addToOptionsInLine1(FIBHtmlEditorOption aOptionsInLine1);
 
-			MetaphaseEditorPanel.TOOLS_PANEL_KEY, MetaphaseEditorPanel.PRINT_BUTTON_KEY, MetaphaseEditorPanel.SPELL_CHECK_BUTTON_KEY,
+	@Remover(OPTIONS_IN_LINE1_KEY)
+	public void removeFromOptionsInLine1(FIBHtmlEditorOption aOptionsInLine1);
 
-			MetaphaseEditorPanel.UNDO_REDO_PANEL_KEY, MetaphaseEditorPanel.UNDO_BUTTON_KEY, MetaphaseEditorPanel.REDO_BUTTON_KEY,
+	@Getter(value = OPTIONS_IN_LINE2_KEY, cardinality = Cardinality.LIST, inverse = FIBHtmlEditorOption.EDITOR_KEY)
+	public List<FIBHtmlEditorOption> getOptionsInLine2();
 
-			MetaphaseEditorPanel.SEARCH_PANEL_KEY, MetaphaseEditorPanel.FIND_BUTTON_KEY, MetaphaseEditorPanel.REPLACE_BUTTON_KEY,
+	@Setter(OPTIONS_IN_LINE2_KEY)
+	public void setOptionsInLine2(List<FIBHtmlEditorOption> optionsInLine2);
 
-			MetaphaseEditorPanel.FORMAT_PANEL_KEY, MetaphaseEditorPanel.SELECT_ALL_BUTTON_KEY,
-			MetaphaseEditorPanel.CLEAR_FORMATTING_BUTTON_KEY,
+	@Adder(OPTIONS_IN_LINE2_KEY)
+	public void addToOptionsInLine2(FIBHtmlEditorOption aOptionsInLine2);
 
-			MetaphaseEditorPanel.TEXT_EFFECT_PANEL_KEY, MetaphaseEditorPanel.BOLD_BUTTON_KEY, MetaphaseEditorPanel.ITALIC_BUTTON_KEY,
-			MetaphaseEditorPanel.UNDERLINE_BUTTON_KEY, MetaphaseEditorPanel.STRIKE_BUTTON_KEY,
+	@Remover(OPTIONS_IN_LINE2_KEY)
+	public void removeFromOptionsInLine2(FIBHtmlEditorOption aOptionsInLine2);
 
-			MetaphaseEditorPanel.SUB_SUPER_SCRIPT_PANEL_KEY, MetaphaseEditorPanel.SUB_SCRIPT_BUTTON_KEY,
-			MetaphaseEditorPanel.SUPER_SCRIPT_BUTTON_KEY,
+	@Getter(value = OPTIONS_IN_LINE3_KEY, cardinality = Cardinality.LIST, inverse = FIBHtmlEditorOption.EDITOR_KEY)
+	public List<FIBHtmlEditorOption> getOptionsInLine3();
 
-			MetaphaseEditorPanel.LIST_PANEL_KEY, MetaphaseEditorPanel.NUMBERED_LIST_BUTTON_KEY, MetaphaseEditorPanel.BULLETED_BUTTON_KEY,
+	@Setter(OPTIONS_IN_LINE3_KEY)
+	public void setOptionsInLine3(List<FIBHtmlEditorOption> optionsInLine3);
 
-			MetaphaseEditorPanel.BLOCK_PANEL_KEY, MetaphaseEditorPanel.DECREASE_INDENT_BUTTON_KEY,
-			MetaphaseEditorPanel.INCREASE_INDENT_BUTTON_KEY, MetaphaseEditorPanel.BLOCK_QUOTE_BUTTON_KEY,
-			MetaphaseEditorPanel.DIV_BUTTON_KEY, MetaphaseEditorPanel.PARAGRAPH_BUTTON_KEY,
+	@Adder(OPTIONS_IN_LINE3_KEY)
+	public void addToOptionsInLine3(FIBHtmlEditorOption aOptionsInLine3);
 
-			MetaphaseEditorPanel.JUSTIFICATION_PANEL_KEY, MetaphaseEditorPanel.LEFT_JUSTIFY_BUTTON_KEY,
-			MetaphaseEditorPanel.CENTER_JUSTIFY_BUTTON_KEY, MetaphaseEditorPanel.RIGHT_JUSTIFY_BUTTON_KEY,
-			MetaphaseEditorPanel.BLOCK_JUSTIFY_BUTTON_KEY,
+	@Remover(OPTIONS_IN_LINE3_KEY)
+	public void removeFromOptionsInLine3(FIBHtmlEditorOption aOptionsInLine3);
 
-			MetaphaseEditorPanel.LINK_PANEL_KEY, MetaphaseEditorPanel.LINK_BUTTON_KEY, MetaphaseEditorPanel.UNLINK_BUTTON_KEY,
-			MetaphaseEditorPanel.ANCHOR_BUTTON_KEY,
+	public FIBHtmlEditorOption getOption(String key);
 
-			MetaphaseEditorPanel.MISC_PANEL_KEY, MetaphaseEditorPanel.IMAGE_BUTTON_KEY, MetaphaseEditorPanel.TABLE_BUTTON_KEY,
-			MetaphaseEditorPanel.HORIZONTAL_LINE_BUTTON_KEY, MetaphaseEditorPanel.SPECIAL_CHAR_BUTTON_KEY,
+	public boolean anyLineContains(FIBHtmlEditorOption option);
 
-			MetaphaseEditorPanel.FONT_PANEL_KEY, MetaphaseEditorPanel.FONT_SIZE_PANEL_KEY, MetaphaseEditorPanel.PARAGRAPH_FORMAT_PANEL_KEY,
+	public Vector<FIBHtmlEditorOption> getAvailableOptions();
 
-			MetaphaseEditorPanel.COLOR_PANEL_KEY, MetaphaseEditorPanel.TEXT_COLOR_BUTTON_KEY,
-			MetaphaseEditorPanel.BACKGROUND_COLOR_BUTTON_KEY,
+	@Getter(value = VISIBLE_AND_UNUSED_OPTIONS_KEY, cardinality = Cardinality.LIST, inverse = FIBHtmlEditorOption.EDITOR_KEY)
+	public Vector<FIBHtmlEditorOption> getVisibleAndUnusedOptions();
 
-			MetaphaseEditorPanel.ABOUT_PANEL_KEY, MetaphaseEditorPanel.ABOUT_BUTTON_KEY };
+	@Adder(VISIBLE_AND_UNUSED_OPTIONS_KEY)
+	public void addToVisibleAndUnusedOptions(FIBHtmlEditorOption anOption);
 
-	public static enum Parameters implements FIBModelAttribute {
-		optionsInLine1,
-		optionsInLine2,
-		optionsInLine3,
-		firstLevelOptionsInLine1,
-		firstLevelOptionsInLine2,
-		firstLevelOptionsInLine3,
-		availableOptions,
-		visibleAndUnusedOptions
-	}
+	@Remover(VISIBLE_AND_UNUSED_OPTIONS_KEY)
+	public void removeFromVisibleAndUnusedOptions(FIBHtmlEditorOption anOption);
 
-	private Vector<FIBHtmlEditorOption> availableOptions;
-	private Vector<FIBHtmlEditorOption> visibleAndUnusedOptions;
+	public void indexChanged();
 
-	private Vector<FIBHtmlEditorOption> optionsInLine1;
-	private Vector<FIBHtmlEditorOption> optionsInLine2;
-	private Vector<FIBHtmlEditorOption> optionsInLine3;
-	private Vector<FIBHtmlEditorOption> firstLevelOptionsInLine1;
-	private Vector<FIBHtmlEditorOption> firstLevelOptionsInLine2;
-	private Vector<FIBHtmlEditorOption> firstLevelOptionsInLine3;
+	public static abstract class FIBHtmlEditorImpl extends FIBWidgetImpl implements FIBHtmlEditor {
 
-	public FIBHtmlEditor() {
-		super();
-		buildAvailableOptions();
-		optionsInLine1 = new Vector<FIBHtmlEditorOption>();
-		optionsInLine2 = new Vector<FIBHtmlEditorOption>();
-		optionsInLine3 = new Vector<FIBHtmlEditorOption>();
-		firstLevelOptionsInLine1 = new Vector<FIBHtmlEditorOption>();
-		firstLevelOptionsInLine2 = new Vector<FIBHtmlEditorOption>();
-		firstLevelOptionsInLine3 = new Vector<FIBHtmlEditorOption>();
+		@SuppressWarnings("unused")
+		private static final Logger logger = Logger.getLogger(FIBHtmlEditor.class.getPackage().getName());
 
-		/*FIBHtmlEditorOption o1 =  getOption(MetaphaseEditorPanel.EDIT_PANEL_KEY);
-		o1.setIsVisible(true);
-		addToOptionsInLine1(o1);*/
+		public static String[] option_keys = { MetaphaseEditorPanel.SOURCE_PANEL_KEY, MetaphaseEditorPanel.SOURCE_BUTTON_KEY,
 
-	}
+		MetaphaseEditorPanel.PAGE_PANEL_KEY, MetaphaseEditorPanel.OPEN_BUTTON_KEY, MetaphaseEditorPanel.SAVE_BUTTON_KEY,
+				MetaphaseEditorPanel.NEW_BUTTON_KEY, MetaphaseEditorPanel.PREVIEW_BUTTON_KEY,
 
-	@Override
-	protected String getBaseName() {
-		return "HTMLEditor";
-	}
+				MetaphaseEditorPanel.EDIT_PANEL_KEY, MetaphaseEditorPanel.CUT_BUTTON_KEY, MetaphaseEditorPanel.COPY_BUTTON_KEY,
+				MetaphaseEditorPanel.PASTE_BUTTON_KEY, MetaphaseEditorPanel.PASTE_AS_TEXT_BUTTON_KEY,
 
-	public void makeFullHtmlEditor() {
-		for (String s : option_keys) {
-			FIBHtmlEditorOption option = getOption(s);
-			option.setIsVisible(false);
-			option.setIsVisible(true);
+				MetaphaseEditorPanel.TOOLS_PANEL_KEY, MetaphaseEditorPanel.PRINT_BUTTON_KEY, MetaphaseEditorPanel.SPELL_CHECK_BUTTON_KEY,
+
+				MetaphaseEditorPanel.UNDO_REDO_PANEL_KEY, MetaphaseEditorPanel.UNDO_BUTTON_KEY, MetaphaseEditorPanel.REDO_BUTTON_KEY,
+
+				MetaphaseEditorPanel.SEARCH_PANEL_KEY, MetaphaseEditorPanel.FIND_BUTTON_KEY, MetaphaseEditorPanel.REPLACE_BUTTON_KEY,
+
+				MetaphaseEditorPanel.FORMAT_PANEL_KEY, MetaphaseEditorPanel.SELECT_ALL_BUTTON_KEY,
+				MetaphaseEditorPanel.CLEAR_FORMATTING_BUTTON_KEY,
+
+				MetaphaseEditorPanel.TEXT_EFFECT_PANEL_KEY, MetaphaseEditorPanel.BOLD_BUTTON_KEY, MetaphaseEditorPanel.ITALIC_BUTTON_KEY,
+				MetaphaseEditorPanel.UNDERLINE_BUTTON_KEY, MetaphaseEditorPanel.STRIKE_BUTTON_KEY,
+
+				MetaphaseEditorPanel.SUB_SUPER_SCRIPT_PANEL_KEY, MetaphaseEditorPanel.SUB_SCRIPT_BUTTON_KEY,
+				MetaphaseEditorPanel.SUPER_SCRIPT_BUTTON_KEY,
+
+				MetaphaseEditorPanel.LIST_PANEL_KEY, MetaphaseEditorPanel.NUMBERED_LIST_BUTTON_KEY,
+				MetaphaseEditorPanel.BULLETED_BUTTON_KEY,
+
+				MetaphaseEditorPanel.BLOCK_PANEL_KEY, MetaphaseEditorPanel.DECREASE_INDENT_BUTTON_KEY,
+				MetaphaseEditorPanel.INCREASE_INDENT_BUTTON_KEY, MetaphaseEditorPanel.BLOCK_QUOTE_BUTTON_KEY,
+				MetaphaseEditorPanel.DIV_BUTTON_KEY, MetaphaseEditorPanel.PARAGRAPH_BUTTON_KEY,
+
+				MetaphaseEditorPanel.JUSTIFICATION_PANEL_KEY, MetaphaseEditorPanel.LEFT_JUSTIFY_BUTTON_KEY,
+				MetaphaseEditorPanel.CENTER_JUSTIFY_BUTTON_KEY, MetaphaseEditorPanel.RIGHT_JUSTIFY_BUTTON_KEY,
+				MetaphaseEditorPanel.BLOCK_JUSTIFY_BUTTON_KEY,
+
+				MetaphaseEditorPanel.LINK_PANEL_KEY, MetaphaseEditorPanel.LINK_BUTTON_KEY, MetaphaseEditorPanel.UNLINK_BUTTON_KEY,
+				MetaphaseEditorPanel.ANCHOR_BUTTON_KEY,
+
+				MetaphaseEditorPanel.MISC_PANEL_KEY, MetaphaseEditorPanel.IMAGE_BUTTON_KEY, MetaphaseEditorPanel.TABLE_BUTTON_KEY,
+				MetaphaseEditorPanel.HORIZONTAL_LINE_BUTTON_KEY, MetaphaseEditorPanel.SPECIAL_CHAR_BUTTON_KEY,
+
+				MetaphaseEditorPanel.FONT_PANEL_KEY, MetaphaseEditorPanel.FONT_SIZE_PANEL_KEY,
+				MetaphaseEditorPanel.PARAGRAPH_FORMAT_PANEL_KEY,
+
+				MetaphaseEditorPanel.COLOR_PANEL_KEY, MetaphaseEditorPanel.TEXT_COLOR_BUTTON_KEY,
+				MetaphaseEditorPanel.BACKGROUND_COLOR_BUTTON_KEY,
+
+				MetaphaseEditorPanel.ABOUT_PANEL_KEY, MetaphaseEditorPanel.ABOUT_BUTTON_KEY };
+
+		private Vector<FIBHtmlEditorOption> availableOptions;
+		private Vector<FIBHtmlEditorOption> visibleAndUnusedOptions;
+
+		private Vector<FIBHtmlEditorOption> optionsInLine1;
+		private Vector<FIBHtmlEditorOption> optionsInLine2;
+		private Vector<FIBHtmlEditorOption> optionsInLine3;
+		private final Vector<FIBHtmlEditorOption> firstLevelOptionsInLine1;
+		private final Vector<FIBHtmlEditorOption> firstLevelOptionsInLine2;
+		private final Vector<FIBHtmlEditorOption> firstLevelOptionsInLine3;
+
+		public FIBHtmlEditorImpl() {
+			super();
+			buildAvailableOptions();
+			optionsInLine1 = new Vector<FIBHtmlEditorOption>();
+			optionsInLine2 = new Vector<FIBHtmlEditorOption>();
+			optionsInLine3 = new Vector<FIBHtmlEditorOption>();
+			firstLevelOptionsInLine1 = new Vector<FIBHtmlEditorOption>();
+			firstLevelOptionsInLine2 = new Vector<FIBHtmlEditorOption>();
+			firstLevelOptionsInLine3 = new Vector<FIBHtmlEditorOption>();
+
+			/*FIBHtmlEditorOption o1 =  getOption(MetaphaseEditorPanel.EDIT_PANEL_KEY);
+			o1.setIsVisible(true);
+			addToOptionsInLine1(o1);*/
+
 		}
 
-		addToOptionsInLine1(getOption(MetaphaseEditorPanel.SOURCE_PANEL_KEY));
-		addToOptionsInLine1(getOption(MetaphaseEditorPanel.PAGE_PANEL_KEY));
-		addToOptionsInLine1(getOption(MetaphaseEditorPanel.EDIT_PANEL_KEY));
-		addToOptionsInLine1(getOption(MetaphaseEditorPanel.TOOLS_PANEL_KEY));
-		addToOptionsInLine1(getOption(MetaphaseEditorPanel.UNDO_REDO_PANEL_KEY));
-		addToOptionsInLine1(getOption(MetaphaseEditorPanel.SEARCH_PANEL_KEY));
-		addToOptionsInLine1(getOption(MetaphaseEditorPanel.FORMAT_PANEL_KEY));
-
-		addToOptionsInLine2(getOption(MetaphaseEditorPanel.TEXT_EFFECT_PANEL_KEY));
-		addToOptionsInLine2(getOption(MetaphaseEditorPanel.SUB_SUPER_SCRIPT_PANEL_KEY));
-		addToOptionsInLine2(getOption(MetaphaseEditorPanel.LIST_PANEL_KEY));
-		addToOptionsInLine2(getOption(MetaphaseEditorPanel.BLOCK_PANEL_KEY));
-		addToOptionsInLine2(getOption(MetaphaseEditorPanel.JUSTIFICATION_PANEL_KEY));
-		addToOptionsInLine2(getOption(MetaphaseEditorPanel.LINK_PANEL_KEY));
-
-		addToOptionsInLine3(getOption(MetaphaseEditorPanel.PARAGRAPH_FORMAT_PANEL_KEY));
-		addToOptionsInLine3(getOption(MetaphaseEditorPanel.FONT_PANEL_KEY));
-		addToOptionsInLine3(getOption(MetaphaseEditorPanel.FONT_SIZE_PANEL_KEY));
-		addToOptionsInLine3(getOption(MetaphaseEditorPanel.COLOR_PANEL_KEY));
-		addToOptionsInLine3(getOption(MetaphaseEditorPanel.MISC_PANEL_KEY));
-		addToOptionsInLine3(getOption(MetaphaseEditorPanel.ABOUT_PANEL_KEY));
-
-	}
-
-	public void makeEmbeddedHtmlEditor() {
-		for (String s : option_keys) {
-			FIBHtmlEditorOption option = getOption(s);
-			option.setIsVisible(false);
-			option.setIsVisible(true);
+		@Override
+		public String getBaseName() {
+			return "HTMLEditor";
 		}
 
-		getOption(MetaphaseEditorPanel.PAGE_PANEL_KEY).setIsVisible(false);
-		getOption(MetaphaseEditorPanel.ABOUT_PANEL_KEY).setIsVisible(false);
+		public void makeFullHtmlEditor() {
+			for (String s : option_keys) {
+				FIBHtmlEditorOption option = getOption(s);
+				option.setIsVisible(false);
+				option.setIsVisible(true);
+			}
 
-		addToOptionsInLine1(getOption(MetaphaseEditorPanel.SOURCE_PANEL_KEY));
-		addToOptionsInLine1(getOption(MetaphaseEditorPanel.EDIT_PANEL_KEY));
-		addToOptionsInLine1(getOption(MetaphaseEditorPanel.TOOLS_PANEL_KEY));
-		addToOptionsInLine1(getOption(MetaphaseEditorPanel.UNDO_REDO_PANEL_KEY));
-		addToOptionsInLine1(getOption(MetaphaseEditorPanel.SEARCH_PANEL_KEY));
-		addToOptionsInLine1(getOption(MetaphaseEditorPanel.FORMAT_PANEL_KEY));
+			addToOptionsInLine1(getOption(MetaphaseEditorPanel.SOURCE_PANEL_KEY));
+			addToOptionsInLine1(getOption(MetaphaseEditorPanel.PAGE_PANEL_KEY));
+			addToOptionsInLine1(getOption(MetaphaseEditorPanel.EDIT_PANEL_KEY));
+			addToOptionsInLine1(getOption(MetaphaseEditorPanel.TOOLS_PANEL_KEY));
+			addToOptionsInLine1(getOption(MetaphaseEditorPanel.UNDO_REDO_PANEL_KEY));
+			addToOptionsInLine1(getOption(MetaphaseEditorPanel.SEARCH_PANEL_KEY));
+			addToOptionsInLine1(getOption(MetaphaseEditorPanel.FORMAT_PANEL_KEY));
 
-		addToOptionsInLine2(getOption(MetaphaseEditorPanel.TEXT_EFFECT_PANEL_KEY));
-		addToOptionsInLine2(getOption(MetaphaseEditorPanel.SUB_SUPER_SCRIPT_PANEL_KEY));
-		addToOptionsInLine2(getOption(MetaphaseEditorPanel.LIST_PANEL_KEY));
-		addToOptionsInLine2(getOption(MetaphaseEditorPanel.BLOCK_PANEL_KEY));
-		addToOptionsInLine2(getOption(MetaphaseEditorPanel.JUSTIFICATION_PANEL_KEY));
-		addToOptionsInLine2(getOption(MetaphaseEditorPanel.LINK_PANEL_KEY));
+			addToOptionsInLine2(getOption(MetaphaseEditorPanel.TEXT_EFFECT_PANEL_KEY));
+			addToOptionsInLine2(getOption(MetaphaseEditorPanel.SUB_SUPER_SCRIPT_PANEL_KEY));
+			addToOptionsInLine2(getOption(MetaphaseEditorPanel.LIST_PANEL_KEY));
+			addToOptionsInLine2(getOption(MetaphaseEditorPanel.BLOCK_PANEL_KEY));
+			addToOptionsInLine2(getOption(MetaphaseEditorPanel.JUSTIFICATION_PANEL_KEY));
+			addToOptionsInLine2(getOption(MetaphaseEditorPanel.LINK_PANEL_KEY));
 
-		addToOptionsInLine3(getOption(MetaphaseEditorPanel.PARAGRAPH_FORMAT_PANEL_KEY));
-		addToOptionsInLine3(getOption(MetaphaseEditorPanel.FONT_PANEL_KEY));
-		addToOptionsInLine3(getOption(MetaphaseEditorPanel.FONT_SIZE_PANEL_KEY));
-		addToOptionsInLine3(getOption(MetaphaseEditorPanel.COLOR_PANEL_KEY));
-		addToOptionsInLine3(getOption(MetaphaseEditorPanel.MISC_PANEL_KEY));
+			addToOptionsInLine3(getOption(MetaphaseEditorPanel.PARAGRAPH_FORMAT_PANEL_KEY));
+			addToOptionsInLine3(getOption(MetaphaseEditorPanel.FONT_PANEL_KEY));
+			addToOptionsInLine3(getOption(MetaphaseEditorPanel.FONT_SIZE_PANEL_KEY));
+			addToOptionsInLine3(getOption(MetaphaseEditorPanel.COLOR_PANEL_KEY));
+			addToOptionsInLine3(getOption(MetaphaseEditorPanel.MISC_PANEL_KEY));
+			addToOptionsInLine3(getOption(MetaphaseEditorPanel.ABOUT_PANEL_KEY));
 
-	}
-
-	public void makeLightHtmlEditor() {
-		for (String s : option_keys) {
-			FIBHtmlEditorOption option = getOption(s);
-			option.setIsVisible(false);
-			option.setIsVisible(true);
 		}
 
-		getOption(MetaphaseEditorPanel.SOURCE_PANEL_KEY).setIsVisible(false);
-		getOption(MetaphaseEditorPanel.PAGE_PANEL_KEY).setIsVisible(false);
-		getOption(MetaphaseEditorPanel.TOOLS_PANEL_KEY).setIsVisible(false);
-		getOption(MetaphaseEditorPanel.SEARCH_PANEL_KEY).setIsVisible(false);
-		getOption(MetaphaseEditorPanel.FORMAT_PANEL_KEY).setIsVisible(false);
-		getOption(MetaphaseEditorPanel.SUB_SUPER_SCRIPT_PANEL_KEY).setIsVisible(false);
-		getOption(MetaphaseEditorPanel.BLOCK_PANEL_KEY).setIsVisible(false);
-		getOption(MetaphaseEditorPanel.MISC_PANEL_KEY).setIsVisible(false);
-		getOption(MetaphaseEditorPanel.ABOUT_PANEL_KEY).setIsVisible(false);
+		public void makeEmbeddedHtmlEditor() {
+			for (String s : option_keys) {
+				FIBHtmlEditorOption option = getOption(s);
+				option.setIsVisible(false);
+				option.setIsVisible(true);
+			}
 
-		getOption(MetaphaseEditorPanel.HORIZONTAL_LINE_BUTTON_KEY).setIsVisible(false);
-		getOption(MetaphaseEditorPanel.SPECIAL_CHAR_BUTTON_KEY).setIsVisible(false);
+			getOption(MetaphaseEditorPanel.PAGE_PANEL_KEY).setIsVisible(false);
+			getOption(MetaphaseEditorPanel.ABOUT_PANEL_KEY).setIsVisible(false);
 
-		addToOptionsInLine1(getOption(MetaphaseEditorPanel.EDIT_PANEL_KEY));
-		addToOptionsInLine1(getOption(MetaphaseEditorPanel.UNDO_REDO_PANEL_KEY));
-		addToOptionsInLine1(getOption(MetaphaseEditorPanel.LIST_PANEL_KEY));
-		addToOptionsInLine1(getOption(MetaphaseEditorPanel.JUSTIFICATION_PANEL_KEY));
-		addToOptionsInLine1(getOption(MetaphaseEditorPanel.LINK_PANEL_KEY));
+			addToOptionsInLine1(getOption(MetaphaseEditorPanel.SOURCE_PANEL_KEY));
+			addToOptionsInLine1(getOption(MetaphaseEditorPanel.EDIT_PANEL_KEY));
+			addToOptionsInLine1(getOption(MetaphaseEditorPanel.TOOLS_PANEL_KEY));
+			addToOptionsInLine1(getOption(MetaphaseEditorPanel.UNDO_REDO_PANEL_KEY));
+			addToOptionsInLine1(getOption(MetaphaseEditorPanel.SEARCH_PANEL_KEY));
+			addToOptionsInLine1(getOption(MetaphaseEditorPanel.FORMAT_PANEL_KEY));
 
-		addToOptionsInLine2(getOption(MetaphaseEditorPanel.TEXT_EFFECT_PANEL_KEY));
-		addToOptionsInLine2(getOption(MetaphaseEditorPanel.PARAGRAPH_FORMAT_PANEL_KEY));
-		addToOptionsInLine2(getOption(MetaphaseEditorPanel.FONT_PANEL_KEY));
-		addToOptionsInLine2(getOption(MetaphaseEditorPanel.FONT_SIZE_PANEL_KEY));
-		addToOptionsInLine2(getOption(MetaphaseEditorPanel.COLOR_PANEL_KEY));
-	}
+			addToOptionsInLine2(getOption(MetaphaseEditorPanel.TEXT_EFFECT_PANEL_KEY));
+			addToOptionsInLine2(getOption(MetaphaseEditorPanel.SUB_SUPER_SCRIPT_PANEL_KEY));
+			addToOptionsInLine2(getOption(MetaphaseEditorPanel.LIST_PANEL_KEY));
+			addToOptionsInLine2(getOption(MetaphaseEditorPanel.BLOCK_PANEL_KEY));
+			addToOptionsInLine2(getOption(MetaphaseEditorPanel.JUSTIFICATION_PANEL_KEY));
+			addToOptionsInLine2(getOption(MetaphaseEditorPanel.LINK_PANEL_KEY));
 
-	public void makeUltraLightHtmlEditor() {
-		for (String s : option_keys) {
-			FIBHtmlEditorOption option = getOption(s);
-			option.setIsVisible(false);
-			option.setIsVisible(true);
+			addToOptionsInLine3(getOption(MetaphaseEditorPanel.PARAGRAPH_FORMAT_PANEL_KEY));
+			addToOptionsInLine3(getOption(MetaphaseEditorPanel.FONT_PANEL_KEY));
+			addToOptionsInLine3(getOption(MetaphaseEditorPanel.FONT_SIZE_PANEL_KEY));
+			addToOptionsInLine3(getOption(MetaphaseEditorPanel.COLOR_PANEL_KEY));
+			addToOptionsInLine3(getOption(MetaphaseEditorPanel.MISC_PANEL_KEY));
+
 		}
 
-		getOption(MetaphaseEditorPanel.SOURCE_PANEL_KEY).setIsVisible(false);
-		getOption(MetaphaseEditorPanel.PAGE_PANEL_KEY).setIsVisible(false);
-		getOption(MetaphaseEditorPanel.EDIT_PANEL_KEY).setIsVisible(false);
-		getOption(MetaphaseEditorPanel.TOOLS_PANEL_KEY).setIsVisible(false);
-		getOption(MetaphaseEditorPanel.UNDO_REDO_PANEL_KEY).setIsVisible(false);
-		getOption(MetaphaseEditorPanel.SEARCH_PANEL_KEY).setIsVisible(false);
-		getOption(MetaphaseEditorPanel.FORMAT_PANEL_KEY).setIsVisible(false);
-		getOption(MetaphaseEditorPanel.SUB_SUPER_SCRIPT_PANEL_KEY).setIsVisible(false);
-		getOption(MetaphaseEditorPanel.LIST_PANEL_KEY).setIsVisible(false);
-		getOption(MetaphaseEditorPanel.BLOCK_PANEL_KEY).setIsVisible(false);
-		getOption(MetaphaseEditorPanel.FONT_PANEL_KEY).setIsVisible(false);
-		getOption(MetaphaseEditorPanel.FONT_SIZE_PANEL_KEY).setIsVisible(false);
-		getOption(MetaphaseEditorPanel.ABOUT_PANEL_KEY).setIsVisible(false);
+		public void makeLightHtmlEditor() {
+			for (String s : option_keys) {
+				FIBHtmlEditorOption option = getOption(s);
+				option.setIsVisible(false);
+				option.setIsVisible(true);
+			}
 
-		getOption(MetaphaseEditorPanel.ANCHOR_BUTTON_KEY).setIsVisible(false);
-		getOption(MetaphaseEditorPanel.TABLE_BUTTON_KEY).setIsVisible(false);
-		getOption(MetaphaseEditorPanel.HORIZONTAL_LINE_BUTTON_KEY).setIsVisible(false);
-		getOption(MetaphaseEditorPanel.SPECIAL_CHAR_BUTTON_KEY).setIsVisible(false);
-		getOption(MetaphaseEditorPanel.STRIKE_BUTTON_KEY).setIsVisible(false);
+			getOption(MetaphaseEditorPanel.SOURCE_PANEL_KEY).setIsVisible(false);
+			getOption(MetaphaseEditorPanel.PAGE_PANEL_KEY).setIsVisible(false);
+			getOption(MetaphaseEditorPanel.TOOLS_PANEL_KEY).setIsVisible(false);
+			getOption(MetaphaseEditorPanel.SEARCH_PANEL_KEY).setIsVisible(false);
+			getOption(MetaphaseEditorPanel.FORMAT_PANEL_KEY).setIsVisible(false);
+			getOption(MetaphaseEditorPanel.SUB_SUPER_SCRIPT_PANEL_KEY).setIsVisible(false);
+			getOption(MetaphaseEditorPanel.BLOCK_PANEL_KEY).setIsVisible(false);
+			getOption(MetaphaseEditorPanel.MISC_PANEL_KEY).setIsVisible(false);
+			getOption(MetaphaseEditorPanel.ABOUT_PANEL_KEY).setIsVisible(false);
 
-		addToOptionsInLine1(getOption(MetaphaseEditorPanel.PARAGRAPH_FORMAT_PANEL_KEY));
-		addToOptionsInLine1(getOption(MetaphaseEditorPanel.TEXT_EFFECT_PANEL_KEY));
-		addToOptionsInLine1(getOption(MetaphaseEditorPanel.COLOR_PANEL_KEY));
-		addToOptionsInLine1(getOption(MetaphaseEditorPanel.JUSTIFICATION_PANEL_KEY));
-		addToOptionsInLine1(getOption(MetaphaseEditorPanel.LINK_PANEL_KEY));
-		addToOptionsInLine1(getOption(MetaphaseEditorPanel.MISC_PANEL_KEY));
-	}
+			getOption(MetaphaseEditorPanel.HORIZONTAL_LINE_BUTTON_KEY).setIsVisible(false);
+			getOption(MetaphaseEditorPanel.SPECIAL_CHAR_BUTTON_KEY).setIsVisible(false);
 
-	private void buildAvailableOptions() {
-		availableOptions = new Vector<FIBHtmlEditorOption>();
-		for (String s : option_keys) {
-			availableOptions.add(new FIBHtmlEditorOption(s, this));
+			addToOptionsInLine1(getOption(MetaphaseEditorPanel.EDIT_PANEL_KEY));
+			addToOptionsInLine1(getOption(MetaphaseEditorPanel.UNDO_REDO_PANEL_KEY));
+			addToOptionsInLine1(getOption(MetaphaseEditorPanel.LIST_PANEL_KEY));
+			addToOptionsInLine1(getOption(MetaphaseEditorPanel.JUSTIFICATION_PANEL_KEY));
+			addToOptionsInLine1(getOption(MetaphaseEditorPanel.LINK_PANEL_KEY));
+
+			addToOptionsInLine2(getOption(MetaphaseEditorPanel.TEXT_EFFECT_PANEL_KEY));
+			addToOptionsInLine2(getOption(MetaphaseEditorPanel.PARAGRAPH_FORMAT_PANEL_KEY));
+			addToOptionsInLine2(getOption(MetaphaseEditorPanel.FONT_PANEL_KEY));
+			addToOptionsInLine2(getOption(MetaphaseEditorPanel.FONT_SIZE_PANEL_KEY));
+			addToOptionsInLine2(getOption(MetaphaseEditorPanel.COLOR_PANEL_KEY));
 		}
-		visibleAndUnusedOptions = new Vector<FIBHtmlEditorOption>();
-	}
 
-	protected FIBHtmlEditorOption getOption(String key) {
-		for (FIBHtmlEditorOption option : availableOptions) {
-			if (option.getName().equals(key)) {
-				return option;
+		public void makeUltraLightHtmlEditor() {
+			for (String s : option_keys) {
+				FIBHtmlEditorOption option = getOption(s);
+				option.setIsVisible(false);
+				option.setIsVisible(true);
+			}
+
+			getOption(MetaphaseEditorPanel.SOURCE_PANEL_KEY).setIsVisible(false);
+			getOption(MetaphaseEditorPanel.PAGE_PANEL_KEY).setIsVisible(false);
+			getOption(MetaphaseEditorPanel.EDIT_PANEL_KEY).setIsVisible(false);
+			getOption(MetaphaseEditorPanel.TOOLS_PANEL_KEY).setIsVisible(false);
+			getOption(MetaphaseEditorPanel.UNDO_REDO_PANEL_KEY).setIsVisible(false);
+			getOption(MetaphaseEditorPanel.SEARCH_PANEL_KEY).setIsVisible(false);
+			getOption(MetaphaseEditorPanel.FORMAT_PANEL_KEY).setIsVisible(false);
+			getOption(MetaphaseEditorPanel.SUB_SUPER_SCRIPT_PANEL_KEY).setIsVisible(false);
+			getOption(MetaphaseEditorPanel.LIST_PANEL_KEY).setIsVisible(false);
+			getOption(MetaphaseEditorPanel.BLOCK_PANEL_KEY).setIsVisible(false);
+			getOption(MetaphaseEditorPanel.FONT_PANEL_KEY).setIsVisible(false);
+			getOption(MetaphaseEditorPanel.FONT_SIZE_PANEL_KEY).setIsVisible(false);
+			getOption(MetaphaseEditorPanel.ABOUT_PANEL_KEY).setIsVisible(false);
+
+			getOption(MetaphaseEditorPanel.ANCHOR_BUTTON_KEY).setIsVisible(false);
+			getOption(MetaphaseEditorPanel.TABLE_BUTTON_KEY).setIsVisible(false);
+			getOption(MetaphaseEditorPanel.HORIZONTAL_LINE_BUTTON_KEY).setIsVisible(false);
+			getOption(MetaphaseEditorPanel.SPECIAL_CHAR_BUTTON_KEY).setIsVisible(false);
+			getOption(MetaphaseEditorPanel.STRIKE_BUTTON_KEY).setIsVisible(false);
+
+			addToOptionsInLine1(getOption(MetaphaseEditorPanel.PARAGRAPH_FORMAT_PANEL_KEY));
+			addToOptionsInLine1(getOption(MetaphaseEditorPanel.TEXT_EFFECT_PANEL_KEY));
+			addToOptionsInLine1(getOption(MetaphaseEditorPanel.COLOR_PANEL_KEY));
+			addToOptionsInLine1(getOption(MetaphaseEditorPanel.JUSTIFICATION_PANEL_KEY));
+			addToOptionsInLine1(getOption(MetaphaseEditorPanel.LINK_PANEL_KEY));
+			addToOptionsInLine1(getOption(MetaphaseEditorPanel.MISC_PANEL_KEY));
+		}
+
+		private void buildAvailableOptions() {
+			availableOptions = new Vector<FIBHtmlEditorOption>();
+			for (String s : option_keys) {
+				FIBHtmlEditorOption newOption = getFactory().newInstance(FIBHtmlEditorOption.class);
+				newOption.setName(s);
+				newOption.setEditor(this);
+				availableOptions.add(newOption);
+			}
+			visibleAndUnusedOptions = new Vector<FIBHtmlEditorOption>();
+		}
+
+		@Override
+		public FIBHtmlEditorOption getOption(String key) {
+			for (FIBHtmlEditorOption option : availableOptions) {
+				if (option.getName().equals(key)) {
+					return option;
+				}
+			}
+			return null;
+		}
+
+		private void ensureOptionRegistering(FIBHtmlEditorOption option) {
+			if (getOption(option.getName()) == null) {
+				availableOptions.add(option);
+			} else {
+				if (getOption(option.getName()) != option) {
+					int index = availableOptions.indexOf(getOption(option.getName()));
+					availableOptions.setElementAt(option, index);
+				}
 			}
 		}
-		return null;
-	}
 
-	private void ensureOptionRegistering(FIBHtmlEditorOption option) {
-		if (getOption(option.getName()) == null) {
-			availableOptions.add(option);
-		} else {
-			if (getOption(option.getName()) != option) {
-				int index = availableOptions.indexOf(getOption(option.getName()));
-				availableOptions.setElementAt(option, index);
+		@Override
+		public Type getDefaultDataClass() {
+			return String.class;
+		}
+
+		@Override
+		public boolean anyLineContains(FIBHtmlEditorOption option) {
+			return optionsInLine1.contains(option) || optionsInLine2.contains(option) || optionsInLine3.contains(option);
+		}
+
+		public Vector<FIBHtmlEditorOption> getFirstLevelOptionsInLine1() {
+			return firstLevelOptionsInLine1;
+		}
+
+		@Override
+		public Vector<FIBHtmlEditorOption> getOptionsInLine1() {
+			return optionsInLine1;
+		}
+
+		public void setOptionsInLine1(Vector<FIBHtmlEditorOption> optionsInLine1) {
+			this.optionsInLine1 = optionsInLine1;
+		}
+
+		@Override
+		public void addToOptionsInLine1(FIBHtmlEditorOption anOption) {
+			ensureOptionRegistering(anOption);
+			anOption.setIsVisible(true);
+			anOption.setEditor(this);
+			optionsInLine1.add(anOption);
+			anOption.setIndexNoEditorNotification(optionsInLine1.indexOf(anOption));
+			getPropertyChangeSupport().firePropertyChange(OPTIONS_IN_LINE1_KEY, null, optionsInLine1);
+			if (visibleAndUnusedOptions.contains(anOption)) {
+				removeFromVisibleAndUnusedOptions(anOption);
+			}
+			for (FIBHtmlEditorOption subOption : anOption.getSubOptions()) {
+				if (subOption.getIsVisible() && !optionsInLine1.contains(subOption)) {
+					addToOptionsInLine1(subOption);
+				}
+			}
+			if (anOption.getLevel() == 0) {
+				firstLevelOptionsInLine1.add(anOption);
+				anOption.setIndexNoEditorNotification(firstLevelOptionsInLine1.indexOf(anOption));
+				getPropertyChangeSupport().firePropertyChange("firstLevelOptionsInLine1", null, firstLevelOptionsInLine1);
 			}
 		}
-	}
 
-	@Override
-	public Type getDefaultDataClass() {
-		return String.class;
-	}
-
-	protected boolean anyLineContains(FIBHtmlEditorOption option) {
-		return optionsInLine1.contains(option) || optionsInLine2.contains(option) || optionsInLine3.contains(option);
-	}
-
-	public Vector<FIBHtmlEditorOption> getFirstLevelOptionsInLine1() {
-		return firstLevelOptionsInLine1;
-	}
-
-	public Vector<FIBHtmlEditorOption> getOptionsInLine1() {
-		return optionsInLine1;
-	}
-
-	public void setOptionsInLine1(Vector<FIBHtmlEditorOption> optionsInLine1) {
-		this.optionsInLine1 = optionsInLine1;
-	}
-
-	public void addToOptionsInLine1(FIBHtmlEditorOption anOption) {
-		ensureOptionRegistering(anOption);
-		anOption.setIsVisible(true);
-		anOption.setFIBHtmlEditor(this);
-		optionsInLine1.add(anOption);
-		anOption.setIndexNoEditorNotification(optionsInLine1.indexOf(anOption));
-		getPropertyChangeSupport().firePropertyChange(Parameters.optionsInLine1.name(), null, optionsInLine1);
-		if (visibleAndUnusedOptions.contains(anOption)) {
-			removeFromVisibleAndUnusedOptions(anOption);
-		}
-		for (FIBHtmlEditorOption subOption : anOption.getSubOptions()) {
-			if (subOption.getIsVisible() && !optionsInLine1.contains(subOption)) {
-				addToOptionsInLine1(subOption);
+		public void addToOptionsInLine1(List<FIBHtmlEditorOption> options) {
+			Vector<FIBHtmlEditorOption> theOptions = new Vector<FIBHtmlEditorOption>();
+			theOptions.addAll(options);
+			for (FIBHtmlEditorOption o : theOptions) {
+				addToOptionsInLine1(o);
 			}
 		}
-		if (anOption.getLevel() == 0) {
-			firstLevelOptionsInLine1.add(anOption);
-			anOption.setIndexNoEditorNotification(firstLevelOptionsInLine1.indexOf(anOption));
-			getPropertyChangeSupport().firePropertyChange(Parameters.firstLevelOptionsInLine1.name(), null, firstLevelOptionsInLine1);
-		}
-	}
 
-	public void addToOptionsInLine1(List<FIBHtmlEditorOption> options) {
-		Vector<FIBHtmlEditorOption> theOptions = new Vector<FIBHtmlEditorOption>();
-		theOptions.addAll(options);
-		for (FIBHtmlEditorOption o : theOptions) {
-			addToOptionsInLine1(o);
-		}
-	}
-
-	public void removeFromOptionsInLine1(FIBHtmlEditorOption anOption) {
-		optionsInLine1.remove(anOption);
-		getPropertyChangeSupport().firePropertyChange(Parameters.optionsInLine1.name(), null, optionsInLine1);
-		if (!visibleAndUnusedOptions.contains(anOption)) {
-			addToVisibleAndUnusedOptions(anOption);
-		}
-		for (FIBHtmlEditorOption subOption : anOption.getSubOptions()) {
-			if (optionsInLine1.contains(subOption)) {
-				removeFromOptionsInLine1(subOption);
+		@Override
+		public void removeFromOptionsInLine1(FIBHtmlEditorOption anOption) {
+			optionsInLine1.remove(anOption);
+			getPropertyChangeSupport().firePropertyChange(OPTIONS_IN_LINE1_KEY, null, optionsInLine1);
+			if (!visibleAndUnusedOptions.contains(anOption)) {
+				addToVisibleAndUnusedOptions(anOption);
+			}
+			for (FIBHtmlEditorOption subOption : anOption.getSubOptions()) {
+				if (optionsInLine1.contains(subOption)) {
+					removeFromOptionsInLine1(subOption);
+				}
+			}
+			if (anOption.getLevel() == 0) {
+				firstLevelOptionsInLine1.remove(anOption);
+				getPropertyChangeSupport().firePropertyChange(OPTIONS_IN_LINE1_KEY, null, firstLevelOptionsInLine1);
 			}
 		}
-		if (anOption.getLevel() == 0) {
-			firstLevelOptionsInLine1.remove(anOption);
-			getPropertyChangeSupport().firePropertyChange(Parameters.firstLevelOptionsInLine1.name(), null, firstLevelOptionsInLine1);
-		}
-	}
 
-	public void removeFromOptionsInLine1(List<FIBHtmlEditorOption> options) {
-		Vector<FIBHtmlEditorOption> theOptions = new Vector<FIBHtmlEditorOption>();
-		theOptions.addAll(options);
-		for (FIBHtmlEditorOption o : theOptions) {
-			removeFromOptionsInLine1(o);
-		}
-	}
-
-	public Vector<FIBHtmlEditorOption> getFirstLevelOptionsInLine2() {
-		return firstLevelOptionsInLine2;
-	}
-
-	public Vector<FIBHtmlEditorOption> getOptionsInLine2() {
-		return optionsInLine2;
-	}
-
-	public void setOptionsInLine2(Vector<FIBHtmlEditorOption> optionsInLine2) {
-		this.optionsInLine2 = optionsInLine2;
-	}
-
-	public void addToOptionsInLine2(FIBHtmlEditorOption anOption) {
-		ensureOptionRegistering(anOption);
-		anOption.setIsVisible(true);
-		anOption.setFIBHtmlEditor(this);
-		optionsInLine2.add(anOption);
-		anOption.setIndexNoEditorNotification(optionsInLine2.indexOf(anOption));
-		getPropertyChangeSupport().firePropertyChange(Parameters.optionsInLine2.name(), null, optionsInLine2);
-		if (visibleAndUnusedOptions.contains(anOption)) {
-			removeFromVisibleAndUnusedOptions(anOption);
-		}
-		for (FIBHtmlEditorOption subOption : anOption.getSubOptions()) {
-			if (subOption.getIsVisible() && !optionsInLine2.contains(subOption)) {
-				addToOptionsInLine2(subOption);
+		public void removeFromOptionsInLine1(List<FIBHtmlEditorOption> options) {
+			Vector<FIBHtmlEditorOption> theOptions = new Vector<FIBHtmlEditorOption>();
+			theOptions.addAll(options);
+			for (FIBHtmlEditorOption o : theOptions) {
+				removeFromOptionsInLine1(o);
 			}
 		}
-		if (anOption.getLevel() == 0) {
-			firstLevelOptionsInLine2.add(anOption);
-			anOption.setIndexNoEditorNotification(firstLevelOptionsInLine2.indexOf(anOption));
-			getPropertyChangeSupport().firePropertyChange(Parameters.firstLevelOptionsInLine2.name(), null, firstLevelOptionsInLine2);
-		}
-	}
 
-	public void addToOptionsInLine2(List<FIBHtmlEditorOption> options) {
-		Vector<FIBHtmlEditorOption> theOptions = new Vector<FIBHtmlEditorOption>();
-		theOptions.addAll(options);
-		for (FIBHtmlEditorOption o : theOptions) {
-			addToOptionsInLine2(o);
+		public Vector<FIBHtmlEditorOption> getFirstLevelOptionsInLine2() {
+			return firstLevelOptionsInLine2;
 		}
-	}
 
-	public void removeFromOptionsInLine2(FIBHtmlEditorOption anOption) {
-		optionsInLine2.remove(anOption);
-		getPropertyChangeSupport().firePropertyChange(Parameters.optionsInLine2.name(), null, optionsInLine2);
-		if (!visibleAndUnusedOptions.contains(anOption)) {
-			addToVisibleAndUnusedOptions(anOption);
+		@Override
+		public Vector<FIBHtmlEditorOption> getOptionsInLine2() {
+			return optionsInLine2;
 		}
-		for (FIBHtmlEditorOption subOption : anOption.getSubOptions()) {
-			if (optionsInLine2.contains(subOption)) {
-				removeFromOptionsInLine2(subOption);
+
+		public void setOptionsInLine2(Vector<FIBHtmlEditorOption> optionsInLine2) {
+			this.optionsInLine2 = optionsInLine2;
+		}
+
+		@Override
+		public void addToOptionsInLine2(FIBHtmlEditorOption anOption) {
+			ensureOptionRegistering(anOption);
+			anOption.setIsVisible(true);
+			anOption.setEditor(this);
+			optionsInLine2.add(anOption);
+			anOption.setIndexNoEditorNotification(optionsInLine2.indexOf(anOption));
+			getPropertyChangeSupport().firePropertyChange(OPTIONS_IN_LINE2_KEY, null, optionsInLine2);
+			if (visibleAndUnusedOptions.contains(anOption)) {
+				removeFromVisibleAndUnusedOptions(anOption);
+			}
+			for (FIBHtmlEditorOption subOption : anOption.getSubOptions()) {
+				if (subOption.getIsVisible() && !optionsInLine2.contains(subOption)) {
+					addToOptionsInLine2(subOption);
+				}
+			}
+			if (anOption.getLevel() == 0) {
+				firstLevelOptionsInLine2.add(anOption);
+				anOption.setIndexNoEditorNotification(firstLevelOptionsInLine2.indexOf(anOption));
+				getPropertyChangeSupport().firePropertyChange("firstLevelOptionsInLine2", null, firstLevelOptionsInLine2);
 			}
 		}
-		if (anOption.getLevel() == 0) {
-			firstLevelOptionsInLine2.remove(anOption);
-			getPropertyChangeSupport().firePropertyChange(Parameters.firstLevelOptionsInLine2.name(), null, firstLevelOptionsInLine2);
-		}
-	}
 
-	public void removeFromOptionsInLine2(List<FIBHtmlEditorOption> options) {
-		Vector<FIBHtmlEditorOption> theOptions = new Vector<FIBHtmlEditorOption>();
-		theOptions.addAll(options);
-		for (FIBHtmlEditorOption o : theOptions) {
-			removeFromOptionsInLine2(o);
-		}
-	}
-
-	public Vector<FIBHtmlEditorOption> getFirstLevelOptionsInLine3() {
-		return firstLevelOptionsInLine3;
-	}
-
-	public Vector<FIBHtmlEditorOption> getOptionsInLine3() {
-		return optionsInLine3;
-	}
-
-	public void setOptionsInLine3(Vector<FIBHtmlEditorOption> optionsInLine3) {
-		this.optionsInLine3 = optionsInLine3;
-	}
-
-	public void addToOptionsInLine3(FIBHtmlEditorOption anOption) {
-		ensureOptionRegistering(anOption);
-		anOption.setIsVisible(true);
-		anOption.setFIBHtmlEditor(this);
-		optionsInLine3.add(anOption);
-		anOption.setIndexNoEditorNotification(optionsInLine3.indexOf(anOption));
-		getPropertyChangeSupport().firePropertyChange(Parameters.optionsInLine3.name(), null, optionsInLine3);
-		if (visibleAndUnusedOptions.contains(anOption)) {
-			removeFromVisibleAndUnusedOptions(anOption);
-		}
-		for (FIBHtmlEditorOption subOption : anOption.getSubOptions()) {
-			if (subOption.getIsVisible() && !optionsInLine3.contains(subOption)) {
-				addToOptionsInLine3(subOption);
+		public void addToOptionsInLine2(List<FIBHtmlEditorOption> options) {
+			Vector<FIBHtmlEditorOption> theOptions = new Vector<FIBHtmlEditorOption>();
+			theOptions.addAll(options);
+			for (FIBHtmlEditorOption o : theOptions) {
+				addToOptionsInLine2(o);
 			}
 		}
-		if (anOption.getLevel() == 0) {
-			firstLevelOptionsInLine3.add(anOption);
-			anOption.setIndexNoEditorNotification(firstLevelOptionsInLine3.indexOf(anOption));
-			getPropertyChangeSupport().firePropertyChange(Parameters.firstLevelOptionsInLine3.name(), null, firstLevelOptionsInLine3);
-		}
-	}
 
-	public void addToOptionsInLine3(List<FIBHtmlEditorOption> options) {
-		Vector<FIBHtmlEditorOption> theOptions = new Vector<FIBHtmlEditorOption>();
-		theOptions.addAll(options);
-		for (FIBHtmlEditorOption o : theOptions) {
-			addToOptionsInLine3(o);
-		}
-	}
-
-	public void removeFromOptionsInLine3(FIBHtmlEditorOption anOption) {
-		optionsInLine3.remove(anOption);
-		getPropertyChangeSupport().firePropertyChange(Parameters.optionsInLine3.name(), null, optionsInLine3);
-		if (!visibleAndUnusedOptions.contains(anOption)) {
-			addToVisibleAndUnusedOptions(anOption);
-		}
-		for (FIBHtmlEditorOption subOption : anOption.getSubOptions()) {
-			if (optionsInLine3.contains(subOption)) {
-				removeFromOptionsInLine3(subOption);
+		@Override
+		public void removeFromOptionsInLine2(FIBHtmlEditorOption anOption) {
+			optionsInLine2.remove(anOption);
+			getPropertyChangeSupport().firePropertyChange(OPTIONS_IN_LINE2_KEY, null, optionsInLine2);
+			if (!visibleAndUnusedOptions.contains(anOption)) {
+				addToVisibleAndUnusedOptions(anOption);
+			}
+			for (FIBHtmlEditorOption subOption : anOption.getSubOptions()) {
+				if (optionsInLine2.contains(subOption)) {
+					removeFromOptionsInLine2(subOption);
+				}
+			}
+			if (anOption.getLevel() == 0) {
+				firstLevelOptionsInLine2.remove(anOption);
+				getPropertyChangeSupport().firePropertyChange("firstLevelOptionsInLine2", null, firstLevelOptionsInLine2);
 			}
 		}
-		if (anOption.getLevel() == 0) {
-			firstLevelOptionsInLine3.remove(anOption);
-			getPropertyChangeSupport().firePropertyChange(Parameters.firstLevelOptionsInLine3.name(), null, firstLevelOptionsInLine3);
+
+		public void removeFromOptionsInLine2(List<FIBHtmlEditorOption> options) {
+			Vector<FIBHtmlEditorOption> theOptions = new Vector<FIBHtmlEditorOption>();
+			theOptions.addAll(options);
+			for (FIBHtmlEditorOption o : theOptions) {
+				removeFromOptionsInLine2(o);
+			}
 		}
-	}
 
-	public void removeFromOptionsInLine3(List<FIBHtmlEditorOption> options) {
-		Vector<FIBHtmlEditorOption> theOptions = new Vector<FIBHtmlEditorOption>();
-		theOptions.addAll(options);
-		for (FIBHtmlEditorOption o : theOptions) {
-			removeFromOptionsInLine3(o);
+		public Vector<FIBHtmlEditorOption> getFirstLevelOptionsInLine3() {
+			return firstLevelOptionsInLine3;
 		}
-	}
 
-	public Vector<FIBHtmlEditorOption> getAvailableOptions() {
-		return availableOptions;
-	}
-
-	public Vector<FIBHtmlEditorOption> getVisibleAndUnusedOptions() {
-		return visibleAndUnusedOptions;
-	}
-
-	protected void addToVisibleAndUnusedOptions(FIBHtmlEditorOption anOption) {
-		if (anOption.getLevel() == 0) {
-			// logger.info(">> addToVisibleAndUnusedOptions "+anOption);
-			visibleAndUnusedOptions.add(anOption);
-			getPropertyChangeSupport().firePropertyChange(Parameters.visibleAndUnusedOptions.name(), null, visibleAndUnusedOptions);
+		@Override
+		public Vector<FIBHtmlEditorOption> getOptionsInLine3() {
+			return optionsInLine3;
 		}
-	}
 
-	protected void removeFromVisibleAndUnusedOptions(FIBHtmlEditorOption anOption) {
-		if (anOption.getLevel() == 0) {
-			// logger.info(">> removeFromVisibleAndUnusedOptions "+anOption);
-			visibleAndUnusedOptions.remove(anOption);
-			getPropertyChangeSupport().firePropertyChange(Parameters.visibleAndUnusedOptions.name(), null, visibleAndUnusedOptions);
+		public void setOptionsInLine3(Vector<FIBHtmlEditorOption> optionsInLine3) {
+			this.optionsInLine3 = optionsInLine3;
 		}
-	}
 
-	public void indexChanged() {
-		// setChanged();
-		// notifyObservers();
-	}
+		@Override
+		public void addToOptionsInLine3(FIBHtmlEditorOption anOption) {
+			ensureOptionRegistering(anOption);
+			anOption.setIsVisible(true);
+			anOption.setEditor(this);
+			optionsInLine3.add(anOption);
+			anOption.setIndexNoEditorNotification(optionsInLine3.indexOf(anOption));
+			getPropertyChangeSupport().firePropertyChange(OPTIONS_IN_LINE3_KEY, null, optionsInLine3);
+			if (visibleAndUnusedOptions.contains(anOption)) {
+				removeFromVisibleAndUnusedOptions(anOption);
+			}
+			for (FIBHtmlEditorOption subOption : anOption.getSubOptions()) {
+				if (subOption.getIsVisible() && !optionsInLine3.contains(subOption)) {
+					addToOptionsInLine3(subOption);
+				}
+			}
+			if (anOption.getLevel() == 0) {
+				firstLevelOptionsInLine3.add(anOption);
+				anOption.setIndexNoEditorNotification(firstLevelOptionsInLine3.indexOf(anOption));
+				getPropertyChangeSupport().firePropertyChange("firstLevelOptionsInLine3", null, firstLevelOptionsInLine3);
+			}
+		}
 
+		public void addToOptionsInLine3(List<FIBHtmlEditorOption> options) {
+			Vector<FIBHtmlEditorOption> theOptions = new Vector<FIBHtmlEditorOption>();
+			theOptions.addAll(options);
+			for (FIBHtmlEditorOption o : theOptions) {
+				addToOptionsInLine3(o);
+			}
+		}
+
+		@Override
+		public void removeFromOptionsInLine3(FIBHtmlEditorOption anOption) {
+			optionsInLine3.remove(anOption);
+			getPropertyChangeSupport().firePropertyChange(OPTIONS_IN_LINE3_KEY, null, optionsInLine3);
+			if (!visibleAndUnusedOptions.contains(anOption)) {
+				addToVisibleAndUnusedOptions(anOption);
+			}
+			for (FIBHtmlEditorOption subOption : anOption.getSubOptions()) {
+				if (optionsInLine3.contains(subOption)) {
+					removeFromOptionsInLine3(subOption);
+				}
+			}
+			if (anOption.getLevel() == 0) {
+				firstLevelOptionsInLine3.remove(anOption);
+				getPropertyChangeSupport().firePropertyChange("firstLevelOptionsInLine3", null, firstLevelOptionsInLine3);
+			}
+		}
+
+		public void removeFromOptionsInLine3(List<FIBHtmlEditorOption> options) {
+			Vector<FIBHtmlEditorOption> theOptions = new Vector<FIBHtmlEditorOption>();
+			theOptions.addAll(options);
+			for (FIBHtmlEditorOption o : theOptions) {
+				removeFromOptionsInLine3(o);
+			}
+		}
+
+		@Override
+		public Vector<FIBHtmlEditorOption> getAvailableOptions() {
+			return availableOptions;
+		}
+
+		@Override
+		public Vector<FIBHtmlEditorOption> getVisibleAndUnusedOptions() {
+			return visibleAndUnusedOptions;
+		}
+
+		@Override
+		public void addToVisibleAndUnusedOptions(FIBHtmlEditorOption anOption) {
+			if (anOption.getLevel() == 0) {
+				// logger.info(">> addToVisibleAndUnusedOptions "+anOption);
+				visibleAndUnusedOptions.add(anOption);
+				getPropertyChangeSupport().firePropertyChange(VISIBLE_AND_UNUSED_OPTIONS_KEY, null, visibleAndUnusedOptions);
+			}
+		}
+
+		@Override
+		public void removeFromVisibleAndUnusedOptions(FIBHtmlEditorOption anOption) {
+			if (anOption.getLevel() == 0) {
+				// logger.info(">> removeFromVisibleAndUnusedOptions "+anOption);
+				visibleAndUnusedOptions.remove(anOption);
+				getPropertyChangeSupport().firePropertyChange(VISIBLE_AND_UNUSED_OPTIONS_KEY, null, visibleAndUnusedOptions);
+			}
+		}
+
+		@Override
+		public void indexChanged() {
+			// setChanged();
+			// notifyObservers();
+		}
+
+	}
 }

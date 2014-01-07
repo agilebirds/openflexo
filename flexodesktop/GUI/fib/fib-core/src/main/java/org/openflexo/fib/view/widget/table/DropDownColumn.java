@@ -51,9 +51,9 @@ import org.openflexo.fib.model.FIBDropDownColumn;
 public class DropDownColumn<T, V> extends AbstractColumn<T, V> implements EditableColumn<T, V> {
 	static final Logger logger = Logger.getLogger(DropDownColumn.class.getPackage().getName());
 
-	private DropDownCellRenderer _cellRenderer;
+	private final DropDownCellRenderer _cellRenderer;
 
-	private DropDownCellEditor _cellEditor;
+	private final DropDownCellEditor _cellEditor;
 
 	public DropDownColumn(FIBDropDownColumn columnModel, FIBTableModel<T> tableModel, FIBController controller) {
 		super(columnModel, tableModel, controller);
@@ -74,7 +74,7 @@ public class DropDownColumn<T, V> extends AbstractColumn<T, V> implements Editab
 			return (Class<V>) TypeUtils.getRawType(analyzedType);
 		}
 
-		if (getColumnModel().staticList != null) {
+		if (getColumnModel().getStaticList() != null) {
 			return (Class<V>) String.class;
 		}
 
@@ -138,9 +138,9 @@ public class DropDownColumn<T, V> extends AbstractColumn<T, V> implements Editab
 
 	protected List<V> getAvailableValues(T object) {
 
-		if (getColumnModel().staticList != null) {
+		if (getColumnModel().getStaticList() != null) {
 			Vector<String> list = new Vector<String>();
-			StringTokenizer st = new StringTokenizer(getColumnModel().staticList, ",");
+			StringTokenizer st = new StringTokenizer(getColumnModel().getStaticList(), ",");
 			while (st.hasMoreTokens()) {
 				list.add(st.nextToken());
 			}

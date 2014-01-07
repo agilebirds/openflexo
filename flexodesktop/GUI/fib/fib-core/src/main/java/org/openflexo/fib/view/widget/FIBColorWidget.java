@@ -32,7 +32,7 @@ import javax.swing.JPanel;
 
 import org.openflexo.fib.controller.FIBController;
 import org.openflexo.fib.model.FIBColor;
-import org.openflexo.fib.model.FIBModelObject;
+import org.openflexo.fib.model.FIBModelObject.FIBModelObjectImpl;
 import org.openflexo.fib.view.FIBWidgetView;
 import org.openflexo.localization.FlexoLocalization;
 import org.openflexo.swing.ColorSelector;
@@ -44,11 +44,11 @@ public class FIBColorWidget extends FIBWidgetView<FIBColor, ColorSelector, Color
 
 	// public static final Icon ARROW_DOWN = new ImageIconResource("Resources/ArrowDown.gif");
 
-	private JCheckBox checkBox;
+	private final JCheckBox checkBox;
 
 	protected ColorSelector _selector;
 
-	private JPanel container;
+	private final JPanel container;
 
 	public FIBColorWidget(FIBColor model, FIBController controller) {
 		super(model, controller);
@@ -87,8 +87,8 @@ public class FIBColorWidget extends FIBWidgetView<FIBColor, ColorSelector, Color
 	}
 
 	private void updateCheckboxLabel() {
-		checkBox.setText(FlexoLocalization.localizedForKey(FIBModelObject.LOCALIZATION, "transparent", checkBox));
-		checkBox.setToolTipText(FlexoLocalization.localizedTooltipForKey(FIBModelObject.LOCALIZATION, "undefined_value", checkBox));
+		checkBox.setText(FlexoLocalization.localizedForKey(FIBModelObjectImpl.LOCALIZATION, "transparent", checkBox));
+		checkBox.setToolTipText(FlexoLocalization.localizedTooltipForKey(FIBModelObjectImpl.LOCALIZATION, "undefined_value", checkBox));
 	}
 
 	public void updateCheckboxVisibility() {

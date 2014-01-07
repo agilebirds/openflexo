@@ -21,16 +21,24 @@ package org.openflexo.fib.model;
 
 import java.lang.reflect.Type;
 
-public class FIBLabelColumn extends FIBTableColumn {
+import org.openflexo.model.annotations.ImplementationClass;
+import org.openflexo.model.annotations.ModelEntity;
 
-	@Override
-	public Type getDefaultDataClass() {
-		return String.class;
+@ModelEntity
+@ImplementationClass(FIBLabelColumn.FIBLabelColumnImpl.class)
+public interface FIBLabelColumn extends FIBTableColumn {
+
+	public static abstract class FIBLabelColumnImpl extends FIBTableColumnImpl implements FIBLabelColumn {
+
+		@Override
+		public Type getDefaultDataClass() {
+			return String.class;
+		}
+
+		@Override
+		public ColumnType getColumnType() {
+			return ColumnType.Label;
+		}
+
 	}
-
-	@Override
-	public ColumnType getColumnType() {
-		return ColumnType.Label;
-	}
-
 }

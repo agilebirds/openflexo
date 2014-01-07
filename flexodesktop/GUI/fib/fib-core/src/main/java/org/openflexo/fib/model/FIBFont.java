@@ -22,53 +22,86 @@ package org.openflexo.fib.model;
 import java.awt.Font;
 import java.lang.reflect.Type;
 
-public class FIBFont extends FIBWidget {
+import org.openflexo.model.annotations.Getter;
+import org.openflexo.model.annotations.ImplementationClass;
+import org.openflexo.model.annotations.ModelEntity;
+import org.openflexo.model.annotations.PropertyIdentifier;
+import org.openflexo.model.annotations.Setter;
+import org.openflexo.model.annotations.XMLAttribute;
+import org.openflexo.model.annotations.XMLElement;
 
-	public static enum Parameters implements FIBModelAttribute {
-		allowsNull;
-	}
+@ModelEntity
+@ImplementationClass(FIBFont.FIBFontImpl.class)
+@XMLElement(xmlTag = "Font")
+public interface FIBFont extends FIBWidget {
 
-	private String sampleText = "Sample for this font";
+	@PropertyIdentifier(type = String.class)
+	public static final String SAMPLE_TEXT_KEY = "sampleText";
+	@PropertyIdentifier(type = boolean.class)
+	public static final String ALLOWS_NULL_KEY = "allowsNull";
 
-	private boolean allowsNull = false;
+	@Getter(value = SAMPLE_TEXT_KEY)
+	@XMLAttribute
+	public String getSampleText();
 
-	public FIBFont() {
-	}
+	@Setter(SAMPLE_TEXT_KEY)
+	public void setSampleText(String sampleText);
 
-	@Override
-	protected String getBaseName() {
-		return "FontSelector";
-	}
+	@Getter(value = ALLOWS_NULL_KEY, defaultValue = "false")
+	@XMLAttribute
+	public boolean getAllowsNull();
 
-	@Override
-	public Type getDefaultDataClass() {
-		return Font.class;
-	}
+	@Setter(ALLOWS_NULL_KEY)
+	public void setAllowsNull(boolean allowsNull);
 
-	public boolean getAllowsNull() {
-		return allowsNull;
-	}
+	public static abstract class FIBFontImpl extends FIBWidgetImpl implements FIBFont {
 
-	public void setAllowsNull(boolean allowsNull) {
-		FIBAttributeNotification<Boolean> notification = requireChange(Parameters.allowsNull, allowsNull);
-		if (notification != null) {
-			this.allowsNull = allowsNull;
-			hasChanged(notification);
+		private String sampleText = "Sample for this font";
+
+		private boolean allowsNull = false;
+
+		public FIBFontImpl() {
 		}
-	}
 
-	/**
-	 * @return the sampleText
-	 */
-	public String getSampleText() {
-		return sampleText;
-	}
+		@Override
+		public String getBaseName() {
+			return "FontSelector";
+		}
 
-	/**
-	 * @param sampleText
-	 *            the sampleText to set
-	 */
-	public void setSampleText(String sampleText) {
-		this.sampleText = sampleText;
+		@Override
+		public Type getDefaultDataClass() {
+			return Font.class;
+		}
+
+		@Override
+		public boolean getAllowsNull() {
+			return allowsNull;
+		}
+
+		@Override
+		public void setAllowsNull(boolean allowsNull) {
+			FIBPropertyNotification<Boolean> notification = requireChange(ALLOWS_NULL_KEY, allowsNull);
+			if (notification != null) {
+				this.allowsNull = allowsNull;
+				hasChanged(notification);
+			}
+		}
+
+		/**
+		 * @return the sampleText
+		 */
+		@Override
+		public String getSampleText() {
+			return sampleText;
+		}
+
+		/**
+		 * @param sampleText
+		 *            the sampleText to set
+		 */
+		@Override
+		public void setSampleText(String sampleText) {
+			this.sampleText = sampleText;
+		}
 	}
 }

@@ -21,36 +21,62 @@ package org.openflexo.fib.model;
 
 import java.util.Vector;
 
-public class FIBTabPanel extends FIBContainer {
+import org.openflexo.model.annotations.Getter;
+import org.openflexo.model.annotations.ImplementationClass;
+import org.openflexo.model.annotations.ModelEntity;
+import org.openflexo.model.annotations.PropertyIdentifier;
+import org.openflexo.model.annotations.Setter;
+import org.openflexo.model.annotations.XMLAttribute;
+import org.openflexo.model.annotations.XMLElement;
 
-	private boolean restrictPreferredSizeToSelectedComponent = false;
+@ModelEntity
+@ImplementationClass(FIBTabPanel.FIBTabPanelImpl.class)
+@XMLElement(xmlTag = "TabPanel")
+public interface FIBTabPanel extends FIBContainer {
 
-	public FIBTabPanel() {
-	}
+	@PropertyIdentifier(type = boolean.class)
+	public static final String RESTRICT_PREFERRED_SIZE_TO_SELECTED_COMPONENT_KEY = "restrictPreferredSizeToSelectedComponent";
 
-	@Override
-	public String getIdentifier() {
-		return null;
-	}
+	@Getter(value = RESTRICT_PREFERRED_SIZE_TO_SELECTED_COMPONENT_KEY, defaultValue = "false")
+	@XMLAttribute
+	public boolean isRestrictPreferredSizeToSelectedComponent();
 
-	public Vector<FIBTab> getTabs() {
-		Vector<FIBTab> returned = new Vector<FIBTab>();
-		for (FIBComponent subComponent : getSubComponents()) {
-			if (subComponent instanceof FIBTab) {
-				returned.add((FIBTab) subComponent);
-			}
+	@Setter(RESTRICT_PREFERRED_SIZE_TO_SELECTED_COMPONENT_KEY)
+	public void setRestrictPreferredSizeToSelectedComponent(boolean restrictPreferredSizeToSelectedComponent);
+
+	public static abstract class FIBTabPanelImpl extends FIBContainerImpl implements FIBTabPanel {
+
+		private boolean restrictPreferredSizeToSelectedComponent = false;
+
+		public FIBTabPanelImpl() {
 		}
-		return returned;
-	}
 
-	public boolean isRestrictPreferredSizeToSelectedComponent() {
-		return restrictPreferredSizeToSelectedComponent;
-	}
+		@Override
+		public String getIdentifier() {
+			return null;
+		}
 
-	public void setRestrictPreferredSizeToSelectedComponent(boolean restrictPreferredSizeToSelectedComponent) {
-		this.restrictPreferredSizeToSelectedComponent = restrictPreferredSizeToSelectedComponent;
-		getPropertyChangeSupport().firePropertyChange("restrictPreferredSizeToSelectedComponent",
-				!restrictPreferredSizeToSelectedComponent, restrictPreferredSizeToSelectedComponent);
-	}
+		public Vector<FIBTab> getTabs() {
+			Vector<FIBTab> returned = new Vector<FIBTab>();
+			for (FIBComponent subComponent : getSubComponents()) {
+				if (subComponent instanceof FIBTab) {
+					returned.add((FIBTab) subComponent);
+				}
+			}
+			return returned;
+		}
 
+		@Override
+		public boolean isRestrictPreferredSizeToSelectedComponent() {
+			return restrictPreferredSizeToSelectedComponent;
+		}
+
+		@Override
+		public void setRestrictPreferredSizeToSelectedComponent(boolean restrictPreferredSizeToSelectedComponent) {
+			this.restrictPreferredSizeToSelectedComponent = restrictPreferredSizeToSelectedComponent;
+			getPropertyChangeSupport().firePropertyChange("restrictPreferredSizeToSelectedComponent",
+					!restrictPreferredSizeToSelectedComponent, restrictPreferredSizeToSelectedComponent);
+		}
+
+	}
 }

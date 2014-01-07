@@ -35,16 +35,13 @@ import java.util.logging.Logger;
 import org.apache.commons.io.IOUtils;
 import org.jdom2.JDOMException;
 import org.openflexo.antar.binding.BindingFactory;
-import org.openflexo.antar.binding.DataBinding;
 import org.openflexo.antar.binding.JavaBindingFactory;
-import org.openflexo.fib.model.ComponentConstraints;
 import org.openflexo.fib.model.FIBComponent;
-import org.openflexo.model.converter.RelativePathFileConverter;
+import org.openflexo.fib.model.FIBModelFactory;
+import org.openflexo.model.exceptions.InvalidDataException;
+import org.openflexo.model.exceptions.ModelDefinitionException;
 import org.openflexo.toolbox.FileResource;
 import org.openflexo.xmlcode.InvalidModelException;
-import org.openflexo.xmlcode.StringEncoder;
-import org.openflexo.xmlcode.StringEncoder.Converter;
-import org.openflexo.xmlcode.XMLCoder;
 import org.openflexo.xmlcode.XMLDecoder;
 import org.openflexo.xmlcode.XMLMapping;
 
@@ -55,22 +52,27 @@ public class FIBLibrary {
 	protected static XMLMapping _fibMapping;
 	private static FIBLibrary _current;
 
-	private Map<String, FIBComponent> _fibDefinitions;
-	private Map<File, FIBComponent> fibFileDefinitions;
+	private final Map<String, FIBComponent> _fibDefinitions;
+	private final Map<File, FIBComponent> fibFileDefinitions;
 
-	private BindingFactory bindingFactory = new JavaBindingFactory();
+	private final BindingFactory bindingFactory = new JavaBindingFactory();
+
+	private FIBModelFactory fibModelFactory;
 
 	private FIBLibrary() {
 		super();
 		_fibDefinitions = new Hashtable<String, FIBComponent>();
 		fibFileDefinitions = new Hashtable<File, FIBComponent>();
+		try {
+			fibModelFactory = new FIBModelFactory();
+		} catch (ModelDefinitionException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		}
 	}
 
 	protected static FIBLibrary createInstance() {
 		_current = new FIBLibrary();
-
-		StringEncoder.getDefaultInstance()._addConverter(DataBinding.CONVERTER);
-		StringEncoder.getDefaultInstance()._addConverter(ComponentConstraints.CONVERTER);
 
 		return _current;
 	}
@@ -84,6 +86,10 @@ public class FIBLibrary {
 
 	public static boolean hasInstance() {
 		return _current != null;
+	}
+
+	public FIBModelFactory getFIBModelFactory() {
+		return fibModelFactory;
 	}
 
 	public BindingFactory getBindingFactory() {
@@ -139,33 +145,37 @@ public class FIBLibrary {
 			if (logger.isLoggable(Level.FINE)) {
 				logger.fine("Load " + fibFile.getAbsolutePath());
 			}
-			RelativePathFileConverter relativePathFileConverter = new RelativePathFileConverter(fibFile.getParentFile());
-			Converter<File> previousConverter = StringEncoder.getDefaultInstance()._converterForClass(File.class);
-			StringEncoder.getDefaultInstance()._addConverter(relativePathFileConverter);
 
-			FileInputStream inputStream = null;
+			FileInputStream fis = null;
+
 			try {
-				inputStream = new FileInputStream(fibFile);
-				FIBComponent component = loadFIBComponent(inputStream);
+				FIBModelFactory factory = new FIBModelFactory(fibFile.getParentFile());
+
+				fis = new FileInputStream(fibFile);
+				FIBComponent component = (FIBComponent) factory.deserialize(fis);
 				component.setLastModified(new Date(fibFile.lastModified()));
 				component.setDefinitionFile(fibFile.getAbsolutePath());
 				fibFileDefinitions.put(fibFile, component);
 				return component;
+			} catch (ModelDefinitionException e) {
+				// TODO Auto-generated catch block
+				e.printStackTrace();
 			} catch (FileNotFoundException e) {
-				logger.warning("Not found: " + fibFile.getAbsolutePath());
-				return null;
+				// TODO Auto-generated catch block
+				e.printStackTrace();
 			} catch (IOException e) {
-				logger.warning("IO exception: " + fibFile.getAbsolutePath());
-
+				// TODO Auto-generated catch block
 				e.printStackTrace();
-				return null;
 			} catch (JDOMException e) {
-				logger.warning("Parse exception for: " + fibFile.getAbsolutePath());
+				// TODO Auto-generated catch block
 				e.printStackTrace();
-				return null;
+			} catch (InvalidDataException e) {
+				// TODO Auto-generated catch block
+				e.printStackTrace();
 			} finally {
-				IOUtils.closeQuietly(inputStream);
-				StringEncoder.getDefaultInstance()._addConverter(previousConverter);
+				if (fis != null) {
+					IOUtils.closeQuietly(fis);
+				}
 			}
 		}
 		return fibComponent;
@@ -193,7 +203,8 @@ public class FIBLibrary {
 
 			try {
 				if (getFIBMapping() != null) {
-					FIBComponent fibComponent = loadFIBComponent(inputStream);
+					FIBComponent fibComponent = (FIBComponent) XMLDecoder.decodeObjectWithMapping(inputStream, getFIBMapping(), this);
+
 					fibComponent.setDefinitionFile(fibIdentifier);
 					_fibDefinitions.put(fibIdentifier, fibComponent);
 				}
@@ -205,10 +216,6 @@ public class FIBLibrary {
 			}
 		}
 		return _fibDefinitions.get(fibIdentifier);
-	}
-
-	private FIBComponent loadFIBComponent(InputStream inputStream) throws IOException, JDOMException {
-		return (FIBComponent) XMLDecoder.decodeObjectWithMapping(inputStream, getFIBMapping(), this);
 	}
 
 	public static boolean save(FIBComponent component, File file) {
@@ -227,17 +234,24 @@ public class FIBLibrary {
 		return false;
 	}
 
-	public static void saveComponentToStream(FIBComponent component, File file, OutputStream stream) {
-		System.out.println("Relative path: " + file.getParentFile());
-		RelativePathFileConverter relativePathFileConverter = new RelativePathFileConverter(file.getParentFile());
-		XMLCoder coder = new XMLCoder(getFIBMapping(), new StringEncoder(StringEncoder.getDefaultInstance(), relativePathFileConverter));
+	public static void saveComponentToStream(FIBComponent component, File fibFile, OutputStream stream) {
+
 		try {
-			coder.encodeObject(component, stream);
-			logger.info("Succeeded to save: " + file);
-			// System.out.println("> "+coder.encodeObject(component));
-		} catch (Exception e) {
-			logger.warning("Failed to save: " + file + " unexpected exception: " + e.getMessage());
+			FIBModelFactory factory = new FIBModelFactory(fibFile.getParentFile());
+
+			factory.serialize(component, stream);
+			logger.info("Succeeded to save: " + fibFile);
+		} catch (ModelDefinitionException e) {
+			logger.warning("Failed to save: " + fibFile + " unexpected exception: " + e.getMessage());
 			e.printStackTrace();
+		} catch (FileNotFoundException e) {
+			logger.warning("Failed to save: " + fibFile + " unexpected exception: " + e.getMessage());
+			e.printStackTrace();
+		} catch (IOException e) {
+			logger.warning("Failed to save: " + fibFile + " unexpected exception: " + e.getMessage());
+			e.printStackTrace();
+		} finally {
+			IOUtils.closeQuietly(stream);
 		}
 	}
 

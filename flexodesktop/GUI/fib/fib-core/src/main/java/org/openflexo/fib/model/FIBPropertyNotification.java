@@ -19,22 +19,16 @@
  */
 package org.openflexo.fib.model;
 
-import org.openflexo.fib.model.FIBModelObject.FIBModelAttribute;
+public class FIBPropertyNotification<T extends Object> extends FIBModelNotification<T> {
+	private final FIBProperty<T> property;
 
-public class FIBAttributeNotification<T extends Object> extends FIBModelNotification<T> {
-	private FIBModelAttribute attribute;
-
-	public FIBAttributeNotification(FIBModelAttribute attribute, T oldValue, T newValue) {
-		super(attribute.name(), oldValue, newValue);
-		this.attribute = attribute;
+	public FIBPropertyNotification(FIBProperty<T> property, T oldValue, T newValue) {
+		super(property.getName(), oldValue, newValue);
+		this.property = property;
 	}
 
-	public FIBAttributeNotification(FIBModelAttribute attribute, T value) {
-		this(attribute, value, value);
-	}
-
-	public FIBModelAttribute getAttribute() {
-		return attribute;
+	public FIBProperty<T> getAttribute() {
+		return property;
 	}
 
 	@Override

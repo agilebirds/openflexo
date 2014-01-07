@@ -19,29 +19,52 @@
  */
 package org.openflexo.fib.model;
 
-public class FIBTab extends FIBPanel {
+import org.openflexo.model.annotations.Getter;
+import org.openflexo.model.annotations.ImplementationClass;
+import org.openflexo.model.annotations.ModelEntity;
+import org.openflexo.model.annotations.PropertyIdentifier;
+import org.openflexo.model.annotations.Setter;
+import org.openflexo.model.annotations.XMLAttribute;
+import org.openflexo.model.annotations.XMLElement;
 
-	private String title;
+@ModelEntity
+@ImplementationClass(FIBTab.FIBTabImpl.class)
+@XMLElement(xmlTag = "Tab")
+public interface FIBTab extends FIBPanel {
 
-	public static enum Parameters implements FIBModelAttribute {
-		title
-	}
+	@PropertyIdentifier(type = String.class)
+	public static final String TITLE_KEY = "title";
+	public static final String PARAMETERS_KEY = "parameters";
 
-	@Override
-	public String getIdentifier() {
-		return getTitle();
-	}
+	@Getter(value = TITLE_KEY)
+	@XMLAttribute
+	public String getTitle();
 
-	public String getTitle() {
-		return title;
-	}
+	@Setter(TITLE_KEY)
+	public void setTitle(String title);
 
-	public void setTitle(String title) {
-		FIBAttributeNotification<String> notification = requireChange(Parameters.title, title);
-		if (notification != null) {
-			this.title = title;
-			hasChanged(notification);
+	public static abstract class FIBTabImpl extends FIBPanelImpl implements FIBTab {
+
+		private String title;
+
+		@Override
+		public String getIdentifier() {
+			return getTitle();
 		}
-	}
 
+		@Override
+		public String getTitle() {
+			return title;
+		}
+
+		@Override
+		public void setTitle(String title) {
+			FIBPropertyNotification<String> notification = requireChange(TITLE_KEY, title);
+			if (notification != null) {
+				this.title = title;
+				hasChanged(notification);
+			}
+		}
+
+	}
 }

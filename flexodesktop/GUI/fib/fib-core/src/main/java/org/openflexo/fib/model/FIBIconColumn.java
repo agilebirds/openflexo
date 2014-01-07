@@ -23,16 +23,26 @@ import java.lang.reflect.Type;
 
 import javax.swing.Icon;
 
-public class FIBIconColumn extends FIBTableColumn {
+import org.openflexo.model.annotations.ImplementationClass;
+import org.openflexo.model.annotations.ModelEntity;
+import org.openflexo.model.annotations.XMLElement;
 
-	@Override
-	public Type getDefaultDataClass() {
-		return Icon.class;
+@ModelEntity
+@ImplementationClass(FIBIconColumn.FIBIconColumnImpl.class)
+@XMLElement(xmlTag = "IconColumn")
+public interface FIBIconColumn extends FIBTableColumn {
+
+	public static abstract class FIBIconColumnImpl extends FIBTableColumnImpl implements FIBIconColumn {
+
+		@Override
+		public Type getDefaultDataClass() {
+			return Icon.class;
+		}
+
+		@Override
+		public ColumnType getColumnType() {
+			return ColumnType.Icon;
+		}
+
 	}
-
-	@Override
-	public ColumnType getColumnType() {
-		return ColumnType.Icon;
-	}
-
 }

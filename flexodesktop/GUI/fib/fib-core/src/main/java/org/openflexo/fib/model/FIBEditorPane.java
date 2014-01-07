@@ -19,12 +19,22 @@
  */
 package org.openflexo.fib.model;
 
+import org.openflexo.model.annotations.Getter;
+import org.openflexo.model.annotations.ImplementationClass;
+import org.openflexo.model.annotations.ModelEntity;
+import org.openflexo.model.annotations.PropertyIdentifier;
+import org.openflexo.model.annotations.Setter;
+import org.openflexo.model.annotations.XMLAttribute;
+import org.openflexo.model.annotations.XMLElement;
 
-public class FIBEditorPane extends FIBTextWidget {
+@ModelEntity
+@ImplementationClass(FIBEditorPane.FIBEditorPaneImpl.class)
+@XMLElement(xmlTag = "EditorPane")
+public interface FIBEditorPane extends FIBTextWidget {
 
 	public enum ContentType {
 		PLAIN("text/plain"), HTML("text/html"), RTF("text/rtf");
-		private String contentType;
+		private final String contentType;
 
 		private ContentType(String contentType) {
 			this.contentType = contentType;
@@ -35,30 +45,38 @@ public class FIBEditorPane extends FIBTextWidget {
 		}
 	}
 
-	private ContentType contentType;
+	@PropertyIdentifier(type = ContentType.class)
+	public static final String CONTENT_TYPE_KEY = "contentType";
 
-	public static enum Parameters implements FIBModelAttribute {
-		contentType;
-	}
+	@Getter(value = CONTENT_TYPE_KEY)
+	@XMLAttribute
+	public ContentType getContentType();
 
-	public FIBEditorPane() {
-	}
+	@Setter(CONTENT_TYPE_KEY)
+	public void setContentType(ContentType contentType);
 
-	@Override
-	protected String getBaseName() {
-		return "EditorPane";
-	}
+	public static abstract class FIBEditorPaneImpl extends FIBTextWidgetImpl implements FIBEditorPane {
 
-	public ContentType getContentType() {
-		return contentType;
-	}
+		private ContentType contentType;
 
-	public void setContentType(ContentType contentType) {
-		FIBAttributeNotification<ContentType> notification = requireChange(Parameters.contentType, contentType);
-		if (notification != null) {
-			this.contentType = contentType;
-			hasChanged(notification);
+		@Override
+		public String getBaseName() {
+			return "EditorPane";
 		}
-	}
 
+		@Override
+		public ContentType getContentType() {
+			return contentType;
+		}
+
+		@Override
+		public void setContentType(ContentType contentType) {
+			FIBPropertyNotification<ContentType> notification = requireChange(CONTENT_TYPE_KEY, contentType);
+			if (notification != null) {
+				this.contentType = contentType;
+				hasChanged(notification);
+			}
+		}
+
+	}
 }

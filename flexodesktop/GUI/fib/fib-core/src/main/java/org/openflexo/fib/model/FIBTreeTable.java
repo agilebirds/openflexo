@@ -1,56 +1,15 @@
 package org.openflexo.fib.model;
 
-import java.util.ArrayList;
-import java.util.List;
+import org.openflexo.model.annotations.ImplementationClass;
+import org.openflexo.model.annotations.ModelEntity;
+import org.openflexo.model.annotations.XMLElement;
 
-import org.openflexo.antar.binding.BindingModel;
+@ModelEntity
+@ImplementationClass(FIBTreeTable.FIBTreeTableImpl.class)
+@XMLElement(xmlTag = "TreeTable")
+public interface FIBTreeTable extends FIBBrowser, FIBTable {
 
-public class FIBTreeTable extends FIBBrowser implements FIBTableComponent {
+	public static abstract class FIBTreeTableImpl extends FIBBrowserImpl implements FIBTreeTable {
 
-	public static enum Parameters implements FIBModelAttribute {
-		columns;
 	}
-
-	private List<FIBTableColumn> columns;
-
-	public FIBTreeTable() {
-		columns = new ArrayList<FIBTableColumn>();
-	}
-
-	public FIBTableColumn getColumnWithTitle(String title) {
-		for (FIBTableColumn c : columns) {
-			if (title.equals(c.getTitle())) {
-				return c;
-			}
-		}
-		return null;
-	}
-
-	@Override
-	public List<FIBTableColumn> getColumns() {
-		return columns;
-	}
-
-	public void setColumns(List<FIBTableColumn> columns) {
-		this.columns = columns;
-	}
-
-	public void addToColumns(FIBTableColumn aColumn) {
-		aColumn.setTable(this);
-		columns.add(aColumn);
-		getPropertyChangeSupport().firePropertyChange(Parameters.columns.name(), null, columns);
-	}
-
-	public void removeFromColumns(FIBTableColumn aColumn) {
-		aColumn.setTable(null);
-		columns.remove(aColumn);
-		getPropertyChangeSupport().firePropertyChange(Parameters.columns.name(), null, columns);
-	}
-
-	@Override
-	public BindingModel getTableBindingModel() {
-		// TODO Auto-generated method stub
-		return null;
-	}
-
 }

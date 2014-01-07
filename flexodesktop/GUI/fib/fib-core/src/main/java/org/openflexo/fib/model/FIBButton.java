@@ -25,132 +25,198 @@ import javax.swing.Icon;
 
 import org.openflexo.antar.binding.BindingDefinition;
 import org.openflexo.antar.binding.DataBinding;
-import org.openflexo.antar.binding.DataBinding.BindingDefinitionType;
 import org.openflexo.fib.model.validation.ValidationReport;
+import org.openflexo.model.annotations.Getter;
+import org.openflexo.model.annotations.ImplementationClass;
+import org.openflexo.model.annotations.ModelEntity;
+import org.openflexo.model.annotations.PropertyIdentifier;
+import org.openflexo.model.annotations.Setter;
+import org.openflexo.model.annotations.XMLAttribute;
+import org.openflexo.model.annotations.XMLElement;
 
-public class FIBButton extends FIBWidget {
-
-	@Deprecated
-	public static BindingDefinition BUTTON_ICON = new BindingDefinition("buttonIcon", Icon.class, DataBinding.BindingDefinitionType.GET, false);
-	@Deprecated
-	public static BindingDefinition ACTION = new BindingDefinition("action", Object.class, DataBinding.BindingDefinitionType.EXECUTE, false);
+@ModelEntity
+@ImplementationClass(FIBButton.FIBButtonImpl.class)
+@XMLElement(xmlTag = "Button")
+public interface FIBButton extends FIBWidget {
 
 	public static enum ButtonType {
 		Trigger, Toggle
 	}
 
-	public static enum Parameters implements FIBModelAttribute {
-		action, buttonType, label, isDefault, buttonIcon;
-	}
+	@PropertyIdentifier(type = DataBinding.class)
+	public static final String ACTION_KEY = "action";
+	@PropertyIdentifier(type = DataBinding.class)
+	public static final String BUTTON_ICON_KEY = "buttonIcon";
+	@PropertyIdentifier(type = ButtonType.class)
+	public static final String BUTTON_TYPE_KEY = "buttonType";
+	@PropertyIdentifier(type = String.class)
+	public static final String LABEL_KEY = "label";
+	@PropertyIdentifier(type = Boolean.class)
+	public static final String IS_DEFAULT_KEY = "isDefault";
 
-	private DataBinding<Object> action;
-	private ButtonType buttonType = ButtonType.Trigger;
-	private String label;
-	private Boolean isDefault;
-	private DataBinding<Icon> buttonIcon;
+	@Getter(value = ACTION_KEY)
+	@XMLAttribute
+	public DataBinding<Object> getAction();
 
-	public FIBButton() {
-	}
+	@Setter(ACTION_KEY)
+	public void setAction(DataBinding<Object> action);
 
-	@Override
-	protected String getBaseName() {
-		return "Button";
-	}
+	@Getter(value = BUTTON_ICON_KEY)
+	@XMLAttribute
+	public DataBinding<Icon> getButtonIcon();
 
-	@Override
-	public String getIdentifier() {
-		return getLabel();
-	}
+	@Setter(BUTTON_ICON_KEY)
+	public void setButtonIcon(DataBinding<Icon> buttonIcon);
 
-	@Override
-	public Type getDefaultDataClass() {
-		return String.class;
-	}
+	@Getter(value = BUTTON_TYPE_KEY)
+	@XMLAttribute
+	public ButtonType getButtonType();
 
-	public DataBinding<Object> getAction() {
-		if (action == null) {
-			action = new DataBinding<Object>(this, Object.class, DataBinding.BindingDefinitionType.EXECUTE);
-		}
-		return action;
-	}
+	@Setter(BUTTON_TYPE_KEY)
+	public void setButtonType(ButtonType buttonType);
 
-	public void setAction(DataBinding<Object> action) {
-		if (action != null) {
-			action.setOwner(this);
-			action.setDeclaredType(Void.TYPE);
-			action.setBindingDefinitionType(DataBinding.BindingDefinitionType.EXECUTE);
-		}
-		this.action = action;
-	}
+	@Getter(value = LABEL_KEY)
+	@XMLAttribute
+	public String getLabel();
 
-	public ButtonType getButtonType() {
-		return buttonType;
-	}
+	@Setter(LABEL_KEY)
+	public void setLabel(String label);
 
-	public void setButtonType(ButtonType buttonType) {
-		FIBAttributeNotification<ButtonType> notification = requireChange(Parameters.buttonType, buttonType);
-		if (notification != null) {
-			this.buttonType = buttonType;
-			hasChanged(notification);
-		}
-	}
+	@Getter(value = IS_DEFAULT_KEY)
+	@XMLAttribute(xmlTag = "default")
+	public Boolean isDefault();
 
-	public String getLabel() {
-		return label;
-	}
+	@Setter(IS_DEFAULT_KEY)
+	public void setIsDefault(Boolean isDefault);
 
-	public void setLabel(String label) {
-		FIBAttributeNotification<String> notification = requireChange(Parameters.label, label);
-		if (notification != null) {
-			this.label = label;
-			hasChanged(notification);
-		}
-	}
+	public static abstract class FIBButtonImpl extends FIBWidgetImpl implements FIBButton {
 
-	public Boolean isDefault() {
-		return isDefault;
-	}
+		@Deprecated
+		public static BindingDefinition BUTTON_ICON = new BindingDefinition("buttonIcon", Icon.class,
+				DataBinding.BindingDefinitionType.GET, false);
+		@Deprecated
+		public static BindingDefinition ACTION = new BindingDefinition("action", Object.class, DataBinding.BindingDefinitionType.EXECUTE,
+				false);
 
-	public void setIsDefault(Boolean isDefault) {
-		FIBAttributeNotification<Boolean> notification = requireChange(Parameters.isDefault, isDefault);
-		if (notification != null) {
-			this.isDefault = isDefault;
-			hasChanged(notification);
-		}
-	}
+		private DataBinding<Object> action;
+		private ButtonType buttonType = ButtonType.Trigger;
+		private String label;
+		private Boolean isDefault;
+		private DataBinding<Icon> buttonIcon;
 
-	public DataBinding<Icon> getButtonIcon() {
-		if (buttonIcon == null) {
-			buttonIcon = new DataBinding<Icon>(this, Icon.class, DataBinding.BindingDefinitionType.GET);
-		}
-		return buttonIcon;
-	}
-
-	public void setButtonIcon(DataBinding<Icon> buttonIcon) {
-		if (buttonIcon != null) {
-			buttonIcon.setOwner(this);
-			buttonIcon.setDeclaredType(Icon.class);
-			buttonIcon.setBindingDefinitionType(DataBinding.BindingDefinitionType.GET);
-		}
-		this.buttonIcon = buttonIcon;
-	}
-
-	@Override
-	protected void applyValidation(ValidationReport report) {
-		super.applyValidation(report);
-		performValidation(ActionBindingMustBeValid.class, report);
-	}
-
-	public static class ActionBindingMustBeValid extends BindingMustBeValid<FIBButton> {
-		public ActionBindingMustBeValid() {
-			super("'action'_binding_is_not_valid", FIBButton.class);
+		public FIBButtonImpl() {
 		}
 
 		@Override
-		public DataBinding getBinding(FIBButton object) {
-			return object.getAction();
+		public String getBaseName() {
+			return "Button";
+		}
+
+		@Override
+		public String getIdentifier() {
+			return getLabel();
+		}
+
+		@Override
+		public Type getDefaultDataClass() {
+			return String.class;
+		}
+
+		@Override
+		public DataBinding<Object> getAction() {
+			if (action == null) {
+				action = new DataBinding<Object>(this, Object.class, DataBinding.BindingDefinitionType.EXECUTE);
+			}
+			return action;
+		}
+
+		@Override
+		public void setAction(DataBinding<Object> action) {
+			if (action != null) {
+				action.setOwner(this);
+				action.setDeclaredType(Void.TYPE);
+				action.setBindingDefinitionType(DataBinding.BindingDefinitionType.EXECUTE);
+			}
+			this.action = action;
+		}
+
+		@Override
+		public ButtonType getButtonType() {
+			return buttonType;
+		}
+
+		@Override
+		public void setButtonType(ButtonType buttonType) {
+			FIBPropertyNotification<ButtonType> notification = requireChange(BUTTON_TYPE_KEY, buttonType);
+			if (notification != null) {
+				this.buttonType = buttonType;
+				hasChanged(notification);
+			}
+		}
+
+		@Override
+		public String getLabel() {
+			return label;
+		}
+
+		@Override
+		public void setLabel(String label) {
+			FIBPropertyNotification<String> notification = requireChange(LABEL_KEY, label);
+			if (notification != null) {
+				this.label = label;
+				hasChanged(notification);
+			}
+		}
+
+		@Override
+		public Boolean isDefault() {
+			return isDefault;
+		}
+
+		@Override
+		public void setIsDefault(Boolean isDefault) {
+			FIBPropertyNotification<Boolean> notification = requireChange(IS_DEFAULT_KEY, isDefault);
+			if (notification != null) {
+				this.isDefault = isDefault;
+				hasChanged(notification);
+			}
+		}
+
+		@Override
+		public DataBinding<Icon> getButtonIcon() {
+			if (buttonIcon == null) {
+				buttonIcon = new DataBinding<Icon>(this, Icon.class, DataBinding.BindingDefinitionType.GET);
+			}
+			return buttonIcon;
+		}
+
+		@Override
+		public void setButtonIcon(DataBinding<Icon> buttonIcon) {
+			if (buttonIcon != null) {
+				buttonIcon.setOwner(this);
+				buttonIcon.setDeclaredType(Icon.class);
+				buttonIcon.setBindingDefinitionType(DataBinding.BindingDefinitionType.GET);
+			}
+			this.buttonIcon = buttonIcon;
+		}
+
+		@Override
+		protected void applyValidation(ValidationReport report) {
+			super.applyValidation(report);
+			performValidation(ActionBindingMustBeValid.class, report);
+		}
+
+		public static class ActionBindingMustBeValid extends BindingMustBeValid<FIBButton> {
+			public ActionBindingMustBeValid() {
+				super("'action'_binding_is_not_valid", FIBButton.class);
+			}
+
+			@Override
+			public DataBinding getBinding(FIBButton object) {
+				return object.getAction();
+			}
+
 		}
 
 	}
-
 }

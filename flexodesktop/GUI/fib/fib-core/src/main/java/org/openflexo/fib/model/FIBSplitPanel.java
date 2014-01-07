@@ -23,6 +23,12 @@ import java.util.List;
 import java.util.Vector;
 
 import org.openflexo.fib.model.FIBPanel.Layout;
+import org.openflexo.model.annotations.Getter;
+import org.openflexo.model.annotations.ImplementationClass;
+import org.openflexo.model.annotations.ModelEntity;
+import org.openflexo.model.annotations.PropertyIdentifier;
+import org.openflexo.model.annotations.Setter;
+import org.openflexo.model.annotations.XMLElement;
 import org.openflexo.swing.layout.MultiSplitLayout.ColSplit;
 import org.openflexo.swing.layout.MultiSplitLayout.Divider;
 import org.openflexo.swing.layout.MultiSplitLayout.Leaf;
@@ -30,166 +36,192 @@ import org.openflexo.swing.layout.MultiSplitLayout.Node;
 import org.openflexo.swing.layout.MultiSplitLayout.RowSplit;
 import org.openflexo.swing.layout.MultiSplitLayout.Split;
 
-public class FIBSplitPanel extends FIBContainer {
+@ModelEntity
+@ImplementationClass(FIBSplitPanel.FIBSplitPanelImpl.class)
+@XMLElement(xmlTag = "SplitPanel")
+public interface FIBSplitPanel extends FIBContainer {
 
-	public static enum Parameters implements FIBModelAttribute {
-		split
-	}
+	@PropertyIdentifier(type = Split.class)
+	public static final String SPLIT_KEY = "split";
 
-	public static final String LEFT = "left";
-	public static final String RIGHT = "right";
-	public static final String TOP = "top";
-	public static final String BOTTOM = "bottom";
+	@Getter(value = SPLIT_KEY)
+	public Split getSplit();
 
-	private Split split;
+	@Setter(SPLIT_KEY)
+	public void setSplit(Split split);
 
-	@Override
-	public Layout getLayout() {
-		return Layout.split;
-	}
+	public String getFirstEmptyPlaceHolder();
 
-	@Override
-	public String getIdentifier() {
-		return null;
-	}
+	public List<Leaf> getAllLeaves();
 
-	public String getFirstEmptyPlaceHolder() {
-		if (getAllLeaves().size() > 0) {
-			return getAllLeaves().get(0).getName();
+	public Leaf getLeafNamed(String aName);
+
+	public void notifySplitLayoutChange();
+
+	public static abstract class FIBSplitPanelImpl extends FIBContainerImpl implements FIBSplitPanel {
+
+		public static final String LEFT = "left";
+		public static final String RIGHT = "right";
+		public static final String TOP = "top";
+		public static final String BOTTOM = "bottom";
+
+		private Split split;
+
+		@Override
+		public Layout getLayout() {
+			return Layout.split;
 		}
-		return "leaf";
-	}
 
-	public Split getSplit() {
-		if (split == null) {
-			split = getDefaultHorizontalLayout();
+		@Override
+		public String getIdentifier() {
+			return null;
 		}
-		return split;
-	}
 
-	public void setSplit(Split split) {
-		FIBAttributeNotification<Split> notification = requireChange(Parameters.split, split);
-		if (notification != null) {
-			this.split = split;
+		@Override
+		public String getFirstEmptyPlaceHolder() {
+			if (getAllLeaves().size() > 0) {
+				return getAllLeaves().get(0).getName();
+			}
+			return "leaf";
+		}
+
+		@Override
+		public Split getSplit() {
+			if (split == null) {
+				split = getDefaultHorizontalLayout();
+			}
+			return split;
+		}
+
+		@Override
+		public void setSplit(Split split) {
+			FIBPropertyNotification<Split> notification = requireChange(SPLIT_KEY, split);
+			if (notification != null) {
+				this.split = split;
+				hasChanged(notification);
+			}
+		}
+
+		protected RowSplit getDefaultHorizontalLayout() {
+			Leaf left = new Leaf(findNextAvailableLeaf(LEFT));
+			left.setWeight(0.5);
+			Leaf right = new Leaf(findNextAvailableLeaf(RIGHT));
+			right.setWeight(0.5);
+			return new RowSplit(left, new Divider(), right);
+		}
+
+		protected ColSplit getDefaultVerticalLayout() {
+			Leaf left = new Leaf(findNextAvailableLeaf(TOP));
+			left.setWeight(0.5);
+			Leaf right = new Leaf(findNextAvailableLeaf(BOTTOM));
+			right.setWeight(0.5);
+			return new ColSplit(left, new Divider(), right);
+		}
+
+		public void makeDefaultHorizontalLayout() {
+			setSplit(getDefaultHorizontalLayout());
+		}
+
+		public void makeDefaultVerticalLayout() {
+			setSplit(getDefaultVerticalLayout());
+		}
+
+		public Divider addDivider(Split parent) {
+			Divider returned = new Divider();
+			parent.addToChildren(returned);
+			notifySplitLayoutChange();
+			return returned;
+		}
+
+		public Leaf addLeaf(Split parent) {
+			Leaf returned = new Leaf(findNextAvailableLeaf("leaf"));
+			parent.addToChildren(returned);
+			notifySplitLayoutChange();
+			return returned;
+		}
+
+		public ColSplit addVerticalSplit(Split parent) {
+			ColSplit returned = new ColSplit();
+			parent.addToChildren(returned);
+			notifySplitLayoutChange();
+			return returned;
+		}
+
+		public RowSplit addHorizontalSplit(Split parent) {
+			RowSplit returned = new RowSplit();
+			parent.addToChildren(returned);
+			notifySplitLayoutChange();
+			return returned;
+		}
+
+		public ColSplit addDefaultVerticalSplit(Split parent) {
+			ColSplit returned = getDefaultVerticalLayout();
+			parent.addToChildren(returned);
+			notifySplitLayoutChange();
+			return returned;
+		}
+
+		public RowSplit addDefaultHorizontalSplit(Split parent) {
+			RowSplit returned = getDefaultHorizontalLayout();
+			parent.addToChildren(returned);
+			notifySplitLayoutChange();
+			return returned;
+		}
+
+		public Node removeNode(Node node) {
+			if (node != getSplit()) {
+				node.getParent().removeFromChildren(node);
+				notifySplitLayoutChange();
+			}
+			return node;
+		}
+
+		@Override
+		public void notifySplitLayoutChange() {
+			FIBPropertyNotification<Split> notification = new FIBPropertyNotification<Split>(
+					(FIBProperty<Split>) FIBProperty.getFIBProperty(getClass(), SPLIT_KEY), null, split);
 			hasChanged(notification);
 		}
-	}
 
-	protected RowSplit getDefaultHorizontalLayout() {
-		Leaf left = new Leaf(findNextAvailableLeaf(LEFT));
-		left.setWeight(0.5);
-		Leaf right = new Leaf(findNextAvailableLeaf(RIGHT));
-		right.setWeight(0.5);
-		return new RowSplit(left, new Divider(), right);
-	}
-
-	protected ColSplit getDefaultVerticalLayout() {
-		Leaf left = new Leaf(findNextAvailableLeaf(TOP));
-		left.setWeight(0.5);
-		Leaf right = new Leaf(findNextAvailableLeaf(BOTTOM));
-		right.setWeight(0.5);
-		return new ColSplit(left, new Divider(), right);
-	}
-
-	public void makeDefaultHorizontalLayout() {
-		setSplit(getDefaultHorizontalLayout());
-	}
-
-	public void makeDefaultVerticalLayout() {
-		setSplit(getDefaultVerticalLayout());
-	}
-
-	public Divider addDivider(Split parent) {
-		Divider returned = new Divider();
-		parent.addToChildren(returned);
-		notifySplitLayoutChange();
-		return returned;
-	}
-
-	public Leaf addLeaf(Split parent) {
-		Leaf returned = new Leaf(findNextAvailableLeaf("leaf"));
-		parent.addToChildren(returned);
-		notifySplitLayoutChange();
-		return returned;
-	}
-
-	public ColSplit addVerticalSplit(Split parent) {
-		ColSplit returned = new ColSplit();
-		parent.addToChildren(returned);
-		notifySplitLayoutChange();
-		return returned;
-	}
-
-	public RowSplit addHorizontalSplit(Split parent) {
-		RowSplit returned = new RowSplit();
-		parent.addToChildren(returned);
-		notifySplitLayoutChange();
-		return returned;
-	}
-
-	public ColSplit addDefaultVerticalSplit(Split parent) {
-		ColSplit returned = getDefaultVerticalLayout();
-		parent.addToChildren(returned);
-		notifySplitLayoutChange();
-		return returned;
-	}
-
-	public RowSplit addDefaultHorizontalSplit(Split parent) {
-		RowSplit returned = getDefaultHorizontalLayout();
-		parent.addToChildren(returned);
-		notifySplitLayoutChange();
-		return returned;
-	}
-
-	public Node removeNode(Node node) {
-		if (node != getSplit()) {
-			node.getParent().removeFromChildren(node);
-			notifySplitLayoutChange();
+		@Override
+		public List<Leaf> getAllLeaves() {
+			Vector<Leaf> returned = new Vector<Leaf>();
+			appendToLeaves(getSplit(), returned);
+			return returned;
 		}
-		return node;
-	}
 
-	public void notifySplitLayoutChange() {
-		FIBAttributeNotification<Split> notification = new FIBAttributeNotification<Split>(Parameters.split, null, split);
-		hasChanged(notification);
-	}
-
-	public List<Leaf> getAllLeaves() {
-		Vector<Leaf> returned = new Vector<Leaf>();
-		appendToLeaves(getSplit(), returned);
-		return returned;
-	}
-
-	private void appendToLeaves(Node n, List<Leaf> returned) {
-		if (n instanceof Leaf) {
-			returned.add((Leaf) n);
-		} else if (n instanceof Split) {
-			for (Node n2 : ((Split) n).getChildren()) {
-				appendToLeaves(n2, returned);
+		private void appendToLeaves(Node n, List<Leaf> returned) {
+			if (n instanceof Leaf) {
+				returned.add((Leaf) n);
+			} else if (n instanceof Split) {
+				for (Node n2 : ((Split) n).getChildren()) {
+					appendToLeaves(n2, returned);
+				}
 			}
 		}
-	}
 
-	public Leaf getLeafNamed(String aName) {
-		for (Leaf l : getAllLeaves()) {
-			if (l.getName().equals(aName)) {
-				return l;
+		@Override
+		public Leaf getLeafNamed(String aName) {
+			for (Leaf l : getAllLeaves()) {
+				if (l.getName().equals(aName)) {
+					return l;
+				}
 			}
+			return null;
 		}
-		return null;
-	}
 
-	public String findNextAvailableLeaf(String baseName) {
-		if (split == null) {
-			return baseName;
+		public String findNextAvailableLeaf(String baseName) {
+			if (split == null) {
+				return baseName;
+			}
+			int i = 2;
+			String tryMe = baseName;
+			while (getLeafNamed(tryMe) != null) {
+				tryMe = baseName + i;
+				i++;
+			}
+			return tryMe;
 		}
-		int i = 2;
-		String tryMe = baseName;
-		while (getLeafNamed(tryMe) != null) {
-			tryMe = baseName + i;
-			i++;
-		}
-		return tryMe;
-	}
 
+	}
 }

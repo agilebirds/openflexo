@@ -19,15 +19,24 @@
  */
 package org.openflexo.fib.model;
 
+import org.openflexo.model.annotations.ImplementationClass;
+import org.openflexo.model.annotations.ModelEntity;
+import org.openflexo.model.annotations.XMLElement;
 
-public class FIBTextPane extends FIBEditorPane {
+@ModelEntity
+@ImplementationClass(FIBTextPane.FIBTextPaneImpl.class)
+@XMLElement(xmlTag = "TextPane")
+public interface FIBTextPane extends FIBEditorPane {
 
-	public FIBTextPane() {
+	public static abstract class FIBTextPaneImpl extends FIBEditorPaneImpl implements FIBTextPane {
+
+		public FIBTextPaneImpl() {
+		}
+
+		@Override
+		public String getBaseName() {
+			return "TextPane";
+		}
+
 	}
-
-	@Override
-	protected String getBaseName() {
-		return "TextPane";
-	}
-
 }

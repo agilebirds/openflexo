@@ -22,35 +22,56 @@ package org.openflexo.fib.model;
 import java.lang.reflect.Type;
 
 import org.openflexo.fib.model.FIBNumber.NumberType;
+import org.openflexo.model.annotations.Getter;
+import org.openflexo.model.annotations.ImplementationClass;
+import org.openflexo.model.annotations.ModelEntity;
+import org.openflexo.model.annotations.PropertyIdentifier;
+import org.openflexo.model.annotations.Setter;
+import org.openflexo.model.annotations.XMLAttribute;
+import org.openflexo.model.annotations.XMLElement;
 
-public class FIBNumberColumn extends FIBTableColumn {
+@ModelEntity
+@ImplementationClass(FIBNumberColumn.FIBNumberColumnImpl.class)
+@XMLElement(xmlTag = "NumberColumn")
+public interface FIBNumberColumn extends FIBTableColumn {
 
-	public static enum Parameters implements FIBModelAttribute {
-		numberType
-	}
+	@PropertyIdentifier(type = NumberType.class)
+	public static final String NUMBER_TYPE_KEY = "numberType";
 
-	private NumberType numberType = NumberType.IntegerType;
+	@Getter(value = NUMBER_TYPE_KEY)
+	@XMLAttribute
+	public NumberType getNumberType();
 
-	public NumberType getNumberType() {
-		return numberType;
-	}
+	@Setter(NUMBER_TYPE_KEY)
+	public void setNumberType(NumberType numberType);
 
-	public void setNumberType(NumberType numberType) {
-		FIBAttributeNotification<NumberType> notification = requireChange(Parameters.numberType, numberType);
-		if (notification != null) {
-			this.numberType = numberType;
-			hasChanged(notification);
+	public static abstract class FIBNumberColumnImpl extends FIBTableColumnImpl implements FIBNumberColumn {
+
+		private NumberType numberType = NumberType.IntegerType;
+
+		@Override
+		public NumberType getNumberType() {
+			return numberType;
 		}
-	}
 
-	@Override
-	public Type getDefaultDataClass() {
-		return Number.class;
-	}
+		@Override
+		public void setNumberType(NumberType numberType) {
+			FIBPropertyNotification<NumberType> notification = requireChange(NUMBER_TYPE_KEY, numberType);
+			if (notification != null) {
+				this.numberType = numberType;
+				hasChanged(notification);
+			}
+		}
 
-	@Override
-	public ColumnType getColumnType() {
-		return ColumnType.Number;
-	}
+		@Override
+		public Type getDefaultDataClass() {
+			return Number.class;
+		}
 
+		@Override
+		public ColumnType getColumnType() {
+			return ColumnType.Number;
+		}
+
+	}
 }

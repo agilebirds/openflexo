@@ -21,60 +21,104 @@ package org.openflexo.fib.model;
 
 import java.util.logging.Logger;
 
-public class FIBRadioButtonList extends FIBMultipleValues {
+import org.openflexo.model.annotations.Getter;
+import org.openflexo.model.annotations.ImplementationClass;
+import org.openflexo.model.annotations.ModelEntity;
+import org.openflexo.model.annotations.PropertyIdentifier;
+import org.openflexo.model.annotations.Setter;
+import org.openflexo.model.annotations.XMLAttribute;
+import org.openflexo.model.annotations.XMLElement;
 
-	public static enum Parameters implements FIBModelAttribute {
-		columns, hGap, vGap
-	}
+@ModelEntity
+@ImplementationClass(FIBRadioButtonList.FIBRadioButtonListImpl.class)
+@XMLElement(xmlTag = "RadioButtonList")
+public interface FIBRadioButtonList extends FIBMultipleValues {
 
-	private int columns = 1;
-	private int hGap = 0;
-	private int vGap = -2;
+	@PropertyIdentifier(type = int.class)
+	public static final String COLUMNS_KEY = "columns";
+	@PropertyIdentifier(type = int.class)
+	public static final String H_GAP_KEY = "HGap";
+	@PropertyIdentifier(type = int.class)
+	public static final String V_GAP_KEY = "VGap";
 
-	private static final Logger logger = Logger.getLogger(FIBRadioButtonList.class.getPackage().getName());
+	@Getter(value = COLUMNS_KEY, defaultValue = "0")
+	@XMLAttribute
+	public int getColumns();
 
-	public FIBRadioButtonList() {
-	}
+	@Setter(COLUMNS_KEY)
+	public void setColumns(int columns);
 
-	@Override
-	protected String getBaseName() {
-		return "RadioButtonList";
-	}
+	@Getter(value = H_GAP_KEY, defaultValue = "0")
+	@XMLAttribute(xmlTag = "hGap")
+	public int getHGap();
 
-	public int getColumns() {
-		return columns;
-	}
+	@Setter(H_GAP_KEY)
+	public void setHGap(int HGap);
 
-	public void setColumns(int columns) {
-		FIBAttributeNotification<Integer> notification = requireChange(Parameters.columns, columns);
-		if (notification != null) {
-			this.columns = columns;
-			hasChanged(notification);
+	@Getter(value = V_GAP_KEY, defaultValue = "0")
+	@XMLAttribute(xmlTag = "vGap")
+	public int getVGap();
+
+	@Setter(V_GAP_KEY)
+	public void setVGap(int VGap);
+
+	public static abstract class FIBRadioButtonListImpl extends FIBMultipleValuesImpl implements FIBRadioButtonList {
+
+		private int columns = 1;
+		private int hGap = 0;
+		private int vGap = -2;
+
+		private static final Logger logger = Logger.getLogger(FIBRadioButtonList.class.getPackage().getName());
+
+		public FIBRadioButtonListImpl() {
 		}
-	}
 
-	public int getHGap() {
-		return hGap;
-	}
-
-	public void setHGap(int hGap) {
-		FIBAttributeNotification<Integer> notification = requireChange(Parameters.hGap, hGap);
-		if (notification != null) {
-			this.hGap = hGap;
-			hasChanged(notification);
+		@Override
+		public String getBaseName() {
+			return "RadioButtonList";
 		}
-	}
 
-	public int getVGap() {
-		return vGap;
-	}
-
-	public void setVGap(int vGap) {
-		FIBAttributeNotification<Integer> notification = requireChange(Parameters.vGap, vGap);
-		if (notification != null) {
-			this.vGap = vGap;
-			hasChanged(notification);
+		@Override
+		public int getColumns() {
+			return columns;
 		}
-	}
 
+		@Override
+		public void setColumns(int columns) {
+			FIBPropertyNotification<Integer> notification = requireChange(COLUMNS_KEY, columns);
+			if (notification != null) {
+				this.columns = columns;
+				hasChanged(notification);
+			}
+		}
+
+		@Override
+		public int getHGap() {
+			return hGap;
+		}
+
+		@Override
+		public void setHGap(int hGap) {
+			FIBPropertyNotification<Integer> notification = requireChange(H_GAP_KEY, hGap);
+			if (notification != null) {
+				this.hGap = hGap;
+				hasChanged(notification);
+			}
+		}
+
+		@Override
+		public int getVGap() {
+			return vGap;
+		}
+
+		@Override
+		public void setVGap(int vGap) {
+			FIBPropertyNotification<Integer> notification = requireChange(V_GAP_KEY, vGap);
+			if (notification != null) {
+				this.vGap = vGap;
+				hasChanged(notification);
+			}
+		}
+
+	}
 }

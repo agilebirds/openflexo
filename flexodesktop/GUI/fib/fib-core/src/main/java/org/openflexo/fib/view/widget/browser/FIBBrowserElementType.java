@@ -82,7 +82,7 @@ public class FIBBrowserElementType implements BindingEvaluationContext, Property
 	@Override
 	public void propertyChange(PropertyChangeEvent evt) {
 		if (evt.getSource() == browserElementDefinition) {
-			((FIBBrowserWidget) controller.viewForComponent(browserElementDefinition.getBrowser())).updateBrowser();
+			((FIBBrowserWidget) controller.viewForComponent(browserElementDefinition.getOwner())).updateBrowser();
 		}
 	}
 
@@ -91,7 +91,7 @@ public class FIBBrowserElementType implements BindingEvaluationContext, Property
 	}
 
 	public FIBBrowser getBrowser() {
-		return browserElementDefinition.getBrowser();
+		return browserElementDefinition.getOwner();
 	}
 
 	public String getLocalized(String key) {

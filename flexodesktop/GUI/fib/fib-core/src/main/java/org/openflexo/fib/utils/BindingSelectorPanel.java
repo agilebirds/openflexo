@@ -76,7 +76,7 @@ import org.openflexo.antar.binding.FunctionPathElement;
 import org.openflexo.antar.binding.TypeUtils;
 import org.openflexo.antar.binding.Typed;
 import org.openflexo.antar.expr.BindingValue;
-import org.openflexo.fib.model.FIBModelObject;
+import org.openflexo.fib.model.FIBModelObject.FIBModelObjectImpl;
 import org.openflexo.fib.utils.BindingSelector.EditionMode;
 import org.openflexo.fib.utils.table.AbstractModel;
 import org.openflexo.fib.utils.table.BindingValueColumn;
@@ -115,7 +115,7 @@ public class BindingSelectorPanel extends AbstractBindingSelectorPanel implement
 
 	JButton createsButton;
 
-	private Map<BindingPathElement, Hashtable<Type, BindingColumnListModel>> _listModels;
+	private final Map<BindingPathElement, Hashtable<Type, BindingColumnListModel>> _listModels;
 
 	Vector<FilteredJList> _lists;
 
@@ -442,7 +442,7 @@ public class BindingSelectorPanel extends AbstractBindingSelectorPanel implement
 		_controlPanel = new ButtonsControlPanel() {
 			@Override
 			public String localizedForKeyAndButton(String key, JButton component) {
-				return FlexoLocalization.localizedForKey(FIBModelObject.LOCALIZATION, key, component);
+				return FlexoLocalization.localizedForKey(FIBModelObjectImpl.LOCALIZATION, key, component);
 			}
 		};
 		connectButton = _controlPanel.addButton("connect", new ActionListener() {
@@ -497,16 +497,16 @@ public class BindingSelectorPanel extends AbstractBindingSelectorPanel implement
 			if (bindingSelector.editionMode == EditionMode.COMPOUND_BINDING) {
 				showHideCompoundBindingsButton.setNormalIcon(FIBIconLibrary.TOGGLE_ARROW_TOP_ICON);
 				showHideCompoundBindingsButton.setMouseOverIcon(FIBIconLibrary.TOGGLE_ARROW_TOP_SELECTED_ICON);
-				showHideCompoundBindingsButton.setToolTipText(FlexoLocalization.localizedForKey(FIBModelObject.LOCALIZATION,
+				showHideCompoundBindingsButton.setToolTipText(FlexoLocalization.localizedForKey(FIBModelObjectImpl.LOCALIZATION,
 						"specify_basic_binding"));
-				showHideCompoundBindingsButtonLabel.setText(FlexoLocalization.localizedForKey(FIBModelObject.LOCALIZATION,
+				showHideCompoundBindingsButtonLabel.setText(FlexoLocalization.localizedForKey(FIBModelObjectImpl.LOCALIZATION,
 						"specify_basic_binding") + "  ");
 			} else {
 				showHideCompoundBindingsButton.setNormalIcon(FIBIconLibrary.TOGGLE_ARROW_BOTTOM_ICON);
 				showHideCompoundBindingsButton.setMouseOverIcon(FIBIconLibrary.TOGGLE_ARROW_BOTTOM_SELECTED_ICON);
-				showHideCompoundBindingsButton.setToolTipText(FlexoLocalization.localizedForKey(FIBModelObject.LOCALIZATION,
+				showHideCompoundBindingsButton.setToolTipText(FlexoLocalization.localizedForKey(FIBModelObjectImpl.LOCALIZATION,
 						"specify_compound_binding"));
-				showHideCompoundBindingsButtonLabel.setText(FlexoLocalization.localizedForKey(FIBModelObject.LOCALIZATION,
+				showHideCompoundBindingsButtonLabel.setText(FlexoLocalization.localizedForKey(FIBModelObjectImpl.LOCALIZATION,
 						"specify_compound_binding") + "  ");
 			}
 
@@ -526,11 +526,11 @@ public class BindingSelectorPanel extends AbstractBindingSelectorPanel implement
 			optionsPanel.add(optionsWestPanel, BorderLayout.WEST);
 		}
 
-		currentTypeLabel = new JLabel(FlexoLocalization.localizedForKey(FIBModelObject.LOCALIZATION, "no_type"), SwingConstants.LEFT);
+		currentTypeLabel = new JLabel(FlexoLocalization.localizedForKey(FIBModelObjectImpl.LOCALIZATION, "no_type"), SwingConstants.LEFT);
 		currentTypeLabel.setFont(new Font("SansSerif", Font.ITALIC, 10));
 		currentTypeLabel.setForeground(Color.GRAY);
 
-		searchedTypeLabel = new JLabel("[" + FlexoLocalization.localizedForKey(FIBModelObject.LOCALIZATION, "no_type") + "]",
+		searchedTypeLabel = new JLabel("[" + FlexoLocalization.localizedForKey(FIBModelObjectImpl.LOCALIZATION, "no_type") + "]",
 				SwingConstants.LEFT);
 		searchedTypeLabel.setFont(new Font("SansSerif", Font.PLAIN, 10));
 		searchedTypeLabel.setForeground(Color.RED);
@@ -1152,8 +1152,8 @@ public class BindingSelectorPanel extends AbstractBindingSelectorPanel implement
 	}
 
 	protected class BindingColumnElement {
-		private BindingPathElement _element;
-		private Type _resultingType;
+		private final BindingPathElement _element;
+		private final Type _resultingType;
 
 		protected BindingColumnElement(BindingPathElement element, Type resultingType) {
 			_element = element;
@@ -1189,7 +1189,7 @@ public class BindingSelectorPanel extends AbstractBindingSelectorPanel implement
 
 		public String getTypeStringRepresentation() {
 			if (getResultingType() == null) {
-				return FlexoLocalization.localizedForKey(FIBModelObject.LOCALIZATION, "no_type");
+				return FlexoLocalization.localizedForKey(FIBModelObjectImpl.LOCALIZATION, "no_type");
 			} else {
 				return TypeUtils.simpleRepresentation(getResultingType());
 			}
@@ -1515,11 +1515,11 @@ public class BindingSelectorPanel extends AbstractBindingSelectorPanel implement
 	}
 
 	private class NormalBindingColumnListModel extends BindingColumnListModel implements Observer {
-		private Type _type;
-		private BindingPathElement _element;
-		private Vector<BindingPathElement> _accessibleProperties;
-		private Vector<BindingPathElement> _accessibleMethods;
-		private Vector<BindingColumnElement> _elements;
+		private final Type _type;
+		private final BindingPathElement _element;
+		private final Vector<BindingPathElement> _accessibleProperties;
+		private final Vector<BindingPathElement> _accessibleMethods;
+		private final Vector<BindingColumnElement> _elements;
 
 		NormalBindingColumnListModel(BindingPathElement element, Type resultingType) {
 			super();
@@ -1614,8 +1614,8 @@ public class BindingSelectorPanel extends AbstractBindingSelectorPanel implement
 	}
 
 	private class RootBindingColumnListModel extends BindingColumnListModel {
-		private BindingModel _myBindingModel;
-		private Vector<BindingColumnElement> _elements;
+		private final BindingModel _myBindingModel;
+		private final Vector<BindingColumnElement> _elements;
 
 		RootBindingColumnListModel(BindingModel bindingModel) {
 			super();
@@ -1656,7 +1656,7 @@ public class BindingSelectorPanel extends AbstractBindingSelectorPanel implement
 
 	protected class TypeResolver extends MouseAdapter implements MouseMotionListener {
 
-		private JList list;
+		private final JList list;
 
 		protected TypeResolver(JList aList) {
 			currentFocused = null;
@@ -1694,8 +1694,8 @@ public class BindingSelectorPanel extends AbstractBindingSelectorPanel implement
 
 	protected class BindingSelectorCellRenderer extends DefaultListCellRenderer {
 
-		private JPanel panel;
-		private JLabel iconLabel;
+		private final JPanel panel;
+		private final JLabel iconLabel;
 
 		public BindingSelectorCellRenderer() {
 			panel = new JPanel(new BorderLayout());

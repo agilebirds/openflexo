@@ -35,7 +35,7 @@ import javax.swing.JPanel;
 
 import org.openflexo.fib.controller.FIBController;
 import org.openflexo.fib.model.FIBDropDown;
-import org.openflexo.fib.model.FIBModelObject;
+import org.openflexo.fib.model.FIBModelObject.FIBModelObjectImpl;
 import org.openflexo.localization.FlexoLocalization;
 import org.openflexo.toolbox.ToolBox;
 
@@ -54,7 +54,7 @@ public class FIBDropDownWidget<T> extends FIBMultipleValueWidget<FIBDropDown, JC
 		initJComboBox();
 		dropdownPanel = new JPanel(new BorderLayout());
 		resetButton = new JButton();
-		resetButton.setText(FlexoLocalization.localizedForKey(FIBModelObject.LOCALIZATION, "reset", resetButton));
+		resetButton.setText(FlexoLocalization.localizedForKey(FIBModelObjectImpl.LOCALIZATION, "reset", resetButton));
 		resetButton.addActionListener(new ActionListener() {
 			@Override
 			public void actionPerformed(ActionEvent e) {
@@ -68,7 +68,7 @@ public class FIBDropDownWidget<T> extends FIBMultipleValueWidget<FIBDropDown, JC
 		}
 
 		dropdownPanel.add(jComboBox, BorderLayout.CENTER);
-		if (model.showReset) {
+		if (model.getShowReset()) {
 			dropdownPanel.add(resetButton, BorderLayout.EAST);
 		}
 		dropdownPanel.setOpaque(false);
@@ -116,7 +116,7 @@ public class FIBDropDownWidget<T> extends FIBMultipleValueWidget<FIBDropDown, JC
 			// _jComboBox.setSize(dimTemp);
 			jComboBox.setLocation(locTemp);
 			((JPanel) parentTemp).add(jComboBox, BorderLayout.CENTER);
-			if (getWidget().showReset) {
+			if (getWidget().getShowReset()) {
 				((JPanel) parentTemp).add(resetButton, BorderLayout.EAST);
 			}
 		}
@@ -184,10 +184,12 @@ public class FIBDropDownWidget<T> extends FIBMultipleValueWidget<FIBDropDown, JC
 		return (MyComboBoxModel) getMultipleValueModel();
 	}
 
+	@Override
 	protected MyComboBoxModel createMultipleValueModel() {
 		return new MyComboBoxModel(getValue());
 	}
 
+	@Override
 	protected void proceedToListModelUpdate() {
 		if (jComboBox != null) {
 			jComboBox.setModel(getListModel());

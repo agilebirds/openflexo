@@ -25,11 +25,18 @@ import java.lang.reflect.Type;
 
 import javax.swing.SwingConstants;
 
-public class FIBImage extends FIBWidget {
+import org.openflexo.model.annotations.Getter;
+import org.openflexo.model.annotations.ImplementationClass;
+import org.openflexo.model.annotations.ModelEntity;
+import org.openflexo.model.annotations.PropertyIdentifier;
+import org.openflexo.model.annotations.Setter;
+import org.openflexo.model.annotations.XMLAttribute;
+import org.openflexo.model.annotations.XMLElement;
 
-	public static enum Parameters implements FIBModelAttribute {
-		imageFile, align, imageWidth, imageHeight, sizeAdjustment
-	}
+@ModelEntity
+@ImplementationClass(FIBImage.FIBImageImpl.class)
+@XMLElement(xmlTag = "Image")
+public interface FIBImage extends FIBWidget {
 
 	public static enum Align {
 		left {
@@ -57,84 +64,139 @@ public class FIBImage extends FIBWidget {
 		OriginalSize, FitToAvailableSize, FitToAvailableSizeRespectRatio, AdjustWidth, AdjustHeight, AdjustDimensions
 	}
 
-	private File imageFile;
-	private Align align = Align.left;
-	private Integer imageWidth;
-	private Integer imageHeight;
-	private SizeAdjustment sizeAdjustment = SizeAdjustment.OriginalSize;
+	@PropertyIdentifier(type = File.class)
+	public static final String IMAGE_FILE_KEY = "imageFile";
+	@PropertyIdentifier(type = SizeAdjustment.class)
+	public static final String SIZE_ADJUSTMENT_KEY = "sizeAdjustment";
+	@PropertyIdentifier(type = Align.class)
+	public static final String ALIGN_KEY = "align";
+	@PropertyIdentifier(type = Integer.class)
+	public static final String IMAGE_WIDTH_KEY = "imageWidth";
+	@PropertyIdentifier(type = Integer.class)
+	public static final String IMAGE_HEIGHT_KEY = "imageHeight";
 
-	public FIBImage() {
-		super();
-	}
+	@Getter(value = IMAGE_FILE_KEY)
+	@XMLAttribute
+	public File getImageFile();
 
-	@Override
-	protected String getBaseName() {
-		return "Image";
-	}
+	@Setter(IMAGE_FILE_KEY)
+	public void setImageFile(File imageFile);
 
-	@Override
-	public Type getDefaultDataClass() {
-		return Image.class;
-	}
+	@Getter(value = SIZE_ADJUSTMENT_KEY)
+	@XMLAttribute
+	public SizeAdjustment getSizeAdjustment();
 
-	public Align getAlign() {
-		return align;
-	}
+	@Setter(SIZE_ADJUSTMENT_KEY)
+	public void setSizeAdjustment(SizeAdjustment sizeAdjustment);
 
-	public void setAlign(Align align) {
-		FIBAttributeNotification<Align> notification = requireChange(Parameters.align, align);
-		if (notification != null) {
-			this.align = align;
-			hasChanged(notification);
+	@Getter(value = ALIGN_KEY)
+	@XMLAttribute
+	public Align getAlign();
+
+	@Setter(ALIGN_KEY)
+	public void setAlign(Align align);
+
+	@Getter(value = IMAGE_WIDTH_KEY)
+	@XMLAttribute
+	public Integer getImageWidth();
+
+	@Setter(IMAGE_WIDTH_KEY)
+	public void setImageWidth(Integer imageWidth);
+
+	@Getter(value = IMAGE_HEIGHT_KEY)
+	@XMLAttribute
+	public Integer getImageHeight();
+
+	@Setter(IMAGE_HEIGHT_KEY)
+	public void setImageHeight(Integer imageHeight);
+
+	public static abstract class FIBImageImpl extends FIBWidgetImpl implements FIBImage {
+
+		private File imageFile;
+		private Align align = Align.left;
+		private Integer imageWidth;
+		private Integer imageHeight;
+		private SizeAdjustment sizeAdjustment = SizeAdjustment.OriginalSize;
+
+		@Override
+		public String getBaseName() {
+			return "Image";
 		}
-	}
 
-	public File getImageFile() {
-		return imageFile;
-	}
-
-	public void setImageFile(File imageFile) {
-		FIBAttributeNotification<File> notification = requireChange(Parameters.imageFile, imageFile);
-		if (notification != null) {
-			this.imageFile = imageFile;
-			hasChanged(notification);
+		@Override
+		public Type getDefaultDataClass() {
+			return Image.class;
 		}
-	}
 
-	public SizeAdjustment getSizeAdjustment() {
-		return sizeAdjustment;
-	}
-
-	public void setSizeAdjustment(SizeAdjustment sizeAdjustment) {
-		FIBAttributeNotification<SizeAdjustment> notification = requireChange(Parameters.sizeAdjustment, sizeAdjustment);
-		if (notification != null) {
-			this.sizeAdjustment = sizeAdjustment;
-			hasChanged(notification);
+		@Override
+		public Align getAlign() {
+			return align;
 		}
-	}
 
-	public Integer getImageWidth() {
-		return imageWidth;
-	}
-
-	public void setImageWidth(Integer imageWidth) {
-		FIBAttributeNotification<Integer> notification = requireChange(Parameters.imageWidth, imageWidth);
-		if (notification != null) {
-			this.imageWidth = imageWidth;
-			hasChanged(notification);
+		@Override
+		public void setAlign(Align align) {
+			FIBPropertyNotification<Align> notification = requireChange(ALIGN_KEY, align);
+			if (notification != null) {
+				this.align = align;
+				hasChanged(notification);
+			}
 		}
-	}
 
-	public Integer getImageHeight() {
-		return imageHeight;
-	}
-
-	public void setImageHeight(Integer imageHeight) {
-		FIBAttributeNotification<Integer> notification = requireChange(Parameters.imageHeight, imageHeight);
-		if (notification != null) {
-			this.imageHeight = imageHeight;
-			hasChanged(notification);
+		@Override
+		public File getImageFile() {
+			return imageFile;
 		}
-	}
 
+		@Override
+		public void setImageFile(File imageFile) {
+			FIBPropertyNotification<File> notification = requireChange(IMAGE_FILE_KEY, imageFile);
+			if (notification != null) {
+				this.imageFile = imageFile;
+				hasChanged(notification);
+			}
+		}
+
+		@Override
+		public SizeAdjustment getSizeAdjustment() {
+			return sizeAdjustment;
+		}
+
+		@Override
+		public void setSizeAdjustment(SizeAdjustment sizeAdjustment) {
+			FIBPropertyNotification<SizeAdjustment> notification = requireChange(SIZE_ADJUSTMENT_KEY, sizeAdjustment);
+			if (notification != null) {
+				this.sizeAdjustment = sizeAdjustment;
+				hasChanged(notification);
+			}
+		}
+
+		@Override
+		public Integer getImageWidth() {
+			return imageWidth;
+		}
+
+		@Override
+		public void setImageWidth(Integer imageWidth) {
+			FIBPropertyNotification<Integer> notification = requireChange(IMAGE_WIDTH_KEY, imageWidth);
+			if (notification != null) {
+				this.imageWidth = imageWidth;
+				hasChanged(notification);
+			}
+		}
+
+		@Override
+		public Integer getImageHeight() {
+			return imageHeight;
+		}
+
+		@Override
+		public void setImageHeight(Integer imageHeight) {
+			FIBPropertyNotification<Integer> notification = requireChange(IMAGE_HEIGHT_KEY, imageHeight);
+			if (notification != null) {
+				this.imageHeight = imageHeight;
+				hasChanged(notification);
+			}
+		}
+
+	}
 }

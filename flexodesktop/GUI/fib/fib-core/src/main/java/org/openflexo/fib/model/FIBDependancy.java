@@ -19,87 +19,103 @@
  */
 package org.openflexo.fib.model;
 
-import java.util.List;
 import java.util.logging.Logger;
 
-public class FIBDependancy extends FIBModelObject {
+import org.openflexo.model.annotations.Getter;
+import org.openflexo.model.annotations.ImplementationClass;
+import org.openflexo.model.annotations.ModelEntity;
+import org.openflexo.model.annotations.PropertyIdentifier;
+import org.openflexo.model.annotations.Setter;
+import org.openflexo.model.annotations.XMLAttribute;
+import org.openflexo.model.annotations.XMLElement;
 
-	private static final Logger logger = Logger.getLogger(FIBDependancy.class.getPackage().getName());
+@ModelEntity
+@ImplementationClass(FIBDependancy.FIBDependancyImpl.class)
+@XMLElement(xmlTag = "Dependancy")
+public interface FIBDependancy extends FIBModelObject {
 
-	// Owner depends of masterComponent
+	@PropertyIdentifier(type = String.class)
+	public static final String OWNER_KEY = "owner";
 
-	private FIBComponent owner;
-	private FIBComponent masterComponent;
-	private String masterComponentName;
+	@PropertyIdentifier(type = String.class)
+	public static final String MASTER_COMPONENT_NAME_KEY = "masterComponentName";
 
-	public static enum Parameters implements FIBModelAttribute {
-		owner, masterComponent;
-	}
+	@Getter(value = OWNER_KEY, inverse = FIBComponent.EXPLICIT_DEPENDANCIES_KEY)
+	public FIBComponent getOwner();
 
-	@Override
-	public FIBComponent getComponent() {
-		return owner;
-	}
+	@Setter(OWNER_KEY)
+	public void setOwner(FIBComponent owner);
 
-	public FIBComponent getOwner() {
-		return owner;
-	}
+	@Getter(value = MASTER_COMPONENT_NAME_KEY)
+	@XMLAttribute(xmlTag = "componentName")
+	public String getMasterComponentName();
 
-	public void setOwner(FIBComponent owner) {
-		FIBAttributeNotification<FIBComponent> notification = requireChange(Parameters.owner, owner);
-		if (notification != null) {
-			this.owner = owner;
-			hasChanged(notification);
+	@Setter(MASTER_COMPONENT_NAME_KEY)
+	public void setMasterComponentName(String masterComponentName);
+
+	public FIBComponent getMasterComponent();
+
+	public void setMasterComponent(FIBComponent masterComponent);
+
+	public static abstract class FIBDependancyImpl extends FIBModelObjectImpl implements FIBDependancy {
+
+		private static final Logger logger = Logger.getLogger(FIBDependancy.class.getPackage().getName());
+
+		// Owner depends of masterComponent
+
+		private FIBComponent masterComponent;
+		private String masterComponentName;
+
+		@Override
+		public FIBComponent getComponent() {
+			return getOwner();
 		}
-	}
 
-	public FIBComponent getMasterComponent() {
-		return masterComponent;
-	}
+		@Override
+		public FIBComponent getMasterComponent() {
+			return masterComponent;
+		}
 
-	public void setMasterComponent(FIBComponent masterComponent) {
-		FIBAttributeNotification<FIBComponent> notification = requireChange(Parameters.masterComponent, masterComponent);
-		if (notification != null) {
+		@Override
+		public void setMasterComponent(FIBComponent masterComponent) {
+			FIBPropertyNotification<FIBComponent> notification = requireChange(MASTER_COMPONENT_NAME_KEY, masterComponent);
+			if (notification != null) {
+				this.masterComponent = masterComponent;
+				// try {
+				getOwner().declareDependantOf(masterComponent);
+				/*} catch (DependancyLoopException e) {
+					logger.warning("DependancyLoopException raised while applying explicit dependancy for " + getOwner() + " and "
+							+ getMasterComponent() + " message: " + e.getMessage());
+				}*/
+				hasChanged(notification);
+			}
+		}
+
+		public FIBDependancyImpl() {
+			super();
+		}
+
+		public FIBDependancyImpl(FIBComponent masterComponent) {
+			super();
 			this.masterComponent = masterComponent;
-			// try {
-			getOwner().declareDependantOf(masterComponent);
-			/*} catch (DependancyLoopException e) {
-				logger.warning("DependancyLoopException raised while applying explicit dependancy for " + getOwner() + " and "
-						+ getMasterComponent() + " message: " + e.getMessage());
-			}*/
-			hasChanged(notification);
 		}
-	}
 
-	public FIBDependancy() {
-		super();
-	}
-
-	public FIBDependancy(FIBComponent masterComponent) {
-		super();
-		this.masterComponent = masterComponent;
-	}
-
-	public String getMasterComponentName() {
-		if (getMasterComponent() != null) {
-			return getMasterComponent().getName();
+		@Override
+		public String getMasterComponentName() {
+			if (getMasterComponent() != null) {
+				return getMasterComponent().getName();
+			}
+			return masterComponentName;
 		}
-		return masterComponentName;
-	}
 
-	public void setMasterComponentName(String masterComponentName) {
-		this.masterComponentName = masterComponentName;
-	}
+		@Override
+		public void setMasterComponentName(String masterComponentName) {
+			this.masterComponentName = masterComponentName;
+		}
 
-	@Override
-	public void finalizeDeserialization() {
-		super.finalizeDeserialization();
-		setMasterComponent(getComponent().getRootComponent().getComponentNamed(masterComponentName));
-	}
+		public void finalizeDeserialization() {
+			setMasterComponent(getComponent().getRootComponent().getComponentNamed(masterComponentName));
+		}
 
-	@Override
-	public List<? extends FIBModelObject> getEmbeddedObjects() {
-		return null;
 	}
-
 }

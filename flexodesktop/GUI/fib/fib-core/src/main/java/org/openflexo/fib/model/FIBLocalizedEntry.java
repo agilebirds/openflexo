@@ -19,80 +19,60 @@
  */
 package org.openflexo.fib.model;
 
-import java.util.List;
+import org.openflexo.model.annotations.Getter;
+import org.openflexo.model.annotations.ImplementationClass;
+import org.openflexo.model.annotations.ModelEntity;
+import org.openflexo.model.annotations.PropertyIdentifier;
+import org.openflexo.model.annotations.Setter;
+import org.openflexo.model.annotations.XMLAttribute;
+import org.openflexo.model.annotations.XMLElement;
 
-import javax.swing.ImageIcon;
+@ModelEntity
+@ImplementationClass(FIBLocalizedEntry.FIBLocalizedEntryImpl.class)
+@XMLElement(xmlTag = "Localized")
+public interface FIBLocalizedEntry extends FIBModelObject {
 
-import org.openflexo.fib.utils.FIBIconLibrary;
+	@PropertyIdentifier(type = FIBLocalizedDictionary.class)
+	public static final String DICTIONARY_KEY = "dictionary";
+	@PropertyIdentifier(type = String.class)
+	public static final String KEY_KEY = "key";
+	@PropertyIdentifier(type = String.class)
+	public static final String LANGUAGE_KEY = "language";
+	@PropertyIdentifier(type = String.class)
+	public static final String VALUE_KEY = "value";
 
-public class FIBLocalizedEntry extends FIBModelObject {
+	@Getter(value = DICTIONARY_KEY, inverse = FIBLocalizedDictionary.ENTRIES_KEY)
+	public FIBLocalizedDictionary getLocalizedDictionary();
 
-	private FIBLocalizedDictionary _dictionary;
+	@Setter(DICTIONARY_KEY)
+	public void setLocalizedDictionary(FIBLocalizedDictionary dict);
 
-	private String key;
-	private String language;
-	private String value;
+	@Getter(value = KEY_KEY)
+	@XMLAttribute
+	public String getKey();
 
-	public FIBLocalizedEntry() {
+	@Setter(KEY_KEY)
+	public void setKey(String key);
+
+	@Getter(value = LANGUAGE_KEY)
+	@XMLAttribute(xmlTag = "lang")
+	public String getLanguage();
+
+	@Setter(LANGUAGE_KEY)
+	public void setLanguage(String language);
+
+	@Getter(value = VALUE_KEY)
+	public String getValue();
+
+	@Setter(VALUE_KEY)
+	public void setValue(String value);
+
+	public static abstract class FIBLocalizedEntryImpl extends FIBModelObjectImpl implements FIBLocalizedEntry {
+
+		@Override
+		public FIBComponent getComponent() {
+			return getLocalizedDictionary().getComponent();
+		}
+
 	}
-
-	public FIBLocalizedEntry(FIBLocalizedDictionary dictionary, String key, String language, String value) {
-		super();
-		_dictionary = dictionary;
-		this.key = key;
-		this.language = language;
-		this.value = value;
-	}
-
-	public void setLocalizedDictionary(FIBLocalizedDictionary dict) {
-		_dictionary = dict;
-	}
-
-	public FIBLocalizedDictionary getLocalizedDictionary() {
-		return _dictionary;
-	}
-
-	public String getKey() {
-		return key;
-	}
-
-	public void setKey(String key) {
-		this.key = key;
-	}
-
-	public String getLanguage() {
-		return language;
-	}
-
-	public void setLanguage(String language) {
-		this.language = language;
-	}
-
-	public String getValue() {
-		return value;
-	}
-
-	public void setValue(String value) {
-		this.value = value;
-	}
-
-	public String getInspectorName() {
-		// TODO Auto-generated method stub
-		return null;
-	}
-
-	public ImageIcon getIcon() {
-		return FIBIconLibrary.LOCALIZATION_ICON;
-	}
-
-	@Override
-	public FIBComponent getComponent() {
-		return getLocalizedDictionary().getComponent();
-	}
-
-	@Override
-	public List<? extends FIBModelObject> getEmbeddedObjects() {
-		return null;
-	}
-
 }
