@@ -80,7 +80,12 @@ public class PAMELAGenerator {
 		}
 
 		for (File f : sourcesToWrite.keySet()) {
-			saveToFile(f, sourcesToWrite.get(f), null);
+			try {
+				saveToFile(f, sourcesToWrite.get(f), null);
+			} catch (IOException e) {
+				// TODO Auto-generated catch block
+				e.printStackTrace();
+			}
 		}
 
 		/*Class builderClass = xmlMapping.builderClass();
