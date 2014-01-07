@@ -66,13 +66,13 @@ public class PAMELAGenerator {
 				System.err.println("ERROR: cannot lookup source file for " + entity.getName());
 			} else {
 				System.out.println("Processing source file: " + sourceFile);
+				try {
+					generateEntity(entity, sourceFile);
+				} catch (IOException e) {
+					// TODO Auto-generated catch block
+					e.printStackTrace();
+				}
 			}
-			/*try {
-				generateEntity(entity, sourceFile);
-			} catch (IOException e) {
-				// TODO Auto-generated catch block
-				e.printStackTrace();
-			}*/
 		}
 
 		/*Class builderClass = xmlMapping.builderClass();
@@ -92,7 +92,8 @@ public class PAMELAGenerator {
 	private File getSourceFile(Class clazz, File dir) {
 		StringTokenizer st = new StringTokenizer(clazz.getName(), ".");
 		File current = dir;
-		while (st.hasMoreElements()) {
+		boolean stopSearch = false;
+		while (st.hasMoreElements() && !stopSearch) {
 			String path = st.nextToken();
 			File tryThis;
 			if (st.hasMoreElements()) {
@@ -107,13 +108,27 @@ public class PAMELAGenerator {
 			if (tryThis.exists()) {
 				current = tryThis;
 			} else {
-				return null;
+				stopSearch = true;
 			}
 		}
-		if (current.exists()) {
-			// System.out.println("Found: " + current + " for " + clazz);
+		if (current.exists() && !stopSearch) {
+			System.out.println("Found: " + current + " for " + clazz);
 			return current;
 		}
+
+		// System.out.println("Cannot find " + clazz + " in " + dir + ". Looking inside");
+
+		if (dir.isDirectory()) {
+			for (File d : dir.listFiles()) {
+				if (d.isDirectory()) {
+					File returned = getSourceFile(clazz, d);
+					if (returned != null) {
+						return returned;
+					}
+				}
+			}
+		}
+
 		return null;
 	}
 
@@ -159,7 +174,7 @@ public class PAMELAGenerator {
 		// File outputFile = new File(sourceFile.getParent(), entity.getRelatedClass().getSimpleName() + "2.java");
 		// saveToFile(outputFile, sb.toString(), null);
 
-		// saveToFile(sourceFile, sb.toString(), null);
+		saveToFile(sourceFile, sb.toString(), null);
 	}
 
 	private String buildInterfaceInnerSourceCode(ModelEntity entity) {
@@ -259,12 +274,27 @@ public class PAMELAGenerator {
 				}
 			}
 
-			getterCode += "public " + typeAsString + " " + property.getKeyValueProperty().getGetMethod().getName() + "();" + LINE_SEPARATOR;
+			String getMethodName;
+			if (property.getKeyValueProperty().getGetMethod() != null) {
+				getMethodName = property.getKeyValueProperty().getGetMethod().getName();
+			} else {
+				String propertyNameWithFirstCharToUpperCase = property.getName().substring(0, 1).toUpperCase()
+						+ property.getName().substring(1, property.getName().length());
+				getMethodName = "get" + propertyNameWithFirstCharToUpperCase;
+			}
+			getterCode += "public " + typeAsString + " " + getMethodName + "();" + LINE_SEPARATOR;
 
 			setterCode = "@Setter(" + identifier + ")" + LINE_SEPARATOR;
 
-			setterCode += "public void " + property.getKeyValueProperty().getSetMethod().getName() + "(" + typeAsString + " "
-					+ property.getName() + ");" + LINE_SEPARATOR;
+			String setMethodName;
+			if (property.getKeyValueProperty().getSetMethod() != null) {
+				setMethodName = property.getKeyValueProperty().getSetMethod().getName();
+			} else {
+				String propertyNameWithFirstCharToUpperCase = property.getName().substring(0, 1).toUpperCase()
+						+ property.getName().substring(1, property.getName().length());
+				setMethodName = "set" + propertyNameWithFirstCharToUpperCase;
+			}
+			setterCode += "public void " + setMethodName + "(" + typeAsString + " " + property.getName() + ");" + LINE_SEPARATOR;
 
 			if (property.isVector()) {
 				VectorKeyValueProperty kvProperty = (VectorKeyValueProperty) property.getKeyValueProperty();
