@@ -88,13 +88,15 @@ public class MultiSplitLayout implements LayoutManager, Serializable {
 	private int layoutMode;
 	private int userMinSize = 20;
 
+	private MultiSplitLayoutFactory factory;
+
 	/**
 	 * Create a MultiSplitLayout with a default model with a single Leaf node named "default".
 	 * 
 	 * #see setModel
 	 */
-	public MultiSplitLayout() {
-		this(new Leaf("default"));
+	public MultiSplitLayout(MultiSplitLayoutFactory factory) {
+		this(factory.makeLeaf("default"), factory);
 	}
 
 	/**
@@ -104,9 +106,26 @@ public class MultiSplitLayout implements LayoutManager, Serializable {
 	 *            if true the layout is initialized in proportion to the node weights rather than the component preferred sizes. #see
 	 *            setModel
 	 */
-	public MultiSplitLayout(boolean layoutByWeight) {
-		this(new Leaf("default"));
+	public MultiSplitLayout(boolean layoutByWeight, MultiSplitLayoutFactory factory) {
+		this(factory.makeLeaf("default"), factory);
 		this.layoutByWeight = layoutByWeight;
+	}
+
+	/**
+	 * Create a MultiSplitLayout with the specified model.
+	 * 
+	 * #see setModel
+	 */
+	public MultiSplitLayout(Node model, MultiSplitLayoutFactory factory) {
+		this.model = model;
+		this.dividerSize = UIManager.getInt("SplitPane.dividerSize");
+		if (this.dividerSize == 0) {
+			this.dividerSize = 7;
+		}
+	}
+
+	public MultiSplitLayoutFactory getFactory() {
+		return factory;
 	}
 
 	/**
@@ -331,19 +350,6 @@ public class MultiSplitLayout implements LayoutManager, Serializable {
 	 */
 	public boolean hasModel() {
 		return model != null;
-	}
-
-	/**
-	 * Create a MultiSplitLayout with the specified model.
-	 * 
-	 * #see setModel
-	 */
-	public MultiSplitLayout(Node model) {
-		this.model = model;
-		this.dividerSize = UIManager.getInt("SplitPane.dividerSize");
-		if (this.dividerSize == 0) {
-			this.dividerSize = 7;
-		}
 	}
 
 	public void addPropertyChangeListener(PropertyChangeListener listener) {
@@ -669,7 +675,7 @@ public class MultiSplitLayout implements LayoutManager, Serializable {
 	 * @return the minimum size.
 	 */
 	public Dimension minimumNodeSize(Node root) {
-		assert root.isVisible;
+		assert root.isVisible();
 		if (root instanceof Leaf) {
 			if (layoutMode == NO_MIN_SIZE_LAYOUT) {
 				return new Dimension(0, 0);
@@ -720,7 +726,7 @@ public class MultiSplitLayout implements LayoutManager, Serializable {
 	 * @return the minimum size.
 	 */
 	public Dimension maximumNodeSize(Node root) {
-		assert root.isVisible;
+		assert root.isVisible();
 		if (root instanceof Leaf) {
 			Component child = childForNode(root);
 			return child != null && child.isVisible() ? child.getMaximumSize() : new Dimension(0, 0);
@@ -1492,14 +1498,119 @@ public class MultiSplitLayout implements LayoutManager, Serializable {
 	}
 
 	/**
+	 * API for the nodes that model a MultiSplitLayout.
+	 */
+	public static interface Node {
+
+		public String getName();
+
+		public void setName(String name);
+
+		public void setVisible(boolean b);
+
+		/**
+		 * Determines whether this node should be visible when its parent is visible. Nodes are initially visible
+		 * 
+		 * @return <code>true</code> if the node is visible, <code>false</code> otherwise
+		 */
+		public boolean isVisible();
+
+		/**
+		 * Returns the Split parent of this Node, or null.
+		 * 
+		 * @return the value of the parent property.
+		 * @see #setParent
+		 */
+		public Split getParent();
+
+		/**
+		 * Set the value of this Node's parent property. The default value of this property is null.
+		 * 
+		 * @param parent
+		 *            a Split or null
+		 * @see #getParent
+		 */
+		public void setParent(Split parent);
+
+		/**
+		 * Returns the bounding Rectangle for this Node.
+		 * 
+		 * @return the value of the bounds property.
+		 * @see #setBounds
+		 */
+		public Rectangle getBounds();
+
+		/**
+		 * Set the bounding Rectangle for this node. The value of bounds may not be null. The default value of bounds is equal to
+		 * <code>new Rectangle(0,0,0,0)</code>.
+		 * 
+		 * @param bounds
+		 *            the new value of the bounds property
+		 * @throws IllegalArgumentException
+		 *             if bounds is null
+		 * @see #getBounds
+		 */
+		public void setBounds(Rectangle bounds);
+
+		/**
+		 * Value between 0.0 and 1.0 used to compute how much space to add to this sibling when the layout grows or how much to reduce when
+		 * the layout shrinks.
+		 * 
+		 * @return the value of the weight property
+		 * @see #setWeight
+		 */
+		public double getWeight();
+
+		/**
+		 * The weight property is a between 0.0 and 1.0 used to compute how much space to add to this sibling when the layout grows or how
+		 * much to reduce when the layout shrinks. If rowLayout is true then this node's width grows or shrinks by (extraSpace * weight). If
+		 * rowLayout is false, then the node's height is changed. The default value of weight is 0.0.
+		 * 
+		 * @param weight
+		 *            a double between 0.0 and 1.0
+		 * @see #getWeight
+		 * @see MultiSplitLayout#layoutContainer
+		 * @throws IllegalArgumentException
+		 *             if weight is not between 0.0 and 1.0
+		 */
+		public void setWeight(double weight);
+
+		/**
+		 * Return the Node that comes after this one in the parent's list of children, or null. If this node's parent is null, or if it's
+		 * the last child, then return null.
+		 * 
+		 * @return the Node that comes after this one in the parent's list of children.
+		 * @see #previousSibling
+		 * @see #getParent
+		 */
+		public Node nextSibling();
+
+		/**
+		 * Return the Node that comes before this one in the parent's list of children, or null. If this node's parent is null, or if it's
+		 * the last child, then return null.
+		 * 
+		 * @return the Node that comes before this one in the parent's list of children.
+		 * @see #nextSibling
+		 * @see #getParent
+		 */
+		public Node previousSibling();
+
+		public Node nextVisibleSibling(boolean includeDivider);
+
+		public Node previousVisibleSibling(boolean includeDivider);
+
+	}
+
+	/**
 	 * Base class for the nodes that model a MultiSplitLayout.
 	 */
-	public static abstract class Node implements Serializable {
+	public static abstract class DefaultNode implements Node, Serializable {
 		private Split parent = null;
 		private Rectangle bounds = new Rectangle();
 		private double weight = 0.0;
 		private boolean isVisible = true;
 
+		@Override
 		public void setVisible(boolean b) {
 			isVisible = b;
 		}
@@ -1509,6 +1620,7 @@ public class MultiSplitLayout implements LayoutManager, Serializable {
 		 * 
 		 * @return <code>true</code> if the node is visible, <code>false</code> otherwise
 		 */
+		@Override
 		public boolean isVisible() {
 			return isVisible;
 		}
@@ -1519,6 +1631,7 @@ public class MultiSplitLayout implements LayoutManager, Serializable {
 		 * @return the value of the parent property.
 		 * @see #setParent
 		 */
+		@Override
 		public Split getParent() {
 			return parent;
 		}
@@ -1530,6 +1643,7 @@ public class MultiSplitLayout implements LayoutManager, Serializable {
 		 *            a Split or null
 		 * @see #getParent
 		 */
+		@Override
 		public void setParent(Split parent) {
 			this.parent = parent;
 		}
@@ -1540,6 +1654,7 @@ public class MultiSplitLayout implements LayoutManager, Serializable {
 		 * @return the value of the bounds property.
 		 * @see #setBounds
 		 */
+		@Override
 		public Rectangle getBounds() {
 			return new Rectangle(this.bounds);
 		}
@@ -1554,6 +1669,7 @@ public class MultiSplitLayout implements LayoutManager, Serializable {
 		 *             if bounds is null
 		 * @see #getBounds
 		 */
+		@Override
 		public void setBounds(Rectangle bounds) {
 			if (bounds == null) {
 				throw new IllegalArgumentException("null bounds");
@@ -1568,6 +1684,7 @@ public class MultiSplitLayout implements LayoutManager, Serializable {
 		 * @return the value of the weight property
 		 * @see #setWeight
 		 */
+		@Override
 		public double getWeight() {
 			return weight;
 		}
@@ -1584,6 +1701,7 @@ public class MultiSplitLayout implements LayoutManager, Serializable {
 		 * @throws IllegalArgumentException
 		 *             if weight is not between 0.0 and 1.0
 		 */
+		@Override
 		public void setWeight(double weight) {
 			if (weight < 0.0 || weight > 1.0) {
 				throw new IllegalArgumentException("invalid weight");
@@ -1613,6 +1731,7 @@ public class MultiSplitLayout implements LayoutManager, Serializable {
 		 * @see #previousSibling
 		 * @see #getParent
 		 */
+		@Override
 		public Node nextSibling() {
 			return siblingAtOffset(+1);
 		}
@@ -1625,6 +1744,7 @@ public class MultiSplitLayout implements LayoutManager, Serializable {
 		 * @see #nextSibling
 		 * @see #getParent
 		 */
+		@Override
 		public Node previousSibling() {
 			return siblingAtOffset(-1);
 		}
@@ -1660,26 +1780,33 @@ public class MultiSplitLayout implements LayoutManager, Serializable {
 			return null;
 		}
 
+		@Override
 		public Node nextVisibleSibling(boolean includeDivider) {
 			return visibleSiblingAtOffset(+1, includeDivider);
 		}
 
+		@Override
 		public Node previousVisibleSibling(boolean includeDivider) {
 			return visibleSiblingAtOffset(-1, includeDivider);
 		}
 
+		@Override
 		public abstract String getName();
 
+		@Override
 		public void setName(String name) {
 		}
 
 	}
 
-	public static class RowSplit extends Split {
-		public RowSplit() {
+	public static interface RowSplit extends Split {
+	}
+
+	public static class DefaultRowSplit extends DefaultSplit implements RowSplit {
+		public DefaultRowSplit() {
 		}
 
-		public RowSplit(Node... children) {
+		public DefaultRowSplit(Node... children) {
 			setChildren(children);
 		}
 
@@ -1696,11 +1823,14 @@ public class MultiSplitLayout implements LayoutManager, Serializable {
 		}
 	}
 
-	public static class ColSplit extends Split {
-		public ColSplit() {
+	public static interface ColSplit extends Split {
+	}
+
+	public static class DefaultColSplit extends DefaultSplit implements ColSplit {
+		public DefaultColSplit() {
 		}
 
-		public ColSplit(Node... children) {
+		public DefaultColSplit(Node... children) {
 			setChildren(children);
 		}
 
@@ -1720,12 +1850,126 @@ public class MultiSplitLayout implements LayoutManager, Serializable {
 	/**
 	 * Defines a vertical or horizontal subdivision into two or more tiles.
 	 */
-	public static class Split extends Node {
+	public static interface Split extends Node {
+		/**
+		 * Returns true if the this Split's children are to be laid out in a row: all the same height, left edge equal to the previous
+		 * Node's right edge. If false, children are laid on in a column.
+		 * 
+		 * @return the value of the rowLayout property.
+		 * @see #setRowLayout
+		 */
+		public boolean isRowLayout();
+
+		/**
+		 * Set the rowLayout property. If true, all of this Split's children are to be laid out in a row: all the same height, each node's
+		 * left edge equal to the previous Node's right edge. If false, children are laid on in a column. Default value is true.
+		 * 
+		 * @param rowLayout
+		 *            true for horizontal row layout, false for column
+		 * @see #isRowLayout
+		 */
+		public void setRowLayout(boolean rowLayout);
+
+		/**
+		 * Returns this Split node's children. The returned value is not a reference to the Split's internal list of children
+		 * 
+		 * @return the value of the children property.
+		 * @see #setChildren
+		 */
+		public List<Node> getChildren();
+
+		/**
+		 * Remove a node from the layout. Any sibling dividers will also be removed
+		 * 
+		 * @param n
+		 *            the node to be removed
+		 */
+		public void remove(Node n);
+
+		/**
+		 * Replace one node with another. This method is used when a child is removed from a split and the split is no longer required, in
+		 * which case the remaining node in the child split can replace the split in the parent node
+		 * 
+		 * @param target
+		 *            the node being replaced
+		 * @param replacement
+		 *            the replacement node
+		 */
+		public void replace(Node target, Node replacement);
+
+		/**
+		 * Change a node to being hidden. Any associated divider nodes are also hidden
+		 * 
+		 * @param target
+		 *            the node to hide
+		 */
+		public void hide(Node target);
+
+		/**
+		 * Check the dividers to ensure that redundant dividers are hidden and do not interfere in the layout, for example when all the
+		 * children of a split are hidden (the split is then invisible), so two dividers may otherwise appear next to one another.
+		 * 
+		 * @param split
+		 *            the split to check
+		 */
+		public void checkDividers(Split split);
+
+		/**
+		 * Restore any of the hidden dividers that are required to separate visible nodes
+		 * 
+		 * @param split
+		 *            the node to check
+		 */
+		public void restoreDividers(Split split);
+
+		/**
+		 * Set's the children property of this Split node. The parent of each new child is set to this Split node, and the parent of each
+		 * old child (if any) is set to null. This method defensively copies the incoming List. Default value is an empty List.
+		 * 
+		 * @param children
+		 *            List of children
+		 * @see #getChildren
+		 * @throws IllegalArgumentException
+		 *             if children is null
+		 */
+		public void setChildren(List<Node> children);
+
+		public void addToChildren(Node child);
+
+		public void removeFromChildren(Node child);
+
+		/**
+		 * Convenience method for setting the children of this Split node. The parent of each new child is set to this Split node, and the
+		 * parent of each old child (if any) is set to null. This method defensively copies the incoming array.
+		 * 
+		 * @param children
+		 *            array of children
+		 * @see #getChildren
+		 * @throws IllegalArgumentException
+		 *             if children is null
+		 */
+		public void setChildren(Node... children);
+
+		/**
+		 * Convenience method that returns the last child whose weight is > 0.0.
+		 * 
+		 * @return the last child whose weight is > 0.0.
+		 * @see #getChildren
+		 * @see Node#getWeight
+		 */
+		public Node lastWeightedChild();
+	}
+
+	/**
+	 * Defines a vertical or horizontal subdivision into two or more tiles.
+	 */
+	public static class DefaultSplit extends DefaultNode implements Split {
+
 		private List<Node> children = Collections.emptyList();
 		private boolean rowLayout = true;
 		private String name;
 
-		public Split(Node... children) {
+		public DefaultSplit(Node... children) {
 			setChildren(children);
 		}
 
@@ -1733,7 +1977,7 @@ public class MultiSplitLayout implements LayoutManager, Serializable {
 		 * Default constructor to support xml (de)serialization and other bean spec dependent ops. Resulting instance of Split is invalid
 		 * until setChildren() is called.
 		 */
-		public Split() {
+		public DefaultSplit() {
 		}
 
 		/**
@@ -1758,6 +2002,7 @@ public class MultiSplitLayout implements LayoutManager, Serializable {
 		 * @return the value of the rowLayout property.
 		 * @see #setRowLayout
 		 */
+		@Override
 		public boolean isRowLayout() {
 			return rowLayout;
 		}
@@ -1770,6 +2015,7 @@ public class MultiSplitLayout implements LayoutManager, Serializable {
 		 *            true for horizontal row layout, false for column
 		 * @see #isRowLayout
 		 */
+		@Override
 		public void setRowLayout(boolean rowLayout) {
 			this.rowLayout = rowLayout;
 		}
@@ -1780,6 +2026,7 @@ public class MultiSplitLayout implements LayoutManager, Serializable {
 		 * @return the value of the children property.
 		 * @see #setChildren
 		 */
+		@Override
 		public List<Node> getChildren() {
 			return new ArrayList<Node>(children);
 		}
@@ -1790,6 +2037,7 @@ public class MultiSplitLayout implements LayoutManager, Serializable {
 		 * @param n
 		 *            the node to be removed
 		 */
+		@Override
 		public void remove(Node n) {
 			if (n.nextSibling() instanceof Divider) {
 				children.remove(n.nextSibling());
@@ -1808,6 +2056,7 @@ public class MultiSplitLayout implements LayoutManager, Serializable {
 		 * @param replacement
 		 *            the replacement node
 		 */
+		@Override
 		public void replace(Node target, Node replacement) {
 			int idx = children.indexOf(target);
 			children.remove(target);
@@ -1823,6 +2072,7 @@ public class MultiSplitLayout implements LayoutManager, Serializable {
 		 * @param target
 		 *            the node to hide
 		 */
+		@Override
 		public void hide(Node target) {
 			Node next = target.nextSibling();
 			if (next instanceof Divider) {
@@ -1843,6 +2093,7 @@ public class MultiSplitLayout implements LayoutManager, Serializable {
 		 * @param split
 		 *            the split to check
 		 */
+		@Override
 		public void checkDividers(Split split) {
 			ListIterator<Node> splitChildren = split.getChildren().listIterator();
 			while (splitChildren.hasNext()) {
@@ -1882,6 +2133,7 @@ public class MultiSplitLayout implements LayoutManager, Serializable {
 		 * @param split
 		 *            the node to check
 		 */
+		@Override
 		public void restoreDividers(Split split) {
 			boolean nextDividerVisible = false;
 			ListIterator<Node> splitChildren = split.getChildren().listIterator();
@@ -1916,6 +2168,7 @@ public class MultiSplitLayout implements LayoutManager, Serializable {
 		 * @throws IllegalArgumentException
 		 *             if children is null
 		 */
+		@Override
 		public void setChildren(List<Node> children) {
 			if (children == null) {
 				throw new IllegalArgumentException("children must be a non-null List");
@@ -1930,11 +2183,13 @@ public class MultiSplitLayout implements LayoutManager, Serializable {
 			}
 		}
 
+		@Override
 		public void addToChildren(Node child) {
 			children.add(child);
 			child.setParent(this);
 		}
 
+		@Override
 		public void removeFromChildren(Node child) {
 			child.setParent(null);
 			children.remove(child);
@@ -1950,6 +2205,7 @@ public class MultiSplitLayout implements LayoutManager, Serializable {
 		 * @throws IllegalArgumentException
 		 *             if children is null
 		 */
+		@Override
 		public void setChildren(Node... children) {
 			setChildren(children == null ? null : Arrays.asList(children));
 		}
@@ -1961,6 +2217,7 @@ public class MultiSplitLayout implements LayoutManager, Serializable {
 		 * @see #getChildren
 		 * @see Node#getWeight
 		 */
+		@Override
 		public final Node lastWeightedChild() {
 			List<Node> kids = getChildren();
 			Node weightedChild = null;
@@ -2008,14 +2265,17 @@ public class MultiSplitLayout implements LayoutManager, Serializable {
 		@Override
 		public String toString() {
 			int nChildren = getChildren().size();
-			StringBuffer sb = new StringBuffer("MultiSplitLayout.Split");
-			sb.append(" \"");
-			sb.append(getName());
-			sb.append("\"");
-			sb.append(isRowLayout() ? " ROW [" : " COLUMN [");
-			sb.append(nChildren + (nChildren == 1 ? " child" : " children"));
-			sb.append("] ");
-			sb.append(getBounds());
+			StringBuffer sb = new StringBuffer(/*"MultiSplitLayout.Split"*/);
+			// sb.append(" \"");
+			// sb.append(getName());
+			// sb.append("\"");
+			sb.append(isRowLayout() ? "( ROW (" : " COLUMN (");
+			// sb.append(nChildren + (nChildren == 1 ? " child" : " children"));
+			for (Node child : getChildren()) {
+				sb.append(child.toString());
+			}
+			sb.append(") ");
+			// sb.append(getBounds());
 			return sb.toString();
 		}
 	}
@@ -2023,13 +2283,20 @@ public class MultiSplitLayout implements LayoutManager, Serializable {
 	/**
 	 * Models a java.awt Component child.
 	 */
-	public static class Leaf extends Node {
+	public static interface Leaf extends Node {
+	}
+
+	/**
+	 * Models a java.awt Component child.
+	 */
+	public static class DefaultLeaf extends DefaultNode implements Leaf {
+
 		private String name = "";
 
 		/**
 		 * Create a Leaf node. The default value of name is "".
 		 */
-		public Leaf() {
+		public DefaultLeaf() {
 		}
 
 		/**
@@ -2040,7 +2307,7 @@ public class MultiSplitLayout implements LayoutManager, Serializable {
 		 * @throws IllegalArgumentException
 		 *             if name is null
 		 */
-		public Leaf(String name) {
+		public DefaultLeaf(String name) {
 			if (name == null) {
 				throw new IllegalArgumentException("name is null");
 			}
@@ -2076,14 +2343,15 @@ public class MultiSplitLayout implements LayoutManager, Serializable {
 
 		@Override
 		public String toString() {
-			StringBuffer sb = new StringBuffer("MultiSplitLayout.Leaf");
-			sb.append(" \"");
+			StringBuffer sb = new StringBuffer(/*"MultiSplitLayout.Leaf"*/);
+			// sb.append(" \"");
+			sb.append(" name=");
 			sb.append(getName());
-			sb.append("\"");
+			// sb.append("\"");
 			sb.append(" weight=");
 			sb.append(getWeight());
-			sb.append(" ");
-			sb.append(getBounds());
+			// sb.append(" ");
+			// sb.append(getBounds());
 			return sb.toString();
 		}
 	}
@@ -2091,7 +2359,16 @@ public class MultiSplitLayout implements LayoutManager, Serializable {
 	/**
 	 * Models a single vertical/horiztonal divider.
 	 */
-	public static class Divider extends Node {
+	public static interface Divider extends Node {
+
+		public boolean isVertical();
+
+	}
+
+	/**
+	 * Models a single vertical/horiztonal divider.
+	 */
+	public static class DefaultDivider extends DefaultNode implements Divider {
 
 		@Override
 		public String getName() {
@@ -2104,6 +2381,7 @@ public class MultiSplitLayout implements LayoutManager, Serializable {
 		 * 
 		 * @return true if this Divider is part of a Split row.
 		 */
+		@Override
 		public final boolean isVertical() {
 			Split parent = getParent();
 			return parent != null ? parent.isRowLayout() : false;
@@ -2121,7 +2399,8 @@ public class MultiSplitLayout implements LayoutManager, Serializable {
 
 		@Override
 		public String toString() {
-			return "MultiSplitLayout.Divider " + getBounds().toString();
+			// return "MultiSplitLayout.Divider " + getBounds().toString();
+			return "\n";
 		}
 	}
 
@@ -2156,19 +2435,19 @@ public class MultiSplitLayout implements LayoutManager, Serializable {
 		}
 	}
 
-	private static void addSplitChild(Split parent, Node child) {
+	private static void addSplitChild(Split parent, Node child, MultiSplitLayoutFactory factory) {
 		List<Node> children = new ArrayList<Node>(parent.getChildren());
 		if (children.size() == 0) {
 			children.add(child);
 		} else {
-			children.add(new Divider());
+			children.add(factory.makeDivider());
 			children.add(child);
 		}
 		parent.setChildren(children);
 	}
 
-	private static void parseLeaf(StreamTokenizer st, Split parent) throws Exception {
-		Leaf leaf = new Leaf();
+	private static void parseLeaf(StreamTokenizer st, Split parent, MultiSplitLayoutFactory factory) throws Exception {
+		Leaf leaf = factory.makeLeaf();
 		int token;
 		while ((token = st.nextToken()) != StreamTokenizer.TT_EOF) {
 			if (token == ')') {
@@ -2180,10 +2459,10 @@ public class MultiSplitLayout implements LayoutManager, Serializable {
 				throwParseException(st, "Bad Leaf: " + leaf);
 			}
 		}
-		addSplitChild(parent, leaf);
+		addSplitChild(parent, leaf, factory);
 	}
 
-	private static void parseSplit(StreamTokenizer st, Split parent) throws Exception {
+	private static void parseSplit(StreamTokenizer st, Split parent, MultiSplitLayoutFactory factory) throws Exception {
 		int token;
 		while ((token = st.nextToken()) != StreamTokenizer.TT_EOF) {
 			if (token == ')') {
@@ -2194,7 +2473,7 @@ public class MultiSplitLayout implements LayoutManager, Serializable {
 				} else if (st.sval.equalsIgnoreCase("NAME")) {
 					parseAttribute(st.sval, st, parent);
 				} else {
-					addSplitChild(parent, new Leaf(st.sval));
+					addSplitChild(parent, factory.makeLeaf(st.sval), factory);
 				}
 			} else if (token == '(') {
 				if ((token = st.nextToken()) != StreamTokenizer.TT_WORD) {
@@ -2202,12 +2481,12 @@ public class MultiSplitLayout implements LayoutManager, Serializable {
 				}
 				String nodeType = st.sval.toUpperCase();
 				if (nodeType.equals("LEAF")) {
-					parseLeaf(st, parent);
+					parseLeaf(st, parent, factory);
 				} else if (nodeType.equals("ROW") || nodeType.equals("COLUMN")) {
-					Split split = new Split();
+					Split split = factory.makeSplit();
 					split.setRowLayout(nodeType.equals("ROW"));
-					addSplitChild(parent, split);
-					parseSplit(st, split);
+					addSplitChild(parent, split, factory);
+					parseSplit(st, split, factory);
 				} else {
 					throwParseException(st, "unrecognized node type '" + nodeType + "'");
 				}
@@ -2215,11 +2494,11 @@ public class MultiSplitLayout implements LayoutManager, Serializable {
 		}
 	}
 
-	private static Node parseModel(Reader r) {
+	private static Node parseModel(Reader r, MultiSplitLayoutFactory factory) {
 		StreamTokenizer st = new StreamTokenizer(r);
 		try {
-			Split root = new Split();
-			parseSplit(st, root);
+			Split root = factory.makeSplit();
+			parseSplit(st, root, factory);
 			return root.getChildren().get(0);
 		} catch (Exception e) {
 			System.err.println(e);
@@ -2269,8 +2548,8 @@ public class MultiSplitLayout implements LayoutManager, Serializable {
 	 * 
 	 * @return the Node root of a tree based on s.
 	 */
-	public static Node parseModel(String s) {
-		return parseModel(new StringReader(s));
+	public static Node parseModel(String s, MultiSplitLayoutFactory factory) {
+		return parseModel(new StringReader(s), factory);
 	}
 
 	private static void printModel(String indent, Node root) {

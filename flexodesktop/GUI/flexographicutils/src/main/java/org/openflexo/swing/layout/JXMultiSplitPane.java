@@ -57,8 +57,8 @@ public class JXMultiSplitPane extends JPanel {
 	/**
 	 * Creates a MultiSplitPane with it's LayoutManager set to to an empty MultiSplitLayout.
 	 */
-	public JXMultiSplitPane() {
-		this(new MultiSplitLayout());
+	public JXMultiSplitPane(MultiSplitLayoutFactory factory) {
+		this(new MultiSplitLayout(factory));
 	}
 
 	/**

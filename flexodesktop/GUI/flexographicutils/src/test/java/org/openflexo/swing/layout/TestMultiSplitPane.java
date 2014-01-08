@@ -17,10 +17,10 @@ import javax.swing.JFrame;
 import javax.swing.SwingUtilities;
 import javax.swing.WindowConstants;
 
-import org.openflexo.swing.layout.MultiSplitLayout.Divider;
 import org.openflexo.swing.layout.MultiSplitLayout.Leaf;
 import org.openflexo.swing.layout.MultiSplitLayout.Node;
 import org.openflexo.swing.layout.MultiSplitLayout.Split;
+import org.openflexo.toolbox.FileResource;
 
 import com.google.gson.Gson;
 import com.google.gson.GsonBuilder;
@@ -39,8 +39,9 @@ public class TestMultiSplitPane {
 
 	protected void initUI() {
 
-		Split root = getDefaultLayout();
-		final MultiSplitLayout layout = new MultiSplitLayout();
+		MultiSplitLayoutFactory factory = new MultiSplitLayoutFactory.DefaultMultiSplitLayoutFactory();
+		Split root = getDefaultLayout(factory);
+		final MultiSplitLayout layout = new MultiSplitLayout(factory);
 		layout.setLayoutByWeight(false);
 		layout.setFloatingDividers(false);
 		JXMultiSplitPane splitPane = new JXMultiSplitPane(layout);
@@ -51,7 +52,13 @@ public class TestMultiSplitPane {
 		addButton(LEFT + BOTTOM, splitPane);
 		addButton(CENTER + BOTTOM, splitPane);
 		addButton(RIGHT + BOTTOM, splitPane);
-		restoreLayout(layout, root);
+
+		System.out.println("root=" + root);
+		System.out.println("layout=" + layout);
+		MultiSplitLayout.printModel(root);
+
+		layout.setModel(root);
+		// restoreLayout(layout, root);
 		splitPane.setPreferredSize(layout.getModel().getBounds().getSize());
 		JFrame frame = new JFrame();
 		frame.addWindowListener(new WindowAdapter() {
@@ -67,19 +74,19 @@ public class TestMultiSplitPane {
 		frame.setVisible(true);
 	}
 
-	protected Split getDefaultLayout() {
-		Split root = new Split();
+	protected Split getDefaultLayout(MultiSplitLayoutFactory factory) {
+		Split root = factory.makeSplit();
 		root.setName("ROOT");
-		Split left = getVerticalSplit(LEFT, 0.5, 0.5);
+		Split left = getVerticalSplit(LEFT, 0.5, 0.5, factory);
 		left.setWeight(0);
 		left.setName(LEFT);
-		Split center = getVerticalSplit(CENTER, 0.8, 0.2);
+		Split center = getVerticalSplit(CENTER, 0.8, 0.2, factory);
 		center.setWeight(1.0);
 		center.setName(CENTER);
-		Split right = getVerticalSplit(RIGHT, 0.5, 0.5);
+		Split right = getVerticalSplit(RIGHT, 0.5, 0.5, factory);
 		right.setWeight(0);
 		right.setName(RIGHT);
-		root.setChildren(left, new Divider(), center, new Divider(), right);
+		root.setChildren(left, factory.makeDivider(), center, factory.makeDivider(), right);
 		return root;
 	}
 
@@ -91,20 +98,20 @@ public class TestMultiSplitPane {
 			@Override
 			public void actionPerformed(ActionEvent e) {
 				MultiSplitLayout layout = splitPane.getMultiSplitLayout();
-				restoreLayout(layout, getDefaultLayout());
+				restoreLayout(layout, getDefaultLayout(splitPane.getMultiSplitLayout().getFactory()));
 				splitPane.revalidate();
 			}
 		});
 	}
 
-	public Split getVerticalSplit(String name, double topWeight, double bottomWeight) {
-		Split split = new Split();
+	public Split getVerticalSplit(String name, double topWeight, double bottomWeight, MultiSplitLayoutFactory factory) {
+		Split split = factory.makeSplit();
 		split.setRowLayout(false);
-		Leaf top = new Leaf(name + TOP);
+		Leaf top = factory.makeLeaf(name + TOP);
 		top.setWeight(topWeight);
-		Leaf bottom = new Leaf(name + BOTTOM);
+		Leaf bottom = factory.makeLeaf(name + BOTTOM);
 		bottom.setWeight(bottomWeight);
-		split.setChildren(top, new Divider(), bottom);
+		split.setChildren(top, factory.makeDivider(), bottom);
 		return split;
 	}
 
@@ -163,7 +170,7 @@ public class TestMultiSplitPane {
 	}
 
 	protected File getLayoutFile() {
-		return new File("testlayout");
+		return new FileResource("testlayout");
 	}
 
 	public static void main(String[] args) {
