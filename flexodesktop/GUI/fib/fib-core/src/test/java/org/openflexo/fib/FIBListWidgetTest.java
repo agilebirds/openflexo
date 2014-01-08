@@ -37,7 +37,7 @@ import com.google.common.reflect.TypeToken;
  * @author sylvain
  * 
  */
-public class FIBListWidgetTest {
+public class FIBListWidgetTest extends FIBTestCase {
 
 	private static GraphicalContextDelegate gcDelegate;
 
@@ -66,44 +66,44 @@ public class FIBListWidgetTest {
 	@Test
 	public void test1CreateComponent() {
 
-		component = new FIBPanel();
+		component = newFIBPanel();
 		component.setLayout(Layout.twocols);
 		component.setDataClass(Family.class);
 
-		listLabel1 = new FIBLabel("static_list_auto_select");
+		listLabel1 = newFIBLabel("static_list_auto_select");
 		component.addToSubComponents(listLabel1, new TwoColsLayoutConstraints(TwoColsLayoutLocation.left, false, false));
-		list1 = new FIBList();
+		list1 = newFIBList();
 		list1.setStaticList("value1,value2,value3");
 		list1.setAutoSelectFirstRow(true);
 		component.addToSubComponents(list1, new TwoColsLayoutConstraints(TwoColsLayoutLocation.right, false, false));
 
-		listLabel2 = new FIBLabel("static_list_no_auto_select");
+		listLabel2 = newFIBLabel("static_list_no_auto_select");
 		component.addToSubComponents(listLabel2, new TwoColsLayoutConstraints(TwoColsLayoutLocation.left, false, false));
-		list2 = new FIBList();
+		list2 = newFIBList();
 		list2.setStaticList("value1,value2,value3");
 		list2.setAutoSelectFirstRow(false);
 		component.addToSubComponents(list2, new TwoColsLayoutConstraints(TwoColsLayoutLocation.right, false, false));
 
-		listLabel3 = new FIBLabel("dynamic_list");
+		listLabel3 = newFIBLabel("dynamic_list");
 		component.addToSubComponents(listLabel3, new TwoColsLayoutConstraints(TwoColsLayoutLocation.left, false, false));
-		list3 = new FIBList();
+		list3 = newFIBList();
 		list3.setList(new DataBinding<List<?>>("data.children", list3, List.class, BindingDefinitionType.GET));
 		list3.setAutoSelectFirstRow(true);
 		component.addToSubComponents(list3, new TwoColsLayoutConstraints(TwoColsLayoutLocation.right, false, false));
 		assertTrue(list3.getList().isValid());
 
-		listLabel4 = new FIBLabel("dynamic_array");
+		listLabel4 = newFIBLabel("dynamic_array");
 		component.addToSubComponents(listLabel4, new TwoColsLayoutConstraints(TwoColsLayoutLocation.left, false, false));
-		list4 = new FIBList();
+		list4 = newFIBList();
 		list4.setArray(new DataBinding<Object[]>("data.parents", list4, new TypeToken<Object[]>() {
 		}.getType(), BindingDefinitionType.GET));
 		list4.setAutoSelectFirstRow(true);
 		component.addToSubComponents(list4, new TwoColsLayoutConstraints(TwoColsLayoutLocation.right, false, false));
 		assertTrue(list4.getArray().isValid());
 
-		listLabel5 = new FIBLabel("dynamic_list_bound_to_data");
+		listLabel5 = newFIBLabel("dynamic_list_bound_to_data");
 		component.addToSubComponents(listLabel5, new TwoColsLayoutConstraints(TwoColsLayoutLocation.left, false, false));
-		list5 = new FIBList();
+		list5 = newFIBList();
 		list5.setData(new DataBinding<Person>("data.biggestChild", list5, Person.class, BindingDefinitionType.GET_SET));
 		list5.setList(new DataBinding<List<?>>("data.children", list5, List.class, BindingDefinitionType.GET));
 		list5.setAutoSelectFirstRow(true);
@@ -111,17 +111,17 @@ public class FIBListWidgetTest {
 		assertTrue(list5.getData().isValid());
 		assertTrue(list5.getList().isValid());
 
-		listLabel6 = new FIBLabel("enum");
+		listLabel6 = newFIBLabel("enum");
 		component.addToSubComponents(listLabel6, new TwoColsLayoutConstraints(TwoColsLayoutLocation.left, false, false));
-		list6 = new FIBList();
+		list6 = newFIBList();
 		list6.setData(new DataBinding<Gender>("data.father.gender", list6, Gender.class, BindingDefinitionType.GET_SET));
 		list6.setAutoSelectFirstRow(true);
 		component.addToSubComponents(list6, new TwoColsLayoutConstraints(TwoColsLayoutLocation.right, false, false));
 		assertTrue(list6.getData().isValid());
 
-		listLabel7 = new FIBLabel("dynamic_list_bound_to_selection");
+		listLabel7 = newFIBLabel("dynamic_list_bound_to_selection");
 		component.addToSubComponents(listLabel7, new TwoColsLayoutConstraints(TwoColsLayoutLocation.left, false, false));
-		list7 = new FIBList();
+		list7 = newFIBList();
 		list7.setList(new DataBinding<List<?>>("data.children", list7, List.class, BindingDefinitionType.GET));
 		list7.setAutoSelectFirstRow(true);
 		list7.setBoundToSelectionManager(true);
@@ -263,6 +263,7 @@ public class FIBListWidgetTest {
 		gcDelegate.setUp();
 	}
 
+	@Override
 	@After
 	public void tearDown() throws Exception {
 		gcDelegate.tearDown();

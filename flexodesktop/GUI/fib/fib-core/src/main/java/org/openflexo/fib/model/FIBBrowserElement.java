@@ -139,7 +139,7 @@ public interface FIBBrowserElement extends FIBModelObject {
 	@Setter(VISIBLE_KEY)
 	public void setVisible(DataBinding visible);
 
-	@Getter(IS_EDITABLE_KEY)
+	@Getter(value = IS_EDITABLE_KEY, defaultValue = "true")
 	@XMLAttribute
 	public boolean getIsEditable();
 
@@ -150,7 +150,7 @@ public interface FIBBrowserElement extends FIBModelObject {
 	@XMLAttribute
 	public DataBinding<String> getEditableLabel();
 
-	@Getter(EDITABLE_LABEL_KEY)
+	@Setter(EDITABLE_LABEL_KEY)
 	public void setEditableLabel(DataBinding<String> editableLabel);
 
 	@Getter(FONT_KEY)
@@ -171,14 +171,14 @@ public interface FIBBrowserElement extends FIBModelObject {
 	@Setter(DYNAMIC_FONT_KEY)
 	public void setDynamicFont(DataBinding<Font> dynamicFont);
 
-	@Getter(FILTERED_KEY)
+	@Getter(value = FILTERED_KEY, defaultValue = "false")
 	@XMLAttribute
 	public boolean getFiltered();
 
 	@Setter(FILTERED_KEY)
 	public void setFiltered(boolean filtered);
 
-	@Getter(DEFAULT_VISIBLE_KEY)
+	@Getter(value = DEFAULT_VISIBLE_KEY, defaultValue = "true")
 	@XMLAttribute
 	public boolean getDefaultVisible();
 
@@ -920,7 +920,7 @@ public interface FIBBrowserElement extends FIBModelObject {
 
 			private static final Logger logger = Logger.getLogger(FIBBrowserElementChildren.class.getPackage().getName());
 
-			private FIBBrowserElement browserElement;
+			// private FIBBrowserElement browserElement;
 			private DataBinding<Object> data;
 			private DataBinding<Boolean> visible;
 			private DataBinding<Object> cast;
@@ -973,7 +973,7 @@ public interface FIBBrowserElement extends FIBModelObject {
 				}
 
 				public FIBComponent getComponent() {
-					return browserElement.getComponent();
+					return getOwner().getComponent();
 				}
 
 				@Override
@@ -994,13 +994,14 @@ public interface FIBBrowserElement extends FIBModelObject {
 			}
 
 			public FIBBrowser getBrowser() {
-				return getBrowserElement().getOwner();
+				return getOwner().getOwner();
 			}
 
 			@Override
 			public DataBinding<Object> getData() {
 				if (data == null) {
-					data = new DataBinding<Object>(this, Object.class, DataBinding.BindingDefinitionType.GET);
+					data = new DataBinding<Object>(getOwner() != null ? getOwner().getIterator() : null, Object.class,
+							DataBinding.BindingDefinitionType.GET);
 				}
 				return data;
 			}
@@ -1008,7 +1009,7 @@ public interface FIBBrowserElement extends FIBModelObject {
 			@Override
 			public void setData(DataBinding<Object> data) {
 				if (data != null) {
-					data.setOwner(browserElement != null ? browserElement.getIterator() : null);
+					data.setOwner(getOwner() != null ? getOwner().getIterator() : null);
 					data.setDeclaredType(Object.class);
 					data.setBindingDefinitionType(DataBinding.BindingDefinitionType.GET);
 				}
@@ -1026,7 +1027,7 @@ public interface FIBBrowserElement extends FIBModelObject {
 			@Override
 			public void setVisible(DataBinding<Boolean> visible) {
 				if (visible != null) {
-					visible.setOwner(browserElement != null ? browserElement.getIterator() : null);
+					visible.setOwner(getOwner() != null ? getOwner().getIterator() : null);
 					visible.setDeclaredType(Boolean.class);
 					visible.setBindingDefinitionType(DataBinding.BindingDefinitionType.GET);
 				}
@@ -1049,18 +1050,10 @@ public interface FIBBrowserElement extends FIBModelObject {
 				this.cast = cast;
 			}
 
-			public FIBBrowserElement getBrowserElement() {
-				return browserElement;
-			}
-
-			public void setBrowserElement(FIBBrowserElement browserElement) {
-				this.browserElement = browserElement;
-			}
-
 			@Override
 			public FIBComponent getComponent() {
-				if (getBrowserElement() != null) {
-					return getBrowserElement().getComponent();
+				if (getOwner() != null) {
+					return getOwner().getComponent();
 				}
 				return null;
 			}
@@ -1069,11 +1062,11 @@ public interface FIBBrowserElement extends FIBModelObject {
 			public void finalizeBrowserDeserialization() {
 				logger.fine("finalizeBrowserDeserialization() for FIBBrowserElementChildren ");
 				if (data != null) {
-					data.setOwner(browserElement.getIterator());
+					data.setOwner(getOwner().getIterator());
 					data.decode();
 				}
 				if (visible != null) {
-					visible.setOwner(browserElement.getIterator());
+					visible.setOwner(getOwner().getIterator());
 					visible.decode();
 				}
 			}

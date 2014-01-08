@@ -327,7 +327,7 @@ public class MultiSplitLayout implements LayoutManager, Serializable {
 	 *            the name used to associate a component with the layout
 	 * @return the node associated with the component
 	 */
-	public Node getNodeForName(Split split, String name) {
+	public Node getNodeForName(Split<?> split, String name) {
 		for (Node n : split.getChildren()) {
 			if (n instanceof Leaf) {
 				if (((Leaf) n).getName().equals(name)) {
@@ -530,11 +530,11 @@ public class MultiSplitLayout implements LayoutManager, Serializable {
 			childMap.remove(name);
 
 			if (n != null) {
-				Split s = n.getParent();
+				Split<?> s = n.getParent();
 				s.remove(n);
 				if (removeDividers) {
 					while (s.getChildren().size() < 2) {
-						Split p = s.getParent();
+						Split<?> p = s.getParent();
 						if (p == null) {
 							if (s.getChildren().size() > 0) {
 								model = s.getChildren().get(0);
@@ -822,9 +822,9 @@ public class MultiSplitLayout implements LayoutManager, Serializable {
 		split.setBounds(splitBounds);
 	}
 
-	private void layoutShrink(Split split, Rectangle bounds) {
+	private void layoutShrink(Split<?> split, Rectangle bounds) {
 		Rectangle splitBounds = split.getBounds();
-		ListIterator<Node> splitChildren = split.getChildren().listIterator();
+		ListIterator<? extends Node> splitChildren = split.getChildren().listIterator();
 		Node lastWeightedChild = split.lastWeightedChild();
 
 		if (split.isRowLayout()) {
@@ -1352,7 +1352,7 @@ public class MultiSplitLayout implements LayoutManager, Serializable {
 		}
 	}*/
 
-	private void normalizeSplitWeights(Split split) {
+	private void normalizeSplitWeights(Split<?> split) {
 		float totalWeight = 0;
 		for (Node n : split.getChildren()) {
 			if (n.isVisible() && !(n instanceof Divider)) {
@@ -1432,7 +1432,7 @@ public class MultiSplitLayout implements LayoutManager, Serializable {
 			Divider divider = (Divider) root;
 			return divider.getBounds().contains(x, y) ? divider : null;
 		} else if (root instanceof Split) {
-			Split split = (Split) root;
+			Split<?> split = (Split<?>) root;
 			for (Node child : split.getChildren()) {
 				if (!child.isVisible()) {
 					continue;
@@ -1466,7 +1466,7 @@ public class MultiSplitLayout implements LayoutManager, Serializable {
 	private List<Divider> dividersThatOverlap(Node root, Rectangle r) {
 		if (nodeOverlapsRectangle(root, r) && root instanceof Split) {
 			List<Divider> dividers = new ArrayList<Divider>();
-			for (Node child : ((Split) root).getChildren()) {
+			for (Node child : ((Split<?>) root).getChildren()) {
 				if (child instanceof Divider) {
 					if (nodeOverlapsRectangle(child, r)) {
 						dividers.add((Divider) child);
@@ -1799,10 +1799,10 @@ public class MultiSplitLayout implements LayoutManager, Serializable {
 
 	}
 
-	public static interface RowSplit extends Split {
+	public static interface RowSplit<N extends Node> extends Split<N> {
 	}
 
-	public static class DefaultRowSplit extends DefaultSplit implements RowSplit {
+	public static class DefaultRowSplit extends DefaultSplit implements RowSplit<Node> {
 		public DefaultRowSplit() {
 		}
 
@@ -1823,10 +1823,10 @@ public class MultiSplitLayout implements LayoutManager, Serializable {
 		}
 	}
 
-	public static interface ColSplit extends Split {
+	public static interface ColSplit<N extends Node> extends Split<N> {
 	}
 
-	public static class DefaultColSplit extends DefaultSplit implements ColSplit {
+	public static class DefaultColSplit extends DefaultSplit implements ColSplit<Node> {
 		public DefaultColSplit() {
 		}
 
@@ -1850,7 +1850,7 @@ public class MultiSplitLayout implements LayoutManager, Serializable {
 	/**
 	 * Defines a vertical or horizontal subdivision into two or more tiles.
 	 */
-	public static interface Split extends Node {
+	public static interface Split<N extends Node> extends Node {
 		/**
 		 * Returns true if the this Split's children are to be laid out in a row: all the same height, left edge equal to the previous
 		 * Node's right edge. If false, children are laid on in a column.
@@ -1876,7 +1876,23 @@ public class MultiSplitLayout implements LayoutManager, Serializable {
 		 * @return the value of the children property.
 		 * @see #setChildren
 		 */
-		public List<Node> getChildren();
+		public List<N> getChildren();
+
+		/**
+		 * Set's the children property of this Split node. The parent of each new child is set to this Split node, and the parent of each
+		 * old child (if any) is set to null. This method defensively copies the incoming List. Default value is an empty List.
+		 * 
+		 * @param children
+		 *            List of children
+		 * @see #getChildren
+		 * @throws IllegalArgumentException
+		 *             if children is null
+		 */
+		public void setChildren(List<N> children);
+
+		public void addToChildren(N child);
+
+		public void removeFromChildren(N child);
 
 		/**
 		 * Remove a node from the layout. Any sibling dividers will also be removed
@@ -1923,22 +1939,6 @@ public class MultiSplitLayout implements LayoutManager, Serializable {
 		public void restoreDividers(Split split);
 
 		/**
-		 * Set's the children property of this Split node. The parent of each new child is set to this Split node, and the parent of each
-		 * old child (if any) is set to null. This method defensively copies the incoming List. Default value is an empty List.
-		 * 
-		 * @param children
-		 *            List of children
-		 * @see #getChildren
-		 * @throws IllegalArgumentException
-		 *             if children is null
-		 */
-		public void setChildren(List<Node> children);
-
-		public void addToChildren(Node child);
-
-		public void removeFromChildren(Node child);
-
-		/**
 		 * Convenience method for setting the children of this Split node. The parent of each new child is set to this Split node, and the
 		 * parent of each old child (if any) is set to null. This method defensively copies the incoming array.
 		 * 
@@ -1963,7 +1963,7 @@ public class MultiSplitLayout implements LayoutManager, Serializable {
 	/**
 	 * Defines a vertical or horizontal subdivision into two or more tiles.
 	 */
-	public static class DefaultSplit extends DefaultNode implements Split {
+	public static class DefaultSplit extends DefaultNode implements Split<Node> {
 
 		private List<Node> children = Collections.emptyList();
 		private boolean rowLayout = true;
@@ -2497,7 +2497,7 @@ public class MultiSplitLayout implements LayoutManager, Serializable {
 	private static Node parseModel(Reader r, MultiSplitLayoutFactory factory) {
 		StreamTokenizer st = new StreamTokenizer(r);
 		try {
-			Split root = factory.makeSplit();
+			Split<?> root = factory.makeSplit();
 			parseSplit(st, root, factory);
 			return root.getChildren().get(0);
 		} catch (Exception e) {
@@ -2554,7 +2554,7 @@ public class MultiSplitLayout implements LayoutManager, Serializable {
 
 	private static void printModel(String indent, Node root) {
 		if (root instanceof Split) {
-			Split split = (Split) root;
+			Split<?> split = (Split<?>) root;
 			System.out.println(indent + split);
 			for (Node child : split.getChildren()) {
 				printModel(indent + "  ", child);

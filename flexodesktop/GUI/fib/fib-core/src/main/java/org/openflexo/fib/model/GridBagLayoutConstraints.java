@@ -121,11 +121,11 @@ public class GridBagLayoutConstraints extends ComponentConstraints {
 		super();
 	}
 
-	protected GridBagLayoutConstraints(String someConstraints) {
+	public GridBagLayoutConstraints(String someConstraints) {
 		super(someConstraints);
 	}
 
-	GridBagLayoutConstraints(ComponentConstraints someConstraints) {
+	public GridBagLayoutConstraints(ComponentConstraints someConstraints) {
 		super(someConstraints);
 	}
 

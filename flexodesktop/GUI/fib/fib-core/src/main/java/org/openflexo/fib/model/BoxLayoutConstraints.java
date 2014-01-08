@@ -32,11 +32,11 @@ public class BoxLayoutConstraints extends ComponentConstraints {
 		super();
 	}
 
-	protected BoxLayoutConstraints(String someConstraints) {
+	public BoxLayoutConstraints(String someConstraints) {
 		super(someConstraints);
 	}
 
-	BoxLayoutConstraints(ComponentConstraints someConstraints) {
+	public BoxLayoutConstraints(ComponentConstraints someConstraints) {
 		super(someConstraints);
 	}
 

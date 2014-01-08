@@ -35,6 +35,8 @@ import org.openflexo.antar.expr.TypeMismatchException;
 import org.openflexo.fib.model.validation.ValidationReport;
 import org.openflexo.model.annotations.Getter;
 import org.openflexo.model.annotations.ImplementationClass;
+import org.openflexo.model.annotations.Import;
+import org.openflexo.model.annotations.Imports;
 import org.openflexo.model.annotations.ModelEntity;
 import org.openflexo.model.annotations.PropertyIdentifier;
 import org.openflexo.model.annotations.Setter;
@@ -43,6 +45,8 @@ import org.openflexo.model.annotations.XMLElement;
 
 @ModelEntity(isAbstract = true)
 @ImplementationClass(FIBBrowserAction.FIBBrowserActionImpl.class)
+@Imports({ @Import(FIBBrowserAction.FIBAddAction.class), @Import(FIBBrowserAction.FIBRemoveAction.class),
+		@Import(FIBBrowserAction.FIBCustomAction.class) })
 public abstract interface FIBBrowserAction extends FIBModelObject {
 
 	public static enum ActionType {

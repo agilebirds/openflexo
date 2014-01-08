@@ -33,6 +33,8 @@ import org.openflexo.antar.binding.DataBinding;
 import org.openflexo.fib.model.validation.ValidationReport;
 import org.openflexo.model.annotations.Getter;
 import org.openflexo.model.annotations.ImplementationClass;
+import org.openflexo.model.annotations.Import;
+import org.openflexo.model.annotations.Imports;
 import org.openflexo.model.annotations.ModelEntity;
 import org.openflexo.model.annotations.PropertyIdentifier;
 import org.openflexo.model.annotations.Setter;
@@ -40,6 +42,9 @@ import org.openflexo.model.annotations.XMLAttribute;
 
 @ModelEntity(isAbstract = true)
 @ImplementationClass(FIBTableColumn.FIBTableColumnImpl.class)
+@Imports({ @Import(FIBButtonColumn.class), @Import(FIBCheckBoxColumn.class), @Import(FIBCustomColumn.class),
+		@Import(FIBDropDownColumn.class), @Import(FIBIconColumn.class), @Import(FIBLabelColumn.class), @Import(FIBNumberColumn.class),
+		@Import(FIBTextFieldColumn.class) })
 public abstract interface FIBTableColumn extends FIBModelObject {
 
 	public static enum ColumnType {
@@ -173,8 +178,6 @@ public abstract interface FIBTableColumn extends FIBModelObject {
 
 		private static final Logger logger = Logger.getLogger(FIBTableColumn.class.getPackage().getName());
 
-		private FIBTableComponent table;
-
 		@Deprecated
 		private static BindingDefinition DATA = new BindingDefinition("data", Object.class, DataBinding.BindingDefinitionType.GET, false);
 		@Deprecated
@@ -211,14 +214,6 @@ public abstract interface FIBTableColumn extends FIBModelObject {
 			formatter = new FIBFormatter();
 		}
 
-		public FIBTableComponent getTable() {
-			return table;
-		}
-
-		public void setTable(FIBTableComponent table) {
-			this.table = table;
-		}
-
 		public BindingDefinition getDataBindingDefinition() {
 			return DATA;
 		}
@@ -245,10 +240,7 @@ public abstract interface FIBTableColumn extends FIBModelObject {
 
 		@Override
 		public FIBComponent getComponent() {
-			if (getTable() instanceof FIBTable) {
-				return ((FIBTable) getTable());
-			}
-			return null;
+			return getOwner();
 		}
 
 		@Override
@@ -282,8 +274,8 @@ public abstract interface FIBTableColumn extends FIBModelObject {
 
 		@Override
 		public BindingModel getBindingModel() {
-			if (getTable() != null) {
-				return getTable().getTableBindingModel();
+			if (getOwner() != null) {
+				return getOwner().getTableBindingModel();
 			}
 			return null;
 		}
@@ -356,8 +348,8 @@ public abstract interface FIBTableColumn extends FIBModelObject {
 
 		@Override
 		public Font retrieveValidFont() {
-			if (font == null && getTable() != null) {
-				return getTable().retrieveValidFont();
+			if (font == null && getOwner() != null) {
+				return getOwner().retrieveValidFont();
 			}
 			return getFont();
 		}
@@ -424,7 +416,7 @@ public abstract interface FIBTableColumn extends FIBModelObject {
 			}
 
 			private void createFormatterBindingModel() {
-				formatterBindingModel = new BindingModel(getTable().getTableBindingModel());
+				formatterBindingModel = new BindingModel(getOwner().getTableBindingModel());
 				formatterBindingModel.addToBindingVariables(new BindingVariable("object", Object.class) {
 					@Override
 					public Type getType() {
@@ -453,8 +445,8 @@ public abstract interface FIBTableColumn extends FIBModelObject {
 		}
 
 		public int getIndex() {
-			if (getTable() != null) {
-				return getTable().getColumns().indexOf(this);
+			if (getOwner() != null) {
+				return getOwner().getColumns().indexOf(this);
 			}
 			return -1;
 		}

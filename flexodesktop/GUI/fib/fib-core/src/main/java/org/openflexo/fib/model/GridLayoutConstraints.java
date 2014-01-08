@@ -54,11 +54,11 @@ public class GridLayoutConstraints extends ComponentConstraints {
 		setY(y);
 	}
 
-	protected GridLayoutConstraints(String someConstraints) {
+	public GridLayoutConstraints(String someConstraints) {
 		super(someConstraints);
 	}
 
-	GridLayoutConstraints(ComponentConstraints someConstraints) {
+	public GridLayoutConstraints(ComponentConstraints someConstraints) {
 		super(someConstraints);
 	}
 

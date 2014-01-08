@@ -29,63 +29,14 @@ import java.util.logging.Logger;
 import javax.swing.JComponent;
 
 import org.openflexo.fib.model.FIBPanel.Layout;
-import org.openflexo.xmlcode.StringConvertable;
-import org.openflexo.xmlcode.StringEncoder.Converter;
 
-public abstract class ComponentConstraints extends Hashtable<String, String> implements StringConvertable<ComponentConstraints> {
+public abstract class ComponentConstraints extends Hashtable<String, String> {
 
-	private static final Logger logger = Logger.getLogger(FIBComponent.class.getPackage().getName());
+	static final Logger logger = Logger.getLogger(FIBComponent.class.getPackage().getName());
 
 	private static final String INDEX = "index";
 
-	public static ComponentConstraintsConverter CONVERTER = new ComponentConstraintsConverter();
-
 	public boolean ignoreNotif = false;
-
-	public static class ComponentConstraintsConverter extends Converter<ComponentConstraints> {
-		public ComponentConstraintsConverter() {
-			super(ComponentConstraints.class);
-		}
-
-		@Override
-		public ComponentConstraints convertFromString(String aValue) {
-			try {
-				// System.out.println("aValue="+aValue);
-				String constraintType = aValue.substring(0, aValue.indexOf("("));
-				String someConstraints = aValue.substring(aValue.indexOf("(") + 1, aValue.length() - 1);
-				// System.out.println("constraintType="+constraintType);
-				// System.out.println("someConstraints="+someConstraints);
-				if (constraintType.equals(Layout.border.name())) {
-					return new BorderLayoutConstraints(someConstraints);
-				} else if (constraintType.equals(Layout.flow.name())) {
-					return new FlowLayoutConstraints(someConstraints);
-				} else if (constraintType.equals(Layout.grid.name())) {
-					return new GridLayoutConstraints(someConstraints);
-				} else if (constraintType.equals(Layout.box.name())) {
-					return new BoxLayoutConstraints(someConstraints);
-				} else if (constraintType.equals(Layout.border.name())) {
-					return new BorderLayoutConstraints(someConstraints);
-				} else if (constraintType.equals(Layout.twocols.name())) {
-					return new TwoColsLayoutConstraints(someConstraints);
-				} else if (constraintType.equals(Layout.gridbag.name())) {
-					return new GridBagLayoutConstraints(someConstraints);
-				} else if (constraintType.equals(Layout.split.name())) {
-					return new SplitLayoutConstraints(someConstraints);
-				}
-			} catch (StringIndexOutOfBoundsException e) {
-				logger.warning("Syntax error in ComponentConstraints: " + aValue);
-			}
-			return null;
-		}
-
-		@Override
-		public String convertToString(ComponentConstraints value) {
-			if (value == null) {
-				return null;
-			}
-			return value.getStringRepresentation();
-		};
-	}
 
 	public String getStringRepresentation() {
 		StringBuilder returned = new StringBuilder();
@@ -100,11 +51,6 @@ public abstract class ComponentConstraints extends Hashtable<String, String> imp
 		}
 		returned.append(")");
 		return returned.toString();
-	}
-
-	@Override
-	public ComponentConstraintsConverter getConverter() {
-		return CONVERTER;
 	}
 
 	private FIBComponent component;

@@ -29,7 +29,7 @@ import org.openflexo.localization.FlexoLocalization;
  * @author sylvain
  * 
  */
-public class FIBNumberWidgetTest {
+public class FIBNumberWidgetTest extends FIBTestCase {
 
 	private static GraphicalContextDelegate gcDelegate;
 
@@ -74,24 +74,24 @@ public class FIBNumberWidgetTest {
 	@Test
 	public void test1CreateComponent() {
 
-		component = new FIBPanel();
+		component = newFIBPanel();
 		component.setLayout(Layout.grid);
 		component.setRows(6);
 		component.setCols(4);
 
 		component.setDataClass(Numbers.class);
 
-		byteLabel = new FIBLabel("byte");
+		byteLabel = newFIBLabel("byte");
 		component.addToSubComponents(byteLabel, new GridLayoutConstraints(0, 0));
-		bytePWidget = new FIBNumber();
+		bytePWidget = newFIBNumber();
 		bytePWidget.setNumberType(NumberType.ByteType);
 		bytePWidget.setData(new DataBinding<String>("data.byteP", bytePWidget, Byte.TYPE, BindingDefinitionType.GET_SET));
 		component.addToSubComponents(bytePWidget, new GridLayoutConstraints(1, 0));
-		byteOWidget = new FIBNumber();
+		byteOWidget = newFIBNumber();
 		byteOWidget.setNumberType(NumberType.ByteType);
 		byteOWidget.setData(new DataBinding<String>("data.byteO", byteOWidget, Byte.class, BindingDefinitionType.GET_SET));
 		component.addToSubComponents(byteOWidget, new GridLayoutConstraints(2, 0));
-		byteSWidget = new FIBNumber();
+		byteSWidget = newFIBNumber();
 		byteSWidget.setNumberType(NumberType.ByteType);
 		byteSWidget.setData(new DataBinding<String>("data.byteP+data.byteO", byteSWidget, Byte.class, BindingDefinitionType.GET));
 		component.addToSubComponents(byteSWidget, new GridLayoutConstraints(3, 0));
@@ -100,17 +100,17 @@ public class FIBNumberWidgetTest {
 		assertTrue(byteOWidget.getData().isValid());
 		assertTrue(byteSWidget.getData().isValid());
 
-		shortLabel = new FIBLabel("short");
+		shortLabel = newFIBLabel("short");
 		component.addToSubComponents(shortLabel, new GridLayoutConstraints(0, 1));
-		shortPWidget = new FIBNumber();
+		shortPWidget = newFIBNumber();
 		shortPWidget.setNumberType(NumberType.ShortType);
 		shortPWidget.setData(new DataBinding<String>("data.shortP", shortPWidget, Short.TYPE, BindingDefinitionType.GET_SET));
 		component.addToSubComponents(shortPWidget, new GridLayoutConstraints(1, 1));
-		shortOWidget = new FIBNumber();
+		shortOWidget = newFIBNumber();
 		shortOWidget.setNumberType(NumberType.ShortType);
 		shortOWidget.setData(new DataBinding<String>("data.shortO", shortOWidget, Short.class, BindingDefinitionType.GET_SET));
 		component.addToSubComponents(shortOWidget, new GridLayoutConstraints(2, 1));
-		shortSWidget = new FIBNumber();
+		shortSWidget = newFIBNumber();
 		shortSWidget.setNumberType(NumberType.ShortType);
 		shortSWidget.setData(new DataBinding<String>("data.shortP+data.shortO", shortSWidget, Short.class, BindingDefinitionType.GET));
 		component.addToSubComponents(shortSWidget, new GridLayoutConstraints(3, 1));
@@ -119,17 +119,17 @@ public class FIBNumberWidgetTest {
 		assertTrue(shortOWidget.getData().isValid());
 		assertTrue(shortSWidget.getData().isValid());
 
-		integerLabel = new FIBLabel("integer");
+		integerLabel = newFIBLabel("integer");
 		component.addToSubComponents(integerLabel, new GridLayoutConstraints(0, 2));
-		integerPWidget = new FIBNumber();
+		integerPWidget = newFIBNumber();
 		integerPWidget.setNumberType(NumberType.IntegerType);
 		integerPWidget.setData(new DataBinding<String>("data.intP", integerPWidget, Integer.TYPE, BindingDefinitionType.GET_SET));
 		component.addToSubComponents(integerPWidget, new GridLayoutConstraints(1, 2));
-		integerOWidget = new FIBNumber();
+		integerOWidget = newFIBNumber();
 		integerOWidget.setNumberType(NumberType.IntegerType);
 		integerOWidget.setData(new DataBinding<String>("data.intO", integerOWidget, Integer.class, BindingDefinitionType.GET_SET));
 		component.addToSubComponents(integerOWidget, new GridLayoutConstraints(2, 2));
-		integerSWidget = new FIBNumber();
+		integerSWidget = newFIBNumber();
 		integerSWidget.setNumberType(NumberType.IntegerType);
 		integerSWidget.setData(new DataBinding<String>("data.intP+data.intO", integerSWidget, Integer.class, BindingDefinitionType.GET));
 		component.addToSubComponents(integerSWidget, new GridLayoutConstraints(3, 2));
@@ -138,17 +138,17 @@ public class FIBNumberWidgetTest {
 		assertTrue(integerOWidget.getData().isValid());
 		assertTrue(integerSWidget.getData().isValid());
 
-		longLabel = new FIBLabel("long");
+		longLabel = newFIBLabel("long");
 		component.addToSubComponents(longLabel, new GridLayoutConstraints(0, 3));
-		longPWidget = new FIBNumber();
+		longPWidget = newFIBNumber();
 		longPWidget.setNumberType(NumberType.LongType);
 		longPWidget.setData(new DataBinding<String>("data.longP", longPWidget, Long.TYPE, BindingDefinitionType.GET_SET));
 		component.addToSubComponents(longPWidget, new GridLayoutConstraints(1, 3));
-		longOWidget = new FIBNumber();
+		longOWidget = newFIBNumber();
 		longOWidget.setNumberType(NumberType.LongType);
 		longOWidget.setData(new DataBinding<String>("data.longO", longOWidget, Long.class, BindingDefinitionType.GET_SET));
 		component.addToSubComponents(longOWidget, new GridLayoutConstraints(2, 3));
-		longSWidget = new FIBNumber();
+		longSWidget = newFIBNumber();
 		longSWidget.setNumberType(NumberType.LongType);
 		longSWidget.setData(new DataBinding<String>("data.longP+data.longO", longSWidget, Long.class, BindingDefinitionType.GET));
 		component.addToSubComponents(longSWidget, new GridLayoutConstraints(3, 3));
@@ -157,17 +157,17 @@ public class FIBNumberWidgetTest {
 		assertTrue(longOWidget.getData().isValid());
 		assertTrue(longSWidget.getData().isValid());
 
-		floatLabel = new FIBLabel("float");
+		floatLabel = newFIBLabel("float");
 		component.addToSubComponents(floatLabel, new GridLayoutConstraints(0, 4));
-		floatPWidget = new FIBNumber();
+		floatPWidget = newFIBNumber();
 		floatPWidget.setNumberType(NumberType.FloatType);
 		floatPWidget.setData(new DataBinding<String>("data.floatP", floatPWidget, Float.TYPE, BindingDefinitionType.GET_SET));
 		component.addToSubComponents(floatPWidget, new GridLayoutConstraints(1, 4));
-		floatOWidget = new FIBNumber();
+		floatOWidget = newFIBNumber();
 		floatOWidget.setNumberType(NumberType.FloatType);
 		floatOWidget.setData(new DataBinding<String>("data.floatO", floatOWidget, Float.class, BindingDefinitionType.GET_SET));
 		component.addToSubComponents(floatOWidget, new GridLayoutConstraints(2, 4));
-		floatSWidget = new FIBNumber();
+		floatSWidget = newFIBNumber();
 		floatSWidget.setNumberType(NumberType.FloatType);
 		floatSWidget.setData(new DataBinding<String>("data.floatP+data.floatO", floatSWidget, Float.class, BindingDefinitionType.GET));
 		component.addToSubComponents(floatSWidget, new GridLayoutConstraints(3, 4));
@@ -176,17 +176,17 @@ public class FIBNumberWidgetTest {
 		assertTrue(floatOWidget.getData().isValid());
 		assertTrue(floatSWidget.getData().isValid());
 
-		doubleLabel = new FIBLabel("double");
+		doubleLabel = newFIBLabel("double");
 		component.addToSubComponents(doubleLabel, new GridLayoutConstraints(0, 5));
-		doublePWidget = new FIBNumber();
+		doublePWidget = newFIBNumber();
 		doublePWidget.setNumberType(NumberType.DoubleType);
 		doublePWidget.setData(new DataBinding<String>("data.doubleP", doublePWidget, Double.TYPE, BindingDefinitionType.GET_SET));
 		component.addToSubComponents(doublePWidget, new GridLayoutConstraints(1, 5));
-		doubleOWidget = new FIBNumber();
+		doubleOWidget = newFIBNumber();
 		doubleOWidget.setNumberType(NumberType.DoubleType);
 		doubleOWidget.setData(new DataBinding<String>("data.doubleO", doubleOWidget, Double.class, BindingDefinitionType.GET_SET));
 		component.addToSubComponents(doubleOWidget, new GridLayoutConstraints(2, 5));
-		doubleSWidget = new FIBNumber();
+		doubleSWidget = newFIBNumber();
 		doubleSWidget.setNumberType(NumberType.DoubleType);
 		doubleSWidget.setData(new DataBinding<String>("data.doubleP+data.doubleO", doubleSWidget, Double.class, BindingDefinitionType.GET));
 		component.addToSubComponents(doubleSWidget, new GridLayoutConstraints(3, 5));
@@ -390,6 +390,7 @@ public class FIBNumberWidgetTest {
 		gcDelegate.setUp();
 	}
 
+	@Override
 	@After
 	public void tearDown() throws Exception {
 		gcDelegate.tearDown();

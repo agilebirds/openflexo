@@ -144,7 +144,9 @@ public abstract interface FIBContainer extends FIBComponent {
 
 		@Override
 		public void addToSubComponents(FIBComponent aComponent, ComponentConstraints someConstraints, int subComponentIndex) {
-			getSubComponents().add(subComponentIndex, aComponent);
+
+			// TODO: i dont't like this code, we might do it without all these hacks
+			aComponent.setParent(this);
 			if (someConstraints != null) {
 				aComponent.getConstraints().ignoreNotif = true;
 				aComponent.getConstraints().putAll(someConstraints);
@@ -158,6 +160,7 @@ public abstract interface FIBContainer extends FIBComponent {
 			// Hack to put at right index
 			// TODO: manage a performSuperAdder(index)
 			getSubComponents().remove(aComponent);
+			getSubComponents().add(subComponentIndex, aComponent);
 
 			if (deserializationPerformed) {
 				reorderComponents();

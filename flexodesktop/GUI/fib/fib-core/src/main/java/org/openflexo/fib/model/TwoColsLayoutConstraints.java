@@ -108,11 +108,11 @@ public class TwoColsLayoutConstraints extends ComponentConstraints {
 		setExpandVertically(expandVertically);
 	}
 
-	protected TwoColsLayoutConstraints(String someConstraints) {
+	public TwoColsLayoutConstraints(String someConstraints) {
 		super(someConstraints);
 	}
 
-	TwoColsLayoutConstraints(ComponentConstraints someConstraints) {
+	public TwoColsLayoutConstraints(ComponentConstraints someConstraints) {
 		super(someConstraints);
 	}
 

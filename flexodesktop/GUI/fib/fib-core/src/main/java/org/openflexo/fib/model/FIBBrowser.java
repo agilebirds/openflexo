@@ -258,12 +258,12 @@ public interface FIBBrowser extends FIBWidget {
 
 		private Class iteratorClass;
 
-		private Vector<FIBBrowserElement> elements;
+		// private Vector<FIBBrowserElement> elements;
 
 		private final Hashtable<Class, FIBBrowserElement> elementsForClasses;
 
 		public FIBBrowserImpl() {
-			elements = new Vector<FIBBrowserElement>();
+			// elements = new Vector<FIBBrowserElement>();
 			elementsForClasses = new Hashtable<Class, FIBBrowserElement>();
 		}
 
@@ -423,36 +423,33 @@ public interface FIBBrowser extends FIBWidget {
 			}
 		}
 
-		@Override
+		/*@Override
 		public Vector<FIBBrowserElement> getElements() {
 			return elements;
-		}
+		}*/
 
-		public void setElements(Vector<FIBBrowserElement> elements) {
-			this.elements = elements;
+		@Override
+		public void setElements(List<FIBBrowserElement> elements) {
+			performSuperSetter(ELEMENTS_KEY, elements);
 			updateElementsForClasses();
 		}
 
 		@Override
 		public void addToElements(FIBBrowserElement anElement) {
-			anElement.setOwner(this);
-			elements.add(anElement);
+			performSuperAdder(ELEMENTS_KEY, anElement);
 			updateElementsForClasses();
-			getPropertyChangeSupport().firePropertyChange(ELEMENTS_KEY, null, elements);
 		}
 
 		@Override
 		public void removeFromElements(FIBBrowserElement anElement) {
-			anElement.setOwner(null);
-			elements.remove(anElement);
+			performSuperRemover(ELEMENTS_KEY, anElement);
 			updateElementsForClasses();
-			getPropertyChangeSupport().firePropertyChange(ELEMENTS_KEY, null, elements);
 		}
 
 		public FIBBrowserElement createElement() {
 			logger.info("Called createElement()");
 			FIBBrowserElement newElement = getFactory().newInstance(FIBBrowserElement.class);
-			newElement.setName("element" + (elements.size() > 0 ? elements.size() : ""));
+			newElement.setName("element" + (getElements().size() > 0 ? getElements().size() : ""));
 			addToElements(newElement);
 			return newElement;
 		}
@@ -467,38 +464,38 @@ public interface FIBBrowser extends FIBWidget {
 			if (e == null) {
 				return;
 			}
-			elements.remove(e);
-			elements.insertElementAt(e, 0);
-			getPropertyChangeSupport().firePropertyChange(ELEMENTS_KEY, null, elements);
+			getElements().remove(e);
+			getElements().add(0, e);
+			getPropertyChangeSupport().firePropertyChange(ELEMENTS_KEY, null, getElements());
 		}
 
 		public void moveUp(FIBBrowserElement e) {
 			if (e == null) {
 				return;
 			}
-			int index = elements.indexOf(e);
-			elements.remove(e);
-			elements.insertElementAt(e, index - 1);
-			getPropertyChangeSupport().firePropertyChange(ELEMENTS_KEY, null, elements);
+			int index = getElements().indexOf(e);
+			getElements().remove(e);
+			getElements().add(index - 1, e);
+			getPropertyChangeSupport().firePropertyChange(ELEMENTS_KEY, null, getElements());
 		}
 
 		public void moveDown(FIBBrowserElement e) {
 			if (e == null) {
 				return;
 			}
-			int index = elements.indexOf(e);
-			elements.remove(e);
-			elements.insertElementAt(e, index + 1);
-			getPropertyChangeSupport().firePropertyChange(ELEMENTS_KEY, null, elements);
+			int index = getElements().indexOf(e);
+			getElements().remove(e);
+			getElements().add(index + 1, e);
+			getPropertyChangeSupport().firePropertyChange(ELEMENTS_KEY, null, getElements());
 		}
 
 		public void moveToBottom(FIBBrowserElement e) {
 			if (e == null) {
 				return;
 			}
-			elements.remove(e);
-			elements.add(e);
-			getPropertyChangeSupport().firePropertyChange(ELEMENTS_KEY, null, elements);
+			getElements().remove(e);
+			getElements().add(e);
+			getPropertyChangeSupport().firePropertyChange(ELEMENTS_KEY, null, getElements());
 		}
 
 		@Override
@@ -517,7 +514,7 @@ public interface FIBBrowser extends FIBWidget {
 
 		protected void updateElementsForClasses() {
 			elementsForClasses.clear();
-			for (FIBBrowserElement e : elements) {
+			for (FIBBrowserElement e : getElements()) {
 				if (e.getDataClass() instanceof Class) {
 					elementsForClasses.put(e.getDataClass(), e);
 				}

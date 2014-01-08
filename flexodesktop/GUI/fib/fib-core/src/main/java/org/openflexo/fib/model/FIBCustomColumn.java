@@ -31,7 +31,6 @@ import org.openflexo.antar.binding.BindingVariable;
 import org.openflexo.antar.binding.DataBinding;
 import org.openflexo.fib.model.FIBCustom.FIBCustomComponent.CustomComponentParameter;
 import org.openflexo.fib.model.FIBCustom.FIBCustomImpl;
-import org.openflexo.fib.model.FIBCustomColumn.FIBCustomAssignment;
 import org.openflexo.model.annotations.Adder;
 import org.openflexo.model.annotations.Getter;
 import org.openflexo.model.annotations.Getter.Cardinality;
@@ -44,8 +43,8 @@ import org.openflexo.model.annotations.XMLAttribute;
 import org.openflexo.model.annotations.XMLElement;
 
 @ModelEntity
-@ImplementationClass(FIBCustomAssignment.FIBCustomAssignmentImpl.class)
-@XMLElement(xmlTag = "ColumnAssignment")
+@ImplementationClass(FIBCustomColumn.FIBCustomColumnImpl.class)
+@XMLElement(xmlTag = "CustomColumn")
 public interface FIBCustomColumn extends FIBTableColumn {
 
 	@PropertyIdentifier(type = Class.class)
@@ -76,14 +75,14 @@ public interface FIBCustomColumn extends FIBTableColumn {
 	@Remover(ASSIGNMENTS_KEY)
 	public void removeFromAssignments(FIBCustomAssignment aParameter);
 
-	@Getter(CUSTOM_RENDERING_KEY)
+	@Getter(value = CUSTOM_RENDERING_KEY, defaultValue = "false")
 	@XMLAttribute
 	public boolean isCustomRendering();
 
 	@Setter(CUSTOM_RENDERING_KEY)
 	public void setCustomRendering(boolean customRendering);
 
-	@Getter(DISABLE_TERMINATE_EDIT_ON_FOCUS_LOST)
+	@Getter(value = DISABLE_TERMINATE_EDIT_ON_FOCUS_LOST, defaultValue = "false")
 	@XMLAttribute
 	public boolean isDisableTerminateEditOnFocusLost();
 
@@ -267,7 +266,7 @@ public interface FIBCustomColumn extends FIBTableColumn {
 		@Setter(VALUE_KEY)
 		public void setValue(DataBinding<Object> value);
 
-		@Getter(value = MANDATORY_KEY)
+		@Getter(value = MANDATORY_KEY, defaultValue = "false")
 		@XMLAttribute
 		public boolean isMandatory();
 

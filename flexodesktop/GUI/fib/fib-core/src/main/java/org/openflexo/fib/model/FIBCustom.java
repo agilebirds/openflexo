@@ -347,7 +347,7 @@ public interface FIBCustom extends FIBWidget {
 
 	@ModelEntity
 	@ImplementationClass(FIBCustomAssignment.FIBCustomAssignmentImpl.class)
-	@XMLElement(xmlTag = "ColumnAssignment")
+	@XMLElement(xmlTag = "Assignment")
 	public static interface FIBCustomAssignment extends FIBModelObject {
 		@PropertyIdentifier(type = FIBCustomColumn.class)
 		public static final String OWNER_KEY = "owner";
@@ -378,7 +378,7 @@ public interface FIBCustom extends FIBWidget {
 		@Setter(VALUE_KEY)
 		public void setValue(DataBinding<Object> value);
 
-		@Getter(value = MANDATORY_KEY)
+		@Getter(value = MANDATORY_KEY, defaultValue = "false")
 		@XMLAttribute
 		public boolean isMandatory();
 

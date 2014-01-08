@@ -29,11 +29,11 @@ public class ButtonLayoutConstraints extends ComponentConstraints {
 		super();
 	}
 
-	protected ButtonLayoutConstraints(String someConstraints) {
+	public ButtonLayoutConstraints(String someConstraints) {
 		super(someConstraints);
 	}
 
-	ButtonLayoutConstraints(ComponentConstraints someConstraints) {
+	public ButtonLayoutConstraints(ComponentConstraints someConstraints) {
 		super(someConstraints);
 	}
 

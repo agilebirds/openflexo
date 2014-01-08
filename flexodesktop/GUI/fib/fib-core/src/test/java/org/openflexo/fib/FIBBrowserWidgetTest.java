@@ -36,7 +36,7 @@ import org.openflexo.localization.FlexoLocalization;
  * @author sylvain
  * 
  */
-public class FIBBrowserWidgetTest {
+public class FIBBrowserWidgetTest extends FIBTestCase {
 
 	private static GraphicalContextDelegate gcDelegate;
 
@@ -52,29 +52,29 @@ public class FIBBrowserWidgetTest {
 	@Test
 	public void test1CreateComponent() {
 
-		component = new FIBPanel();
+		component = newFIBPanel();
 		component.setLayout(Layout.twocols);
 		component.setDataClass(Family.class);
 
-		browser = new FIBBrowser();
+		browser = newFIBBrowser();
 		browser.setRoot(new DataBinding<Object>("data", browser, Object.class, BindingDefinitionType.GET));
 		browser.setBoundToSelectionManager(true);
 		browser.setIteratorClass(Person.class);
 
-		FIBBrowserElement rootElement = new FIBBrowserElement();
+		FIBBrowserElement rootElement = newFIBBrowserElement();
 		rootElement.setName("family");
 		rootElement.setDataClass(Family.class);
 		rootElement.setLabel(new DataBinding<String>("\"My Family\"", browser, String.class, BindingDefinitionType.GET));
-		FIBBrowserElementChildren parents = new FIBBrowserElementChildren();
+		FIBBrowserElementChildren parents = newFIBBrowserElementChildren();
 		parents.setData(new DataBinding<Object>("family.parents", browser, Object.class, BindingDefinitionType.GET));
 		rootElement.addToChildren(parents);
-		FIBBrowserElementChildren children = new FIBBrowserElementChildren();
+		FIBBrowserElementChildren children = newFIBBrowserElementChildren();
 		parents.setData(new DataBinding<Object>("family.children", browser, Object.class, BindingDefinitionType.GET));
 		rootElement.addToChildren(children);
 
 		browser.addToElements(rootElement);
 
-		FIBBrowserElement personElement = new FIBBrowserElement();
+		FIBBrowserElement personElement = newFIBBrowserElement();
 		personElement.setName("person");
 		personElement.setDataClass(Person.class);
 		personElement.setLabel(new DataBinding<String>("\"My relative: \"+person.toString", browser, String.class,
@@ -194,6 +194,7 @@ public class FIBBrowserWidgetTest {
 		gcDelegate.setUp();
 	}
 
+	@Override
 	@After
 	public void tearDown() throws Exception {
 		gcDelegate.tearDown();

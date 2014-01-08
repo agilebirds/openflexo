@@ -36,7 +36,7 @@ import org.openflexo.localization.FlexoLocalization;
  * @author sylvain
  * 
  */
-public class FIBBrowserWidgetSelectionTest {
+public class FIBBrowserWidgetSelectionTest extends FIBTestCase {
 
 	private static GraphicalContextDelegate gcDelegate;
 
@@ -60,31 +60,31 @@ public class FIBBrowserWidgetSelectionTest {
 	@Test
 	public void test1CreateComponent() {
 
-		component = new FIBPanel();
+		component = newFIBPanel();
 		component.setLayout(Layout.border);
 		component.setDataClass(Family.class);
 
-		browser = new FIBBrowser();
+		browser = newFIBBrowser();
 		browser.setName("browser");
 		browser.setRoot(new DataBinding<Object>("data", browser, Object.class, BindingDefinitionType.GET));
 		browser.setIteratorClass(Person.class);
 		browser.setBoundToSelectionManager(true);
 		browser.setManageDynamicModel(true);
 
-		FIBBrowserElement rootElement = new FIBBrowserElement();
+		FIBBrowserElement rootElement = newFIBBrowserElement();
 		rootElement.setName("family");
 		rootElement.setDataClass(Family.class);
 		rootElement.setLabel(new DataBinding<String>("\"My Family\"", browser, String.class, BindingDefinitionType.GET));
-		FIBBrowserElementChildren parents = new FIBBrowserElementChildren();
+		FIBBrowserElementChildren parents = newFIBBrowserElementChildren();
 		parents.setData(new DataBinding<Object>("family.parents", browser, Object.class, BindingDefinitionType.GET));
 		rootElement.addToChildren(parents);
-		FIBBrowserElementChildren children = new FIBBrowserElementChildren();
+		FIBBrowserElementChildren children = newFIBBrowserElementChildren();
 		parents.setData(new DataBinding<Object>("family.children", browser, Object.class, BindingDefinitionType.GET));
 		rootElement.addToChildren(children);
 
 		browser.addToElements(rootElement);
 
-		FIBBrowserElement personElement = new FIBBrowserElement();
+		FIBBrowserElement personElement = newFIBBrowserElement();
 		personElement.setName("person");
 		personElement.setDataClass(Person.class);
 		personElement.setLabel(new DataBinding<String>("\"My relative: \"+person.toString", browser, String.class,
@@ -92,25 +92,25 @@ public class FIBBrowserWidgetSelectionTest {
 
 		browser.addToElements(personElement);
 
-		detailsPanel = new FIBPanel();
+		detailsPanel = newFIBPanel();
 		detailsPanel.setLayout(Layout.twocols);
 
-		firstNameLabel = new FIBLabel("first_name");
+		firstNameLabel = newFIBLabel("first_name");
 		detailsPanel.addToSubComponents(firstNameLabel, new TwoColsLayoutConstraints(TwoColsLayoutLocation.left, false, false));
-		firstNameTF = new FIBTextField();
+		firstNameTF = newFIBTextField();
 		firstNameTF
 				.setData(new DataBinding<String>("browser.selected.firstName", firstNameTF, String.class, BindingDefinitionType.GET_SET));
 		detailsPanel.addToSubComponents(firstNameTF, new TwoColsLayoutConstraints(TwoColsLayoutLocation.right, false, false));
 
-		lastNameLabel = new FIBLabel("last_name");
+		lastNameLabel = newFIBLabel("last_name");
 		detailsPanel.addToSubComponents(lastNameLabel, new TwoColsLayoutConstraints(TwoColsLayoutLocation.left, false, false));
-		lastNameTF = new FIBTextField();
+		lastNameTF = newFIBTextField();
 		lastNameTF.setData(new DataBinding<String>("browser.selected.lastName", lastNameTF, String.class, BindingDefinitionType.GET_SET));
 		detailsPanel.addToSubComponents(lastNameTF, new TwoColsLayoutConstraints(TwoColsLayoutLocation.right, false, false));
 
-		fullNameLabel = new FIBLabel("full_name");
+		fullNameLabel = newFIBLabel("full_name");
 		detailsPanel.addToSubComponents(fullNameLabel, new TwoColsLayoutConstraints(TwoColsLayoutLocation.left, false, false));
-		fullNameTF = new FIBTextField();
+		fullNameTF = newFIBTextField();
 		fullNameTF.setData(new DataBinding<String>("browser.selected.firstName + ' ' + browser.selected.lastName", fullNameTF,
 				String.class, BindingDefinitionType.GET));
 		detailsPanel.addToSubComponents(fullNameTF, new TwoColsLayoutConstraints(TwoColsLayoutLocation.right, false, false));
@@ -206,6 +206,7 @@ public class FIBBrowserWidgetSelectionTest {
 		gcDelegate.setUp();
 	}
 
+	@Override
 	@After
 	public void tearDown() throws Exception {
 		gcDelegate.tearDown();

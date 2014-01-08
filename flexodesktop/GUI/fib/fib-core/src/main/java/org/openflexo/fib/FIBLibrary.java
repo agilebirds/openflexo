@@ -40,16 +40,11 @@ import org.openflexo.fib.model.FIBComponent;
 import org.openflexo.fib.model.FIBModelFactory;
 import org.openflexo.model.exceptions.InvalidDataException;
 import org.openflexo.model.exceptions.ModelDefinitionException;
-import org.openflexo.toolbox.FileResource;
-import org.openflexo.xmlcode.InvalidModelException;
-import org.openflexo.xmlcode.XMLDecoder;
-import org.openflexo.xmlcode.XMLMapping;
 
 public class FIBLibrary {
 
 	static final Logger logger = Logger.getLogger(FIBLibrary.class.getPackage().getName());
 
-	protected static XMLMapping _fibMapping;
 	private static FIBLibrary _current;
 
 	private final Map<String, FIBComponent> _fibDefinitions;
@@ -94,36 +89,6 @@ public class FIBLibrary {
 
 	public BindingFactory getBindingFactory() {
 		return bindingFactory;
-	}
-
-	public static XMLMapping getFIBMapping() {
-		if (_fibMapping == null) {
-			// File mappingFile = new File
-			// ("../FlexoInspector/Models/InspectorModel.xml");
-			File mappingFile = new FileResource("Models/FIBModel.xml");
-			if (!mappingFile.exists()) {
-				if (logger.isLoggable(Level.SEVERE)) {
-					logger.severe("Could not find file: " + mappingFile.getAbsolutePath());
-				}
-			}
-			try {
-				_fibMapping = new XMLMapping(mappingFile);
-			} catch (InvalidModelException e) {
-				// Warns about the exception
-				if (logger.isLoggable(Level.SEVERE)) {
-					logger.severe("Exception raised: " + e + " for file " + mappingFile.getAbsolutePath() + ". See console for details.");
-				}
-				e.printStackTrace();
-			} catch (Exception e) {
-				// Warns about the exception
-				if (logger.isLoggable(Level.SEVERE)) {
-					logger.severe("Exception raised: " + e.getClass().getName() + " for file " + mappingFile.getAbsolutePath()
-							+ ". See console for details.");
-				}
-				e.printStackTrace();
-			}
-		}
-		return _fibMapping;
 	}
 
 	public boolean componentIsLoaded(File fibFile) {
@@ -202,17 +167,42 @@ public class FIBLibrary {
 		if (!useCache || _fibDefinitions.get(fibIdentifier) == null) {
 
 			try {
-				if (getFIBMapping() != null) {
-					FIBComponent fibComponent = (FIBComponent) XMLDecoder.decodeObjectWithMapping(inputStream, getFIBMapping(), this);
+				FIBModelFactory factory = new FIBModelFactory();
 
-					fibComponent.setDefinitionFile(fibIdentifier);
-					_fibDefinitions.put(fibIdentifier, fibComponent);
-				}
-			} catch (Exception e) {
+				FIBComponent component = (FIBComponent) factory.deserialize(inputStream);
+				component.setLastModified(new Date());
+				component.setDefinitionFile(fibIdentifier);
+				_fibDefinitions.put(fibIdentifier, component);
+				return component;
+			} catch (ModelDefinitionException e) {
 				if (logger.isLoggable(Level.WARNING)) {
 					logger.warning("Exception raised during Fib import '" + fibIdentifier + "': " + e);
 				}
 				e.printStackTrace();
+			} catch (FileNotFoundException e) {
+				if (logger.isLoggable(Level.WARNING)) {
+					logger.warning("Exception raised during Fib import '" + fibIdentifier + "': " + e);
+				}
+				e.printStackTrace();
+			} catch (IOException e) {
+				if (logger.isLoggable(Level.WARNING)) {
+					logger.warning("Exception raised during Fib import '" + fibIdentifier + "': " + e);
+				}
+				e.printStackTrace();
+			} catch (JDOMException e) {
+				if (logger.isLoggable(Level.WARNING)) {
+					logger.warning("Exception raised during Fib import '" + fibIdentifier + "': " + e);
+				}
+				e.printStackTrace();
+			} catch (InvalidDataException e) {
+				if (logger.isLoggable(Level.WARNING)) {
+					logger.warning("Exception raised during Fib import '" + fibIdentifier + "': " + e);
+				}
+				e.printStackTrace();
+			} finally {
+				if (inputStream != null) {
+					IOUtils.closeQuietly(inputStream);
+				}
 			}
 		}
 		return _fibDefinitions.get(fibIdentifier);

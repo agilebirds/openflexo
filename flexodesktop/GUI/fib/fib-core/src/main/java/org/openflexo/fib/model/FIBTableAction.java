@@ -27,6 +27,8 @@ import org.openflexo.antar.binding.DataBinding;
 import org.openflexo.fib.model.validation.ValidationReport;
 import org.openflexo.model.annotations.Getter;
 import org.openflexo.model.annotations.ImplementationClass;
+import org.openflexo.model.annotations.Import;
+import org.openflexo.model.annotations.Imports;
 import org.openflexo.model.annotations.ModelEntity;
 import org.openflexo.model.annotations.PropertyIdentifier;
 import org.openflexo.model.annotations.Setter;
@@ -35,6 +37,8 @@ import org.openflexo.model.annotations.XMLElement;
 
 @ModelEntity(isAbstract = true)
 @ImplementationClass(FIBTableAction.FIBTableActionImpl.class)
+@Imports({ @Import(FIBTableAction.FIBAddAction.class), @Import(FIBTableAction.FIBRemoveAction.class),
+		@Import(FIBTableAction.FIBCustomAction.class) })
 public abstract interface FIBTableAction extends FIBModelObject {
 
 	public static enum ActionType {

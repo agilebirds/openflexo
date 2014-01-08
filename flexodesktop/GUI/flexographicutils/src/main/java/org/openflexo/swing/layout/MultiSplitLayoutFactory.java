@@ -40,11 +40,15 @@ public interface MultiSplitLayoutFactory {
 
 	public Leaf makeLeaf(String name);
 
-	public Split makeSplit();
+	public Split<?> makeSplit();
 
-	public ColSplit makeColSplit();
+	public ColSplit<?> makeColSplit();
 
-	public RowSplit makeRowSplit();
+	public RowSplit<?> makeRowSplit();
+
+	public RowSplit<?> makeRowSplit(Leaf left, Divider divider, Leaf right);
+
+	public ColSplit<?> makeColSplit(Leaf top, Divider divider, Leaf bottom);
 
 	public static class DefaultMultiSplitLayoutFactory implements MultiSplitLayoutFactory {
 
@@ -78,5 +82,16 @@ public interface MultiSplitLayoutFactory {
 			return new DefaultRowSplit();
 		}
 
+		@Override
+		public RowSplit<?> makeRowSplit(Leaf left, Divider divider, Leaf right) {
+			return new DefaultRowSplit(left, divider, right);
+		}
+
+		@Override
+		public ColSplit<?> makeColSplit(Leaf top, Divider divider, Leaf bottom) {
+			return new DefaultColSplit(top, divider, bottom);
+		}
+
 	}
+
 }

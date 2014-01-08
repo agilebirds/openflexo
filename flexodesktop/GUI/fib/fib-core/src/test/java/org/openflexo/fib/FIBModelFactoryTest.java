@@ -17,34 +17,33 @@
  * along with OpenFlexo. If not, see <http://www.gnu.org/licenses/>.
  *
  */
-package org.openflexo.fib.model;
+package org.openflexo.fib;
 
-import javax.swing.JComponent;
+import static org.junit.Assert.fail;
 
-import org.openflexo.fib.model.FIBPanel.Layout;
+import java.util.logging.Logger;
 
-public class FlowLayoutConstraints extends ComponentConstraints {
+import org.junit.Test;
+import org.openflexo.fib.model.FIBModelFactory;
+import org.openflexo.logging.FlexoLogger;
+import org.openflexo.model.exceptions.ModelDefinitionException;
 
-	public FlowLayoutConstraints() {
-		super();
+/**
+ * Test instanciation of FIBModelFactory<br>
+ * TODO: instanciate all widgets
+ * 
+ */
+public class FIBModelFactoryTest {
+
+	private static final Logger logger = FlexoLogger.getLogger(FIBModelFactoryTest.class.getPackage().getName());
+
+	@Test
+	public void testInstanciateFIBModelFactory() {
+		try {
+			FIBModelFactory factory = new FIBModelFactory();
+		} catch (ModelDefinitionException e) {
+			e.printStackTrace();
+			fail();
+		}
 	}
-
-	public FlowLayoutConstraints(String someConstraints) {
-		super(someConstraints);
-	}
-
-	public FlowLayoutConstraints(ComponentConstraints someConstraints) {
-		super(someConstraints);
-	}
-
-	@Override
-	protected Layout getType() {
-		return Layout.flow;
-	}
-
-	@Override
-	public void performConstrainedAddition(JComponent container, JComponent contained) {
-		container.add(contained);
-	}
-
 }

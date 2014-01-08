@@ -35,7 +35,7 @@ import com.google.common.reflect.TypeToken;
  * @author sylvain
  * 
  */
-public class FIBCheckboxListWidgetTest {
+public class FIBCheckboxListWidgetTest extends FIBTestCase {
 
 	private static GraphicalContextDelegate gcDelegate;
 
@@ -60,44 +60,44 @@ public class FIBCheckboxListWidgetTest {
 	@Test
 	public void test1CreateComponent() {
 
-		component = new FIBPanel();
+		component = newFIBPanel();
 		component.setLayout(Layout.twocols);
 		component.setDataClass(Family.class);
 
-		checkboxListLabel1 = new FIBLabel("static_checkboxList_auto_select");
+		checkboxListLabel1 = newFIBLabel("static_checkboxList_auto_select");
 		component.addToSubComponents(checkboxListLabel1, new TwoColsLayoutConstraints(TwoColsLayoutLocation.left, false, false));
-		checkboxList1 = new FIBCheckboxList();
+		checkboxList1 = newFIBCheckboxList();
 		checkboxList1.setStaticList("value1,value2,value3");
 		checkboxList1.setAutoSelectFirstRow(true);
 		component.addToSubComponents(checkboxList1, new TwoColsLayoutConstraints(TwoColsLayoutLocation.right, false, false));
 
-		checkboxListLabel2 = new FIBLabel("static_checkboxList_no_auto_select");
+		checkboxListLabel2 = newFIBLabel("static_checkboxList_no_auto_select");
 		component.addToSubComponents(checkboxListLabel2, new TwoColsLayoutConstraints(TwoColsLayoutLocation.left, false, false));
-		checkboxList2 = new FIBCheckboxList();
+		checkboxList2 = newFIBCheckboxList();
 		checkboxList2.setStaticList("value1,value2,value3");
 		checkboxList2.setAutoSelectFirstRow(false);
 		component.addToSubComponents(checkboxList2, new TwoColsLayoutConstraints(TwoColsLayoutLocation.right, false, false));
 
-		checkboxListLabel3 = new FIBLabel("dynamic_checkboxList");
+		checkboxListLabel3 = newFIBLabel("dynamic_checkboxList");
 		component.addToSubComponents(checkboxListLabel3, new TwoColsLayoutConstraints(TwoColsLayoutLocation.left, false, false));
-		checkboxList3 = new FIBCheckboxList();
+		checkboxList3 = newFIBCheckboxList();
 		checkboxList3.setList(new DataBinding<List<?>>("data.children", checkboxList3, List.class, BindingDefinitionType.GET));
 		checkboxList3.setAutoSelectFirstRow(true);
 		component.addToSubComponents(checkboxList3, new TwoColsLayoutConstraints(TwoColsLayoutLocation.right, false, false));
 		assertTrue(checkboxList3.getList().isValid());
 
-		checkboxListLabel4 = new FIBLabel("dynamic_array");
+		checkboxListLabel4 = newFIBLabel("dynamic_array");
 		component.addToSubComponents(checkboxListLabel4, new TwoColsLayoutConstraints(TwoColsLayoutLocation.left, false, false));
-		checkboxList4 = new FIBCheckboxList();
+		checkboxList4 = newFIBCheckboxList();
 		checkboxList4.setArray(new DataBinding<Object[]>("data.parents", checkboxList4, new TypeToken<Object[]>() {
 		}.getType(), BindingDefinitionType.GET));
 		checkboxList4.setAutoSelectFirstRow(true);
 		component.addToSubComponents(checkboxList4, new TwoColsLayoutConstraints(TwoColsLayoutLocation.right, false, false));
 		assertTrue(checkboxList4.getArray().isValid());
 
-		checkboxListLabel5 = new FIBLabel("dynamic_checkboxList_bound_to_data");
+		checkboxListLabel5 = newFIBLabel("dynamic_checkboxList_bound_to_data");
 		component.addToSubComponents(checkboxListLabel5, new TwoColsLayoutConstraints(TwoColsLayoutLocation.left, false, false));
-		checkboxList5 = new FIBCheckboxList();
+		checkboxList5 = newFIBCheckboxList();
 		checkboxList5.setData(new DataBinding<List<Person>>("data.jackies", checkboxList5, List.class, BindingDefinitionType.GET_SET));
 		checkboxList5.setList(new DataBinding<List<?>>("data.children", checkboxList5, List.class, BindingDefinitionType.GET));
 		// checkboxList5.setAutoSelectFirstRow(true);
@@ -233,6 +233,7 @@ public class FIBCheckboxListWidgetTest {
 		gcDelegate.setUp();
 	}
 
+	@Override
 	@After
 	public void tearDown() throws Exception {
 		gcDelegate.tearDown();

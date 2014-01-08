@@ -62,7 +62,7 @@ public class FIBSplitPanelView<T> extends FIBContainerView<FIBSplitPanel, JXMult
 
 	@Override
 	protected JXMultiSplitPane createJComponent() {
-		layout = new MultiSplitLayout();
+		layout = new MultiSplitLayout(getComponent().getSplitLayoutFactory());
 		layout.setLayoutByWeight(false);
 		layout.setFloatingDividers(true);
 

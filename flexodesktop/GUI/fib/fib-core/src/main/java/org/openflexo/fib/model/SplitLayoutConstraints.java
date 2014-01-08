@@ -40,11 +40,11 @@ public class SplitLayoutConstraints extends ComponentConstraints {
 		return returned;
 	}
 
-	protected SplitLayoutConstraints(String someConstraints) {
+	public SplitLayoutConstraints(String someConstraints) {
 		super(someConstraints);
 	}
 
-	SplitLayoutConstraints(ComponentConstraints someConstraints) {
+	public SplitLayoutConstraints(ComponentConstraints someConstraints) {
 		super(someConstraints);
 	}
 

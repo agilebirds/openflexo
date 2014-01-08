@@ -22,6 +22,7 @@ package org.openflexo.fib.model;
 import java.io.File;
 
 import org.openflexo.fib.FIBLibrary;
+import org.openflexo.fib.model.converter.ComponentConstraintsConverter;
 import org.openflexo.model.ModelContextLibrary;
 import org.openflexo.model.converter.DataBindingConverter;
 import org.openflexo.model.converter.RelativePathFileConverter;
@@ -40,6 +41,7 @@ public class FIBModelFactory extends ModelFactory {
 	public FIBModelFactory() throws ModelDefinitionException {
 		super(ModelContextLibrary.getModelContext(FIBComponent.class));
 		addConverter(new DataBindingConverter());
+		addConverter(new ComponentConstraintsConverter());
 	}
 
 	public FIBModelFactory(File relativePath) throws ModelDefinitionException {

@@ -54,6 +54,8 @@ import org.openflexo.model.annotations.Adder;
 import org.openflexo.model.annotations.Getter;
 import org.openflexo.model.annotations.Getter.Cardinality;
 import org.openflexo.model.annotations.ImplementationClass;
+import org.openflexo.model.annotations.Import;
+import org.openflexo.model.annotations.Imports;
 import org.openflexo.model.annotations.ModelEntity;
 import org.openflexo.model.annotations.PropertyIdentifier;
 import org.openflexo.model.annotations.Remover;
@@ -63,6 +65,12 @@ import org.openflexo.toolbox.StringUtils;
 
 @ModelEntity(isAbstract = true)
 @ImplementationClass(FIBComponent.FIBComponentImpl.class)
+@Imports({ @Import(FIBPanel.class), @Import(FIBTab.class), @Import(FIBSplitPanel.class), @Import(FIBTabPanel.class),
+		@Import(FIBBrowser.class), @Import(FIBButton.class), @Import(FIBCheckBox.class), @Import(FIBColor.class), @Import(FIBCustom.class),
+		@Import(FIBFile.class), @Import(FIBFont.class), @Import(FIBHtmlEditor.class), @Import(FIBImage.class), @Import(FIBLabel.class),
+		@Import(FIBCheckboxList.class), @Import(FIBDropDown.class), @Import(FIBList.class), @Import(FIBRadioButtonList.class),
+		@Import(FIBNumber.class), @Import(FIBReferencedComponent.class), @Import(FIBTable.class), @Import(FIBEditor.class),
+		@Import(FIBEditorPane.class), @Import(FIBTextArea.class), @Import(FIBTextField.class) })
 public abstract interface FIBComponent extends FIBModelObject, TreeNode {
 
 	public static enum VerticalScrollBarPolicy {
@@ -189,7 +197,7 @@ public abstract interface FIBComponent extends FIBModelObject, TreeNode {
 	@Setter(CONTROLLER_CLASS_KEY)
 	public void setControllerClass(Class<? extends FIBController> controllerClass);
 
-	@Getter(value = CONSTRAINTS_KEY)
+	@Getter(value = CONSTRAINTS_KEY, isStringConvertable = true)
 	@XMLAttribute
 	public ComponentConstraints getConstraints();
 

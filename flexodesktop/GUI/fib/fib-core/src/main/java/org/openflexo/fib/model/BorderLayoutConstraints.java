@@ -132,11 +132,11 @@ public class BorderLayoutConstraints extends ComponentConstraints {
 		setLocation(location);
 	}
 
-	protected BorderLayoutConstraints(String someConstraints) {
+	public BorderLayoutConstraints(String someConstraints) {
 		super(someConstraints);
 	}
 
-	BorderLayoutConstraints(ComponentConstraints someConstraints) {
+	public BorderLayoutConstraints(ComponentConstraints someConstraints) {
 		super(someConstraints);
 	}
 

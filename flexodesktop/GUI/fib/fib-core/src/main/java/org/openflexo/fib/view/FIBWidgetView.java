@@ -49,8 +49,6 @@ import org.openflexo.fib.controller.FIBController;
 import org.openflexo.fib.model.FIBComponent;
 import org.openflexo.fib.model.FIBModelObject;
 import org.openflexo.fib.model.FIBWidget;
-import org.openflexo.xmlcode.AccessorInvocationException;
-import org.openflexo.xmlcode.InvalidObjectSpecificationException;
 
 /**
  * Abstract class representing a widget view
@@ -160,6 +158,7 @@ public abstract class FIBWidgetView<M extends FIBWidget, J extends JComponent, T
 		return getComponent();
 	}
 
+	@Override
 	public void updateData() {
 		super.updateData();
 		if (!widgetUpdating && !isDeleted() && getDynamicJComponent() != null) {
@@ -237,6 +236,7 @@ public abstract class FIBWidgetView<M extends FIBWidget, J extends JComponent, T
 		return _hasFocus;
 	}
 
+	@Override
 	public T getValue() {
 		if (isDeleted()) {
 			return null;
@@ -264,9 +264,6 @@ public abstract class FIBWidgetView<M extends FIBWidget, J extends JComponent, T
 			T returned = (T) value;
 			setData(returned);
 			return returned;
-		} catch (InvalidObjectSpecificationException e) {
-			logger.warning("Widget " + getWidget() + " InvalidObjectSpecificationException: " + e.getMessage());
-			return null;
 		} catch (TypeMismatchException e) {
 			logger.warning("Widget " + getWidget() + " TypeMismatchException: " + e.getMessage());
 			return null;
@@ -353,8 +350,6 @@ public abstract class FIBWidgetView<M extends FIBWidget, J extends JComponent, T
 			}
 			try {
 				getWidget().getData().setBindingValue(aValue, getBindingEvaluationContext());
-			} catch (AccessorInvocationException e) {
-				getController().handleException(e.getCause());
 			} catch (TypeMismatchException e) {
 				e.printStackTrace();
 			} catch (NullReferenceException e) {

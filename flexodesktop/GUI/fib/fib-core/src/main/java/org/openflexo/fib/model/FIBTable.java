@@ -22,7 +22,6 @@ package org.openflexo.fib.model;
 import java.awt.Color;
 import java.lang.reflect.ParameterizedType;
 import java.lang.reflect.Type;
-import java.util.ArrayList;
 import java.util.Collection;
 import java.util.List;
 import java.util.logging.Logger;
@@ -39,6 +38,7 @@ import org.openflexo.fib.model.FIBTableAction.FIBCustomAction;
 import org.openflexo.fib.model.FIBTableAction.FIBRemoveAction;
 import org.openflexo.fib.view.widget.FIBTableWidget;
 import org.openflexo.model.annotations.Adder;
+import org.openflexo.model.annotations.Finder;
 import org.openflexo.model.annotations.Getter;
 import org.openflexo.model.annotations.Getter.Cardinality;
 import org.openflexo.model.annotations.ImplementationClass;
@@ -52,7 +52,7 @@ import org.openflexo.model.annotations.XMLElement;
 @ModelEntity
 @ImplementationClass(FIBTable.FIBTableImpl.class)
 @XMLElement(xmlTag = "Table")
-public interface FIBTable extends FIBWidget, FIBTableComponent {
+public interface FIBTable extends FIBWidget {
 
 	@PropertyIdentifier(type = Class.class)
 	public static final String ITERATOR_CLASS_KEY = "iteratorClass";
@@ -150,7 +150,6 @@ public interface FIBTable extends FIBWidget, FIBTableComponent {
 	@Setter(SELECTED_KEY)
 	public void setSelected(DataBinding<Object> selected);
 
-	@Override
 	@Getter(value = COLUMNS_KEY, cardinality = Cardinality.LIST, inverse = FIBTableColumn.OWNER_KEY)
 	public List<FIBTableColumn> getColumns();
 
@@ -212,7 +211,10 @@ public interface FIBTable extends FIBWidget, FIBTableComponent {
 
 	public BindingModel getActionBindingModel();
 
+	@Finder(collection = COLUMNS_KEY, attribute = FIBTableColumn.TITLE_KEY)
 	public FIBTableColumn getColumnWithTitle(String title);
+
+	public BindingModel getTableBindingModel();
 
 	public static abstract class FIBTableImpl extends FIBWidgetImpl implements FIBTable {
 
@@ -242,8 +244,8 @@ public interface FIBTable extends FIBWidget, FIBTableComponent {
 
 		private Class iteratorClass;
 
-		private List<FIBTableColumn> columns;
-		private List<FIBTableAction> actions;
+		// private List<FIBTableColumn> columns;
+		// private List<FIBTableAction> actions;
 
 		private BindingModel tableBindingModel;
 		private BindingModel actionBindingModel;
@@ -254,17 +256,17 @@ public interface FIBTable extends FIBWidget, FIBTableComponent {
 		private Color backgroundSecondarySelectionColor;
 		private Color backgroundNonSelectionColor;
 
-		public FIBTableImpl() {
+		/*public FIBTableImpl() {
 			columns = new ArrayList<FIBTableColumn>();
 			actions = new ArrayList<FIBTableAction>();
-		}
+		}*/
 
 		@Override
 		public String getBaseName() {
 			return "Table";
 		}
 
-		@Override
+		/*@Override
 		public FIBTableColumn getColumnWithTitle(String title) {
 			for (FIBTableColumn c : columns) {
 				if (title.equals(c.getTitle())) {
@@ -272,9 +274,9 @@ public interface FIBTable extends FIBWidget, FIBTableComponent {
 				}
 			}
 			return null;
-		}
+		}*/
 
-		@Override
+		/*@Override
 		public List<FIBTableColumn> getColumns() {
 			return columns;
 		}
@@ -296,9 +298,9 @@ public interface FIBTable extends FIBWidget, FIBTableComponent {
 			aColumn.setOwner(null);
 			columns.remove(aColumn);
 			getPropertyChangeSupport().firePropertyChange(COLUMNS_KEY, null, columns);
-		}
+		}*/
 
-		@Override
+		/*@Override
 		public List<FIBTableAction> getActions() {
 			return actions;
 		}
@@ -321,7 +323,7 @@ public interface FIBTable extends FIBWidget, FIBTableComponent {
 			anAction.setOwner(null);
 			actions.remove(anAction);
 			getPropertyChangeSupport().firePropertyChange(ACTIONS_KEY, null, actions);
-		}
+		}*/
 
 		@Override
 		public void updateBindingModel() {
@@ -696,38 +698,38 @@ public interface FIBTable extends FIBWidget, FIBTableComponent {
 			if (c == null) {
 				return;
 			}
-			columns.remove(c);
-			columns.add(0, c);
-			getPropertyChangeSupport().firePropertyChange(COLUMNS_KEY, null, columns);
+			getColumns().remove(c);
+			getColumns().add(0, c);
+			getPropertyChangeSupport().firePropertyChange(COLUMNS_KEY, null, getColumns());
 		}
 
 		public void moveUp(FIBTableColumn c) {
 			if (c == null) {
 				return;
 			}
-			int index = columns.indexOf(c);
-			columns.remove(c);
-			columns.add(index - 1, c);
-			getPropertyChangeSupport().firePropertyChange(COLUMNS_KEY, null, columns);
+			int index = getColumns().indexOf(c);
+			getColumns().remove(c);
+			getColumns().add(index - 1, c);
+			getPropertyChangeSupport().firePropertyChange(COLUMNS_KEY, null, getColumns());
 		}
 
 		public void moveDown(FIBTableColumn c) {
 			if (c == null) {
 				return;
 			}
-			int index = columns.indexOf(c);
-			columns.remove(c);
-			columns.add(index + 1, c);
-			getPropertyChangeSupport().firePropertyChange(COLUMNS_KEY, null, columns);
+			int index = getColumns().indexOf(c);
+			getColumns().remove(c);
+			getColumns().add(index + 1, c);
+			getPropertyChangeSupport().firePropertyChange(COLUMNS_KEY, null, getColumns());
 		}
 
 		public void moveToBottom(FIBTableColumn c) {
 			if (c == null) {
 				return;
 			}
-			columns.remove(c);
-			columns.add(c);
-			getPropertyChangeSupport().firePropertyChange(COLUMNS_KEY, null, columns);
+			getColumns().remove(c);
+			getColumns().add(c);
+			getPropertyChangeSupport().firePropertyChange(COLUMNS_KEY, null, getColumns());
 		}
 
 		@Override

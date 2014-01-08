@@ -45,7 +45,7 @@ import org.openflexo.localization.FlexoLocalization;
  * @author sylvain
  * 
  */
-public class FIBTableWidgetSelectionTest2 {
+public class FIBTableWidgetSelectionTest2 extends FIBTestCase {
 
 	private static GraphicalContextDelegate gcDelegate;
 
@@ -80,11 +80,11 @@ public class FIBTableWidgetSelectionTest2 {
 	@Test
 	public void test1CreateComponent() {
 
-		component = new FIBPanel();
+		component = newFIBPanel();
 		component.setLayout(Layout.border);
 		component.setDataClass(Family.class);
 
-		table = new FIBTable();
+		table = newFIBTable();
 		table.setName("table");
 		table.setData(new DataBinding<List<?>>("data.children", table, List.class, BindingDefinitionType.GET));
 		table.setAutoSelectFirstRow(true);
@@ -92,69 +92,69 @@ public class FIBTableWidgetSelectionTest2 {
 		table.setBoundToSelectionManager(true);
 		table.setManageDynamicModel(true);
 
-		FIBTextFieldColumn c1 = new FIBTextFieldColumn();
+		FIBTextFieldColumn c1 = newFIBTextFieldColumn();
 		c1.setData(new DataBinding<String>("iterator.firstName", c1, String.class, BindingDefinitionType.GET_SET));
 		table.addToColumns(c1);
-		FIBTextFieldColumn c2 = new FIBTextFieldColumn();
+		FIBTextFieldColumn c2 = newFIBTextFieldColumn();
 		c2.setData(new DataBinding<String>("iterator.lastName", c2, String.class, BindingDefinitionType.GET_SET));
 		table.addToColumns(c2);
-		FIBNumberColumn c3 = new FIBNumberColumn();
+		FIBNumberColumn c3 = newFIBNumberColumn();
 		c3.setNumberType(NumberType.IntegerType);
 		c3.setData(new DataBinding<Integer>("iterator.age", c3, String.class, BindingDefinitionType.GET_SET));
 		table.addToColumns(c3);
-		FIBDropDownColumn c4 = new FIBDropDownColumn();
+		FIBDropDownColumn c4 = newFIBDropDownColumn();
 		c4.setData(new DataBinding<Gender>("iterator.gender", c4, String.class, BindingDefinitionType.GET_SET));
 		table.addToColumns(c4);
-		FIBLabelColumn c5 = new FIBLabelColumn();
+		FIBLabelColumn c5 = newFIBLabelColumn();
 		c5.setData(new DataBinding<String>("iterator.toString", c5, String.class, BindingDefinitionType.GET));
 		table.addToColumns(c5);
 
-		detailsPanel1 = new FIBPanel();
+		detailsPanel1 = newFIBPanel();
 		detailsPanel1.setLayout(Layout.twocols);
 
-		label1 = new FIBLabel("This detail panel represents a Jacky");
+		label1 = newFIBLabel("This detail panel represents a Jacky");
 		detailsPanel1.addToSubComponents(label1, new TwoColsLayoutConstraints(TwoColsLayoutLocation.center, false, false));
-		firstNameLabel1 = new FIBLabel("first_name");
+		firstNameLabel1 = newFIBLabel("first_name");
 		detailsPanel1.addToSubComponents(firstNameLabel1, new TwoColsLayoutConstraints(TwoColsLayoutLocation.left, false, false));
-		firstNameTF1 = new FIBTextField();
+		firstNameTF1 = newFIBTextField();
 		firstNameTF1
 				.setData(new DataBinding<String>("table.selected.firstName", firstNameTF1, String.class, BindingDefinitionType.GET_SET));
 		detailsPanel1.addToSubComponents(firstNameTF1, new TwoColsLayoutConstraints(TwoColsLayoutLocation.right, false, false));
 
-		lastNameLabel1 = new FIBLabel("last_name");
+		lastNameLabel1 = newFIBLabel("last_name");
 		detailsPanel1.addToSubComponents(lastNameLabel1, new TwoColsLayoutConstraints(TwoColsLayoutLocation.left, false, false));
-		lastNameTF1 = new FIBTextField();
+		lastNameTF1 = newFIBTextField();
 		lastNameTF1.setData(new DataBinding<String>("table.selected.lastName", lastNameTF1, String.class, BindingDefinitionType.GET_SET));
 		detailsPanel1.addToSubComponents(lastNameTF1, new TwoColsLayoutConstraints(TwoColsLayoutLocation.right, false, false));
 
-		fullNameLabel1 = new FIBLabel("full_name");
+		fullNameLabel1 = newFIBLabel("full_name");
 		detailsPanel1.addToSubComponents(fullNameLabel1, new TwoColsLayoutConstraints(TwoColsLayoutLocation.left, false, false));
-		fullNameTF1 = new FIBTextField();
+		fullNameTF1 = newFIBTextField();
 		fullNameTF1.setData(new DataBinding<String>("table.selected.firstName + ' ' + table.selected.lastName", fullNameTF1, String.class,
 				BindingDefinitionType.GET));
 		detailsPanel1.addToSubComponents(fullNameTF1, new TwoColsLayoutConstraints(TwoColsLayoutLocation.right, false, false));
 
-		detailsPanel2 = new FIBPanel();
+		detailsPanel2 = newFIBPanel();
 		detailsPanel2.setLayout(Layout.twocols);
 
-		label2 = new FIBLabel("This detail panel represents a normal child");
+		label2 = newFIBLabel("This detail panel represents a normal child");
 		detailsPanel2.addToSubComponents(label2, new TwoColsLayoutConstraints(TwoColsLayoutLocation.center, false, false));
-		firstNameLabel2 = new FIBLabel("first_name");
+		firstNameLabel2 = newFIBLabel("first_name");
 		detailsPanel2.addToSubComponents(firstNameLabel2, new TwoColsLayoutConstraints(TwoColsLayoutLocation.left, false, false));
-		firstNameTF2 = new FIBTextField();
+		firstNameTF2 = newFIBTextField();
 		firstNameTF2
 				.setData(new DataBinding<String>("table.selected.firstName", firstNameTF2, String.class, BindingDefinitionType.GET_SET));
 		detailsPanel2.addToSubComponents(firstNameTF2, new TwoColsLayoutConstraints(TwoColsLayoutLocation.right, false, false));
 
-		lastNameLabel2 = new FIBLabel("last_name");
+		lastNameLabel2 = newFIBLabel("last_name");
 		detailsPanel2.addToSubComponents(lastNameLabel2, new TwoColsLayoutConstraints(TwoColsLayoutLocation.left, false, false));
-		lastNameTF2 = new FIBTextField();
+		lastNameTF2 = newFIBTextField();
 		lastNameTF2.setData(new DataBinding<String>("table.selected.lastName", lastNameTF2, String.class, BindingDefinitionType.GET_SET));
 		detailsPanel2.addToSubComponents(lastNameTF2, new TwoColsLayoutConstraints(TwoColsLayoutLocation.right, false, false));
 
-		fullNameLabel2 = new FIBLabel("full_name");
+		fullNameLabel2 = newFIBLabel("full_name");
 		detailsPanel2.addToSubComponents(fullNameLabel2, new TwoColsLayoutConstraints(TwoColsLayoutLocation.left, false, false));
-		fullNameTF2 = new FIBTextField();
+		fullNameTF2 = newFIBTextField();
 		fullNameTF2.setData(new DataBinding<String>("table.selected.firstName + ' ' + table.selected.lastName", fullNameTF2, String.class,
 				BindingDefinitionType.GET));
 		detailsPanel2.addToSubComponents(fullNameTF2, new TwoColsLayoutConstraints(TwoColsLayoutLocation.right, false, false));
@@ -164,7 +164,7 @@ public class FIBTableWidgetSelectionTest2 {
 		detailsPanel2.setVisible(new DataBinding<Boolean>("!data.jackies.contains(table.selected)", detailsPanel2, Boolean.class,
 				BindingDefinitionType.GET));
 
-		detailsContainerPanel = new FIBPanel();
+		detailsContainerPanel = newFIBPanel();
 		detailsContainerPanel.setLayout(Layout.gridbag);
 		detailsContainerPanel.addToSubComponents(detailsPanel1, new GridBagLayoutConstraints());
 		detailsContainerPanel.addToSubComponents(detailsPanel2, new GridBagLayoutConstraints());
@@ -250,6 +250,7 @@ public class FIBTableWidgetSelectionTest2 {
 		gcDelegate.setUp();
 	}
 
+	@Override
 	@After
 	public void tearDown() throws Exception {
 		gcDelegate.tearDown();

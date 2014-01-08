@@ -276,7 +276,7 @@ public interface FIBReferencedComponent extends FIBWidget {
 		@Setter(VALUE_KEY)
 		public void setValue(DataBinding<Object> value);
 
-		@Getter(value = MANDATORY_KEY)
+		@Getter(value = MANDATORY_KEY, defaultValue = "false")
 		@XMLAttribute
 		public boolean isMandatory();
 

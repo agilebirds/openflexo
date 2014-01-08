@@ -28,7 +28,7 @@ import org.openflexo.localization.FlexoLocalization;
  * @author sylvain
  * 
  */
-public class DataManagingTest {
+public class DataManagingTest extends FIBTestCase {
 
 	private static GraphicalContextDelegate gcDelegate;
 
@@ -51,27 +51,27 @@ public class DataManagingTest {
 	@Test
 	public void test1CreateComponent() {
 
-		component = new FIBPanel();
+		component = newFIBPanel();
 		component.setLayout(Layout.twocols);
 		component.setDataClass(Family.class);
 
-		firstNameLabel = new FIBLabel("first_name");
+		firstNameLabel = newFIBLabel("first_name");
 		component.addToSubComponents(firstNameLabel, new TwoColsLayoutConstraints(TwoColsLayoutLocation.left, false, false));
-		firstNameTF = new FIBTextField();
+		firstNameTF = newFIBTextField();
 		firstNameTF.setData(new DataBinding<String>("data.father.firstName", firstNameTF, String.class, BindingDefinitionType.GET_SET));
 		component.addToSubComponents(firstNameTF, new TwoColsLayoutConstraints(TwoColsLayoutLocation.right, false, false));
 		assertTrue(firstNameTF.getData().isValid());
 
-		lastNameLabel = new FIBLabel("last_name");
+		lastNameLabel = newFIBLabel("last_name");
 		component.addToSubComponents(lastNameLabel, new TwoColsLayoutConstraints(TwoColsLayoutLocation.left, false, false));
-		lastNameTF = new FIBTextField();
+		lastNameTF = newFIBTextField();
 		lastNameTF.setData(new DataBinding<String>("data.father.lastName", lastNameTF, String.class, BindingDefinitionType.GET_SET));
 		component.addToSubComponents(lastNameTF, new TwoColsLayoutConstraints(TwoColsLayoutLocation.right, false, false));
 		assertTrue(lastNameTF.getData().isValid());
 
-		fullNameLabel = new FIBLabel("full_name");
+		fullNameLabel = newFIBLabel("full_name");
 		component.addToSubComponents(fullNameLabel, new TwoColsLayoutConstraints(TwoColsLayoutLocation.left, false, false));
-		fullNameTF = new FIBTextField();
+		fullNameTF = newFIBTextField();
 		fullNameTF.setData(new DataBinding<String>("data.father.firstName + ' ' + data.father.lastName", fullNameTF, String.class,
 				BindingDefinitionType.GET));
 		component.addToSubComponents(fullNameTF, new TwoColsLayoutConstraints(TwoColsLayoutLocation.right, false, false));
@@ -156,6 +156,7 @@ public class DataManagingTest {
 		gcDelegate.setUp();
 	}
 
+	@Override
 	@After
 	public void tearDown() throws Exception {
 		gcDelegate.tearDown();
