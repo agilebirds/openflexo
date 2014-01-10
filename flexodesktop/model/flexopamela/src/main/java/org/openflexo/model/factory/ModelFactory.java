@@ -49,6 +49,10 @@ public class ModelFactory {
 
 	private UndoManager undoManager;
 
+	public Map<Class, PAMELAProxyFactory> getProxyFactories() {
+		return proxyFactories;
+	}
+
 	public class PAMELAProxyFactory<I> extends ProxyFactory {
 		private final ModelEntity<I> modelEntity;
 		private boolean locked = false;

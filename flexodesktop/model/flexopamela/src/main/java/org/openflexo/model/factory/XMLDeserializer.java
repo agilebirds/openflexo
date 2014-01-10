@@ -94,13 +94,13 @@ class XMLDeserializer {
 	}
 
 	private Object buildObjectFromNode(Element node) throws InvalidDataException, ModelDefinitionException {
-		// System.out.println("What to do with "+node+" ?");
-
 		ModelEntity<?> modelEntity = modelFactory.getModelContext().getModelEntity(node.getName());
 		Object object = buildObjectFromNodeAndModelEntity(node, modelEntity);
 		for (ProxyMethodHandler<?> handler : deserializingHandlers) {
 			handler.setDeserializing(false);
 		}
+
+		// We just finished deserialization, call deserialization finalizers now
 		for (DeserializedObject o : alreadyDeserialized) {
 			finalizeDeserialization(o.object, o.modelEntity);
 		}
@@ -176,8 +176,9 @@ class XMLDeserializer {
 
 		if (currentDeserializedReference != null) {
 			alreadyDeserializedMap.put(currentDeserializedReference, returned);
-			alreadyDeserialized.add(new DeserializedObject<I>(returned, modelEntity));
 		}
+
+		alreadyDeserialized.add(new DeserializedObject<I>(returned, modelEntity));
 
 		ProxyMethodHandler<I> handler = modelFactory.getHandler(returned);
 		deserializingHandlers.add(handler);

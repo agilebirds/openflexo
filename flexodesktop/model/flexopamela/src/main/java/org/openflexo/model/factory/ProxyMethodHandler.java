@@ -873,15 +873,7 @@ public class ProxyMethodHandler<I> implements MethodHandler, PropertyChangeListe
 
 	private void internallyInvokeSetter(ModelProperty<? super I> property, Object value, boolean trackAtomicEdit)
 			throws ModelDefinitionException {
-		Object oldValue;
-		// try {
-		oldValue = invokeGetter(property);
-		/*} catch (Throwable t) {
-			System.out.println("ca chie la");
-			System.out.println("getterMethod=" + property.getGetterMethod());
-			System.out.println("declaringClass=" + property.getGetterMethod().getDeclaringClass());
-			return;
-		}*/
+		Object oldValue = invokeGetter(property);
 		if (trackAtomicEdit && getModelFactory().getUndoManager() != null) {
 			if (oldValue != value) {
 				getModelFactory().getUndoManager().addEdit(
@@ -924,10 +916,21 @@ public class ProxyMethodHandler<I> implements MethodHandler, PropertyChangeListe
 				ModelProperty<? super Object> inverseProperty = property.getInverseProperty(oppositeHandler.getModelEntity());
 				switch (inverseProperty.getCardinality()) {
 				case SINGLE:
-					oppositeHandler.invokeSetter(inverseProperty, null);
+					Object oppositeOldValue = oppositeHandler.invokeGetter(inverseProperty);
+					if (oppositeOldValue != null) {
+						oppositeHandler.invokeSetter(inverseProperty, null);
+					} else {
+						// No need to reset inverse setter, as it is already set to null
+					}
 					break;
 				case LIST:
-					oppositeHandler.invokeRemover(inverseProperty, getObject());
+					// TODO: what is same object has multiple occurences in the list ???
+					List<Object> oppositeListValue = (List<Object>) oppositeHandler.invokeGetter(inverseProperty);
+					if (oppositeListValue.contains(getObject())) {
+						oppositeHandler.invokeRemover(inverseProperty, getObject());
+					} else {
+						// No need to remove objet from opposite property object was not inside
+					}
 					break;
 				case MAP:
 					break;
@@ -963,10 +966,21 @@ public class ProxyMethodHandler<I> implements MethodHandler, PropertyChangeListe
 				ModelProperty<? super Object> inverseProperty = property.getInverseProperty(oppositeHandler.getModelEntity());
 				switch (inverseProperty.getCardinality()) {
 				case SINGLE:
-					oppositeHandler.invokeSetter(inverseProperty, getObject());
+					Object oppositeOldValue = oppositeHandler.invokeGetter(inverseProperty);
+					if (oppositeOldValue != getObject()) {
+						oppositeHandler.invokeSetter(inverseProperty, getObject());
+					} else {
+						// No need to set inverse property, because this is already right value
+					}
 					break;
 				case LIST:
-					oppositeHandler.invokeAdder(inverseProperty, getObject());
+					// TODO: what is same object has multiple occurences in the list ???
+					List<Object> oppositeListValue = (List<Object>) oppositeHandler.invokeGetter(inverseProperty);
+					if (!oppositeListValue.contains(getObject())) {
+						oppositeHandler.invokeAdder(inverseProperty, getObject());
+					} else {
+						// No need to add object to inverse property, because this is already inside
+					}
 					break;
 				case MAP:
 					break;
