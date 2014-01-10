@@ -94,27 +94,36 @@ public class FIBMultiSplitLayoutFactory implements MultiSplitLayoutFactory {
 	 * API for the nodes that model a MultiSplitLayout.
 	 */
 	@ModelEntity(isAbstract = true)
-	@ImplementationClass(MultiSplitLayout.DefaultNode.class)
-	public static interface FIBNode extends Node {
+	@ImplementationClass(FIBNode.FIBNodeImpl.class)
+	public static interface FIBNode<N extends FIBNode<N>> extends Node<N> {
 
+		@SuppressWarnings("serial")
+		public static abstract class FIBNodeImpl<N extends FIBNode<N>> extends MultiSplitLayout.DefaultNode<N> implements FIBNode<N> {
+
+		}
 	}
 
 	/**
 	 * Models a single vertical/horiztonal divider.
 	 */
 	@ModelEntity
-	@ImplementationClass(MultiSplitLayout.DefaultDivider.class)
+	@ImplementationClass(FIBDivider.FIBDividerImpl.class)
 	@XMLElement(xmlTag = "Divider")
-	public static interface FIBDivider extends FIBNode, Divider {
+	public static interface FIBDivider<N extends FIBDivider<N>> extends FIBNode<N>, Divider<N> {
 
+		@SuppressWarnings("serial")
+		public static abstract class FIBDividerImpl<N extends FIBDivider<N>> extends MultiSplitLayout.DefaultDivider<N> implements
+				FIBDivider<N> {
+
+		}
 	}
 
 	/**
 	 * Models a java.awt Component child.
 	 */
 	@ModelEntity
-	@ImplementationClass(MultiSplitLayout.DefaultLeaf.class)
-	@XMLElement(xmlTag = "Divider")
+	@ImplementationClass(FIBLeaf.FIBLeafImpl.class)
+	@XMLElement(xmlTag = "Leaf")
 	public static interface FIBLeaf extends FIBNode, Leaf {
 
 		@PropertyIdentifier(type = String.class)
@@ -141,14 +150,18 @@ public class FIBMultiSplitLayoutFactory implements MultiSplitLayoutFactory {
 		@Setter(WEIGHT_KEY)
 		public void setWeight(double weight);
 
+		@SuppressWarnings("serial")
+		public static abstract class FIBLeafImpl extends MultiSplitLayout.DefaultLeaf implements FIBLeaf {
+
+		}
 	}
 
 	/**
 	 * Defines a vertical or horizontal subdivision into two or more tiles.
 	 */
 	@ModelEntity(isAbstract = true)
-	@ImplementationClass(MultiSplitLayout.DefaultSplit.class)
-	public static interface FIBSplit extends FIBNode, Split<FIBNode> {
+	@ImplementationClass(FIBSplit.FIBSplitImpl.class)
+	public static interface FIBSplit<N extends FIBNode<N>> extends FIBNode<N>, Split<N> {
 
 		@PropertyIdentifier(type = String.class)
 		public static final String NAME_KEY = "name";
@@ -179,28 +192,34 @@ public class FIBMultiSplitLayoutFactory implements MultiSplitLayoutFactory {
 
 		@Override
 		@Getter(value = CHILDREN_KEY, cardinality = Cardinality.LIST)
-		public List<FIBNode> getChildren();
+		public List<N> getChildren();
 
 		@Override
 		@Setter(CHILDREN_KEY)
-		public void setChildren(List<FIBNode> children);
+		public void setChildren(List<N> children);
 
 		@Override
 		@Adder(CHILDREN_KEY)
-		public void addToChildren(FIBNode child);
+		public void addToChildren(N child);
 
 		@Override
 		@Remover(CHILDREN_KEY)
-		public void removeFromChildren(FIBNode child);
+		public void removeFromChildren(N child);
+
+		@SuppressWarnings("serial")
+		public static abstract class FIBSplitImpl<N extends FIBNode<N>> extends MultiSplitLayout.DefaultSplit<N> implements FIBSplit<N> {
+
+		}
+
 	}
 
 	/**
 	 * Defines a horizontal subdivision into two or more tiles.
 	 */
 	@ModelEntity
-	@ImplementationClass(MultiSplitLayout.DefaultRowSplit.class)
+	// @ImplementationClass(MultiSplitLayout.DefaultRowSplit.class)
 	@XMLElement(xmlTag = "RowSplit")
-	public static interface FIBRowSplit extends FIBSplit, RowSplit<FIBNode> {
+	public static interface FIBRowSplit<N extends FIBNode<N>> extends FIBSplit<N>, RowSplit<N> {
 
 	}
 
@@ -210,7 +229,7 @@ public class FIBMultiSplitLayoutFactory implements MultiSplitLayoutFactory {
 	@ModelEntity
 	@ImplementationClass(MultiSplitLayout.DefaultColSplit.class)
 	@XMLElement(xmlTag = "ColSplit")
-	public static interface FIBColSplit extends FIBSplit, ColSplit<FIBNode> {
+	public static interface FIBColSplit<N extends FIBNode<N>> extends FIBSplit<N>, ColSplit<N> {
 
 	}
 

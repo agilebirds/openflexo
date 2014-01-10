@@ -74,13 +74,13 @@ public class FIBEditableCheckboxListWidget<T> extends FIBCheckboxListWidget<T> i
 		return delegate;
 	}
 
+	@Override
 	public void receivedModelNotifications(FIBModelObject o, String propertyName, Object oldValue, Object newValue) {
 		super.receivedModelNotifications(o, propertyName, oldValue, newValue);
-		if ((propertyName.equals(FIBWidget.Parameters.format.name())) || (propertyName.equals(FIBWidget.Parameters.localize.name()))
-				|| (propertyName.equals(FIBCheckboxList.Parameters.columns.name()))
-				|| (propertyName.equals(FIBCheckboxList.Parameters.hGap.name()))
-				|| (propertyName.equals(FIBCheckboxList.Parameters.vGap.name())) || (propertyName.equals(FIBWidget.Parameters.icon.name()))
-				|| (propertyName.equals(FIBMultipleValues.Parameters.showIcon.name()))) {
+		if ((propertyName.equals(FIBWidget.FORMAT_KEY)) || (propertyName.equals(FIBWidget.LOCALIZE_KEY))
+				|| (propertyName.equals(FIBCheckboxList.COLUMNS_KEY)) || (propertyName.equals(FIBCheckboxList.H_GAP_KEY))
+				|| (propertyName.equals(FIBCheckboxList.V_GAP_KEY)) || (propertyName.equals(FIBWidget.ICON_KEY))
+				|| (propertyName.equals(FIBMultipleValues.SHOW_ICON_KEY)) || (propertyName.equals(FIBMultipleValues.SHOW_TEXT_KEY))) {
 			rebuildCheckboxes();
 		}
 		delegate.receivedModelNotifications(o, propertyName, oldValue, newValue);

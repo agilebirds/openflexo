@@ -27,7 +27,9 @@ import java.lang.reflect.ParameterizedType;
 import java.lang.reflect.Type;
 import java.lang.reflect.TypeVariable;
 import java.lang.reflect.WildcardType;
+import java.util.ArrayList;
 import java.util.Collection;
+import java.util.Hashtable;
 import java.util.List;
 import java.util.Map;
 import java.util.Vector;
@@ -851,6 +853,63 @@ public class TypeUtils {
 		logger.warning("Undefined specializing criteria between " + someClasses);
 		return someClasses.iterator().next();
 
+	}
+
+	/**
+	 * Utility method used to lookup an object associated with a given class<br>
+	 * Lookup is performed using inheritance properties declared for supplied class, using inherited classes and interfaces<br>
+	 * The object for the most specialized class is returned
+	 * 
+	 * @param aClass
+	 * @param storedObjectForClasses
+	 * @return
+	 */
+	public static <T> T objectForClass(Class<?> aClass, Hashtable<Class<?>, T> storedObjectForClasses) {
+		if (aClass == null) {
+			return null;
+		}
+		T returned = storedObjectForClasses.get(aClass);
+		if (returned != null) {
+			return returned;
+		} else {
+			Class<?> superclass = aClass.getSuperclass();
+			if (superclass != null) {
+				returned = storedObjectForClasses.get(superclass);
+				if (returned != null) {
+					return returned;
+				} else {
+					for (Class<?> superInterface : aClass.getInterfaces()) {
+						returned = storedObjectForClasses.get(superInterface);
+						if (returned != null) {
+							return returned;
+						}
+					}
+					returned = objectForClass(superclass, storedObjectForClasses);
+					if (returned != null) {
+						storedObjectForClasses.put(aClass, returned);
+						return returned;
+					} else {
+						for (Class<?> superInterface : aClass.getInterfaces()) {
+							returned = objectForClass(superInterface, storedObjectForClasses);
+							if (returned != null) {
+								storedObjectForClasses.put(aClass, returned);
+								return returned;
+							}
+						}
+					}
+				}
+			}
+		}
+		List<Class<?>> matchingClasses = new ArrayList<Class<?>>();
+		for (Class<?> cl : storedObjectForClasses.keySet()) {
+			if (cl.isAssignableFrom(aClass)) {
+				matchingClasses.add(cl);
+			}
+		}
+		if (matchingClasses.size() > 0) {
+			return storedObjectForClasses.get(TypeUtils.getMostSpecializedClass(matchingClasses));
+		}
+		return null;
 	}
 
 	/**

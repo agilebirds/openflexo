@@ -22,6 +22,7 @@ package org.openflexo.fib.model;
 import java.io.File;
 
 import org.openflexo.fib.FIBLibrary;
+import org.openflexo.fib.model.FIBBrowserElement.FIBBrowserElementChildren;
 import org.openflexo.fib.model.converter.ComponentConstraintsConverter;
 import org.openflexo.model.ModelContextLibrary;
 import org.openflexo.model.converter.DataBindingConverter;
@@ -44,9 +45,113 @@ public class FIBModelFactory extends ModelFactory {
 		addConverter(new ComponentConstraintsConverter());
 	}
 
+	public FIBModelFactory(Class<?>... additionalClasses) throws ModelDefinitionException {
+		super(ModelContextLibrary.getCompoundModelContext(FIBComponent.class, additionalClasses));
+		addConverter(new DataBindingConverter());
+		addConverter(new ComponentConstraintsConverter());
+	}
+
 	public FIBModelFactory(File relativePath) throws ModelDefinitionException {
 		this();
 		addConverter(new RelativePathFileConverter(relativePath));
+	}
+
+	public FIBPanel newFIBPanel() {
+		return newInstance(FIBPanel.class);
+	}
+
+	public FIBLabel newFIBLabel() {
+		return newInstance(FIBLabel.class);
+	}
+
+	public FIBLabel newFIBLabel(String label) {
+		FIBLabel returned = newInstance(FIBLabel.class);
+		returned.setLabel(label);
+		return returned;
+	}
+
+	public FIBTextField newFIBTextField() {
+		return newInstance(FIBTextField.class);
+	}
+
+	public FIBBrowser newFIBBrowser() {
+		return newInstance(FIBBrowser.class);
+	}
+
+	public FIBBrowserElement newFIBBrowserElement() {
+		return newInstance(FIBBrowserElement.class);
+	}
+
+	public FIBBrowserElementChildren newFIBBrowserElementChildren() {
+		return newInstance(FIBBrowserElementChildren.class);
+	}
+
+	public FIBCheckboxList newFIBCheckboxList() {
+		return newInstance(FIBCheckboxList.class);
+	}
+
+	public FIBDropDown newFIBDropDown() {
+		return newInstance(FIBDropDown.class);
+	}
+
+	public FIBList newFIBList() {
+		return newInstance(FIBList.class);
+	}
+
+	public FIBNumber newFIBNumber() {
+		return newInstance(FIBNumber.class);
+	}
+
+	public FIBRadioButtonList newFIBRadioButtonList() {
+		return newInstance(FIBRadioButtonList.class);
+	}
+
+	public FIBNumberColumn newFIBNumberColumn() {
+		return newInstance(FIBNumberColumn.class);
+	}
+
+	public FIBLabelColumn newFIBLabelColumn() {
+		return newInstance(FIBLabelColumn.class);
+	}
+
+	public FIBDropDownColumn newFIBDropDownColumn() {
+		return newInstance(FIBDropDownColumn.class);
+	}
+
+	public FIBTable newFIBTable() {
+		return newInstance(FIBTable.class);
+	}
+
+	public FIBTextFieldColumn newFIBTextFieldColumn() {
+		return newInstance(FIBTextFieldColumn.class);
+	}
+
+	public FIBTextArea newFIBTextArea() {
+		return newInstance(FIBTextArea.class);
+	}
+
+	public FIBSplitPanel newFIBSplitPanel() {
+		return newInstance(FIBSplitPanel.class);
+	}
+
+	public FIBReferencedComponent newFIBReferencedComponent() {
+		return newInstance(FIBReferencedComponent.class);
+	}
+
+	public FIBFile newFIBFile() {
+		return newInstance(FIBFile.class);
+	}
+
+	public FIBCustom newFIBCustom() {
+		return newInstance(FIBCustom.class);
+	}
+
+	public FIBButton newFIBButton() {
+		return newInstance(FIBButton.class);
+	}
+
+	public FIBTab newFIBTab() {
+		return newInstance(FIBTab.class);
 	}
 
 }

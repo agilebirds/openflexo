@@ -40,9 +40,9 @@ public class FIBEditableEditorPaneWidget extends FIBEditorPaneWidget implements 
 	@SuppressWarnings("unused")
 	private static final Logger logger = FlexoLogger.getLogger(FIBEditableEditorPaneWidget.class.getPackage().getName());
 
-	private FIBEditableViewDelegate<FIBEditorPane, JEditorPane> delegate;
+	private final FIBEditableViewDelegate<FIBEditorPane, JEditorPane> delegate;
 
-	private FIBEditorController editorController;
+	private final FIBEditorController editorController;
 
 	@Override
 	public FIBEditorController getEditorController() {
@@ -74,12 +74,13 @@ public class FIBEditableEditorPaneWidget extends FIBEditorPaneWidget implements 
 		return delegate;
 	}
 
+	@Override
 	public void receivedModelNotifications(FIBModelObject o, String propertyName, Object oldValue, Object newValue) {
 		super.receivedModelNotifications(o, propertyName, oldValue, newValue);
-		if (propertyName.equals(FIBEditorPane.Parameters.contentType.name())) {
+		if (propertyName.equals(FIBEditorPane.CONTENT_TYPE_KEY)) {
 			updateContentType();
 		}
-		if (propertyName.equals(FIBLabel.Parameters.label.name())) {
+		if (propertyName.equals(FIBLabel.LABEL_KEY)) {
 			relayoutParentBecauseLabelChanged();
 		}
 		delegate.receivedModelNotifications(o, propertyName, oldValue, newValue);

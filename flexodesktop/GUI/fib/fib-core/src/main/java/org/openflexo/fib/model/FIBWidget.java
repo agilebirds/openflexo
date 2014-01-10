@@ -329,6 +329,7 @@ public abstract interface FIBWidget extends FIBComponent {
 
 		@Override
 		public void finalizeDeserialization() {
+
 			super.finalizeDeserialization();
 			getEventListener().createEventListenerBindingModel();
 			if (enable != null) {

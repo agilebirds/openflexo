@@ -35,7 +35,7 @@ import javax.swing.JPanel;
 
 import org.openflexo.fib.FIBLibrary;
 import org.openflexo.fib.editor.FIBEditor;
-import org.openflexo.fib.editor.FIBEditor.FIBPreferences;
+import org.openflexo.fib.editor.FIBPreferences;
 import org.openflexo.fib.model.FIBComponent;
 import org.openflexo.fib.utils.FIBIconLibrary;
 import org.openflexo.logging.FlexoLogger;

@@ -21,8 +21,8 @@ import org.openflexo.antar.binding.TypeUtils;
 import org.openflexo.fib.FIBLibrary;
 import org.openflexo.fib.controller.FIBController.Status;
 import org.openflexo.fib.controller.FIBDialog;
-import org.openflexo.fib.editor.FIBEditor.FIBPreferences;
 import org.openflexo.fib.editor.FIBEmbeddedEditor;
+import org.openflexo.fib.editor.FIBPreferences;
 import org.openflexo.fib.editor.controller.EditorAction.ActionAvailability;
 import org.openflexo.fib.editor.controller.EditorAction.ActionPerformer;
 import org.openflexo.fib.model.BorderLayoutConstraints;
@@ -35,6 +35,7 @@ import org.openflexo.fib.model.FIBFile;
 import org.openflexo.fib.model.FIBFile.FileMode;
 import org.openflexo.fib.model.FIBLabel;
 import org.openflexo.fib.model.FIBLabel.Align;
+import org.openflexo.fib.model.FIBModelFactory;
 import org.openflexo.fib.model.FIBModelObject;
 import org.openflexo.fib.model.FIBPanel;
 import org.openflexo.fib.model.FIBPanel.Border;
@@ -48,6 +49,7 @@ import org.openflexo.fib.model.TwoColsLayoutConstraints.TwoColsLayoutLocation;
 import org.openflexo.fib.utils.BindingSelector;
 import org.openflexo.fib.view.FIBWidgetView;
 import org.openflexo.logging.FlexoLogger;
+import org.openflexo.model.exceptions.ModelDefinitionException;
 import org.openflexo.toolbox.StringUtils;
 
 public class ContextualMenu {
@@ -100,7 +102,7 @@ public class ContextualMenu {
 				FIBComponent component = (FIBComponent) object;
 				FIBContainer parent = component.getParent();
 				parent.removeFromSubComponents(component);
-				FIBPanel newPanel = new FIBPanel();
+				FIBPanel newPanel = editorController.getFactory().newFIBPanel();
 				newPanel.setLayout(Layout.border);
 				newPanel.setBorder(Border.titled);
 				newPanel.finalizeDeserialization();
@@ -121,7 +123,7 @@ public class ContextualMenu {
 				FIBComponent component = (FIBComponent) object;
 				FIBContainer parent = component.getParent();
 				parent.removeFromSubComponents(component);
-				FIBSplitPanel newPanel = new FIBSplitPanel();
+				FIBSplitPanel newPanel = editorController.getFactory().newFIBSplitPanel();
 				newPanel.makeDefaultHorizontalLayout();
 				parent.addToSubComponents(newPanel, component.getConstraints());
 				newPanel.addToSubComponents(component,
@@ -167,33 +169,45 @@ public class ContextualMenu {
 	}
 
 	public FIBModelObject makeReusableComponent(FIBContainer component, FIBContainer parent) {
+		FIBModelFactory dialogFactory = null;
+		try {
+			dialogFactory = new FIBModelFactory();
+		} catch (ModelDefinitionException e) {
+			e.printStackTrace();
+			return null;
+		}
 		MakeReusableComponentParameters params = new MakeReusableComponentParameters(component, parent);
-		FIBPanel panel = new FIBPanel();
+		FIBPanel panel = dialogFactory.newFIBPanel();
 		panel.setDataClass(params.getClass());
 		panel.setLayout(Layout.twocols);
-		FIBLabel title = new FIBLabel("Make reusable component");
+		FIBLabel title = dialogFactory.newFIBLabel("Make reusable component");
 		title.setAlign(Align.center);
 		panel.addToSubComponents(title, new TwoColsLayoutConstraints(TwoColsLayoutLocation.center, true, false));
-		panel.addToSubComponents(new FIBLabel("file"), new TwoColsLayoutConstraints(TwoColsLayoutLocation.left, false, false));
-		FIBFile fileWidget = new FIBFile();
+		panel.addToSubComponents(dialogFactory.newFIBLabel("file"), new TwoColsLayoutConstraints(TwoColsLayoutLocation.left, false, false));
+		FIBFile fileWidget = dialogFactory.newFIBFile();
 		fileWidget.setMode(FileMode.SaveMode);
 		fileWidget.setData(new DataBinding("data.reusableComponentFile"));
 		panel.addToSubComponents(fileWidget, new TwoColsLayoutConstraints(TwoColsLayoutLocation.right, true, false));
-		panel.addToSubComponents(new FIBLabel("data"), new TwoColsLayoutConstraints(TwoColsLayoutLocation.left, false, false));
-		FIBCustom dataWidget = new FIBCustom();
+		panel.addToSubComponents(dialogFactory.newFIBLabel("data"), new TwoColsLayoutConstraints(TwoColsLayoutLocation.left, false, false));
+		FIBCustom dataWidget = dialogFactory.newFIBCustom();
 		dataWidget.setComponentClass(BindingSelector.class);
 		dataWidget.setData(new DataBinding("data.data"));
-		dataWidget.addToAssignments(new FIBCustom.FIBCustomAssignment(dataWidget, new DataBinding<Object>("component.bindable"),
-				new DataBinding<Object>("data"), true));
+		FIBCustom.FIBCustomAssignment assignment = dialogFactory.newInstance(FIBCustom.FIBCustomAssignment.class);
+		assignment.setOwner(dataWidget);
+		assignment.setVariable(new DataBinding<Object>("component.bindable"));
+		assignment.setValue(new DataBinding<Object>("data"));
+		assignment.setMandatory(true);
+		;
+		dataWidget.addToAssignments(assignment);
 		panel.addToSubComponents(dataWidget, new TwoColsLayoutConstraints(TwoColsLayoutLocation.right, true, false));
-		FIBPanel controlPanel = new FIBPanel();
+		FIBPanel controlPanel = dialogFactory.newFIBPanel();
 		controlPanel.setLayout(Layout.flow);
 		controlPanel.setFlowAlignment(FlowLayoutAlignment.CENTER);
-		FIBButton validateButton = new FIBButton();
+		FIBButton validateButton = dialogFactory.newFIBButton();
 		validateButton.setLabel("validate");
 		validateButton.setAction(new DataBinding<Object>("controller.validateAndDispose()"));
 		controlPanel.addToSubComponents(validateButton);
-		FIBButton cancelButton = new FIBButton();
+		FIBButton cancelButton = dialogFactory.newFIBButton();
 		cancelButton.setLabel("cancel");
 		cancelButton.setAction(new DataBinding<Object>("controller.cancelAndDispose()"));
 		controlPanel.addToSubComponents(cancelButton);
@@ -232,7 +246,7 @@ public class ContextualMenu {
 				// .getEditedComponentFile().getParentFile());
 				// String relativeFilePath = relativePathFileConverter.convertToString(params.reusableComponentFile);
 				// logger.info("Relative file path: " + relativeFilePath);
-				FIBReferencedComponent widget = new FIBReferencedComponent();
+				FIBReferencedComponent widget = dialogFactory.newFIBReferencedComponent();
 				widget.setComponentFile(params.reusableComponentFile);
 				widget.setData(params.data);
 				widget.setVisible(visible);
@@ -250,7 +264,7 @@ public class ContextualMenu {
 		public Class reusableComponentClass;
 		public DataBinding<Object> data;
 
-		private FIBComponent contextComponent;
+		private final FIBComponent contextComponent;
 
 		public MakeReusableComponentParameters(FIBContainer component, FIBContainer parent) {
 			this.contextComponent = parent;
@@ -306,7 +320,7 @@ public class ContextualMenu {
 
 	class PopupMenuItem extends JMenuItem {
 		private FIBModelObject object;
-		private EditorAction action;
+		private final EditorAction action;
 
 		public PopupMenuItem(EditorAction anAction) {
 			super(anAction.getActionName(), anAction.getActionIcon());

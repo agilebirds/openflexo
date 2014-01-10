@@ -25,7 +25,6 @@ import java.lang.reflect.ParameterizedType;
 import java.lang.reflect.Type;
 import java.util.Enumeration;
 import java.util.List;
-import java.util.Vector;
 import java.util.logging.Logger;
 
 import javax.swing.Icon;
@@ -98,11 +97,11 @@ public interface FIBBrowserElement extends FIBModelObject {
 	public void setOwner(FIBBrowser customColumn);
 
 	@Getter(DATA_CLASS_KEY)
-	@XMLAttribute
-	public Class getDataClass();
+	@XMLAttribute(xmlTag = "dataClassName")
+	public Class<?> getDataClass();
 
 	@Setter(DATA_CLASS_KEY)
-	public void setDataClass(Class dataClass);
+	public void setDataClass(Class<?> dataClass);
 
 	@Getter(LABEL_KEY)
 	@XMLAttribute
@@ -186,6 +185,7 @@ public interface FIBBrowserElement extends FIBModelObject {
 	public void setDefaultVisible(boolean defaultVisible);
 
 	@Getter(value = CHILDREN_KEY, cardinality = Cardinality.LIST, inverse = FIBBrowserElementChildren.OWNER_KEY)
+	@XMLElement
 	public List<FIBBrowserElementChildren> getChildren();
 
 	@Setter(CHILDREN_KEY)
@@ -198,6 +198,7 @@ public interface FIBBrowserElement extends FIBModelObject {
 	public void removeFromChildren(FIBBrowserElementChildren aChildren);
 
 	@Getter(value = ACTIONS_KEY, cardinality = Cardinality.LIST, inverse = FIBBrowserAction.OWNER_KEY)
+	@XMLElement
 	public List<FIBBrowserAction> getActions();
 
 	@Setter(ACTIONS_KEY)
@@ -247,7 +248,7 @@ public interface FIBBrowserElement extends FIBModelObject {
 		public static BindingDefinition DYNAMIC_FONT = new BindingDefinition("dynamicFont", Font.class,
 				DataBinding.BindingDefinitionType.GET, false);
 
-		private Class dataClass;
+		// private Class dataClass;
 
 		private DataBinding<String> label;
 		private DataBinding<Icon> icon;
@@ -266,8 +267,8 @@ public interface FIBBrowserElement extends FIBModelObject {
 
 		private Font font;
 
-		private List<FIBBrowserAction> actions;
-		private List<FIBBrowserElementChildren> children;
+		// private List<FIBBrowserAction> actions;
+		// private List<FIBBrowserElementChildren> children;
 
 		private BindingModel actionBindingModel;
 
@@ -275,8 +276,8 @@ public interface FIBBrowserElement extends FIBModelObject {
 
 		public FIBBrowserElementImpl() {
 			iterator = new FIBBrowserElementIterator();
-			children = new Vector<FIBBrowserElementChildren>();
-			actions = new Vector<FIBBrowserAction>();
+			// children = new Vector<FIBBrowserElementChildren>();
+			// actions = new Vector<FIBBrowserAction>();
 		}
 
 		@Override
@@ -448,7 +449,7 @@ public interface FIBBrowserElement extends FIBModelObject {
 
 		@Override
 		public void finalizeBrowserDeserialization() {
-			logger.fine("finalizeBrowserDeserialization() for FIBBrowserElement " + dataClass);
+			logger.fine("finalizeBrowserDeserialization() for FIBBrowserElement " + getDataClass());
 			if (label != null) {
 				label.decode();
 			}
@@ -467,7 +468,7 @@ public interface FIBBrowserElement extends FIBModelObject {
 			if (editableLabel != null) {
 				editableLabel.decode();
 			}
-			for (FIBBrowserElementChildren c : children) {
+			for (FIBBrowserElementChildren c : getChildren()) {
 				c.finalizeBrowserDeserialization();
 			}
 		}
@@ -630,24 +631,26 @@ public interface FIBBrowserElement extends FIBModelObject {
 		}
 
 		@Override
-		public Class getDataClass() {
-			if (dataClass == null && getOwner() != null) {
+		public Class<?> getDataClass() {
+			Class<?> returned = (Class<?>) performSuperGetter(DATA_CLASS_KEY);
+			if (returned == null && getOwner() != null) {
 				return getOwner().getIteratorClass();
 			}
-			return dataClass;
-
+			return returned;
 		}
 
 		@Override
-		public void setDataClass(Class dataClass) {
-			FIBPropertyNotification<Class> notification = requireChange(DATA_CLASS_KEY, dataClass);
+		public void setDataClass(Class<?> dataClass) {
+			System.out.println("For browser element " + getName() + " set data class " + dataClass);
+			performSuperSetter(DATA_CLASS_KEY, dataClass);
+			/*FIBPropertyNotification<Class> notification = requireChange(DATA_CLASS_KEY, dataClass);
 			if (notification != null) {
 				this.dataClass = dataClass;
 				hasChanged(notification);
-			}
+			}*/
 		}
 
-		@Override
+		/*@Override
 		public List<FIBBrowserAction> getActions() {
 			return actions;
 		}
@@ -670,7 +673,7 @@ public interface FIBBrowserElement extends FIBModelObject {
 			anAction.setOwner(null);
 			actions.remove(anAction);
 			getPropertyChangeSupport().firePropertyChange(ACTIONS_KEY, null, actions);
-		}
+		}*/
 
 		public FIBAddAction createAddAction() {
 			FIBAddAction newAction = getFactory().newInstance(FIBAddAction.class);
@@ -699,7 +702,7 @@ public interface FIBBrowserElement extends FIBModelObject {
 			return actionToDelete;
 		}
 
-		@Override
+		/*@Override
 		public List<FIBBrowserElementChildren> getChildren() {
 			return children;
 		}
@@ -721,12 +724,12 @@ public interface FIBBrowserElement extends FIBModelObject {
 			aChildren.setOwner(null);
 			children.remove(aChildren);
 			getPropertyChangeSupport().firePropertyChange(CHILDREN_KEY, null, children);
-		}
+		}*/
 
 		public FIBBrowserElementChildren createChildren() {
 			logger.info("Called createChildren()");
 			FIBBrowserElementChildren newChildren = getFactory().newInstance(FIBBrowserElementChildren.class);
-			newChildren.setName("children" + (children.size() > 0 ? children.size() : ""));
+			newChildren.setName("children" + (getChildren().size() > 0 ? getChildren().size() : ""));
 			addToChildren(newChildren);
 			return newChildren;
 		}
@@ -741,38 +744,38 @@ public interface FIBBrowserElement extends FIBModelObject {
 			if (e == null) {
 				return;
 			}
-			children.remove(e);
+			getChildren().remove(e);
 			getChildren().add(0, e);
-			getPropertyChangeSupport().firePropertyChange(CHILDREN_KEY, null, children);
+			getPropertyChangeSupport().firePropertyChange(CHILDREN_KEY, null, getChildren());
 		}
 
 		public void moveUp(FIBBrowserElementChildren e) {
 			if (e == null) {
 				return;
 			}
-			int index = children.indexOf(e);
-			children.remove(e);
-			children.add(index - 1, e);
-			getPropertyChangeSupport().firePropertyChange(CHILDREN_KEY, null, children);
+			int index = getChildren().indexOf(e);
+			getChildren().remove(e);
+			getChildren().add(index - 1, e);
+			getPropertyChangeSupport().firePropertyChange(CHILDREN_KEY, null, getChildren());
 		}
 
 		public void moveDown(FIBBrowserElementChildren e) {
 			if (e == null) {
 				return;
 			}
-			int index = children.indexOf(e);
-			children.remove(e);
-			children.add(index + 1, e);
-			getPropertyChangeSupport().firePropertyChange(CHILDREN_KEY, null, children);
+			int index = getChildren().indexOf(e);
+			getChildren().remove(e);
+			getChildren().add(index + 1, e);
+			getPropertyChangeSupport().firePropertyChange(CHILDREN_KEY, null, getChildren());
 		}
 
 		public void moveToBottom(FIBBrowserElementChildren e) {
 			if (e == null) {
 				return;
 			}
-			children.remove(e);
-			children.add(e);
-			getPropertyChangeSupport().firePropertyChange(CHILDREN_KEY, null, children);
+			getChildren().remove(e);
+			getChildren().add(e);
+			getPropertyChangeSupport().firePropertyChange(CHILDREN_KEY, null, getChildren());
 		}
 
 		@Override
@@ -915,6 +918,12 @@ public interface FIBBrowserElement extends FIBModelObject {
 		public void finalizeBrowserDeserialization();
 
 		public boolean isMultipleAccess();
+
+		public ImageIcon getImageIcon();
+
+		public Class<?> getBaseClass();
+
+		public Type getAccessedType();
 
 		public static abstract class FIBBrowserElementChildrenImpl extends FIBModelObjectImpl implements FIBBrowserElementChildren {
 
@@ -1071,6 +1080,7 @@ public interface FIBBrowserElement extends FIBModelObject {
 				}
 			}
 
+			@Override
 			public ImageIcon getImageIcon() {
 				if (getBaseClass() == null) {
 					return null;
@@ -1082,6 +1092,7 @@ public interface FIBBrowserElement extends FIBModelObject {
 				return null;
 			}
 
+			@Override
 			public Class getBaseClass() {
 				Type accessedType = getAccessedType();
 				if (accessedType == null) {
@@ -1094,6 +1105,7 @@ public interface FIBBrowserElement extends FIBModelObject {
 				}
 			}
 
+			@Override
 			public Type getAccessedType() {
 				if (data != null && data.isSet()) {
 					return data.getAnalyzedType();

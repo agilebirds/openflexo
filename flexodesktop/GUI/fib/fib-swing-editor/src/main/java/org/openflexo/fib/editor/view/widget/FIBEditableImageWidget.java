@@ -39,9 +39,9 @@ public class FIBEditableImageWidget extends FIBImageWidget implements FIBEditabl
 	@SuppressWarnings("unused")
 	private static final Logger logger = FlexoLogger.getLogger(FIBEditableImageWidget.class.getPackage().getName());
 
-	private FIBEditableViewDelegate<FIBImage, JLabel> delegate;
+	private final FIBEditableViewDelegate<FIBImage, JLabel> delegate;
 
-	private FIBEditorController editorController;
+	private final FIBEditorController editorController;
 
 	@Override
 	public FIBEditorController getEditorController() {
@@ -73,14 +73,13 @@ public class FIBEditableImageWidget extends FIBImageWidget implements FIBEditabl
 		return delegate;
 	}
 
+	@Override
 	public void receivedModelNotifications(FIBModelObject o, String propertyName, Object oldValue, Object newValue) {
 		super.receivedModelNotifications(o, propertyName, oldValue, newValue);
-		if ((propertyName.equals(FIBImage.Parameters.align.name()))) {
+		if ((propertyName.equals(FIBImage.ALIGN_KEY))) {
 			updateAlign();
-		} else if ((propertyName.equals(FIBImage.Parameters.imageFile.name()))
-				|| (propertyName.equals(FIBImage.Parameters.sizeAdjustment.name()))
-				|| (propertyName.equals(FIBImage.Parameters.imageHeight.name()))
-				|| (propertyName.equals(FIBImage.Parameters.imageWidth.name()))) {
+		} else if ((propertyName.equals(FIBImage.IMAGE_FILE_KEY)) || (propertyName.equals(FIBImage.SIZE_ADJUSTMENT_KEY))
+				|| (propertyName.equals(FIBImage.IMAGE_HEIGHT_KEY)) || (propertyName.equals(FIBImage.IMAGE_WIDTH_KEY))) {
 			relayoutParentBecauseImageChanged();
 		}
 		delegate.receivedModelNotifications(o, propertyName, oldValue, newValue);

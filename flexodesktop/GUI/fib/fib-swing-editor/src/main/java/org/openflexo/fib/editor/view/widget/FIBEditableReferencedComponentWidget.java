@@ -40,9 +40,9 @@ public class FIBEditableReferencedComponentWidget extends FIBReferencedComponent
 	@SuppressWarnings("unused")
 	private static final Logger logger = FlexoLogger.getLogger(FIBEditableReferencedComponentWidget.class.getPackage().getName());
 
-	private FIBEditableViewDelegate<FIBReferencedComponent, JComponent> delegate;
+	private final FIBEditableViewDelegate<FIBReferencedComponent, JComponent> delegate;
 
-	private FIBEditorController editorController;
+	private final FIBEditorController editorController;
 
 	@Override
 	public FIBEditorController getEditorController() {
@@ -74,9 +74,10 @@ public class FIBEditableReferencedComponentWidget extends FIBReferencedComponent
 		return delegate;
 	}
 
+	@Override
 	public void receivedModelNotifications(FIBModelObject o, String propertyName, Object oldValue, Object newValue) {
 		super.receivedModelNotifications(o, propertyName, oldValue, newValue);
-		if (propertyName.equals(FIBReferencedComponent.Parameters.componentFile.name())) {
+		if (propertyName.equals(FIBReferencedComponent.COMPONENT_FILE_KEY)) {
 			updateComponent();
 		}
 		delegate.receivedModelNotifications(o, propertyName, oldValue, newValue);

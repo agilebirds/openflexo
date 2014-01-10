@@ -39,6 +39,7 @@ import org.openflexo.model.annotations.ModelEntity;
 import org.openflexo.model.annotations.PropertyIdentifier;
 import org.openflexo.model.annotations.Remover;
 import org.openflexo.model.annotations.Setter;
+import org.openflexo.model.annotations.XMLElement;
 
 @ModelEntity(isAbstract = true)
 @ImplementationClass(FIBContainer.FIBContainerImpl.class)
@@ -48,6 +49,7 @@ public abstract interface FIBContainer extends FIBComponent {
 	public static final String SUB_COMPONENTS_KEY = "subComponents";
 
 	@Getter(value = SUB_COMPONENTS_KEY, cardinality = Cardinality.LIST, inverse = FIBComponent.PARENT_KEY)
+	@XMLElement
 	public List<FIBComponent> getSubComponents();
 
 	@Setter(SUB_COMPONENTS_KEY)
@@ -69,6 +71,17 @@ public abstract interface FIBContainer extends FIBComponent {
 	public void reorderComponents();
 
 	public void append(FIBContainer container);
+
+	/**
+	 * Return a recursive list of all components beeing embedded in this container
+	 * 
+	 * @return
+	 */
+	public List<FIBComponent> getAllSubComponents();
+
+	@Deprecated
+	// TODO: check if this is still required
+	public void notifyComponentMoved(FIBComponent aComponent);
 
 	public static abstract class FIBContainerImpl extends FIBComponentImpl implements FIBContainer {
 
@@ -94,6 +107,7 @@ public abstract interface FIBContainer extends FIBComponent {
 		 * 
 		 * @return
 		 */
+		@Override
 		public List<FIBComponent> getAllSubComponents() {
 			List<FIBComponent> returned = new ArrayList<FIBComponent>();
 			appendAllSubComponents(this, returned);
@@ -238,9 +252,12 @@ public abstract interface FIBContainer extends FIBComponent {
 			subComponents.remove(aComponent);
 		}*/
 
-		/*public void notifyComponentMoved(FIBComponent aComponent) {
-			getPropertyChangeSupport().firePropertyChange(Parameters.subComponents.name(), null, subComponents);
-		}*/
+		@Override
+		@Deprecated
+		// TODO: check if this is still required
+		public void notifyComponentMoved(FIBComponent aComponent) {
+			getPropertyChangeSupport().firePropertyChange(SUB_COMPONENTS_KEY, null, getSubComponents());
+		}
 
 		@Override
 		public Enumeration<FIBComponent> children() {

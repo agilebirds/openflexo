@@ -36,7 +36,6 @@ import org.openflexo.fib.model.BorderLayoutConstraints;
 import org.openflexo.fib.model.BorderLayoutConstraints.BorderLayoutLocation;
 import org.openflexo.fib.model.BoxLayoutConstraints;
 import org.openflexo.fib.model.FIBComponent;
-import org.openflexo.fib.model.FIBLabel;
 import org.openflexo.fib.model.FIBModelObject;
 import org.openflexo.fib.model.FIBPanel;
 import org.openflexo.fib.model.FIBPanel.Layout;
@@ -52,11 +51,11 @@ public class FIBEditablePanelView<T> extends FIBPanelView<FIBPanel, T> implement
 
 	private static final Logger logger = FlexoLogger.getLogger(FIBEditablePanelView.class.getPackage().getName());
 
-	private FIBEditableViewDelegate<FIBPanel, JPanel> delegate;
+	private final FIBEditableViewDelegate<FIBPanel, JPanel> delegate;
 
 	private Vector<PlaceHolder> placeholders;
 
-	private FIBEditorController editorController;
+	private final FIBEditorController editorController;
 
 	@Override
 	public FIBEditorController getEditorController() {
@@ -201,7 +200,7 @@ public class FIBEditablePanelView<T> extends FIBPanelView<FIBPanel, T> implement
 					@Override
 					public void insertComponent(FIBComponent newComponent) {
 						FIBEditablePanelView.this.getComponent().addToSubComponents(newComponent, beginRightPlaceHolderConstraints, 0);
-						FIBEditablePanelView.this.getComponent().addToSubComponents(new FIBLabel("<left>"),
+						FIBEditablePanelView.this.getComponent().addToSubComponents(editorController.getFactory().newFIBLabel("<left>"),
 								beginLeftPlaceHolderConstraints, 0);
 					}
 				};
@@ -211,7 +210,7 @@ public class FIBEditablePanelView<T> extends FIBPanelView<FIBPanel, T> implement
 				PlaceHolder beginLeftPlaceHolder = new PlaceHolder(this, "<left>") {
 					@Override
 					public void insertComponent(FIBComponent newComponent) {
-						FIBEditablePanelView.this.getComponent().addToSubComponents(new FIBLabel("<right>"),
+						FIBEditablePanelView.this.getComponent().addToSubComponents(editorController.getFactory().newFIBLabel("<right>"),
 								beginRightPlaceHolderConstraints, 0);
 						FIBEditablePanelView.this.getComponent().addToSubComponents(newComponent, beginLeftPlaceHolderConstraints, 0);
 					}
@@ -240,8 +239,8 @@ public class FIBEditablePanelView<T> extends FIBPanelView<FIBPanel, T> implement
 					@Override
 					public void insertComponent(FIBComponent newComponent) {
 						FIBEditablePanelView.this.getComponent().addToSubComponents(newComponent, endLeftPlaceHolderConstraints);
-						FIBEditablePanelView.this.getComponent()
-								.addToSubComponents(new FIBLabel("<right>"), endRightPlaceHolderConstraints);
+						FIBEditablePanelView.this.getComponent().addToSubComponents(editorController.getFactory().newFIBLabel("<right>"),
+								endRightPlaceHolderConstraints);
 					}
 				};
 				registerComponentWithConstraints(endLeftPlaceHolder, endLeftPlaceHolderConstraints);
@@ -251,7 +250,8 @@ public class FIBEditablePanelView<T> extends FIBPanelView<FIBPanel, T> implement
 				PlaceHolder endRightPlaceHolder = new PlaceHolder(this, "<right>") {
 					@Override
 					public void insertComponent(FIBComponent newComponent) {
-						FIBEditablePanelView.this.getComponent().addToSubComponents(new FIBLabel("<left>"), endLeftPlaceHolderConstraints);
+						FIBEditablePanelView.this.getComponent().addToSubComponents(editorController.getFactory().newFIBLabel("<left>"),
+								endLeftPlaceHolderConstraints);
 						FIBEditablePanelView.this.getComponent().addToSubComponents(newComponent, endRightPlaceHolderConstraints);
 					}
 				};

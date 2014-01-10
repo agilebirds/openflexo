@@ -73,12 +73,12 @@ public class FIBEditableRadioButtonListWidget<T> extends FIBRadioButtonListWidge
 		return delegate;
 	}
 
+	@Override
 	public void receivedModelNotifications(FIBModelObject o, String propertyName, Object oldValue, Object newValue) {
 		super.receivedModelNotifications(o, propertyName, oldValue, newValue);
-		if ((propertyName.equals(FIBWidget.Parameters.format.name())) || (propertyName.equals(FIBWidget.Parameters.localize.name()))
-				|| (propertyName.equals(FIBRadioButtonList.Parameters.columns.name()))
-				|| (propertyName.equals(FIBRadioButtonList.Parameters.hGap.name()))
-				|| (propertyName.equals(FIBRadioButtonList.Parameters.vGap.name()))) {
+		if ((propertyName.equals(FIBWidget.FORMAT_KEY)) || (propertyName.equals(FIBWidget.LOCALIZE_KEY))
+				|| (propertyName.equals(FIBRadioButtonList.COLUMNS_KEY)) || (propertyName.equals(FIBRadioButtonList.H_GAP_KEY))
+				|| (propertyName.equals(FIBRadioButtonList.V_GAP_KEY))) {
 			rebuildRadioButtons();
 		}
 		delegate.receivedModelNotifications(o, propertyName, oldValue, newValue);

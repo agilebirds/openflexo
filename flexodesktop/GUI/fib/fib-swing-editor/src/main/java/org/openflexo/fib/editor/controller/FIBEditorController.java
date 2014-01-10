@@ -23,7 +23,6 @@ import java.awt.BorderLayout;
 import java.awt.Color;
 import java.awt.Graphics;
 import java.awt.Point;
-import java.io.File;
 import java.lang.reflect.Modifier;
 import java.util.HashMap;
 import java.util.Map;
@@ -38,7 +37,6 @@ import javax.swing.JSplitPane;
 import javax.swing.SwingUtilities;
 import javax.swing.border.Border;
 
-import org.openflexo.fib.FIBLibrary;
 import org.openflexo.fib.controller.FIBController;
 import org.openflexo.fib.controller.FIBViewFactory;
 import org.openflexo.fib.editor.FIBAbstractEditor;
@@ -73,6 +71,7 @@ import org.openflexo.fib.editor.view.widget.FIBEditableReferencedComponentWidget
 import org.openflexo.fib.editor.view.widget.FIBEditableTableWidget;
 import org.openflexo.fib.editor.view.widget.FIBEditableTextAreaWidget;
 import org.openflexo.fib.editor.view.widget.FIBEditableTextFieldWidget;
+import org.openflexo.fib.editor.widget.FIBEditorBrowser;
 import org.openflexo.fib.model.FIBBrowser;
 import org.openflexo.fib.model.FIBButton;
 import org.openflexo.fib.model.FIBCheckBox;
@@ -90,6 +89,7 @@ import org.openflexo.fib.model.FIBHtmlEditor;
 import org.openflexo.fib.model.FIBImage;
 import org.openflexo.fib.model.FIBLabel;
 import org.openflexo.fib.model.FIBList;
+import org.openflexo.fib.model.FIBModelFactory;
 import org.openflexo.fib.model.FIBNumber;
 import org.openflexo.fib.model.FIBPanel;
 import org.openflexo.fib.model.FIBRadioButtonList;
@@ -107,7 +107,6 @@ import org.openflexo.fib.view.FIBWidgetView;
 import org.openflexo.localization.Language;
 import org.openflexo.logging.FlexoLogger;
 import org.openflexo.swing.NoInsetsBorder;
-import org.openflexo.toolbox.FileResource;
 
 public class FIBEditorController /*extends FIBController*/extends Observable {
 
@@ -115,7 +114,7 @@ public class FIBEditorController /*extends FIBController*/extends Observable {
 
 	private final FIBController controller;
 
-	public static File BROWSER_FIB = new FileResource("Fib/Browser.fib");
+	private final FIBModelFactory factory;
 
 	private final JPanel editorPanel;
 	private final FIBView<?, ?, ?> fibPanel;
@@ -124,14 +123,12 @@ public class FIBEditorController /*extends FIBController*/extends Observable {
 	private FIBComponent selectedObject = null;
 	private FIBComponent focusedObject = null;
 
-	private ContextualMenu contextualMenu;
-
-	private FIBBrowserController browserController;
+	private final ContextualMenu contextualMenu;
 
 	private static final Border FOCUSED_BORDER = new NoInsetsBorder(BorderFactory.createLineBorder(Color.RED));
 	private static final Border SELECTED_BORDER = new NoInsetsBorder(BorderFactory.createLineBorder(Color.BLUE));
 
-	private Map<FIBComponent, FIBEditableViewDelegate<?, ?>> viewDelegates;
+	private final Map<FIBComponent, FIBEditableViewDelegate<?, ?>> viewDelegates;
 
 	private class FibWrappingPanel extends JPanel {
 		public FibWrappingPanel(JComponent wrappedFib) {
@@ -167,8 +164,8 @@ public class FIBEditorController /*extends FIBController*/extends Observable {
 		}
 	}
 
-	public FIBEditorController(FIBComponent fibComponent, FIBGenericEditor editor) {
-		this(fibComponent, editor, null);
+	public FIBEditorController(FIBModelFactory factory, FIBComponent fibComponent, FIBGenericEditor editor) {
+		this(factory, fibComponent, editor, null);
 		// Class testClass = null;
 		boolean instantiable = fibComponent.getDataClass() != null && !Modifier.isAbstract(fibComponent.getDataClass().getModifiers());
 		if (instantiable) {
@@ -198,12 +195,14 @@ public class FIBEditorController /*extends FIBController*/extends Observable {
 
 	}
 
-	public FIBEditorController(FIBComponent fibComponent, FIBGenericEditor editor, Object dataObject) {
-		this(fibComponent, editor, dataObject, FIBController.instanciateController(fibComponent, FIBAbstractEditor.LOCALIZATION));
+	public FIBEditorController(FIBModelFactory factory, FIBComponent fibComponent, FIBGenericEditor editor, Object dataObject) {
+		this(factory, fibComponent, editor, dataObject, FIBController.instanciateController(fibComponent, FIBAbstractEditor.LOCALIZATION));
 	}
 
-	public FIBEditorController(FIBComponent fibComponent, FIBGenericEditor editor, Object dataObject, FIBController controller) {
+	public FIBEditorController(FIBModelFactory factory, FIBComponent fibComponent, FIBGenericEditor editor, Object dataObject,
+			FIBController controller) {
 		this.controller = controller;
+		this.factory = factory;
 		viewDelegates = new HashMap<FIBComponent, FIBEditableViewDelegate<?, ?>>();
 		controller.setViewFactory(new EditorFIBViewFactory());
 
@@ -215,14 +214,16 @@ public class FIBEditorController /*extends FIBController*/extends Observable {
 
 		editorPanel = new JPanel(new BorderLayout());
 
-		FIBComponent browserComponent = FIBLibrary.instance().retrieveFIBComponent(BROWSER_FIB, false);
+		/*FIBComponent browserComponent = FIBLibrary.instance().retrieveFIBComponent(BROWSER_FIB, false, factory);
 		browserController = new FIBBrowserController(browserComponent, this);
 		FIBView<?, ?, ?> view = FIBController.makeView(browserComponent, browserController);
-		view.getController().setDataObject(fibComponent);
+		view.getController().setDataObject(fibComponent);*/
 
 		fibPanel = controller.buildView();
 
-		JSplitPane splitPane = new JSplitPane(JSplitPane.HORIZONTAL_SPLIT, view.getResultingJComponent(), new FibWrappingPanel(
+		FIBEditorBrowser editorBrowser = new FIBEditorBrowser(fibComponent, this);
+
+		JSplitPane splitPane = new JSplitPane(JSplitPane.HORIZONTAL_SPLIT, editorBrowser, new FibWrappingPanel(
 				fibPanel.getResultingJComponent())/*new JScrollPane(fibPanel.getJComponent())*/);
 
 		editorPanel.add(splitPane, BorderLayout.CENTER);
@@ -249,6 +250,10 @@ public class FIBEditorController /*extends FIBController*/extends Observable {
 
 	public FIBGenericEditor getEditor() {
 		return editor;
+	}
+
+	public FIBModelFactory getFactory() {
+		return factory;
 	}
 
 	public JPanel getEditorPanel() {

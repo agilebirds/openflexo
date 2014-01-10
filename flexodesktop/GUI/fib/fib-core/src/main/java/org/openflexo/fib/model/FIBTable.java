@@ -151,6 +151,7 @@ public interface FIBTable extends FIBWidget {
 	public void setSelected(DataBinding<Object> selected);
 
 	@Getter(value = COLUMNS_KEY, cardinality = Cardinality.LIST, inverse = FIBTableColumn.OWNER_KEY)
+	@XMLElement
 	public List<FIBTableColumn> getColumns();
 
 	@Setter(COLUMNS_KEY)
@@ -163,6 +164,7 @@ public interface FIBTable extends FIBWidget {
 	public void removeFromColumns(FIBTableColumn aColumn);
 
 	@Getter(value = ACTIONS_KEY, cardinality = Cardinality.LIST, inverse = FIBTableAction.OWNER_KEY)
+	@XMLElement
 	public List<FIBTableAction> getActions();
 
 	@Setter(ACTIONS_KEY)

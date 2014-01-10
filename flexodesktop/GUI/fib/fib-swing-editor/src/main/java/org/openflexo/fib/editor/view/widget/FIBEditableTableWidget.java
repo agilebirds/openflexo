@@ -72,13 +72,12 @@ public class FIBEditableTableWidget<T> extends FIBTableWidget<T> implements FIBE
 		return delegate;
 	}
 
+	@Override
 	public void receivedModelNotifications(FIBModelObject o, String propertyName, Object oldValue, Object newValue) {
 		super.receivedModelNotifications(o, propertyName, oldValue, newValue);
-		if ((propertyName.equals(FIBTable.Parameters.createNewRowOnClick.name()))
-				|| (propertyName.equals(FIBTable.Parameters.iteratorClass.name()))
-				|| (propertyName.equals(FIBTable.Parameters.rowHeight.name()))
-				|| (propertyName.equals(FIBTable.Parameters.visibleRowCount.name()))
-				|| (propertyName.equals(FIBTable.Parameters.showFooter.name()))) {
+		if ((propertyName.equals(FIBTable.CREATE_NEW_ROW_ON_CLICK_KEY)) || (propertyName.equals(FIBTable.ITERATOR_CLASS_KEY))
+				|| (propertyName.equals(FIBTable.ROW_HEIGHT_KEY)) || (propertyName.equals(FIBTable.VISIBLE_ROW_COUNT_KEY))
+				|| (propertyName.equals(FIBTable.SHOW_FOOTER_KEY))) {
 			updateTable();
 		}
 		delegate.receivedModelNotifications(o, propertyName, oldValue, newValue);

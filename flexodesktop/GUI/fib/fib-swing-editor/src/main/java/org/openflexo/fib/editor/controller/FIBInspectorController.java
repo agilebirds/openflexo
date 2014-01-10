@@ -36,15 +36,18 @@ import javax.swing.SwingConstants;
 import javax.swing.event.ChangeEvent;
 import javax.swing.event.ChangeListener;
 
+import org.openflexo.antar.binding.TypeUtils;
 import org.openflexo.fib.FIBLibrary;
 import org.openflexo.fib.controller.FIBController;
 import org.openflexo.fib.editor.FIBAbstractEditor;
-import org.openflexo.fib.editor.FIBEditor.FIBPreferences;
+import org.openflexo.fib.editor.FIBPreferences;
 import org.openflexo.fib.editor.notifications.FIBEditorNotification;
 import org.openflexo.fib.editor.notifications.SelectedObjectChange;
+import org.openflexo.fib.model.FIBModelFactory;
 import org.openflexo.fib.view.FIBView;
 import org.openflexo.fib.view.container.FIBTabPanelView;
 import org.openflexo.localization.FlexoLocalization;
+import org.openflexo.model.exceptions.ModelDefinitionException;
 import org.openflexo.swing.ComponentBoundSaver;
 import org.openflexo.toolbox.FileResource;
 
@@ -56,12 +59,21 @@ public class FIBInspectorController implements Observer, ChangeListener {
 	private JPanel EMPTY_CONTENT;
 	private JPanel rootPane;
 
-	private Hashtable<Class, FIBInspector> inspectors;
+	private Hashtable<Class<?>, FIBInspector> inspectors;
 	private Hashtable<FIBInspector, FIBView> inspectorViews;
 
+	private FIBModelFactory INSPECTOR_FACTORY;
+
 	public FIBInspectorController(JFrame frame) {
-		inspectors = new Hashtable<Class, FIBInspector>();
+		inspectors = new Hashtable<Class<?>, FIBInspector>();
 		inspectorViews = new Hashtable<FIBInspector, FIBView>();
+
+		try {
+			INSPECTOR_FACTORY = new FIBModelFactory(FIBInspector.class);
+		} catch (ModelDefinitionException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		}
 
 		File dir = new FileResource("EditorInspectors");
 
@@ -73,7 +85,7 @@ public class FIBInspectorController implements Observer, ChangeListener {
 		})) {
 			// System.out.println("Read "+f.getAbsolutePath());
 			logger.info("Loading " + f.getAbsolutePath());
-			FIBInspector inspector = (FIBInspector) FIBLibrary.instance().retrieveFIBComponent(f);
+			FIBInspector inspector = (FIBInspector) FIBLibrary.instance().retrieveFIBComponent(f, false, INSPECTOR_FACTORY);
 			if (inspector != null) {
 				if (inspector.getDataClass() != null) {
 					// try {
@@ -198,8 +210,11 @@ public class FIBInspectorController implements Observer, ChangeListener {
 		return inspectorForClass(object.getClass());
 	}
 
-	protected FIBInspector inspectorForClass(Class aClass) {
-		Class c = aClass;
+	protected FIBInspector inspectorForClass(Class<?> aClass) {
+		return TypeUtils.objectForClass(aClass, inspectors);
+
+		// Old code, to be removed
+		/*Class c = aClass;
 		while (c != null) {
 			FIBInspector returned = inspectors.get(c);
 			if (returned != null) {
@@ -208,10 +223,10 @@ public class FIBInspectorController implements Observer, ChangeListener {
 				c = c.getSuperclass();
 			}
 		}
-		return null;
+		return null;*/
 	}
 
-	protected Hashtable<Class, FIBInspector> getInspectors() {
+	protected Hashtable<Class<?>, FIBInspector> getInspectors() {
 		return inspectors;
 	}
 

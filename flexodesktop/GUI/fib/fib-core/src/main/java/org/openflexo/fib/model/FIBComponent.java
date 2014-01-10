@@ -51,6 +51,8 @@ import org.openflexo.fib.model.validation.ValidationWarning;
 import org.openflexo.fib.view.FIBView;
 import org.openflexo.localization.LocalizedDelegate;
 import org.openflexo.model.annotations.Adder;
+import org.openflexo.model.annotations.DeserializationFinalizer;
+import org.openflexo.model.annotations.DeserializationInitializer;
 import org.openflexo.model.annotations.Getter;
 import org.openflexo.model.annotations.Getter.Cardinality;
 import org.openflexo.model.annotations.ImplementationClass;
@@ -345,10 +347,6 @@ public abstract interface FIBComponent extends FIBModelObject, TreeNode {
 
 	public void updateBindingModel();
 
-	// Is is still necessary (preferably no)
-	@Deprecated
-	public void finalizeDeserialization();
-
 	public void declareDependantOf(FIBComponent aComponent);
 
 	public List<FIBButton> getDefaultButtons();
@@ -376,6 +374,14 @@ public abstract interface FIBComponent extends FIBModelObject, TreeNode {
 	public Iterator<FIBComponent> getMayAltersIterator();
 
 	public abstract String getIdentifier();
+
+	public List<DataBinding<?>> getDeclaredBindings();
+
+	@DeserializationInitializer
+	public void initializeDeserialization();
+
+	@DeserializationFinalizer
+	public void finalizeDeserialization();
 
 	public static abstract class FIBComponentImpl extends FIBModelObjectImpl implements FIBComponent {
 
@@ -835,6 +841,7 @@ public abstract interface FIBComponent extends FIBModelObject, TreeNode {
 
 		protected boolean deserializationPerformed = true;
 
+		@Override
 		public void initializeDeserialization() {
 			deserializationPerformed = false;
 		}
@@ -1147,10 +1154,6 @@ public abstract interface FIBComponent extends FIBModelObject, TreeNode {
 				return new ParameterizedTypeImpl(FIBView.class, args);
 			}
 			return null;
-		}
-
-		public void clearParameters() {
-			getParameters().clear();
 		}
 
 		@Override
@@ -1590,6 +1593,7 @@ public abstract interface FIBComponent extends FIBModelObject, TreeNode {
 		 * 
 		 * @return
 		 */
+		@Override
 		public List<DataBinding<?>> getDeclaredBindings() {
 			List<DataBinding<?>> returned = new ArrayList<DataBinding<?>>();
 			returned.add(getData());

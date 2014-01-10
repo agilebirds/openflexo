@@ -21,6 +21,7 @@ package org.openflexo.fib.model;
 
 import java.util.logging.Logger;
 
+import org.openflexo.model.annotations.DeserializationFinalizer;
 import org.openflexo.model.annotations.Getter;
 import org.openflexo.model.annotations.ImplementationClass;
 import org.openflexo.model.annotations.ModelEntity;
@@ -56,6 +57,9 @@ public interface FIBDependancy extends FIBModelObject {
 	public FIBComponent getMasterComponent();
 
 	public void setMasterComponent(FIBComponent masterComponent);
+
+	@DeserializationFinalizer
+	public void finalizeDeserialization();
 
 	public static abstract class FIBDependancyImpl extends FIBModelObjectImpl implements FIBDependancy {
 
@@ -113,6 +117,7 @@ public interface FIBDependancy extends FIBModelObject {
 			this.masterComponentName = masterComponentName;
 		}
 
+		@Override
 		public void finalizeDeserialization() {
 			setMasterComponent(getComponent().getRootComponent().getComponentNamed(masterComponentName));
 		}

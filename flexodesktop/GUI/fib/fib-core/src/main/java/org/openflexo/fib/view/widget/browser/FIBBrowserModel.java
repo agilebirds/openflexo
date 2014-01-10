@@ -62,7 +62,7 @@ public class FIBBrowserModel extends DefaultTreeModel implements TreeModel {
 	private FIBBrowser _fibBrowser;
 	private final Multimap<Object, BrowserCell> contents;
 
-	private FIBBrowserWidget widget;
+	private final FIBBrowserWidget widget;
 
 	/**
 	 * Stores controls: key is the JButton and value the PropertyListActionListener
@@ -102,6 +102,10 @@ public class FIBBrowserModel extends DefaultTreeModel implements TreeModel {
 			return _elementTypes.get(element);
 		} else {
 			logger.warning("Could not find element for class " + aClass);
+			/*System.out.println("Available=");
+			for (FIBBrowserElement e : _fibBrowser.getElements()) {
+				System.out.println("> " + e.getName() + " for " + e.getDataClass());
+			}*/
 			return null;
 		}
 	}
@@ -216,7 +220,7 @@ public class FIBBrowserModel extends DefaultTreeModel implements TreeModel {
 	/**
 	 * This set is used during exploration of all exhaustive contents, in order not no enter in an infinite loop
 	 */
-	private Set<Object> computedExhaustiveContents = new HashSet<Object>();
+	private final Set<Object> computedExhaustiveContents = new HashSet<Object>();
 
 	/**
 	 * Flag indicating is exhaustive contents (obtained after deep-browsing) is up-to-date
@@ -275,7 +279,13 @@ public class FIBBrowserModel extends DefaultTreeModel implements TreeModel {
 
 			if (browserElementType != null) {
 
+				System.out.println("Build BrowserCell for " + representedObject);
+
+				System.out.println("elementType=" + browserElementType.getBrowserElement().getName());
+
 				final List<?> newChildrenObjects = browserElementType.getChildrenFor(getRepresentedObject());
+
+				System.out.println("newChildrenObjects=" + newChildrenObjects);
 
 				if (newChildrenObjects.size() > 0) {
 					// System.out.println("For " + representedObject + " found " + newChildrenObjects.size() + " children: " +

@@ -42,7 +42,6 @@ import org.openflexo.fib.model.validation.ValidationRule;
 import org.openflexo.fib.model.validation.ValidationWarning;
 import org.openflexo.fib.utils.LocalizedDelegateGUIImpl;
 import org.openflexo.model.annotations.Adder;
-import org.openflexo.model.annotations.Finder;
 import org.openflexo.model.annotations.Getter;
 import org.openflexo.model.annotations.Getter.Cardinality;
 import org.openflexo.model.annotations.ImplementationClass;
@@ -51,6 +50,7 @@ import org.openflexo.model.annotations.PropertyIdentifier;
 import org.openflexo.model.annotations.Remover;
 import org.openflexo.model.annotations.Setter;
 import org.openflexo.model.annotations.XMLAttribute;
+import org.openflexo.model.annotations.XMLElement;
 import org.openflexo.model.factory.AccessibleProxyObject;
 import org.openflexo.model.factory.CloneableProxyObject;
 import org.openflexo.model.factory.DeletableProxyObject;
@@ -77,12 +77,14 @@ public interface FIBModelObject extends Bindable, AccessibleProxyObject, Cloneab
 	public void setName(String name);
 
 	@Getter(value = DESCRIPTION_KEY)
+	@XMLAttribute
 	public String getDescription();
 
 	@Setter(DESCRIPTION_KEY)
 	public void setDescription(String description);
 
 	@Getter(value = PARAMETERS_KEY, cardinality = Cardinality.LIST)
+	@XMLElement
 	public List<FIBParameter> getParameters();
 
 	@Setter(PARAMETERS_KEY)
@@ -94,8 +96,10 @@ public interface FIBModelObject extends Bindable, AccessibleProxyObject, Cloneab
 	@Remover(PARAMETERS_KEY)
 	public void removeFromParameters(FIBParameter aParameter);
 
-	@Finder(collection = PARAMETERS_KEY, attribute = FIBParameter.NAME_KEY)
+	// @Finder(collection = PARAMETERS_KEY, attribute = FIBParameter.NAME_KEY)
 	public String getParameter(String parameterName);
+
+	public void clearParameters();
 
 	public FIBParameter createNewParameter();
 
@@ -201,14 +205,15 @@ public interface FIBModelObject extends Bindable, AccessibleProxyObject, Cloneab
 			}
 		}*/
 
-		/*public String getParameter(String parameterName) {
-			for (FIBParameter p : parameters) {
+		@Override
+		public String getParameter(String parameterName) {
+			for (FIBParameter p : getParameters()) {
 				if (parameterName.equals(p.getName())) {
 					return p.getValue();
 				}
 			}
 			return null;
-		}*/
+		}
 
 		/*@Override
 		public List<FIBParameter> getParameters() {
@@ -490,6 +495,11 @@ public interface FIBModelObject extends Bindable, AccessibleProxyObject, Cloneab
 		@Override
 		public final Collection<? extends FIBModelObject> getEmbeddedObjects() {
 			return (Collection<? extends FIBModelObject>) getFactory().getEmbeddedObjects(this, EmbeddingType.CLOSURE);
+		}
+
+		@Override
+		public void clearParameters() {
+			getParameters().clear();
 		}
 
 	}

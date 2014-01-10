@@ -30,6 +30,8 @@ import org.openflexo.fib.editor.view.FIBEditableViewDelegate.FIBDropTarget;
 import org.openflexo.fib.editor.view.PlaceHolder;
 import org.openflexo.fib.model.FIBComponent;
 import org.openflexo.fib.model.FIBModelObject;
+import org.openflexo.fib.model.FIBMultiSplitLayoutFactory.FIBNode;
+import org.openflexo.fib.model.FIBMultiSplitLayoutFactory.FIBSplit;
 import org.openflexo.fib.model.FIBSplitPanel;
 import org.openflexo.fib.model.SplitLayoutConstraints;
 import org.openflexo.fib.view.container.FIBSplitPanelView;
@@ -43,11 +45,11 @@ public class FIBEditableSplitPanelView<T> extends FIBSplitPanelView<T> implement
 
 	private static final Logger logger = FlexoLogger.getLogger(FIBEditableSplitPanelView.class.getPackage().getName());
 
-	private FIBEditableViewDelegate<FIBSplitPanel, JXMultiSplitPane> delegate;
+	private final FIBEditableViewDelegate<FIBSplitPanel, JXMultiSplitPane> delegate;
 
 	private Vector<PlaceHolder> placeholders;
 
-	private FIBEditorController editorController;
+	private final FIBEditorController editorController;
 
 	@Override
 	public FIBEditorController getEditorController() {
@@ -96,8 +98,8 @@ public class FIBEditableSplitPanelView<T> extends FIBSplitPanelView<T> implement
 
 	}
 
-	private void appendPlaceHolders(Split s) {
-		for (Node n : s.getChildren()) {
+	private void appendPlaceHolders(FIBSplit<?> s) {
+		for (FIBNode n : s.getChildren()) {
 			appendPlaceHolders(n);
 		}
 	}

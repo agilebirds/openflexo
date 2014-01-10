@@ -68,7 +68,6 @@ public class FIBLibrary {
 
 	protected static FIBLibrary createInstance() {
 		_current = new FIBLibrary();
-
 		return _current;
 	}
 
@@ -100,10 +99,15 @@ public class FIBLibrary {
 	}
 
 	public FIBComponent retrieveFIBComponent(File fibFile) {
-		return retrieveFIBComponent(fibFile, true);
+		try {
+			return retrieveFIBComponent(fibFile, true, new FIBModelFactory(fibFile.getParentFile()));
+		} catch (ModelDefinitionException e) {
+			e.printStackTrace();
+			return null;
+		}
 	}
 
-	public FIBComponent retrieveFIBComponent(File fibFile, boolean useCache) {
+	public FIBComponent retrieveFIBComponent(File fibFile, boolean useCache, FIBModelFactory factory) {
 		FIBComponent fibComponent = fibFileDefinitions.get(fibFile);
 		if (!useCache || fibComponent == null || fibComponent.getLastModified().getTime() < fibFile.lastModified()) {
 
@@ -114,8 +118,6 @@ public class FIBLibrary {
 			FileInputStream fis = null;
 
 			try {
-				FIBModelFactory factory = new FIBModelFactory(fibFile.getParentFile());
-
 				fis = new FileInputStream(fibFile);
 				FIBComponent component = (FIBComponent) factory.deserialize(fis);
 				component.setLastModified(new Date(fibFile.lastModified()));
@@ -231,13 +233,7 @@ public class FIBLibrary {
 
 			factory.serialize(component, stream);
 			logger.info("Succeeded to save: " + fibFile);
-		} catch (ModelDefinitionException e) {
-			logger.warning("Failed to save: " + fibFile + " unexpected exception: " + e.getMessage());
-			e.printStackTrace();
-		} catch (FileNotFoundException e) {
-			logger.warning("Failed to save: " + fibFile + " unexpected exception: " + e.getMessage());
-			e.printStackTrace();
-		} catch (IOException e) {
+		} catch (Exception e) {
 			logger.warning("Failed to save: " + fibFile + " unexpected exception: " + e.getMessage());
 			e.printStackTrace();
 		} finally {

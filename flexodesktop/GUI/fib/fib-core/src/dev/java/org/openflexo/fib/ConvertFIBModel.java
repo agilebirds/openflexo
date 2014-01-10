@@ -3,8 +3,6 @@ package org.openflexo.fib;
 import java.io.File;
 import java.io.IOException;
 
-import org.openflexo.xmlcode.pamelagenerator.PAMELAGenerator;
-
 public class ConvertFIBModel {
 
 	public static void main(String[] args) {
@@ -21,7 +19,7 @@ public class ConvertFIBModel {
 			e.printStackTrace();
 		}
 		File outputDir = new File(tempFile.getParentFile(), "PAMELAGenerator");
-		PAMELAGenerator generator = new PAMELAGenerator(mappingFile, sourceCode, outputDir);
+		// PAMELAGenerator generator = new PAMELAGenerator(mappingFile, sourceCode, outputDir);
 	}
 
 }

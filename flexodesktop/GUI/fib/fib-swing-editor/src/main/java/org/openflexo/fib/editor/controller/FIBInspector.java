@@ -19,84 +19,62 @@
  */
 package org.openflexo.fib.editor.controller;
 
-import org.openflexo.fib.FIBLibrary;
 import org.openflexo.fib.model.FIBPanel;
 import org.openflexo.fib.model.FIBTabPanel;
-import org.openflexo.xmlcode.AccessorInvocationException;
-import org.openflexo.xmlcode.Cloner;
-import org.openflexo.xmlcode.DuplicateSerializationIdentifierException;
-import org.openflexo.xmlcode.InvalidModelException;
-import org.openflexo.xmlcode.InvalidObjectSpecificationException;
-import org.openflexo.xmlcode.StringEncoder;
-import org.openflexo.xmlcode.XMLCoder;
+import org.openflexo.model.annotations.ImplementationClass;
+import org.openflexo.model.annotations.ModelEntity;
+import org.openflexo.model.annotations.XMLElement;
 
-public class FIBInspector extends FIBPanel {
+@ModelEntity
+@ImplementationClass(FIBInspector.FIBInspectorImpl.class)
+@XMLElement(xmlTag = "Inspector")
+public interface FIBInspector extends FIBPanel {
 
-	private boolean superInspectorWereAppended = false;
+	public void appendSuperInspectors(FIBInspectorController controller);
 
-	protected void appendSuperInspectors(FIBInspectorController controller) {
-		if (getDataType() == null) {
-			return;
-		}
-		if (getDataType() instanceof Class) {
-			FIBInspector superInspector = controller.inspectorForClass(((Class) getDataType()).getSuperclass());
-			if (superInspector != null) {
-				superInspector.appendSuperInspectors(controller);
-				appendSuperInspector(superInspector);
+	public FIBTabPanel getTabPanel();
+
+	public static abstract class FIBInspectorImpl extends FIBPanelImpl implements FIBInspector {
+
+		private boolean superInspectorWereAppended = false;
+
+		@Override
+		public void appendSuperInspectors(FIBInspectorController controller) {
+			if (getDataType() == null) {
+				return;
+			}
+			if (getDataType() instanceof Class) {
+				FIBInspector superInspector = controller.inspectorForClass(((Class) getDataType()).getSuperclass());
+				if (superInspector != null) {
+					superInspector.appendSuperInspectors(controller);
+					appendSuperInspector(superInspector);
+				}
 			}
 		}
-	}
 
-	@Override
-	public String toString() {
-		return "Inspector[" + getDataType() + "]";
-	}
+		@Override
+		public String toString() {
+			return "Inspector[" + getDataType() + "]";
+		}
 
-	protected void appendSuperInspector(FIBInspector superInspector) {
-		if (!superInspectorWereAppended) {
-			// System.out.println("Append "+superInspector+" to "+this);
-			/*try {
-				System.out.println("Clone container:\n"+XMLCoder.encodeObjectWithMapping(superInspector, FIBLibrary.getFIBMapping(),StringEncoder.getDefaultInstance()));
-				System.out.println("Found this:\n"+XMLCoder.encodeObjectWithMapping((XMLSerializable)Cloner.cloneObjectWithMapping(superInspector, FIBLibrary.getFIBMapping()), FIBLibrary.getFIBMapping(),StringEncoder.getDefaultInstance()));
-			} catch (InvalidObjectSpecificationException e) {
-				// TODO Auto-generated catch block
-				e.printStackTrace();
-			} catch (InvalidModelException e) {
-				// TODO Auto-generated catch block
-				e.printStackTrace();
-			} catch (AccessorInvocationException e) {
-				// TODO Auto-generated catch block
-				e.printStackTrace();
-			} catch (DuplicateSerializationIdentifierException e) {
-				// TODO Auto-generated catch block
-				e.printStackTrace();
-			}*/
-			append((FIBPanel) Cloner.cloneObjectWithMapping(superInspector, FIBLibrary.getFIBMapping()));
-			superInspectorWereAppended = true;
+		protected void appendSuperInspector(FIBInspector superInspector) {
+			if (!superInspectorWereAppended) {
+				// System.out.println("Append "+superInspector+" to "+this);
+				// TODO: i dont't know if this clone is still required (check this)
+				FIBInspector clonedSuperInspector = (FIBInspector) superInspector.cloneObject();
+				append(clonedSuperInspector);
+				superInspectorWereAppended = true;
+			}
+		}
+
+		@Override
+		public FIBTabPanel getTabPanel() {
+			return (FIBTabPanel) getSubComponents().get(0);
+		}
+
+		public String getXMLRepresentation() {
+			// TODO: we use here the default factory !!!
+			return getFactory().stringRepresentation(this);
 		}
 	}
-
-	public FIBTabPanel getTabPanel() {
-		return (FIBTabPanel) getSubComponents().firstElement();
-	}
-
-	public String getXMLRepresentation() {
-		try {
-			return XMLCoder.encodeObjectWithMapping(this, FIBLibrary.getFIBMapping(), StringEncoder.getDefaultInstance());
-		} catch (InvalidObjectSpecificationException e) {
-			// TODO Auto-generated catch block
-			e.printStackTrace();
-		} catch (InvalidModelException e) {
-			// TODO Auto-generated catch block
-			e.printStackTrace();
-		} catch (AccessorInvocationException e) {
-			// TODO Auto-generated catch block
-			e.printStackTrace();
-		} catch (DuplicateSerializationIdentifierException e) {
-			// TODO Auto-generated catch block
-			e.printStackTrace();
-		}
-		return "Error ???";
-	}
-
 }

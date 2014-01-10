@@ -12,7 +12,7 @@ public class DraggedFIBComponent implements FIBDraggable {
 
 	private static final Logger logger = FlexoLogger.getLogger(FIBEditorController.class.getPackage().getName());
 
-	private FIBComponent draggedComponent;
+	private final FIBComponent draggedComponent;
 
 	public DraggedFIBComponent(FIBComponent draggedComponent) {
 		this.draggedComponent = draggedComponent;
@@ -52,7 +52,8 @@ public class DraggedFIBComponent implements FIBDraggable {
 			if (target.getPlaceHolder() != null) {
 				target.getPlaceHolder().willDelete();
 				FIBContainer oldParent = draggedComponent.getParent();
-				draggedComponent.getParent().removeFromSubComponentsNoNotification(draggedComponent);
+				draggedComponent.getParent().removeFromSubComponents(draggedComponent);
+				// WAS: draggedComponent.getParent().removeFromSubComponentsNoNotification(draggedComponent);
 				target.getPlaceHolder().insertComponent(draggedComponent);
 				target.getPlaceHolder().hasDeleted();
 				oldParent.notifyComponentMoved(draggedComponent);

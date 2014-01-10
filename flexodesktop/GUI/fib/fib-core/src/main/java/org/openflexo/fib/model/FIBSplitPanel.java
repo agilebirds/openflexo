@@ -23,12 +23,16 @@ import java.util.List;
 import java.util.Vector;
 
 import org.openflexo.fib.model.FIBMultiSplitLayoutFactory.FIBColSplit;
+import org.openflexo.fib.model.FIBMultiSplitLayoutFactory.FIBDivider;
+import org.openflexo.fib.model.FIBMultiSplitLayoutFactory.FIBLeaf;
 import org.openflexo.fib.model.FIBMultiSplitLayoutFactory.FIBNode;
 import org.openflexo.fib.model.FIBMultiSplitLayoutFactory.FIBRowSplit;
 import org.openflexo.fib.model.FIBMultiSplitLayoutFactory.FIBSplit;
 import org.openflexo.fib.model.FIBPanel.Layout;
 import org.openflexo.model.annotations.Getter;
 import org.openflexo.model.annotations.ImplementationClass;
+import org.openflexo.model.annotations.Import;
+import org.openflexo.model.annotations.Imports;
 import org.openflexo.model.annotations.ModelEntity;
 import org.openflexo.model.annotations.PropertyIdentifier;
 import org.openflexo.model.annotations.Setter;
@@ -43,6 +47,8 @@ import org.openflexo.swing.layout.MultiSplitLayout.Split;
 @ModelEntity
 @ImplementationClass(FIBSplitPanel.FIBSplitPanelImpl.class)
 @XMLElement(xmlTag = "SplitPanel")
+@Imports({ @Import(FIBSplit.class), @Import(FIBLeaf.class), @Import(FIBDivider.class), @Import(FIBColSplit.class),
+		@Import(FIBRowSplit.class) })
 public interface FIBSplitPanel extends FIBContainer {
 
 	@PropertyIdentifier(type = FIBSplit.class)
@@ -63,6 +69,10 @@ public interface FIBSplitPanel extends FIBContainer {
 	public void notifySplitLayoutChange();
 
 	public FIBMultiSplitLayoutFactory getSplitLayoutFactory();
+
+	public void makeDefaultHorizontalLayout();
+
+	public void makeDefaultVerticalLayout();
 
 	public static abstract class FIBSplitPanelImpl extends FIBContainerImpl implements FIBSplitPanel {
 
@@ -131,10 +141,12 @@ public interface FIBSplitPanel extends FIBContainer {
 			return splitLayoutFactory.makeColSplit(left, splitLayoutFactory.makeDivider(), right);
 		}
 
+		@Override
 		public void makeDefaultHorizontalLayout() {
 			setSplit(getDefaultHorizontalLayout());
 		}
 
+		@Override
 		public void makeDefaultVerticalLayout() {
 			setSplit(getDefaultVerticalLayout());
 		}
@@ -207,7 +219,7 @@ public interface FIBSplitPanel extends FIBContainer {
 			if (n instanceof Leaf) {
 				returned.add((Leaf) n);
 			} else if (n instanceof FIBSplit) {
-				for (FIBNode n2 : ((FIBSplit) n).getChildren()) {
+				for (FIBNode n2 : ((FIBSplit<?>) n).getChildren()) {
 					appendToLeaves(n2, returned);
 				}
 			}

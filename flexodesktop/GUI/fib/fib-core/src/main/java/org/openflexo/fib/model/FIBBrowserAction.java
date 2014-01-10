@@ -33,6 +33,7 @@ import org.openflexo.antar.binding.DataBinding.BindingDefinitionType;
 import org.openflexo.antar.expr.NullReferenceException;
 import org.openflexo.antar.expr.TypeMismatchException;
 import org.openflexo.fib.model.validation.ValidationReport;
+import org.openflexo.model.annotations.DeserializationFinalizer;
 import org.openflexo.model.annotations.Getter;
 import org.openflexo.model.annotations.ImplementationClass;
 import org.openflexo.model.annotations.Import;
@@ -82,6 +83,9 @@ public abstract interface FIBBrowserAction extends FIBModelObject {
 	public void setIsAvailable(DataBinding<Boolean> isAvailable);
 
 	public ActionType getActionType();
+
+	@DeserializationFinalizer
+	public void finalizeDeserialization();
 
 	public static abstract class FIBBrowserActionImpl extends FIBModelObjectImpl implements FIBBrowserAction {
 
@@ -159,6 +163,7 @@ public abstract interface FIBBrowserAction extends FIBModelObject {
 			return null;
 		}
 
+		@Override
 		public void finalizeDeserialization() {
 			if (logger.isLoggable(Level.FINE)) {
 				logger.fine("finalizeDeserialization() for FIBTableAction " + getName());

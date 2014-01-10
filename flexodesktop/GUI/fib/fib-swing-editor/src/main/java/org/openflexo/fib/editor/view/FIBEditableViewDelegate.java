@@ -81,10 +81,10 @@ public class FIBEditableViewDelegate<M extends FIBComponent, J extends JComponen
 
 	private FIBEditableView<M, J> view;
 
-	private DragSource dragSource;
-	private MoveDGListener dgListener;
-	private MoveDSListener dsListener;
-	private int dragAction = DnDConstants.ACTION_MOVE;
+	private final DragSource dragSource;
+	private final MoveDGListener dgListener;
+	private final MoveDSListener dsListener;
+	private final int dragAction = DnDConstants.ACTION_MOVE;
 
 	public FIBEditableViewDelegate(FIBEditableView<M, J> view) {
 		this.view = view;
@@ -192,7 +192,7 @@ public class FIBEditableViewDelegate<M extends FIBComponent, J extends JComponen
 		getEditorController().setFocusedObject(getFIBComponent());
 	}
 
-	private List<Object> placeHolderVisibleRequesters = new ArrayList<Object>();
+	private final List<Object> placeHolderVisibleRequesters = new ArrayList<Object>();
 
 	public void addToPlaceHolderVisibleRequesters(Object requester) {
 		if (!placeHolderVisibleRequesters.contains(requester)) {
@@ -278,56 +278,50 @@ public class FIBEditableViewDelegate<M extends FIBComponent, J extends JComponen
 		}
 
 		if (o instanceof FIBContainer && view instanceof FIBContainerView) {
-			if (propertyName.equals(FIBContainer.Parameters.subComponents.name())) {
+			if (propertyName.equals(FIBContainer.SUB_COMPONENTS_KEY)) {
 				((FIBContainerView) view).updateLayout();
 			}
 		}
 
 		if (o instanceof FIBSplitPanel && view instanceof FIBSplitPanelView) {
-			if (propertyName.equals(FIBSplitPanel.Parameters.split.name())) {
+			if (propertyName.equals(FIBSplitPanel.SPLIT_KEY)) {
 				((FIBSplitPanelView) view).updateLayout();
 			}
 		}
 
 		if (o instanceof FIBTab && view instanceof FIBTabView) {
-			if (propertyName.equals(FIBTab.Parameters.title.name())) {
+			if (propertyName.equals(FIBTab.TITLE_KEY)) {
 				// Arghlll how do we update titles on this.
 			}
 		}
 
 		if (o instanceof FIBPanel && view instanceof FIBPanelView) {
-			if (propertyName.equals(FIBPanel.Parameters.border.name()) || propertyName.equals(FIBPanel.Parameters.borderColor.name())
-					|| propertyName.equals(FIBPanel.Parameters.borderTitle.name())
-					|| propertyName.equals(FIBPanel.Parameters.borderTop.name())
-					|| propertyName.equals(FIBPanel.Parameters.borderLeft.name())
-					|| propertyName.equals(FIBPanel.Parameters.borderRight.name())
-					|| propertyName.equals(FIBPanel.Parameters.borderBottom.name())
-					|| propertyName.equals(FIBPanel.Parameters.titleFont.name())
-					|| propertyName.equals(FIBPanel.Parameters.darkLevel.name())) {
+			if (propertyName.equals(FIBPanel.BORDER_KEY) || propertyName.equals(FIBPanel.BORDER_COLOR_KEY)
+					|| propertyName.equals(FIBPanel.BORDER_TITLE_KEY) || propertyName.equals(FIBPanel.BORDER_TOP_KEY)
+					|| propertyName.equals(FIBPanel.BORDER_LEFT_KEY) || propertyName.equals(FIBPanel.BORDER_RIGHT_KEY)
+					|| propertyName.equals(FIBPanel.BORDER_BOTTOM_KEY) || propertyName.equals(FIBPanel.TITLE_FONT_KEY)
+					|| propertyName.equals(FIBPanel.DARK_LEVEL_KEY)) {
 				((FIBPanelView) view).updateBorder();
-			} else if (propertyName.equals(FIBPanel.Parameters.layout.name())
-					|| propertyName.equals(FIBPanel.Parameters.flowAlignment.name())
-					|| propertyName.equals(FIBPanel.Parameters.boxLayoutAxis.name())
-					|| propertyName.equals(FIBPanel.Parameters.vGap.name()) || propertyName.equals(FIBPanel.Parameters.hGap.name())
-					|| propertyName.equals(FIBPanel.Parameters.rows.name()) || propertyName.equals(FIBPanel.Parameters.cols.name())
-					|| propertyName.equals(FIBPanel.Parameters.protectContent.name())) {
+			} else if (propertyName.equals(FIBPanel.LAYOUT_KEY) || propertyName.equals(FIBPanel.FLOW_ALIGNMENT_KEY)
+					|| propertyName.equals(FIBPanel.BOX_LAYOUT_AXIS_KEY) || propertyName.equals(FIBPanel.V_GAP_KEY)
+					|| propertyName.equals(FIBPanel.H_GAP_KEY) || propertyName.equals(FIBPanel.ROWS_KEY)
+					|| propertyName.equals(FIBPanel.COLS_KEY) || propertyName.equals(FIBPanel.PROTECT_CONTENT_KEY)) {
 				((FIBPanelView) view).updateLayout();
 			}
 		}
 
 		if (o instanceof FIBWidget) {
 			FIBWidgetView widgetView = (FIBWidgetView) view;
-			if (propertyName.equals(FIBWidget.Parameters.manageDynamicModel.name())) {
+			if (propertyName.equals(FIBWidget.MANAGE_DYNAMIC_MODEL_KEY)) {
 				widgetView.getComponent().updateBindingModel();
-			} else if (propertyName.equals(FIBWidget.Parameters.readOnly.name())) {
+			} else if (propertyName.equals(FIBWidget.READ_ONLY_KEY)) {
 				widgetView.updateEnability();
 			}
 		}
 
 		if (o instanceof FIBMultipleValues) {
-			if (propertyName.equals(FIBMultipleValues.Parameters.staticList.name())
-					|| propertyName.equals(FIBMultipleValues.Parameters.list.name())
-					|| propertyName.equals(FIBMultipleValues.Parameters.array.name())) {
+			if (propertyName.equals(FIBMultipleValues.STATIC_LIST_KEY) || propertyName.equals(FIBMultipleValues.LIST_KEY)
+					|| propertyName.equals(FIBMultipleValues.ARRAY_KEY)) {
 				// view.updateDataObject(view.getDataObject());
 				((FIBMultipleValueWidget) view).updateMultipleValues();
 
@@ -335,20 +329,20 @@ public class FIBEditableViewDelegate<M extends FIBComponent, J extends JComponen
 		}
 
 		if (o instanceof FIBNumber) {
-			if (propertyName.equals(FIBNumber.Parameters.allowsNull.name())) {
+			if (propertyName.equals(FIBNumber.ALLOWS_NULL_KEY)) {
 				((FIBNumberWidget<?>) view).updateCheckboxVisibility();
-			} else if (propertyName.equals(FIBNumber.Parameters.columns.name())) {
+			} else if (propertyName.equals(FIBNumber.COLUMNS_KEY)) {
 				((FIBNumberWidget<?>) view).updateColumns();
 			}
 		}
 
 		if (o instanceof FIBFont) {
-			if (propertyName.equals(FIBFont.Parameters.allowsNull.name())) {
+			if (propertyName.equals(FIBFont.ALLOWS_NULL_KEY)) {
 				((FIBFontWidget) view).updateCheckboxVisibility();
 			}
 		}
 		if (o instanceof FIBColor) {
-			if (propertyName.equals(FIBColor.Parameters.allowsNull.name())) {
+			if (propertyName.equals(FIBColor.ALLOWS_NULL_KEY)) {
 				((FIBColorWidget) view).updateCheckboxVisibility();
 			}
 		}
@@ -360,29 +354,24 @@ public class FIBEditableViewDelegate<M extends FIBComponent, J extends JComponen
 		 */
 
 		if (o instanceof FIBComponent) {
-			if (propertyName.equals(FIBComponent.Parameters.constraints.name())
-					|| propertyName.equals(FIBComponent.Parameters.width.name())
-					|| propertyName.equals(FIBComponent.Parameters.height.name())
-					|| propertyName.equals(FIBComponent.Parameters.minWidth.name())
-					|| propertyName.equals(FIBComponent.Parameters.minHeight.name())
-					|| propertyName.equals(FIBComponent.Parameters.maxWidth.name())
-					|| propertyName.equals(FIBComponent.Parameters.maxHeight.name())
-					|| propertyName.equals(FIBComponent.Parameters.useScrollBar.name())
-					|| propertyName.equals(FIBComponent.Parameters.horizontalScrollbarPolicy.name())
-					|| propertyName.equals(FIBComponent.Parameters.verticalScrollbarPolicy.name())) {
+			if (propertyName.equals(FIBComponent.CONSTRAINTS_KEY) || propertyName.equals(FIBComponent.WIDTH_KEY)
+					|| propertyName.equals(FIBComponent.HEIGHT_KEY) || propertyName.equals(FIBComponent.MIN_WIDTH_KEY)
+					|| propertyName.equals(FIBComponent.MIN_HEIGHT_KEY) || propertyName.equals(FIBComponent.MAX_WIDTH_KEY)
+					|| propertyName.equals(FIBComponent.MAX_HEIGHT_KEY) || propertyName.equals(FIBComponent.USE_SCROLL_BAR_KEY)
+					|| propertyName.equals(FIBComponent.HORIZONTAL_SCROLLBAR_POLICY_KEY)
+					|| propertyName.equals(FIBComponent.VERTICAL_SCROLLBAR_POLICY_KEY)) {
 				FIBView parentView = view.getParentView();
 				FIBEditorController controller = getEditorController();
 				if (parentView instanceof FIBContainerView) {
 					((FIBContainerView) parentView).updateLayout();
 				}
 				controller.notifyFocusedAndSelectedObject();
-			} else if (propertyName.equals(FIBComponent.Parameters.data.name())) {
+			} else if (propertyName.equals(FIBComponent.DATA_KEY)) {
 				((FIBView) view).updateData();
-			} else if (propertyName.equals(FIBComponent.Parameters.font.name())) {
+			} else if (propertyName.equals(FIBComponent.FONT_KEY)) {
 				((FIBView) view).updateFont();
-			} else if (propertyName.equals(FIBComponent.Parameters.backgroundColor.name())
-					|| propertyName.equals(FIBComponent.Parameters.foregroundColor.name())
-					|| propertyName.equals(FIBComponent.Parameters.opaque.name())) {
+			} else if (propertyName.equals(FIBComponent.BACKGROUND_COLOR_KEY) || propertyName.equals(FIBComponent.FOREGROUND_COLOR_KEY)
+					|| propertyName.equals(FIBComponent.OPAQUE_KEY)) {
 				((FIBView) view).updateGraphicalProperties();
 				((FIBView) view).getJComponent().revalidate();
 				((FIBView) view).getJComponent().repaint();
@@ -391,7 +380,7 @@ public class FIBEditableViewDelegate<M extends FIBComponent, J extends JComponen
 	}
 
 	public static class FIBDropTarget extends DropTarget {
-		private FIBEditableView editableView;
+		private final FIBEditableView editableView;
 		private PlaceHolder placeHolder = null;
 
 		public FIBDropTarget(FIBEditableView editableView) {

@@ -41,7 +41,6 @@ import java.util.logging.Logger;
 import javax.swing.JComponent;
 import javax.swing.JOptionPane;
 
-import org.openflexo.fib.FIBLibrary;
 import org.openflexo.fib.controller.FIBController;
 import org.openflexo.fib.editor.FIBAbstractEditor;
 import org.openflexo.fib.editor.view.FIBEditableViewDelegate.FIBDropTarget;
@@ -54,21 +53,20 @@ import org.openflexo.fib.model.FIBTab;
 import org.openflexo.fib.model.FIBTabPanel;
 import org.openflexo.fib.view.FIBView;
 import org.openflexo.logging.FlexoLogger;
-import org.openflexo.xmlcode.Cloner;
 
 public class PaletteElement implements FIBDraggable /*implements Transferable*/{
 	static final Logger logger = FlexoLogger.getLogger(PaletteElement.class.getPackage().getName());
 
 	private final FIBEditorPalette _palette;
-	private FIBComponent modelComponent;
-	private FIBComponent representationComponent;
-	private FIBView view;
+	private final FIBComponent modelComponent;
+	private final FIBComponent representationComponent;
+	private final FIBView view;
 
-	private DragSource dragSource;
-	private DragGestureListener dgListener;
-	private DragSourceListener dsListener;
-	private int dragAction = DnDConstants.ACTION_COPY;
-	private Hashtable<JComponent, DragGestureRecognizer> dgr;
+	private final DragSource dragSource;
+	private final DragGestureListener dgListener;
+	private final DragSourceListener dsListener;
+	private final int dragAction = DnDConstants.ACTION_COPY;
+	private final Hashtable<JComponent, DragGestureRecognizer> dgr;
 
 	// private static final DataFlavor DATA_FLAVOR = new DataFlavor(PaletteElement.class, "PaletteElement");
 
@@ -182,7 +180,7 @@ public class PaletteElement implements FIBDraggable /*implements Transferable*/{
 			}
 		}
 
-		FIBComponent newComponent = (FIBComponent) Cloner.cloneObjectWithMapping(modelComponent, FIBLibrary.getFIBMapping());
+		FIBComponent newComponent = (FIBComponent) modelComponent.cloneObject();
 		newComponent.setLocalizedDictionary(null);
 		newComponent.clearParameters();
 
@@ -208,7 +206,8 @@ public class PaletteElement implements FIBDraggable /*implements Transferable*/{
 
 				if (isTabInsertion) {
 					// Special case where a new tab is added to a FIBTabPanel
-					FIBTab newTabComponent = new FIBTab();
+
+					FIBTab newTabComponent = containerComponent.getFactory().newFIBTab();
 					newTabComponent.setLayout(Layout.border);
 					newTabComponent.setTitle("NewTab");
 					newTabComponent.finalizeDeserialization();
@@ -217,8 +216,9 @@ public class PaletteElement implements FIBDraggable /*implements Transferable*/{
 				} else {
 					// Normal case, we replace targetComponent by newComponent
 					ComponentConstraints constraints = targetComponent.getConstraints();
-					containerComponent.removeFromSubComponentsNoNotification(targetComponent);
-					// No notification, we will do it later, to avoid reindexing
+					containerComponent.removeFromSubComponents(targetComponent);
+					// WAS: containerComponent.removeFromSubComponentsNoNotification(targetComponent);
+					// WAS: No notification, we will do it later, to avoid reindexing
 					targetComponent.delete();
 					containerComponent.addToSubComponents(newComponent, constraints);
 					return true;

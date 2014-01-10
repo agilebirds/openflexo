@@ -21,7 +21,6 @@ package org.openflexo.fib.model;
 
 import java.awt.Color;
 import java.lang.reflect.Type;
-import java.util.ArrayList;
 import java.util.Hashtable;
 import java.util.List;
 import java.util.Vector;
@@ -156,6 +155,7 @@ public interface FIBBrowser extends FIBWidget {
 	public void setSelected(DataBinding<Object> selected);
 
 	@Getter(value = ELEMENTS_KEY, cardinality = Cardinality.LIST, inverse = FIBBrowserElement.OWNER_KEY)
+	@XMLElement
 	public List<FIBBrowserElement> getElements();
 
 	@Setter(ELEMENTS_KEY)
@@ -260,11 +260,11 @@ public interface FIBBrowser extends FIBWidget {
 
 		// private Vector<FIBBrowserElement> elements;
 
-		private final Hashtable<Class, FIBBrowserElement> elementsForClasses;
+		private final Hashtable<Class<?>, FIBBrowserElement> elementsForClasses;
 
 		public FIBBrowserImpl() {
 			// elements = new Vector<FIBBrowserElement>();
-			elementsForClasses = new Hashtable<Class, FIBBrowserElement>();
+			elementsForClasses = new Hashtable<Class<?>, FIBBrowserElement>();
 		}
 
 		@Override
@@ -437,6 +437,8 @@ public interface FIBBrowser extends FIBWidget {
 		@Override
 		public void addToElements(FIBBrowserElement anElement) {
 			performSuperAdder(ELEMENTS_KEY, anElement);
+			System.out.println("**** Adding element " + anElement.getName() + " for class " + anElement.getDataClass());
+			// Thread.dumpStack();
 			updateElementsForClasses();
 		}
 
@@ -523,7 +525,10 @@ public interface FIBBrowser extends FIBWidget {
 
 		@Override
 		public FIBBrowserElement elementForClass(Class<?> aClass) {
-			FIBBrowserElement returned = elementsForClasses.get(aClass);
+			return TypeUtils.objectForClass(aClass, elementsForClasses);
+
+			// Old code, to be removed
+			/*FIBBrowserElement returned = elementsForClasses.get(aClass);
 			if (returned != null) {
 				return returned;
 			} else {
@@ -564,7 +569,7 @@ public interface FIBBrowser extends FIBWidget {
 			if (matchingClasses.size() > 0) {
 				return elementsForClasses.get(TypeUtils.getMostSpecializedClass(matchingClasses));
 			}
-			return null;
+			return null;*/
 		}
 
 		@Override

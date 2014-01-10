@@ -41,6 +41,7 @@ import org.openflexo.antar.binding.ParameterizedTypeImpl;
 import org.openflexo.fib.controller.FIBController;
 import org.openflexo.fib.view.widget.FIBCustomWidget;
 import org.openflexo.model.annotations.Adder;
+import org.openflexo.model.annotations.DeserializationFinalizer;
 import org.openflexo.model.annotations.Finder;
 import org.openflexo.model.annotations.Getter;
 import org.openflexo.model.annotations.Getter.Cardinality;
@@ -226,19 +227,22 @@ public interface FIBCustom extends FIBWidget {
 		@Override
 		public void addToAssignments(FIBCustomAssignment a) {
 			if (getAssignent(a.getVariable().toString()) != null) {
+				performSuperAdder(ASSIGNMENTS_KEY, a);
 				removeFromAssignments(getAssignent(a.getVariable().toString()));
+				return;
 			}
-			a.setOwner(this);
+			/*a.setOwner(this);
 			assignments.add(a);
-			getPropertyChangeSupport().firePropertyChange(ASSIGNMENTS_KEY, null, assignments);
+			getPropertyChangeSupport().firePropertyChange(ASSIGNMENTS_KEY, null, assignments);*/
+			performSuperAdder(ASSIGNMENTS_KEY, a);
 		}
 
-		@Override
+		/*@Override
 		public void removeFromAssignments(FIBCustomAssignment a) {
 			a.setOwner(null);
 			assignments.remove(a);
 			getPropertyChangeSupport().firePropertyChange(ASSIGNMENTS_KEY, null, assignments);
-		}
+		}*/
 
 		private BindingModel customComponentBindingModel;
 
@@ -385,6 +389,7 @@ public interface FIBCustom extends FIBWidget {
 		@Setter(MANDATORY_KEY)
 		public void setMandatory(boolean mandatory);
 
+		@DeserializationFinalizer
 		public void finalizeDeserialization();
 
 		public static abstract class FIBCustomAssignmentImpl extends FIBModelObjectImpl implements FIBCustomAssignment {

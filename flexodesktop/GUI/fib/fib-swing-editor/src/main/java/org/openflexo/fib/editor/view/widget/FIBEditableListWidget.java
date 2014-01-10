@@ -72,12 +72,11 @@ public class FIBEditableListWidget<T> extends FIBListWidget<T> implements FIBEdi
 		return delegate;
 	}
 
+	@Override
 	public void receivedModelNotifications(FIBModelObject o, String propertyName, Object oldValue, Object newValue) {
 		super.receivedModelNotifications(o, propertyName, oldValue, newValue);
-		if ((propertyName.equals(FIBList.Parameters.createNewRowOnClick.name()))
-				|| (propertyName.equals(FIBList.Parameters.rowHeight.name()))
-				|| (propertyName.equals(FIBList.Parameters.visibleRowCount.name()))
-				|| (propertyName.equals(FIBList.Parameters.layoutOrientation.name()))) {
+		if ((propertyName.equals(FIBList.CREATE_NEW_ROW_ON_CLICK_KEY)) || (propertyName.equals(FIBList.ROW_HEIGHT_KEY))
+				|| (propertyName.equals(FIBList.VISIBLE_ROW_COUNT_KEY)) || (propertyName.equals(FIBList.LAYOUT_ORIENTATION_KEY))) {
 			proceedToListModelUpdate();
 		}
 		delegate.receivedModelNotifications(o, propertyName, oldValue, newValue);

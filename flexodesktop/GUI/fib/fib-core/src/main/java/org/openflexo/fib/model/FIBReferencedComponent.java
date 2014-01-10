@@ -29,6 +29,7 @@ import org.openflexo.antar.binding.BindingDefinition;
 import org.openflexo.antar.binding.BindingModel;
 import org.openflexo.antar.binding.DataBinding;
 import org.openflexo.model.annotations.Adder;
+import org.openflexo.model.annotations.DeserializationFinalizer;
 import org.openflexo.model.annotations.Getter;
 import org.openflexo.model.annotations.Getter.Cardinality;
 import org.openflexo.model.annotations.ImplementationClass;
@@ -283,6 +284,7 @@ public interface FIBReferencedComponent extends FIBWidget {
 		@Setter(MANDATORY_KEY)
 		public void setMandatory(boolean mandatory);
 
+		@DeserializationFinalizer
 		public void finalizeDeserialization();
 
 		public static abstract class FIBReferenceAssignmentImpl extends FIBModelObjectImpl implements FIBReferenceAssignment {

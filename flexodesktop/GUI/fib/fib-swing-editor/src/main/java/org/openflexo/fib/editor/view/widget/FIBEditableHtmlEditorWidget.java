@@ -39,9 +39,9 @@ public class FIBEditableHtmlEditorWidget extends FIBHtmlEditorWidget implements 
 	@SuppressWarnings("unused")
 	private static final Logger logger = FlexoLogger.getLogger(FIBEditableHtmlEditorWidget.class.getPackage().getName());
 
-	private FIBEditableViewDelegate<FIBHtmlEditor, MetaphaseEditorPanel> delegate;
+	private final FIBEditableViewDelegate<FIBHtmlEditor, MetaphaseEditorPanel> delegate;
 
-	private FIBEditorController editorController;
+	private final FIBEditorController editorController;
 
 	@Override
 	public FIBEditorController getEditorController() {
@@ -73,15 +73,15 @@ public class FIBEditableHtmlEditorWidget extends FIBHtmlEditorWidget implements 
 		return delegate;
 	}
 
+	@Override
 	public void receivedModelNotifications(FIBModelObject o, String propertyName, Object oldValue, Object newValue) {
 		super.receivedModelNotifications(o, propertyName, oldValue, newValue);
-		if ((propertyName.equals(FIBHtmlEditor.Parameters.optionsInLine1.name()))
-				|| (propertyName.equals(FIBHtmlEditor.Parameters.optionsInLine2.name()))
-				|| (propertyName.equals(FIBHtmlEditor.Parameters.optionsInLine3.name()))
-				|| (propertyName.equals(FIBHtmlEditor.Parameters.firstLevelOptionsInLine1.name()))
+		if ((propertyName.equals(FIBHtmlEditor.OPTIONS_IN_LINE1_KEY)) || (propertyName.equals(FIBHtmlEditor.OPTIONS_IN_LINE2_KEY))
+				|| (propertyName.equals(FIBHtmlEditor.OPTIONS_IN_LINE3_KEY))
+				/*|| (propertyName.equals(FIBHtmlEditor.Parameters.firstLevelOptionsInLine1.name()))
 				|| (propertyName.equals(FIBHtmlEditor.Parameters.firstLevelOptionsInLine2.name()))
-				|| (propertyName.equals(FIBWidget.Parameters.icon.name()))
-				|| (propertyName.equals(FIBHtmlEditor.Parameters.firstLevelOptionsInLine3.name()))) {
+				|| (propertyName.equals(FIBHtmlEditor.Parameters.firstLevelOptionsInLine3.name()))*/
+				|| (propertyName.equals(FIBWidget.ICON_KEY))) {
 			updateHtmlEditorConfiguration();
 		}
 		delegate.receivedModelNotifications(o, propertyName, oldValue, newValue);

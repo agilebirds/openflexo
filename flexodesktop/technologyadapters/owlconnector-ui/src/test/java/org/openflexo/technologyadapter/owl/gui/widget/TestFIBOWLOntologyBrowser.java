@@ -12,7 +12,7 @@ import org.junit.Before;
 import org.junit.BeforeClass;
 import org.junit.Test;
 import org.openflexo.OpenflexoTestCaseWithGUI;
-import org.openflexo.fib.testutils.GraphicalContextDelegate;
+import org.openflexo.fib.testutils.FIBComponentGraphicalContextDelegate;
 import org.openflexo.foundation.FlexoException;
 import org.openflexo.foundation.resource.ResourceLoadingCancelledException;
 import org.openflexo.foundation.resource.ResourceRepository;
@@ -28,7 +28,7 @@ import org.openflexo.technologyadapter.owl.rm.OWLOntologyResource;
  */
 public class TestFIBOWLOntologyBrowser extends OpenflexoTestCaseWithGUI {
 
-	private static GraphicalContextDelegate gcDelegate;
+	private static FIBComponentGraphicalContextDelegate gcDelegate;
 
 	private static OWLOntologyResource ontologyResource;
 
@@ -193,7 +193,7 @@ public class TestFIBOWLOntologyBrowser extends OpenflexoTestCaseWithGUI {
 	}*/
 
 	public static void initGUI() {
-		gcDelegate = new GraphicalContextDelegate(TestFIBOWLOntologyBrowser.class.getSimpleName());
+		gcDelegate = new FIBComponentGraphicalContextDelegate(TestFIBOWLOntologyBrowser.class.getSimpleName());
 	}
 
 	@AfterClass

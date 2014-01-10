@@ -36,7 +36,6 @@ import org.openflexo.fib.model.BorderLayoutConstraints;
 import org.openflexo.fib.model.BorderLayoutConstraints.BorderLayoutLocation;
 import org.openflexo.fib.model.BoxLayoutConstraints;
 import org.openflexo.fib.model.FIBComponent;
-import org.openflexo.fib.model.FIBLabel;
 import org.openflexo.fib.model.FIBModelObject;
 import org.openflexo.fib.model.FIBPanel.Layout;
 import org.openflexo.fib.model.FIBTab;
@@ -197,7 +196,8 @@ public class FIBEditableTabView<T> extends FIBTabView<FIBTab, T> implements FIBE
 					@Override
 					public void insertComponent(FIBComponent newComponent) {
 						FIBEditableTabView.this.getComponent().addToSubComponents(newComponent, beginRightPlaceHolderConstraints);
-						FIBEditableTabView.this.getComponent().addToSubComponents(new FIBLabel("<left>"), beginLeftPlaceHolderConstraints);
+						FIBEditableTabView.this.getComponent().addToSubComponents(editorController.getFactory().newFIBLabel("<left>"),
+								beginLeftPlaceHolderConstraints);
 					}
 				};
 				registerComponentWithConstraints(beginRightPlaceHolder, beginRightPlaceHolderConstraints, 0);
@@ -208,7 +208,7 @@ public class FIBEditableTabView<T> extends FIBTabView<FIBTab, T> implements FIBE
 					@Override
 					public void insertComponent(FIBComponent newComponent) {
 						FIBEditableTabView.this.getComponent().addToSubComponents(newComponent, beginLeftPlaceHolderConstraints, 0);
-						FIBEditableTabView.this.getComponent().addToSubComponents(new FIBLabel("<right>"),
+						FIBEditableTabView.this.getComponent().addToSubComponents(editorController.getFactory().newFIBLabel("<right>"),
 								beginRightPlaceHolderConstraints, 0);
 					}
 				};
@@ -236,7 +236,8 @@ public class FIBEditableTabView<T> extends FIBTabView<FIBTab, T> implements FIBE
 					@Override
 					public void insertComponent(FIBComponent newComponent) {
 						FIBEditableTabView.this.getComponent().addToSubComponents(newComponent, endLeftPlaceHolderConstraints);
-						FIBEditableTabView.this.getComponent().addToSubComponents(new FIBLabel("<right>"), endRightPlaceHolderConstraints);
+						FIBEditableTabView.this.getComponent().addToSubComponents(editorController.getFactory().newFIBLabel("<right>"),
+								endRightPlaceHolderConstraints);
 					}
 				};
 				registerComponentWithConstraints(endLeftPlaceHolder, endLeftPlaceHolderConstraints);
@@ -246,7 +247,8 @@ public class FIBEditableTabView<T> extends FIBTabView<FIBTab, T> implements FIBE
 				PlaceHolder endRightPlaceHolder = new PlaceHolder(this, "<right>") {
 					@Override
 					public void insertComponent(FIBComponent newComponent) {
-						FIBEditableTabView.this.getComponent().addToSubComponents(new FIBLabel("<left>"), endLeftPlaceHolderConstraints);
+						FIBEditableTabView.this.getComponent().addToSubComponents(editorController.getFactory().newFIBLabel("<left>"),
+								endLeftPlaceHolderConstraints);
 						FIBEditableTabView.this.getComponent().addToSubComponents(newComponent, endRightPlaceHolderConstraints);
 					}
 				};

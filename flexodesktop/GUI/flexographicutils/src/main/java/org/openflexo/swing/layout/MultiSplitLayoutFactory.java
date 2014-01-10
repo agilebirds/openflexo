@@ -34,62 +34,62 @@ import org.openflexo.swing.layout.MultiSplitLayout.Split;
 
 public interface MultiSplitLayoutFactory {
 
-	public Divider makeDivider();
+	public <N extends Divider<N>> Divider<N> makeDivider();
 
-	public Leaf makeLeaf();
+	public <N extends Leaf<N>> Leaf<N> makeLeaf();
 
-	public Leaf makeLeaf(String name);
+	public <N extends Leaf<N>> Leaf<N> makeLeaf(String name);
 
-	public Split<?> makeSplit();
+	public <N extends Split<N>> Split<N> makeSplit();
 
-	public ColSplit<?> makeColSplit();
+	public <N extends ColSplit<N>> ColSplit<?> makeColSplit();
 
-	public RowSplit<?> makeRowSplit();
+	public <N extends ColSplit<N>> ColSplit<?> makeColSplit(Leaf<?> top, Divider<?> divider, Leaf<?> bottom);
 
-	public RowSplit<?> makeRowSplit(Leaf left, Divider divider, Leaf right);
+	public <N extends RowSplit<N>> RowSplit<?> makeRowSplit();
 
-	public ColSplit<?> makeColSplit(Leaf top, Divider divider, Leaf bottom);
+	public <N extends RowSplit<N>> RowSplit<?> makeRowSplit(Leaf<?> left, Divider<?> divider, Leaf<?> right);
 
 	public static class DefaultMultiSplitLayoutFactory implements MultiSplitLayoutFactory {
 
 		@Override
-		public Divider makeDivider() {
-			return new DefaultDivider();
+		public <N extends Divider<N>> Divider<N> makeDivider() {
+			return new DefaultDivider<N>();
 		}
 
 		@Override
-		public Leaf makeLeaf() {
-			return new DefaultLeaf();
+		public <N extends Leaf<N>> Leaf<N> makeLeaf() {
+			return new DefaultLeaf<N>();
 		}
 
 		@Override
-		public Leaf makeLeaf(String name) {
-			return new DefaultLeaf(name);
+		public <N extends Leaf<N>> Leaf<N> makeLeaf(String name) {
+			return new DefaultLeaf<N>(name);
 		}
 
 		@Override
-		public Split makeSplit() {
-			return new DefaultSplit();
+		public <N extends Split<N>> Split<N> makeSplit() {
+			return new DefaultSplit<N>();
 		}
 
 		@Override
-		public ColSplit makeColSplit() {
-			return new DefaultColSplit();
+		public <N extends ColSplit<N>> ColSplit<N> makeColSplit() {
+			return new DefaultColSplit<N>();
 		}
 
 		@Override
-		public RowSplit makeRowSplit() {
-			return new DefaultRowSplit();
+		public <N extends ColSplit<N>> ColSplit<N> makeColSplit(Leaf<?> top, Divider<?> divider, Leaf<?> bottom) {
+			return new DefaultColSplit((Leaf) top, (Divider) divider, (Leaf) bottom);
+		}
+
+		@Override
+		public <N extends RowSplit<N>> RowSplit<N> makeRowSplit() {
+			return new DefaultRowSplit<N>();
 		}
 
 		@Override
 		public RowSplit<?> makeRowSplit(Leaf left, Divider divider, Leaf right) {
 			return new DefaultRowSplit(left, divider, right);
-		}
-
-		@Override
-		public ColSplit<?> makeColSplit(Leaf top, Divider divider, Leaf bottom) {
-			return new DefaultColSplit(top, divider, bottom);
 		}
 
 	}

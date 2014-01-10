@@ -44,11 +44,11 @@ public class FIBEditableTabPanelView<T> extends FIBTabPanelView<T> implements FI
 
 	private static final Logger logger = FlexoLogger.getLogger(FIBEditableTabPanelView.class.getPackage().getName());
 
-	private FIBEditableViewDelegate<FIBTabPanel, JTabbedPane> delegate;
+	private final FIBEditableViewDelegate<FIBTabPanel, JTabbedPane> delegate;
 
 	private Vector<PlaceHolder> placeholders;
 
-	private FIBEditorController editorController;
+	private final FIBEditorController editorController;
 
 	@Override
 	public FIBEditorController getEditorController() {
@@ -100,7 +100,7 @@ public class FIBEditableTabPanelView<T> extends FIBTabPanelView<T> implements FI
 			public void mousePressed(MouseEvent e) {
 				int tab = getJComponent().getUI().tabForCoordinate(getJComponent(), e.getX(), e.getY());
 				if (tab == getJComponent().getTabCount() - 1) {
-					FIBTab newTabComponent = new FIBTab();
+					FIBTab newTabComponent = editorController.getFactory().newFIBTab();
 					newTabComponent.setLayout(Layout.border);
 					newTabComponent.setTitle("NewTab");
 					newTabComponent.finalizeDeserialization();

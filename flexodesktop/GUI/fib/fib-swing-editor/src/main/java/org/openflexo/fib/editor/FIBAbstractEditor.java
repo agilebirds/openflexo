@@ -49,11 +49,11 @@ import javax.swing.WindowConstants;
 
 import org.openflexo.fib.FIBLibrary;
 import org.openflexo.fib.controller.FIBController;
-import org.openflexo.fib.editor.FIBEditor.FIBPreferences;
 import org.openflexo.fib.editor.controller.FIBEditorController;
 import org.openflexo.fib.editor.controller.FIBEditorPalette;
 import org.openflexo.fib.editor.controller.FIBInspectorController;
 import org.openflexo.fib.model.FIBComponent;
+import org.openflexo.fib.model.FIBModelFactory;
 import org.openflexo.fib.utils.FlexoLoggingViewer;
 import org.openflexo.fib.utils.LocalizedDelegateGUIImpl;
 import org.openflexo.fib.view.FIBView;
@@ -61,15 +61,9 @@ import org.openflexo.localization.FlexoLocalization;
 import org.openflexo.localization.Language;
 import org.openflexo.logging.FlexoLogger;
 import org.openflexo.logging.FlexoLoggingManager;
-import org.openflexo.model.converter.RelativePathFileConverter;
+import org.openflexo.model.exceptions.ModelDefinitionException;
 import org.openflexo.toolbox.FileResource;
 import org.openflexo.toolbox.ToolBox;
-import org.openflexo.xmlcode.AccessorInvocationException;
-import org.openflexo.xmlcode.DuplicateSerializationIdentifierException;
-import org.openflexo.xmlcode.InvalidModelException;
-import org.openflexo.xmlcode.InvalidObjectSpecificationException;
-import org.openflexo.xmlcode.StringEncoder;
-import org.openflexo.xmlcode.XMLCoder;
 
 //TODO: switch to the right editor controller when switching tab
 //	getPalette().setEditorController(editorController);
@@ -113,6 +107,9 @@ public abstract class FIBAbstractEditor implements FIBGenericEditor {
 	private FIBComponent fibComponent;
 	private FIBEditorController editorController;
 
+	// This is the factory used to edit the FIB component
+	private FIBModelFactory factory;
+
 	private final JMenu actionMenu;
 
 	@Override
@@ -131,7 +128,7 @@ public abstract class FIBAbstractEditor implements FIBGenericEditor {
 	}
 
 	class LAFMenuItem extends JCheckBoxMenuItem {
-		private LookAndFeelInfo laf;
+		private final LookAndFeelInfo laf;
 
 		public LAFMenuItem(LookAndFeelInfo laf) {
 			super(laf.getName(), UIManager.getLookAndFeel().getClass().getName().equals(laf.getClassName()));
@@ -344,23 +341,9 @@ public abstract class FIBAbstractEditor implements FIBGenericEditor {
 		displayFileItem.addActionListener(new ActionListener() {
 			@Override
 			public void actionPerformed(ActionEvent e) {
-				try {
-					RelativePathFileConverter relativePathFileConverter = new RelativePathFileConverter(fibFile.getParentFile());
-					StringEncoder stringEncoder = new StringEncoder(StringEncoder.getDefaultInstance(), relativePathFileConverter);
-					logger.info("Getting this " + XMLCoder.encodeObjectWithMapping(fibComponent, FIBLibrary.getFIBMapping(), stringEncoder));
-				} catch (InvalidObjectSpecificationException e1) {
-					// TODO Auto-generated catch block
-					e1.printStackTrace();
-				} catch (InvalidModelException e1) {
-					// TODO Auto-generated catch block
-					e1.printStackTrace();
-				} catch (AccessorInvocationException e1) {
-					// TODO Auto-generated catch block
-					e1.printStackTrace();
-				} catch (DuplicateSerializationIdentifierException e1) {
-					// TODO Auto-generated catch block
-					e1.printStackTrace();
-				}
+
+				logger.info("Getting this " + factory.stringRepresentation(fibComponent));
+
 			}
 		});
 
@@ -430,6 +413,12 @@ public abstract class FIBAbstractEditor implements FIBGenericEditor {
 	public void loadFIB() {
 		fibFile = getFIBFile();
 
+		try {
+			factory = new FIBModelFactory(fibFile.getParentFile());
+		} catch (ModelDefinitionException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		}
 		fibComponent = FIBLibrary.instance().retrieveFIBComponent(fibFile);
 
 		if (fibComponent == null) {
@@ -443,9 +432,9 @@ public abstract class FIBAbstractEditor implements FIBGenericEditor {
 			dataObject = data[0];
 		}
 		if (getController() != null) {
-			editorController = new FIBEditorController(fibComponent, this, dataObject, getController());
+			editorController = new FIBEditorController(factory, fibComponent, this, dataObject, getController());
 		} else {
-			editorController = new FIBEditorController(fibComponent, this, dataObject);
+			editorController = new FIBEditorController(factory, fibComponent, this, dataObject);
 		}
 		getPalette().setEditorController(editorController);
 		frame.getContentPane().add(editorController.getEditorPanel());

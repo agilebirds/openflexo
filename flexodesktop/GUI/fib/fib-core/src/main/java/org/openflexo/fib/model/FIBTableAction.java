@@ -25,6 +25,7 @@ import org.openflexo.antar.binding.BindingDefinition;
 import org.openflexo.antar.binding.BindingModel;
 import org.openflexo.antar.binding.DataBinding;
 import org.openflexo.fib.model.validation.ValidationReport;
+import org.openflexo.model.annotations.DeserializationFinalizer;
 import org.openflexo.model.annotations.Getter;
 import org.openflexo.model.annotations.ImplementationClass;
 import org.openflexo.model.annotations.Import;
@@ -72,6 +73,9 @@ public abstract interface FIBTableAction extends FIBModelObject {
 
 	@Setter(IS_AVAILABLE_KEY)
 	public void setIsAvailable(DataBinding<Boolean> isAvailable);
+
+	@DeserializationFinalizer
+	public void finalizeDeserialization();
 
 	public static abstract class FIBTableActionImpl extends FIBModelObjectImpl implements FIBTableAction {
 
@@ -136,6 +140,7 @@ public abstract interface FIBTableAction extends FIBModelObject {
 			return null;
 		}
 
+		@Override
 		public void finalizeDeserialization() {
 			logger.fine("finalizeDeserialization() for FIBTableAction " + getName());
 			if (method != null) {

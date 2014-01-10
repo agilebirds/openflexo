@@ -530,31 +530,35 @@ public class MultiSplitLayout implements LayoutManager, Serializable {
 			childMap.remove(name);
 
 			if (n != null) {
-				Split<?> s = n.getParent();
-				s.remove(n);
-				if (removeDividers) {
-					while (s.getChildren().size() < 2) {
-						Split<?> p = s.getParent();
-						if (p == null) {
-							if (s.getChildren().size() > 0) {
-								model = s.getChildren().get(0);
-							} else {
-								model = null;
-							}
-							return;
-						}
-						if (s.getChildren().size() == 1) {
-							Node next = s.getChildren().get(0);
-							p.replace(s, next);
-							next.setParent(p);
-						} else {
-							p.remove(s);
-						}
-						s = p;
-					}
-				}
+				removeLayoutNode(n.getParent(), n);
+
 			} else {
 				childMap.remove(name);
+			}
+		}
+	}
+
+	private <N extends Node<N>> void removeLayoutNode(Split<N> s, N n) {
+		s.remove(n);
+		if (removeDividers) {
+			while (s.getChildren().size() < 2) {
+				Split<N> p = s.getParent();
+				if (p == null) {
+					if (s.getChildren().size() > 0) {
+						model = s.getChildren().get(0);
+					} else {
+						model = null;
+					}
+					return;
+				}
+				if (s.getChildren().size() == 1) {
+					N next = s.getChildren().get(0);
+					p.replace((N) s, next);
+					next.setParent(p);
+				} else {
+					p.remove((N) s);
+				}
+				s = p;
 			}
 		}
 	}
@@ -1500,7 +1504,7 @@ public class MultiSplitLayout implements LayoutManager, Serializable {
 	/**
 	 * API for the nodes that model a MultiSplitLayout.
 	 */
-	public static interface Node {
+	public static interface Node<N extends Node<N>> {
 
 		public String getName();
 
@@ -1521,7 +1525,7 @@ public class MultiSplitLayout implements LayoutManager, Serializable {
 		 * @return the value of the parent property.
 		 * @see #setParent
 		 */
-		public Split getParent();
+		public Split<N> getParent();
 
 		/**
 		 * Set the value of this Node's parent property. The default value of this property is null.
@@ -1530,7 +1534,7 @@ public class MultiSplitLayout implements LayoutManager, Serializable {
 		 *            a Split or null
 		 * @see #getParent
 		 */
-		public void setParent(Split parent);
+		public void setParent(Split<N> parent);
 
 		/**
 		 * Returns the bounding Rectangle for this Node.
@@ -1604,8 +1608,8 @@ public class MultiSplitLayout implements LayoutManager, Serializable {
 	/**
 	 * Base class for the nodes that model a MultiSplitLayout.
 	 */
-	public static abstract class DefaultNode implements Node, Serializable {
-		private Split parent = null;
+	public static abstract class DefaultNode<N extends Node<N>> implements Node<N>, Serializable {
+		private Split<N> parent = null;
 		private Rectangle bounds = new Rectangle();
 		private double weight = 0.0;
 		private boolean isVisible = true;
@@ -1632,7 +1636,7 @@ public class MultiSplitLayout implements LayoutManager, Serializable {
 		 * @see #setParent
 		 */
 		@Override
-		public Split getParent() {
+		public Split<N> getParent() {
 			return parent;
 		}
 
@@ -1799,14 +1803,14 @@ public class MultiSplitLayout implements LayoutManager, Serializable {
 
 	}
 
-	public static interface RowSplit<N extends Node> extends Split<N> {
+	public static interface RowSplit<N extends Node<N>> extends Split<N> {
 	}
 
-	public static class DefaultRowSplit extends DefaultSplit implements RowSplit<Node> {
+	public static class DefaultRowSplit<N extends Node<N>> extends DefaultSplit<N> implements RowSplit<N> {
 		public DefaultRowSplit() {
 		}
 
-		public DefaultRowSplit(Node... children) {
+		public DefaultRowSplit(N... children) {
 			setChildren(children);
 		}
 
@@ -1823,14 +1827,14 @@ public class MultiSplitLayout implements LayoutManager, Serializable {
 		}
 	}
 
-	public static interface ColSplit<N extends Node> extends Split<N> {
+	public static interface ColSplit<N extends Node<N>> extends Split<N> {
 	}
 
-	public static class DefaultColSplit extends DefaultSplit implements ColSplit<Node> {
+	public static class DefaultColSplit<N extends Node<N>> extends DefaultSplit<N> implements ColSplit<N> {
 		public DefaultColSplit() {
 		}
 
-		public DefaultColSplit(Node... children) {
+		public DefaultColSplit(N... children) {
 			setChildren(children);
 		}
 
@@ -1850,7 +1854,7 @@ public class MultiSplitLayout implements LayoutManager, Serializable {
 	/**
 	 * Defines a vertical or horizontal subdivision into two or more tiles.
 	 */
-	public static interface Split<N extends Node> extends Node {
+	public static interface Split<N extends Node<N>> extends Node<N> {
 		/**
 		 * Returns true if the this Split's children are to be laid out in a row: all the same height, left edge equal to the previous
 		 * Node's right edge. If false, children are laid on in a column.
@@ -1900,7 +1904,7 @@ public class MultiSplitLayout implements LayoutManager, Serializable {
 		 * @param n
 		 *            the node to be removed
 		 */
-		public void remove(Node n);
+		public void remove(N n);
 
 		/**
 		 * Replace one node with another. This method is used when a child is removed from a split and the split is no longer required, in
@@ -1911,7 +1915,7 @@ public class MultiSplitLayout implements LayoutManager, Serializable {
 		 * @param replacement
 		 *            the replacement node
 		 */
-		public void replace(Node target, Node replacement);
+		public void replace(N target, N replacement);
 
 		/**
 		 * Change a node to being hidden. Any associated divider nodes are also hidden
@@ -1919,7 +1923,7 @@ public class MultiSplitLayout implements LayoutManager, Serializable {
 		 * @param target
 		 *            the node to hide
 		 */
-		public void hide(Node target);
+		public void hide(N target);
 
 		/**
 		 * Check the dividers to ensure that redundant dividers are hidden and do not interfere in the layout, for example when all the
@@ -1928,7 +1932,7 @@ public class MultiSplitLayout implements LayoutManager, Serializable {
 		 * @param split
 		 *            the split to check
 		 */
-		public void checkDividers(Split split);
+		public void checkDividers(Split<N> split);
 
 		/**
 		 * Restore any of the hidden dividers that are required to separate visible nodes
@@ -1936,7 +1940,7 @@ public class MultiSplitLayout implements LayoutManager, Serializable {
 		 * @param split
 		 *            the node to check
 		 */
-		public void restoreDividers(Split split);
+		public void restoreDividers(Split<N> split);
 
 		/**
 		 * Convenience method for setting the children of this Split node. The parent of each new child is set to this Split node, and the
@@ -1948,7 +1952,7 @@ public class MultiSplitLayout implements LayoutManager, Serializable {
 		 * @throws IllegalArgumentException
 		 *             if children is null
 		 */
-		public void setChildren(Node... children);
+		public void setChildren(N... children);
 
 		/**
 		 * Convenience method that returns the last child whose weight is > 0.0.
@@ -1963,13 +1967,13 @@ public class MultiSplitLayout implements LayoutManager, Serializable {
 	/**
 	 * Defines a vertical or horizontal subdivision into two or more tiles.
 	 */
-	public static class DefaultSplit extends DefaultNode implements Split<Node> {
+	public static class DefaultSplit<N extends Node<N>> extends DefaultNode<N> implements Split<N> {
 
-		private List<Node> children = Collections.emptyList();
+		private List<N> children = Collections.emptyList();
 		private boolean rowLayout = true;
 		private String name;
 
-		public DefaultSplit(Node... children) {
+		public DefaultSplit(N... children) {
 			setChildren(children);
 		}
 
@@ -1987,7 +1991,7 @@ public class MultiSplitLayout implements LayoutManager, Serializable {
 		 */
 		@Override
 		public boolean isVisible() {
-			for (Node child : children) {
+			for (N child : children) {
 				if (child.isVisible() && !(child instanceof Divider)) {
 					return true;
 				}
@@ -2027,8 +2031,8 @@ public class MultiSplitLayout implements LayoutManager, Serializable {
 		 * @see #setChildren
 		 */
 		@Override
-		public List<Node> getChildren() {
-			return new ArrayList<Node>(children);
+		public List<N> getChildren() {
+			return new ArrayList<N>(children);
 		}
 
 		/**
@@ -2038,7 +2042,7 @@ public class MultiSplitLayout implements LayoutManager, Serializable {
 		 *            the node to be removed
 		 */
 		@Override
-		public void remove(Node n) {
+		public void remove(N n) {
 			if (n.nextSibling() instanceof Divider) {
 				children.remove(n.nextSibling());
 			} else if (n.previousSibling() instanceof Divider) {
@@ -2057,7 +2061,7 @@ public class MultiSplitLayout implements LayoutManager, Serializable {
 		 *            the replacement node
 		 */
 		@Override
-		public void replace(Node target, Node replacement) {
+		public void replace(N target, N replacement) {
 			int idx = children.indexOf(target);
 			children.remove(target);
 			children.add(idx, replacement);
@@ -2169,7 +2173,7 @@ public class MultiSplitLayout implements LayoutManager, Serializable {
 		 *             if children is null
 		 */
 		@Override
-		public void setChildren(List<Node> children) {
+		public void setChildren(List<N> children) {
 			if (children == null) {
 				throw new IllegalArgumentException("children must be a non-null List");
 			}
@@ -2177,14 +2181,14 @@ public class MultiSplitLayout implements LayoutManager, Serializable {
 				child.setParent(null);
 			}
 
-			this.children = new ArrayList<Node>(children);
+			this.children = new ArrayList<N>(children);
 			for (Node child : this.children) {
 				child.setParent(this);
 			}
 		}
 
 		@Override
-		public void addToChildren(Node child) {
+		public void addToChildren(N child) {
 			children.add(child);
 			child.setParent(this);
 		}
@@ -2206,7 +2210,7 @@ public class MultiSplitLayout implements LayoutManager, Serializable {
 		 *             if children is null
 		 */
 		@Override
-		public void setChildren(Node... children) {
+		public void setChildren(N... children) {
 			setChildren(children == null ? null : Arrays.asList(children));
 		}
 
@@ -2218,10 +2222,10 @@ public class MultiSplitLayout implements LayoutManager, Serializable {
 		 * @see Node#getWeight
 		 */
 		@Override
-		public final Node lastWeightedChild() {
-			List<Node> kids = getChildren();
-			Node weightedChild = null;
-			for (Node child : kids) {
+		public final N lastWeightedChild() {
+			List<N> kids = getChildren();
+			N weightedChild = null;
+			for (N child : kids) {
 				if (!child.isVisible()) {
 					continue;
 				}
@@ -2283,13 +2287,13 @@ public class MultiSplitLayout implements LayoutManager, Serializable {
 	/**
 	 * Models a java.awt Component child.
 	 */
-	public static interface Leaf extends Node {
+	public static interface Leaf<N extends Leaf<N>> extends Node<N> {
 	}
 
 	/**
 	 * Models a java.awt Component child.
 	 */
-	public static class DefaultLeaf extends DefaultNode implements Leaf {
+	public static class DefaultLeaf<N extends Leaf<N>> extends DefaultNode<N> implements Leaf<N> {
 
 		private String name = "";
 
@@ -2359,7 +2363,7 @@ public class MultiSplitLayout implements LayoutManager, Serializable {
 	/**
 	 * Models a single vertical/horiztonal divider.
 	 */
-	public static interface Divider extends Node {
+	public static interface Divider<N extends Divider<N>> extends Node<N> {
 
 		public boolean isVertical();
 
@@ -2368,7 +2372,7 @@ public class MultiSplitLayout implements LayoutManager, Serializable {
 	/**
 	 * Models a single vertical/horiztonal divider.
 	 */
-	public static class DefaultDivider extends DefaultNode implements Divider {
+	public static class DefaultDivider<N extends Divider<N>> extends DefaultNode<N> implements Divider<N> {
 
 		@Override
 		public String getName() {

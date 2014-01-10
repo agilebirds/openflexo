@@ -29,7 +29,6 @@ import java.awt.event.WindowAdapter;
 import java.awt.event.WindowEvent;
 import java.io.File;
 import java.io.IOException;
-import java.util.ArrayList;
 import java.util.Hashtable;
 import java.util.List;
 import java.util.Vector;
@@ -37,7 +36,6 @@ import java.util.logging.Level;
 import java.util.logging.Logger;
 import java.util.prefs.PreferenceChangeEvent;
 import java.util.prefs.PreferenceChangeListener;
-import java.util.prefs.Preferences;
 
 import javax.swing.JCheckBoxMenuItem;
 import javax.swing.JDialog;
@@ -64,6 +62,7 @@ import org.openflexo.fib.editor.controller.FIBEditorController;
 import org.openflexo.fib.editor.controller.FIBEditorPalette;
 import org.openflexo.fib.editor.controller.FIBInspectorController;
 import org.openflexo.fib.model.FIBComponent;
+import org.openflexo.fib.model.FIBModelFactory;
 import org.openflexo.fib.model.FIBPanel;
 import org.openflexo.fib.model.FIBPanel.Layout;
 import org.openflexo.fib.utils.FlexoLoggingViewer;
@@ -72,136 +71,15 @@ import org.openflexo.localization.FlexoLocalization;
 import org.openflexo.localization.Language;
 import org.openflexo.logging.FlexoLogger;
 import org.openflexo.logging.FlexoLoggingManager;
+import org.openflexo.model.exceptions.ModelDefinitionException;
 import org.openflexo.swing.ComponentBoundSaver;
 import org.openflexo.swing.FlexoFileChooser;
 import org.openflexo.toolbox.FileResource;
 import org.openflexo.toolbox.ToolBox;
-import org.openflexo.xmlcode.AccessorInvocationException;
-import org.openflexo.xmlcode.DuplicateSerializationIdentifierException;
-import org.openflexo.xmlcode.InvalidModelException;
-import org.openflexo.xmlcode.InvalidObjectSpecificationException;
-import org.openflexo.xmlcode.StringEncoder;
-import org.openflexo.xmlcode.XMLCoder;
 
 // TODO: switch to the right editor controller when switching tab
 // 		getPalette().setEditorController(editorController);
 public class FIBEditor implements FIBGenericEditor {
-
-	public static class FIBPreferences {
-
-		private static final String FIB = "FIB";
-
-		public static final String FRAME = "Frame";
-		public static final String PALETTE = "Palette";
-		public static final String INSPECTOR = "Inspector";
-		public static final String LAST_DIR = "LastDirectory";
-		public static final String LAST_FILES_COUNT = "LAST_FILES_COUNT";
-		public static final String LAST_FILE = "LAST_FILE";
-
-		private static final Preferences prefs = Preferences.userRoot().node(FIB);
-		private static final StringEncoder encoder = new StringEncoder();
-
-		private static Rectangle getPreferredBounds(String key, Rectangle def) {
-			String s = prefs.get(key, encoder._encodeObject(def));
-			if (s == null) {
-				return def;
-			}
-			return encoder._decodeObject(s, Rectangle.class);
-		}
-
-		public static void addPreferenceChangeListener(PreferenceChangeListener pcl) {
-			prefs.addPreferenceChangeListener(pcl);
-		}
-
-		public static void removePreferenceChangeListener(PreferenceChangeListener pcl) {
-			prefs.removePreferenceChangeListener(pcl);
-		}
-
-		private static void setPreferredBounds(String key, Rectangle value) {
-			prefs.put(key, encoder._encodeObject(value));
-		}
-
-		private static File getPreferredFile(String key, File def) {
-			String s = prefs.get(key, encoder._encodeObject(def));
-			if (s == null) {
-				return def;
-			}
-			return encoder._decodeObject(s, File.class);
-		}
-
-		private static void setPreferredFile(String key, File value) {
-			prefs.put(key, encoder._encodeObject(value));
-		}
-
-		public static Rectangle getFrameBounds() {
-			return getPreferredBounds(FRAME, new Rectangle(0, 0, 1000, 800));
-		}
-
-		public static void setFrameBounds(Rectangle bounds) {
-			setPreferredBounds(FRAME, bounds);
-		}
-
-		public static Rectangle getInspectorBounds() {
-			return getPreferredBounds(INSPECTOR, new Rectangle(1000, 400, 400, 400));
-		}
-
-		public static void setInspectorBounds(Rectangle bounds) {
-			setPreferredBounds(INSPECTOR, bounds);
-		}
-
-		public static Rectangle getPaletteBounds() {
-			return getPreferredBounds(PALETTE, new Rectangle(1000, 0, 400, 400));
-		}
-
-		public static void setPaletteBounds(Rectangle bounds) {
-			setPreferredBounds(PALETTE, bounds);
-		}
-
-		public static File getLastDirectory() {
-			return getPreferredFile(LAST_DIR, new FileResource("TestFIB"));
-		}
-
-		public static void setLastDirectory(File file) {
-			setPreferredFile(LAST_DIR, file);
-		}
-
-		public static int getLastFileCount() {
-			return prefs.getInt(LAST_FILES_COUNT, 10);
-		}
-
-		public static void setLastFileCount(int count) {
-			prefs.putInt(LAST_FILES_COUNT, count);
-		}
-
-		public static List<File> getLastFiles() {
-			List<File> list = new ArrayList<File>();
-			for (int i = 0; i < getLastFileCount(); i++) {
-				File file = getPreferredFile(LAST_FILE + i, null);
-				if (file != null) {
-					list.add(file);
-				}
-			}
-			return list;
-		}
-
-		public static void setLastFiles(List<File> files) {
-			for (int i = 0; i < files.size(); i++) {
-				setPreferredFile(LAST_FILE + i, files.get(i));
-			}
-		}
-
-		public static void setLastFile(File file) {
-			List<File> files = getLastFiles();
-			if (files.contains(file)) {
-				files.remove(file);
-			} else if (files.size() == getLastFileCount()) {
-				files.remove(getLastFileCount() - 1);
-			}
-			files.add(0, file);
-			setLastFiles(files);
-			setLastDirectory(file.getParentFile());
-		}
-	}
 
 	private static final Logger logger = FlexoLogger.getLogger(FIBEditor.class.getPackage().getName());
 
@@ -275,20 +153,32 @@ public class FIBEditor implements FIBGenericEditor {
 		private String title;
 		private File fibFile;
 		private final FIBComponent fibComponent;
+		// This is the factory used to edit the FIB component
+		private final FIBModelFactory factory;
 
-		public EditedFIB(String title, File fibFile, FIBComponent fibComponent) {
+		public EditedFIB(String title, File fibFile, FIBComponent fibComponent, FIBModelFactory factory) {
 			super();
 			this.title = title;
 			this.fibFile = fibFile;
 			this.fibComponent = fibComponent;
+			this.factory = factory;
+
+		}
+
+		public FIBComponent getFIBComponent() {
+			return fibComponent;
+		}
+
+		public FIBModelFactory getFactory() {
+			return factory;
 		}
 
 		public void save() {
 			logger.info("Save to file " + fibFile.getAbsolutePath());
 
 			FIBLibrary.save(fibComponent, fibFile);
-
 		}
+
 	}
 
 	private EditedFIB editedFIB;
@@ -366,12 +256,22 @@ public class FIBEditor implements FIBGenericEditor {
 	}
 
 	public void newFIB() {
-		FIBPanel fibComponent = new FIBPanel();
+
+		FIBModelFactory factory = null;
+
+		try {
+			factory = new FIBModelFactory();
+		} catch (ModelDefinitionException e) {
+			e.printStackTrace();
+			return;
+		}
+
+		FIBPanel fibComponent = factory.newInstance(FIBPanel.class);
 		fibComponent.setLayout(Layout.border);
 		fibComponent.finalizeDeserialization();
-		EditedFIB newEditedFIB = new EditedFIB("New.fib", new File("NewComponent.fib"), fibComponent);
+		EditedFIB newEditedFIB = new EditedFIB("New.fib", new File("NewComponent.fib"), fibComponent, factory);
 
-		editorController = new FIBEditorController(fibComponent, this);
+		editorController = new FIBEditorController(factory, fibComponent, this);
 		getPalette().setEditorController(editorController);
 
 		mainPanel.newEditedComponent(newEditedFIB, editorController);
@@ -391,9 +291,17 @@ public class FIBEditor implements FIBGenericEditor {
 			return;
 		}
 		FIBPreferences.setLastFile(fibFile);
-		FIBComponent fibComponent = FIBLibrary.instance().retrieveFIBComponent(fibFile, false);
-		EditedFIB newEditedFIB = new EditedFIB(fibFile.getName(), fibFile, fibComponent);
-		editorController = new FIBEditorController(fibComponent, this);
+
+		FIBModelFactory factory = null;
+		try {
+			factory = new FIBModelFactory(fibFile.getParentFile());
+		} catch (ModelDefinitionException e) {
+			e.printStackTrace();
+			return;
+		}
+		FIBComponent fibComponent = FIBLibrary.instance().retrieveFIBComponent(fibFile, false, factory);
+		EditedFIB newEditedFIB = new EditedFIB(fibFile.getName(), fibFile, fibComponent, factory);
+		editorController = new FIBEditorController(factory, fibComponent, this);
 		getPalette().setEditorController(editorController);
 		mainPanel.newEditedComponent(newEditedFIB, editorController);
 	}
@@ -503,7 +411,7 @@ public class FIBEditor implements FIBGenericEditor {
 	}
 
 	class LAFMenuItem extends JCheckBoxMenuItem {
-		private LookAndFeelInfo laf;
+		private final LookAndFeelInfo laf;
 
 		public LAFMenuItem(LookAndFeelInfo laf) {
 			super(laf.getName(), UIManager.getLookAndFeel().getClass().getName().equals(laf.getClassName()));
@@ -516,44 +424,44 @@ public class FIBEditor implements FIBGenericEditor {
 	}
 
 	public class MenuBar extends JMenuBar implements PreferenceChangeListener {
-		private JMenu fileMenu;
+		private final JMenu fileMenu;
 
-		private JMenu editMenu;
+		private final JMenu editMenu;
 
-		private JMenu toolsMenu;
+		private final JMenu toolsMenu;
 
-		private JMenu helpMenu;
+		private final JMenu helpMenu;
 
-		private JMenuItem newItem;
+		private final JMenuItem newItem;
 
-		private JMenuItem loadItem;
+		private final JMenuItem loadItem;
 
-		private JMenuItem saveItem;
+		private final JMenuItem saveItem;
 
-		private JMenuItem saveAsItem;
+		private final JMenuItem saveAsItem;
 
-		private JMenuItem closeItem;
+		private final JMenuItem closeItem;
 
-		private JMenuItem quitItem;
+		private final JMenuItem quitItem;
 
-		private JMenu languagesItem;
+		private final JMenu languagesItem;
 
-		private JMenuItem inspectItem;
+		private final JMenuItem inspectItem;
 
-		private JMenuItem logsItem;
+		private final JMenuItem logsItem;
 
-		private JMenuItem localizedItem;
+		private final JMenuItem localizedItem;
 
-		private JMenuItem displayFileItem;
+		private final JMenuItem displayFileItem;
 
-		private JMenuItem testInterfaceItem;
+		private final JMenuItem testInterfaceItem;
 
-		private JMenuItem componentLocalizationItem;
-		private JMenuItem componentValidationItem;
+		private final JMenuItem componentLocalizationItem;
+		private final JMenuItem componentValidationItem;
 
-		private JMenu openRecent;
+		private final JMenu openRecent;
 
-		private JMenuItem showPaletteItem;
+		private final JMenuItem showPaletteItem;
 
 		public MenuBar() {
 			fileMenu = new JMenu(FlexoLocalization.localizedForKey(FIBAbstractEditor.LOCALIZATION, "file"));
@@ -728,23 +636,7 @@ public class FIBEditor implements FIBGenericEditor {
 			displayFileItem.addActionListener(new ActionListener() {
 				@Override
 				public void actionPerformed(ActionEvent e) {
-					try {
-						logger.info("Getting this "
-								+ XMLCoder.encodeObjectWithMapping(editedFIB.fibComponent, FIBLibrary.getFIBMapping(),
-										StringEncoder.getDefaultInstance()));
-					} catch (InvalidObjectSpecificationException e1) {
-						// TODO Auto-generated catch block
-						e1.printStackTrace();
-					} catch (InvalidModelException e1) {
-						// TODO Auto-generated catch block
-						e1.printStackTrace();
-					} catch (AccessorInvocationException e1) {
-						// TODO Auto-generated catch block
-						e1.printStackTrace();
-					} catch (DuplicateSerializationIdentifierException e1) {
-						// TODO Auto-generated catch block
-						e1.printStackTrace();
-					}
+					logger.info("Getting this " + editedFIB.getFactory().stringRepresentation(editedFIB.fibComponent));
 				}
 			});
 

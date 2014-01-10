@@ -39,9 +39,9 @@ public class FIBEditableLabelWidget extends FIBLabelWidget implements FIBEditabl
 	@SuppressWarnings("unused")
 	private static final Logger logger = FlexoLogger.getLogger(FIBEditableLabelWidget.class.getPackage().getName());
 
-	private FIBEditableViewDelegate<FIBLabel, JLabel> delegate;
+	private final FIBEditableViewDelegate<FIBLabel, JLabel> delegate;
 
-	private FIBEditorController editorController;
+	private final FIBEditorController editorController;
 
 	@Override
 	public FIBEditorController getEditorController() {
@@ -73,12 +73,13 @@ public class FIBEditableLabelWidget extends FIBLabelWidget implements FIBEditabl
 		return delegate;
 	}
 
+	@Override
 	public void receivedModelNotifications(FIBModelObject o, String propertyName, Object oldValue, Object newValue) {
 		super.receivedModelNotifications(o, propertyName, oldValue, newValue);
-		if (propertyName.equals(FIBLabel.Parameters.align.name())) {
+		if (propertyName.equals(FIBLabel.ALIGN_KEY)) {
 			updateAlign();
 		}
-		if (propertyName.equals(FIBLabel.Parameters.label.name())) {
+		if (propertyName.equals(FIBLabel.LABEL_KEY)) {
 			relayoutParentBecauseLabelChanged();
 		}
 		delegate.receivedModelNotifications(o, propertyName, oldValue, newValue);

@@ -71,9 +71,10 @@ public class FIBEditableEditorWidget extends FIBEditorWidget implements FIBEdita
 		return delegate;
 	}
 
+	@Override
 	public void receivedModelNotifications(FIBModelObject o, String propertyName, Object oldValue, Object newValue) {
 		super.receivedModelNotifications(o, propertyName, oldValue, newValue);
-		if (propertyName.equals(FIBEditor.Parameters.tokenMarkerStyle.name())) {
+		if (propertyName.equals(FIBEditor.TOKEN_MARKER_STYLE_KEY)) {
 			updateTokenMarkerStyle();
 		}
 		delegate.receivedModelNotifications(o, propertyName, oldValue, newValue);

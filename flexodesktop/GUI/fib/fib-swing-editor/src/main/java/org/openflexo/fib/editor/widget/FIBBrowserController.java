@@ -1,4 +1,4 @@
-package org.openflexo.fib.editor.controller;
+package org.openflexo.fib.editor.widget;
 
 import java.awt.event.MouseEvent;
 import java.util.Observer;
@@ -7,6 +7,8 @@ import java.util.logging.Logger;
 import javax.swing.ImageIcon;
 
 import org.openflexo.fib.controller.FIBController;
+import org.openflexo.fib.editor.controller.FIBEditorController;
+import org.openflexo.fib.editor.controller.FIBEditorIconLibrary;
 import org.openflexo.fib.model.FIBBrowser;
 import org.openflexo.fib.model.FIBButton;
 import org.openflexo.fib.model.FIBCheckBox;
@@ -22,6 +24,7 @@ import org.openflexo.fib.model.FIBTabPanel;
 import org.openflexo.fib.model.FIBTable;
 import org.openflexo.fib.model.FIBTextArea;
 import org.openflexo.fib.model.FIBTextField;
+import org.openflexo.model.ModelEntity;
 
 public class FIBBrowserController extends FIBController implements Observer {
 
@@ -30,18 +33,29 @@ public class FIBBrowserController extends FIBController implements Observer {
 	private FIBEditorController editorController;
 
 	public FIBBrowserController(FIBComponent rootComponent, FIBEditorController editorController) {
-		super(rootComponent);
+		this(rootComponent);
 		this.editorController = editorController;
-		editorController.addObserver(this);
+		if (editorController != null) {
+			editorController.addObserver(this);
+		}
+	}
+
+	public FIBBrowserController(FIBComponent rootComponent) {
+		super(rootComponent);
 	}
 
 	public FIBComponent getSelectedComponent() {
-		return editorController.getSelectedObject();
+		if (editorController != null) {
+			return editorController.getSelectedObject();
+		}
+		return null;
 	}
 
 	public void setSelectedComponent(FIBComponent selectedComponent) {
 		// logger.info("setSelectedComponent with " + selectedComponent);
-		editorController.setSelectedObject(selectedComponent);
+		if (editorController != null) {
+			editorController.setSelectedObject(selectedComponent);
+		}
 	}
 
 	public ImageIcon iconFor(FIBComponent component) {
@@ -87,12 +101,15 @@ public class FIBBrowserController extends FIBController implements Observer {
 		if (component == null) {
 			return null;
 		}
+
+		ModelEntity<?> e = component.getFactory().getModelEntityForInstance(component);
+
 		if (component.getName() != null) {
-			return component.getName() + " (" + component.getClass().getSimpleName() + ")";
+			return component.getName() + " (" + e.getImplementedInterface().getSimpleName() + ")";
 		} else if (component.getIdentifier() != null) {
-			return component.getIdentifier() + " (" + component.getClass().getSimpleName() + ")";
+			return component.getIdentifier() + " (" + e.getImplementedInterface().getSimpleName() + ")";
 		} else {
-			return "<" + component.getClass().getSimpleName() + ">";
+			return "<" + e.getImplementedInterface().getSimpleName() + ">";
 		}
 	}
 

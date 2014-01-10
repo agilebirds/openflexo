@@ -37,9 +37,9 @@ public class FIBEditableButtonWidget extends FIBButtonWidget implements FIBEdita
 
 	private static final Logger logger = FlexoLogger.getLogger(FIBEditableButtonWidget.class.getPackage().getName());
 
-	private FIBEditableViewDelegate<FIBButton, JButton> delegate;
+	private final FIBEditableViewDelegate<FIBButton, JButton> delegate;
 
-	private FIBEditorController editorController;
+	private final FIBEditorController editorController;
 
 	@Override
 	public FIBEditorController getEditorController() {
@@ -71,12 +71,13 @@ public class FIBEditableButtonWidget extends FIBButtonWidget implements FIBEdita
 		return delegate;
 	}
 
+	@Override
 	public void receivedModelNotifications(FIBModelObject o, String propertyName, Object oldValue, Object newValue) {
 		super.receivedModelNotifications(o, propertyName, oldValue, newValue);
-		if (propertyName.equals(FIBButton.Parameters.label.name())) {
+		if (propertyName.equals(FIBButton.LABEL_KEY)) {
 			updateLabel();
 		}
-		if (propertyName.equals(FIBButton.Parameters.buttonIcon.name())) {
+		if (propertyName.equals(FIBButton.BUTTON_ICON_KEY)) {
 			updateIcon();
 		}
 		delegate.receivedModelNotifications(o, propertyName, oldValue, newValue);
