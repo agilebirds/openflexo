@@ -895,7 +895,22 @@ public class ProxyMethodHandler<I> implements MethodHandler, PropertyChangeListe
 		}
 	}
 
+	/**
+	 * This map contains all scheduled set for a given property<br>
+	 * We need to retain values beeing set in case of bidirectional inverse properties patterns, to avoid infinite loop
+	 */
+	private final Map<ModelProperty<? super I>, Object> scheduledSets = new HashMap<ModelProperty<? super I>, Object>();
+
 	private void invokeSetterForSingleCardinality(ModelProperty<? super I> property, Object value) throws ModelDefinitionException {
+
+		if (scheduledSets.get(property) == value) {
+			// This set was already scheduled (we are entering in an infinite loop): break NOW
+			return;
+		}
+
+		// System.out.println("Object " + getModelEntity().getImplementedInterface().getSimpleName() + " set "
+		// + property.getPropertyIdentifier() + " with " + value);
+
 		if (property.getSetter() == null && !isDeserializing() && !initializing && !createdByCloning && !deleting && !undeleting) {
 			throw new ModelExecutionException("Setter is not defined for property " + property);
 		}
@@ -904,7 +919,11 @@ public class ProxyMethodHandler<I> implements MethodHandler, PropertyChangeListe
 
 		// Is it a real change ?
 		if (!isEqual(oldValue, value)) {
+			// System.out.println("Change for " + oldValue + " to " + value);
 			boolean hasInverse = property.hasInverseProperty();
+
+			scheduledSets.put(property, value);
+
 			// First handle inverse property for oldValue
 			if (hasInverse && oldValue != null) {
 				ProxyMethodHandler<Object> oppositeHandler = getModelFactory().getHandler(oldValue);
@@ -918,6 +937,9 @@ public class ProxyMethodHandler<I> implements MethodHandler, PropertyChangeListe
 				case SINGLE:
 					Object oppositeOldValue = oppositeHandler.invokeGetter(inverseProperty);
 					if (oppositeOldValue != null) {
+						// System.out.println("Object " + inverseProperty.getModelEntity().getImplementedInterface().getSimpleName() +
+						// " set "
+						// + inverseProperty.getPropertyIdentifier() + " with " + null);
 						oppositeHandler.invokeSetter(inverseProperty, null);
 					} else {
 						// No need to reset inverse setter, as it is already set to null
@@ -968,6 +990,9 @@ public class ProxyMethodHandler<I> implements MethodHandler, PropertyChangeListe
 				case SINGLE:
 					Object oppositeOldValue = oppositeHandler.invokeGetter(inverseProperty);
 					if (oppositeOldValue != getObject()) {
+						// System.out.println("Object " + inverseProperty.getModelEntity().getImplementedInterface().getSimpleName() +
+						// " set "
+						// + inverseProperty.getPropertyIdentifier() + " with " + getObject());
 						oppositeHandler.invokeSetter(inverseProperty, getObject());
 					} else {
 						// No need to set inverse property, because this is already right value
@@ -992,6 +1017,9 @@ public class ProxyMethodHandler<I> implements MethodHandler, PropertyChangeListe
 			if (property.isSerializable()) {
 				invokeSetModified(true);
 			}
+
+			scheduledSets.remove(property);
+
 		}
 	}
 
