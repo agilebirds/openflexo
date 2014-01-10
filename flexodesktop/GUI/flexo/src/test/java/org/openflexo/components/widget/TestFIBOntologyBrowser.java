@@ -5,7 +5,7 @@ import org.junit.AfterClass;
 import org.junit.Before;
 import org.junit.BeforeClass;
 import org.junit.Test;
-import org.openflexo.fib.testutils.FIBComponentGraphicalContextDelegate;
+import org.openflexo.fib.testutils.GraphicalContextDelegate;
 import org.openflexo.foundation.OpenflexoTestCase;
 import org.openflexo.foundation.technologyadapter.TechnologyAdapter;
 
@@ -17,7 +17,7 @@ import org.openflexo.foundation.technologyadapter.TechnologyAdapter;
  */
 public class TestFIBOntologyBrowser extends OpenflexoTestCase {
 
-	private static FIBComponentGraphicalContextDelegate gcDelegate;
+	private static GraphicalContextDelegate gcDelegate;
 
 	@BeforeClass
 	public static void setupClass() {
@@ -144,7 +144,7 @@ public class TestFIBOntologyBrowser extends OpenflexoTestCase {
 	}*/
 
 	public static void initGUI() {
-		gcDelegate = new FIBComponentGraphicalContextDelegate(TestFIBOntologyBrowser.class.getSimpleName());
+		gcDelegate = new GraphicalContextDelegate(TestFIBOntologyBrowser.class.getSimpleName());
 	}
 
 	@AfterClass

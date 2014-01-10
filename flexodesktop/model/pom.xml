@@ -16,6 +16,7 @@
 		<module>flexopamela</module>
 		<module>flexoutils</module>
 		<module>flexoxmlcode</module>
+		<module>flexolocalization</module>
 	</modules>
 </project>
 

@@ -281,6 +281,9 @@ public abstract class PamelaResourceImpl<RD extends ResourceData<RD>, F extends 
 			out.flush();
 			out.close();
 			out = null;
+		} catch (Exception e) {
+			e.printStackTrace();
+			throw new IOException(e);
 		} finally {
 			if (out != null) {
 				out.close();

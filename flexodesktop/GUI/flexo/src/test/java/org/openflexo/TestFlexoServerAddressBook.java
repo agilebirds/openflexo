@@ -45,7 +45,7 @@ public class TestFlexoServerAddressBook {
 		ByteArrayOutputStream baos = new ByteArrayOutputStream();
 		try {
 			factory.serialize(book, baos);
-		} catch (IOException e) {
+		} catch (Exception e) {
 			// Not sure this can happen with a BAOS
 			e.printStackTrace();
 			Assert.fail("Serialization failed: " + e.getMessage());

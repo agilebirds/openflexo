@@ -2,8 +2,12 @@
 <project xmlns="http://maven.apache.org/POM/4.0.0" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
 	xsi:schemaLocation="http://maven.apache.org/POM/4.0.0
                              http://maven.apache.org/maven-v4_0_0.xsd">
+	<parent>
+		<groupId>org.openflexo</groupId>
+		<artifactId>openflexo-production</artifactId>
+        <version>0.1-SNAPSHOT</version>
+	</parent>
 	<modelVersion>4.0.0</modelVersion>
-	<groupId>org.openflexo</groupId>
 	<artifactId>openflexo</artifactId>
 	<packaging>pom</packaging>
         <version>1.7-SNAPSHOT</version>
@@ -13,25 +17,10 @@
 		<url>${organization.url}</url>
 	</organization>
 	<properties>
-		<ant.version>1.9.0</ant.version>
-		<compiler.source>1.6</compiler.source>
-		<compiler.target>1.6</compiler.target>
-		<hibernate.version>4.2.3.Final</hibernate.version>
-		<jersey.version>1.17.1</jersey.version>
-		<organization.name>Openflexo</organization.name>
-		<organization.url>http://www.openflexo.org</organization.url>
-		<organization.logo>https://media.openflexo.org/images/OpenFlexo_Logo.png</organization.logo>
-		<!-- need this so that sonar run properly. don't know what the difference 
-			with source.encoding. todo : investigate difference between source.encoding 
-			and project.build.sourceEncoding -->
-		<project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
-		<product.name>OpenFlexo</product.name>
-		<resource.encoding>UTF-8</resource.encoding>
-		<source.encoding>UTF-8</source.encoding>
-		<swingx.version>1.6.3</swingx.version>
-		<javahelp.version>2.0.05</javahelp.version>
 		<diana.version>1.0-SNAPSHOT</diana.version>
 		<fib.version>1.0-SNAPSHOT</fib.version>
+		<connie.version>1.0-SNAPSHOT</connie.version>
+		<pamela.version>1.0-SNAPSHOT</pamela.version>
 	</properties>
 	<scm>
 		<connection>scm:git:ssh://git@github.com:agilebirds/openflexo.git</connection>
@@ -223,6 +212,45 @@
 	</build>
 	<dependencyManagement>
 		<dependencies>
+
+			<dependency>
+				<groupId>org.openflexo</groupId>
+				<artifactId>flexoutils</artifactId>
+				<version>${connie.version}</version>
+			</dependency>
+			<dependency>
+				<groupId>org.openflexo</groupId>
+				<artifactId>flexoutils</artifactId>
+				<version>${connie.version}</version>
+				<classifier>resources</classifier>
+				<type>zip</type>
+			</dependency>
+			<dependency>
+				<groupId>org.openflexo</groupId>
+				<artifactId>flexoutils</artifactId>
+				<version>${connie.version}</version>
+				<classifier>tests</classifier>
+			</dependency>
+			<dependency>
+				<groupId>org.openflexo</groupId>
+				<artifactId>flexoconnie</artifactId>
+				<version>${connie.version}</version>
+			</dependency>
+			<dependency>
+				<groupId>org.openflexo</groupId>
+				<artifactId>flexoconnie</artifactId>
+				<version>${connie.version}</version>
+				<classifier>resources</classifier>
+				<type>zip</type>
+			</dependency>
+			<dependency>
+				<groupId>org.openflexo</groupId>
+				<artifactId>flexoconnie</artifactId>
+				<version>${connie.version}</version>
+				<classifier>tests</classifier>
+			</dependency>
+
+
 			<!-- project modules -->
 			<dependency>
 				<groupId>org.openflexo</groupId>
@@ -232,24 +260,6 @@
 			<dependency>
 				<groupId>org.openflexo</groupId>
 				<artifactId>flexoxmlcode</artifactId>
-				<version>${project.version}</version>
-				<classifier>tests</classifier>
-			</dependency>
-			<dependency>
-				<groupId>org.openflexo</groupId>
-				<artifactId>flexoutils</artifactId>
-				<version>${project.version}</version>
-			</dependency>
-			<dependency>
-				<groupId>org.openflexo</groupId>
-				<artifactId>flexoutils</artifactId>
-				<version>${project.version}</version>
-				<classifier>resources</classifier>
-				<type>zip</type>
-			</dependency>
-			<dependency>
-				<groupId>org.openflexo</groupId>
-				<artifactId>flexoutils</artifactId>
 				<version>${project.version}</version>
 				<classifier>tests</classifier>
 			</dependency>
