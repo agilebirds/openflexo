@@ -22,7 +22,7 @@
 	<dependencies>
 		<dependency>
 			<groupId>org.openflexo</groupId>
-			<artifactId>flexopamela</artifactId>
+			<artifactId>pamela-core</artifactId>
 		</dependency>
 		<dependency>
 			<groupId>org.openflexo</groupId>

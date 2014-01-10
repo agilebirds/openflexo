@@ -22,7 +22,7 @@
 	<dependencies>
 		<dependency>
 			<groupId>org.openflexo</groupId>
-			<artifactId>flexopamela</artifactId>
+			<artifactId>pamela-core</artifactId>
 		</dependency>
 		<dependency>
 			<groupId>org.openflexo</groupId>
@@ -31,6 +31,10 @@
 		<dependency>
 			<groupId>org.openflexo</groupId>
 			<artifactId>flexographicutils</artifactId>
+		</dependency>
+		<dependency>
+			<groupId>org.openflexo</groupId>
+			<artifactId>flexolocalization</artifactId>
 		</dependency>
 		<dependency>
 			<groupId>junit</groupId>

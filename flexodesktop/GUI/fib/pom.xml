@@ -1,7 +1,6 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <project xmlns="http://maven.apache.org/POM/4.0.0" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
 	xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/maven-v4_0_0.xsd">
-	<groupId>org.openflexo</groupId>
 	<parent>
 		<groupId>org.openflexo</groupId>
 		<artifactId>openflexo-production</artifactId>
@@ -15,6 +14,7 @@
 	<properties>
 		<fib.version>1.0-SNAPSHOT</fib.version>
 		<connie.version>1.0-SNAPSHOT</connie.version>
+		<pamela.version>1.0-SNAPSHOT</pamela.version>
 	</properties>
 	<scm>
 		<connection>scm:git:ssh://git@github.com:openflexo-team/gina.git</connection>
@@ -25,6 +25,73 @@
 		<module>fib-swing</module>
 		<module>fib-swing-editor</module>
     </modules>
+	<build>
+		<resources>
+			<resource>
+				<directory>src/main/java</directory>
+				<excludes>
+					<exclude>**/*.java</exclude>
+				</excludes>
+			</resource>
+			<resource>
+				<directory>src/main/resources</directory>
+				<excludes>
+					<exclude>**/*</exclude>
+				</excludes>
+			</resource>
+			<resource>
+				<directory>src/main/resources</directory>
+				<includes>
+					<include>META-INF/**/*</include>
+				</includes>
+			</resource>
+		</resources>
+		<pluginManagement>
+			<plugins>
+				<plugin>
+					<groupId>org.apache.maven.plugins</groupId>
+					<artifactId>maven-assembly-plugin</artifactId>
+					<configuration>
+						<descriptors>
+							<descriptor>package-resources.xml</descriptor>
+						</descriptors>
+					</configuration>
+					<executions>
+						<execution>
+							<id>build-resources</id>
+							<phase>package</phase>
+							<goals>
+								<goal>single</goal>
+							</goals>
+						</execution>
+					</executions>
+				</plugin>
+				<plugin>
+					<groupId>org.apache.maven.plugins</groupId>
+					<artifactId>maven-jar-plugin</artifactId>
+					<executions>
+						<execution>
+						    <id>default-jar</id>
+							<goals>
+								<goal>jar</goal>
+							</goals>
+							<configuration>
+							     <skipIfEmpty>true</skipIfEmpty>
+							</configuration>
+						</execution>
+						<execution>
+							<goals>
+								<goal>test-jar</goal>
+							</goals>
+							<configuration>
+							     <skipIfEmpty>true</skipIfEmpty>
+							</configuration>
+						</execution>
+					</executions>
+				</plugin>
+			</plugins>
+		</pluginManagement>
+	</build>
 	<dependencyManagement>
 		<dependencies>
 			<dependency>
@@ -34,17 +101,22 @@
 			</dependency>
 		    <dependency>
 			   <groupId>org.openflexo</groupId>
-			   <artifactId>flexopamela</artifactId>
-			   <version>1.7-SNAPSHOT</version>
+			   <artifactId>pamela-core</artifactId>
+			   <version>${pamela.version}</version>
 		    </dependency>
 		    <dependency>
 			   <groupId>org.openflexo</groupId>
 			   <artifactId>flexoutils</artifactId>
-			   <version>1.7-SNAPSHOT</version>
+			   <version>${connie.version}</version>
 		    </dependency>
 		    <dependency>
 			   <groupId>org.openflexo</groupId>
 			   <artifactId>flexographicutils</artifactId>
+			   <version>1.7-SNAPSHOT</version>
+		    </dependency>
+		    <dependency>
+			   <groupId>org.openflexo</groupId>
+			   <artifactId>flexolocalization</artifactId>
 			   <version>1.7-SNAPSHOT</version>
 		    </dependency>
 			<dependency>
@@ -91,150 +163,5 @@
 			</dependency>
 		</dependencies>
   	</dependencyManagement>
-	<build>
-		<pluginManagement>
-			<plugins>
-				<plugin>
-					<groupId>org.apache.maven.plugins</groupId>
-					<artifactId>maven-clean-plugin</artifactId>
-					<version>2.4.1</version>
-				</plugin>
-				<plugin>
-					<groupId>org.apache.maven.plugins</groupId>
-					<artifactId>maven-install-plugin</artifactId>
-					<version>2.3.1</version>
-				</plugin>
-				<plugin>
-					<groupId>org.apache.maven.plugins</groupId>
-					<artifactId>maven-deploy-plugin</artifactId>
-					<version>2.7</version>
-					<configuration>
-						<retryFailedDeploymentCount>3</retryFailedDeploymentCount>
-					</configuration>
-				</plugin>
-				<plugin>
-					<groupId>org.apache.maven.plugins</groupId>
-					<artifactId>maven-antrun-plugin</artifactId>
-					<version>1.7</version>
-				</plugin>
-				<plugin>
-					<groupId>org.apache.maven.plugins</groupId>
-					<artifactId>maven-assembly-plugin</artifactId>
-					<version>2.4</version>
-				</plugin>
-				<plugin>
-					<groupId>org.apache.maven.plugins</groupId>
-					<artifactId>maven-dependency-plugin</artifactId>
-					<version>2.7</version>
-				</plugin>
-				<plugin>
-					<groupId>org.apache.maven.plugins</groupId>
-					<artifactId>maven-release-plugin</artifactId>
-					<version>2.0</version>
-				</plugin>
-				<plugin>
-					<groupId>org.codehaus.mojo</groupId>
-					<artifactId>exec-maven-plugin</artifactId>
-					<version>1.2</version>
-				</plugin>
-				<plugin>
-					<groupId>org.apache.maven.plugins</groupId>
-					<artifactId>maven-compiler-plugin</artifactId>
-					<configuration>
-						<source>${compiler.source}</source>
-						<target>${compiler.target}</target>
-						<encoding>${source.encoding}</encoding>
-						<fork>false</fork>
-						<compilerId>jdt</compilerId>
-					</configuration>
-					<dependencies>
-						<dependency>
-							<groupId>org.eclipse.tycho</groupId>
-							<artifactId>tycho-compiler-jdt</artifactId>
-							<version>0.13.0</version>
-						</dependency>
-					</dependencies>
-				</plugin>
-				<plugin>
-					<groupId>org.apache.maven.plugins</groupId>
-					<artifactId>maven-surefire-plugin</artifactId>
-					<version>2.7.1</version>
-					<configuration>
-						<forkMode>always</forkMode>
-						<argLine>-Xmx512M -XX:MaxPermSize=128M</argLine>
-					</configuration>
-				</plugin>
-				<plugin>
-					<groupId>org.codehaus.mojo</groupId>
-					<artifactId>sonar-maven-plugin</artifactId>
-					<version>2.0</version>
-					<configuration>
-						<sonarHostURL>https://sonar.openflexo.com</sonarHostURL>
-					</configuration>
-				</plugin>
-				<plugin>
-					<groupId>org.eclipse.m2e</groupId>
-					<artifactId>lifecycle-mapping</artifactId>
-					<version>1.0.0</version>
-					<configuration>
-						<lifecycleMappingMetadata>
-							<pluginExecutions>
-								<pluginExecution>
-									<pluginExecutionFilter>
-										<groupId>org.apache.maven.plugins</groupId>
-										<artifactId>maven-compiler-plugin</artifactId>
-										<versionRange>[2.0,)</versionRange>
-										<goals>
-											<goal>compile</goal>
-											<goal>testCompile</goal>
-										</goals>
-										<parameters>
-											<compilerId>jdt</compilerId>
-										</parameters>
-									</pluginExecutionFilter>
-									<action>
-										<configurator>
-											<id>org.eclipse.m2e.jdt.javaConfigurator</id>
-										</configurator>
-									</action>
-								</pluginExecution>
-								<pluginExecution>
-									<pluginExecutionFilter>
-										<groupId>org.jvnet.ws.wadl</groupId>
-										<artifactId>wadl-client-plugin</artifactId>
-										<versionRange>[1.0,)</versionRange>
-										<goals>
-											<goal>generate</goal>
-										</goals>
-									</pluginExecutionFilter>
-									<action>
-										<ignore />
-									</action>
-								</pluginExecution>
-							</pluginExecutions>
-						</lifecycleMappingMetadata>
-					</configuration>
-				</plugin>
-				<plugin>
-					<groupId>org.apache.maven.plugins</groupId>
-					<artifactId>maven-jar-plugin</artifactId>
-					<version>2.4</version>
-				</plugin>
-				<plugin>
-					<groupId>org.apache.maven.plugins</groupId>
-					<artifactId>maven-resources-plugin</artifactId>
-					<version>2.5</version>
-					<configuration>
-						<encoding>${resource.encoding}</encoding>
-					</configuration>
-				</plugin>
-				<plugin>
-					<groupId>org.apache.maven.plugins</groupId>
-					<artifactId>maven-site-plugin</artifactId>
-					<version>3.3</version>
-				</plugin>
-			</plugins>
-		</pluginManagement>
-	</build>
 </project>
 

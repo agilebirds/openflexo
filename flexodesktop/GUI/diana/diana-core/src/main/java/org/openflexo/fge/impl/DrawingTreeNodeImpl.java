@@ -54,8 +54,6 @@ import org.openflexo.fge.notifications.LabelWillMove;
 import org.openflexo.fge.notifications.NodeDeleted;
 import org.openflexo.model.factory.DeletableProxyObject;
 import org.openflexo.toolbox.HasPropertyChangeSupport;
-import org.openflexo.xmlcode.KeyValueCoder;
-import org.openflexo.xmlcode.KeyValueDecoder;
 
 /**
  * This is the base implementation of a node in the drawing tree. (see DrawingTreeNode<O,GR)<br>
@@ -82,12 +80,12 @@ public abstract class DrawingTreeNodeImpl<O, GR extends GraphicalRepresentation>
 	private O drawable;
 	private ContainerNodeImpl<?, ?> parentNode;
 	private GR graphicalRepresentation;
-	private GRBinding<O, GR> grBinding;
+	private final GRBinding<O, GR> grBinding;
 
 	// private List<ControlArea<?>> controlAreas;
 
-	private List<ConstraintDependency> dependancies;
-	private List<ConstraintDependency> alterings;
+	private final List<ConstraintDependency> dependancies;
+	private final List<ConstraintDependency> alterings;
 
 	// TODO: manage validated/isInvalidated: is this still required ???
 	private boolean isInvalidated = true;
@@ -1206,7 +1204,7 @@ public abstract class DrawingTreeNodeImpl<O, GR extends GraphicalRepresentation>
 		setPropertyValue(GraphicalRepresentation.TEXT_STYLE, style);
 	}
 
-	@Override
+	/*@Override
 	public boolean hasKey(String key) {
 		return KeyValueDecoder.hasKey(this, key);
 	}
@@ -1226,6 +1224,6 @@ public abstract class DrawingTreeNodeImpl<O, GR extends GraphicalRepresentation>
 	@Override
 	public Class getTypeForKey(String key) {
 		return KeyValueDecoder.getTypeForKey(this, key);
-	}
+	}*/
 
 }

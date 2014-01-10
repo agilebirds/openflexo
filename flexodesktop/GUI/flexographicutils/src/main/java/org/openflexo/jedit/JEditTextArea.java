@@ -163,7 +163,7 @@ public class JEditTextArea extends JComponent implements ITextComponent {
 		return returned;
 	}
 
-	private MouseWheelListener _defaultMouseWheelListener;
+	private final MouseWheelListener _defaultMouseWheelListener;
 
 	protected void disableDefaultMouseWheelListener() {
 		getPainter().removeMouseWheelListener(_defaultMouseWheelListener);
@@ -1933,7 +1933,7 @@ public class JEditTextArea extends JComponent implements ITextComponent {
 		private Component center;
 		private Component right;
 		private Component bottom;
-		private Vector<Component> leftOfScrollBar = new Vector<Component>();
+		private final Vector<Component> leftOfScrollBar = new Vector<Component>();
 	}
 
 	static class CaretBlinker implements ActionListener {
@@ -2306,10 +2306,10 @@ public class JEditTextArea extends JComponent implements ITextComponent {
 	public static class DisplayContext {
 
 		private String content;
-		private int firstVisibleLine;
-		private int selectionStart;
-		private int selectionEnd;
-		private int caretPosition;
+		private final int firstVisibleLine;
+		private final int selectionStart;
+		private final int selectionEnd;
+		private final int caretPosition;
 
 		public DisplayContext(String content, int firstVisibleLine, int selectionStart, int selectionEnd, int caretPosition) {
 			this.content = content;
@@ -2461,7 +2461,12 @@ public class JEditTextArea extends JComponent implements ITextComponent {
 		}
 		searchDialog = createNewDialog(FlexoLocalization.localizedForKey("find_and_replace"));
 		if (searchPanel == null) {
-			searchDialog.add(searchPanel = new TextSearchPanel());
+			searchDialog.add(searchPanel = new TextSearchPanel() {
+				@Override
+				public String localizedForKey(String key) {
+					return FlexoLocalization.localizedForKey(key);
+				}
+			});
 		} else {
 			searchDialog.add(searchPanel);
 		}
@@ -2485,7 +2490,7 @@ public class JEditTextArea extends JComponent implements ITextComponent {
 		repaint();
 	}
 
-	private TokenMarker defaultMarker = new TextTokenMarker();
+	private final TokenMarker defaultMarker = new TextTokenMarker();
 
 	public void disableSyntaxColor() {
 		document.setTokenMarker(defaultMarker);

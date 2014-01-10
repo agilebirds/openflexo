@@ -213,6 +213,7 @@
 	<dependencyManagement>
 		<dependencies>
 
+			<!--  CONNIE dependancies -->
 			<dependency>
 				<groupId>org.openflexo</groupId>
 				<artifactId>flexoutils</artifactId>
@@ -249,9 +250,98 @@
 				<version>${connie.version}</version>
 				<classifier>tests</classifier>
 			</dependency>
+
+			<!--  PAMELA dependancies -->
+
+			<dependency>
+				<groupId>org.openflexo</groupId>
+				<artifactId>pamela-core</artifactId>
+				<version>${pamela.version}</version>
+			</dependency>
+
+			<!--  DIANA dependancies -->
+		    <dependency>
+				<groupId>org.openflexo</groupId>
+				<artifactId>diana-geom</artifactId>
+				<version>${diana.version}</version>
+				<classifier>resources</classifier>
+				<type>zip</type>
+			</dependency>
+			<dependency>
+				<groupId>org.openflexo</groupId>
+				<artifactId>diana-geom</artifactId>
+				<version>${diana.version}</version>
+			</dependency>
+			<dependency>
+				<groupId>org.openflexo</groupId>
+				<artifactId>diana-api</artifactId>
+				<version>${diana.version}</version>
+				<classifier>resources</classifier>
+				<type>zip</type>
+			</dependency>
+			<dependency>
+				<groupId>org.openflexo</groupId>
+				<artifactId>diana-api</artifactId>
+				<version>${diana.version}</version>
+			</dependency>
+			<dependency>
+				<groupId>org.openflexo</groupId>
+				<artifactId>diana-core</artifactId>
+				<version>${diana.version}</version>
+				<classifier>resources</classifier>
+				<type>zip</type>
+			</dependency>
+			<dependency>
+				<groupId>org.openflexo</groupId>
+				<artifactId>diana-core</artifactId>
+				<version>${diana.version}</version>
+			</dependency>
+			<dependency>
+				<groupId>org.openflexo</groupId>
+				<artifactId>diana-swing</artifactId>
+				<version>${diana.version}</version>
+				<classifier>resources</classifier>
+				<type>zip</type>
+			</dependency>
+			<dependency>
+				<groupId>org.openflexo</groupId>
+				<artifactId>diana-swing</artifactId>
+				<version>${diana.version}</version>
+			</dependency>
+			<dependency>
+				<groupId>org.openflexo</groupId>
+				<artifactId>diana-drawing-editor</artifactId>
+				<version>${diana.version}</version>
+				<classifier>resources</classifier>
+				<type>zip</type>
+			</dependency>
+			<dependency>
+				<groupId>org.openflexo</groupId>
+				<artifactId>diana-drawing-editor</artifactId>
+				<version>${diana.version}</version>
+			</dependency>
+			<dependency>
+				<groupId>org.openflexo</groupId>
+				<artifactId>diana-geomedit</artifactId>
+				<version>${diana.version}</version>
+				<classifier>resources</classifier>
+				<type>zip</type>
+			</dependency>
+			<dependency>
+				<groupId>org.openflexo</groupId>
+				<artifactId>diana-geomedit</artifactId>
+				<version>${diana.version}</version>
+			</dependency>
+
 
 
 			<!-- project modules -->
+			
+			<dependency>
+				<groupId>org.openflexo</groupId>
+				<artifactId>flexolocalization</artifactId>
+				<version>${project.version}</version>
+			</dependency>
 			<dependency>
 				<groupId>org.openflexo</groupId>
 				<artifactId>flexoxmlcode</artifactId>
@@ -262,11 +352,6 @@
 				<artifactId>flexoxmlcode</artifactId>
 				<version>${project.version}</version>
 				<classifier>tests</classifier>
-			</dependency>
-			<dependency>
-				<groupId>org.openflexo</groupId>
-				<artifactId>flexopamela</artifactId>
-				<version>${project.version}</version>
 			</dependency>
 			<dependency>
 				<groupId>org.openflexo</groupId>
@@ -344,78 +429,6 @@
 				<version>${fib.version}</version>
 				<classifier>resources</classifier>
 				<type>zip</type>
-			</dependency>
-		    <dependency>
-				<groupId>org.openflexo</groupId>
-				<artifactId>diana-geom</artifactId>
-				<version>${diana.version}</version>
-				<classifier>resources</classifier>
-				<type>zip</type>
-			</dependency>
-			<dependency>
-				<groupId>org.openflexo</groupId>
-				<artifactId>diana-geom</artifactId>
-				<version>${diana.version}</version>
-			</dependency>
-			<dependency>
-				<groupId>org.openflexo</groupId>
-				<artifactId>diana-api</artifactId>
-				<version>${diana.version}</version>
-				<classifier>resources</classifier>
-				<type>zip</type>
-			</dependency>
-			<dependency>
-				<groupId>org.openflexo</groupId>
-				<artifactId>diana-api</artifactId>
-				<version>${diana.version}</version>
-			</dependency>
-			<dependency>
-				<groupId>org.openflexo</groupId>
-				<artifactId>diana-core</artifactId>
-				<version>${diana.version}</version>
-				<classifier>resources</classifier>
-				<type>zip</type>
-			</dependency>
-			<dependency>
-				<groupId>org.openflexo</groupId>
-				<artifactId>diana-core</artifactId>
-				<version>${diana.version}</version>
-			</dependency>
-			<dependency>
-				<groupId>org.openflexo</groupId>
-				<artifactId>diana-swing</artifactId>
-				<version>${diana.version}</version>
-				<classifier>resources</classifier>
-				<type>zip</type>
-			</dependency>
-			<dependency>
-				<groupId>org.openflexo</groupId>
-				<artifactId>diana-swing</artifactId>
-				<version>${diana.version}</version>
-			</dependency>
-			<dependency>
-				<groupId>org.openflexo</groupId>
-				<artifactId>diana-drawing-editor</artifactId>
-				<version>${diana.version}</version>
-				<classifier>resources</classifier>
-				<type>zip</type>
-			</dependency>
-			<dependency>
-				<groupId>org.openflexo</groupId>
-				<artifactId>diana-drawing-editor</artifactId>
-				<version>${diana.version}</version>
-			</dependency>
-			<dependency>
-				<groupId>org.openflexo</groupId>
-				<artifactId>diana-geomedit</artifactId>
-				<version>${diana.version}</version>
-				<classifier>resources</classifier>
-				<type>zip</type>
-			</dependency>
-			<dependency>
-				<groupId>org.openflexo</groupId>
-				<artifactId>diana-geomedit</artifactId>
-				<version>${diana.version}</version>
 			</dependency>
 			<dependency>
 				<groupId>org.openflexo</groupId>

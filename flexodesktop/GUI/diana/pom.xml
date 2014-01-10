@@ -14,6 +14,7 @@
 	<properties>
 		<fib.version>1.0-SNAPSHOT</fib.version>
 		<connie.version>1.0-SNAPSHOT</connie.version>
+		<pamela.version>1.0-SNAPSHOT</pamela.version>
 	</properties>
 	<scm>
 		<connection>scm:git:ssh://git@github.com:openflexo-team/diana.git</connection>
@@ -74,13 +75,8 @@
 			</dependency>
 		    <dependency>
 			   <groupId>org.openflexo</groupId>
-			   <artifactId>flexopamela</artifactId>
-			   <version>1.7-SNAPSHOT</version>
-		    </dependency>
-		    <dependency>
-			   <groupId>org.openflexo</groupId>
-			   <artifactId>flexoutils</artifactId>
-			   <version>1.7-SNAPSHOT</version>
+			   <artifactId>pamela-core</artifactId>
+			   <version>${pamela.version}</version>
 		    </dependency>
 		    <dependency>
 			   <groupId>org.openflexo</groupId>

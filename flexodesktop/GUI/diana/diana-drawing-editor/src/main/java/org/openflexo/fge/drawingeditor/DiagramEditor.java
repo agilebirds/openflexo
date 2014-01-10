@@ -44,8 +44,8 @@ public class DiagramEditor {
 	private DianaDrawingEditor controller;
 	private int index;
 	private File file = null;
-	private DiagramFactory factory;
-	private DiagramEditorApplication application;
+	private final DiagramFactory factory;
+	private final DiagramEditorApplication application;
 
 	public static DiagramEditor newDiagramEditor(DiagramFactory factory, DiagramEditorApplication application) {
 
@@ -137,6 +137,8 @@ public class DiagramEditor {
 		} catch (FileNotFoundException e1) {
 			e1.printStackTrace();
 		} catch (IOException e) {
+			e.printStackTrace();
+		} catch (Exception e) {
 			e.printStackTrace();
 		}
 		return false;
