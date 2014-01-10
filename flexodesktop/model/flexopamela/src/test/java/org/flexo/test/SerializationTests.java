@@ -62,6 +62,8 @@ public class SerializationTests extends AbstractPAMELATest {
 			Assert.fail("Restrictive serialization should not allow the serialization of a " + MyNode.class.getName());
 		} catch (RestrictiveSerializationException e) {
 			// Yes this is what we wanted
+		} catch (Exception e) {
+			fail(e.getMessage());
 		} finally {
 			IOUtils.closeQuietly(fos);
 		}
@@ -70,6 +72,8 @@ public class SerializationTests extends AbstractPAMELATest {
 			factory.serialize(process, fos, SerializationPolicy.EXTENSIVE);
 		} catch (RestrictiveSerializationException e) {
 			Assert.fail("Extensive serialization should allow the serialization of a " + MyNode.class.getName());
+		} catch (Exception e) {
+			fail(e.getMessage());
 		} finally {
 			IOUtils.closeQuietly(fos);
 		}
@@ -108,6 +112,8 @@ public class SerializationTests extends AbstractPAMELATest {
 			factory.serialize(process, fos, SerializationPolicy.EXTENSIVE);
 		} catch (RestrictiveSerializationException e) {
 			Assert.fail("Extensive serialization should allow the serialization of a " + MyNode.class.getName());
+		} catch (Exception e) {
+			fail(e.getMessage());
 		} finally {
 			IOUtils.closeQuietly(fos);
 		}

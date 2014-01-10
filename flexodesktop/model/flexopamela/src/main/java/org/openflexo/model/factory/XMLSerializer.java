@@ -64,37 +64,24 @@ class XMLSerializer {
 		return modelFactory.getStringEncoder();
 	}
 
-	public Document serializeDocument(Object object, OutputStream out) throws IOException {
+	public Document serializeDocument(Object object, OutputStream out) throws IOException, IllegalArgumentException,
+			IllegalAccessException, InvocationTargetException, ModelDefinitionException {
 		Document builtDocument = new Document();
+		id = 0;
+		objectReferences = new HashMap<Object, ObjectReference>();
+		alreadySerialized = new HashMap<Object, Object>();
+		Element rootElement = serializeElement(object, null);
+		postProcess(rootElement);
+		builtDocument.setRootElement(rootElement);
+		Format prettyFormat = Format.getPrettyFormat();
+		prettyFormat.setLineSeparator(LineSeparator.SYSTEM);
+		XMLOutputter outputter = new XMLOutputter(prettyFormat);
 		try {
-			id = 0;
-			objectReferences = new HashMap<Object, ObjectReference>();
-			alreadySerialized = new HashMap<Object, Object>();
-			Element rootElement = serializeElement(object, null);
-			postProcess(rootElement);
-			builtDocument.setRootElement(rootElement);
-			Format prettyFormat = Format.getPrettyFormat();
-			prettyFormat.setLineSeparator(LineSeparator.SYSTEM);
-			XMLOutputter outputter = new XMLOutputter(prettyFormat);
-			try {
-				outputter.output(builtDocument, out);
-			} catch (IOException e) {
-				e.printStackTrace();
-			}
-			out.flush();
-		} catch (IllegalArgumentException e) {
-			// TODO Auto-generated catch block
-			e.printStackTrace();
-		} catch (IllegalAccessException e) {
-			// TODO Auto-generated catch block
-			e.printStackTrace();
-		} catch (InvocationTargetException e) {
-			// TODO Auto-generated catch block
-			e.printStackTrace();
-		} catch (ModelDefinitionException e) {
-			// TODO Auto-generated catch block
+			outputter.output(builtDocument, out);
+		} catch (IOException e) {
 			e.printStackTrace();
 		}
+		out.flush();
 		return builtDocument;
 	}
 
@@ -242,7 +229,7 @@ class XMLSerializer {
 									e);
 						}
 					} else {
-						throw new ModelDefinitionException("No XML element for " + object);
+						throw new ModelDefinitionException("No XML element for " + modelEntity.getImplementedInterface());
 					}
 				} finally {
 					handler.setSerializing(false);

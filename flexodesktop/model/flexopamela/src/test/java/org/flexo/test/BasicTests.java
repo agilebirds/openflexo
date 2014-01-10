@@ -17,14 +17,12 @@ import org.flexo.model.FlexoProcess;
 import org.flexo.model.StartNode;
 import org.flexo.model.TokenEdge;
 import org.flexo.model.WKFAnnotation;
-import org.jdom2.JDOMException;
 import org.junit.After;
 import org.junit.AfterClass;
 import org.junit.Before;
 import org.junit.BeforeClass;
 import org.openflexo.model.AbstractPAMELATest;
 import org.openflexo.model.ModelContext;
-import org.openflexo.model.exceptions.InvalidDataException;
 import org.openflexo.model.exceptions.ModelDefinitionException;
 import org.openflexo.model.exceptions.UnitializedEntityException;
 import org.openflexo.model.factory.AccessibleProxyObject;
@@ -276,13 +274,7 @@ public class BasicTests extends AbstractPAMELATest {
 			System.out.println("Read: " + process);
 			fos = new FileOutputStream(file);
 			factory.serialize(process, fos);
-		} catch (FileNotFoundException e) {
-			fail(e.getMessage());
-		} catch (IOException e) {
-			fail(e.getMessage());
-		} catch (JDOMException e) {
-			fail(e.getMessage());
-		} catch (InvalidDataException e) {
+		} catch (Exception e) {
 			fail(e.getMessage());
 		} finally {
 			IOUtils.closeQuietly(fos);
@@ -686,7 +678,7 @@ public class BasicTests extends AbstractPAMELATest {
 	private void serializeObject(AccessibleProxyObject object) {
 		try {
 			factory.serialize(object, new ByteArrayOutputStream());
-		} catch (IOException e) {
+		} catch (Exception e) {
 			e.printStackTrace();
 			fail(e.getMessage());
 		}

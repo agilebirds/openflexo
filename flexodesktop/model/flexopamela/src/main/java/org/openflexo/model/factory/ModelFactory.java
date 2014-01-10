@@ -649,18 +649,20 @@ public class ModelFactory {
 		ByteArrayOutputStream baos = new ByteArrayOutputStream();
 		try {
 			serialize(object, baos, SerializationPolicy.PERMISSIVE);
-		} catch (IOException e) {
+		} catch (Exception e) {
 			e.printStackTrace();
 			return null;
 		}
 		return baos.toString();
 	}
 
-	public void serialize(Object object, OutputStream os) throws IOException {
+	public void serialize(Object object, OutputStream os) throws IOException, IllegalArgumentException, IllegalAccessException,
+			InvocationTargetException, ModelDefinitionException {
 		serialize(object, os, SerializationPolicy.PERMISSIVE);
 	}
 
-	public void serialize(Object object, OutputStream os, SerializationPolicy policy) throws IOException {
+	public void serialize(Object object, OutputStream os, SerializationPolicy policy) throws IOException, IllegalArgumentException,
+			IllegalAccessException, InvocationTargetException, ModelDefinitionException {
 		XMLSerializer serializer = new XMLSerializer(this, policy);
 		serializer.serializeDocument(object, os);
 	}
@@ -695,7 +697,17 @@ public class ModelFactory {
 	}
 
 	/**
-	 * Hook to detect an object deserialization<br>
+	 * Hook to detect an object deserialization (called just after instance has been created)<br>
+	 * Default implementation silently returns
+	 * 
+	 * @param newlyCreatedObject
+	 * @param implementedInterface
+	 */
+	public <I> void objectIsBeeingDeserialized(I newlyCreatedObject, Class<I> implementedInterface) {
+	}
+
+	/**
+	 * Hook to detect an object deserialization (called at the end of whole object graph deserialization)<br>
 	 * Default implementation silently returns
 	 * 
 	 * @param newlyCreatedObject

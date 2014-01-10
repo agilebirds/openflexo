@@ -117,6 +117,9 @@ public class ModelEntity<I> {
 	 */
 	private final Map<Method, ModelInitializer> initializers;
 
+	DeserializationInitializer deserializationInitializer = null;
+	DeserializationFinalizer deserializationFinalizer = null;
+
 	private boolean initialized;
 
 	private final Map<String, ModelProperty<I>> declaredModelProperties;
@@ -185,6 +188,27 @@ public class ModelEntity<I> {
 			org.openflexo.model.annotations.Initializer initializer = m.getAnnotation(org.openflexo.model.annotations.Initializer.class);
 			if (initializer != null) {
 				initializers.put(m, new ModelInitializer(initializer, m));
+			}
+
+			org.openflexo.model.annotations.DeserializationFinalizer deserializationFinalizer = m
+					.getAnnotation(org.openflexo.model.annotations.DeserializationFinalizer.class);
+			if (deserializationFinalizer != null) {
+				if (this.deserializationFinalizer == null) {
+					this.deserializationFinalizer = new DeserializationFinalizer(deserializationFinalizer, m);
+				} else {
+					throw new ModelDefinitionException("Duplicated deserialization finalizer found for entity " + getImplementedInterface());
+				}
+			}
+
+			org.openflexo.model.annotations.DeserializationInitializer deserializationInitializer = m
+					.getAnnotation(org.openflexo.model.annotations.DeserializationInitializer.class);
+			if (deserializationInitializer != null) {
+				if (this.deserializationInitializer == null) {
+					this.deserializationInitializer = new DeserializationInitializer(deserializationInitializer, m);
+				} else {
+					throw new ModelDefinitionException("Duplicated deserialization initializer found for entity "
+							+ getImplementedInterface());
+				}
 			}
 		}
 
@@ -767,6 +791,48 @@ public class ModelEntity<I> {
 			}
 		}
 		return list;
+	}
+
+	/**
+	 * Return the first found deserialization initializer in the class hierarchy<br>
+	 * TODO: manage multiple inheritance issues
+	 * 
+	 * @return
+	 * @throws ModelDefinitionException
+	 */
+	// TODO: manage multiple inheritance issues
+	public DeserializationInitializer getDeserializationInitializer() throws ModelDefinitionException {
+		if (deserializationInitializer == null) {
+			if (getDirectSuperEntities() != null) {
+				for (ModelEntity<?> e : getDirectSuperEntities()) {
+					if (e.getDeserializationInitializer() != null) {
+						return e.getDeserializationInitializer();
+					}
+				}
+			}
+		}
+		return deserializationInitializer;
+	}
+
+	/**
+	 * Return the first found deserialization finalizer in the class hierarchy<br>
+	 * TODO: manage multiple inheritance issues
+	 * 
+	 * @return
+	 * @throws ModelDefinitionException
+	 */
+	// TODO: manage multiple inheritance issues
+	public DeserializationFinalizer getDeserializationFinalizer() throws ModelDefinitionException {
+		if (deserializationFinalizer == null) {
+			if (getDirectSuperEntities() != null) {
+				for (ModelEntity<?> e : getDirectSuperEntities()) {
+					if (e.getDeserializationFinalizer() != null) {
+						return e.getDeserializationFinalizer();
+					}
+				}
+			}
+		}
+		return deserializationFinalizer;
 	}
 
 	/**

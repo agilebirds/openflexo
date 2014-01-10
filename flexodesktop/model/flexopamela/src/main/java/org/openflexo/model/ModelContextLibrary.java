@@ -38,4 +38,14 @@ public class ModelContextLibrary {
 		return context;
 	}
 
+	public static ModelContext getCompoundModelContext(Class<?> baseClass, Class<?>[] classes) throws ModelDefinitionException {
+		Class[] newArray = new Class[classes.length + 1];
+		for (int i = 0; i < classes.length; i++) {
+			newArray[i] = classes[i];
+		}
+		newArray[classes.length] = baseClass;
+
+		return getCompoundModelContext(newArray);
+	}
+
 }

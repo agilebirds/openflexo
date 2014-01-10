@@ -56,7 +56,7 @@ public class ModelEntityLibrary {
 	/**
 	 * For testings purposes only.
 	 */
-	static void clear() {
+	public static void clear() {
 		entities.clear();
 	}
 }
