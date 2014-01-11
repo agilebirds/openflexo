@@ -684,27 +684,36 @@ public class ShapeGraphicalRepresentation<O> extends GraphicalRepresentation<O> 
 		if (newLocation == null) {
 			return;
 		}
+
 		updateConstraints();
 		newLocation = computeConstrainedLocation(newLocation);
 		FGEPoint oldLocation = getLocation();
-		if (!newLocation.equals(oldLocation)) {
-			double oldX = getX();
-			double oldY = getY();
-			if (isParentLayoutedAsContainer()) {
-				setLocationForContainerLayout(newLocation);
-			} else {
-				setXNoNotification(newLocation.x);
-				setYNoNotification(newLocation.y);
-			}
-			notifyObjectMoved(oldLocation);
-			notifyChange(Parameters.x, oldX, getX());
-			notifyChange(Parameters.y, oldY, getY());
-			if (!isFullyContainedInContainer()) {
-				if (logger.isLoggable(Level.FINE)) {
-					logger.fine("setLocation() lead shape going outside it's parent view");
-				}
+
+		// Vincent: I forced the notifications here because I had a problem to use constraints.
+		// If for instance I have a square which location is relative to the x or y of
+		// its parent, y or x never change. The computation of x and y is right (updateConstraints)
+		// but never used, because the value used after computing constraints
+		// is the "newLocation" and not the "oldLocation"(which contains the result of this computing).
+		// Feel free to change this, but if so try to solve the problem above because some viewpoints are requiring this
+
+		// if (!newLocation.equals(oldLocation)) {
+		double oldX = getX();
+		double oldY = getY();
+		if (isParentLayoutedAsContainer()) {
+			setLocationForContainerLayout(newLocation);
+		} else {
+			setXNoNotification(newLocation.x);
+			setYNoNotification(newLocation.y);
+		}
+		notifyObjectMoved(oldLocation);
+		notifyChange(Parameters.x, oldX, getX());
+		notifyChange(Parameters.y, oldY, getY());
+		if (!isFullyContainedInContainer()) {
+			if (logger.isLoggable(Level.FINE)) {
+				logger.fine("setLocation() lead shape going outside it's parent view");
 			}
 		}
+		// }
 	}
 
 	public FGEPoint getLocationInDrawing() {
@@ -952,8 +961,11 @@ public class ShapeGraphicalRepresentation<O> extends GraphicalRepresentation<O> 
 			updateConstraints();
 			return newLocation;
 		}*/
+		else {
+			return getLocation();
+		}
 
-		return newLocation;
+		// return newLocation;
 	}
 
 	public boolean isFullyContainedInContainer() {
