@@ -14,7 +14,6 @@ import org.openflexo.foundation.resource.DefaultResourceCenterService;
 import org.openflexo.foundation.resource.FlexoResourceCenterService;
 import org.openflexo.toolbox.FileResource;
 import org.openflexo.toolbox.FileUtils;
-import org.openflexo.toolbox.ResourceLocator;
 import org.openflexo.toolbox.ZipUtils;
 import org.openflexo.velocity.FlexoVelocity;
 
@@ -22,7 +21,7 @@ public abstract class AbstractTestExternalBuilders<M extends FlexoExternalMain> 
 
 	private File projectFile;
 
-	private Class<M> mainClass;
+	private final Class<M> mainClass;
 
 	private M main;
 
@@ -37,8 +36,8 @@ public abstract class AbstractTestExternalBuilders<M extends FlexoExternalMain> 
 
 	@BeforeClass
 	public static void staticSetUp() {
-		ResourceLocator.addProjectDirectory(ResourceLocator.findProjectDirectoryWithName(new File(System.getProperty("user.dir")),
-				"flexoexternalbuilders"));
+		// ResourceLocator.addProjectDirectory(ResourceLocator.findProjectDirectoryWithName(new File(System.getProperty("user.dir")),
+		// "flexoexternalbuilders"));
 	}
 
 	@Before
