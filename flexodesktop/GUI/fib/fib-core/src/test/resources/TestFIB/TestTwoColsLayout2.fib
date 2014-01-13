@@ -1,8 +1,0 @@
-<?xml version="1.0" encoding="UTF-8"?>
-<Panel layout="twocols" hGap="5" vGap="5" flowAlignment="LEADING" border="empty">
-  <Panel layout="border" border="titled" borderTitle="Panel2" name="panel2" constraints="twocols(location=center;index=2;expandHorizontally=false;expandVertically=false)" width="80" height="50" />
-  <Label label="label2" align="left" name="label2" constraints="twocols(location=center;index=3;expandHorizontally=false;expandVertically=false)" width="41" height="16" manageDynamicModel="false" />
-  <Panel layout="border" border="titled" borderTitle="Panel1" name="panel1" constraints="twocols(location=center;index=1;expandVertically=false;expandHorizontally=true)" width="80" height="50" />
-  <Label label="label1" align="right" name="label1" constraints="twocols(location=left;index=0;expandVertically=true;expandHorizontally=true)" width="70" height="16" manageDynamicModel="false" />
-</Panel>
-

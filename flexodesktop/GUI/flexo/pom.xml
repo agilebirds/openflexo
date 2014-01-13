@@ -21,7 +21,7 @@
 				<artifactId>maven-surefire-plugin</artifactId>
 				<configuration>
 					<excludes>
-						<exclude>**/*/FlexoFIBValidationTest.java</exclude>
+						<exclude>**/*/FlexoginaValidationTest.java</exclude>
 					</excludes>
 				</configuration>
 			</plugin>
@@ -88,37 +88,37 @@
 		</dependency>
 		<dependency>
 			<groupId>org.openflexo</groupId>
-			<artifactId>fib-core</artifactId>
+			<artifactId>gina-core</artifactId>
 		</dependency>
 		<dependency>
 			<groupId>org.openflexo</groupId>
-			<artifactId>fib-core</artifactId>
+			<artifactId>gina-core</artifactId>
 			<classifier>resources</classifier>
 			<type>zip</type>
 		</dependency>
 		<dependency>
 			<groupId>org.openflexo</groupId>
-			<artifactId>fib-core</artifactId>
+			<artifactId>gina-core</artifactId>
 			<classifier>tests</classifier>
 			<scope>test</scope>
 		</dependency>
 		<dependency>
 			<groupId>org.openflexo</groupId>
-			<artifactId>fib-swing</artifactId>
+			<artifactId>gina-swing</artifactId>
 		</dependency>
 		<dependency>
 			<groupId>org.openflexo</groupId>
-			<artifactId>fib-swing</artifactId>
+			<artifactId>gina-swing</artifactId>
 			<classifier>resources</classifier>
 			<type>zip</type>
 		</dependency>
 		<dependency>
 			<groupId>org.openflexo</groupId>
-			<artifactId>fib-swing-editor</artifactId>
+			<artifactId>gina-swing-editor</artifactId>
 		</dependency>
 		<dependency>
 			<groupId>org.openflexo</groupId>
-			<artifactId>fib-swing-editor</artifactId>
+			<artifactId>gina-swing-editor</artifactId>
 			<classifier>resources</classifier>
 			<type>zip</type>
 		</dependency>
@@ -191,13 +191,13 @@
 		</dependency>
 		<dependency>
 			<groupId>org.openflexo</groupId>
-			<artifactId>fib-core</artifactId>
+			<artifactId>gina-core</artifactId>
 			<classifier>tests</classifier>
 			<scope>test</scope>
 		</dependency>
 		<dependency>
 			<groupId>org.openflexo</groupId>
-			<artifactId>fib-swing-editor</artifactId>
+			<artifactId>gina-swing-editor</artifactId>
 			<classifier>tests</classifier>
 			<scope>test</scope>
 		</dependency>

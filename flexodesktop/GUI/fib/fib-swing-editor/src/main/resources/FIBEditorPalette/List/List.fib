@@ -1,5 +1,0 @@
-<List name="list" visibleRowCount="3" staticList="Item-1 ,Item-2 ,Item-3 " autoSelectFirstRow="true">
-	<Parameter name="x" value="275"/>
-	<Parameter name="y" value="78"/>
-	<Parameter name="isPaletteElement" value="true"/>
-</List>

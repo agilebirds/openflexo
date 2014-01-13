@@ -26,11 +26,11 @@
 		</dependency>
  		<dependency>
 			<groupId>org.openflexo</groupId>
-			<artifactId>fib-swing</artifactId>
+			<artifactId>gina-swing</artifactId>
 		</dependency>
  		<dependency>
 			<groupId>org.openflexo</groupId>
-			<artifactId>fib-swing-editor</artifactId>
+			<artifactId>gina-swing-editor</artifactId>
 		</dependency>
        <dependency>
                 <groupId>org.dockingframes</groupId>

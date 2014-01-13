@@ -18,7 +18,7 @@
 	</organization>
 	<properties>
 		<diana.version>1.0-SNAPSHOT</diana.version>
-		<fib.version>1.0-SNAPSHOT</fib.version>
+		<gina.version>1.0-SNAPSHOT</gina.version>
 		<connie.version>1.0-SNAPSHOT</connie.version>
 		<pamela.version>1.0-SNAPSHOT</pamela.version>
 	</properties>
@@ -384,49 +384,49 @@
 			</dependency>
 			<dependency>
 				<groupId>org.openflexo</groupId>
-				<artifactId>fib-core</artifactId>
-				<version>${fib.version}</version>
+				<artifactId>gina-core</artifactId>
+				<version>${gina.version}</version>
 			</dependency>
 			<dependency>
 				<groupId>org.openflexo</groupId>
-				<artifactId>fib-core</artifactId>
-				<version>${fib.version}</version>
+				<artifactId>gina-core</artifactId>
+				<version>${gina.version}</version>
 				<classifier>tests</classifier>
 			</dependency>		
 			<dependency>
 				<groupId>org.openflexo</groupId>
-				<artifactId>fib-core</artifactId>
-				<version>${fib.version}</version>
+				<artifactId>gina-core</artifactId>
+				<version>${gina.version}</version>
 				<classifier>resources</classifier>
 				<type>zip</type>
 			</dependency>
 			<dependency>
 				<groupId>org.openflexo</groupId>
-				<artifactId>fib-swing</artifactId>
-				<version>${fib.version}</version>
+				<artifactId>gina-swing</artifactId>
+				<version>${gina.version}</version>
 			</dependency>
 			<dependency>
 				<groupId>org.openflexo</groupId>
-				<artifactId>fib-swing</artifactId>
-				<version>${fib.version}</version>
+				<artifactId>gina-swing</artifactId>
+				<version>${gina.version}</version>
 				<classifier>resources</classifier>
 				<type>zip</type>
 			</dependency>
 			<dependency>
 				<groupId>org.openflexo</groupId>
-				<artifactId>fib-swing-editor</artifactId>
-				<version>${fib.version}</version>
+				<artifactId>gina-swing-editor</artifactId>
+				<version>${gina.version}</version>
 			</dependency>
 			<dependency>
 				<groupId>org.openflexo</groupId>
-				<artifactId>fib-swing-editor</artifactId>
-				<version>${fib.version}</version>
+				<artifactId>gina-swing-editor</artifactId>
+				<version>${gina.version}</version>
 				<classifier>tests</classifier>
 			</dependency>		
 			<dependency>
 				<groupId>org.openflexo</groupId>
-				<artifactId>fib-swing-editor</artifactId>
-				<version>${fib.version}</version>
+				<artifactId>gina-swing-editor</artifactId>
+				<version>${gina.version}</version>
 				<classifier>resources</classifier>
 				<type>zip</type>
 			</dependency>

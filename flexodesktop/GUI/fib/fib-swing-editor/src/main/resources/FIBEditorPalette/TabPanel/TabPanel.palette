@@ -1,6 +1,0 @@
-<TabPanel width="100" height="60">
-	<Parameter name="x" value="90"/>
-	<Parameter name="y" value="10"/>
-	<Tab title="Tab1" index="1"/>
-	<!-- <Tab title="Tab2" index="2"/> -->
-</TabPanel>

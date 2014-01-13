@@ -16,7 +16,7 @@
 		<module>flexographicutils</module>
 		<module>flexowysiwyg</module>
 		<module>diana</module>
-		<module>fib</module>
+		<module>gina</module>
     </modules>
 </project>
 

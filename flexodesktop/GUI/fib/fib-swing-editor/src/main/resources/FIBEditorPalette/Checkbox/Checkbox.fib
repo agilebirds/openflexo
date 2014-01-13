@@ -1,5 +1,0 @@
-<CheckBox name="checkbox" selected="true">
-	<Parameter name="x" value="8"/>
-	<Parameter name="y" value="107"/>
-	<Parameter name="isPaletteElement" value="true"/>
-</CheckBox>

@@ -1,5 +1,0 @@
-<Button label="Button">
-	<Parameter name="x" value="115"/>
-	<Parameter name="y" value="170"/>
-	<Parameter name="isPaletteElement" value="true"/>
-</Button>

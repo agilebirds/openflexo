@@ -1,4 +1,0 @@
-<TextField text="TextField" columns="7">
-	<Parameter name="x" value="50"/>
-	<Parameter name="y" value="75"/>
-</TextField>

@@ -1,8 +1,0 @@
-<?xml version="1.0" encoding="UTF-8"?>
-<Browser root="data" iteratorClassName="org.openflexo.fib.model.FIBComponent" boundToSelectionManager="true" selectionMode="DiscontiguousTreeSelection" selected="controller.selectedComponent" showFooter="true" rootVisible="true" showRootsHandle="true" dataClassName="org.openflexo.fib.model.FIBComponent" controllerClassName="org.openflexo.fib.editor.widget.FIBBrowserController" name="ComponentBrowser" localize="true" manageDynamicModel="true" rightClickAction="controller.rightClick(ComponentBrowser.selected,controller.mouseEvent)">
-  <BrowserElement dataClassName="org.openflexo.fib.model.FIBComponent" label="controller.textFor(element)" icon="controller.iconFor(element)" isEditable="false" filtered="false" defaultVisible="true" name="element" />
-  <BrowserElement dataClassName="org.openflexo.fib.model.FIBContainer" label="controller.textFor(container)" icon="controller.iconFor(container)" isEditable="false" filtered="false" defaultVisible="true" name="container">
-    <Children data="container.subComponents" name="children" />
-  </BrowserElement>
-</Browser>
-

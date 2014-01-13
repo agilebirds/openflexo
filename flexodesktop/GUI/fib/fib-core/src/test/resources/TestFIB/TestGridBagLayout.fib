@@ -1,8 +1,0 @@
-<?xml version="1.0" encoding="UTF-8"?>
-<Panel layout="gridbag" hGap="5" vGap="5" flowAlignment="LEADING" border="empty">
-  <Panel layout="border" border="titled" borderTitle="Panel2" name="panel2" constraints="gridbag(location=center;index=2;anchor=center;weightY=0.0;insetsLeft=0;weightX=0.0;insetsTop=0;gridHeight=1;padY=0;padX=0;insetsBottom=0;fill=none;insetsRight=0;gridY=-1;gridX=-1;gridWidth=1;expandHorizontally=false;expandVertically=false)" width="80" height="50" />
-  <Label label="label2" align="left" name="label2" constraints="gridbag(location=center;index=3;anchor=center;weightY=0.0;insetsLeft=0;weightX=0.0;insetsTop=0;gridHeight=1;padY=0;padX=0;insetsBottom=0;fill=none;insetsRight=0;gridY=-1;gridX=-1;gridWidth=1;expandHorizontally=false;expandVertically=false)" width="41" height="16" manageDynamicModel="false" />
-  <Panel layout="border" border="titled" borderTitle="Panel1" name="panel1" constraints="gridbag(location=center;index=1;anchor=center;weightY=0.0;insetsLeft=0;weightX=0.0;insetsTop=0;gridHeight=1;padY=0;padX=0;insetsBottom=0;fill=none;insetsRight=0;gridY=-1;gridX=-1;gridWidth=1;expandHorizontally=true;expandVertically=false)" width="80" height="50" />
-  <Label label="label1" align="right" name="label1" constraints="gridbag(location=left;index=0;anchor=center;weightY=0.0;insetsLeft=0;weightX=0.0;insetsTop=0;gridHeight=1;padY=0;padX=0;insetsBottom=0;fill=none;insetsRight=0;gridY=-1;gridX=-1;gridWidth=1;expandHorizontally=true;expandVertically=true)" width="70" height="16" manageDynamicModel="false" />
-</Panel>
-

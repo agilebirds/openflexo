@@ -1,4 +1,0 @@
-<Number name="Integer" numberType="IntegerType" columns="3">
-	<Parameter name="x" value="120"/>
-	<Parameter name="y" value="210"/>
-</Number>
