@@ -234,19 +234,19 @@
 			</dependency>
 			<dependency>
 				<groupId>org.openflexo</groupId>
-				<artifactId>flexoconnie</artifactId>
+				<artifactId>connie-core</artifactId>
 				<version>${connie.version}</version>
 			</dependency>
 			<dependency>
 				<groupId>org.openflexo</groupId>
-				<artifactId>flexoconnie</artifactId>
+				<artifactId>connie-core</artifactId>
 				<version>${connie.version}</version>
 				<classifier>resources</classifier>
 				<type>zip</type>
 			</dependency>
 			<dependency>
 				<groupId>org.openflexo</groupId>
-				<artifactId>flexoconnie</artifactId>
+				<artifactId>connie-core</artifactId>
 				<version>${connie.version}</version>
 				<classifier>tests</classifier>
 			</dependency>
