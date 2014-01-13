@@ -1,8 +1,0 @@
-<?xml version="1.0" encoding="UTF-8"?>
-<Panel className="org.openflexo.fge.geomedit.FIBInspector" layout="border" titleFont="SansSerif,0,12" darkLevel="0" dataClassName="org.openflexo.fge.geomedit.gr.BandGraphicalRepresentation" font="SansSerif,0,12" name="Inspector">
-  <TabPanel name="Tab" constraints="border(location=center)">
-    <Tab title="Data" layout="twocols" titleFont="SansSerif,0,11" darkLevel="0" index="0" font="SansSerif,0,11" useScrollBar="true" horizontalScrollbarPolicy="HORIZONTAL_SCROLLBAR_AS_NEEDED" verticalScrollbarPolicy="VERTICAL_SCROLLBAR_AS_NEEDED" name="DataTab" />
-  </TabPanel>
-  <LocalizedDictionary />
-  <Parameter name="title" value="Band" />
-</Panel>
