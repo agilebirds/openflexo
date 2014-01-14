@@ -54,6 +54,7 @@ import javax.swing.table.TableColumn;
 import org.openflexo.ApplicationContext;
 import org.openflexo.FlexoCst;
 import org.openflexo.components.ProgressWindow;
+import org.openflexo.components.validation.AskParametersComponent.AskParametersComponentImpl;
 import org.openflexo.fib.controller.FIBController.Status;
 import org.openflexo.fib.controller.FIBDialog;
 import org.openflexo.foundation.DataModification;
@@ -123,6 +124,7 @@ public class ValidationReportEditor extends JPanel implements GraphicalFlexoObse
 	public ValidationReportEditor(ConsistencyCheckDialogInterface consistencyCheckDialog, ValidationReport validationReport,
 			ApplicationContext applicationContext) {
 		super();
+
 		setLayout(new BorderLayout());
 		this.applicationContext = applicationContext;
 		_consistencyCheckDialog = consistencyCheckDialog;
@@ -345,7 +347,7 @@ public class ValidationReportEditor extends JPanel implements GraphicalFlexoObse
 				        ((ParameteredFixProposal) fixProposal).getParams());*/
 				ParameteredFixProposal<R, V> parameteredFixProposal = (ParameteredFixProposal<R, V>) fixProposal;
 				parameteredFixProposal.updateBeforeApply();
-				AskParametersComponent askParameterPanel = new AskParametersComponent(parameteredFixProposal);
+				AskParametersComponent askParameterPanel = AskParametersComponentImpl.makeAskParametersComponent(parameteredFixProposal);
 				FIBDialog<ParameteredFixProposal<R, V>> dialog = FIBDialog.instanciateAndShowDialog(askParameterPanel,
 						parameteredFixProposal, FlexoFrame.getActiveFrame(), true, FlexoLocalization.getMainLocalizer());
 				if (dialog.getStatus() == Status.CANCELED) {
