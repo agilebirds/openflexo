@@ -21,7 +21,7 @@ package org.openflexo.foundation.viewpoint;
 
 import java.lang.reflect.Type;
 
-import org.openflexo.foundation.viewpoint.VirtualModel.VirtualModelBuilder;
+import org.openflexo.antar.binding.DataBinding;
 
 public class IntegerParameter extends EditionSchemeParameter {
 
@@ -37,6 +37,14 @@ public class IntegerParameter extends EditionSchemeParameter {
 	@Override
 	public WidgetType getWidget() {
 		return WidgetType.INTEGER;
+	}
+
+	@Override
+	public DataBinding<Object> getDefaultValue() {
+		DataBinding<Object> defaultValue = super.getDefaultValue();
+		defaultValue.setDeclaredType(Integer.class);
+		getDefaultValueBindingDefinition().setType(Integer.class);
+		return defaultValue;
 	}
 
 }

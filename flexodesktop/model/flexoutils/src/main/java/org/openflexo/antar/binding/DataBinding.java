@@ -651,9 +651,12 @@ public class DataBinding<T> extends Observable implements StringConvertable<Data
 					}
 				}
 
+				// Vincent: Add the "fromPrimitive" comparison. If we manipulate int despite of Integers, it not returns the right type.
 				if (evaluatedExpression instanceof Constant) {
 					Class baseClassForType = TypeUtils.getBaseClass(getDeclaredType());
-					if (baseClassForType != null && Number.class.isAssignableFrom(baseClassForType)) {
+					if (baseClassForType != null
+							&& (Number.class.isAssignableFrom(baseClassForType) || (Number.class.isAssignableFrom(TypeUtils
+									.fromPrimitive(baseClassForType))))) {
 						return (T) TypeUtils.castTo(((Constant) evaluatedExpression).getValue(), getDeclaredType());
 					}
 					return (T) ((Constant) evaluatedExpression).getValue();
