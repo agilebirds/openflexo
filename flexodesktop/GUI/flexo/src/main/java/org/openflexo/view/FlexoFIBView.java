@@ -29,19 +29,14 @@ import java.util.logging.Logger;
 import javax.swing.JPanel;
 import javax.swing.JScrollPane;
 
-import org.openflexo.antar.binding.DataBinding;
 import org.openflexo.fib.FIBLibrary;
 import org.openflexo.fib.controller.FIBController;
-import org.openflexo.fib.model.FIBBrowserAction;
 import org.openflexo.fib.model.FIBComponent;
 import org.openflexo.fib.model.listener.FIBMouseClickListener;
 import org.openflexo.fib.view.FIBView;
 import org.openflexo.foundation.DataModification;
-import org.openflexo.foundation.FlexoObject;
 import org.openflexo.foundation.FlexoObservable;
 import org.openflexo.foundation.GraphicalFlexoObserver;
-import org.openflexo.foundation.action.FlexoAction;
-import org.openflexo.foundation.action.FlexoActionType;
 import org.openflexo.foundation.utils.FlexoProgress;
 import org.openflexo.localization.FlexoLocalization;
 import org.openflexo.toolbox.HasPropertyChangeSupport;
@@ -62,52 +57,7 @@ public class FlexoFIBView extends JPanel implements GraphicalFlexoObserver, HasP
 
 	private Object dataObject;
 
-	public class FIBBrowserActionAdapter extends FIBBrowserAction {
-
-		private final FlexoActionType actionType;
-
-		public FIBBrowserActionAdapter(FlexoActionType<?, ?, ?> actionType) {
-			super();
-			this.actionType = actionType;
-			setMethod(new DataBinding("action.performAction(selected)"));
-			setIsAvailable(new DataBinding("action.isAvailable(selected)"));
-		}
-
-		public Object performAction(Object selected) {
-			if (selected instanceof FlexoObject) {
-				FlexoAction action = actionType.makeNewAction((FlexoObject) selected, null, controller.getEditor());
-				action.doAction();
-			}
-			return null;
-		}
-
-		public boolean isAvailable(Object selected) {
-			if (selected instanceof FlexoObject) {
-				return controller.getEditor().isActionVisible(actionType, (FlexoObject) selected, null)
-						&& controller.getEditor().isActionEnabled(actionType, (FlexoObject) selected, null);
-			}
-			return false;
-		}
-
-		@Override
-		public String getName() {
-			return actionType.getUnlocalizedName();
-		}
-
-		@Override
-		public ActionType getActionType() {
-			if (actionType.getActionCategory() == FlexoActionType.ADD_ACTION_TYPE) {
-				return ActionType.Add;
-			} else if (actionType.getActionCategory() == FlexoActionType.DELETE_ACTION_TYPE) {
-				return ActionType.Delete;
-			} else {
-				return ActionType.Custom;
-			}
-		}
-
-	}
-
-	private final FlexoController controller;
+	final FlexoController controller;
 	private final FIBView fibView;
 	private FlexoFIBController fibController;
 	private final FIBComponent fibComponent;

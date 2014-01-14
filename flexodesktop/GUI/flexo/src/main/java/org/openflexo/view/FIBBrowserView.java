@@ -28,11 +28,13 @@ import org.openflexo.fib.FIBLibrary;
 import org.openflexo.fib.model.FIBBrowser;
 import org.openflexo.fib.model.FIBBrowserElement;
 import org.openflexo.fib.model.FIBComponent;
+import org.openflexo.fib.model.FIBContainer;
 import org.openflexo.fib.model.listener.FIBSelectionListener;
 import org.openflexo.foundation.FlexoObject;
 import org.openflexo.foundation.FlexoObject.FlexoObjectImpl;
 import org.openflexo.foundation.action.FlexoActionType;
 import org.openflexo.foundation.utils.FlexoProgress;
+import org.openflexo.view.FIBBrowserActionAdapter.FIBBrowserActionAdapterImpl;
 import org.openflexo.view.controller.FlexoController;
 
 /**
@@ -98,7 +100,7 @@ public abstract class FIBBrowserView<O> extends SelectionSynchronizedFIBView imp
 	@Override
 	protected void initializeFIBComponent() {
 		super.initializeFIBComponent();
-		FIBBrowser browser = retrieveFIBBrowser(getFIBComponent());
+		FIBBrowser browser = retrieveFIBBrowser((FIBContainer) getFIBComponent());
 		if (browser == null) {
 			logger.warning("Could not retrieve FIBBrowser for component " + getFIBComponent());
 			return;
@@ -116,21 +118,18 @@ public abstract class FIBBrowserView<O> extends SelectionSynchronizedFIBView imp
 		for (FIBBrowserElement el : browser.getElements()) {
 			if (el.getDataClass() != null) {
 				if (FlexoObject.class.isAssignableFrom(el.getDataClass())) {
-					List<FlexoActionType<?, ?, ?>> actionList = FlexoObjectImpl.getActionList(el.getDataClass());
+					List<FlexoActionType<?, ?, ?>> actionList = FlexoObjectImpl.getActionList((Class<? extends FlexoObject>) el
+							.getDataClass());
 					for (FlexoActionType<?, ?, ?> actionType : actionList) {
-						el.addToActions(new FIBBrowserActionAdapter(actionType));
+						el.addToActions(FIBBrowserActionAdapterImpl.makeFIBBrowserActionAdapter(actionType, this));
 					}
 				}
 			}
 		}
 	}
 
-	public FIBBrowser getFIBBrowser(FIBComponent component) {
-		return retrieveFIBBrowser(getFIBComponent());
-	}
-
-	private static FIBBrowser retrieveFIBBrowser(FIBComponent component) {
-		List<FIBComponent> listComponent = component.retrieveAllSubComponents();
+	private static FIBBrowser retrieveFIBBrowser(FIBContainer component) {
+		List<FIBComponent> listComponent = component.getAllSubComponents();
 		for (FIBComponent c : listComponent) {
 			if (c instanceof FIBBrowser) {
 				return (FIBBrowser) c;

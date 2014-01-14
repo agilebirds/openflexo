@@ -53,6 +53,7 @@ import org.openflexo.swing.layout.MultiSplitLayout.Divider;
 import org.openflexo.swing.layout.MultiSplitLayout.Leaf;
 import org.openflexo.swing.layout.MultiSplitLayout.Node;
 import org.openflexo.swing.layout.MultiSplitLayout.Split;
+import org.openflexo.swing.layout.MultiSplitLayoutFactory;
 import org.openflexo.toolbox.PropertyChangeListenerRegistrationManager;
 import org.openflexo.view.controller.FlexoController;
 import org.openflexo.view.controller.model.ControllerModel;
@@ -112,10 +113,12 @@ public class FlexoMainPane extends JPanel implements PropertyChangeListener {
 	private static final Paint KNOB_PAINTER = new RadialGradientPaint(new Point((KNOB_SIZE - 1) / 2, (KNOB_SIZE - 1) / 2),
 			(KNOB_SIZE - 1) / 2, new float[] { 0.0f, 1.0f }, new Color[] { Color.GRAY, Color.LIGHT_GRAY });
 
+	private final MultiSplitLayoutFactory MSL_FACTORY = new MultiSplitLayoutFactory.DefaultMultiSplitLayoutFactory();
+
 	public FlexoMainPane(FlexoController controller) {
 		super(new BorderLayout());
 		this.controller = controller;
-		this.centerLayout = new MultiSplitLayout(false);
+		this.centerLayout = new MultiSplitLayout(false, MSL_FACTORY);
 		this.centerLayout.setLayoutMode(MultiSplitLayout.NO_MIN_SIZE_LAYOUT);
 		registrationManager = new PropertyChangeListenerRegistrationManager();
 		registrationManager.new PropertyChangeListenerRegistration(ControllerModel.LOCATIONS, this, controller.getControllerModel());
@@ -429,7 +432,7 @@ public class FlexoMainPane extends JPanel implements PropertyChangeListener {
 		}
 	}
 
-	protected void fixWeightForNodeChildren(Split split) {
+	protected void fixWeightForNodeChildren(Split<?> split) {
 		int visibleChildren = 0;
 		// double weight = 0.0;
 		for (Node child : split.getChildren()) {
@@ -465,7 +468,7 @@ public class FlexoMainPane extends JPanel implements PropertyChangeListener {
 	}
 
 	private Split getDefaultLayout() {
-		Split root = new Split();
+		Split root = MSL_FACTORY.makeSplit();
 		root.setName("ROOT");
 		Split left = getVerticalSplit(LayoutPosition.TOP_LEFT, LayoutPosition.MIDDLE_LEFT, LayoutPosition.BOTTOM_LEFT);
 		left.setWeight(0.2);
@@ -476,26 +479,26 @@ public class FlexoMainPane extends JPanel implements PropertyChangeListener {
 		Split right = getVerticalSplit(LayoutPosition.TOP_RIGHT, LayoutPosition.MIDDLE_RIGHT, LayoutPosition.BOTTOM_RIGHT);
 		right.setWeight(0.2);
 		right.setName(LayoutColumns.RIGHT.name());
-		root.setChildren(left, new Divider(), center, new Divider(), right);
+		root.setChildren(left, MSL_FACTORY.makeDivider(), center, MSL_FACTORY.makeDivider(), right);
 		return root;
 	}
 
 	private Split getVerticalSplit(LayoutPosition position1, LayoutPosition position2, LayoutPosition position3) {
-		Split split = new Split();
+		Split split = MSL_FACTORY.makeSplit();
 		split.setRowLayout(false);
-		Leaf l1 = new Leaf(position1.name());
+		Leaf l1 = MSL_FACTORY.makeLeaf(position1.name());
 		l1.setWeight(0.2);
-		Leaf l2 = new Leaf(position2.name());
+		Leaf l2 = MSL_FACTORY.makeLeaf(position2.name());
 		l2.setWeight(0.6);
-		Leaf l3 = new Leaf(position3.name());
+		Leaf l3 = MSL_FACTORY.makeLeaf(position3.name());
 		l3.setWeight(0.2);
-		split.setChildren(l1, new Divider(), l2, new Divider(), l3);
+		split.setChildren(l1, MSL_FACTORY.makeDivider(), l2, MSL_FACTORY.makeDivider(), l3);
 		return split;
 	}
 
 	private Node getNodeForName(Node root, String name) {
 		if (root instanceof Split) {
-			Split split = (Split) root;
+			Split<?> split = (Split) root;
 			if (name.equals(split.getName())) {
 				return split;
 			}
@@ -558,7 +561,7 @@ public class FlexoMainPane extends JPanel implements PropertyChangeListener {
 				centerLayout.displayNode(((Leaf) root).getName(), visible);
 			}
 		} else if (root instanceof Split) {
-			Split split = (Split) root;
+			Split<?> split = (Split) root;
 			centerLayout.displayNode(split.getName(), visible);
 			for (Node child : split.getChildren()) {
 				updateVisibility(child, visible);
