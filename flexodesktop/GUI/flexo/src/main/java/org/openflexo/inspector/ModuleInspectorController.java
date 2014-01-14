@@ -37,9 +37,11 @@ import org.openflexo.antar.binding.TypeUtils;
 import org.openflexo.fib.FIBLibrary;
 import org.openflexo.fib.model.FIBComponent;
 import org.openflexo.fib.model.FIBContainer;
+import org.openflexo.fib.model.FIBModelFactory;
 import org.openflexo.fib.model.FIBWidget;
 import org.openflexo.foundation.FlexoObject;
 import org.openflexo.foundation.view.EditionPatternInstance;
+import org.openflexo.model.exceptions.ModelDefinitionException;
 import org.openflexo.toolbox.FileResource;
 import org.openflexo.view.controller.FlexoController;
 
@@ -64,6 +66,16 @@ public class ModuleInspectorController extends Observable implements Observer {
 
 	private FIBInspector currentInspector = null;
 	private Object currentInspectedObject = null;
+
+	public static FIBModelFactory INSPECTOR_FACTORY;
+
+	static {
+		try {
+			INSPECTOR_FACTORY = new FIBModelFactory(FIBInspector.class);
+		} catch (ModelDefinitionException e1) {
+			e1.printStackTrace();
+		}
+	}
 
 	public ModuleInspectorController(final FlexoController flexoController) {
 		this.flexoController = flexoController;
@@ -110,7 +122,7 @@ public class ModuleInspectorController extends Observable implements Observer {
 			}
 		})) {
 			logger.fine("Loading: " + f.getAbsolutePath());
-			FIBInspector inspector = (FIBInspector) FIBLibrary.instance().retrieveFIBComponent(f);
+			FIBInspector inspector = (FIBInspector) FIBLibrary.instance().retrieveFIBComponent(f, false, INSPECTOR_FACTORY);
 			if (inspector != null) {
 				appendVisibleFor(inspector);
 				appendEditableCondition(inspector);

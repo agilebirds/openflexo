@@ -89,7 +89,8 @@ public class FIBInspectorController extends FlexoFIBController {
 					JMenuItem menuItem = new JMenuItem(inspectorFile.getName());
 					// We dont use existing inspector which is already
 					// aggregated !!!
-					final FIBInspector inspectorToOpen = (FIBInspector) FIBLibrary.instance().retrieveFIBComponent(inspectorFile, false);
+					final FIBInspector inspectorToOpen = (FIBInspector) FIBLibrary.instance().retrieveFIBComponent(inspectorFile, false,
+							ModuleInspectorController.INSPECTOR_FACTORY);
 					menuItem.addActionListener(new ActionListener() {
 						@Override
 						public void actionPerformed(ActionEvent e) {
