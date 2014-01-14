@@ -337,11 +337,11 @@
 
 			<!-- project modules -->
 			
-			<dependency>
+			<!--  <dependency>
 				<groupId>org.openflexo</groupId>
 				<artifactId>flexolocalization</artifactId>
 				<version>${project.version}</version>
-			</dependency>
+			</dependency> -->
 			<dependency>
 				<groupId>org.openflexo</groupId>
 				<artifactId>flexoxmlcode</artifactId>
@@ -353,11 +353,11 @@
 				<version>${project.version}</version>
 				<classifier>tests</classifier>
 			</dependency>
-			<dependency>
+			<!--  <dependency>
 				<groupId>org.openflexo</groupId>
 				<artifactId>flexographicutils</artifactId>
 				<version>${project.version}</version>
-			</dependency>
+			</dependency> -->
 			<dependency>
 				<groupId>org.openflexo</groupId>
 				<artifactId>flexographicutils</artifactId>

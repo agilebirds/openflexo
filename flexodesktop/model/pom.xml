@@ -13,10 +13,10 @@
 	<modules>
 		<module>flexofoundation</module>
 		<module>flexoinspector</module>
-		<module>flexopamela</module>
-		<module>flexoutils</module>
+		<!--  <module>flexopamela</module> -->
+		<!--  <module>flexoutils</module> -->
 		<module>flexoxmlcode</module>
-		<module>flexolocalization</module>
+		<!--  <module>flexolocalization</module> -->
 	</modules>
 </project>
 
