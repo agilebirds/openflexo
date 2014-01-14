@@ -51,6 +51,7 @@ import org.openflexo.fib.FIBLibrary;
 import org.openflexo.fib.controller.FIBController;
 import org.openflexo.fib.model.FIBBrowser;
 import org.openflexo.fib.model.FIBComponent;
+import org.openflexo.fib.model.FIBContainer;
 import org.openflexo.fib.model.FIBCustom;
 import org.openflexo.fib.model.FIBCustom.FIBCustomComponent;
 import org.openflexo.fib.model.FIBList;
@@ -454,14 +455,14 @@ public abstract class FIBFlexoObjectSelector<T extends FlexoObject> extends Text
 	}
 
 	public class SelectorDetailsPanel extends ResizablePanel {
-		private final FIBComponent fibComponent;
+		private final FIBContainer fibComponent;
 		private final FIBView fibView;
 		private final SelectorFIBController controller;
 
 		protected SelectorDetailsPanel(T anObject) {
 			super();
 
-			fibComponent = FIBLibrary.instance().retrieveFIBComponent(getFIBFile());
+			fibComponent = (FIBContainer) FIBLibrary.instance().retrieveFIBComponent(getFIBFile());
 			controller = makeCustomFIBController(fibComponent);
 			fibView = controller.buildView(fibComponent);
 
@@ -512,7 +513,7 @@ public abstract class FIBFlexoObjectSelector<T extends FlexoObject> extends Text
 		}
 
 		private FIBBrowserWidget retrieveFIBBrowserWidget() {
-			List<FIBComponent> listComponent = fibComponent.retrieveAllSubComponents();
+			List<FIBComponent> listComponent = fibComponent.getAllSubComponents();
 			for (FIBComponent c : listComponent) {
 				if (c instanceof FIBBrowser) {
 					return (FIBBrowserWidget) controller.viewForComponent(c);
@@ -522,7 +523,7 @@ public abstract class FIBFlexoObjectSelector<T extends FlexoObject> extends Text
 		}
 
 		private FIBListWidget retrieveFIBListWidget() {
-			List<FIBComponent> listComponent = fibComponent.retrieveAllSubComponents();
+			List<FIBComponent> listComponent = fibComponent.getAllSubComponents();
 			for (FIBComponent c : listComponent) {
 				if (c instanceof FIBList) {
 					return (FIBListWidget) controller.viewForComponent(c);
@@ -531,7 +532,7 @@ public abstract class FIBFlexoObjectSelector<T extends FlexoObject> extends Text
 			return null;
 		}
 
-		public FIBComponent getFIBComponent() {
+		public FIBContainer getFIBComponent() {
 			return fibComponent;
 		}
 
@@ -648,7 +649,7 @@ public abstract class FIBFlexoObjectSelector<T extends FlexoObject> extends Text
 	 * protected void pointerLeavesPopup() { cancel(); }
 	 */
 
-	public FIBComponent getFIBComponent() {
+	public FIBContainer getFIBComponent() {
 		if (getSelectorPanel() != null) {
 			return getSelectorPanel().getFIBComponent();
 		}
@@ -666,7 +667,7 @@ public abstract class FIBFlexoObjectSelector<T extends FlexoObject> extends Text
 		if (getFIBComponent() == null) {
 			return null;
 		}
-		List<FIBComponent> listComponent = getFIBComponent().retrieveAllSubComponents();
+		List<FIBComponent> listComponent = getFIBComponent().getAllSubComponents();
 		for (FIBComponent c : listComponent) {
 			if (c instanceof FIBBrowser) {
 				return (FIBBrowser) c;
@@ -682,7 +683,7 @@ public abstract class FIBFlexoObjectSelector<T extends FlexoObject> extends Text
 		if (getController() == null) {
 			return null;
 		}
-		List<FIBComponent> listComponent = getFIBComponent().retrieveAllSubComponents();
+		List<FIBComponent> listComponent = getFIBComponent().getAllSubComponents();
 		for (FIBComponent c : listComponent) {
 			if (c instanceof FIBBrowser) {
 				return (FIBBrowserWidget) getController().viewForComponent(c);

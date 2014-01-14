@@ -33,6 +33,7 @@ import javax.swing.SwingUtilities;
 import org.openflexo.components.widget.OntologyBrowserModel.OntologyBrowserModelRecomputed;
 import org.openflexo.fib.model.FIBBrowser;
 import org.openflexo.fib.model.FIBComponent;
+import org.openflexo.fib.model.FIBContainer;
 import org.openflexo.fib.view.widget.DefaultFIBCustomComponent;
 import org.openflexo.fib.view.widget.FIBBrowserWidget;
 import org.openflexo.foundation.ontology.BuiltInDataType;
@@ -435,20 +436,24 @@ public class FIBOntologyBrowser extends DefaultFIBCustomComponent<FIBOntologyBro
 	}
 
 	public FIBBrowser getFIBBrowser() {
-		List<FIBComponent> listComponent = getFIBComponent().retrieveAllSubComponents();
-		for (FIBComponent c : listComponent) {
-			if (c instanceof FIBBrowser) {
-				return (FIBBrowser) c;
+		if (getFIBComponent() instanceof FIBContainer) {
+			List<FIBComponent> listComponent = ((FIBContainer) getFIBComponent()).getAllSubComponents();
+			for (FIBComponent c : listComponent) {
+				if (c instanceof FIBBrowser) {
+					return (FIBBrowser) c;
+				}
 			}
 		}
 		return null;
 	}
 
 	private FIBBrowserWidget retrieveFIBBrowserWidget() {
-		List<FIBComponent> listComponent = getFIBComponent().retrieveAllSubComponents();
-		for (FIBComponent c : listComponent) {
-			if (c instanceof FIBBrowser) {
-				return (FIBBrowserWidget) getController().viewForComponent(c);
+		if (getFIBComponent() instanceof FIBContainer) {
+			List<FIBComponent> listComponent = ((FIBContainer) getFIBComponent()).getAllSubComponents();
+			for (FIBComponent c : listComponent) {
+				if (c instanceof FIBBrowser) {
+					return (FIBBrowserWidget) getController().viewForComponent(c);
+				}
 			}
 		}
 		return null;
