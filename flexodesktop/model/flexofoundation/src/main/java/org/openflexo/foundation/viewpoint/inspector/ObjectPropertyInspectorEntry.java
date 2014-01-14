@@ -35,13 +35,40 @@ import org.openflexo.foundation.ontology.IFlexoOntologyObjectProperty;
  * @author sylvain
  * 
  */
-public class ObjectPropertyInspectorEntry extends PropertyInspectorEntry {
+@ModelEntity
+@ImplementationClass(ObjectPropertyInspectorEntry.ObjectPropertyInspectorEntryImpl.class)
+@XMLElement(xmlTag="ObjectProperty")
+public interface ObjectPropertyInspectorEntry extends PropertyInspectorEntry{
+
+@PropertyIdentifier(type=String.class)
+public static final String RANGE_URI_KEY = "rangeURI";
+@PropertyIdentifier(type=DataBinding.class)
+public static final String RANGE_VALUE_KEY = "rangeValue";
+
+@Getter(value=RANGE_URI_KEY)
+@XMLAttribute(xmlTag="range")
+public String _getRangeURI();
+
+@Setter(RANGE_URI_KEY)
+public void _setRangeURI(String rangeURI);
+
+
+@Getter(value=RANGE_VALUE_KEY)
+@XMLAttribute
+public DataBinding getRangeValue();
+
+@Setter(RANGE_VALUE_KEY)
+public void setRangeValue(DataBinding rangeValue);
+
+
+public static abstract  class ObjectPropertyInspectorEntryImpl extends PropertyInspectorEntryImpl implements ObjectPropertyInspectorEntry
+{
 
 	private String rangeURI;
 
 	private DataBinding<IFlexoOntologyClass> rangeValue;
 
-	public ObjectPropertyInspectorEntry() {
+	public ObjectPropertyInspectorEntryImpl() {
 		super();
 	}
 
@@ -119,4 +146,5 @@ public class ObjectPropertyInspectorEntry extends PropertyInspectorEntry {
 		return null;
 	}
 
+}
 }

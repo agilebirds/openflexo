@@ -62,23 +62,30 @@ import org.openflexo.technologyadapter.owl.viewpoint.editionaction.AddSubClassSt
 		@DeclareEditionAction(FML = "AddRestrictionStatement", editionActionClass = AddRestrictionStatement.class), // Add class
 		@DeclareEditionAction(FML = "AddSubClassStatement", editionActionClass = AddSubClassStatement.class), // Add class
 })
-public class OWLModelSlot extends TypeAwareModelSlot<OWLOntology, OWLOntology> {
+@ModelEntity
+@ImplementationClass(OWLModelSlot.OWLModelSlotImpl.class)
+@XMLElement
+public interface OWLModelSlot extends TypeAwareModelSlot<OWLOntology, OWLOntology>{
+
+
+public static abstract  class OWLModelSlotImpl extends TypeAwareModelSlot<OWLOntology, OWLOntology>Impl implements OWLModelSlot
+{
 
 	private static final Logger logger = Logger.getLogger(OWLModelSlot.class.getPackage().getName());
 
-	/*public OWLModelSlot(ViewPoint viewPoint, OWLTechnologyAdapter adapter) {
+	/*public OWLModelSlotImpl(ViewPoint viewPoint, OWLTechnologyAdapter adapter) {
 		super(viewPoint, adapter);
 	}*/
 
-	public OWLModelSlot(VirtualModel virtualModel, OWLTechnologyAdapter adapter) {
+	public OWLModelSlotImpl(VirtualModel virtualModel, OWLTechnologyAdapter adapter) {
 		super(virtualModel, adapter);
 	}
 
-	public OWLModelSlot() {
+	public OWLModelSlotImpl() {
 		super();
 	}
 
-	/*public OWLModelSlot(ViewPointBuilder builder) {
+	/*public OWLModelSlotImpl(ViewPointBuilder builder) {
 		super(builder);
 	}*/
 
@@ -91,7 +98,7 @@ public class OWLModelSlot extends TypeAwareModelSlot<OWLOntology, OWLOntology> {
 	 * Instanciate a new model slot instance configuration for this model slot
 	 */
 	@Override
-	public OWLModelSlotInstanceConfiguration createConfiguration(CreateVirtualModelInstance<?> action) {
+	public OWLModelSlotImplInstanceConfiguration createConfiguration(CreateVirtualModelInstance<?> action) {
 		return new OWLModelSlotInstanceConfiguration(this, action);
 	}
 
@@ -233,4 +240,5 @@ public class OWLModelSlot extends TypeAwareModelSlot<OWLOntology, OWLOntology> {
 		return "Ontology importing " + getMetaModelURI();
 	}
 
+}
 }

@@ -11,12 +11,69 @@ import org.openflexo.localization.FlexoLocalization;
 import org.openflexo.technologyadapter.diagram.model.DiagramConnector;
 import org.openflexo.technologyadapter.diagram.model.dm.GraphicalRepresentationChanged;
 
-public class ConnectorPatternRole extends GraphicalElementPatternRole<DiagramConnector, ConnectorGraphicalRepresentation> {
+@ModelEntity
+@ImplementationClass(ConnectorPatternRole.ConnectorPatternRoleImpl.class)
+@XMLElement
+public interface ConnectorPatternRole extends GraphicalElementPatternRole<DiagramConnector, ConnectorGraphicalRepresentation>{
+
+@PropertyIdentifier(type=GraphicalRepresentation.class)
+public static final String GRAPHICAL_REPRESENTATION_KEY = "graphicalRepresentation";
+@PropertyIdentifier(type=ShapeGraphicalRepresentation.class)
+public static final String ARTIFACT_FROM_GRAPHICAL_REPRESENTATION_KEY = "artifactFromGraphicalRepresentation";
+@PropertyIdentifier(type=ShapeGraphicalRepresentation.class)
+public static final String ARTIFACT_TO_GRAPHICAL_REPRESENTATION_KEY = "artifactToGraphicalRepresentation";
+@PropertyIdentifier(type=ShapePatternRole.class)
+public static final String START_SHAPE_PATTERN_ROLE_KEY = "startShapePatternRole";
+@PropertyIdentifier(type=ShapePatternRole.class)
+public static final String END_SHAPE_PATTERN_ROLE_KEY = "endShapePatternRole";
+
+@Getter(value=GRAPHICAL_REPRESENTATION_KEY)
+@XMLElement
+public GraphicalRepresentation getGraphicalRepresentation();
+
+@Setter(GRAPHICAL_REPRESENTATION_KEY)
+public void setGraphicalRepresentation(GraphicalRepresentation graphicalRepresentation);
+
+
+@Getter(value=ARTIFACT_FROM_GRAPHICAL_REPRESENTATION_KEY)
+@XMLElement
+public ShapeGraphicalRepresentation getArtifactFromGraphicalRepresentation();
+
+@Setter(ARTIFACT_FROM_GRAPHICAL_REPRESENTATION_KEY)
+public void setArtifactFromGraphicalRepresentation(ShapeGraphicalRepresentation artifactFromGraphicalRepresentation);
+
+
+@Getter(value=ARTIFACT_TO_GRAPHICAL_REPRESENTATION_KEY)
+@XMLElement
+public ShapeGraphicalRepresentation getArtifactToGraphicalRepresentation();
+
+@Setter(ARTIFACT_TO_GRAPHICAL_REPRESENTATION_KEY)
+public void setArtifactToGraphicalRepresentation(ShapeGraphicalRepresentation artifactToGraphicalRepresentation);
+
+
+@Getter(value=START_SHAPE_PATTERN_ROLE_KEY)
+@XMLElement
+public ShapePatternRole getStartShapePatternRole();
+
+@Setter(START_SHAPE_PATTERN_ROLE_KEY)
+public void setStartShapePatternRole(ShapePatternRole startShapePatternRole);
+
+
+@Getter(value=END_SHAPE_PATTERN_ROLE_KEY)
+@XMLElement
+public ShapePatternRole getEndShapePatternRole();
+
+@Setter(END_SHAPE_PATTERN_ROLE_KEY)
+public void setEndShapePatternRole(ShapePatternRole endShapePatternRole);
+
+
+public static abstract  class ConnectorPatternRoleImpl extends GraphicalElementPatternRole<DiagramConnector, ConnectorGraphicalRepresentation>Impl implements ConnectorPatternRole
+{
 
 	private ShapeGraphicalRepresentation artifactFromGraphicalRepresentation;
 	private ShapeGraphicalRepresentation artifactToGraphicalRepresentation;
 
-	public ConnectorPatternRole() {
+	public ConnectorPatternRoleImpl() {
 		super();
 	}
 
@@ -158,4 +215,5 @@ public class ConnectorPatternRole extends GraphicalElementPatternRole<DiagramCon
 	public List<ShapePatternRole> getShapePatternRoles() {
 		return getEditionPattern().getPatternRoles(ShapePatternRole.class);
 	}
+}
 }

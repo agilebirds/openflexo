@@ -38,7 +38,75 @@ import org.openflexo.logging.FlexoLogger;
 import org.openflexo.toolbox.StringUtils;
 
 @FIBPanel("Fib/AddIndividualPanel.fib")
-public abstract class AddIndividual<MS extends TypeAwareModelSlot<?, ?>, T extends IFlexoOntologyIndividual> extends AddConcept<MS, T> {
+@ModelEntity(isAbstract = true)
+@ImplementationClass(AddIndividual.AddIndividualImpl.class)
+public abstract interface AddIndividual<MS extends TypeAwareModelSlot<?, ?>, T extends IFlexoOntologyIndividual> extends AddConcept<MS, T>{
+
+@PropertyIdentifier(type=DataBinding.class)
+public static final String INDIVIDUAL_NAME_KEY = "individualName";
+@PropertyIdentifier(type=Vector.class)
+public static final String DATA_ASSERTIONS_KEY = "dataAssertions";
+@PropertyIdentifier(type=Vector.class)
+public static final String OBJECT_ASSERTIONS_KEY = "objectAssertions";
+@PropertyIdentifier(type=String.class)
+public static final String ONTOLOGY_CLASS_URI_KEY = "ontologyClassURI";
+@PropertyIdentifier(type=TypeAwareModelSlot.class)
+public static final String MODEL_SLOT_KEY = "modelSlot";
+
+@Getter(value=INDIVIDUAL_NAME_KEY)
+@XMLAttribute
+public DataBinding getIndividualName();
+
+@Setter(INDIVIDUAL_NAME_KEY)
+public void setIndividualName(DataBinding individualName);
+
+
+@Getter(value=DATA_ASSERTIONS_KEY,cardinality = Cardinality.LIST)
+@XMLElement(xmlTag="DataPropertyAssertion")
+public List<DataPropertyAssertion> getDataAssertions();
+
+@Setter(DATA_ASSERTIONS_KEY)
+public void setDataAssertions(List<DataPropertyAssertion> dataAssertions);
+
+@Adder(DATA_ASSERTIONS_KEY)
+public void addToDataAssertions(DataPropertyAssertion aDataAssertion);
+
+@Remover(DATA_ASSERTIONS_KEY)
+public void removeFromDataAssertions(DataPropertyAssertion aDataAssertion);
+
+
+@Getter(value=OBJECT_ASSERTIONS_KEY,cardinality = Cardinality.LIST)
+@XMLElement(xmlTag="ObjectPropertyAssertion")
+public List<ObjectPropertyAssertion> getObjectAssertions();
+
+@Setter(OBJECT_ASSERTIONS_KEY)
+public void setObjectAssertions(List<ObjectPropertyAssertion> objectAssertions);
+
+@Adder(OBJECT_ASSERTIONS_KEY)
+public void addToObjectAssertions(ObjectPropertyAssertion aObjectAssertion);
+
+@Remover(OBJECT_ASSERTIONS_KEY)
+public void removeFromObjectAssertions(ObjectPropertyAssertion aObjectAssertion);
+
+
+@Getter(value=ONTOLOGY_CLASS_URI_KEY)
+@XMLAttribute
+public String _getOntologyClassURI();
+
+@Setter(ONTOLOGY_CLASS_URI_KEY)
+public void _setOntologyClassURI(String ontologyClassURI);
+
+
+@Getter(value=MODEL_SLOT_KEY)
+@XMLElement
+public TypeAwareModelSlot getModelSlot();
+
+@Setter(MODEL_SLOT_KEY)
+public void setModelSlot(TypeAwareModelSlot modelSlot);
+
+
+public static abstract  abstract class AddIndividual<MSImpl extends TypeAwareModelSlot<?, ?>, T extends IFlexoOntologyIndividual> extends AddConcept<MS, T>Impl implements AddIndividual<MS
+{
 
 	protected static final Logger logger = FlexoLogger.getLogger(AddIndividual.class.getPackage().getName());
 
@@ -48,7 +116,7 @@ public abstract class AddIndividual<MS extends TypeAwareModelSlot<?, ?>, T exten
 
 	private DataBinding<String> individualName;
 
-	public AddIndividual() {
+	public AddIndividualImpl() {
 		super();
 		dataAssertions = new Vector<DataPropertyAssertion>();
 		objectAssertions = new Vector<ObjectPropertyAssertion>();
@@ -250,7 +318,7 @@ public abstract class AddIndividual<MS extends TypeAwareModelSlot<?, ?>, T exten
 
 	public static class AddIndividualActionMustDefineAnOntologyClass extends
 			ValidationRule<AddIndividualActionMustDefineAnOntologyClass, AddIndividual> {
-		public AddIndividualActionMustDefineAnOntologyClass() {
+		public AddIndividualImplActionMustDefineAnOntologyClass() {
 			super(AddIndividual.class, "add_individual_action_must_define_an_ontology_class");
 		}
 
@@ -301,4 +369,5 @@ public abstract class AddIndividual<MS extends TypeAwareModelSlot<?, ?>, T exten
 
 	}
 
+}
 }

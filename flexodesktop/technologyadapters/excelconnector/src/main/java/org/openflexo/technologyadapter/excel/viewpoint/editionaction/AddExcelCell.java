@@ -22,7 +22,84 @@ import org.openflexo.technologyadapter.excel.model.ExcelSheet;
 import org.openflexo.technologyadapter.excel.model.ExcelWorkbook;
 
 @FIBPanel("Fib/AddExcelCellPanel.fib")
-public class AddExcelCell extends AssignableAction<BasicExcelModelSlot, ExcelCell> {
+@ModelEntity
+@ImplementationClass(AddExcelCell.AddExcelCellImpl.class)
+@XMLElement
+public interface AddExcelCell extends AssignableAction<BasicExcelModelSlot, ExcelCell>{
+
+@PropertyIdentifier(type=DataBinding.class)
+public static final String ROW_KEY = "row";
+@PropertyIdentifier(type=DataBinding.class)
+public static final String VALUE_KEY = "value";
+@PropertyIdentifier(type=CellType.class)
+public static final String CELL_TYPE_KEY = "cellType";
+@PropertyIdentifier(type=DataBinding.class)
+public static final String COLUMN_INDEX_KEY = "columnIndex";
+@PropertyIdentifier(type=DataBinding.class)
+public static final String ROW_INDEX_KEY = "rowIndex";
+@PropertyIdentifier(type=DataBinding.class)
+public static final String SHEET_KEY = "sheet";
+@PropertyIdentifier(type=boolean.class)
+public static final String IS_ROW_INDEX_KEY = "isRowIndex";
+
+@Getter(value=ROW_KEY)
+@XMLAttribute
+public DataBinding getRow();
+
+@Setter(ROW_KEY)
+public void setRow(DataBinding row);
+
+
+@Getter(value=VALUE_KEY)
+@XMLElement
+public DataBinding getValue();
+
+@Setter(VALUE_KEY)
+public void setValue(DataBinding value);
+
+
+@Getter(value=CELL_TYPE_KEY)
+@XMLAttribute
+public CellType getCellType();
+
+@Setter(CELL_TYPE_KEY)
+public void setCellType(CellType cellType);
+
+
+@Getter(value=COLUMN_INDEX_KEY)
+@XMLElement
+public DataBinding getColumnIndex();
+
+@Setter(COLUMN_INDEX_KEY)
+public void setColumnIndex(DataBinding columnIndex);
+
+
+@Getter(value=ROW_INDEX_KEY)
+@XMLElement
+public DataBinding getRowIndex();
+
+@Setter(ROW_INDEX_KEY)
+public void setRowIndex(DataBinding rowIndex);
+
+
+@Getter(value=SHEET_KEY)
+@XMLElement
+public DataBinding getSheet();
+
+@Setter(SHEET_KEY)
+public void setSheet(DataBinding sheet);
+
+
+@Getter(value=IS_ROW_INDEX_KEY,defaultValue = "false")
+@XMLAttribute
+public boolean isRowIndex();
+
+@Setter(IS_ROW_INDEX_KEY)
+public void setRowIndex(boolean isRowIndex);
+
+
+public static abstract  class AddExcelCellImpl extends AssignableAction<BasicExcelModelSlot, ExcelCell>Impl implements AddExcelCell
+{
 
 	private static final Logger logger = Logger.getLogger(AddExcelCell.class.getPackage().getName());
 
@@ -40,7 +117,7 @@ public class AddExcelCell extends AssignableAction<BasicExcelModelSlot, ExcelCel
 
 	private boolean isRowIndex = false;
 
-	public AddExcelCell() {
+	public AddExcelCellImpl() {
 		super();
 	}
 
@@ -257,4 +334,5 @@ public class AddExcelCell extends AssignableAction<BasicExcelModelSlot, ExcelCel
 		this.isRowIndex = isRowIndex;
 	}
 
+}
 }

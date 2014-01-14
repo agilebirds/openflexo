@@ -63,6 +63,8 @@ public interface ViewPointObject extends FlexoObject, Bindable, InnerResourceDat
 
 	public String getStringRepresentation();
 
+	public void notifyBindingModelChanged();
+
 	public static abstract class ViewPointObjectImpl extends FlexoObjectImpl implements ViewPointObject {
 
 		private static final Logger logger = Logger.getLogger(ViewPointObject.class.getPackage().getName());
@@ -134,6 +136,7 @@ public interface ViewPointObject extends FlexoObject, Bindable, InnerResourceDat
 			return null;
 		}
 
+		@Override
 		public void notifyBindingModelChanged() {
 			getPropertyChangeSupport().firePropertyChange(BindingModelChanged.BINDING_MODEL_CHANGED, null, null);
 		}

@@ -26,9 +26,16 @@ import org.openflexo.foundation.view.EditionPatternInstance;
 import org.openflexo.foundation.viewpoint.PatternRole;
 import org.openflexo.technologyadapter.excel.model.ExcelCell;
 
-public class ExcelCellPatternRole extends PatternRole<ExcelCell> {
+@ModelEntity
+@ImplementationClass(ExcelCellPatternRole.ExcelCellPatternRoleImpl.class)
+@XMLElement
+public interface ExcelCellPatternRole extends PatternRole<ExcelCell>{
 
-	public ExcelCellPatternRole() {
+
+public static abstract  class ExcelCellPatternRoleImpl extends PatternRole<ExcelCell>Impl implements ExcelCellPatternRole
+{
+
+	public ExcelCellPatternRoleImpl() {
 		super();
 		// TODO Auto-generated constructor stub
 	}
@@ -66,4 +73,5 @@ public class ExcelCellPatternRole extends PatternRole<ExcelCell> {
 		return new ExcelActorReference(object, this, epi);
 	}
 
+}
 }

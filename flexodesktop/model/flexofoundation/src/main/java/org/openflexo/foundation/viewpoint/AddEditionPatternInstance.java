@@ -49,7 +49,50 @@ import org.openflexo.foundation.viewpoint.annotations.FIBPanel;
  */
 
 @FIBPanel("Fib/AddEditionPatternInstancePanel.fib")
-public class AddEditionPatternInstance extends AssignableAction<VirtualModelModelSlot, EditionPatternInstance> {
+@ModelEntity
+@ImplementationClass(AddEditionPatternInstance.AddEditionPatternInstanceImpl.class)
+@XMLElement
+public interface AddEditionPatternInstance extends AssignableAction<VirtualModelModelSlot, EditionPatternInstance>{
+
+@PropertyIdentifier(type=DataBinding.class)
+public static final String VIRTUAL_MODEL_INSTANCE_KEY = "virtualModelInstance";
+@PropertyIdentifier(type=String.class)
+public static final String CREATION_SCHEME_URI_KEY = "creationSchemeURI";
+@PropertyIdentifier(type=Vector.class)
+public static final String PARAMETERS_KEY = "parameters";
+
+@Getter(value=VIRTUAL_MODEL_INSTANCE_KEY)
+@XMLAttribute
+public DataBinding getVirtualModelInstance();
+
+@Setter(VIRTUAL_MODEL_INSTANCE_KEY)
+public void setVirtualModelInstance(DataBinding virtualModelInstance);
+
+
+@Getter(value=CREATION_SCHEME_URI_KEY)
+@XMLAttribute
+public String _getCreationSchemeURI();
+
+@Setter(CREATION_SCHEME_URI_KEY)
+public void _setCreationSchemeURI(String creationSchemeURI);
+
+
+@Getter(value=PARAMETERS_KEY,cardinality = Cardinality.LIST)
+@XMLElement
+public List<AddEditionPatternInstanceParameter> getParameters();
+
+@Setter(PARAMETERS_KEY)
+public void setParameters(List<AddEditionPatternInstanceParameter> parameters);
+
+@Adder(PARAMETERS_KEY)
+public void addToParameters(AddEditionPatternInstanceParameter aParameter);
+
+@Remover(PARAMETERS_KEY)
+public void removeFromParameters(AddEditionPatternInstanceParameter aParameter);
+
+
+public static abstract  class AddEditionPatternInstanceImpl extends AssignableAction<VirtualModelModelSlot, EditionPatternInstance>Impl implements AddEditionPatternInstance
+{
 
 	static final Logger logger = Logger.getLogger(AddEditionPatternInstance.class.getPackage().getName());
 
@@ -57,7 +100,7 @@ public class AddEditionPatternInstance extends AssignableAction<VirtualModelMode
 	private CreationScheme creationScheme;
 	private String _creationSchemeURI;
 
-	public AddEditionPatternInstance() {
+	public AddEditionPatternInstanceImpl() {
 		super();
 	}
 
@@ -164,7 +207,7 @@ public class AddEditionPatternInstance extends AssignableAction<VirtualModelMode
 		parameters.remove(parameter);
 	}
 
-	public AddEditionPatternInstanceParameter getParameter(EditionSchemeParameter p) {
+	public AddEditionPatternInstanceImplParameter getParameter(EditionSchemeParameter p) {
 		for (AddEditionPatternInstanceParameter addEPParam : parameters) {
 			if (addEPParam.getParam() == p) {
 				return addEPParam;
@@ -222,7 +265,7 @@ public class AddEditionPatternInstance extends AssignableAction<VirtualModelMode
 
 	public static class AddEditionPatternInstanceMustAddressACreationScheme extends
 			ValidationRule<AddEditionPatternInstanceMustAddressACreationScheme, AddEditionPatternInstance> {
-		public AddEditionPatternInstanceMustAddressACreationScheme() {
+		public AddEditionPatternInstanceImplMustAddressACreationScheme() {
 			super(AddEditionPatternInstance.class, "add_edition_pattern_action_must_address_a_valid_creation_scheme");
 		}
 
@@ -245,7 +288,7 @@ public class AddEditionPatternInstance extends AssignableAction<VirtualModelMode
 	public static class AddEditionPatternInstanceParametersMustBeValid extends
 			ValidationRule<AddEditionPatternInstanceParametersMustBeValid, AddEditionPatternInstance> {
 
-		public AddEditionPatternInstanceParametersMustBeValid() {
+		public AddEditionPatternInstanceImplParametersMustBeValid() {
 			super(AddEditionPatternInstance.class, "add_edition_pattern_parameters_must_be_valid");
 		}
 
@@ -298,4 +341,5 @@ public class AddEditionPatternInstance extends AssignableAction<VirtualModelMode
 
 	}
 
+}
 }

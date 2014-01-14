@@ -35,12 +35,39 @@ import org.openflexo.technologyadapter.diagram.model.DiagramContainerElement;
 import org.openflexo.toolbox.StringUtils;
 
 @FIBPanel("Fib/DropSchemePanel.fib")
-public class DropScheme extends AbstractCreationScheme implements DiagramEditionScheme {
+@ModelEntity
+@ImplementationClass(DropScheme.DropSchemeImpl.class)
+@XMLElement
+public interface DropScheme extends AbstractCreationScheme,DiagramEditionScheme{
+
+@PropertyIdentifier(type=String.class)
+public static final String TARGET_KEY = "target";
+@PropertyIdentifier(type=ShapePatternRole.class)
+public static final String TARGET_PATTERN_ROLE_KEY = "targetPatternRole";
+
+@Getter(value=TARGET_KEY)
+@XMLAttribute
+public String _getTarget();
+
+@Setter(TARGET_KEY)
+public void _setTarget(String target);
+
+
+@Getter(value=TARGET_PATTERN_ROLE_KEY)
+@XMLElement
+public ShapePatternRole getTargetPatternRole();
+
+@Setter(TARGET_PATTERN_ROLE_KEY)
+public void setTargetPatternRole(ShapePatternRole targetPatternRole);
+
+
+public static abstract  class DropSchemeImpl extends AbstractCreationSchemeImpl implements DropScheme
+{
 
 	private String target;
 	private ShapePatternRole targetPatternRole;
 
-	public DropScheme() {
+	public DropSchemeImpl() {
 		super();
 	}
 
@@ -170,4 +197,5 @@ public class DropScheme extends AbstractCreationScheme implements DiagramEdition
 	public DiagramTechnologyAdapter getTechnologyAdapter() {
 		return getServiceManager().getTechnologyAdapterService().getTechnologyAdapter(DiagramTechnologyAdapter.class);
 	}
+}
 }

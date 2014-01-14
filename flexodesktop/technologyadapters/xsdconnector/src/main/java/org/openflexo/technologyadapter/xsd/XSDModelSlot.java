@@ -73,20 +73,43 @@ import org.openflexo.technologyadapter.xsd.viewpoint.editionaction.SetXMLDocumen
 		@DeclareEditionAction(FML = "AddXSClass", editionActionClass = AddXSClass.class) })
 @DeclareFetchRequests({ // All requests available through this model slot
 })
-public class XSDModelSlot extends TypeAwareModelSlot<XMLXSDModel, XSDMetaModel> {
+@ModelEntity
+@ImplementationClass(XSDModelSlot.XSDModelSlotImpl.class)
+@XMLElement
+public interface XSDModelSlot extends TypeAwareModelSlot<XMLXSDModel, XSDMetaModel>{
+
+@PropertyIdentifier(type=List.class)
+public static final String URI_PROCESSORS_LIST_KEY = "uriProcessorsList";
+
+@Getter(value=URI_PROCESSORS_LIST_KEY,cardinality = Cardinality.LIST)
+@XMLElement
+public List<XSURIProcessor> getUriProcessorsList();
+
+@Setter(URI_PROCESSORS_LIST_KEY)
+public void setUriProcessorsList(List<XSURIProcessor> uriProcessorsList);
+
+@Adder(URI_PROCESSORS_LIST_KEY)
+public void addToUriProcessorsList(XSURIProcessor aUriProcessorsList);
+
+@Remover(URI_PROCESSORS_LIST_KEY)
+public void removeFromUriProcessorsList(XSURIProcessor aUriProcessorsList);
+
+
+public static abstract  class XSDModelSlotImpl extends TypeAwareModelSlot<XMLXSDModel, XSDMetaModel>Impl implements XSDModelSlot
+{
 	static final Logger logger = Logger.getLogger(XSDModelSlot.class.getPackage().getName());
 
 	/* Used to process URIs for XML Objects */
 	private List<XSURIProcessor> uriProcessors;
 	private Hashtable<String, XSURIProcessor> uriProcessorsMap;
 
-	/*public XSDModelSlot(ViewPoint viewPoint, XSDTechnologyAdapter adapter) {
+	/*public XSDModelSlotImpl(ViewPoint viewPoint, XSDTechnologyAdapter adapter) {
 		super(viewPoint, adapter);
 		if (uriProcessors == null)
 			uriProcessors = new Hashtable<String, XSURIProcessor>();
 	}*/
 
-	public XSDModelSlot(VirtualModel virtualModel, XSDTechnologyAdapter adapter) {
+	public XSDModelSlotImpl(VirtualModel virtualModel, XSDTechnologyAdapter adapter) {
 		super(virtualModel, adapter);
 		if (uriProcessorsMap == null) {
 			uriProcessorsMap = new Hashtable<String, XSURIProcessor>();
@@ -96,7 +119,7 @@ public class XSDModelSlot extends TypeAwareModelSlot<XMLXSDModel, XSDMetaModel> 
 		}
 	}
 
-	public XSDModelSlot() {
+	public XSDModelSlotImpl() {
 		super();
 		if (uriProcessorsMap == null) {
 			uriProcessorsMap = new Hashtable<String, XSURIProcessor>();
@@ -106,7 +129,7 @@ public class XSDModelSlot extends TypeAwareModelSlot<XMLXSDModel, XSDMetaModel> 
 		}
 	}
 
-	/*public XSDModelSlot(ViewPointBuilder builder) {
+	/*public XSDModelSlotImpl(ViewPointBuilder builder) {
 		super(builder);
 		if (uriProcessors == null)
 			uriProcessors = new Hashtable<String, XSURIProcessor>();
@@ -121,7 +144,7 @@ public class XSDModelSlot extends TypeAwareModelSlot<XMLXSDModel, XSDMetaModel> 
 	 * Instanciate a new model slot instance configuration for this model slot
 	 */
 	@Override
-	public XSDModelSlotInstanceConfiguration createConfiguration(CreateVirtualModelInstance<?> action) {
+	public XSDModelSlotImplInstanceConfiguration createConfiguration(CreateVirtualModelInstance<?> action) {
 		return new XSDModelSlotInstanceConfiguration(this, action);
 	}
 
@@ -353,4 +376,5 @@ public class XSDModelSlot extends TypeAwareModelSlot<XMLXSDModel, XSDMetaModel> 
 		return true;
 	}
 
+}
 }

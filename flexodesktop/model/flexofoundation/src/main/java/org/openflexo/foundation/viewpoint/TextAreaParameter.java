@@ -21,9 +21,16 @@ package org.openflexo.foundation.viewpoint;
 
 import java.lang.reflect.Type;
 
-public class TextAreaParameter extends EditionSchemeParameter {
+@ModelEntity
+@ImplementationClass(TextAreaParameter.TextAreaParameterImpl.class)
+@XMLElement
+public interface TextAreaParameter extends EditionSchemeParameter{
 
-	public TextAreaParameter() {
+
+public static abstract  class TextAreaParameterImpl extends EditionSchemeParameterImpl implements TextAreaParameter
+{
+
+	public TextAreaParameterImpl() {
 		super();
 	}
 
@@ -37,4 +44,5 @@ public class TextAreaParameter extends EditionSchemeParameter {
 		return WidgetType.TEXT_AREA;
 	}
 
+}
 }

@@ -19,7 +19,8 @@
  */
 package org.openflexo.foundation.viewpoint;
 
-import org.openflexo.foundation.viewpoint.NamedViewPointObject.NamedViewPointObjectImpl;
+import org.openflexo.model.annotations.ImplementationClass;
+import org.openflexo.model.annotations.ModelEntity;
 
 /**
  * Represents an object which is part of the model of an EditionPattern
@@ -27,49 +28,64 @@ import org.openflexo.foundation.viewpoint.NamedViewPointObject.NamedViewPointObj
  * @author sylvain
  * 
  */
-public abstract class EditionPatternObject extends NamedViewPointObjectImpl {
+@ModelEntity(isAbstract = true)
+@ImplementationClass(EditionPatternObject.EditionPatternObjectImpl.class)
+public interface EditionPatternObject extends NamedViewPointObject {
 
-	public EditionPatternObject() {
-		super();
-	}
-
-	public abstract EditionPattern getEditionPattern();
+	public EditionPattern getEditionPattern();
 
 	@Override
-	public ViewPoint getViewPoint() {
-		if (getVirtualModel() != null) {
-			return getVirtualModel().getViewPoint();
-		}
-		if (getEditionPattern() != null && getEditionPattern() != this) {
-			return getEditionPattern().getViewPoint();
-		}
-		return null;
-	}
+	public ViewPoint getViewPoint();
 
-	public VirtualModel getVirtualModel() {
-		if (getEditionPattern() != null) {
-			return getEditionPattern().getVirtualModel();
-		}
-		return null;
-	}
+	public VirtualModel getVirtualModel();
 
 	@Override
-	public String getStringRepresentation() {
-		return (getVirtualModel() != null ? getVirtualModel().getStringRepresentation() : "null") + "#"
-				+ (getEditionPattern() != null ? getEditionPattern().getName() : "null") + "." + getClass().getSimpleName();
-	}
+	public String getStringRepresentation();
 
-	@Override
-	public String getFMLRepresentation(FMLRepresentationContext context) {
-		return "<not_implemented:" + getStringRepresentation() + ">";
-	}
+	public String getFMLRepresentation(FMLRepresentationContext context);
 
-	@Override
-	public void setChanged() {
-		super.setChanged();
-		if (getVirtualModel() != null) {
-			getVirtualModel().setIsModified();
+	public abstract class EditionPatternObjectImpl extends NamedViewPointObjectImpl implements EditionPatternObject {
+
+		@Override
+		public abstract EditionPattern getEditionPattern();
+
+		@Override
+		public ViewPoint getViewPoint() {
+			if (getVirtualModel() != null) {
+				return getVirtualModel().getViewPoint();
+			}
+			if (getEditionPattern() != null && getEditionPattern() != this) {
+				return getEditionPattern().getViewPoint();
+			}
+			return null;
 		}
-	}
 
+		@Override
+		public VirtualModel getVirtualModel() {
+			if (getEditionPattern() != null) {
+				return getEditionPattern().getVirtualModel();
+			}
+			return null;
+		}
+
+		@Override
+		public String getStringRepresentation() {
+			return (getVirtualModel() != null ? getVirtualModel().getStringRepresentation() : "null") + "#"
+					+ (getEditionPattern() != null ? getEditionPattern().getName() : "null") + "." + getClass().getSimpleName();
+		}
+
+		@Override
+		public String getFMLRepresentation(FMLRepresentationContext context) {
+			return "<not_implemented:" + getStringRepresentation() + ">";
+		}
+
+		@Override
+		public void setChanged() {
+			super.setChanged();
+			if (getVirtualModel() != null) {
+				getVirtualModel().setIsModified();
+			}
+		}
+
+	}
 }

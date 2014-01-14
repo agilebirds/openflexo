@@ -3,9 +3,15 @@ package org.openflexo.technologyadapter.owl.viewpoint;
 import org.openflexo.foundation.viewpoint.OntologicObjectPatternRole;
 import org.openflexo.technologyadapter.owl.model.OWLStatement;
 
-public abstract class StatementPatternRole<T extends OWLStatement> extends OntologicObjectPatternRole<T> {
+@ModelEntity(isAbstract = true)
+@ImplementationClass(StatementPatternRole.StatementPatternRoleImpl.class)
+public abstract interface StatementPatternRole<T extends OWLStatement> extends OntologicObjectPatternRole<T>{
 
-	public StatementPatternRole() {
+
+public static abstract  abstract class StatementPatternRole<TImpl extends OWLStatement> extends OntologicObjectPatternRole<T>Impl implements StatementPatternRole<T
+{
+
+	public StatementPatternRoleImpl() {
 		super();
 	}
 
@@ -23,4 +29,5 @@ public abstract class StatementPatternRole<T extends OWLStatement> extends Ontol
 	public void setIsPrimaryRole(boolean isPrimary) {
 	}*/
 
+}
 }

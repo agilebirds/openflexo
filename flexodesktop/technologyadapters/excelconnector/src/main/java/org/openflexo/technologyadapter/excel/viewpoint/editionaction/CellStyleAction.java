@@ -39,11 +39,48 @@ import org.openflexo.technologyadapter.excel.model.ExcelCell.CellBorderStyleFeat
 import org.openflexo.technologyadapter.excel.model.ExcelCell.CellStyleFeature;
 
 @FIBPanel("Fib/CellStyleActionPanel.fib")
-public class CellStyleAction extends EditionAction<BasicExcelModelSlot, ExcelCell> {
+@ModelEntity
+@ImplementationClass(CellStyleAction.CellStyleActionImpl.class)
+@XMLElement
+public interface CellStyleAction extends EditionAction<BasicExcelModelSlot, ExcelCell>{
+
+@PropertyIdentifier(type=DataBinding.class)
+public static final String SUBJECT_KEY = "subject";
+@PropertyIdentifier(type=DataBinding.class)
+public static final String VALUE_KEY = "value";
+@PropertyIdentifier(type=CellStyleFeature.class)
+public static final String CELL_STYLE_KEY = "cellStyle";
+
+@Getter(value=SUBJECT_KEY)
+@XMLAttribute
+public DataBinding getSubject();
+
+@Setter(SUBJECT_KEY)
+public void setSubject(DataBinding subject);
+
+
+@Getter(value=VALUE_KEY)
+@XMLAttribute
+public DataBinding getValue();
+
+@Setter(VALUE_KEY)
+public void setValue(DataBinding value);
+
+
+@Getter(value=CELL_STYLE_KEY)
+@XMLAttribute
+public CellStyleFeature getCellStyle();
+
+@Setter(CELL_STYLE_KEY)
+public void setCellStyle(CellStyleFeature cellStyle);
+
+
+public static abstract  class CellStyleActionImpl extends EditionAction<BasicExcelModelSlot, ExcelCell>Impl implements CellStyleAction
+{
 
 	private static final Logger logger = Logger.getLogger(CellStyleAction.class.getPackage().getName());
 
-	public CellStyleAction() {
+	public CellStyleActionImpl() {
 		super();
 	}
 
@@ -318,4 +355,5 @@ public class CellStyleAction extends EditionAction<BasicExcelModelSlot, ExcelCel
 
 	}
 
+}
 }

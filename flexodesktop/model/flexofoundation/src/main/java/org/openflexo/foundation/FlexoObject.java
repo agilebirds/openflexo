@@ -1008,7 +1008,7 @@ public abstract interface FlexoObject extends ReferenceOwner, AccessibleProxyObj
 		}
 
 		@Override
-		public Collection<? extends Validable> getEmbeddedValidableObjects() {
+		public final Collection<? extends Validable> getEmbeddedValidableObjects() {
 			if (this instanceof InnerResourceData) {
 				ResourceData<?> resourceData = ((InnerResourceData) this).getResourceData();
 				if (resourceData.getResource() instanceof PamelaResource) {

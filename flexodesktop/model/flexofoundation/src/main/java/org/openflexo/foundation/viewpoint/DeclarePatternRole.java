@@ -34,13 +34,30 @@ import org.openflexo.foundation.viewpoint.FMLRepresentationContext.FMLRepresenta
 import org.openflexo.foundation.viewpoint.annotations.FIBPanel;
 
 @FIBPanel("Fib/DeclarePatternRolePanel.fib")
-public class DeclarePatternRole extends AssignableAction<ModelSlot<?>, FlexoObject> {
+@ModelEntity
+@ImplementationClass(DeclarePatternRole.DeclarePatternRoleImpl.class)
+@XMLElement
+public interface DeclarePatternRole extends AssignableAction<ModelSlot<?>, FlexoObject>{
+
+@PropertyIdentifier(type=DataBinding.class)
+public static final String OBJECT_KEY = "object";
+
+@Getter(value=OBJECT_KEY)
+@XMLAttribute
+public DataBinding getObject();
+
+@Setter(OBJECT_KEY)
+public void setObject(DataBinding object);
+
+
+public static abstract  class DeclarePatternRoleImpl extends AssignableAction<ModelSlot<?>, FlexoObject>Impl implements DeclarePatternRole
+{
 
 	private static final Logger logger = Logger.getLogger(DeclarePatternRole.class.getPackage().getName());
 
 	private DataBinding<Object> object;
 
-	public DeclarePatternRole() {
+	public DeclarePatternRoleImpl() {
 		super();
 	}
 
@@ -121,4 +138,5 @@ public class DeclarePatternRole extends AssignableAction<ModelSlot<?>, FlexoObje
 		return (FlexoObject) getDeclaredObject(action);
 	}
 
+}
 }

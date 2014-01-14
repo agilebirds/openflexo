@@ -45,13 +45,60 @@ import org.openflexo.technologyadapter.owl.model.SubClassStatement;
 // No more applicable
 @Deprecated
 @FIBPanel("Fib/AddRestrictionStatementPanel.fib")
-public class AddRestrictionStatement extends AddStatement<OWLStatement> {
+@ModelEntity
+@ImplementationClass(AddRestrictionStatement.AddRestrictionStatementImpl.class)
+@XMLElement
+public interface AddRestrictionStatement extends AddStatement<OWLStatement>{
+
+@PropertyIdentifier(type=DataBinding.class)
+public static final String OBJECT_KEY = "object";
+@PropertyIdentifier(type=String.class)
+public static final String PROPERTY_URI_KEY = "propertyURI";
+@PropertyIdentifier(type=DataBinding.class)
+public static final String RESTRICTION_TYPE_KEY = "restrictionType";
+@PropertyIdentifier(type=DataBinding.class)
+public static final String CARDINALITY_KEY = "cardinality";
+
+@Getter(value=OBJECT_KEY)
+@XMLAttribute
+public DataBinding getObject();
+
+@Setter(OBJECT_KEY)
+public void setObject(DataBinding object);
+
+
+@Getter(value=PROPERTY_URI_KEY)
+@XMLAttribute
+public String _getPropertyURI();
+
+@Setter(PROPERTY_URI_KEY)
+public void _setPropertyURI(String propertyURI);
+
+
+@Getter(value=RESTRICTION_TYPE_KEY)
+@XMLAttribute
+public DataBinding getRestrictionType();
+
+@Setter(RESTRICTION_TYPE_KEY)
+public void setRestrictionType(DataBinding restrictionType);
+
+
+@Getter(value=CARDINALITY_KEY)
+@XMLAttribute
+public DataBinding getCardinality();
+
+@Setter(CARDINALITY_KEY)
+public void setCardinality(DataBinding cardinality);
+
+
+public static abstract  class AddRestrictionStatementImpl extends AddStatement<OWLStatement>Impl implements AddRestrictionStatement
+{
 
 	private static final Logger logger = Logger.getLogger(AddRestrictionStatement.class.getPackage().getName());
 
 	private String propertyURI;
 
-	public AddRestrictionStatement() {
+	public AddRestrictionStatementImpl() {
 		super();
 	}
 
@@ -232,4 +279,5 @@ public class AddRestrictionStatement extends AddStatement<OWLStatement> {
 		return null;
 	}
 
+}
 }

@@ -39,11 +39,28 @@ import org.openflexo.technologyadapter.owl.model.SubClassStatement;
 
 @Deprecated
 @FIBPanel("Fib/AddSubClassStatementPanel.fib")
-public class AddSubClassStatement extends AddStatement<SubClassStatement> {
+@ModelEntity
+@ImplementationClass(AddSubClassStatement.AddSubClassStatementImpl.class)
+@XMLElement(xmlTag="AddIsAPropertyStatement")
+public interface AddSubClassStatement extends AddStatement<SubClassStatement>{
+
+@PropertyIdentifier(type=DataBinding.class)
+public static final String FATHER_KEY = "father";
+
+@Getter(value=FATHER_KEY)
+@XMLAttribute
+public DataBinding getFather();
+
+@Setter(FATHER_KEY)
+public void setFather(DataBinding father);
+
+
+public static abstract  class AddSubClassStatementImpl extends AddStatement<SubClassStatement>Impl implements AddSubClassStatement
+{
 
 	private static final Logger logger = Logger.getLogger(AddSubClassStatement.class.getPackage().getName());
 
-	public AddSubClassStatement() {
+	public AddSubClassStatementImpl() {
 		super();
 	}
 
@@ -110,4 +127,5 @@ public class AddSubClassStatement extends AddStatement<SubClassStatement> {
 		return null;
 	}
 
+}
 }

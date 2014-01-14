@@ -19,10 +19,8 @@
  */
 package org.openflexo.foundation.viewpoint;
 
-import java.lang.reflect.Type;
 import java.util.logging.Logger;
 
-import org.openflexo.antar.binding.BindingModel;
 import org.openflexo.foundation.NameChanged;
 import org.openflexo.model.annotations.Getter;
 import org.openflexo.model.annotations.ImplementationClass;
@@ -61,6 +59,8 @@ public abstract interface NamedViewPointObject extends ViewPointObject {
 	 */
 	public String getURI();
 
+	public String getFMLRepresentation(FMLRepresentationContext context);
+
 	public static abstract class NamedViewPointObjectImpl extends ViewPointObjectImpl implements NamedViewPointObject {
 
 		private static final Logger logger = Logger.getLogger(NamedViewPointObject.class.getPackage().getName());
@@ -94,9 +94,7 @@ public abstract interface NamedViewPointObject extends ViewPointObject {
 		 */
 		// TODO: change to abstract
 		@Override
-		public String getURI() {
-			return null;
-		}
+		public abstract String getURI();
 
 		@Override
 		public String getName() {
@@ -112,185 +110,5 @@ public abstract interface NamedViewPointObject extends ViewPointObject {
 				notifyObservers(new NameChanged(oldName, name));
 			}
 		}
-
-		@Override
-		public Object performSuperGetter(String propertyIdentifier) {
-			// TODO Auto-generated method stub
-			return null;
-		}
-
-		@Override
-		public void performSuperSetter(String propertyIdentifier, Object value) {
-			// TODO Auto-generated method stub
-
-		}
-
-		@Override
-		public void performSuperAdder(String propertyIdentifier, Object value) {
-			// TODO Auto-generated method stub
-
-		}
-
-		@Override
-		public void performSuperRemover(String propertyIdentifier, Object value) {
-			// TODO Auto-generated method stub
-
-		}
-
-		@Override
-		public Object performSuperGetter(String propertyIdentifier, Class<?> modelEntityInterface) {
-			// TODO Auto-generated method stub
-			return null;
-		}
-
-		@Override
-		public void performSuperSetter(String propertyIdentifier, Object value, Class<?> modelEntityInterface) {
-			// TODO Auto-generated method stub
-
-		}
-
-		@Override
-		public void performSuperAdder(String propertyIdentifier, Object value, Class<?> modelEntityInterface) {
-			// TODO Auto-generated method stub
-
-		}
-
-		@Override
-		public void performSuperRemover(String propertyIdentifier, Object value, Class<?> modelEntityInterface) {
-			// TODO Auto-generated method stub
-
-		}
-
-		@Override
-		public void performSuperSetModified(boolean modified) {
-			// TODO Auto-generated method stub
-
-		}
-
-		@Override
-		public Object performSuperFinder(String finderIdentifier, Object value) {
-			// TODO Auto-generated method stub
-			return null;
-		}
-
-		@Override
-		public Object performSuperFinder(String finderIdentifier, Object value, Class<?> modelEntityInterface) {
-			// TODO Auto-generated method stub
-			return null;
-		}
-
-		@Override
-		public boolean isSerializing() {
-			// TODO Auto-generated method stub
-			return false;
-		}
-
-		@Override
-		public boolean isDeserializing() {
-			// TODO Auto-generated method stub
-			return false;
-		}
-
-		@Override
-		public void setModified(boolean modified) {
-			// TODO Auto-generated method stub
-
-		}
-
-		@Override
-		public boolean equalsObject(Object obj) {
-			// TODO Auto-generated method stub
-			return false;
-		}
-
-		@Override
-		public void destroy() {
-			// TODO Auto-generated method stub
-
-		}
-
-		@Override
-		public boolean hasKey(String key) {
-			// TODO Auto-generated method stub
-			return false;
-		}
-
-		@Override
-		public boolean performSuperDelete(Object... context) {
-			// TODO Auto-generated method stub
-			return false;
-		}
-
-		@Override
-		public boolean performSuperUndelete() {
-			// TODO Auto-generated method stub
-			return false;
-		}
-
-		@Override
-		public void performSuperDelete(Class<?> modelEntityInterface, Object... context) {
-			// TODO Auto-generated method stub
-
-		}
-
-		@Override
-		public boolean delete(Object... context) {
-			// TODO Auto-generated method stub
-			return false;
-		}
-
-		@Override
-		public boolean undelete() {
-			// TODO Auto-generated method stub
-			return false;
-		}
-
-		@Override
-		public Object cloneObject() {
-			// TODO Auto-generated method stub
-			return null;
-		}
-
-		@Override
-		public Object cloneObject(Object... context) {
-			// TODO Auto-generated method stub
-			return null;
-		}
-
-		@Override
-		public boolean isCreatedByCloning() {
-			// TODO Auto-generated method stub
-			return false;
-		}
-
-		@Override
-		public boolean isBeingCloned() {
-			// TODO Auto-generated method stub
-			return false;
-		}
-
-		@Override
-		public BindingModel getBindingModel() {
-			// TODO Auto-generated method stub
-			return null;
-		}
-
-		@Override
-		public Object objectForKey(String key) {
-			// TODO Auto-generated method stub
-			return null;
-		}
-
-		@Override
-		public void setObjectForKey(Object value, String key) {
-			// TODO Auto-generated method stub
-		}
-
-		@Override
-		public Type getTypeForKey(String key) {
-			// TODO Auto-generated method stub
-			return null;
-		}
-
 	}
 }

@@ -1,18 +1,16 @@
 package org.openflexo.foundation;
 
 import java.lang.reflect.Type;
-import java.util.Collection;
 import java.util.List;
 
 import org.openflexo.foundation.FlexoObject.FlexoObjectImpl;
-import org.openflexo.foundation.validation.Validable;
 import org.openflexo.foundation.validation.ValidationModel;
 
 /**
  * This is the default non-abstract implementation of {@link FlexoObject}.<br>
  * Use it only when you don't want to encode your model using PAMELA
  * 
- * TODO: This class should not be used
+ * TODO: This class should not be used anymore
  * 
  * @author sylvain
  * 
@@ -184,12 +182,6 @@ public class DefaultFlexoObject extends FlexoObjectImpl {
 
 	@Override
 	public ValidationModel getDefaultValidationModel() {
-		// TODO Auto-generated method stub
-		return null;
-	}
-
-	@Override
-	public Collection<? extends Validable> getEmbeddedValidableObjects() {
 		// TODO Auto-generated method stub
 		return null;
 	}

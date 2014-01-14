@@ -31,7 +31,44 @@ import org.openflexo.foundation.ontology.IFlexoOntologyClass;
 import org.openflexo.foundation.ontology.IFlexoOntologyStructuralProperty;
 import org.openflexo.foundation.technologyadapter.TypeAwareModelSlot;
 
-public class PropertyParameter extends InnerModelSlotParameter<TypeAwareModelSlot<?, ?>> {
+@ModelEntity
+@ImplementationClass(PropertyParameter.PropertyParameterImpl.class)
+@XMLElement
+public interface PropertyParameter extends InnerModelSlotParameter<TypeAwareModelSlot<?, ?>>{
+
+@PropertyIdentifier(type=String.class)
+public static final String PARENT_PROPERTY_URI_KEY = "parentPropertyURI";
+@PropertyIdentifier(type=String.class)
+public static final String DOMAIN_URI_KEY = "domainURI";
+@PropertyIdentifier(type=DataBinding.class)
+public static final String DOMAIN_VALUE_KEY = "domainValue";
+
+@Getter(value=PARENT_PROPERTY_URI_KEY)
+@XMLAttribute(xmlTag="parentProperty")
+public String _getParentPropertyURI();
+
+@Setter(PARENT_PROPERTY_URI_KEY)
+public void _setParentPropertyURI(String parentPropertyURI);
+
+
+@Getter(value=DOMAIN_URI_KEY)
+@XMLAttribute(xmlTag="domain")
+public String _getDomainURI();
+
+@Setter(DOMAIN_URI_KEY)
+public void _setDomainURI(String domainURI);
+
+
+@Getter(value=DOMAIN_VALUE_KEY)
+@XMLAttribute
+public DataBinding getDomainValue();
+
+@Setter(DOMAIN_VALUE_KEY)
+public void setDomainValue(DataBinding domainValue);
+
+
+public static abstract  class PropertyParameterImpl extends InnerModelSlotParameter<TypeAwareModelSlot<?, ?>>Impl implements PropertyParameter
+{
 
 	private String domainURI;
 	private String parentPropertyURI;
@@ -39,7 +76,7 @@ public class PropertyParameter extends InnerModelSlotParameter<TypeAwareModelSlo
 
 	private DataBinding<IFlexoOntologyClass> domainValue;
 
-	public PropertyParameter() {
+	public PropertyParameterImpl() {
 		super();
 	}
 
@@ -142,4 +179,5 @@ public class PropertyParameter extends InnerModelSlotParameter<TypeAwareModelSlo
 		return returned;
 	}
 
+}
 }

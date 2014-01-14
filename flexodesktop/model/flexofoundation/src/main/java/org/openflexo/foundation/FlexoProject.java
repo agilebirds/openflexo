@@ -2178,17 +2178,12 @@ public class FlexoProject extends ResourceRepository<FlexoResource<?>> implement
 		}
 	}
 
-	@Override
+	/*@Override
 	public Collection<? extends Validable> getEmbeddedValidableObjects() {
 		Vector<Validable> v = new Vector<Validable>();
 		v.add(this);
-		/*for (FlexoStorageResource<? extends StorageResourceData> r : getLoadedStorageResources()) {
-			if (r.getResourceData() instanceof Validable && r.getResourceData() != this) {
-				v.addAll(((Validable) r.getResourceData()).getAllEmbeddedValidableObjects());
-			}
-		}*/
 		return v;
-	}
+	}*/
 
 	/**
 	 * Overrides getDefaultValidationModel

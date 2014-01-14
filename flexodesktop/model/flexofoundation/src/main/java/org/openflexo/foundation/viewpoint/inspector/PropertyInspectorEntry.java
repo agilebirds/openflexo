@@ -30,14 +30,51 @@ import org.openflexo.foundation.ontology.IFlexoOntologyStructuralProperty;
  * @author sylvain
  * 
  */
-public class PropertyInspectorEntry extends InspectorEntry {
+@ModelEntity
+@ImplementationClass(PropertyInspectorEntry.PropertyInspectorEntryImpl.class)
+@XMLElement(xmlTag="Property")
+public interface PropertyInspectorEntry extends InspectorEntry{
+
+@PropertyIdentifier(type=String.class)
+public static final String PARENT_PROPERTY_URI_KEY = "parentPropertyURI";
+@PropertyIdentifier(type=String.class)
+public static final String DOMAIN_URI_KEY = "domainURI";
+@PropertyIdentifier(type=DataBinding.class)
+public static final String DOMAIN_VALUE_KEY = "domainValue";
+
+@Getter(value=PARENT_PROPERTY_URI_KEY)
+@XMLAttribute(xmlTag="parentProperty")
+public String _getParentPropertyURI();
+
+@Setter(PARENT_PROPERTY_URI_KEY)
+public void _setParentPropertyURI(String parentPropertyURI);
+
+
+@Getter(value=DOMAIN_URI_KEY)
+@XMLAttribute(xmlTag="domain")
+public String _getDomainURI();
+
+@Setter(DOMAIN_URI_KEY)
+public void _setDomainURI(String domainURI);
+
+
+@Getter(value=DOMAIN_VALUE_KEY)
+@XMLAttribute
+public DataBinding getDomainValue();
+
+@Setter(DOMAIN_VALUE_KEY)
+public void setDomainValue(DataBinding domainValue);
+
+
+public static abstract  class PropertyInspectorEntryImpl extends InspectorEntryImpl implements PropertyInspectorEntry
+{
 
 	private String parentPropertyURI;
 	private String domainURI;
 	private boolean isDynamicDomainValueSet = false;
 	private DataBinding<IFlexoOntologyClass> domainValue;
 
-	public PropertyInspectorEntry() {
+	public PropertyInspectorEntryImpl() {
 		super();
 	}
 
@@ -114,4 +151,5 @@ public class PropertyInspectorEntry extends InspectorEntry {
 		}
 	}
 
+}
 }

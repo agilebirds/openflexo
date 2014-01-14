@@ -13,11 +13,18 @@ import org.openflexo.technologyadapter.owl.model.OWLConcept;
 import org.openflexo.technologyadapter.owl.model.OWLObject;
 import org.openflexo.technologyadapter.owl.model.SubClassStatement;
 
-public class SubClassStatementPatternRole extends StatementPatternRole<SubClassStatement> {
+@ModelEntity
+@ImplementationClass(SubClassStatementPatternRole.SubClassStatementPatternRoleImpl.class)
+@XMLElement
+public interface SubClassStatementPatternRole extends StatementPatternRole<SubClassStatement>{
+
+
+public static abstract  class SubClassStatementPatternRoleImpl extends StatementPatternRole<SubClassStatement>Impl implements SubClassStatementPatternRole
+{
 
 	static final Logger logger = FlexoLogger.getLogger(SubClassStatementPatternRole.class.getPackage().toString());
 
-	public SubClassStatementPatternRole() {
+	public SubClassStatementPatternRoleImpl() {
 		super();
 	}
 
@@ -78,4 +85,5 @@ public class SubClassStatementPatternRole extends StatementPatternRole<SubClassS
 			return statement;
 		}
 	}
+}
 }

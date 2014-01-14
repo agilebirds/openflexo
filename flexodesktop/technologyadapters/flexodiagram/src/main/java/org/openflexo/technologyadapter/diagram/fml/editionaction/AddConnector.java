@@ -62,11 +62,38 @@ import org.openflexo.toolbox.StringUtils;
  * 
  */
 @FIBPanel("Fib/AddConnectorPanel.fib")
-public class AddConnector extends AddDiagramElementAction<DiagramConnector> {
+@ModelEntity
+@ImplementationClass(AddConnector.AddConnectorImpl.class)
+@XMLElement
+public interface AddConnector extends AddDiagramElementAction<DiagramConnector>{
+
+@PropertyIdentifier(type=DataBinding.class)
+public static final String FROM_SHAPE_KEY = "fromShape";
+@PropertyIdentifier(type=DataBinding.class)
+public static final String TO_SHAPE_KEY = "toShape";
+
+@Getter(value=FROM_SHAPE_KEY)
+@XMLAttribute
+public DataBinding getFromShape();
+
+@Setter(FROM_SHAPE_KEY)
+public void setFromShape(DataBinding fromShape);
+
+
+@Getter(value=TO_SHAPE_KEY)
+@XMLAttribute
+public DataBinding getToShape();
+
+@Setter(TO_SHAPE_KEY)
+public void setToShape(DataBinding toShape);
+
+
+public static abstract  class AddConnectorImpl extends AddDiagramElementAction<DiagramConnector>Impl implements AddConnector
+{
 
 	private static final Logger logger = Logger.getLogger(LinkSchemeAction.class.getPackage().getName());
 
-	public AddConnector() {
+	public AddConnectorImpl() {
 		super();
 	}
 
@@ -263,7 +290,7 @@ public class AddConnector extends AddDiagramElementAction<DiagramConnector> {
 
 	public static class AddConnectorActionMustAdressAValidConnectorPatternRole extends
 			ValidationRule<AddConnectorActionMustAdressAValidConnectorPatternRole, AddConnector> {
-		public AddConnectorActionMustAdressAValidConnectorPatternRole() {
+		public AddConnectorImplActionMustAdressAValidConnectorPatternRole() {
 			super(AddConnector.class, "add_connector_action_must_address_a_valid_connector_pattern_role");
 		}
 
@@ -304,7 +331,7 @@ public class AddConnector extends AddDiagramElementAction<DiagramConnector> {
 
 	public static class AddConnectorActionMustHaveAValidStartingShape extends
 			ValidationRule<AddConnectorActionMustHaveAValidStartingShape, AddConnector> {
-		public AddConnectorActionMustHaveAValidStartingShape() {
+		public AddConnectorImplActionMustHaveAValidStartingShape() {
 			super(AddConnector.class, "add_connector_action_must_have_a_valid_starting_shape");
 		}
 
@@ -382,7 +409,7 @@ public class AddConnector extends AddDiagramElementAction<DiagramConnector> {
 
 	public static class AddConnectorActionMustHaveAValidEndingShape extends
 			ValidationRule<AddConnectorActionMustHaveAValidEndingShape, AddConnector> {
-		public AddConnectorActionMustHaveAValidEndingShape() {
+		public AddConnectorImplActionMustHaveAValidEndingShape() {
 			super(AddConnector.class, "add_connector_action_must_have_a_valid_ending_shape");
 		}
 
@@ -458,4 +485,5 @@ public class AddConnector extends AddDiagramElementAction<DiagramConnector> {
 
 	}
 
+}
 }

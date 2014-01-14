@@ -42,13 +42,29 @@ import org.openflexo.toolbox.StringUtils;
  * @param <T>
  */
 @FIBPanel("Fib/SelectIndividualPanel.fib")
-public abstract class SelectIndividual<MS extends TypeAwareModelSlot<?, ?>, T extends IFlexoOntologyIndividual> extends FetchRequest<MS, T> {
+@ModelEntity(isAbstract = true)
+@ImplementationClass(SelectIndividual.SelectIndividualImpl.class)
+public abstract interface SelectIndividual<MS extends TypeAwareModelSlot<?, ?>, T extends IFlexoOntologyIndividual> extends FetchRequest<MS, T>{
+
+@PropertyIdentifier(type=String.class)
+public static final String ONTOLOGY_CLASS_URI_KEY = "ontologyClassURI";
+
+@Getter(value=ONTOLOGY_CLASS_URI_KEY)
+@XMLAttribute
+public String _getOntologyClassURI();
+
+@Setter(ONTOLOGY_CLASS_URI_KEY)
+public void _setOntologyClassURI(String ontologyClassURI);
+
+
+public static abstract  abstract class SelectIndividual<MSImpl extends TypeAwareModelSlot<?, ?>, T extends IFlexoOntologyIndividual> extends FetchRequest<MS, T>Impl implements SelectIndividual<MS
+{
 
 	protected static final Logger logger = FlexoLogger.getLogger(SelectIndividual.class.getPackage().getName());
 
 	private String typeURI = null;
 
-	public SelectIndividual() {
+	public SelectIndividualImpl() {
 		super();
 	}
 
@@ -104,4 +120,5 @@ public abstract class SelectIndividual<MS extends TypeAwareModelSlot<?, ?>, T ex
 		return getClass().getSimpleName() + (getType() != null ? " : " + getType().getName() : "")
 				+ (StringUtils.isNotEmpty(getAssignation().toString()) ? " (" + getAssignation().toString() + ")" : "");
 	}
+}
 }

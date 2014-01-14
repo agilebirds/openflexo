@@ -38,7 +38,63 @@ import org.openflexo.toolbox.StringUtils;
  * @author sylvain
  * 
  */
-public abstract class InspectorEntry extends EditionPatternObject implements Bindable {
+@ModelEntity(isAbstract = true)
+@ImplementationClass(InspectorEntry.InspectorEntryImpl.class)
+public abstract interface InspectorEntry extends EditionPatternObject,Bindable{
+
+@PropertyIdentifier(type=String.class)
+public static final String LABEL_KEY = "label";
+@PropertyIdentifier(type=String.class)
+public static final String NAME_KEY = "name";
+@PropertyIdentifier(type=boolean.class)
+public static final String IS_READ_ONLY_KEY = "isReadOnly";
+@PropertyIdentifier(type=DataBinding.class)
+public static final String DATA_KEY = "data";
+@PropertyIdentifier(type=DataBinding.class)
+public static final String CONDITIONAL_KEY = "conditional";
+
+@Getter(value=LABEL_KEY)
+@XMLAttribute
+public String getLabel();
+
+@Setter(LABEL_KEY)
+public void setLabel(String label);
+
+
+@Getter(value=NAME_KEY)
+@XMLAttribute
+public String getName();
+
+@Setter(NAME_KEY)
+public void setName(String name);
+
+
+@Getter(value=IS_READ_ONLY_KEY,defaultValue = "false")
+@XMLAttribute(xmlTag="readOnly")
+public boolean getIsReadOnly();
+
+@Setter(IS_READ_ONLY_KEY)
+public void setIsReadOnly(boolean isReadOnly);
+
+
+@Getter(value=DATA_KEY)
+@XMLAttribute
+public DataBinding getData();
+
+@Setter(DATA_KEY)
+public void setData(DataBinding data);
+
+
+@Getter(value=CONDITIONAL_KEY)
+@XMLAttribute
+public DataBinding getConditional();
+
+@Setter(CONDITIONAL_KEY)
+public void setConditional(DataBinding conditional);
+
+
+public static abstract  abstract class InspectorEntryImpl extends EditionPatternObjectImpl implements InspectorEntry
+{
 
 	static final Logger logger = Logger.getLogger(InspectorEntry.class.getPackage().getName());
 
@@ -49,7 +105,7 @@ public abstract class InspectorEntry extends EditionPatternObject implements Bin
 	private DataBinding<Object> data;
 	private DataBinding<Boolean> conditional;
 
-	public InspectorEntry() {
+	public InspectorEntryImpl() {
 		super();
 	}
 
@@ -185,4 +241,5 @@ public abstract class InspectorEntry extends EditionPatternObject implements Bin
 
 	}
 
+}
 }

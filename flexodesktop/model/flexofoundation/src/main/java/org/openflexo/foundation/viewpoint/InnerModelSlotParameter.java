@@ -22,11 +22,27 @@ package org.openflexo.foundation.viewpoint;
 import org.openflexo.foundation.DataModification;
 import org.openflexo.foundation.technologyadapter.ModelSlot;
 
-public abstract class InnerModelSlotParameter<MS extends ModelSlot<?>> extends EditionSchemeParameter {
+@ModelEntity(isAbstract = true)
+@ImplementationClass(InnerModelSlotParameter.InnerModelSlotParameterImpl.class)
+public abstract interface InnerModelSlotParameter<MS extends ModelSlot<?>> extends EditionSchemeParameter{
+
+@PropertyIdentifier(type=ModelSlot.class)
+public static final String MODEL_SLOT_KEY = "modelSlot";
+
+@Getter(value=MODEL_SLOT_KEY)
+@XMLElement
+public ModelSlot getModelSlot();
+
+@Setter(MODEL_SLOT_KEY)
+public void setModelSlot(ModelSlot modelSlot);
+
+
+public static abstract  abstract class InnerModelSlotParameter<MSImpl extends ModelSlot<?>> extends EditionSchemeParameterImpl implements InnerModelSlotParameter<MS
+{
 
 	private MS modelSlot;
 
-	public InnerModelSlotParameter() {
+	public InnerModelSlotParameterImpl() {
 		super();
 	}
 
@@ -40,4 +56,5 @@ public abstract class InnerModelSlotParameter<MS extends ModelSlot<?>> extends E
 		notifyObservers(new DataModification("modelSlot", null, modelSlot));
 	}
 
+}
 }

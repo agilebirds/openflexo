@@ -32,14 +32,51 @@ import org.openflexo.foundation.ontology.IFlexoOntologyIndividual;
 import org.openflexo.foundation.ontology.IndividualOfClass;
 import org.openflexo.foundation.technologyadapter.TypeAwareModelSlot;
 
-public class IndividualParameter extends InnerModelSlotParameter<TypeAwareModelSlot<?, ?>> {
+@ModelEntity
+@ImplementationClass(IndividualParameter.IndividualParameterImpl.class)
+@XMLElement
+public interface IndividualParameter extends InnerModelSlotParameter<TypeAwareModelSlot<?, ?>>{
+
+@PropertyIdentifier(type=String.class)
+public static final String CONCEPT_URI_KEY = "conceptURI";
+@PropertyIdentifier(type=DataBinding.class)
+public static final String CONCEPT_VALUE_KEY = "conceptValue";
+@PropertyIdentifier(type=String.class)
+public static final String RENDERER_KEY = "renderer";
+
+@Getter(value=CONCEPT_URI_KEY)
+@XMLAttribute
+public String _getConceptURI();
+
+@Setter(CONCEPT_URI_KEY)
+public void _setConceptURI(String conceptURI);
+
+
+@Getter(value=CONCEPT_VALUE_KEY)
+@XMLAttribute
+public DataBinding getConceptValue();
+
+@Setter(CONCEPT_VALUE_KEY)
+public void setConceptValue(DataBinding conceptValue);
+
+
+@Getter(value=RENDERER_KEY)
+@XMLAttribute
+public String getRenderer();
+
+@Setter(RENDERER_KEY)
+public void setRenderer(String renderer);
+
+
+public static abstract  class IndividualParameterImpl extends InnerModelSlotParameter<TypeAwareModelSlot<?, ?>>Impl implements IndividualParameter
+{
 
 	private String conceptURI;
 	private DataBinding<IFlexoOntologyClass> conceptValue;
 	private String renderer;
 	private boolean isDynamicConceptValueSet = false;
 
-	public IndividualParameter() {
+	public IndividualParameterImpl() {
 		super();
 	}
 
@@ -150,4 +187,5 @@ public class IndividualParameter extends InnerModelSlotParameter<TypeAwareModelS
 		return null;
 	}
 
+}
 }

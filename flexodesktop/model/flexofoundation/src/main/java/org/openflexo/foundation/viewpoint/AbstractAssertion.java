@@ -29,12 +29,28 @@ import org.openflexo.antar.expr.TypeMismatchException;
 import org.openflexo.foundation.validation.Validable;
 import org.openflexo.foundation.view.action.EditionSchemeAction;
 
-public abstract class AbstractAssertion extends EditionSchemeObject {
+@ModelEntity(isAbstract = true)
+@ImplementationClass(AbstractAssertion.AbstractAssertionImpl.class)
+public abstract interface AbstractAssertion extends EditionSchemeObject{
+
+@PropertyIdentifier(type=DataBinding.class)
+public static final String CONDITIONAL_KEY = "conditional";
+
+@Getter(value=CONDITIONAL_KEY)
+@XMLAttribute
+public DataBinding getConditional();
+
+@Setter(CONDITIONAL_KEY)
+public void setConditional(DataBinding conditional);
+
+
+public static abstract  abstract class AbstractAssertionImpl extends EditionSchemeObjectImpl implements AbstractAssertion
+{
 
 	private AddIndividual _action;
 	private DataBinding<Boolean> conditional;
 
-	public AbstractAssertion() {
+	public AbstractAssertionImpl() {
 		super();
 	}
 
@@ -119,4 +135,5 @@ public abstract class AbstractAssertion extends EditionSchemeObject {
 		this.conditional = conditional;
 	}
 
+}
 }

@@ -30,13 +30,40 @@ import org.openflexo.antar.expr.TypeMismatchException;
 import org.openflexo.foundation.ontology.IFlexoOntologyClass;
 import org.openflexo.foundation.technologyadapter.TypeAwareModelSlot;
 
-public class ClassParameter extends InnerModelSlotParameter<TypeAwareModelSlot<?, ?>> {
+@ModelEntity
+@ImplementationClass(ClassParameter.ClassParameterImpl.class)
+@XMLElement
+public interface ClassParameter extends InnerModelSlotParameter<TypeAwareModelSlot<?, ?>>{
+
+@PropertyIdentifier(type=String.class)
+public static final String CONCEPT_URI_KEY = "conceptURI";
+@PropertyIdentifier(type=DataBinding.class)
+public static final String CONCEPT_VALUE_KEY = "conceptValue";
+
+@Getter(value=CONCEPT_URI_KEY)
+@XMLAttribute
+public String _getConceptURI();
+
+@Setter(CONCEPT_URI_KEY)
+public void _setConceptURI(String conceptURI);
+
+
+@Getter(value=CONCEPT_VALUE_KEY)
+@XMLAttribute
+public DataBinding getConceptValue();
+
+@Setter(CONCEPT_VALUE_KEY)
+public void setConceptValue(DataBinding conceptValue);
+
+
+public static abstract  class ClassParameterImpl extends InnerModelSlotParameter<TypeAwareModelSlot<?, ?>>Impl implements ClassParameter
+{
 
 	private String conceptURI;
 	private DataBinding<IFlexoOntologyClass> conceptValue;
 	private boolean isDynamicConceptValueSet = false;
 
-	public ClassParameter() {
+	public ClassParameterImpl() {
 		super();
 	}
 
@@ -123,4 +150,5 @@ public class ClassParameter extends InnerModelSlotParameter<TypeAwareModelSlot<?
 		return returned;
 	}
 
+}
 }

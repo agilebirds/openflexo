@@ -38,11 +38,28 @@ import org.openflexo.technologyadapter.diagram.model.Diagram;
 import org.openflexo.toolbox.StringUtils;
 
 @FIBPanel("Fib/AddDiagramPanel.fib")
-public class AddDiagram extends DiagramAction<Diagram> {
+@ModelEntity
+@ImplementationClass(AddDiagram.AddDiagramImpl.class)
+@XMLElement
+public interface AddDiagram extends DiagramAction<Diagram>{
+
+@PropertyIdentifier(type=DataBinding.class)
+public static final String DIAGRAM_NAME_KEY = "diagramName";
+
+@Getter(value=DIAGRAM_NAME_KEY)
+@XMLAttribute
+public DataBinding getDiagramName();
+
+@Setter(DIAGRAM_NAME_KEY)
+public void setDiagramName(DataBinding diagramName);
+
+
+public static abstract  class AddDiagramImpl extends DiagramAction<Diagram>Impl implements AddDiagram
+{
 
 	private static final Logger logger = Logger.getLogger(AddDiagram.class.getPackage().getName());
 
-	public AddDiagram() {
+	public AddDiagramImpl() {
 		super();
 	}
 
@@ -171,4 +188,5 @@ public class AddDiagram extends DiagramAction<Diagram> {
 		return null;
 	}
 
+}
 }

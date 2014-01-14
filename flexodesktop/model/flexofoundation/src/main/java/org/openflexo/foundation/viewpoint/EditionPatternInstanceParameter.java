@@ -24,12 +24,29 @@ import java.lang.reflect.Type;
 import org.openflexo.foundation.DataModification;
 import org.openflexo.foundation.view.EditionPatternInstance;
 
-public class EditionPatternInstanceParameter extends InnerModelSlotParameter<VirtualModelModelSlot> {
+@ModelEntity
+@ImplementationClass(EditionPatternInstanceParameter.EditionPatternInstanceParameterImpl.class)
+@XMLElement
+public interface EditionPatternInstanceParameter extends InnerModelSlotParameter<VirtualModelModelSlot>{
+
+@PropertyIdentifier(type=String.class)
+public static final String EDITION_PATTERN_TYPE_URI_KEY = "editionPatternTypeURI";
+
+@Getter(value=EDITION_PATTERN_TYPE_URI_KEY)
+@XMLAttribute
+public String _getEditionPatternTypeURI();
+
+@Setter(EDITION_PATTERN_TYPE_URI_KEY)
+public void _setEditionPatternTypeURI(String editionPatternTypeURI);
+
+
+public static abstract  class EditionPatternInstanceParameterImpl extends InnerModelSlotParameter<VirtualModelModelSlot>Impl implements EditionPatternInstanceParameter
+{
 
 	private EditionPattern editionPatternType;
 	private String editionPatternTypeURI;
 
-	public EditionPatternInstanceParameter() {
+	public EditionPatternInstanceParameterImpl() {
 		super();
 	}
 
@@ -104,4 +121,5 @@ public class EditionPatternInstanceParameter extends InnerModelSlotParameter<Vir
 		return null;
 	}
 
+}
 }

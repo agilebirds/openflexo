@@ -35,14 +35,41 @@ import org.openflexo.foundation.viewpoint.FMLRepresentationContext.FMLRepresenta
 import org.openflexo.foundation.viewpoint.annotations.FIBPanel;
 
 @FIBPanel("Fib/AddToListActionPanel.fib")
-public class AddToListAction<MS extends ModelSlot<?>, T> extends EditionAction<MS, Object> {
+@ModelEntity
+@ImplementationClass(AddToListAction.AddToListActionImpl.class)
+@XMLElement
+public interface AddToListAction<MS extends ModelSlot<?>, T> extends EditionAction<MS, Object>{
+
+@PropertyIdentifier(type=DataBinding.class)
+public static final String VALUE_KEY = "value";
+@PropertyIdentifier(type=DataBinding.class)
+public static final String LIST_KEY = "list";
+
+@Getter(value=VALUE_KEY)
+@XMLAttribute
+public DataBinding getValue();
+
+@Setter(VALUE_KEY)
+public void setValue(DataBinding value);
+
+
+@Getter(value=LIST_KEY)
+@XMLAttribute
+public DataBinding getList();
+
+@Setter(LIST_KEY)
+public void setList(DataBinding list);
+
+
+public static abstract  class AddToListAction<MSImpl extends ModelSlot<?>, T> extends EditionAction<MS, Object>Impl implements AddToListAction<MS
+{
 
 	private static final Logger logger = Logger.getLogger(AddToListAction.class.getPackage().getName());
 
 	private DataBinding<Object> value;
 	private DataBinding<Object> list;
 
-	public AddToListAction() {
+	public AddToListActionImpl() {
 		super();
 	}
 
@@ -221,4 +248,5 @@ public class AddToListAction<MS extends ModelSlot<?>, T> extends EditionAction<M
 
 	}
 
+}
 }

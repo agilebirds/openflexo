@@ -29,9 +29,16 @@ import org.openflexo.foundation.technologyadapter.ModelSlot;
  * @author sylvain
  * 
  */
-public class TechnologyObjectParameter<MS extends ModelSlot<?>> extends InnerModelSlotParameter<MS> {
+@ModelEntity
+@ImplementationClass(TechnologyObjectParameter.TechnologyObjectParameterImpl.class)
+@XMLElement
+public interface TechnologyObjectParameter<MS extends ModelSlot<?>> extends InnerModelSlotParameter<MS>{
 
-	public TechnologyObjectParameter() {
+
+public static abstract  class TechnologyObjectParameter<MSImpl extends ModelSlot<?>> extends InnerModelSlotParameter<MS>Impl implements TechnologyObjectParameter<MS
+{
+
+	public TechnologyObjectParameterImpl() {
 		super();
 	}
 
@@ -45,4 +52,5 @@ public class TechnologyObjectParameter<MS extends ModelSlot<?>> extends InnerMod
 		return WidgetType.TECHNOLOGY_OBJECT;
 	}
 
+}
 }

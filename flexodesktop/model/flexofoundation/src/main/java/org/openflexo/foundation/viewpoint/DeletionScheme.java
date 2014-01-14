@@ -22,10 +22,18 @@ package org.openflexo.foundation.viewpoint;
 import org.openflexo.foundation.viewpoint.annotations.FIBPanel;
 
 @FIBPanel("Fib/DeletionSchemePanel.fib")
-public class DeletionScheme extends AbstractActionScheme {
+@ModelEntity
+@ImplementationClass(DeletionScheme.DeletionSchemeImpl.class)
+@XMLElement
+public interface DeletionScheme extends AbstractActionScheme{
 
-	public DeletionScheme() {
+
+public static abstract  class DeletionSchemeImpl extends AbstractActionSchemeImpl implements DeletionScheme
+{
+
+	public DeletionSchemeImpl() {
 		super();
 	}
 
+}
 }

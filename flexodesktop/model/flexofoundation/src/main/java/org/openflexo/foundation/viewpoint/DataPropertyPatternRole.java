@@ -8,11 +8,27 @@ import org.openflexo.foundation.view.ActorReference;
 import org.openflexo.foundation.view.ConceptActorReference;
 import org.openflexo.foundation.view.EditionPatternInstance;
 
-public abstract class DataPropertyPatternRole<P extends IFlexoOntologyDataProperty> extends PropertyPatternRole<P> {
+@ModelEntity(isAbstract = true)
+@ImplementationClass(DataPropertyPatternRole.DataPropertyPatternRoleImpl.class)
+public abstract interface DataPropertyPatternRole<P extends IFlexoOntologyDataProperty> extends PropertyPatternRole<P>{
+
+@PropertyIdentifier(type=BuiltInDataType.class)
+public static final String DATA_TYPE_KEY = "dataType";
+
+@Getter(value=DATA_TYPE_KEY)
+@XMLAttribute
+public BuiltInDataType getDataType();
+
+@Setter(DATA_TYPE_KEY)
+public void setDataType(BuiltInDataType dataType);
+
+
+public static abstract  abstract class DataPropertyPatternRole<PImpl extends IFlexoOntologyDataProperty> extends PropertyPatternRole<P>Impl implements DataPropertyPatternRole<P
+{
 
 	private BuiltInDataType dataType;
 
-	public DataPropertyPatternRole() {
+	public DataPropertyPatternRoleImpl() {
 		super();
 	}
 
@@ -53,4 +69,5 @@ public abstract class DataPropertyPatternRole<P extends IFlexoOntologyDataProper
 	public ActorReference<P> makeActorReference(P object, EditionPatternInstance epi) {
 		return new ConceptActorReference<P>(object, this, epi);
 	}
+}
 }

@@ -10,9 +10,16 @@ import org.openflexo.technologyadapter.owl.model.OWLRestriction;
 
 // TODO: Rewrite this
 @Deprecated
-public class RestrictionStatementPatternRole extends StatementPatternRole {
+@ModelEntity
+@ImplementationClass(RestrictionStatementPatternRole.RestrictionStatementPatternRoleImpl.class)
+@XMLElement
+public interface RestrictionStatementPatternRole extends StatementPatternRole{
 
-	public RestrictionStatementPatternRole() {
+
+public static abstract  class RestrictionStatementPatternRoleImpl extends StatementPatternRoleImpl implements RestrictionStatementPatternRole
+{
+
+	public RestrictionStatementPatternRoleImpl() {
 		super();
 	}
 
@@ -58,4 +65,5 @@ public class RestrictionStatementPatternRole extends StatementPatternRole {
 		}
 	}
 
+}
 }

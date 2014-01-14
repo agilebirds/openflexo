@@ -24,11 +24,28 @@ import java.lang.reflect.Type;
 import org.openflexo.foundation.ontology.BuiltInDataType;
 import org.openflexo.foundation.ontology.IFlexoOntologyDataProperty;
 
-public class DataPropertyParameter extends PropertyParameter {
+@ModelEntity
+@ImplementationClass(DataPropertyParameter.DataPropertyParameterImpl.class)
+@XMLElement
+public interface DataPropertyParameter extends PropertyParameter{
+
+@PropertyIdentifier(type=BuiltInDataType.class)
+public static final String DATA_TYPE_KEY = "dataType";
+
+@Getter(value=DATA_TYPE_KEY)
+@XMLAttribute
+public BuiltInDataType getDataType();
+
+@Setter(DATA_TYPE_KEY)
+public void setDataType(BuiltInDataType dataType);
+
+
+public static abstract  class DataPropertyParameterImpl extends PropertyParameterImpl implements DataPropertyParameter
+{
 
 	private BuiltInDataType dataType;
 
-	public DataPropertyParameter() {
+	public DataPropertyParameterImpl() {
 		super();
 	}
 
@@ -50,4 +67,5 @@ public class DataPropertyParameter extends PropertyParameter {
 		this.dataType = dataType;
 	}
 
+}
 }

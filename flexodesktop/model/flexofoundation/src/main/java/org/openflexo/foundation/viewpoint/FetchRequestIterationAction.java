@@ -33,7 +33,34 @@ import org.openflexo.foundation.viewpoint.annotations.FIBPanel;
 import org.openflexo.toolbox.StringUtils;
 
 @FIBPanel("Fib/FetchRequestIterationActionPanel.fib")
-public class FetchRequestIterationAction extends ControlStructureAction {
+@ModelEntity
+@ImplementationClass(FetchRequestIterationAction.FetchRequestIterationActionImpl.class)
+@XMLElement
+public interface FetchRequestIterationAction extends ControlStructureAction{
+
+@PropertyIdentifier(type=String.class)
+public static final String ITERATOR_NAME_KEY = "iteratorName";
+@PropertyIdentifier(type=FetchRequest.class)
+public static final String FETCH_REQUEST_KEY = "fetchRequest";
+
+@Getter(value=ITERATOR_NAME_KEY)
+@XMLAttribute
+public String getIteratorName();
+
+@Setter(ITERATOR_NAME_KEY)
+public void setIteratorName(String iteratorName);
+
+
+@Getter(value=FETCH_REQUEST_KEY)
+@XMLElement
+public FetchRequest getFetchRequest();
+
+@Setter(FETCH_REQUEST_KEY)
+public void setFetchRequest(FetchRequest fetchRequest);
+
+
+public static abstract  class FetchRequestIterationActionImpl extends ControlStructureActionImpl implements FetchRequestIterationAction
+{
 
 	private static final Logger logger = Logger.getLogger(FetchRequestIterationAction.class.getPackage().getName());
 
@@ -41,7 +68,7 @@ public class FetchRequestIterationAction extends ControlStructureAction {
 
 	private FetchRequest fetchRequest;
 
-	public FetchRequestIterationAction() {
+	public FetchRequestIterationActionImpl() {
 		super();
 	}
 
@@ -150,4 +177,5 @@ public class FetchRequestIterationAction extends ControlStructureAction {
 		return super.getStringRepresentation();
 	}
 
+}
 }

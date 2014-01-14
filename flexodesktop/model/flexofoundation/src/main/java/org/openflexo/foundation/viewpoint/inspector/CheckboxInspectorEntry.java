@@ -26,9 +26,16 @@ package org.openflexo.foundation.viewpoint.inspector;
  * @author sylvain
  * 
  */
-public class CheckboxInspectorEntry extends InspectorEntry {
+@ModelEntity
+@ImplementationClass(CheckboxInspectorEntry.CheckboxInspectorEntryImpl.class)
+@XMLElement(xmlTag="Checkbox")
+public interface CheckboxInspectorEntry extends InspectorEntry{
 
-	public CheckboxInspectorEntry() {
+
+public static abstract  class CheckboxInspectorEntryImpl extends InspectorEntryImpl implements CheckboxInspectorEntry
+{
+
+	public CheckboxInspectorEntryImpl() {
 		super();
 	}
 
@@ -41,4 +48,5 @@ public class CheckboxInspectorEntry extends InspectorEntry {
 	public String getWidgetName() {
 		return "Checkbox";
 	}
+}
 }

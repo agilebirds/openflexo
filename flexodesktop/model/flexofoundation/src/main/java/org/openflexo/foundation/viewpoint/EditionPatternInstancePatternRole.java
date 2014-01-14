@@ -8,7 +8,34 @@ import org.openflexo.foundation.view.ModelObjectActorReference;
 import org.openflexo.foundation.viewpoint.FMLRepresentationContext.FMLRepresentationOutput;
 
 
-public class EditionPatternInstancePatternRole extends PatternRole<EditionPatternInstance> {
+@ModelEntity
+@ImplementationClass(EditionPatternInstancePatternRole.EditionPatternInstancePatternRoleImpl.class)
+@XMLElement
+public interface EditionPatternInstancePatternRole extends PatternRole<EditionPatternInstance>{
+
+@PropertyIdentifier(type=String.class)
+public static final String EDITION_PATTERN_TYPE_URI_KEY = "editionPatternTypeURI";
+@PropertyIdentifier(type=String.class)
+public static final String CREATION_SCHEME_URI_KEY = "creationSchemeURI";
+
+@Getter(value=EDITION_PATTERN_TYPE_URI_KEY)
+@XMLAttribute
+public String _getEditionPatternTypeURI();
+
+@Setter(EDITION_PATTERN_TYPE_URI_KEY)
+public void _setEditionPatternTypeURI(String editionPatternTypeURI);
+
+
+@Getter(value=CREATION_SCHEME_URI_KEY)
+@XMLAttribute
+public String _getCreationSchemeURI();
+
+@Setter(CREATION_SCHEME_URI_KEY)
+public void _setCreationSchemeURI(String creationSchemeURI);
+
+
+public static abstract  class EditionPatternInstancePatternRoleImpl extends PatternRole<EditionPatternInstance>Impl implements EditionPatternInstancePatternRole
+{
 
 	private static final Logger logger = Logger.getLogger(EditionPatternInstancePatternRole.class.getPackage().getName());
 
@@ -17,7 +44,7 @@ public class EditionPatternInstancePatternRole extends PatternRole<EditionPatter
 	private String _creationSchemeURI;
 	private String _editionPatternTypeURI;
 
-	public EditionPatternInstancePatternRole() {
+	public EditionPatternInstancePatternRoleImpl() {
 		super();
 		// logger.severe("############# Created EditionPatternInstancePatternRole " + Integer.toHexString(hashCode()) + " model version="
 		// + builder.getModelVersion() + " file=" + builder.resource.getFile().getAbsolutePath());
@@ -165,4 +192,5 @@ public class EditionPatternInstancePatternRole extends PatternRole<EditionPatter
 		setModelSlot(modelSlot);
 	}
 
+}
 }

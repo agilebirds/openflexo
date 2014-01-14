@@ -15,11 +15,18 @@ import org.openflexo.technologyadapter.excel.model.ExcelSheet;
 import org.openflexo.technologyadapter.excel.model.ExcelWorkbook;
 
 @FIBPanel("Fib/SelectExcelCellPanel.fib")
-public class SelectExcelCell extends FetchRequest<BasicExcelModelSlot, ExcelCell> {
+@ModelEntity
+@ImplementationClass(SelectExcelCell.SelectExcelCellImpl.class)
+@XMLElement
+public interface SelectExcelCell extends FetchRequest<BasicExcelModelSlot, ExcelCell>{
+
+
+public static abstract  class SelectExcelCellImpl extends FetchRequest<BasicExcelModelSlot, ExcelCell>Impl implements SelectExcelCell
+{
 
 	private static final Logger logger = Logger.getLogger(SelectExcelCell.class.getPackage().getName());
 
-	public SelectExcelCell() {
+	public SelectExcelCellImpl() {
 		super();
 	}
 
@@ -53,4 +60,5 @@ public class SelectExcelCell extends FetchRequest<BasicExcelModelSlot, ExcelCell
 
 		return returned;
 	}
+}
 }

@@ -33,13 +33,30 @@ import org.openflexo.foundation.viewpoint.FMLRepresentationContext.FMLRepresenta
 import org.openflexo.foundation.viewpoint.annotations.FIBPanel;
 
 @FIBPanel("Fib/DeletionActionPanel.fib")
-public class DeleteAction<MS extends ModelSlot<?>, T extends FlexoObject> extends EditionAction<MS, T> {
+@ModelEntity
+@ImplementationClass(DeleteAction.DeleteActionImpl.class)
+@XMLElement
+public interface DeleteAction<MS extends ModelSlot<?>, T extends FlexoObject> extends EditionAction<MS, T>{
+
+@PropertyIdentifier(type=DataBinding.class)
+public static final String OBJECT_KEY = "object";
+
+@Getter(value=OBJECT_KEY)
+@XMLAttribute
+public DataBinding getObject();
+
+@Setter(OBJECT_KEY)
+public void setObject(DataBinding object);
+
+
+public static abstract  class DeleteAction<MSImpl extends ModelSlot<?>, T extends FlexoObject> extends EditionAction<MS, T>Impl implements DeleteAction<MS
+{
 
 	private static final Logger logger = Logger.getLogger(DeleteAction.class.getPackage().getName());
 
 	private DataBinding<Object> object;
 
-	public DeleteAction() {
+	public DeleteActionImpl() {
 		super();
 	}
 
@@ -136,4 +153,5 @@ public class DeleteAction<MS extends ModelSlot<?>, T extends FlexoObject> extend
 
 	}
 
+}
 }

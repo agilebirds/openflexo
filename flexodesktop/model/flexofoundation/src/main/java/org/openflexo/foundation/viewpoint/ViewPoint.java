@@ -144,7 +144,7 @@ public interface ViewPoint extends NamedViewPointObject, ResourceData<ViewPoint>
 	 * 
 	 * @return
 	 */
-	@Getter(value = VIRTUAL_MODELS_KEY, cardinality = Cardinality.LIST/*, inverse = VirtualModel.VIEWPOINT_KEY*/)
+	@Getter(value = VIRTUAL_MODELS_KEY, cardinality = Cardinality.LIST, inverse = VirtualModel.VIEW_POINT_KEY)
 	public List<VirtualModel> getVirtualModels();
 
 	@Setter(VIRTUAL_MODELS_KEY)

@@ -58,13 +58,40 @@ import org.openflexo.toolbox.StringUtils;
  * 
  */
 @FIBPanel("Fib/AddShapePanel.fib")
-public class AddShape extends AddDiagramElementAction<DiagramShape> {
+@ModelEntity
+@ImplementationClass(AddShape.AddShapeImpl.class)
+@XMLElement
+public interface AddShape extends AddDiagramElementAction<DiagramShape>{
+
+@PropertyIdentifier(type=DataBinding.class)
+public static final String CONTAINER_KEY = "container";
+@PropertyIdentifier(type=boolean.class)
+public static final String EXTEND_PARENT_BOUNDS_TO_HOST_THIS_SHAPE_KEY = "extendParentBoundsToHostThisShape";
+
+@Getter(value=CONTAINER_KEY)
+@XMLAttribute
+public DataBinding getContainer();
+
+@Setter(CONTAINER_KEY)
+public void setContainer(DataBinding container);
+
+
+@Getter(value=EXTEND_PARENT_BOUNDS_TO_HOST_THIS_SHAPE_KEY,defaultValue = "false")
+@XMLAttribute
+public boolean getExtendParentBoundsToHostThisShape();
+
+@Setter(EXTEND_PARENT_BOUNDS_TO_HOST_THIS_SHAPE_KEY)
+public void setExtendParentBoundsToHostThisShape(boolean extendParentBoundsToHostThisShape);
+
+
+public static abstract  class AddShapeImpl extends AddDiagramElementAction<DiagramShape>Impl implements AddShape
+{
 
 	private static final Logger logger = Logger.getLogger(AddShape.class.getPackage().getName());
 
 	private boolean extendParentBoundsToHostThisShape = false;
 
-	public AddShape() {
+	public AddShapeImpl() {
 		super();
 	}
 
@@ -202,7 +229,7 @@ public class AddShape extends AddDiagramElementAction<DiagramShape> {
 
 	public static class AddShapeActionMustAdressAValidShapePatternRole extends
 			ValidationRule<AddShapeActionMustAdressAValidShapePatternRole, AddShape> {
-		public AddShapeActionMustAdressAValidShapePatternRole() {
+		public AddShapeImplActionMustAdressAValidShapePatternRole() {
 			super(AddShape.class, "add_shape_action_must_address_a_valid_shape_pattern_role");
 		}
 
@@ -242,7 +269,7 @@ public class AddShape extends AddDiagramElementAction<DiagramShape> {
 	}
 
 	public static class AddShapeActionMustHaveAValidContainer extends ValidationRule<AddShapeActionMustHaveAValidContainer, AddShape> {
-		public AddShapeActionMustHaveAValidContainer() {
+		public AddShapeImplActionMustHaveAValidContainer() {
 			super(AddShape.class, "add_shape_action_must_have_a_valid_container");
 		}
 
@@ -332,4 +359,5 @@ public class AddShape extends AddDiagramElementAction<DiagramShape> {
 
 	}
 
+}
 }

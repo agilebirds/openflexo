@@ -51,14 +51,41 @@ import org.openflexo.technologyadapter.owl.viewpoint.ObjectPropertyStatementPatt
 import org.openflexo.toolbox.StringUtils;
 
 @FIBPanel("Fib/AddObjectPropertyStatementPanel.fib")
-public class AddObjectPropertyStatement extends AddStatement<ObjectPropertyStatement> implements SetObjectPropertyValueAction {
+@ModelEntity
+@ImplementationClass(AddObjectPropertyStatement.AddObjectPropertyStatementImpl.class)
+@XMLElement
+public interface AddObjectPropertyStatement extends AddStatement<ObjectPropertyStatement>,SetObjectPropertyValueAction{
+
+@PropertyIdentifier(type=DataBinding.class)
+public static final String OBJECT_KEY = "object";
+@PropertyIdentifier(type=String.class)
+public static final String OBJECT_PROPERTY_URI_KEY = "objectPropertyURI";
+
+@Getter(value=OBJECT_KEY)
+@XMLAttribute
+public DataBinding getObject();
+
+@Setter(OBJECT_KEY)
+public void setObject(DataBinding object);
+
+
+@Getter(value=OBJECT_PROPERTY_URI_KEY)
+@XMLAttribute
+public String _getObjectPropertyURI();
+
+@Setter(OBJECT_PROPERTY_URI_KEY)
+public void _setObjectPropertyURI(String objectPropertyURI);
+
+
+public static abstract  class AddObjectPropertyStatementImpl extends AddStatement<ObjectPropertyStatement>Impl implements AddObjectPropertyStatement
+{
 
 	private static final Logger logger = Logger.getLogger(AddObjectPropertyStatement.class.getPackage().getName());
 
 	private String objectPropertyURI = null;
 	private DataBinding<Object> object;
 
-	public AddObjectPropertyStatement() {
+	public AddObjectPropertyStatementImpl() {
 		super();
 	}
 
@@ -231,7 +258,7 @@ public class AddObjectPropertyStatement extends AddStatement<ObjectPropertyState
 
 	public static class AddObjectPropertyStatementActionMustDefineAnObjectProperty extends
 			ValidationRule<AddObjectPropertyStatementActionMustDefineAnObjectProperty, AddObjectPropertyStatement> {
-		public AddObjectPropertyStatementActionMustDefineAnObjectProperty() {
+		public AddObjectPropertyStatementImplActionMustDefineAnObjectProperty() {
 			super(AddObjectPropertyStatement.class, "add_object_property_statement_action_must_define_an_object_property");
 		}
 
@@ -285,4 +312,5 @@ public class AddObjectPropertyStatement extends AddStatement<ObjectPropertyState
 
 	}
 
+}
 }

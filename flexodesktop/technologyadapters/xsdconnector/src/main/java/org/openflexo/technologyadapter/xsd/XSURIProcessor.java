@@ -51,7 +51,44 @@ import org.openflexo.technologyadapter.xsd.rm.XSDMetaModelResource;
 
 // TODO Manage the fact that URI May Change
 
-public class XSURIProcessor extends XMLURIProcessor {
+@ModelEntity
+@ImplementationClass(XSURIProcessor.XSURIProcessorImpl.class)
+@XMLElement(xmlTag="URIProcessor")
+public interface XSURIProcessor extends XMLURIProcessor{
+
+@PropertyIdentifier(type=String.class)
+public static final String TYPE_URI_KEY = "typeURI";
+@PropertyIdentifier(type=MappingStyle.class)
+public static final String MAPPING_STYLE_KEY = "mappingStyle";
+@PropertyIdentifier(type=String.class)
+public static final String ATTRIBUTE_NAME_KEY = "attributeName";
+
+@Getter(value=TYPE_URI_KEY)
+@XMLAttribute
+public String _getTypeURI();
+
+@Setter(TYPE_URI_KEY)
+public void _setTypeURI(String typeURI);
+
+
+@Getter(value=MAPPING_STYLE_KEY)
+@XMLAttribute
+public MappingStyle getMappingStyle();
+
+@Setter(MAPPING_STYLE_KEY)
+public void setMappingStyle(MappingStyle mappingStyle);
+
+
+@Getter(value=ATTRIBUTE_NAME_KEY)
+@XMLAttribute
+public String _getAttributeName();
+
+@Setter(ATTRIBUTE_NAME_KEY)
+public void _setAttributeName(String attributeName);
+
+
+public static abstract  class XSURIProcessorImpl extends XMLURIProcessorImpl implements XSURIProcessor
+{
 
 	// Properties actually used to calculate URis
 
@@ -247,4 +284,4 @@ public class XSURIProcessor extends XMLURIProcessor {
 		return typeURIStr.toString();
 	}
 
-}
+}}

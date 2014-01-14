@@ -1,5 +1,5 @@
 /** Copyright (c) 2013, THALES SYSTEMES AEROPORTES - All Rights Reserved
- * Author : Gilles Besançon
+ * Author : Gilles BesanÃ§on
  *
  * This file is part of OpenFlexo.
  *
@@ -57,8 +57,36 @@ import org.openflexo.toolbox.StringUtils;
  * 
  */
 @FIBPanel("Fib/AddEMFObjectIndividualAttributeDataPropertyValuePanel.fib")
-public class AddEMFObjectIndividualAttributeDataPropertyValue extends SetEMFPropertyValue<EMFObjectIndividualAttributeDataPropertyValue>
-		implements SetDataPropertyValueAction {
+@ModelEntity
+@ImplementationClass(AddEMFObjectIndividualAttributeDataPropertyValue.AddEMFObjectIndividualAttributeDataPropertyValueImpl.class)
+@XMLElement
+public interface AddEMFObjectIndividualAttributeDataPropertyValue extends SetEMFPropertyValue<EMFObjectIndividualAttributeDataPropertyValue>
+	,SetDataPropertyValueAction{
+
+@PropertyIdentifier(type=DataBinding.class)
+public static final String VALUE_KEY = "value";
+@PropertyIdentifier(type=String.class)
+public static final String DATA_PROPERTY_URI_KEY = "dataPropertyURI";
+
+@Getter(value=VALUE_KEY)
+@XMLAttribute
+public DataBinding getValue();
+
+@Setter(VALUE_KEY)
+public void setValue(DataBinding value);
+
+
+@Getter(value=DATA_PROPERTY_URI_KEY)
+@XMLAttribute
+public String _getDataPropertyURI();
+
+@Setter(DATA_PROPERTY_URI_KEY)
+public void _setDataPropertyURI(String dataPropertyURI);
+
+
+public static abstract  class AddEMFObjectIndividualAttributeDataPropertyValueImpl extends SetEMFPropertyValue<EMFObjectIndividualAttributeDataPropertyValue>
+	Impl implements AddEMFObjectIndividualAttributeDataPropertyValue
+{
 
 	private String dataPropertyURI = null;
 	private DataBinding<Object> value;
@@ -68,7 +96,7 @@ public class AddEMFObjectIndividualAttributeDataPropertyValue extends SetEMFProp
 	 * 
 	 * @param builder
 	 */
-	public AddEMFObjectIndividualAttributeDataPropertyValue() {
+	public AddEMFObjectIndividualAttributeDataPropertyValueImpl() {
 		super();
 	}
 
@@ -189,4 +217,5 @@ public class AddEMFObjectIndividualAttributeDataPropertyValue extends SetEMFProp
 		return result;
 	}
 
+}
 }

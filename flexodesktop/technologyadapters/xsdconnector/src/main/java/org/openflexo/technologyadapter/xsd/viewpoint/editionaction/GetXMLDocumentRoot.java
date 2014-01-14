@@ -31,11 +31,18 @@ import org.openflexo.technologyadapter.xsd.model.XMLXSDModel;
 import org.openflexo.technologyadapter.xsd.model.XSOntIndividual;
 
 @FIBPanel("Fib/GetXMLDocumentRoot.fib")
-public class GetXMLDocumentRoot extends AssignableAction<XSDModelSlot, XSOntIndividual> {
+@ModelEntity
+@ImplementationClass(GetXMLDocumentRoot.GetXMLDocumentRootImpl.class)
+@XMLElement
+public interface GetXMLDocumentRoot extends AssignableAction<XSDModelSlot, XSOntIndividual>{
+
+
+public static abstract  class GetXMLDocumentRootImpl extends AssignableAction<XSDModelSlot, XSOntIndividual>Impl implements GetXMLDocumentRoot
+{
 
 	private static final Logger logger = Logger.getLogger(GetXMLDocumentRoot.class.getPackage().getName());
 
-	public GetXMLDocumentRoot() {
+	public GetXMLDocumentRootImpl() {
 		super();
 	}
 
@@ -55,4 +62,5 @@ public class GetXMLDocumentRoot extends AssignableAction<XSDModelSlot, XSOntIndi
 		return Object.class;
 	}
 
+}
 }

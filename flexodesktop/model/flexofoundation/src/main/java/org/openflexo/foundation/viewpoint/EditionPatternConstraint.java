@@ -26,6 +26,13 @@ import org.openflexo.antar.binding.BindingModel;
 import org.openflexo.antar.binding.DataBinding;
 import org.openflexo.antar.binding.DataBinding.BindingDefinitionType;
 import org.openflexo.logging.FlexoLogger;
+import org.openflexo.model.annotations.Getter;
+import org.openflexo.model.annotations.ImplementationClass;
+import org.openflexo.model.annotations.ModelEntity;
+import org.openflexo.model.annotations.PropertyIdentifier;
+import org.openflexo.model.annotations.Setter;
+import org.openflexo.model.annotations.XMLAttribute;
+import org.openflexo.model.annotations.XMLElement;
 
 /**
  * An EditionPatternConstraint represents a structural constraint attached to an EditionPattern
@@ -33,61 +40,89 @@ import org.openflexo.logging.FlexoLogger;
  * @author sylvain
  * 
  */
-public class EditionPatternConstraint extends EditionPatternObject {
+@ModelEntity
+@ImplementationClass(EditionPatternConstraint.EditionPatternConstraintImpl.class)
+@XMLElement(xmlTag = "Constraint")
+public interface EditionPatternConstraint extends EditionPatternObject {
 
-	protected static final Logger logger = FlexoLogger.getLogger(EditionPatternConstraint.class.getPackage().getName());
+	@PropertyIdentifier(type = EditionPattern.class)
+	public static final String EDITION_PATTERN_KEY = "editionPattern";
 
-	private EditionPattern editionPattern;
-	private DataBinding<Boolean> constraint;
-
-	public EditionPatternConstraint() {
-		super();
-	}
-
-	@Override
-	public Collection<ViewPointObject> getEmbeddedValidableObjects() {
-		return null;
-	}
+	@PropertyIdentifier(type = DataBinding.class)
+	public static final String CONSTRAINT_KEY = "constraint";
 
 	@Override
-	public BindingModel getBindingModel() {
-		if (getEditionPattern() != null) {
-			return getEditionPattern().getBindingModel();
-		} else {
+	@Getter(value = EDITION_PATTERN_KEY, inverse = EditionPattern.EDITION_PATTERN_CONSTRAINTS_KEY)
+	public EditionPattern getEditionPattern();
+
+	@Setter(EDITION_PATTERN_KEY)
+	public void setEditionPattern(EditionPattern editionPattern);
+
+	@Getter(value = CONSTRAINT_KEY)
+	@XMLAttribute
+	public DataBinding getConstraint();
+
+	@Setter(CONSTRAINT_KEY)
+	public void setConstraint(DataBinding constraint);
+
+	public static abstract class EditionPatternConstraintImpl extends EditionPatternObjectImpl implements EditionPatternConstraint {
+
+		protected static final Logger logger = FlexoLogger.getLogger(EditionPatternConstraint.class.getPackage().getName());
+
+		private EditionPattern editionPattern;
+		private DataBinding<Boolean> constraint;
+
+		public EditionPatternConstraintImpl() {
+			super();
+		}
+
+		@Override
+		public Collection<ViewPointObject> getEmbeddedValidableObjects() {
 			return null;
 		}
-	}
 
-	@Override
-	public EditionPattern getEditionPattern() {
-		return editionPattern;
-	}
-
-	public void setEditionPattern(EditionPattern editionPattern) {
-		this.editionPattern = editionPattern;
-	}
-
-	@Override
-	public String getURI() {
-		return getEditionPattern().getURI() + "/Constraints_" + Integer.toHexString(hashCode());
-	}
-
-	public DataBinding<Boolean> getConstraint() {
-		if (constraint == null) {
-			constraint = new DataBinding<Boolean>(this, Boolean.class, BindingDefinitionType.GET);
-			constraint.setBindingName("constraint");
+		@Override
+		public BindingModel getBindingModel() {
+			if (getEditionPattern() != null) {
+				return getEditionPattern().getBindingModel();
+			} else {
+				return null;
+			}
 		}
-		return constraint;
-	}
 
-	public void setConstraint(DataBinding<Boolean> constraint) {
-		if (constraint != null) {
-			constraint.setOwner(this);
-			constraint.setBindingName("constraint");
-			constraint.setDeclaredType(Boolean.class);
-			constraint.setBindingDefinitionType(BindingDefinitionType.GET);
+		@Override
+		public EditionPattern getEditionPattern() {
+			return editionPattern;
 		}
-		this.constraint = constraint;
-	}
 
+		@Override
+		public void setEditionPattern(EditionPattern editionPattern) {
+			this.editionPattern = editionPattern;
+		}
+
+		@Override
+		public String getURI() {
+			return getEditionPattern().getURI() + "/Constraints_" + Integer.toHexString(hashCode());
+		}
+
+		@Override
+		public DataBinding<Boolean> getConstraint() {
+			if (constraint == null) {
+				constraint = new DataBinding<Boolean>(this, Boolean.class, BindingDefinitionType.GET);
+				constraint.setBindingName("constraint");
+			}
+			return constraint;
+		}
+
+		public void setConstraint(DataBinding<Boolean> constraint) {
+			if (constraint != null) {
+				constraint.setOwner(this);
+				constraint.setBindingName("constraint");
+				constraint.setDeclaredType(Boolean.class);
+				constraint.setBindingDefinitionType(BindingDefinitionType.GET);
+			}
+			this.constraint = constraint;
+		}
+
+	}
 }

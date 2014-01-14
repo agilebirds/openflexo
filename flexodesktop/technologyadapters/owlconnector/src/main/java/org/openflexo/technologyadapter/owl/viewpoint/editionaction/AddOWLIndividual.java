@@ -39,13 +39,20 @@ import org.openflexo.technologyadapter.owl.model.OWLObjectProperty;
 import org.openflexo.technologyadapter.owl.model.OWLOntology;
 import org.openflexo.technologyadapter.owl.model.OWLProperty;
 
-public class AddOWLIndividual extends AddIndividual<OWLModelSlot, OWLIndividual> {
+@ModelEntity
+@ImplementationClass(AddOWLIndividual.AddOWLIndividualImpl.class)
+@XMLElement
+public interface AddOWLIndividual extends AddIndividual<OWLModelSlot, OWLIndividual>{
+
+
+public static abstract  class AddOWLIndividualImpl extends AddIndividual<OWLModelSlot, OWLIndividual>Impl implements AddOWLIndividual
+{
 
 	private static final Logger logger = Logger.getLogger(AddOWLIndividual.class.getPackage().getName());
 
 	private final String dataPropertyURI = null;
 
-	public AddOWLIndividual() {
+	public AddOWLIndividualImpl() {
 		super();
 	}
 
@@ -145,4 +152,5 @@ public class AddOWLIndividual extends AddIndividual<OWLModelSlot, OWLIndividual>
 		return (TypeAwareModelSlotInstance<OWLOntology, OWLOntology, OWLModelSlot>) super.getModelSlotInstance(action);
 	}
 
+}
 }

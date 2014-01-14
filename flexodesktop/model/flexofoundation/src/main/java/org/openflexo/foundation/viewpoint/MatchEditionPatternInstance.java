@@ -52,7 +52,66 @@ import org.openflexo.foundation.viewpoint.annotations.FIBPanel;
  * @param <MM>
  */
 @FIBPanel("Fib/MatchEditionPatternInstancePanel.fib")
-public class MatchEditionPatternInstance extends AssignableAction<VirtualModelModelSlot, EditionPatternInstance> {
+@ModelEntity
+@ImplementationClass(MatchEditionPatternInstance.MatchEditionPatternInstanceImpl.class)
+@XMLElement
+public interface MatchEditionPatternInstance extends AssignableAction<VirtualModelModelSlot, EditionPatternInstance>{
+
+@PropertyIdentifier(type=DataBinding.class)
+public static final String VIRTUAL_MODEL_INSTANCE_KEY = "virtualModelInstance";
+@PropertyIdentifier(type=String.class)
+public static final String CREATION_SCHEME_URI_KEY = "creationSchemeURI";
+@PropertyIdentifier(type=Vector.class)
+public static final String MATCHING_CRITERIAS_KEY = "matchingCriterias";
+@PropertyIdentifier(type=Vector.class)
+public static final String PARAMETERS_KEY = "parameters";
+
+@Getter(value=VIRTUAL_MODEL_INSTANCE_KEY)
+@XMLAttribute
+public DataBinding getVirtualModelInstance();
+
+@Setter(VIRTUAL_MODEL_INSTANCE_KEY)
+public void setVirtualModelInstance(DataBinding virtualModelInstance);
+
+
+@Getter(value=CREATION_SCHEME_URI_KEY)
+@XMLAttribute
+public String _getCreationSchemeURI();
+
+@Setter(CREATION_SCHEME_URI_KEY)
+public void _setCreationSchemeURI(String creationSchemeURI);
+
+
+@Getter(value=MATCHING_CRITERIAS_KEY,cardinality = Cardinality.LIST)
+@XMLElement
+public List<MatchingCriteria> getMatchingCriterias();
+
+@Setter(MATCHING_CRITERIAS_KEY)
+public void setMatchingCriterias(List<MatchingCriteria> matchingCriterias);
+
+@Adder(MATCHING_CRITERIAS_KEY)
+public void addToMatchingCriterias(MatchingCriteria aMatchingCriteria);
+
+@Remover(MATCHING_CRITERIAS_KEY)
+public void removeFromMatchingCriterias(MatchingCriteria aMatchingCriteria);
+
+
+@Getter(value=PARAMETERS_KEY,cardinality = Cardinality.LIST)
+@XMLElement
+public List<CreateEditionPatternInstanceParameter> getParameters();
+
+@Setter(PARAMETERS_KEY)
+public void setParameters(List<CreateEditionPatternInstanceParameter> parameters);
+
+@Adder(PARAMETERS_KEY)
+public void addToParameters(CreateEditionPatternInstanceParameter aParameter);
+
+@Remover(PARAMETERS_KEY)
+public void removeFromParameters(CreateEditionPatternInstanceParameter aParameter);
+
+
+public static abstract  class MatchEditionPatternInstanceImpl extends AssignableAction<VirtualModelModelSlot, EditionPatternInstance>Impl implements MatchEditionPatternInstance
+{
 
 	static final Logger logger = Logger.getLogger(MatchEditionPatternInstance.class.getPackage().getName());
 
@@ -62,7 +121,7 @@ public class MatchEditionPatternInstance extends AssignableAction<VirtualModelMo
 	private Vector<MatchingCriteria> matchingCriterias = new Vector<MatchingCriteria>();
 	private Vector<CreateEditionPatternInstanceParameter> parameters = new Vector<CreateEditionPatternInstanceParameter>();
 
-	public MatchEditionPatternInstance() {
+	public MatchEditionPatternInstanceImpl() {
 		super();
 	}
 
@@ -337,7 +396,7 @@ public class MatchEditionPatternInstance extends AssignableAction<VirtualModelMo
 
 	public static class MatchEditionPatternInstanceMustAddressACreationScheme extends
 			ValidationRule<MatchEditionPatternInstanceMustAddressACreationScheme, MatchEditionPatternInstance> {
-		public MatchEditionPatternInstanceMustAddressACreationScheme() {
+		public MatchEditionPatternInstanceImplMustAddressACreationScheme() {
 			super(MatchEditionPatternInstance.class, "match_edition_pattern_action_must_address_a_valid_creation_scheme");
 		}
 
@@ -359,7 +418,7 @@ public class MatchEditionPatternInstance extends AssignableAction<VirtualModelMo
 
 	public static class MatchEditionPatternInstanceParametersMustBeValid extends
 			ValidationRule<MatchEditionPatternInstanceParametersMustBeValid, MatchEditionPatternInstance> {
-		public MatchEditionPatternInstanceParametersMustBeValid() {
+		public MatchEditionPatternInstanceImplParametersMustBeValid() {
 			super(MatchEditionPatternInstance.class, "match_edition_pattern_parameters_must_be_valid");
 		}
 
@@ -410,4 +469,5 @@ public class MatchEditionPatternInstance extends AssignableAction<VirtualModelMo
 
 	}
 
+}
 }

@@ -11,7 +11,34 @@ import org.openflexo.antar.expr.TypeMismatchException;
 import org.openflexo.foundation.validation.Validable;
 import org.openflexo.foundation.view.action.EditionSchemeAction;
 
-public class MatchingCriteria extends EditionSchemeObject implements Bindable {
+@ModelEntity
+@ImplementationClass(MatchingCriteria.MatchingCriteriaImpl.class)
+@XMLElement
+public interface MatchingCriteria extends EditionSchemeObject,Bindable{
+
+@PropertyIdentifier(type=String.class)
+public static final String PATTERN_ROLE_NAME_KEY = "patternRoleName";
+@PropertyIdentifier(type=DataBinding.class)
+public static final String VALUE_KEY = "value";
+
+@Getter(value=PATTERN_ROLE_NAME_KEY)
+@XMLAttribute
+public String _getPatternRoleName();
+
+@Setter(PATTERN_ROLE_NAME_KEY)
+public void _setPatternRoleName(String patternRoleName);
+
+
+@Getter(value=VALUE_KEY)
+@XMLAttribute
+public DataBinding getValue();
+
+@Setter(VALUE_KEY)
+public void setValue(DataBinding value);
+
+
+public static abstract  class MatchingCriteriaImpl extends EditionSchemeObjectImpl implements MatchingCriteria
+{
 
 	private MatchEditionPatternInstance action;
 
@@ -20,11 +47,11 @@ public class MatchingCriteria extends EditionSchemeObject implements Bindable {
 	private DataBinding<Object> value;
 
 	// Use it only for deserialization
-	public MatchingCriteria() {
+	public MatchingCriteriaImpl() {
 		super();
 	}
 
-	public MatchingCriteria(PatternRole patternRole) {
+	public MatchingCriteriaImpl(PatternRole patternRole) {
 		super();
 		this.patternRole = patternRole;
 	}
@@ -147,4 +174,4 @@ public class MatchingCriteria extends EditionSchemeObject implements Bindable {
 		return null;
 	}
 
-}
+}}

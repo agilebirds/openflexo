@@ -33,13 +33,20 @@ import org.openflexo.technologyadapter.xsd.metamodel.XSDMetaModel;
 import org.openflexo.technologyadapter.xsd.metamodel.XSOntClass;
 import org.openflexo.technologyadapter.xsd.model.XMLXSDModel;
 
-public class AddXSClass extends AddClass<XSDModelSlot, XSOntClass> {
+@ModelEntity
+@ImplementationClass(AddXSClass.AddXSClassImpl.class)
+@XMLElement
+public interface AddXSClass extends AddClass<XSDModelSlot, XSOntClass>{
+
+
+public static abstract  class AddXSClassImpl extends AddClass<XSDModelSlot, XSOntClass>Impl implements AddXSClass
+{
 
 	private static final Logger logger = Logger.getLogger(AddXSClass.class.getPackage().getName());
 
 	private final String dataPropertyURI = null;
 
-	public AddXSClass() {
+	public AddXSClassImpl() {
 		super();
 	}
 
@@ -84,4 +91,5 @@ public class AddXSClass extends AddClass<XSDModelSlot, XSOntClass> {
 		return (TypeAwareModelSlotInstance<XMLXSDModel, XSDMetaModel, XSDModelSlot>) super.getModelSlotInstance(action);
 	}
 
+}
 }

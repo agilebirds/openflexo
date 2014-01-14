@@ -31,11 +31,28 @@ import org.openflexo.technologyadapter.xsd.XSDModelSlot;
 import org.openflexo.technologyadapter.xsd.model.XMLXSDModel;
 import org.openflexo.technologyadapter.xsd.model.XSOntIndividual;
 
-public class SetXMLDocumentRoot extends ProcedureAction<XSDModelSlot, XSOntIndividual> {
+@ModelEntity
+@ImplementationClass(SetXMLDocumentRoot.SetXMLDocumentRootImpl.class)
+@XMLElement
+public interface SetXMLDocumentRoot extends ProcedureAction<XSDModelSlot, XSOntIndividual>{
+
+@PropertyIdentifier(type=DataBinding.class)
+public static final String PARAMETER_KEY = "parameter";
+
+@Getter(value=PARAMETER_KEY)
+@XMLAttribute
+public DataBinding getParameter();
+
+@Setter(PARAMETER_KEY)
+public void setParameter(DataBinding parameter);
+
+
+public static abstract  class SetXMLDocumentRootImpl extends ProcedureAction<XSDModelSlot, XSOntIndividual>Impl implements SetXMLDocumentRoot
+{
 
 	private static final Logger logger = Logger.getLogger(SetXMLDocumentRoot.class.getPackage().getName());
 
-	public SetXMLDocumentRoot() {
+	public SetXMLDocumentRootImpl() {
 		super();
 	}
 
@@ -73,4 +90,5 @@ public class SetXMLDocumentRoot extends ProcedureAction<XSDModelSlot, XSOntIndiv
 		return rootIndiv;
 	}
 
+}
 }

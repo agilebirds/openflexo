@@ -38,13 +38,40 @@ import org.openflexo.foundation.validation.ValidationIssue;
 import org.openflexo.foundation.validation.ValidationRule;
 import org.openflexo.foundation.view.action.EditionSchemeAction;
 
-public class ObjectPropertyAssertion extends AbstractAssertion {
+@ModelEntity
+@ImplementationClass(ObjectPropertyAssertion.ObjectPropertyAssertionImpl.class)
+@XMLElement
+public interface ObjectPropertyAssertion extends AbstractAssertion{
+
+@PropertyIdentifier(type=String.class)
+public static final String OBJECT_PROPERTY_URI_KEY = "objectPropertyURI";
+@PropertyIdentifier(type=DataBinding.class)
+public static final String OBJECT_KEY = "object";
+
+@Getter(value=OBJECT_PROPERTY_URI_KEY)
+@XMLAttribute
+public String _getObjectPropertyURI();
+
+@Setter(OBJECT_PROPERTY_URI_KEY)
+public void _setObjectPropertyURI(String objectPropertyURI);
+
+
+@Getter(value=OBJECT_KEY)
+@XMLAttribute
+public DataBinding getObject();
+
+@Setter(OBJECT_KEY)
+public void setObject(DataBinding object);
+
+
+public static abstract  class ObjectPropertyAssertionImpl extends AbstractAssertionImpl implements ObjectPropertyAssertion
+{
 
 	private static final Logger logger = Logger.getLogger(ObjectPropertyAssertion.class.getPackage().getName());
 
 	private String objectPropertyURI;
 
-	public ObjectPropertyAssertion() {
+	public ObjectPropertyAssertionImpl() {
 		super();
 	}
 
@@ -133,7 +160,7 @@ public class ObjectPropertyAssertion extends AbstractAssertion {
 
 	public static class ObjectPropertyAssertionMustDefineAnOntologyProperty extends
 			ValidationRule<ObjectPropertyAssertionMustDefineAnOntologyProperty, ObjectPropertyAssertion> {
-		public ObjectPropertyAssertionMustDefineAnOntologyProperty() {
+		public ObjectPropertyAssertionImplMustDefineAnOntologyProperty() {
 			super(ObjectPropertyAssertion.class, "object_property_assertion_must_define_an_ontology_property");
 		}
 
@@ -161,4 +188,5 @@ public class ObjectPropertyAssertion extends AbstractAssertion {
 
 	}
 
+}
 }

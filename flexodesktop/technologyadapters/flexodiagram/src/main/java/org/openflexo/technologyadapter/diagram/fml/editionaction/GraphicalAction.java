@@ -47,14 +47,51 @@ import org.openflexo.technologyadapter.diagram.model.DiagramElement;
 import org.openflexo.technologyadapter.diagram.model.DiagramShape;
 
 @FIBPanel("Fib/GraphicalActionPanel.fib")
-public class GraphicalAction extends EditionAction<TypedDiagramModelSlot, DiagramElement<?>> {
+@ModelEntity
+@ImplementationClass(GraphicalAction.GraphicalActionImpl.class)
+@XMLElement
+public interface GraphicalAction extends EditionAction<TypedDiagramModelSlot, DiagramElement<?>>{
+
+@PropertyIdentifier(type=DataBinding.class)
+public static final String SUBJECT_KEY = "subject";
+@PropertyIdentifier(type=DataBinding.class)
+public static final String VALUE_KEY = "value";
+@PropertyIdentifier(type=String.class)
+public static final String GRAPHICAL_FEATURE_NAME_KEY = "graphicalFeatureName";
+
+@Getter(value=SUBJECT_KEY)
+@XMLAttribute
+public DataBinding getSubject();
+
+@Setter(SUBJECT_KEY)
+public void setSubject(DataBinding subject);
+
+
+@Getter(value=VALUE_KEY)
+@XMLAttribute
+public DataBinding getValue();
+
+@Setter(VALUE_KEY)
+public void setValue(DataBinding value);
+
+
+@Getter(value=GRAPHICAL_FEATURE_NAME_KEY)
+@XMLAttribute(xmlTag="feature")
+public String _getGraphicalFeatureName();
+
+@Setter(GRAPHICAL_FEATURE_NAME_KEY)
+public void _setGraphicalFeatureName(String graphicalFeatureName);
+
+
+public static abstract  class GraphicalActionImpl extends EditionAction<TypedDiagramModelSlot, DiagramElement<?>>Impl implements GraphicalAction
+{
 
 	private static final Logger logger = Logger.getLogger(GraphicalAction.class.getPackage().getName());
 
 	private GraphicalFeature<?, ?> graphicalFeature = null;
 	private DataBinding<Object> value;
 
-	public GraphicalAction() {
+	public GraphicalActionImpl() {
 		super();
 	}
 
@@ -245,7 +282,7 @@ public class GraphicalAction extends EditionAction<TypedDiagramModelSlot, Diagra
 	}
 
 	public static class GraphicalActionMustHaveASubject extends ValidationRule<GraphicalActionMustHaveASubject, GraphicalAction> {
-		public GraphicalActionMustHaveASubject() {
+		public GraphicalActionImplMustHaveASubject() {
 			super(GraphicalAction.class, "graphical_action_must_have_a_subject");
 		}
 
@@ -289,7 +326,7 @@ public class GraphicalAction extends EditionAction<TypedDiagramModelSlot, Diagra
 	}
 
 	public static class GraphicalActionMustDefineAValue extends BindingIsRequiredAndMustBeValid<GraphicalAction> {
-		public GraphicalActionMustDefineAValue() {
+		public GraphicalActionImplMustDefineAValue() {
 			super("'value'_binding_is_not_valid", GraphicalAction.class);
 		}
 
@@ -300,4 +337,5 @@ public class GraphicalAction extends EditionAction<TypedDiagramModelSlot, Diagra
 
 	}
 
+}
 }

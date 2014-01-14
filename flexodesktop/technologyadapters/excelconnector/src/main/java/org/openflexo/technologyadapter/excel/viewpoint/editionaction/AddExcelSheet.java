@@ -20,7 +20,34 @@ import org.openflexo.technologyadapter.excel.model.ExcelSheet;
 import org.openflexo.technologyadapter.excel.model.ExcelWorkbook;
 
 @FIBPanel("Fib/AddExcelSheetPanel.fib")
-public class AddExcelSheet extends AssignableAction<BasicExcelModelSlot, ExcelSheet> {
+@ModelEntity
+@ImplementationClass(AddExcelSheet.AddExcelSheetImpl.class)
+@XMLElement
+public interface AddExcelSheet extends AssignableAction<BasicExcelModelSlot, ExcelSheet>{
+
+@PropertyIdentifier(type=DataBinding.class)
+public static final String SHEET_NAME_KEY = "sheetName";
+@PropertyIdentifier(type=DataBinding.class)
+public static final String SHEET_ROWS_KEY = "sheetRows";
+
+@Getter(value=SHEET_NAME_KEY)
+@XMLAttribute
+public DataBinding getSheetName();
+
+@Setter(SHEET_NAME_KEY)
+public void setSheetName(DataBinding sheetName);
+
+
+@Getter(value=SHEET_ROWS_KEY)
+@XMLElement
+public DataBinding getSheetRows();
+
+@Setter(SHEET_ROWS_KEY)
+public void setSheetRows(DataBinding sheetRows);
+
+
+public static abstract  class AddExcelSheetImpl extends AssignableAction<BasicExcelModelSlot, ExcelSheet>Impl implements AddExcelSheet
+{
 
 	private static final Logger logger = Logger.getLogger(AddExcelSheet.class.getPackage().getName());
 
@@ -28,7 +55,7 @@ public class AddExcelSheet extends AssignableAction<BasicExcelModelSlot, ExcelSh
 
 	private DataBinding<List<ExcelRow>> sheetRows;
 
-	public AddExcelSheet() {
+	public AddExcelSheetImpl() {
 		super();
 	}
 
@@ -123,4 +150,5 @@ public class AddExcelSheet extends AssignableAction<BasicExcelModelSlot, ExcelSh
 		this.sheetRows = sheetRows;
 	}
 
+}
 }

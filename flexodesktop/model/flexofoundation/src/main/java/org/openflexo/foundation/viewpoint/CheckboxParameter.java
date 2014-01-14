@@ -21,9 +21,16 @@ package org.openflexo.foundation.viewpoint;
 
 import java.lang.reflect.Type;
 
-public class CheckboxParameter extends EditionSchemeParameter {
+@ModelEntity
+@ImplementationClass(CheckboxParameter.CheckboxParameterImpl.class)
+@XMLElement(xmlTag="CheckBoxParameter")
+public interface CheckboxParameter extends EditionSchemeParameter{
 
-	public CheckboxParameter() {
+
+public static abstract  class CheckboxParameterImpl extends EditionSchemeParameterImpl implements CheckboxParameter
+{
+
+	public CheckboxParameterImpl() {
 		super();
 	}
 
@@ -37,4 +44,5 @@ public class CheckboxParameter extends EditionSchemeParameter {
 		return WidgetType.CHECKBOX;
 	}
 
+}
 }

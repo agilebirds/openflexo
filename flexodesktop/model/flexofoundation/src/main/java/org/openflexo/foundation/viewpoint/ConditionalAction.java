@@ -31,13 +31,30 @@ import org.openflexo.foundation.viewpoint.annotations.FIBPanel;
 import org.openflexo.toolbox.StringUtils;
 
 @FIBPanel("Fib/ConditionalActionPanel.fib")
-public class ConditionalAction extends ControlStructureAction {
+@ModelEntity
+@ImplementationClass(ConditionalAction.ConditionalActionImpl.class)
+@XMLElement
+public interface ConditionalAction extends ControlStructureAction{
+
+@PropertyIdentifier(type=DataBinding.class)
+public static final String CONDITION_KEY = "condition";
+
+@Getter(value=CONDITION_KEY)
+@XMLAttribute
+public DataBinding getCondition();
+
+@Setter(CONDITION_KEY)
+public void setCondition(DataBinding condition);
+
+
+public static abstract  class ConditionalActionImpl extends ControlStructureActionImpl implements ConditionalAction
+{
 
 	private static final Logger logger = Logger.getLogger(ConditionalAction.class.getPackage().getName());
 
 	private DataBinding<Boolean> condition;
 
-	public ConditionalAction() {
+	public ConditionalActionImpl() {
 		super();
 	}
 
@@ -130,4 +147,5 @@ public class ConditionalAction extends ControlStructureAction {
 
 	}
 
+}
 }

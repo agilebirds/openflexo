@@ -30,12 +30,20 @@ import org.openflexo.foundation.viewpoint.annotations.FIBPanel;
  * 
  */
 @FIBPanel("Fib/CloneShapePanel.fib")
-public class CloneShape extends AddShape {
+@ModelEntity
+@ImplementationClass(CloneShape.CloneShapeImpl.class)
+@XMLElement
+public interface CloneShape extends AddShape{
+
+
+public static abstract  class CloneShapeImpl extends AddShapeImpl implements CloneShape
+{
 
 	private static final Logger logger = Logger.getLogger(CloneShape.class.getPackage().getName());
 
-	public CloneShape() {
+	public CloneShapeImpl() {
 		super();
 	}
 
+}
 }

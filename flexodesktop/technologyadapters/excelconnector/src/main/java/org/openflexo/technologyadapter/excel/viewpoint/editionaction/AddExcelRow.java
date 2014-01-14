@@ -20,7 +20,44 @@ import org.openflexo.technologyadapter.excel.model.ExcelSheet;
 import org.openflexo.technologyadapter.excel.model.ExcelWorkbook;
 
 @FIBPanel("Fib/AddExcelRowPanel.fib")
-public class AddExcelRow extends AssignableAction<BasicExcelModelSlot, ExcelRow> {
+@ModelEntity
+@ImplementationClass(AddExcelRow.AddExcelRowImpl.class)
+@XMLElement
+public interface AddExcelRow extends AssignableAction<BasicExcelModelSlot, ExcelRow>{
+
+@PropertyIdentifier(type=DataBinding.class)
+public static final String EXCEL_SHEET_KEY = "excelSheet";
+@PropertyIdentifier(type=DataBinding.class)
+public static final String EXCEL_CELLS_KEY = "excelCells";
+@PropertyIdentifier(type=DataBinding.class)
+public static final String ROW_INDEX_KEY = "rowIndex";
+
+@Getter(value=EXCEL_SHEET_KEY)
+@XMLAttribute
+public DataBinding getExcelSheet();
+
+@Setter(EXCEL_SHEET_KEY)
+public void setExcelSheet(DataBinding excelSheet);
+
+
+@Getter(value=EXCEL_CELLS_KEY)
+@XMLElement
+public DataBinding getExcelCells();
+
+@Setter(EXCEL_CELLS_KEY)
+public void setExcelCells(DataBinding excelCells);
+
+
+@Getter(value=ROW_INDEX_KEY)
+@XMLElement
+public DataBinding getRowIndex();
+
+@Setter(ROW_INDEX_KEY)
+public void setRowIndex(DataBinding rowIndex);
+
+
+public static abstract  class AddExcelRowImpl extends AssignableAction<BasicExcelModelSlot, ExcelRow>Impl implements AddExcelRow
+{
 
 	private static final Logger logger = Logger.getLogger(AddExcelRow.class.getPackage().getName());
 
@@ -30,7 +67,7 @@ public class AddExcelRow extends AssignableAction<BasicExcelModelSlot, ExcelRow>
 
 	private DataBinding<Integer> rowIndex;
 
-	public AddExcelRow() {
+	public AddExcelRowImpl() {
 		super();
 		// TODO Auto-generated constructor stub
 	}
@@ -148,4 +185,5 @@ public class AddExcelRow extends AssignableAction<BasicExcelModelSlot, ExcelRow>
 		return (FreeModelSlotInstance<ExcelWorkbook, BasicExcelModelSlot>) super.getModelSlotInstance(action);
 	}
 
+}
 }

@@ -33,13 +33,30 @@ import org.openflexo.foundation.viewpoint.FMLRepresentationContext.FMLRepresenta
 import org.openflexo.foundation.viewpoint.annotations.FIBPanel;
 
 @FIBPanel("Fib/AssignationActionPanel.fib")
-public class AssignationAction<T> extends AssignableAction<ModelSlot<?>, T> {
+@ModelEntity
+@ImplementationClass(AssignationAction.AssignationActionImpl.class)
+@XMLElement
+public interface AssignationAction<T> extends AssignableAction<ModelSlot<?>, T>{
+
+@PropertyIdentifier(type=DataBinding.class)
+public static final String VALUE_KEY = "value";
+
+@Getter(value=VALUE_KEY)
+@XMLAttribute
+public DataBinding getValue();
+
+@Setter(VALUE_KEY)
+public void setValue(DataBinding value);
+
+
+public static abstract  class AssignationAction<T>Impl extends AssignableAction<ModelSlot<?>, T>Impl implements AssignationAction<T>
+{
 
 	private static final Logger logger = Logger.getLogger(AssignationAction.class.getPackage().getName());
 
 	private DataBinding<Object> value;
 
-	public AssignationAction() {
+	public AssignationActionImpl() {
 		super();
 	}
 
@@ -119,4 +136,5 @@ public class AssignationAction<T> extends AssignableAction<ModelSlot<?>, T> {
 
 	}
 
+}
 }

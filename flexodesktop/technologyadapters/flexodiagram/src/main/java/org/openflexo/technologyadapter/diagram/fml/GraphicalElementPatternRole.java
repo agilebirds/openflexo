@@ -27,8 +27,57 @@ import org.openflexo.technologyadapter.diagram.model.dm.GraphicalElementActionRe
 import org.openflexo.technologyadapter.diagram.model.dm.GraphicalRepresentationChanged;
 import org.openflexo.technologyadapter.diagram.model.dm.GraphicalRepresentationModified;
 
-public abstract class GraphicalElementPatternRole<T extends DiagramElement<GR>, GR extends GraphicalRepresentation> extends PatternRole<T>
-		implements Bindable {
+@ModelEntity(isAbstract = true)
+@ImplementationClass(GraphicalElementPatternRole.GraphicalElementPatternRoleImpl.class)
+public abstract interface GraphicalElementPatternRole<T extends DiagramElement<GR>, GR extends GraphicalRepresentation> extends PatternRole<T>
+	,Bindable{
+
+@PropertyIdentifier(type=String.class)
+public static final String EXAMPLE_LABEL_KEY = "exampleLabel";
+@PropertyIdentifier(type=Vector.class)
+public static final String ACTIONS_KEY = "actions";
+@PropertyIdentifier(type=Vector.class)
+public static final String DECLARED_GRSPECIFICATIONS_KEY = "declaredGRSpecifications";
+
+@Getter(value=EXAMPLE_LABEL_KEY)
+@XMLAttribute
+public String getExampleLabel();
+
+@Setter(EXAMPLE_LABEL_KEY)
+public void setExampleLabel(String exampleLabel);
+
+
+@Getter(value=ACTIONS_KEY,cardinality = Cardinality.LIST)
+@XMLElement
+public List<GraphicalElementAction> getActions();
+
+@Setter(ACTIONS_KEY)
+public void setActions(List<GraphicalElementAction> actions);
+
+@Adder(ACTIONS_KEY)
+public void addToActions(GraphicalElementAction aAction);
+
+@Remover(ACTIONS_KEY)
+public void removeFromActions(GraphicalElementAction aAction);
+
+
+@Getter(value=DECLARED_GRSPECIFICATIONS_KEY,cardinality = Cardinality.LIST)
+@XMLElement
+public List<GraphicalElementSpecification> _getDeclaredGRSpecifications();
+
+@Setter(DECLARED_GRSPECIFICATIONS_KEY)
+public void _setDeclaredGRSpecifications(List<GraphicalElementSpecification> declaredGRSpecifications);
+
+@Adder(DECLARED_GRSPECIFICATIONS_KEY)
+public void _addToDeclaredGRSpecifications(GraphicalElementSpecification aDeclaredGRSpecification);
+
+@Remover(DECLARED_GRSPECIFICATIONS_KEY)
+public void _removeFromDeclaredGRSpecifications(GraphicalElementSpecification aDeclaredGRSpecification);
+
+
+public static abstract  abstract class GraphicalElementPatternRole<TImpl extends DiagramElement<GR>, GR extends GraphicalRepresentation> extends PatternRole<T>
+	Impl implements GraphicalElementPatternRole<T
+{
 
 	@SuppressWarnings("unused")
 	private static final Logger logger = Logger.getLogger(GraphicalElementPatternRole.class.getPackage().getName());
@@ -43,7 +92,7 @@ public abstract class GraphicalElementPatternRole<T extends DiagramElement<GR>, 
 
 	private GR graphicalRepresentation;
 
-	public GraphicalElementPatternRole() {
+	public GraphicalElementPatternRoleImpl() {
 		super();
 		initDefaultSpecifications();
 	}
@@ -378,4 +427,5 @@ public abstract class GraphicalElementPatternRole<T extends DiagramElement<GR>, 
 	/*public void setModelSlot(DiagramModelSlot modelSlot) {
 		super.setModelSlot(modelSlot);
 	}*/
+}
 }

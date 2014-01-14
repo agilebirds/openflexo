@@ -90,7 +90,14 @@ import org.openflexo.technologyadapter.emf.viewpoint.editionaction.SelectEMFObje
 })
 @DeclareFetchRequests({ // All requests available through this model slot
 @DeclareFetchRequest(FML = "SelectEMFObjectIndividual", fetchRequestClass = SelectEMFObjectIndividual.class) })
-public class EMFModelSlot extends TypeAwareModelSlot<EMFModel, EMFMetaModel> {
+@ModelEntity
+@ImplementationClass(EMFModelSlot.EMFModelSlotImpl.class)
+@XMLElement
+public interface EMFModelSlot extends TypeAwareModelSlot<EMFModel, EMFMetaModel>{
+
+
+public static abstract  class EMFModelSlotImpl extends TypeAwareModelSlot<EMFModel, EMFMetaModel>Impl implements EMFModelSlot
+{
 
 	private static final Logger logger = Logger.getLogger(EMFModelSlot.class.getPackage().getName());
 
@@ -101,7 +108,7 @@ public class EMFModelSlot extends TypeAwareModelSlot<EMFModel, EMFMetaModel> {
 	 * @param viewPoint
 	 * @param adapter
 	 */
-	/*public EMFModelSlot(ViewPoint viewPoint, EMFTechnologyAdapter adapter) {
+	/*public EMFModelSlotImpl(ViewPoint viewPoint, EMFTechnologyAdapter adapter) {
 		super(viewPoint, adapter);
 	}*/
 
@@ -112,7 +119,7 @@ public class EMFModelSlot extends TypeAwareModelSlot<EMFModel, EMFMetaModel> {
 	 * @param virtualModel
 	 * @param adapter
 	 */
-	public EMFModelSlot(VirtualModel virtualModel, EMFTechnologyAdapter adapter) {
+	public EMFModelSlotImpl(VirtualModel virtualModel, EMFTechnologyAdapter adapter) {
 		super(virtualModel, adapter);
 	}
 
@@ -122,7 +129,7 @@ public class EMFModelSlot extends TypeAwareModelSlot<EMFModel, EMFMetaModel> {
 	 * 
 	 * @param builder
 	 */
-	public EMFModelSlot() {
+	public EMFModelSlotImpl() {
 		super();
 	}
 
@@ -132,7 +139,7 @@ public class EMFModelSlot extends TypeAwareModelSlot<EMFModel, EMFMetaModel> {
 	 * 
 	 * @param builder
 	 */
-	/*public EMFModelSlot(ViewPointBuilder builder) {
+	/*public EMFModelSlotImpl(ViewPointBuilder builder) {
 		super(builder);
 	}*/
 
@@ -145,7 +152,7 @@ public class EMFModelSlot extends TypeAwareModelSlot<EMFModel, EMFMetaModel> {
 	 * Instanciate a new model slot instance configuration for this model slot
 	 */
 	@Override
-	public EMFModelSlotInstanceConfiguration createConfiguration(CreateVirtualModelInstance<?> action) {
+	public EMFModelSlotImplInstanceConfiguration createConfiguration(CreateVirtualModelInstance<?> action) {
 		return new EMFModelSlotInstanceConfiguration(this, action);
 	}
 
@@ -250,4 +257,5 @@ public class EMFModelSlot extends TypeAwareModelSlot<EMFModel, EMFMetaModel> {
 		return true;
 	}
 
+}
 }

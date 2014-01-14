@@ -52,17 +52,24 @@ import org.openflexo.technologyadapter.diagram.rm.DiagramResource;
 		@DeclareEditionAction(FML = "GraphicalAction", editionActionClass = GraphicalAction.class) })
 @DeclareFetchRequests({ // All requests available through this model slot
 })
-public class TypedDiagramModelSlot extends TypeAwareModelSlot<Diagram, DiagramSpecification> implements DiagramModelSlot {
+@ModelEntity
+@ImplementationClass(TypedDiagramModelSlot.TypedDiagramModelSlotImpl.class)
+@XMLElement(xmlTag="DiagramModelSlot")
+public interface TypedDiagramModelSlot extends TypeAwareModelSlot<Diagram, DiagramSpecification>,DiagramModelSlot{
+
+
+public static abstract  class TypedDiagramModelSlotImpl extends TypeAwareModelSlot<Diagram, DiagramSpecification>Impl implements TypedDiagramModelSlot
+{
 
 	private static final Logger logger = Logger.getLogger(TypedDiagramModelSlot.class.getPackage().getName());
 
 	private List<FMLDiagramPaletteElementBinding> paletteElementBindings;
 
-	public TypedDiagramModelSlot(VirtualModel virtualModel, DiagramTechnologyAdapter adapter) {
+	public TypedDiagramModelSlotImpl(VirtualModel virtualModel, DiagramTechnologyAdapter adapter) {
 		super(virtualModel, adapter);
 	}
 
-	public TypedDiagramModelSlot(VirtualModel virtualModel, DiagramSpecification diagramSpecification, DiagramTechnologyAdapter adapter) {
+	public TypedDiagramModelSlotImpl(VirtualModel virtualModel, DiagramSpecification diagramSpecification, DiagramTechnologyAdapter adapter) {
 		this(virtualModel, adapter);
 		setMetaModelResource(diagramSpecification.getResource());
 	}
@@ -137,7 +144,7 @@ public class TypedDiagramModelSlot extends TypeAwareModelSlot<Diagram, DiagramSp
 	}
 
 	@Override
-	public TypedDiagramModelSlotInstanceConfiguration createConfiguration(CreateVirtualModelInstance<?> action) {
+	public TypedDiagramModelSlotImplInstanceConfiguration createConfiguration(CreateVirtualModelInstance<?> action) {
 		return new TypedDiagramModelSlotInstanceConfiguration(this, action);
 	}
 
@@ -205,4 +212,5 @@ public class TypedDiagramModelSlot extends TypeAwareModelSlot<Diagram, DiagramSp
 		paletteElementBindings.remove(paletteElementBinding);
 	}
 
+}
 }

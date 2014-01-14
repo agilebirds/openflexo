@@ -22,60 +22,64 @@ package org.openflexo.foundation.viewpoint;
 import org.openflexo.foundation.ontology.IFlexoOntologyObject;
 import org.openflexo.foundation.technologyadapter.ModelSlot;
 import org.openflexo.foundation.technologyadapter.TypeAwareModelSlot;
+import org.openflexo.model.annotations.ImplementationClass;
+import org.openflexo.model.annotations.ModelEntity;
 
-public abstract class OntologicObjectPatternRole<T extends IFlexoOntologyObject> extends PatternRole<T> {
+@ModelEntity(isAbstract = true)
+@ImplementationClass(OntologicObjectPatternRole.OntologicObjectPatternRoleImpl.class)
+public interface OntologicObjectPatternRole<T extends IFlexoOntologyObject> extends PatternRole<T> {
 
-	public OntologicObjectPatternRole() {
-		super();
-	}
+	public static abstract class OntologicObjectPatternRoleImpl<T extends IFlexoOntologyObject> extends PatternRoleImpl<T> implements
+			OntologicObjectPatternRole<T> {
 
-	/*public boolean getIsPrimaryConceptRole() {
-		if (getEditionPattern() == null) {
-			return false;
+		/*public boolean getIsPrimaryConceptRole() {
+			if (getEditionPattern() == null) {
+				return false;
+			}
+			return getEditionPattern().getPrimaryConceptRole() == this;
 		}
-		return getEditionPattern().getPrimaryConceptRole() == this;
-	}
 
-	public void setIsPrimaryConceptRole(boolean isPrimary) {
-		if (getEditionPattern() == null) {
-			return;
-		}
-		if (isPrimary) {
-			getEditionPattern().setPrimaryConceptRole(this);
-		} else {
-			getEditionPattern().setPrimaryConceptRole(null);
-		}
-	}
-
-	@Override
-	public boolean getIsPrimaryRole() {
-		return getIsPrimaryConceptRole();
-	}
-
-	@Override
-	public void setIsPrimaryRole(boolean isPrimary) {
-		setIsPrimaryConceptRole(isPrimary);
-	}*/
-
-	@Override
-	public TypeAwareModelSlot<?, ?> getModelSlot() {
-		TypeAwareModelSlot<?, ?> returned = null;
-		ModelSlot<?> superMS = super.getModelSlot();
-		if (superMS instanceof TypeAwareModelSlot) {
-			returned = (TypeAwareModelSlot<?, ?>) super.getModelSlot();
-		}
-		if (returned == null) {
-			if (getVirtualModel() != null && getVirtualModel().getModelSlots(TypeAwareModelSlot.class).size() > 0) {
-				return getVirtualModel().getModelSlots(TypeAwareModelSlot.class).get(0);
+		public void setIsPrimaryConceptRole(boolean isPrimary) {
+			if (getEditionPattern() == null) {
+				return;
+			}
+			if (isPrimary) {
+				getEditionPattern().setPrimaryConceptRole(this);
+			} else {
+				getEditionPattern().setPrimaryConceptRole(null);
 			}
 		}
-		return returned;
-	}
 
-	@Override
-	public void setModelSlot(ModelSlot<?> modelSlot) {
-		if (modelSlot instanceof TypeAwareModelSlot) {
-			super.setModelSlot(modelSlot);
+		@Override
+		public boolean getIsPrimaryRole() {
+			return getIsPrimaryConceptRole();
+		}
+
+		@Override
+		public void setIsPrimaryRole(boolean isPrimary) {
+			setIsPrimaryConceptRole(isPrimary);
+		}*/
+
+		@Override
+		public TypeAwareModelSlot<?, ?> getModelSlot() {
+			TypeAwareModelSlot<?, ?> returned = null;
+			ModelSlot<?> superMS = super.getModelSlot();
+			if (superMS instanceof TypeAwareModelSlot) {
+				returned = (TypeAwareModelSlot<?, ?>) super.getModelSlot();
+			}
+			if (returned == null) {
+				if (getVirtualModel() != null && getVirtualModel().getModelSlots(TypeAwareModelSlot.class).size() > 0) {
+					return getVirtualModel().getModelSlots(TypeAwareModelSlot.class).get(0);
+				}
+			}
+			return returned;
+		}
+
+		@Override
+		public void setModelSlot(ModelSlot<?> modelSlot) {
+			if (modelSlot instanceof TypeAwareModelSlot) {
+				super.setModelSlot(modelSlot);
+			}
 		}
 	}
 }

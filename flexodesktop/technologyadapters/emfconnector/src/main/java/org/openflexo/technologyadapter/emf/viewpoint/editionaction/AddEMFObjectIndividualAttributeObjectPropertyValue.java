@@ -1,5 +1,5 @@
 /** Copyright (c) 2013, THALES SYSTEMES AEROPORTES - All Rights Reserved
- * Author : Gilles Besançon
+ * Author : Gilles BesanÃ§on
  *
  * This file is part of OpenFlexo.
  *
@@ -59,8 +59,37 @@ import org.openflexo.toolbox.StringUtils;
  * 
  */
 @FIBPanel("Fib/AddEMFObjectIndividualAttributeObjectPropertyValuePanel.fib")
-public class AddEMFObjectIndividualAttributeObjectPropertyValue extends
-		SetEMFPropertyValue<EMFObjectIndividualAttributeObjectPropertyValue> implements SetObjectPropertyValueAction {
+@ModelEntity
+@ImplementationClass(AddEMFObjectIndividualAttributeObjectPropertyValue.AddEMFObjectIndividualAttributeObjectPropertyValueImpl.class)
+@XMLElement
+public interface AddEMFObjectIndividualAttributeObjectPropertyValue extends
+		SetEMFPropertyValue<EMFObjectIndividualAttributeObjectPropertyValue> implements SetObjectPropertyValueAction extends {
+
+@PropertyIdentifier(type=DataBinding.class)
+public static final String OBJECT_KEY = "object";
+@PropertyIdentifier(type=String.class)
+public static final String OBJECT_PROPERTY_URI_KEY = "objectPropertyURI";
+
+@Getter(value=OBJECT_KEY)
+@XMLAttribute
+public DataBinding getObject();
+
+@Setter(OBJECT_KEY)
+public void setObject(DataBinding object);
+
+
+@Getter(value=OBJECT_PROPERTY_URI_KEY)
+@XMLAttribute
+public String _getObjectPropertyURI();
+
+@Setter(OBJECT_PROPERTY_URI_KEY)
+public void _setObjectPropertyURI(String objectPropertyURI);
+
+
+public static abstract  class AddEMFObjectIndividualAttributeObjectPropertyValue extends
+		SetEMFPropertyValue<EMFObjectIndividualAttributeObjectPropertyValue> implements SetObjectPropertyValueActionImpl implements AddEMFObjectIndividualAttributeObjectPropertyValue extends
+		SetEMFPropertyValue<EMFObjectIndividualAttributeObjectPropertyValue> implements SetObjectPropertyValueAction
+{
 
 	private String objectPropertyURI = null;
 	private DataBinding<Object> object;
@@ -70,7 +99,7 @@ public class AddEMFObjectIndividualAttributeObjectPropertyValue extends
 	 * 
 	 * @param builder
 	 */
-	public AddEMFObjectIndividualAttributeObjectPropertyValue() {
+	public AddEMFObjectIndividualAttributeObjectPropertyValueImpl() {
 		super();
 	}
 
@@ -199,4 +228,5 @@ public class AddEMFObjectIndividualAttributeObjectPropertyValue extends
 		return result;
 	}
 
+}
 }

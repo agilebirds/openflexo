@@ -29,11 +29,17 @@ import org.openflexo.foundation.view.TypeAwareModelSlotInstance;
 import org.openflexo.foundation.view.action.EditionSchemeAction;
 import org.openflexo.logging.FlexoLogger;
 
-public abstract class AddConcept<MS extends TypeAwareModelSlot<?, ?>, T> extends AssignableAction<MS, T> {
+@ModelEntity(isAbstract = true)
+@ImplementationClass(AddConcept.AddConceptImpl.class)
+public abstract interface AddConcept<MS extends TypeAwareModelSlot<?, ?>, T> extends AssignableAction<MS, T>{
+
+
+public static abstract  abstract class AddConcept<MSImpl extends TypeAwareModelSlot<?, ?>, T> extends AssignableAction<MS, T>Impl implements AddConcept<MS
+{
 
 	protected static final Logger logger = FlexoLogger.getLogger(AddConcept.class.getPackage().getName());
 
-	public AddConcept() {
+	public AddConceptImpl() {
 		super();
 	}
 
@@ -90,4 +96,5 @@ public abstract class AddConcept<MS extends TypeAwareModelSlot<?, ?>, T> extends
 		return (TypeAwareModelSlotInstance<?, ?, MS>) super.getModelSlotInstance(action);
 	}
 
+}
 }

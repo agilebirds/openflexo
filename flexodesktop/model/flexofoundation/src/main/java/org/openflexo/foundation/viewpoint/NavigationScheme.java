@@ -30,11 +30,28 @@ import org.openflexo.foundation.view.EditionPatternInstance;
 import org.openflexo.foundation.viewpoint.annotations.FIBPanel;
 
 @FIBPanel("Fib/NavigationSchemePanel.fib")
-public class NavigationScheme extends AbstractActionScheme {
+@ModelEntity
+@ImplementationClass(NavigationScheme.NavigationSchemeImpl.class)
+@XMLElement
+public interface NavigationScheme extends AbstractActionScheme{
+
+@PropertyIdentifier(type=DataBinding.class)
+public static final String TARGET_OBJECT_KEY = "targetObject";
+
+@Getter(value=TARGET_OBJECT_KEY)
+@XMLAttribute
+public DataBinding getTargetObject();
+
+@Setter(TARGET_OBJECT_KEY)
+public void setTargetObject(DataBinding targetObject);
+
+
+public static abstract  class NavigationSchemeImpl extends AbstractActionSchemeImpl implements NavigationScheme
+{
 
 	private DataBinding<Object> targetObject;
 
-	public NavigationScheme() {
+	public NavigationSchemeImpl() {
 		super();
 	}
 
@@ -71,4 +88,5 @@ public class NavigationScheme extends AbstractActionScheme {
 		return null;
 	}
 
+}
 }

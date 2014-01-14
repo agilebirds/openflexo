@@ -34,14 +34,41 @@ import org.openflexo.foundation.ontology.IFlexoOntologyClass;
  * @author sylvain
  * 
  */
-public class ClassInspectorEntry extends InspectorEntry {
+@ModelEntity
+@ImplementationClass(ClassInspectorEntry.ClassInspectorEntryImpl.class)
+@XMLElement(xmlTag="Class")
+public interface ClassInspectorEntry extends InspectorEntry{
+
+@PropertyIdentifier(type=String.class)
+public static final String CONCEPT_URI_KEY = "conceptURI";
+@PropertyIdentifier(type=DataBinding.class)
+public static final String CONCEPT_VALUE_KEY = "conceptValue";
+
+@Getter(value=CONCEPT_URI_KEY)
+@XMLAttribute
+public String _getConceptURI();
+
+@Setter(CONCEPT_URI_KEY)
+public void _setConceptURI(String conceptURI);
+
+
+@Getter(value=CONCEPT_VALUE_KEY)
+@XMLAttribute
+public DataBinding getConceptValue();
+
+@Setter(CONCEPT_VALUE_KEY)
+public void setConceptValue(DataBinding conceptValue);
+
+
+public static abstract  class ClassInspectorEntryImpl extends InspectorEntryImpl implements ClassInspectorEntry
+{
 
 	private String conceptURI;
 	private boolean isDynamicConceptValueSet = false;
 
 	private DataBinding<IFlexoOntologyClass> conceptValue;
 
-	public ClassInspectorEntry() {
+	public ClassInspectorEntryImpl() {
 		super();
 	}
 
@@ -117,4 +144,5 @@ public class ClassInspectorEntry extends InspectorEntry {
 		return null;
 	}
 
+}
 }

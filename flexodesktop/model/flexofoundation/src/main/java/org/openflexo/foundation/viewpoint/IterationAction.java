@@ -38,13 +38,40 @@ import org.openflexo.foundation.viewpoint.annotations.FIBPanel;
 import org.openflexo.toolbox.StringUtils;
 
 @FIBPanel("Fib/IterationActionPanel.fib")
-public class IterationAction extends ControlStructureAction {
+@ModelEntity
+@ImplementationClass(IterationAction.IterationActionImpl.class)
+@XMLElement
+public interface IterationAction extends ControlStructureAction{
+
+@PropertyIdentifier(type=DataBinding.class)
+public static final String ITERATION_KEY = "iteration";
+@PropertyIdentifier(type=String.class)
+public static final String ITERATOR_NAME_KEY = "iteratorName";
+
+@Getter(value=ITERATION_KEY)
+@XMLAttribute
+public DataBinding getIteration();
+
+@Setter(ITERATION_KEY)
+public void setIteration(DataBinding iteration);
+
+
+@Getter(value=ITERATOR_NAME_KEY)
+@XMLAttribute
+public String getIteratorName();
+
+@Setter(ITERATOR_NAME_KEY)
+public void setIteratorName(String iteratorName);
+
+
+public static abstract  class IterationActionImpl extends ControlStructureActionImpl implements IterationAction
+{
 
 	private static final Logger logger = Logger.getLogger(IterationAction.class.getPackage().getName());
 
 	private String iteratorName = "item";
 
-	public IterationAction() {
+	public IterationActionImpl() {
 		super();
 	}
 
@@ -177,4 +204,5 @@ public class IterationAction extends ControlStructureAction {
 
 	}
 
+}
 }

@@ -33,7 +33,6 @@ import org.openflexo.antar.expr.NullReferenceException;
 import org.openflexo.antar.expr.TypeMismatchException;
 import org.openflexo.foundation.FlexoObject;
 import org.openflexo.foundation.technologyadapter.ModelSlot;
-import org.openflexo.foundation.validation.Validable;
 import org.openflexo.foundation.view.ModelSlotInstance;
 import org.openflexo.foundation.view.action.ActionSchemeAction;
 import org.openflexo.foundation.view.action.CreationSchemeAction;
@@ -41,6 +40,13 @@ import org.openflexo.foundation.view.action.DeletionSchemeAction;
 import org.openflexo.foundation.view.action.EditionSchemeAction;
 import org.openflexo.foundation.view.action.NavigationSchemeAction;
 import org.openflexo.foundation.view.action.SynchronizationSchemeAction;
+import org.openflexo.model.annotations.Getter;
+import org.openflexo.model.annotations.ImplementationClass;
+import org.openflexo.model.annotations.ModelEntity;
+import org.openflexo.model.annotations.PropertyIdentifier;
+import org.openflexo.model.annotations.Setter;
+import org.openflexo.model.annotations.XMLAttribute;
+import org.openflexo.model.annotations.XMLElement;
 
 /**
  * Abstract class representing a primitive to be executed as an atomic action of an EditionScheme
@@ -50,412 +56,446 @@ import org.openflexo.foundation.view.action.SynchronizationSchemeAction;
  * @author sylvain
  * 
  */
-public abstract class EditionAction<MS extends ModelSlot<?>, T> extends EditionSchemeObject {
+@ModelEntity(isAbstract = true)
+@ImplementationClass(EditionAction.EditionActionImpl.class)
+public abstract interface EditionAction<MS extends ModelSlot<?>, T> extends EditionSchemeObject {
 
-	private static final Logger logger = Logger.getLogger(EditionAction.class.getPackage().getName());
+	@PropertyIdentifier(type = ActionContainer.class)
+	public static final String ACTION_CONTAINER_KEY = "actionContainer";
+	@PropertyIdentifier(type = String.class)
+	public static final String DESCRIPTION_KEY = "description";
+	@PropertyIdentifier(type = DataBinding.class)
+	public static final String CONDITIONAL_KEY = "conditional";
+	@PropertyIdentifier(type = ModelSlot.class)
+	public static final String MODEL_SLOT_KEY = "modelSlot";
 
-	private MS modelSlot;
+	@Getter(value = ACTION_CONTAINER_KEY, inverse = ActionContainer.ACTIONS_KEY)
+	public ActionContainer getActionContainer();
 
-	private DataBinding<Boolean> conditional;
-
-	private ActionContainer actionContainer;
-
-	private BindingModel inferedBindingModel = null;
-
-	public EditionAction() {
-		super();
-	}
-
-	@Override
-	public String getURI() {
-		return null;
-	}
+	@Setter(ACTION_CONTAINER_KEY)
+	public void setActionContainer(ActionContainer actionContainer);
 
 	@Override
-	public Collection<? extends Validable> getEmbeddedValidableObjects() {
-		return null;
-	}
+	@Getter(value = DESCRIPTION_KEY)
+	@XMLElement
+	public String getDescription();
 
 	@Override
-	public EditionScheme getEditionScheme() {
-		return getScheme();
-	}
+	@Setter(DESCRIPTION_KEY)
+	public void setDescription(String description);
 
-	public EditionScheme getScheme() {
-		if (actionContainer instanceof EditionScheme) {
-			return (EditionScheme) actionContainer;
-		} else if (actionContainer != null) {
-			return actionContainer.getEditionScheme();
-		}
-		return null;
-	}
+	@Getter(value = CONDITIONAL_KEY)
+	@XMLAttribute
+	public DataBinding getConditional();
 
-	@Override
-	public VirtualModel getVirtualModel() {
-		if (getScheme() != null) {
-			return getScheme().getVirtualModel();
-		}
-		return null;
-	}
+	@Setter(CONDITIONAL_KEY)
+	public void setConditional(DataBinding conditional);
 
-	public MS getModelSlot() {
-		return modelSlot;
-	}
+	@Getter(value = MODEL_SLOT_KEY)
+	@XMLElement
+	public ModelSlot getModelSlot();
 
-	public void setModelSlot(MS modelSlot) {
-		this.modelSlot = modelSlot;
-	}
+	@Setter(MODEL_SLOT_KEY)
+	public void setModelSlot(ModelSlot modelSlot);
 
-	public <MS2 extends ModelSlot<?>> List<MS2> getAvailableModelSlots(Class<MS2> msType) {
-		if (getEditionPattern() != null && getEditionPattern().getVirtualModel() != null) {
-			return getEditionPattern().getVirtualModel().getModelSlots(msType);
-		} else if (getEditionPattern() instanceof VirtualModel) {
-			return ((VirtualModel) getEditionPattern()).getModelSlots(msType);
-		}
-		return null;
-	}
+	public static abstract class EditionActionImpl<MS extends ModelSlot<?>, T> extends EditionSchemeObjectImpl implements EditionAction<MS> {
 
-	public List<VirtualModelModelSlot> getAvailableVirtualModelModelSlots() {
-		return getAvailableModelSlots(VirtualModelModelSlot.class);
-	}
+		private static final Logger logger = Logger.getLogger(EditionAction.class.getPackage().getName());
 
-	public ModelSlotInstance<MS, ?> getModelSlotInstance(EditionSchemeAction action) {
-		if (action.getVirtualModelInstance() != null) {
-			return action.getVirtualModelInstance().getModelSlotInstance((ModelSlot) getModelSlot());
-		} else {
-			logger.severe("Could not access virtual model instance for action " + action);
-			return null;
-		}
-	}
+		private MS modelSlot;
 
-	public boolean evaluateCondition(EditionSchemeAction action) {
-		if (getConditional().isValid()) {
-			try {
-				return getConditional().getBindingValue(action);
-			} catch (TypeMismatchException e) {
-				e.printStackTrace();
-			} catch (NullReferenceException e) {
-				e.printStackTrace();
-			} catch (InvocationTargetException e) {
-				e.printStackTrace();
-			}
-		}
-		return true;
-	}
+		private DataBinding<Boolean> conditional;
 
-	/**
-	 * Perform batch of actions, in the context provided by supplied {@link EditionSchemeAction}<br>
-	 * An action is performed if and only if the condition evaluation returns true. All finalizers of actions are invoked in a second step
-	 * when all actions are performed.
-	 * 
-	 * @param action
-	 * @return
-	 */
-	public static void performBatchOfActions(Collection<EditionAction<?, ?>> actions, EditionSchemeAction contextAction) {
+		// private ActionContainer actionContainer;
 
-		Hashtable<EditionAction, Object> performedActions = new Hashtable<EditionAction, Object>();
+		private BindingModel inferedBindingModel = null;
 
-		for (EditionAction editionAction : actions) {
-			if (editionAction.evaluateCondition(contextAction)) {
-				Object assignedObject = editionAction.performAction(contextAction);
-				if (assignedObject != null) {
-					performedActions.put(editionAction, assignedObject);
-				}
-
-				if (assignedObject != null && editionAction instanceof AssignableAction) {
-					AssignableAction assignableAction = (AssignableAction) editionAction;
-					if (assignableAction.getIsVariableDeclaration()) {
-						System.out.println("Setting variable " + assignableAction.getVariableName() + " with value " + assignedObject
-								+ " of " + (assignedObject != null ? assignedObject.getClass() : "null"));
-						contextAction.declareVariable(assignableAction.getVariableName(), assignedObject);
-					}
-					if (assignableAction.getAssignation().isSet() && assignableAction.getAssignation().isValid()) {
-						try {
-							assignableAction.getAssignation().setBindingValue(assignedObject, contextAction);
-						} catch (Exception e) {
-							logger.warning("Unexpected assignation issue, " + assignableAction.getAssignation() + " object="
-									+ assignedObject + " exception: " + e);
-							e.printStackTrace();
-						}
-					}
-					if (assignableAction.getPatternRole() != null && assignedObject instanceof FlexoObject) {
-						if (contextAction instanceof ActionSchemeAction) {
-							((ActionSchemeAction) contextAction).getEditionPatternInstance().setObjectForPatternRole(
-									(FlexoObject) assignedObject, assignableAction.getPatternRole());
-						}
-						if (contextAction instanceof CreationSchemeAction) {
-							((CreationSchemeAction) contextAction).getEditionPatternInstance().setObjectForPatternRole(
-									(FlexoObject) assignedObject, assignableAction.getPatternRole());
-						}
-						if (contextAction instanceof DeletionSchemeAction) {
-							((DeletionSchemeAction) contextAction).getEditionPatternInstance().setObjectForPatternRole(
-									(FlexoObject) assignedObject, assignableAction.getPatternRole());
-						}
-						if (contextAction instanceof NavigationSchemeAction) {
-							((NavigationSchemeAction) contextAction).getEditionPatternInstance().setObjectForPatternRole(
-									(FlexoObject) assignedObject, assignableAction.getPatternRole());
-						}
-						if (contextAction instanceof SynchronizationSchemeAction) {
-							((SynchronizationSchemeAction) contextAction).getEditionPatternInstance().setObjectForPatternRole(
-									(FlexoObject) assignedObject, assignableAction.getPatternRole());
-						}
-					}
-				}
-			}
-		}
-
-		for (EditionAction editionAction : performedActions.keySet()) {
-			editionAction.finalizePerformAction(contextAction, performedActions.get(editionAction));
-		}
-	}
-
-	/**
-	 * Execute edition action in the context provided by supplied {@link EditionSchemeAction}<br>
-	 * Note than returned object will be used to be further reinjected in finalizer
-	 * 
-	 * @param action
-	 * @return
-	 */
-	public abstract T performAction(EditionSchemeAction action);
-
-	/**
-	 * Provides hooks after executing edition action in the context provided by supplied {@link EditionSchemeAction}
-	 * 
-	 * @param action
-	 * @param initialContext
-	 *            the object that was returned during {@link #performAction(EditionSchemeAction)} call
-	 * @return
-	 */
-	public abstract void finalizePerformAction(EditionSchemeAction action, T initialContext);
-
-	@Override
-	public EditionPattern getEditionPattern() {
-		if (getScheme() == null) {
-			return null;
-		}
-		return getScheme().getEditionPattern();
-	}
-
-	public Type getActionClass() {
-		return getClass();
-	}
-
-	public int getIndex() {
-		if (getScheme() != null && getScheme().getActions() != null) {
-			return getScheme().getActions().indexOf(this);
-		}
-		return -1;
-	}
-
-	@Override
-	public final BindingModel getBindingModel() {
-		if (getActionContainer() != null) {
-			return getActionContainer().getInferedBindingModel();
-		}
-		return null;
-	}
-
-	public final BindingModel getInferedBindingModel() {
-		if (inferedBindingModel == null) {
-			rebuildInferedBindingModel();
-		}
-		return inferedBindingModel;
-	}
-
-	protected void rebuildInferedBindingModel() {
-		inferedBindingModel = buildInferedBindingModel();
-	}
-
-	protected BindingModel buildInferedBindingModel() {
-		BindingModel returned;
-		if (getActionContainer() == null || isDeserializing()/* Prevent StackOverflow !!! */) {
-			returned = new BindingModel();
-		} else {
-			returned = new BindingModel(getActionContainer().getInferedBindingModel());
-		}
-		return returned;
-	}
-
-	public DataBinding<Boolean> getConditional() {
-		if (conditional == null) {
-			conditional = new DataBinding<Boolean>(this, Boolean.class, DataBinding.BindingDefinitionType.GET);
-			conditional.setBindingName("conditional");
-		}
-		return conditional;
-	}
-
-	public void setConditional(DataBinding<Boolean> conditional) {
-		if (conditional != null) {
-			conditional.setOwner(this);
-			conditional.setDeclaredType(Boolean.class);
-			conditional.setBindingDefinitionType(DataBinding.BindingDefinitionType.GET);
-			conditional.setBindingName("conditional");
-		}
-		this.conditional = conditional;
-	}
-
-	@Override
-	public String getStringRepresentation() {
-		return getClass().getSimpleName();
-	}
-
-	@Override
-	public String toString() {
-		return getStringRepresentation();
-	}
-
-	public ActionContainer getActionContainer() {
-		return actionContainer;
-	}
-
-	public void setActionContainer(ActionContainer actionContainer) {
-		this.actionContainer = actionContainer;
-		rebuildInferedBindingModel();
-	}
-
-	private void insertActionAtCurrentIndex(EditionAction<?, ?> editionAction) {
-		if (getActionContainer() != null) {
-			getActionContainer().insertActionAtIndex(editionAction, getActionContainer().getIndex(this) + 1);
-		}
-	}
-
-	/*public AddShape createAddShapeAction() {
-		AddShape newAction = new AddShape(null);
-		if (getEditionPattern().getDefaultShapePatternRole() != null) {
-			newAction.setAssignation(new ViewPointDataBinding(getEditionPattern().getDefaultShapePatternRole().getPatternRoleName()));
-		}
-		insertActionAtCurrentIndex(newAction);
-		return newAction;
-	}
-
-	public AddClass createAddClassAction() {
-		AddClass newAction = new AddClass(null);
-		insertActionAtCurrentIndex(newAction);
-		return newAction;
-	}
-
-	public AddIndividual createAddIndividualAction() {
-		AddIndividual newAction = new AddIndividual(null);
-		insertActionAtCurrentIndex(newAction);
-		return newAction;
-	}
-
-	public AddObjectPropertyStatement createAddObjectPropertyStatementAction() {
-		AddObjectPropertyStatement newAction = new AddObjectPropertyStatement(null);
-		insertActionAtCurrentIndex(newAction);
-		return newAction;
-	}
-
-	public AddDataPropertyStatement createAddDataPropertyStatementAction() {
-		AddDataPropertyStatement newAction = new AddDataPropertyStatement(null);
-		insertActionAtCurrentIndex(newAction);
-		return newAction;
-	}
-
-	public AddIsAStatement createAddIsAPropertyAction() {
-		AddIsAStatement newAction = new AddIsAStatement(null);
-		insertActionAtCurrentIndex(newAction);
-		return newAction;
-	}
-
-	public AddRestrictionStatement createAddRestrictionAction() {
-		AddRestrictionStatement newAction = new AddRestrictionStatement(null);
-		insertActionAtCurrentIndex(newAction);
-		return newAction;
-	}
-
-	public AddConnector createAddConnectorAction() {
-		AddConnector newAction = new AddConnector(null);
-		if (getEditionPattern().getDefaultConnectorPatternRole() != null) {
-			newAction.setAssignation(new ViewPointDataBinding(getEditionPattern().getDefaultConnectorPatternRole().getPatternRoleName()));
-		}
-		insertActionAtCurrentIndex(newAction);
-		return newAction;
-	}
-
-	public DeclarePatternRole createDeclarePatternRoleAction() {
-		DeclarePatternRole newAction = new DeclarePatternRole(null);
-		insertActionAtCurrentIndex(newAction);
-		return newAction;
-	}
-
-	public GraphicalAction createGraphicalAction() {
-		GraphicalAction newAction = new GraphicalAction(null);
-		insertActionAtCurrentIndex(newAction);
-		return newAction;
-	}
-
-	public CreateDiagram createAddDiagramAction() {
-		CreateDiagram newAction = new CreateDiagram(null);
-		insertActionAtCurrentIndex(newAction);
-		return newAction;
-	}
-
-	public AddEditionPattern createAddEditionPatternAction() {
-		AddEditionPattern newAction = new AddEditionPattern(null);
-		insertActionAtCurrentIndex(newAction);
-		return newAction;
-	}
-
-	public ConditionalAction createConditionalAction() {
-		ConditionalAction newAction = new ConditionalAction(null);
-		insertActionAtCurrentIndex(newAction);
-		return newAction;
-	}
-
-	public IterationAction createIterationAction() {
-		IterationAction newAction = new IterationAction(null);
-		insertActionAtCurrentIndex(newAction);
-		return newAction;
-	}
-
-	public CloneShape createCloneShapeAction() {
-		CloneShape newAction = new CloneShape(null);
-		if (getEditionPattern().getDefaultShapePatternRole() != null) {
-			newAction.setAssignation(new ViewPointDataBinding(getEditionPattern().getDefaultShapePatternRole().getPatternRoleName()));
-		}
-		insertActionAtCurrentIndex(newAction);
-		return newAction;
-	}
-
-	public CloneConnector createCloneConnectorAction() {
-		CloneConnector newAction = new CloneConnector(null);
-		if (getEditionPattern().getDefaultConnectorPatternRole() != null) {
-			newAction.setAssignation(new ViewPointDataBinding(getEditionPattern().getDefaultConnectorPatternRole().getPatternRoleName()));
-		}
-		insertActionAtCurrentIndex(newAction);
-		return newAction;
-	}
-
-	public CloneIndividual createCloneIndividualAction() {
-		CloneIndividual newAction = new CloneIndividual(null);
-		insertActionAtCurrentIndex(newAction);
-		return newAction;
-	}*/
-
-	/**
-	 * Creates a new {@link EditionAction} of supplied class, and add it to parent container at the index where this action is itself
-	 * registered<br>
-	 * Delegates creation to model slot
-	 * 
-	 * @return newly created {@link EditionAction}
-	 */
-	public <A extends EditionAction<?, ?>> A createActionAtCurrentIndex(Class<A> actionClass, ModelSlot<?> modelSlot) {
-		A newAction = modelSlot.createAction(actionClass);
-		insertActionAtCurrentIndex(newAction);
-		return null;
-	}
-
-	public static class ConditionalBindingMustBeValid extends BindingMustBeValid<EditionAction> {
-		public ConditionalBindingMustBeValid() {
-			super("'conditional'_binding_is_not_valid", EditionAction.class);
+		public EditionActionImpl() {
+			super();
 		}
 
 		@Override
-		public DataBinding<Boolean> getBinding(EditionAction object) {
-			return object.getConditional();
+		public String getURI() {
+			return null;
+		}
+
+		@Override
+		public EditionScheme getEditionScheme() {
+			if (getActionContainer() instanceof EditionScheme) {
+				return (EditionScheme) getActionContainer();
+			} else if (getActionContainer() != null) {
+				return getActionContainer().getEditionScheme();
+			}
+			return null;
+		}
+
+		@Override
+		public VirtualModel getVirtualModel() {
+			if (getEditionScheme() != null) {
+				return getEditionScheme().getVirtualModel();
+			}
+			return null;
+		}
+
+		public MS getModelSlot() {
+			return modelSlot;
+		}
+
+		public void setModelSlot(MS modelSlot) {
+			this.modelSlot = modelSlot;
+		}
+
+		public <MS2 extends ModelSlot<?>> List<MS2> getAvailableModelSlots(Class<MS2> msType) {
+			if (getEditionPattern() != null && getEditionPattern().getVirtualModel() != null) {
+				return getEditionPattern().getVirtualModel().getModelSlots(msType);
+			} else if (getEditionPattern() instanceof VirtualModel) {
+				return ((VirtualModel) getEditionPattern()).getModelSlots(msType);
+			}
+			return null;
+		}
+
+		public List<VirtualModelModelSlot> getAvailableVirtualModelModelSlots() {
+			return getAvailableModelSlots(VirtualModelModelSlot.class);
+		}
+
+		public ModelSlotInstance<MS, ?> getModelSlotInstance(EditionSchemeAction action) {
+			if (action.getVirtualModelInstance() != null) {
+				return action.getVirtualModelInstance().getModelSlotInstance((ModelSlot) getModelSlot());
+			} else {
+				logger.severe("Could not access virtual model instance for action " + action);
+				return null;
+			}
+		}
+
+		public boolean evaluateCondition(EditionSchemeAction action) {
+			if (getConditional().isValid()) {
+				try {
+					return getConditional().getBindingValue(action);
+				} catch (TypeMismatchException e) {
+					e.printStackTrace();
+				} catch (NullReferenceException e) {
+					e.printStackTrace();
+				} catch (InvocationTargetException e) {
+					e.printStackTrace();
+				}
+			}
+			return true;
+		}
+
+		/**
+		 * Perform batch of actions, in the context provided by supplied {@link EditionSchemeAction}<br>
+		 * An action is performed if and only if the condition evaluation returns true. All finalizers of actions are invoked in a second
+		 * step when all actions are performed.
+		 * 
+		 * @param action
+		 * @return
+		 */
+		public static void performBatchOfActions(Collection<EditionAction<?, ?>> actions, EditionSchemeAction contextAction) {
+
+			Hashtable<EditionAction, Object> performedActions = new Hashtable<EditionAction, Object>();
+
+			for (EditionAction editionAction : actions) {
+				if (editionAction.evaluateCondition(contextAction)) {
+					Object assignedObject = editionAction.performAction(contextAction);
+					if (assignedObject != null) {
+						performedActions.put(editionAction, assignedObject);
+					}
+
+					if (assignedObject != null && editionAction instanceof AssignableAction) {
+						AssignableAction assignableAction = (AssignableAction) editionAction;
+						if (assignableAction.getIsVariableDeclaration()) {
+							System.out.println("Setting variable " + assignableAction.getVariableName() + " with value " + assignedObject
+									+ " of " + (assignedObject != null ? assignedObject.getClass() : "null"));
+							contextAction.declareVariable(assignableAction.getVariableName(), assignedObject);
+						}
+						if (assignableAction.getAssignation().isSet() && assignableAction.getAssignation().isValid()) {
+							try {
+								assignableAction.getAssignation().setBindingValue(assignedObject, contextAction);
+							} catch (Exception e) {
+								logger.warning("Unexpected assignation issue, " + assignableAction.getAssignation() + " object="
+										+ assignedObject + " exception: " + e);
+								e.printStackTrace();
+							}
+						}
+						if (assignableAction.getPatternRole() != null && assignedObject instanceof FlexoObject) {
+							if (contextAction instanceof ActionSchemeAction) {
+								((ActionSchemeAction) contextAction).getEditionPatternInstance().setObjectForPatternRole(
+										(FlexoObject) assignedObject, assignableAction.getPatternRole());
+							}
+							if (contextAction instanceof CreationSchemeAction) {
+								((CreationSchemeAction) contextAction).getEditionPatternInstance().setObjectForPatternRole(
+										(FlexoObject) assignedObject, assignableAction.getPatternRole());
+							}
+							if (contextAction instanceof DeletionSchemeAction) {
+								((DeletionSchemeAction) contextAction).getEditionPatternInstance().setObjectForPatternRole(
+										(FlexoObject) assignedObject, assignableAction.getPatternRole());
+							}
+							if (contextAction instanceof NavigationSchemeAction) {
+								((NavigationSchemeAction) contextAction).getEditionPatternInstance().setObjectForPatternRole(
+										(FlexoObject) assignedObject, assignableAction.getPatternRole());
+							}
+							if (contextAction instanceof SynchronizationSchemeAction) {
+								((SynchronizationSchemeAction) contextAction).getEditionPatternInstance().setObjectForPatternRole(
+										(FlexoObject) assignedObject, assignableAction.getPatternRole());
+							}
+						}
+					}
+				}
+			}
+
+			for (EditionAction editionAction : performedActions.keySet()) {
+				editionAction.finalizePerformAction(contextAction, performedActions.get(editionAction));
+			}
+		}
+
+		/**
+		 * Execute edition action in the context provided by supplied {@link EditionSchemeAction}<br>
+		 * Note than returned object will be used to be further reinjected in finalizer
+		 * 
+		 * @param action
+		 * @return
+		 */
+		public abstract T performAction(EditionSchemeAction action);
+
+		/**
+		 * Provides hooks after executing edition action in the context provided by supplied {@link EditionSchemeAction}
+		 * 
+		 * @param action
+		 * @param initialContext
+		 *            the object that was returned during {@link #performAction(EditionSchemeAction)} call
+		 * @return
+		 */
+		public abstract void finalizePerformAction(EditionSchemeAction action, T initialContext);
+
+		@Override
+		public EditionPattern getEditionPattern() {
+			if (getScheme() == null) {
+				return null;
+			}
+			return getScheme().getEditionPattern();
+		}
+
+		public Type getActionClass() {
+			return getClass();
+		}
+
+		public int getIndex() {
+			if (getScheme() != null && getScheme().getActions() != null) {
+				return getScheme().getActions().indexOf(this);
+			}
+			return -1;
+		}
+
+		@Override
+		public final BindingModel getBindingModel() {
+			if (getActionContainer() != null) {
+				return getActionContainer().getInferedBindingModel();
+			}
+			return null;
+		}
+
+		public final BindingModel getInferedBindingModel() {
+			if (inferedBindingModel == null) {
+				rebuildInferedBindingModel();
+			}
+			return inferedBindingModel;
+		}
+
+		protected void rebuildInferedBindingModel() {
+			inferedBindingModel = buildInferedBindingModel();
+		}
+
+		protected BindingModel buildInferedBindingModel() {
+			BindingModel returned;
+			if (getActionContainer() == null || isDeserializing()/* Prevent StackOverflow !!! */) {
+				returned = new BindingModel();
+			} else {
+				returned = new BindingModel(getActionContainer().getInferedBindingModel());
+			}
+			return returned;
+		}
+
+		public DataBinding<Boolean> getConditional() {
+			if (conditional == null) {
+				conditional = new DataBinding<Boolean>(this, Boolean.class, DataBinding.BindingDefinitionType.GET);
+				conditional.setBindingName("conditional");
+			}
+			return conditional;
+		}
+
+		public void setConditional(DataBinding<Boolean> conditional) {
+			if (conditional != null) {
+				conditional.setOwner(this);
+				conditional.setDeclaredType(Boolean.class);
+				conditional.setBindingDefinitionType(DataBinding.BindingDefinitionType.GET);
+				conditional.setBindingName("conditional");
+			}
+			this.conditional = conditional;
+		}
+
+		@Override
+		public String getStringRepresentation() {
+			return getClass().getSimpleName();
+		}
+
+		@Override
+		public String toString() {
+			return getStringRepresentation();
+		}
+
+		public ActionContainer getActionContainer() {
+			return actionContainer;
+		}
+
+		public void setActionContainer(ActionContainer actionContainer) {
+			this.actionContainer = actionContainer;
+			rebuildInferedBindingModel();
+		}
+
+		private void insertActionAtCurrentIndex(EditionAction<?, ?> editionAction) {
+			if (getActionContainer() != null) {
+				getActionContainer().insertActionAtIndex(editionAction, getActionContainer().getIndex(this) + 1);
+			}
+		}
+
+		/*public AddShape createAddShapeAction() {
+			AddShape newAction = new AddShape(null);
+			if (getEditionPattern().getDefaultShapePatternRole() != null) {
+				newAction.setAssignation(new ViewPointDataBinding(getEditionPattern().getDefaultShapePatternRole().getPatternRoleName()));
+			}
+			insertActionAtCurrentIndex(newAction);
+			return newAction;
+		}
+
+		public AddClass createAddClassAction() {
+			AddClass newAction = new AddClass(null);
+			insertActionAtCurrentIndex(newAction);
+			return newAction;
+		}
+
+		public AddIndividual createAddIndividualAction() {
+			AddIndividual newAction = new AddIndividual(null);
+			insertActionAtCurrentIndex(newAction);
+			return newAction;
+		}
+
+		public AddObjectPropertyStatement createAddObjectPropertyStatementAction() {
+			AddObjectPropertyStatement newAction = new AddObjectPropertyStatement(null);
+			insertActionAtCurrentIndex(newAction);
+			return newAction;
+		}
+
+		public AddDataPropertyStatement createAddDataPropertyStatementAction() {
+			AddDataPropertyStatement newAction = new AddDataPropertyStatement(null);
+			insertActionAtCurrentIndex(newAction);
+			return newAction;
+		}
+
+		public AddIsAStatement createAddIsAPropertyAction() {
+			AddIsAStatement newAction = new AddIsAStatement(null);
+			insertActionAtCurrentIndex(newAction);
+			return newAction;
+		}
+
+		public AddRestrictionStatement createAddRestrictionAction() {
+			AddRestrictionStatement newAction = new AddRestrictionStatement(null);
+			insertActionAtCurrentIndex(newAction);
+			return newAction;
+		}
+
+		public AddConnector createAddConnectorAction() {
+			AddConnector newAction = new AddConnector(null);
+			if (getEditionPattern().getDefaultConnectorPatternRole() != null) {
+				newAction.setAssignation(new ViewPointDataBinding(getEditionPattern().getDefaultConnectorPatternRole().getPatternRoleName()));
+			}
+			insertActionAtCurrentIndex(newAction);
+			return newAction;
+		}
+
+		public DeclarePatternRole createDeclarePatternRoleAction() {
+			DeclarePatternRole newAction = new DeclarePatternRole(null);
+			insertActionAtCurrentIndex(newAction);
+			return newAction;
+		}
+
+		public GraphicalAction createGraphicalAction() {
+			GraphicalAction newAction = new GraphicalAction(null);
+			insertActionAtCurrentIndex(newAction);
+			return newAction;
+		}
+
+		public CreateDiagram createAddDiagramAction() {
+			CreateDiagram newAction = new CreateDiagram(null);
+			insertActionAtCurrentIndex(newAction);
+			return newAction;
+		}
+
+		public AddEditionPattern createAddEditionPatternAction() {
+			AddEditionPattern newAction = new AddEditionPattern(null);
+			insertActionAtCurrentIndex(newAction);
+			return newAction;
+		}
+
+		public ConditionalAction createConditionalAction() {
+			ConditionalAction newAction = new ConditionalAction(null);
+			insertActionAtCurrentIndex(newAction);
+			return newAction;
+		}
+
+		public IterationAction createIterationAction() {
+			IterationAction newAction = new IterationAction(null);
+			insertActionAtCurrentIndex(newAction);
+			return newAction;
+		}
+
+		public CloneShape createCloneShapeAction() {
+			CloneShape newAction = new CloneShape(null);
+			if (getEditionPattern().getDefaultShapePatternRole() != null) {
+				newAction.setAssignation(new ViewPointDataBinding(getEditionPattern().getDefaultShapePatternRole().getPatternRoleName()));
+			}
+			insertActionAtCurrentIndex(newAction);
+			return newAction;
+		}
+
+		public CloneConnector createCloneConnectorAction() {
+			CloneConnector newAction = new CloneConnector(null);
+			if (getEditionPattern().getDefaultConnectorPatternRole() != null) {
+				newAction.setAssignation(new ViewPointDataBinding(getEditionPattern().getDefaultConnectorPatternRole().getPatternRoleName()));
+			}
+			insertActionAtCurrentIndex(newAction);
+			return newAction;
+		}
+
+		public CloneIndividual createCloneIndividualAction() {
+			CloneIndividual newAction = new CloneIndividual(null);
+			insertActionAtCurrentIndex(newAction);
+			return newAction;
+		}*/
+
+		/**
+		 * Creates a new {@link EditionAction} of supplied class, and add it to parent container at the index where this action is itself
+		 * registered<br>
+		 * Delegates creation to model slot
+		 * 
+		 * @return newly created {@link EditionAction}
+		 */
+		public <A extends EditionAction<?, ?>> A createActionAtCurrentIndex(Class<A> actionClass, ModelSlot<?> modelSlot) {
+			A newAction = modelSlot.createAction(actionClass);
+			insertActionAtCurrentIndex(newAction);
+			return null;
+		}
+
+		public static class ConditionalBindingMustBeValid extends BindingMustBeValid<EditionAction> {
+			public ConditionalBindingMustBeValid() {
+				super("'conditional'_binding_is_not_valid", EditionAction.class);
+			}
+
+			@Override
+			public DataBinding<Boolean> getBinding(EditionAction object) {
+				return object.getConditional();
+			}
+
 		}
 
 	}
-
 }

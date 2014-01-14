@@ -44,11 +44,18 @@ import org.openflexo.technologyadapter.emf.model.EMFObjectIndividual;
  * 
  * @author sylvain
  */
-public class SelectEMFObjectIndividual extends SelectIndividual<EMFModelSlot, EMFObjectIndividual> {
+@ModelEntity
+@ImplementationClass(SelectEMFObjectIndividual.SelectEMFObjectIndividualImpl.class)
+@XMLElement
+public interface SelectEMFObjectIndividual extends SelectIndividual<EMFModelSlot, EMFObjectIndividual>{
+
+
+public static abstract  class SelectEMFObjectIndividualImpl extends SelectIndividual<EMFModelSlot, EMFObjectIndividual>Impl implements SelectEMFObjectIndividual
+{
 
 	private static final Logger logger = Logger.getLogger(SelectEMFObjectIndividual.class.getPackage().getName());
 
-	public SelectEMFObjectIndividual() {
+	public SelectEMFObjectIndividualImpl() {
 		super();
 	}
 
@@ -117,4 +124,5 @@ public class SelectEMFObjectIndividual extends SelectIndividual<EMFModelSlot, EM
 		return (TypeAwareModelSlotInstance<EMFModel, EMFMetaModel, EMFModelSlot>) super.getModelSlotInstance(action);
 	}
 
+}
 }

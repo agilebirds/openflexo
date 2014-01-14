@@ -13,11 +13,18 @@ import org.openflexo.technologyadapter.excel.model.ExcelSheet;
 import org.openflexo.technologyadapter.excel.model.ExcelWorkbook;
 
 @FIBPanel("Fib/SelectExcelSheetPanel.fib")
-public class SelectExcelSheet extends FetchRequest<BasicExcelModelSlot, ExcelSheet> {
+@ModelEntity
+@ImplementationClass(SelectExcelSheet.SelectExcelSheetImpl.class)
+@XMLElement
+public interface SelectExcelSheet extends FetchRequest<BasicExcelModelSlot, ExcelSheet>{
+
+
+public static abstract  class SelectExcelSheetImpl extends FetchRequest<BasicExcelModelSlot, ExcelSheet>Impl implements SelectExcelSheet
+{
 
 	private static final Logger logger = Logger.getLogger(SelectExcelSheet.class.getPackage().getName());
 
-	public SelectExcelSheet() {
+	public SelectExcelSheetImpl() {
 		super();
 		// TODO Auto-generated constructor stub
 	}
@@ -49,4 +56,5 @@ public class SelectExcelSheet extends FetchRequest<BasicExcelModelSlot, ExcelShe
 
 		return returned;
 	}
+}
 }

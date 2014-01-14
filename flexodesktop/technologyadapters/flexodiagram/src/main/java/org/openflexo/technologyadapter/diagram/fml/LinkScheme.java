@@ -34,7 +34,84 @@ import org.openflexo.technologyadapter.diagram.model.DiagramShape;
 import org.openflexo.toolbox.StringUtils;
 
 @FIBPanel("Fib/LinkSchemePanel.fib")
-public class LinkScheme extends AbstractCreationScheme implements DiagramEditionScheme {
+@ModelEntity
+@ImplementationClass(LinkScheme.LinkSchemeImpl.class)
+@XMLElement
+public interface LinkScheme extends AbstractCreationScheme,DiagramEditionScheme{
+
+@PropertyIdentifier(type=String.class)
+public static final String FROM_TARGET_KEY = "fromTarget";
+@PropertyIdentifier(type=String.class)
+public static final String TO_TARGET_KEY = "toTarget";
+@PropertyIdentifier(type=boolean.class)
+public static final String IS_AVAILABLE_WITH_FLOATING_PALETTE_KEY = "isAvailableWithFloatingPalette";
+@PropertyIdentifier(type=boolean.class)
+public static final String NORTH_DIRECTION_SUPPORTED_KEY = "northDirectionSupported";
+@PropertyIdentifier(type=boolean.class)
+public static final String EAST_DIRECTION_SUPPORTED_KEY = "eastDirectionSupported";
+@PropertyIdentifier(type=boolean.class)
+public static final String SOUTH_DIRECTION_SUPPORTED_KEY = "southDirectionSupported";
+@PropertyIdentifier(type=boolean.class)
+public static final String WEST_DIRECTION_SUPPORTED_KEY = "westDirectionSupported";
+
+@Getter(value=FROM_TARGET_KEY)
+@XMLAttribute
+public String _getFromTarget();
+
+@Setter(FROM_TARGET_KEY)
+public void _setFromTarget(String fromTarget);
+
+
+@Getter(value=TO_TARGET_KEY)
+@XMLAttribute
+public String _getToTarget();
+
+@Setter(TO_TARGET_KEY)
+public void _setToTarget(String toTarget);
+
+
+@Getter(value=IS_AVAILABLE_WITH_FLOATING_PALETTE_KEY,defaultValue = "false")
+@XMLAttribute
+public boolean getIsAvailableWithFloatingPalette();
+
+@Setter(IS_AVAILABLE_WITH_FLOATING_PALETTE_KEY)
+public void setIsAvailableWithFloatingPalette(boolean isAvailableWithFloatingPalette);
+
+
+@Getter(value=NORTH_DIRECTION_SUPPORTED_KEY,defaultValue = "false")
+@XMLAttribute
+public boolean getNorthDirectionSupported();
+
+@Setter(NORTH_DIRECTION_SUPPORTED_KEY)
+public void setNorthDirectionSupported(boolean northDirectionSupported);
+
+
+@Getter(value=EAST_DIRECTION_SUPPORTED_KEY,defaultValue = "false")
+@XMLAttribute
+public boolean getEastDirectionSupported();
+
+@Setter(EAST_DIRECTION_SUPPORTED_KEY)
+public void setEastDirectionSupported(boolean eastDirectionSupported);
+
+
+@Getter(value=SOUTH_DIRECTION_SUPPORTED_KEY,defaultValue = "false")
+@XMLAttribute
+public boolean getSouthDirectionSupported();
+
+@Setter(SOUTH_DIRECTION_SUPPORTED_KEY)
+public void setSouthDirectionSupported(boolean southDirectionSupported);
+
+
+@Getter(value=WEST_DIRECTION_SUPPORTED_KEY,defaultValue = "false")
+@XMLAttribute
+public boolean getWestDirectionSupported();
+
+@Setter(WEST_DIRECTION_SUPPORTED_KEY)
+public void setWestDirectionSupported(boolean westDirectionSupported);
+
+
+public static abstract  class LinkSchemeImpl extends AbstractCreationSchemeImpl implements LinkScheme
+{
 
 	private String fromTarget;
 	private String toTarget;
@@ -46,7 +123,7 @@ public class LinkScheme extends AbstractCreationScheme implements DiagramEdition
 
 	private boolean isAvailableWithFloatingPalette = true;
 
-	public LinkScheme() {
+	public LinkSchemeImpl() {
 		super();
 	}
 
@@ -225,4 +302,5 @@ public class LinkScheme extends AbstractCreationScheme implements DiagramEdition
 		return getServiceManager().getTechnologyAdapterService().getTechnologyAdapter(DiagramTechnologyAdapter.class);
 	}
 
+}
 }

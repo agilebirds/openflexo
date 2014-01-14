@@ -35,7 +35,43 @@ import org.openflexo.foundation.viewpoint.annotations.FIBPanel;
 import org.openflexo.toolbox.StringUtils;
 
 @FIBPanel("Fib/AddClassPanel.fib")
-public abstract class AddClass<MS extends TypeAwareModelSlot<?, ?>, T extends IFlexoOntologyClass> extends AddConcept<MS, T> {
+@ModelEntity(isAbstract = true)
+@ImplementationClass(AddClass.AddClassImpl.class)
+public abstract interface AddClass<MS extends TypeAwareModelSlot<?, ?>, T extends IFlexoOntologyClass> extends AddConcept<MS, T>{
+
+@PropertyIdentifier(type=DataBinding.class)
+public static final String CLASS_NAME_KEY = "className";
+@PropertyIdentifier(type=String.class)
+public static final String ONTOLOGY_CLASS_URI_KEY = "ontologyClassURI";
+@PropertyIdentifier(type=TypeAwareModelSlot.class)
+public static final String MODEL_SLOT_KEY = "modelSlot";
+
+@Getter(value=CLASS_NAME_KEY)
+@XMLAttribute(xmlTag="newClassName")
+public DataBinding getClassName();
+
+@Setter(CLASS_NAME_KEY)
+public void setClassName(DataBinding className);
+
+
+@Getter(value=ONTOLOGY_CLASS_URI_KEY)
+@XMLAttribute
+public String _getOntologyClassURI();
+
+@Setter(ONTOLOGY_CLASS_URI_KEY)
+public void _setOntologyClassURI(String ontologyClassURI);
+
+
+@Getter(value=MODEL_SLOT_KEY)
+@XMLAttribute
+public TypeAwareModelSlot getModelSlot();
+
+@Setter(MODEL_SLOT_KEY)
+public void setModelSlot(TypeAwareModelSlot modelSlot);
+
+
+public static abstract  abstract class AddClass<MSImpl extends TypeAwareModelSlot<?, ?>, T extends IFlexoOntologyClass> extends AddConcept<MS, T>Impl implements AddClass<MS
+{
 
 	private static final Logger logger = Logger.getLogger(AddClass.class.getPackage().getName());
 
@@ -43,7 +79,7 @@ public abstract class AddClass<MS extends TypeAwareModelSlot<?, ?>, T extends IF
 
 	private DataBinding<String> className;
 
-	public AddClass() {
+	public AddClassImpl() {
 		super();
 	}
 
@@ -132,7 +168,7 @@ public abstract class AddClass<MS extends TypeAwareModelSlot<?, ?>, T extends IF
 	}
 
 	public static class AddClassActionMustDefineAnOntologyClass extends ValidationRule<AddClassActionMustDefineAnOntologyClass, AddClass> {
-		public AddClassActionMustDefineAnOntologyClass() {
+		public AddClassImplActionMustDefineAnOntologyClass() {
 			super(AddClass.class, "add_individual_action_must_define_an_ontology_class");
 		}
 
@@ -183,4 +219,5 @@ public abstract class AddClass<MS extends TypeAwareModelSlot<?, ?>, T extends IF
 
 	}
 
+}
 }

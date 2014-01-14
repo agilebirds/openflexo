@@ -26,9 +26,16 @@ import org.openflexo.foundation.view.EditionPatternInstance;
 import org.openflexo.foundation.viewpoint.PatternRole;
 import org.openflexo.technologyadapter.excel.model.ExcelSheet;
 
-public class ExcelSheetPatternRole extends PatternRole<ExcelSheet> {
+@ModelEntity
+@ImplementationClass(ExcelSheetPatternRole.ExcelSheetPatternRoleImpl.class)
+@XMLElement
+public interface ExcelSheetPatternRole extends PatternRole<ExcelSheet>{
 
-	public ExcelSheetPatternRole() {
+
+public static abstract  class ExcelSheetPatternRoleImpl extends PatternRole<ExcelSheet>Impl implements ExcelSheetPatternRole
+{
+
+	public ExcelSheetPatternRoleImpl() {
 		super();
 		// TODO Auto-generated constructor stub
 	}
@@ -63,4 +70,5 @@ public class ExcelSheetPatternRole extends PatternRole<ExcelSheet> {
 
 	}*/
 
+}
 }

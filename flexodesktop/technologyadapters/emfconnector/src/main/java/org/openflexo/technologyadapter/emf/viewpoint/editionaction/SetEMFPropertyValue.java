@@ -39,11 +39,27 @@ import org.openflexo.technologyadapter.emf.metamodel.EMFMetaModel;
 import org.openflexo.technologyadapter.emf.model.EMFModel;
 import org.openflexo.technologyadapter.emf.model.EMFObjectIndividual;
 
-public abstract class SetEMFPropertyValue<T> extends AssignableAction<EMFModelSlot, T> implements SetPropertyValueAction {
+@ModelEntity(isAbstract = true)
+@ImplementationClass(SetEMFPropertyValue.SetEMFPropertyValueImpl.class)
+public abstract interface SetEMFPropertyValue<T> extends AssignableAction<EMFModelSlot, T>,SetPropertyValueAction{
+
+@PropertyIdentifier(type=DataBinding.class)
+public static final String SUBJECT_KEY = "subject";
+
+@Getter(value=SUBJECT_KEY)
+@XMLAttribute
+public DataBinding getSubject();
+
+@Setter(SUBJECT_KEY)
+public void setSubject(DataBinding subject);
+
+
+public static abstract  abstract class SetEMFPropertyValue<T>Impl extends AssignableAction<EMFModelSlot, T>Impl implements SetEMFPropertyValue<T>
+{
 
 	private static final Logger logger = Logger.getLogger(SetEMFPropertyValue.class.getPackage().getName());
 
-	public SetEMFPropertyValue() {
+	public SetEMFPropertyValueImpl() {
 		super();
 	}
 
@@ -116,4 +132,5 @@ public abstract class SetEMFPropertyValue<T> extends AssignableAction<EMFModelSl
 
 	}
 
+}
 }

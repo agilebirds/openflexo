@@ -11,7 +11,34 @@ import org.openflexo.antar.expr.TypeMismatchException;
 import org.openflexo.foundation.validation.Validable;
 import org.openflexo.foundation.view.action.EditionSchemeAction;
 
-public class AddEditionPatternInstanceParameter extends EditionSchemeObject implements Bindable {
+@ModelEntity
+@ImplementationClass(AddEditionPatternInstanceParameter.AddEditionPatternInstanceParameterImpl.class)
+@XMLElement
+public interface AddEditionPatternInstanceParameter extends EditionSchemeObject,Bindable{
+
+@PropertyIdentifier(type=String.class)
+public static final String PARAM_NAME_KEY = "paramName";
+@PropertyIdentifier(type=DataBinding.class)
+public static final String VALUE_KEY = "value";
+
+@Getter(value=PARAM_NAME_KEY)
+@XMLAttribute
+public String _getParamName();
+
+@Setter(PARAM_NAME_KEY)
+public void _setParamName(String paramName);
+
+
+@Getter(value=VALUE_KEY)
+@XMLAttribute
+public DataBinding getValue();
+
+@Setter(VALUE_KEY)
+public void setValue(DataBinding value);
+
+
+public static abstract  class AddEditionPatternInstanceParameterImpl extends EditionSchemeObjectImpl implements AddEditionPatternInstanceParameter
+{
 
 	AddEditionPatternInstance action;
 
@@ -20,11 +47,11 @@ public class AddEditionPatternInstanceParameter extends EditionSchemeObject impl
 	private DataBinding<Object> value;
 
 	// Use it only for deserialization
-	public AddEditionPatternInstanceParameter() {
+	public AddEditionPatternInstanceParameterImpl() {
 		super();
 	}
 
-	public AddEditionPatternInstanceParameter(EditionSchemeParameter param) {
+	public AddEditionPatternInstanceParameterImpl(EditionSchemeParameter param) {
 		super();
 		this.param = param;
 	}
@@ -150,4 +177,4 @@ public class AddEditionPatternInstanceParameter extends EditionSchemeObject impl
 		return null;
 	}
 
-}
+}}

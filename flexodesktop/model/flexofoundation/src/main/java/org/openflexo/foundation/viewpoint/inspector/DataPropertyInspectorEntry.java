@@ -28,11 +28,28 @@ import org.openflexo.foundation.ontology.IFlexoOntologyDataProperty;
  * @author sylvain
  * 
  */
-public class DataPropertyInspectorEntry extends PropertyInspectorEntry {
+@ModelEntity
+@ImplementationClass(DataPropertyInspectorEntry.DataPropertyInspectorEntryImpl.class)
+@XMLElement(xmlTag="DataProperty")
+public interface DataPropertyInspectorEntry extends PropertyInspectorEntry{
+
+@PropertyIdentifier(type=BuiltInDataType.class)
+public static final String DATA_TYPE_KEY = "dataType";
+
+@Getter(value=DATA_TYPE_KEY)
+@XMLAttribute
+public BuiltInDataType getDataType();
+
+@Setter(DATA_TYPE_KEY)
+public void setDataType(BuiltInDataType dataType);
+
+
+public static abstract  class DataPropertyInspectorEntryImpl extends PropertyInspectorEntryImpl implements DataPropertyInspectorEntry
+{
 
 	private BuiltInDataType dataType;
 
-	public DataPropertyInspectorEntry() {
+	public DataPropertyInspectorEntryImpl() {
 		super();
 	}
 
@@ -54,4 +71,5 @@ public class DataPropertyInspectorEntry extends PropertyInspectorEntry {
 		this.dataType = dataType;
 	}
 
+}
 }

@@ -27,11 +27,27 @@ import org.openflexo.antar.expr.NullReferenceException;
 import org.openflexo.antar.expr.TypeMismatchException;
 import org.openflexo.foundation.view.EditionPatternInstance;
 
-public abstract class AbstractActionScheme extends EditionScheme {
+@ModelEntity(isAbstract = true)
+@ImplementationClass(AbstractActionScheme.AbstractActionSchemeImpl.class)
+public abstract interface AbstractActionScheme extends EditionScheme{
+
+@PropertyIdentifier(type=DataBinding.class)
+public static final String CONDITIONAL_KEY = "conditional";
+
+@Getter(value=CONDITIONAL_KEY)
+@XMLAttribute
+public DataBinding getConditional();
+
+@Setter(CONDITIONAL_KEY)
+public void setConditional(DataBinding conditional);
+
+
+public static abstract  abstract class AbstractActionSchemeImpl extends EditionSchemeImpl implements AbstractActionScheme
+{
 
 	private DataBinding<Boolean> conditional;
 
-	public AbstractActionScheme() {
+	public AbstractActionSchemeImpl() {
 		super();
 	}
 
@@ -82,4 +98,5 @@ public abstract class AbstractActionScheme extends EditionScheme {
 		updateBindingModels();
 	}
 
+}
 }

@@ -28,10 +28,18 @@ import org.openflexo.foundation.viewpoint.annotations.FIBPanel;
  * 
  */
 @FIBPanel("Fib/CloningSchemePanel.fib")
-public class CloningScheme extends AbstractCreationScheme {
+@ModelEntity
+@ImplementationClass(CloningScheme.CloningSchemeImpl.class)
+@XMLElement
+public interface CloningScheme extends AbstractCreationScheme{
 
-	public CloningScheme() {
+
+public static abstract  class CloningSchemeImpl extends AbstractCreationSchemeImpl implements CloningScheme
+{
+
+	public CloningSchemeImpl() {
 		super();
 	}
 
+}
 }

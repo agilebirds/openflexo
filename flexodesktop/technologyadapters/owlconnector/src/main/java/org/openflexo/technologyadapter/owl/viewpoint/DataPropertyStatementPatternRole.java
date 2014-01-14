@@ -19,11 +19,28 @@ import org.openflexo.technologyadapter.owl.model.OWLConcept;
 import org.openflexo.technologyadapter.owl.model.OWLDataProperty;
 import org.openflexo.technologyadapter.owl.model.StatementWithProperty;
 
-public class DataPropertyStatementPatternRole extends StatementPatternRole<DataPropertyStatement> {
+@ModelEntity
+@ImplementationClass(DataPropertyStatementPatternRole.DataPropertyStatementPatternRoleImpl.class)
+@XMLElement
+public interface DataPropertyStatementPatternRole extends StatementPatternRole<DataPropertyStatement>{
+
+@PropertyIdentifier(type=String.class)
+public static final String DATA_PROPERTY_URI_KEY = "dataPropertyURI";
+
+@Getter(value=DATA_PROPERTY_URI_KEY)
+@XMLAttribute(xmlTag="dataProperty")
+public String _getDataPropertyURI();
+
+@Setter(DATA_PROPERTY_URI_KEY)
+public void _setDataPropertyURI(String dataPropertyURI);
+
+
+public static abstract  class DataPropertyStatementPatternRoleImpl extends StatementPatternRole<DataPropertyStatement>Impl implements DataPropertyStatementPatternRole
+{
 
 	static final Logger logger = FlexoLogger.getLogger(DataPropertyStatementPatternRole.class.getPackage().toString());
 
-	public DataPropertyStatementPatternRole() {
+	public DataPropertyStatementPatternRoleImpl() {
 		super();
 	}
 
@@ -68,7 +85,7 @@ public class DataPropertyStatementPatternRole extends StatementPatternRole<DataP
 
 	public static class DataPropertyStatementPatternRoleMustDefineAValidProperty extends
 			ValidationRule<DataPropertyStatementPatternRoleMustDefineAValidProperty, DataPropertyStatementPatternRole> {
-		public DataPropertyStatementPatternRoleMustDefineAValidProperty() {
+		public DataPropertyStatementPatternRoleImplMustDefineAValidProperty() {
 			super(DataPropertyStatementPatternRole.class, "pattern_role_must_define_a_valid_data_property");
 		}
 
@@ -128,4 +145,5 @@ public class DataPropertyStatementPatternRole extends StatementPatternRole<DataP
 			return statement;
 		}
 	}
+}
 }

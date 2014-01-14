@@ -38,7 +38,29 @@ import org.openflexo.foundation.viewpoint.FMLRepresentationContext.FMLRepresenta
  * @author sylvain
  * 
  */
-public abstract class FetchRequest<MS extends ModelSlot<?>, T> extends AssignableAction<MS, List<T>> {
+@ModelEntity(isAbstract = true)
+@ImplementationClass(FetchRequest.FetchRequestImpl.class)
+public abstract interface FetchRequest<MS extends ModelSlot<?>, T> extends AssignableAction<MS, List<T>>{
+
+@PropertyIdentifier(type=Vector.class)
+public static final String CONDITIONS_KEY = "conditions";
+
+@Getter(value=CONDITIONS_KEY,cardinality = Cardinality.LIST)
+@XMLElement
+public List<FetchRequestCondition> getConditions();
+
+@Setter(CONDITIONS_KEY)
+public void setConditions(List<FetchRequestCondition> conditions);
+
+@Adder(CONDITIONS_KEY)
+public void addToConditions(FetchRequestCondition aCondition);
+
+@Remover(CONDITIONS_KEY)
+public void removeFromConditions(FetchRequestCondition aCondition);
+
+
+public static abstract  abstract class FetchRequest<MSImpl extends ModelSlot<?>, T> extends AssignableAction<MS, List<T>>Impl implements FetchRequest<MS
+{
 
 	private static final Logger logger = Logger.getLogger(FetchRequest.class.getPackage().getName());
 
@@ -47,7 +69,7 @@ public abstract class FetchRequest<MS extends ModelSlot<?>, T> extends Assignabl
 	// null in fetch request is not embedded in an iteration
 	private FetchRequestIterationAction embeddingIteration;
 
-	public FetchRequest() {
+	public FetchRequestImpl() {
 		super();
 		conditions = new Vector<FetchRequestCondition>();
 	}
@@ -110,7 +132,7 @@ public abstract class FetchRequest<MS extends ModelSlot<?>, T> extends Assignabl
 		notifyObservers(new DataModification("conditions", condition, null));
 	}
 
-	public FetchRequestCondition createCondition() {
+	public FetchRequestImplCondition createCondition() {
 		FetchRequestCondition newCondition = new FetchRequestCondition();
 		addToConditions(newCondition);
 		return newCondition;
@@ -146,7 +168,7 @@ public abstract class FetchRequest<MS extends ModelSlot<?>, T> extends Assignabl
 		}
 	}
 
-	public FetchRequestIterationAction getEmbeddingIteration() {
+	public FetchRequestImplIterationAction getEmbeddingIteration() {
 		return embeddingIteration;
 	}
 
@@ -154,4 +176,5 @@ public abstract class FetchRequest<MS extends ModelSlot<?>, T> extends Assignabl
 		this.embeddingIteration = embeddingIteration;
 	}
 
+}
 }

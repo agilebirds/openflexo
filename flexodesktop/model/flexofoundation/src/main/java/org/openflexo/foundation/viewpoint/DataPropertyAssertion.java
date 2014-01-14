@@ -33,12 +33,39 @@ import org.openflexo.foundation.validation.ValidationIssue;
 import org.openflexo.foundation.validation.ValidationRule;
 import org.openflexo.foundation.view.action.EditionSchemeAction;
 
-public class DataPropertyAssertion extends AbstractAssertion {
+@ModelEntity
+@ImplementationClass(DataPropertyAssertion.DataPropertyAssertionImpl.class)
+@XMLElement
+public interface DataPropertyAssertion extends AbstractAssertion{
+
+@PropertyIdentifier(type=String.class)
+public static final String DATA_PROPERTY_URI_KEY = "dataPropertyURI";
+@PropertyIdentifier(type=DataBinding.class)
+public static final String VALUE_KEY = "value";
+
+@Getter(value=DATA_PROPERTY_URI_KEY)
+@XMLAttribute
+public String _getDataPropertyURI();
+
+@Setter(DATA_PROPERTY_URI_KEY)
+public void _setDataPropertyURI(String dataPropertyURI);
+
+
+@Getter(value=VALUE_KEY)
+@XMLAttribute
+public DataBinding getValue();
+
+@Setter(VALUE_KEY)
+public void setValue(DataBinding value);
+
+
+public static abstract  class DataPropertyAssertionImpl extends AbstractAssertionImpl implements DataPropertyAssertion
+{
 
 	private String dataPropertyURI;
 	private DataBinding<Object> value;
 
-	public DataPropertyAssertion() {
+	public DataPropertyAssertionImpl() {
 		super();
 	}
 
@@ -108,7 +135,7 @@ public class DataPropertyAssertion extends AbstractAssertion {
 
 	public static class DataPropertyAssertionMustDefineAnOntologyProperty extends
 			ValidationRule<DataPropertyAssertionMustDefineAnOntologyProperty, DataPropertyAssertion> {
-		public DataPropertyAssertionMustDefineAnOntologyProperty() {
+		public DataPropertyAssertionImplMustDefineAnOntologyProperty() {
 			super(DataPropertyAssertion.class, "data_property_assertion_must_define_an_ontology_property");
 		}
 
@@ -136,4 +163,5 @@ public class DataPropertyAssertion extends AbstractAssertion {
 
 	}
 
+}
 }

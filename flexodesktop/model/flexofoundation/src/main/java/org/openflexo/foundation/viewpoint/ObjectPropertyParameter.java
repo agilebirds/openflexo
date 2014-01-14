@@ -30,13 +30,40 @@ import org.openflexo.antar.expr.TypeMismatchException;
 import org.openflexo.foundation.ontology.IFlexoOntologyClass;
 import org.openflexo.foundation.ontology.IFlexoOntologyObjectProperty;
 
-public class ObjectPropertyParameter extends PropertyParameter {
+@ModelEntity
+@ImplementationClass(ObjectPropertyParameter.ObjectPropertyParameterImpl.class)
+@XMLElement
+public interface ObjectPropertyParameter extends PropertyParameter{
+
+@PropertyIdentifier(type=String.class)
+public static final String RANGE_URI_KEY = "rangeURI";
+@PropertyIdentifier(type=DataBinding.class)
+public static final String RANGE_VALUE_KEY = "rangeValue";
+
+@Getter(value=RANGE_URI_KEY)
+@XMLAttribute(xmlTag="range")
+public String _getRangeURI();
+
+@Setter(RANGE_URI_KEY)
+public void _setRangeURI(String rangeURI);
+
+
+@Getter(value=RANGE_VALUE_KEY)
+@XMLAttribute
+public DataBinding getRangeValue();
+
+@Setter(RANGE_VALUE_KEY)
+public void setRangeValue(DataBinding rangeValue);
+
+
+public static abstract  class ObjectPropertyParameterImpl extends PropertyParameterImpl implements ObjectPropertyParameter
+{
 
 	private String rangeURI;
 	private DataBinding<IFlexoOntologyClass> rangeValue;
 	private boolean isDynamicRangeValueSet = false;
 
-	public ObjectPropertyParameter() {
+	public ObjectPropertyParameterImpl() {
 		super();
 	}
 
@@ -112,4 +139,5 @@ public class ObjectPropertyParameter extends PropertyParameter {
 		return null;
 	}
 
+}
 }

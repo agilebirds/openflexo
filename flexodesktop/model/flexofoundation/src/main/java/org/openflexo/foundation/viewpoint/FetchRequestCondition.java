@@ -40,7 +40,24 @@ import org.openflexo.logging.FlexoLogger;
  * @author sylvain
  * 
  */
-public class FetchRequestCondition extends EditionPatternObject {
+@ModelEntity
+@ImplementationClass(FetchRequestCondition.FetchRequestConditionImpl.class)
+@XMLElement(xmlTag="Condition")
+public interface FetchRequestCondition extends EditionPatternObject{
+
+@PropertyIdentifier(type=DataBinding.class)
+public static final String CONDITION_KEY = "condition";
+
+@Getter(value=CONDITION_KEY)
+@XMLAttribute
+public DataBinding getCondition();
+
+@Setter(CONDITION_KEY)
+public void setCondition(DataBinding condition);
+
+
+public static abstract  class FetchRequestConditionImpl extends EditionPatternObjectImpl implements FetchRequestCondition
+{
 
 	protected static final Logger logger = FlexoLogger.getLogger(FetchRequestCondition.class.getPackage().getName());
 
@@ -49,7 +66,7 @@ public class FetchRequestCondition extends EditionPatternObject {
 	private FetchRequest fetchRequest;
 	private DataBinding<Boolean> condition;
 
-	public FetchRequestCondition() {
+	public FetchRequestConditionImpl() {
 		super();
 	}
 
@@ -160,4 +177,5 @@ public class FetchRequestCondition extends EditionPatternObject {
 		}
 		return returned;
 	}
+}
 }

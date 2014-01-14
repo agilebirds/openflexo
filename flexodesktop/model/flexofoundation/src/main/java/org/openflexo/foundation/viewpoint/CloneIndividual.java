@@ -30,12 +30,19 @@ import org.openflexo.foundation.viewpoint.annotations.FIBPanel;
  * 
  */
 @FIBPanel("Fib/CloneIndividualPanel.fib")
-public abstract class CloneIndividual extends AddIndividual {
+@ModelEntity(isAbstract = true)
+@ImplementationClass(CloneIndividual.CloneIndividualImpl.class)
+public abstract interface CloneIndividual extends AddIndividual{
+
+
+public static abstract  abstract class CloneIndividualImpl extends AddIndividualImpl implements CloneIndividual
+{
 
 	private static final Logger logger = Logger.getLogger(CloneIndividual.class.getPackage().getName());
 
-	public CloneIndividual() {
+	public CloneIndividualImpl() {
 		super();
 	}
 
+}
 }

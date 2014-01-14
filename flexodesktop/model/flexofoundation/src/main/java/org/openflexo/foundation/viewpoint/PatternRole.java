@@ -20,17 +20,23 @@
 package org.openflexo.foundation.viewpoint;
 
 import java.lang.reflect.Type;
-import java.util.Collection;
 
 import org.openflexo.antar.binding.BindingModel;
 import org.openflexo.foundation.DataModification;
 import org.openflexo.foundation.technologyadapter.ModelSlot;
-import org.openflexo.foundation.validation.Validable;
 import org.openflexo.foundation.validation.ValidationError;
 import org.openflexo.foundation.validation.ValidationIssue;
 import org.openflexo.foundation.validation.ValidationRule;
 import org.openflexo.foundation.view.ActorReference;
 import org.openflexo.foundation.view.EditionPatternInstance;
+import org.openflexo.model.annotations.DeserializationFinalizer;
+import org.openflexo.model.annotations.Getter;
+import org.openflexo.model.annotations.ImplementationClass;
+import org.openflexo.model.annotations.ModelEntity;
+import org.openflexo.model.annotations.PropertyIdentifier;
+import org.openflexo.model.annotations.Setter;
+import org.openflexo.model.annotations.XMLAttribute;
+import org.openflexo.model.annotations.XMLElement;
 import org.openflexo.toolbox.StringUtils;
 
 /**
@@ -41,109 +47,157 @@ import org.openflexo.toolbox.StringUtils;
  * @author sylvain
  * 
  */
-public abstract class PatternRole<T> extends EditionPatternObject {
+@ModelEntity(isAbstract = true)
+@ImplementationClass(PatternRole.PatternRoleImpl.class)
+public abstract interface PatternRole<T> extends EditionPatternObject {
 
-	// private static final Logger logger = Logger.getLogger(PatternRole.class.getPackage().getName());
-
-	private EditionPattern _pattern;
-
-	private ModelSlot<?> modelSlot;
-
-	public PatternRole() {
-		super();
-	}
-
-	@Override
-	public String getURI() {
-		return getEditionPattern().getURI() + "." + getPatternRoleName();
-	}
+	@PropertyIdentifier(type = EditionPattern.class)
+	public static final String EDITION_PATTERN_KEY = "editionPattern";
+	@PropertyIdentifier(type = String.class)
+	public static final String PATTERN_ROLE_NAME_KEY = "patternRoleName";
+	@PropertyIdentifier(type = String.class)
+	public static final String DESCRIPTION_KEY = "description";
+	@PropertyIdentifier(type = ModelSlot.class)
+	public static final String MODEL_SLOT_KEY = "modelSlot";
 
 	@Override
-	public Collection<? extends Validable> getEmbeddedValidableObjects() {
-		return null;
-	}
+	@Getter(value = EDITION_PATTERN_KEY, inverse = EditionPattern.PATTERN_ROLES_KEY)
+	public EditionPattern getEditionPattern();
 
-	public ModelSlot<?> getModelSlot() {
-		return modelSlot;
-	}
+	@Setter(EDITION_PATTERN_KEY)
+	public void setEditionPattern(EditionPattern editionPattern);
 
-	public void setModelSlot(ModelSlot<?> modelSlot) {
-		this.modelSlot = modelSlot;
-		setChanged();
-		notifyObservers(new DataModification("modelSlot", null, modelSlot));
-	}
+	@Getter(value = PATTERN_ROLE_NAME_KEY)
+	@XMLAttribute(xmlTag = "patternRole")
+	public String getPatternRoleName();
 
-	public void setEditionPattern(EditionPattern pattern) {
-		_pattern = pattern;
-	}
+	@Setter(PATTERN_ROLE_NAME_KEY)
+	public void setPatternRoleName(String patternRoleName);
 
 	@Override
-	public EditionPattern getEditionPattern() {
-		return _pattern;
-	}
+	@Getter(value = DESCRIPTION_KEY)
+	@XMLElement
+	public String getDescription();
 
 	@Override
-	public VirtualModel getVirtualModel() {
-		if (getEditionPattern() != null) {
-			return getEditionPattern().getVirtualModel();
-		}
-		return null;
-	}
+	@Setter(DESCRIPTION_KEY)
+	public void setDescription(String description);
 
-	public String getPatternRoleName() {
-		return getName();
-	}
+	@Getter(value = MODEL_SLOT_KEY)
+	@XMLElement
+	public ModelSlot<?> getModelSlot();
 
-	public void setPatternRoleName(String patternRoleName) {
-		setName(patternRoleName);
-	}
+	@Setter(MODEL_SLOT_KEY)
+	public void setModelSlot(ModelSlot<?> modelSlot);
 
-	@Override
-	public String toString() {
-		return getClass().getSimpleName()
-				+ ":"
-				+ getPatternRoleName()
-				+ "[container="
-				+ (getEditionPattern() != null ? getEditionPattern().getName() + "/"
-						+ (getEditionPattern().getVirtualModel() != null ? getEditionPattern().getVirtualModel().getName() : "null")
-						: "null") + "][" + Integer.toHexString(hashCode()) + "]";
-	}
+	@DeserializationFinalizer
+	public void finalizePatternRoleDeserialization();
 
-	public abstract Type getType();
+	public static abstract class PatternRoleImpl<T> extends EditionPatternObjectImpl implements PatternRole<T> {
 
-	public abstract String getPreciseType();
+		// private static final Logger logger = Logger.getLogger(PatternRole.class.getPackage().getName());
 
-	public void finalizePatternRoleDeserialization() {
-	}
+		private EditionPattern _pattern;
 
-	@Override
-	public final BindingModel getBindingModel() {
-		return getEditionPattern().getBindingModel();
-	}
+		private ModelSlot<?> modelSlot;
 
-	// public abstract boolean getIsPrimaryRole();
-
-	// public abstract void setIsPrimaryRole(boolean isPrimary);
-
-	public abstract boolean defaultBehaviourIsToBeDeleted();
-
-	public abstract ActorReference<T> makeActorReference(T object, EditionPatternInstance epi);
-
-	// @Override
-	// public abstract String getLanguageRepresentation();
-
-	public static class PatternRoleMustHaveAName extends ValidationRule<PatternRoleMustHaveAName, PatternRole> {
-		public PatternRoleMustHaveAName() {
-			super(PatternRole.class, "pattern_role_must_have_a_name");
+		public PatternRoleImpl() {
+			super();
 		}
 
 		@Override
-		public ValidationIssue<PatternRoleMustHaveAName, PatternRole> applyValidation(PatternRole patternRole) {
-			if (StringUtils.isEmpty(patternRole.getPatternRoleName())) {
-				return new ValidationError<PatternRoleMustHaveAName, PatternRole>(this, patternRole, "pattern_role_has_no_name");
+		public String getURI() {
+			return getEditionPattern().getURI() + "." + getPatternRoleName();
+		}
+
+		@Override
+		public ModelSlot<?> getModelSlot() {
+			return modelSlot;
+		}
+
+		@Override
+		public void setModelSlot(ModelSlot<?> modelSlot) {
+			this.modelSlot = modelSlot;
+			setChanged();
+			notifyObservers(new DataModification("modelSlot", null, modelSlot));
+		}
+
+		@Override
+		public void setEditionPattern(EditionPattern pattern) {
+			_pattern = pattern;
+		}
+
+		@Override
+		public EditionPattern getEditionPattern() {
+			return _pattern;
+		}
+
+		@Override
+		public VirtualModel getVirtualModel() {
+			if (getEditionPattern() != null) {
+				return getEditionPattern().getVirtualModel();
 			}
 			return null;
 		}
-	}
 
+		@Override
+		public String getPatternRoleName() {
+			return getName();
+		}
+
+		@Override
+		public void setPatternRoleName(String patternRoleName) {
+			setName(patternRoleName);
+		}
+
+		@Override
+		public String toString() {
+			return getClass().getSimpleName()
+					+ ":"
+					+ getPatternRoleName()
+					+ "[container="
+					+ (getEditionPattern() != null ? getEditionPattern().getName() + "/"
+							+ (getEditionPattern().getVirtualModel() != null ? getEditionPattern().getVirtualModel().getName() : "null")
+							: "null") + "][" + Integer.toHexString(hashCode()) + "]";
+		}
+
+		public abstract Type getType();
+
+		public abstract String getPreciseType();
+
+		@Override
+		public void finalizePatternRoleDeserialization() {
+		}
+
+		@Override
+		public final BindingModel getBindingModel() {
+			return getEditionPattern().getBindingModel();
+		}
+
+		// public abstract boolean getIsPrimaryRole();
+
+		// public abstract void setIsPrimaryRole(boolean isPrimary);
+
+		public abstract boolean defaultBehaviourIsToBeDeleted();
+
+		public abstract ActorReference<T> makeActorReference(T object, EditionPatternInstance epi);
+
+		// @Override
+		// public abstract String getLanguageRepresentation();
+
+		public static class PatternRoleMustHaveAName extends ValidationRule<PatternRoleMustHaveAName, PatternRole> {
+			public PatternRoleMustHaveAName() {
+				super(PatternRole.class, "pattern_role_must_have_a_name");
+			}
+
+			@Override
+			public ValidationIssue<PatternRoleMustHaveAName, PatternRole> applyValidation(PatternRole patternRole) {
+				if (StringUtils.isEmpty(patternRole.getPatternRoleName())) {
+					return new ValidationError<PatternRoleMustHaveAName, PatternRole>(this, patternRole, "pattern_role_has_no_name");
+				}
+				return null;
+			}
+		}
+
+	}
 }

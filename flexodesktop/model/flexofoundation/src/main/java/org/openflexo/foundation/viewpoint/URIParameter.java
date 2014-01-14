@@ -33,11 +33,28 @@ import org.openflexo.foundation.view.TypeAwareModelSlotInstance;
 import org.openflexo.foundation.view.action.EditionSchemeAction;
 import org.openflexo.toolbox.StringUtils;
 
-public class URIParameter extends InnerModelSlotParameter<TypeAwareModelSlot<?, ?>> {
+@ModelEntity
+@ImplementationClass(URIParameter.URIParameterImpl.class)
+@XMLElement
+public interface URIParameter extends InnerModelSlotParameter<TypeAwareModelSlot<?, ?>>{
+
+@PropertyIdentifier(type=DataBinding.class)
+public static final String BASE_URI_KEY = "baseURI";
+
+@Getter(value=BASE_URI_KEY)
+@XMLAttribute(xmlTag="base")
+public DataBinding getBaseURI();
+
+@Setter(BASE_URI_KEY)
+public void setBaseURI(DataBinding baseURI);
+
+
+public static abstract  class URIParameterImpl extends InnerModelSlotParameter<TypeAwareModelSlot<?, ?>>Impl implements URIParameter
+{
 
 	private DataBinding<String> baseURI;
 
-	public URIParameter() {
+	public URIParameterImpl() {
 		super();
 	}
 
@@ -188,4 +205,5 @@ public class URIParameter extends InnerModelSlotParameter<TypeAwareModelSlot<?, 
 
 	}
 
+}
 }

@@ -19,12 +19,36 @@
  */
 package org.openflexo.foundation.viewpoint;
 
+import java.util.List;
 import java.util.Vector;
 
 import org.openflexo.antar.binding.BindingModel;
 import org.openflexo.foundation.technologyadapter.ModelSlot;
+import org.openflexo.model.annotations.Adder;
+import org.openflexo.model.annotations.Getter;
+import org.openflexo.model.annotations.Getter.Cardinality;
+import org.openflexo.model.annotations.PropertyIdentifier;
+import org.openflexo.model.annotations.Remover;
+import org.openflexo.model.annotations.Setter;
+import org.openflexo.model.annotations.XMLElement;
 
 public interface ActionContainer {
+
+	@PropertyIdentifier(type = Vector.class)
+	public static final String ACTIONS_KEY = "actions";
+
+	@Getter(value = ACTIONS_KEY, cardinality = Cardinality.LIST, inverse = EditionAction.ACTION_CONTAINER_KEY)
+	@XMLElement
+	public List<EditionAction<?, ?>> getActions();
+
+	@Setter(ACTIONS_KEY)
+	public void setActions(List<EditionAction<?, ?>> actions);
+
+	@Adder(ACTIONS_KEY)
+	public void addToActions(EditionAction<?, ?> aAction);
+
+	@Remover(ACTIONS_KEY)
+	public void removeFromActions(EditionAction<?, ?> aAction);
 
 	public EditionScheme getEditionScheme();
 
@@ -32,59 +56,21 @@ public interface ActionContainer {
 
 	public BindingModel getInferedBindingModel();
 
-	public Vector<EditionAction<?,?>> getActions();
+	public int getIndex(EditionAction<?, ?> action);
 
-	public void setActions(Vector<EditionAction<?,?>> actions);
+	public void insertActionAtIndex(EditionAction<?, ?> action, int index);
 
-	public void addToActions(EditionAction<?,?> action);
+	public void actionFirst(EditionAction<?, ?> a);
 
-	public void removeFromActions(EditionAction<?,?> action);
+	public void actionUp(EditionAction<?, ?> a);
 
-	public int getIndex(EditionAction<?,?> action);
+	public void actionDown(EditionAction<?, ?> a);
 
-	public void insertActionAtIndex(EditionAction<?,?> action, int index);
+	public void actionLast(EditionAction<?, ?> a);
 
-	public void actionFirst(EditionAction<?,?> a);
+	public <A extends EditionAction<?, ?>> A createAction(Class<A> actionClass, ModelSlot<?> modelSlot);
 
-	public void actionUp(EditionAction<?,?> a);
-
-	public void actionDown(EditionAction<?,?> a);
-
-	public void actionLast(EditionAction<?,?> a);
-
-	public <A extends EditionAction<?,?>> A createAction(Class<A> actionClass, ModelSlot<?> modelSlot);
-
-	/*public AddShape createAddShapeAction();
-
-	public AddClass createAddClassAction();
-
-	public AddIndividual createAddIndividualAction();
-
-	public AddObjectPropertyStatement createAddObjectPropertyStatementAction();
-
-	public AddDataPropertyStatement createAddDataPropertyStatementAction();
-
-	public AddIsAStatement createAddIsAPropertyAction();
-
-	public AddRestrictionStatement createAddRestrictionAction();
-
-	public AddConnector createAddConnectorAction();
-
-	public DeclarePatternRole createDeclarePatternRoleAction();
-
-	public GraphicalAction createGraphicalAction();
-
-	public CreateDiagram createAddDiagramAction();
-
-	public AddEditionPattern createAddEditionPatternAction();
-
-	public ConditionalAction createConditionalAction();
-
-	public IterationAction createIterationAction();
-
-	public DeleteAction createDeleteAction();*/
-
-	public EditionAction<?,?> deleteAction(EditionAction<?,?> anAction);
+	public EditionAction<?, ?> deleteAction(EditionAction<?, ?> anAction);
 
 	public void variableAdded(AssignableAction action);
 }

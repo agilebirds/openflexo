@@ -26,7 +26,44 @@ import org.openflexo.technologyadapter.diagram.model.DiagramElement;
  * @author sylvain
  * 
  */
-public class GraphicalElementSpecification<T, GR extends GraphicalRepresentation> extends EditionPatternObject implements Bindable {
+@ModelEntity
+@ImplementationClass(GraphicalElementSpecification.GraphicalElementSpecificationImpl.class)
+@XMLElement(xmlTag="GRSpec")
+public interface GraphicalElementSpecification<T, GR extends GraphicalRepresentation> extends EditionPatternObject,Bindable{
+
+@PropertyIdentifier(type=String.class)
+public static final String FEATURE_NAME_KEY = "featureName";
+@PropertyIdentifier(type=DataBinding.class)
+public static final String VALUE_KEY = "value";
+@PropertyIdentifier(type=boolean.class)
+public static final String READ_ONLY_KEY = "readOnly";
+
+@Getter(value=FEATURE_NAME_KEY)
+@XMLAttribute
+public String getFeatureName();
+
+@Setter(FEATURE_NAME_KEY)
+public void _setFeatureName(String featureName);
+
+
+@Getter(value=VALUE_KEY)
+@XMLAttribute
+public DataBinding getValue();
+
+@Setter(VALUE_KEY)
+public void setValue(DataBinding value);
+
+
+@Getter(value=READ_ONLY_KEY,defaultValue = "false")
+@XMLAttribute
+public boolean getReadOnly();
+
+@Setter(READ_ONLY_KEY)
+public void setReadOnly(boolean readOnly);
+
+
+public static abstract  class GraphicalElementSpecification<T, GRImpl extends GraphicalRepresentation> extends EditionPatternObjectImpl implements GraphicalElementSpecification<T, GR
+{
 
 	@SuppressWarnings("unused")
 	private static final Logger logger = Logger.getLogger(GraphicalElementSpecification.class.getPackage().getName());
@@ -39,11 +76,11 @@ public class GraphicalElementSpecification<T, GR extends GraphicalRepresentation
 	private boolean mandatory;
 
 	// Use it only for deserialization
-	public GraphicalElementSpecification() {
+	public GraphicalElementSpecificationImpl() {
 		super();
 	}
 
-	public GraphicalElementSpecification(GraphicalElementPatternRole<?, GR> patternRole, GraphicalFeature<T, GR> feature, boolean readOnly,
+	public GraphicalElementSpecificationImpl(GraphicalElementPatternRole<?, GR> patternRole, GraphicalFeature<T, GR> feature, boolean readOnly,
 			boolean mandatory) {
 		super();
 		this.patternRole = patternRole;
@@ -193,4 +230,5 @@ public class GraphicalElementSpecification<T, GR extends GraphicalRepresentation
 		return newValue;
 	}
 
+}
 }

@@ -38,4 +38,40 @@ public class VirtualModelModelFactory extends ModelFactory {
 		super(ModelContextLibrary.getModelContext(VirtualModel.class));
 		addConverter(new RelativePathFileConverter(virtualModelResource.getDirectory()));
 	}
+
+	public VirtualModel newVirtualModel() {
+		return newInstance(VirtualModel.class);
+	}
+
+	public SynchronizationScheme newSynchronizationScheme() {
+		return newInstance(SynchronizationScheme.class);
+	}
+
+	public EditionPatternConstraint newEditionPatternConstraint() {
+		return newInstance(EditionPatternConstraint.class);
+	}
+
+	public CreationScheme newCreationScheme() {
+		return newInstance(CreationScheme.class);
+	}
+
+	public CloningScheme newCloningScheme() {
+		return newInstance(CloningScheme.class);
+	}
+
+	public ActionScheme newActionScheme() {
+		return newInstance(ActionScheme.class);
+	}
+
+	public NavigationScheme newNavigationScheme() {
+		return newInstance(NavigationScheme.class);
+	}
+
+	public DeletionScheme newDeletionScheme() {
+		return newInstance(DeletionScheme.class);
+	}
+
+	public DeleteAction newDeleteAction() {
+		return newInstance(DeleteAction.class);
+	}
 }

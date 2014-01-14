@@ -59,7 +59,7 @@ import org.openflexo.technologyadapter.excel.viewpoint.editionaction.SelectExcel
  * Implementation of a basic ModelSlot class for the Excel technology adapter<br>
  * This model slot reflects a basic interpretation of a workbook, with basic excel notions, such as workbook, sheet, row, col, and cell
  * 
- * @author Vincent Leildé, Sylvain Guérin
+ * @author Vincent LeildÃ©, Sylvain GuÃ©rin
  * 
  */
 @DeclarePatternRoles({ // All pattern roles available through this model slot
@@ -79,19 +79,26 @@ import org.openflexo.technologyadapter.excel.viewpoint.editionaction.SelectExcel
 		@DeclareFetchRequest(FML = "RemoveReferencePropertyValue", fetchRequestClass = SelectExcelRow.class), // Select Excel Row
 		@DeclareFetchRequest(FML = "RemoveReferencePropertyValue", fetchRequestClass = SelectExcelCell.class) // Select Excel Cell
 })
-public class BasicExcelModelSlot extends FreeModelSlot<ExcelWorkbook> {
+@ModelEntity
+@ImplementationClass(BasicExcelModelSlot.BasicExcelModelSlotImpl.class)
+@XMLElement
+public interface BasicExcelModelSlot extends FreeModelSlot<ExcelWorkbook>{
+
+
+public static abstract  class BasicExcelModelSlotImpl extends FreeModelSlot<ExcelWorkbook>Impl implements BasicExcelModelSlot
+{
 
 	private static final Logger logger = Logger.getLogger(BasicExcelModelSlot.class.getPackage().getName());
 
 	private final BasicExcelModelSlotURIProcessor uriProcessor;
 
-	public BasicExcelModelSlot(VirtualModel virtualModel, ExcelTechnologyAdapter adapter) {
+	public BasicExcelModelSlotImpl(VirtualModel virtualModel, ExcelTechnologyAdapter adapter) {
 		super(virtualModel, adapter);
 		uriProcessor = new BasicExcelModelSlotURIProcessor();
 
 	}
 
-	public BasicExcelModelSlot() {
+	public BasicExcelModelSlotImpl() {
 		super();
 		uriProcessor = new BasicExcelModelSlotURIProcessor();
 	}
@@ -217,4 +224,5 @@ public class BasicExcelModelSlot extends FreeModelSlot<ExcelWorkbook> {
 		return null;
 	}
 
+}
 }

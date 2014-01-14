@@ -19,10 +19,18 @@
  */
 package org.openflexo.foundation.viewpoint;
 
-public abstract class AbstractCreationScheme extends EditionScheme {
+import org.openflexo.model.annotations.ImplementationClass;
+import org.openflexo.model.annotations.ModelEntity;
 
-	public AbstractCreationScheme() {
-		super();
+@ModelEntity(isAbstract = true)
+@ImplementationClass(AbstractCreationScheme.AbstractCreationSchemeImpl.class)
+public abstract interface AbstractCreationScheme extends EditionScheme {
+
+	public static abstract class AbstractCreationSchemeImpl extends EditionSchemeImpl implements AbstractCreationScheme {
+
+		public AbstractCreationSchemeImpl() {
+			super();
+		}
+
 	}
-
 }

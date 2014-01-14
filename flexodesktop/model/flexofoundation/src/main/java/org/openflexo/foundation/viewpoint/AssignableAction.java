@@ -36,7 +36,33 @@ import org.openflexo.toolbox.StringUtils;
  * @author sylvain
  * 
  */
-public abstract class AssignableAction<MS extends ModelSlot<?>, T> extends EditionAction<MS, T> {
+@ModelEntity(isAbstract = true)
+@ImplementationClass(AssignableAction.AssignableActionImpl.class)
+public abstract interface AssignableAction<MS extends ModelSlot<?>, T> extends EditionAction<MS, T>{
+
+@PropertyIdentifier(type=String.class)
+public static final String VARIABLE_NAME_KEY = "variableName";
+@PropertyIdentifier(type=DataBinding.class)
+public static final String ASSIGNATION_KEY = "assignation";
+
+@Getter(value=VARIABLE_NAME_KEY)
+@XMLAttribute
+public String getVariableName();
+
+@Setter(VARIABLE_NAME_KEY)
+public void setVariableName(String variableName);
+
+
+@Getter(value=ASSIGNATION_KEY)
+@XMLAttribute
+public DataBinding getAssignation();
+
+@Setter(ASSIGNATION_KEY)
+public void setAssignation(DataBinding assignation);
+
+
+public static abstract  abstract class AssignableAction<MSImpl extends ModelSlot<?>, T> extends EditionAction<MS, T>Impl implements AssignableAction<MS
+{
 
 	private static final Logger logger = Logger.getLogger(AssignableAction.class.getPackage().getName());
 
@@ -44,7 +70,7 @@ public abstract class AssignableAction<MS extends ModelSlot<?>, T> extends Editi
 
 	private String variableName = null;
 
-	public AssignableAction() {
+	public AssignableActionImpl() {
 		super();
 	}
 
@@ -189,4 +215,5 @@ public abstract class AssignableAction<MS extends ModelSlot<?>, T> extends Editi
 
 	}
 
+}
 }

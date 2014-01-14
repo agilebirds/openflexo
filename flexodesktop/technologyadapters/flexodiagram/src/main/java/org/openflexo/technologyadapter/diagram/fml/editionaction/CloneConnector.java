@@ -31,11 +31,18 @@ import org.openflexo.technologyadapter.diagram.model.action.LinkSchemeAction;
  * 
  */
 @FIBPanel("Fib/CloneConnectorPanel.fib")
-public class CloneConnector extends AddConnector {
+@ModelEntity
+@ImplementationClass(CloneConnector.CloneConnectorImpl.class)
+@XMLElement
+public interface CloneConnector extends AddConnector{
+
+
+public static abstract  class CloneConnectorImpl extends AddConnectorImpl implements CloneConnector
+{
 
 	private static final Logger logger = Logger.getLogger(LinkSchemeAction.class.getPackage().getName());
 
-	public CloneConnector() {
+	public CloneConnectorImpl() {
 		super();
 	}
 
@@ -44,4 +51,5 @@ public class CloneConnector extends AddConnector {
 		return "CloneConnector " + Integer.toHexString(hashCode()) + " patternRole=" + getPatternRole();
 	}
 
+}
 }

@@ -12,7 +12,34 @@ import org.openflexo.localization.FlexoLocalization;
 import org.openflexo.technologyadapter.diagram.TypedDiagramModelSlot;
 import org.openflexo.technologyadapter.diagram.model.DiagramShape;
 
-public class ShapePatternRole extends GraphicalElementPatternRole<DiagramShape, ShapeGraphicalRepresentation> {
+@ModelEntity
+@ImplementationClass(ShapePatternRole.ShapePatternRoleImpl.class)
+@XMLElement
+public interface ShapePatternRole extends GraphicalElementPatternRole<DiagramShape, ShapeGraphicalRepresentation>{
+
+@PropertyIdentifier(type=GraphicalRepresentation.class)
+public static final String GRAPHICAL_REPRESENTATION_KEY = "graphicalRepresentation";
+@PropertyIdentifier(type=ShapePatternRole.class)
+public static final String PARENT_SHAPE_PATTERN_ROLE_KEY = "parentShapePatternRole";
+
+@Getter(value=GRAPHICAL_REPRESENTATION_KEY)
+@XMLElement
+public GraphicalRepresentation getGraphicalRepresentation();
+
+@Setter(GRAPHICAL_REPRESENTATION_KEY)
+public void setGraphicalRepresentation(GraphicalRepresentation graphicalRepresentation);
+
+
+@Getter(value=PARENT_SHAPE_PATTERN_ROLE_KEY)
+@XMLElement
+public ShapePatternRole getParentShapePatternRole();
+
+@Setter(PARENT_SHAPE_PATTERN_ROLE_KEY)
+public void setParentShapePatternRole(ShapePatternRole parentShapePatternRole);
+
+
+public static abstract  class ShapePatternRoleImpl extends GraphicalElementPatternRole<DiagramShape, ShapeGraphicalRepresentation>Impl implements ShapePatternRole
+{
 
 	private static final Logger logger = Logger.getLogger(ShapePatternRole.class.getPackage().getName());
 
@@ -20,7 +47,7 @@ public class ShapePatternRole extends GraphicalElementPatternRole<DiagramShape, 
 
 	// private List<ShapePatternRole> _possibleParentPatternRole;
 
-	public ShapePatternRole() {
+	public ShapePatternRoleImpl() {
 		super();
 	}
 
@@ -75,7 +102,7 @@ public class ShapePatternRole extends GraphicalElementPatternRole<DiagramShape, 
 		return false;
 	}
 
-	public ShapePatternRole getParentShapePatternRole() {
+	public ShapePatternRoleImpl getParentShapePatternRole() {
 		return parentShapePatternRole;
 	}
 
@@ -256,4 +283,5 @@ public class ShapePatternRole extends GraphicalElementPatternRole<DiagramShape, 
 	public static GraphicalFeature<?, ?>[] AVAILABLE_FEATURES = { POS_X_FEATURE, POS_Y_FEATURE, WIDTH_FEATURE, HEIGHT_FEATURE,
 			RELATIVE_TEXT_X_FEATURE, RELATIVE_TEXT_Y_FEATURE, ABSOLUTE_TEXT_X_FEATURE, ABSOLUTE_TEXT_Y_FEATURE };
 
+}
 }

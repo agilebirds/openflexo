@@ -37,11 +37,27 @@ import org.openflexo.technologyadapter.owl.model.OWLConcept;
 import org.openflexo.technologyadapter.owl.model.OWLOntology;
 import org.openflexo.technologyadapter.owl.model.OWLStatement;
 
-public abstract class AddStatement<S extends OWLStatement> extends AssignableAction<OWLModelSlot, S> implements SetPropertyValueAction {
+@ModelEntity(isAbstract = true)
+@ImplementationClass(AddStatement.AddStatementImpl.class)
+public abstract interface AddStatement<S extends OWLStatement> extends AssignableAction<OWLModelSlot, S>,SetPropertyValueAction{
+
+@PropertyIdentifier(type=DataBinding.class)
+public static final String SUBJECT_KEY = "subject";
+
+@Getter(value=SUBJECT_KEY)
+@XMLAttribute
+public DataBinding getSubject();
+
+@Setter(SUBJECT_KEY)
+public void setSubject(DataBinding subject);
+
+
+public static abstract  abstract class AddStatement<SImpl extends OWLStatement> extends AssignableAction<OWLModelSlot, S>Impl implements AddStatement<S
+{
 
 	private static final Logger logger = Logger.getLogger(AddStatement.class.getPackage().getName());
 
-	public AddStatement() {
+	public AddStatementImpl() {
 		super();
 	}
 
@@ -128,4 +144,5 @@ public abstract class AddStatement<S extends OWLStatement> extends AssignableAct
 		return (TypeAwareModelSlotInstance<OWLOntology, OWLOntology, OWLModelSlot>) super.getModelSlotInstance(action);
 	}
 
+}
 }

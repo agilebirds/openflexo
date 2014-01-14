@@ -34,13 +34,30 @@ import org.openflexo.foundation.viewpoint.FMLRepresentationContext.FMLRepresenta
 import org.openflexo.foundation.viewpoint.annotations.FIBPanel;
 
 @FIBPanel("Fib/ExecutionActionPanel.fib")
-public class ExecutionAction<MS extends ModelSlot<?>> extends AssignableAction<MS, FlexoObject> {
+@ModelEntity
+@ImplementationClass(ExecutionAction.ExecutionActionImpl.class)
+@XMLElement
+public interface ExecutionAction<MS extends ModelSlot<?>> extends AssignableAction<MS, FlexoObject>{
+
+@PropertyIdentifier(type=DataBinding.class)
+public static final String EXECUTION_KEY = "execution";
+
+@Getter(value=EXECUTION_KEY)
+@XMLAttribute
+public DataBinding getExecution();
+
+@Setter(EXECUTION_KEY)
+public void setExecution(DataBinding execution);
+
+
+public static abstract  class ExecutionAction<MSImpl extends ModelSlot<?>> extends AssignableAction<MS, FlexoObject>Impl implements ExecutionAction<MS
+{
 
 	private static final Logger logger = Logger.getLogger(ExecutionAction.class.getPackage().getName());
 
 	private DataBinding<Object> execution;
 
-	public ExecutionAction() {
+	public ExecutionActionImpl() {
 		super();
 	}
 
@@ -110,4 +127,5 @@ public class ExecutionAction<MS extends ModelSlot<?>> extends AssignableAction<M
 
 	}
 
+}
 }

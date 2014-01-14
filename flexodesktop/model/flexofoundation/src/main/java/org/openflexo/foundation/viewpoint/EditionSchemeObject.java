@@ -19,25 +19,23 @@
  */
 package org.openflexo.foundation.viewpoint;
 
+import org.openflexo.model.annotations.ImplementationClass;
+import org.openflexo.model.annotations.ModelEntity;
+
 /**
  * Represents an object which is part of the model of an EditionScheme
  * 
  * @author sylvain
  * 
  */
-public abstract class EditionSchemeObject extends EditionPatternObject {
+@ModelEntity(isAbstract = true)
+@ImplementationClass(EditionSchemeObject.EditionSchemeObjectImpl.class)
+public interface EditionSchemeObject extends EditionPatternObject {
 
-	public EditionSchemeObject() {
-		super();
-	}
+	public EditionScheme getEditionScheme();
 
-	public abstract EditionScheme getEditionScheme();
+	public abstract class EditionSchemeObjectImpl extends EditionPatternObjectImpl implements EditionSchemeObject {
 
-	@Override
-	public String getStringRepresentation() {
-		return (getVirtualModel() != null ? getVirtualModel().getStringRepresentation() : "null") + "#"
-				+ (getEditionPattern() != null ? getEditionPattern().getName() : "null") + "."
-				+ (getEditionScheme() != null ? getEditionScheme().getName() : "null") + "." + getClass().getSimpleName();
 	}
 
 }

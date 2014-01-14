@@ -33,7 +33,34 @@ import org.openflexo.foundation.viewpoint.EditionPattern;
 import org.openflexo.foundation.viewpoint.EditionPatternObject;
 import org.openflexo.foundation.viewpoint.VirtualModel;
 
-public class GraphicalElementAction extends EditionPatternObject {
+@ModelEntity
+@ImplementationClass(GraphicalElementAction.GraphicalElementActionImpl.class)
+@XMLElement(xmlTag="Action")
+public interface GraphicalElementAction extends EditionPatternObject{
+
+@PropertyIdentifier(type=ActionMask.class)
+public static final String ACTION_MASK_KEY = "actionMask";
+@PropertyIdentifier(type=AbstractActionScheme.class)
+public static final String ABSTRACT_ACTION_SCHEME_KEY = "abstractActionScheme";
+
+@Getter(value=ACTION_MASK_KEY)
+@XMLAttribute
+public ActionMask getActionMask();
+
+@Setter(ACTION_MASK_KEY)
+public void setActionMask(ActionMask actionMask);
+
+
+@Getter(value=ABSTRACT_ACTION_SCHEME_KEY)
+@XMLElement
+public AbstractActionScheme getAbstractActionScheme();
+
+@Setter(ABSTRACT_ACTION_SCHEME_KEY)
+public void setAbstractActionScheme(AbstractActionScheme abstractActionScheme);
+
+
+public static abstract  class GraphicalElementActionImpl extends EditionPatternObjectImpl implements GraphicalElementAction
+{
 
 	private ActionMask actionMask = ActionMask.DoubleClick;
 	private AbstractActionScheme abstractActionScheme;
@@ -45,7 +72,7 @@ public class GraphicalElementAction extends EditionPatternObject {
 
 	private DataBinding<Boolean> conditional;
 
-	public GraphicalElementAction() {
+	public GraphicalElementActionImpl() {
 		super();
 	}
 
@@ -131,4 +158,5 @@ public class GraphicalElementAction extends EditionPatternObject {
 		this.actionMask = actionMask;
 	}
 
+}
 }

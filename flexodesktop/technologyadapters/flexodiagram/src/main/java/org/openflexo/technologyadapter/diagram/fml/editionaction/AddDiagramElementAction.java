@@ -26,9 +26,15 @@ import org.openflexo.technologyadapter.diagram.fml.GraphicalElementSpecification
 import org.openflexo.technologyadapter.diagram.model.DiagramElement;
 import org.openflexo.toolbox.StringUtils;
 
-public abstract class AddDiagramElementAction<T extends DiagramElement<?>> extends DiagramAction<T> {
+@ModelEntity(isAbstract = true)
+@ImplementationClass(AddDiagramElementAction.AddDiagramElementActionImpl.class)
+public abstract interface AddDiagramElementAction<T extends DiagramElement<?>> extends DiagramAction<T>{
 
-	public AddDiagramElementAction() {
+
+public static abstract  abstract class AddDiagramElementAction<TImpl extends DiagramElement<?>> extends DiagramAction<T>Impl implements AddDiagramElementAction<T
+{
+
+	public AddDiagramElementActionImpl() {
 		super();
 	}
 
@@ -65,4 +71,5 @@ public abstract class AddDiagramElementAction<T extends DiagramElement<?>> exten
 		return null;
 	}
 
+}
 }

@@ -26,9 +26,16 @@ package org.openflexo.foundation.viewpoint.inspector;
  * @author sylvain
  * 
  */
-public class IntegerInspectorEntry extends InspectorEntry {
+@ModelEntity
+@ImplementationClass(IntegerInspectorEntry.IntegerInspectorEntryImpl.class)
+@XMLElement(xmlTag="Integer")
+public interface IntegerInspectorEntry extends InspectorEntry{
 
-	public IntegerInspectorEntry() {
+
+public static abstract  class IntegerInspectorEntryImpl extends InspectorEntryImpl implements IntegerInspectorEntry
+{
+
+	public IntegerInspectorEntryImpl() {
 		super();
 	}
 
@@ -41,4 +48,5 @@ public class IntegerInspectorEntry extends InspectorEntry {
 	public String getWidgetName() {
 		return "Integer";
 	}
+}
 }

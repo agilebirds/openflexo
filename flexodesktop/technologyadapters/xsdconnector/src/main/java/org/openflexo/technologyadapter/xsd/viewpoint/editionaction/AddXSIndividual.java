@@ -36,7 +36,14 @@ import org.openflexo.technologyadapter.xsd.metamodel.XSOntDataProperty;
 import org.openflexo.technologyadapter.xsd.model.XMLXSDModel;
 import org.openflexo.technologyadapter.xsd.model.XSOntIndividual;
 
-public class AddXSIndividual extends AddIndividual<XSDModelSlot, XSOntIndividual> {
+@ModelEntity
+@ImplementationClass(AddXSIndividual.AddXSIndividualImpl.class)
+@XMLElement
+public interface AddXSIndividual extends AddIndividual<XSDModelSlot, XSOntIndividual>{
+
+
+public static abstract  class AddXSIndividualImpl extends AddIndividual<XSDModelSlot, XSOntIndividual>Impl implements AddXSIndividual
+{
 
 	@Override
 	public void setOntologyClass(IFlexoOntologyClass ontologyClass) {
@@ -48,7 +55,7 @@ public class AddXSIndividual extends AddIndividual<XSDModelSlot, XSOntIndividual
 
 	private static final Logger logger = Logger.getLogger(AddXSIndividual.class.getPackage().getName());
 
-	public AddXSIndividual() {
+	public AddXSIndividualImpl() {
 		super();
 	}
 
@@ -116,4 +123,5 @@ public class AddXSIndividual extends AddIndividual<XSDModelSlot, XSOntIndividual
 		}
 	}
 
+}
 }

@@ -22,6 +22,9 @@ package org.openflexo.foundation.viewpoint;
 import org.openflexo.foundation.view.EditionPatternInstance;
 import org.openflexo.foundation.view.VirtualModelInstance;
 import org.openflexo.foundation.viewpoint.annotations.FIBPanel;
+import org.openflexo.model.annotations.ImplementationClass;
+import org.openflexo.model.annotations.ModelEntity;
+import org.openflexo.model.annotations.XMLElement;
 
 /**
  * A {@link SynchronizationScheme} is applied to a {@link VirtualModelInstance} to automatically manage contained
@@ -31,19 +34,31 @@ import org.openflexo.foundation.viewpoint.annotations.FIBPanel;
  * 
  */
 @FIBPanel("Fib/SynchronizationSchemePanel.fib")
-public class SynchronizationScheme extends AbstractActionScheme {
-
-	public SynchronizationScheme() {
-		super();
-	}
+@ModelEntity
+@ImplementationClass(SynchronizationScheme.SynchronizationSchemeImpl.class)
+@XMLElement
+public interface SynchronizationScheme extends AbstractActionScheme {
 
 	@Override
-	public VirtualModel getVirtualModel() {
-		return (VirtualModel) super.getEditionPattern();
-	}
+	public VirtualModel getVirtualModel();
 
-	public void setVirtualModel(VirtualModel virtualModel) {
-		setEditionPattern(virtualModel);
-	}
+	public void setVirtualModel(VirtualModel virtualModel);
 
+	public static abstract class SynchronizationSchemeImpl extends AbstractActionSchemeImpl implements SynchronizationScheme {
+
+		public SynchronizationSchemeImpl() {
+			super();
+		}
+
+		@Override
+		public VirtualModel getVirtualModel() {
+			return (VirtualModel) super.getEditionPattern();
+		}
+
+		@Override
+		public void setVirtualModel(VirtualModel virtualModel) {
+			setEditionPattern(virtualModel);
+		}
+
+	}
 }

@@ -12,9 +12,25 @@ import org.openflexo.foundation.view.EditionPatternInstance;
 import org.openflexo.foundation.viewpoint.FMLRepresentationContext.FMLRepresentationOutput;
 
 
-public abstract class ClassPatternRole<C extends IFlexoOntologyClass> extends OntologicObjectPatternRole<IFlexoOntologyClass> {
+@ModelEntity(isAbstract = true)
+@ImplementationClass(ClassPatternRole.ClassPatternRoleImpl.class)
+public abstract interface ClassPatternRole<C extends IFlexoOntologyClass> extends OntologicObjectPatternRole<IFlexoOntologyClass>{
 
-	public ClassPatternRole() {
+@PropertyIdentifier(type=String.class)
+public static final String CONCEPT_URI_KEY = "conceptURI";
+
+@Getter(value=CONCEPT_URI_KEY)
+@XMLAttribute(xmlTag="ontologicType")
+public String _getConceptURI();
+
+@Setter(CONCEPT_URI_KEY)
+public void _setConceptURI(String conceptURI);
+
+
+public static abstract  abstract class ClassPatternRole<CImpl extends IFlexoOntologyClass> extends OntologicObjectPatternRole<IFlexoOntologyClass>Impl implements ClassPatternRole<C
+{
+
+	public ClassPatternRoleImpl() {
 		super();
 	}
 
@@ -67,7 +83,7 @@ public abstract class ClassPatternRole<C extends IFlexoOntologyClass> extends On
 
 	public static class ClassPatternRoleMustDefineAValidConceptClass extends
 			ValidationRule<ClassPatternRoleMustDefineAValidConceptClass, ClassPatternRole> {
-		public ClassPatternRoleMustDefineAValidConceptClass() {
+		public ClassPatternRoleImplMustDefineAValidConceptClass() {
 			super(ClassPatternRole.class, "pattern_role_must_define_a_valid_concept_class");
 		}
 
@@ -85,4 +101,5 @@ public abstract class ClassPatternRole<C extends IFlexoOntologyClass> extends On
 	public ConceptActorReference<IFlexoOntologyClass> makeActorReference(IFlexoOntologyClass object, EditionPatternInstance epi) {
 		return new ConceptActorReference<IFlexoOntologyClass>(object, this, epi);
 	}
+}
 }

@@ -36,13 +36,30 @@ import org.openflexo.foundation.viewpoint.FMLRepresentationContext.FMLRepresenta
 import org.openflexo.foundation.viewpoint.annotations.FIBPanel;
 
 @FIBPanel("Fib/RemoveFromListActionPanel.fib")
-public class RemoveFromListAction<MS extends ModelSlot<?>, T> extends AssignableAction<MS, Object> {
+@ModelEntity
+@ImplementationClass(RemoveFromListAction.RemoveFromListActionImpl.class)
+@XMLElement
+public interface RemoveFromListAction<MS extends ModelSlot<?>, T> extends AssignableAction<MS, Object>{
+
+@PropertyIdentifier(type=DataBinding.class)
+public static final String VALUE_KEY = "value";
+
+@Getter(value=VALUE_KEY)
+@XMLAttribute
+public DataBinding getValue();
+
+@Setter(VALUE_KEY)
+public void setValue(DataBinding value);
+
+
+public static abstract  class RemoveFromListAction<MSImpl extends ModelSlot<?>, T> extends AssignableAction<MS, Object>Impl implements RemoveFromListAction<MS
+{
 
 	private static final Logger logger = Logger.getLogger(RemoveFromListAction.class.getPackage().getName());
 
 	private DataBinding<Object> value;
 
-	public RemoveFromListAction() {
+	public RemoveFromListActionImpl() {
 		super();
 	}
 
@@ -122,4 +139,5 @@ public class RemoveFromListAction<MS extends ModelSlot<?>, T> extends Assignable
 
 	}
 
+}
 }

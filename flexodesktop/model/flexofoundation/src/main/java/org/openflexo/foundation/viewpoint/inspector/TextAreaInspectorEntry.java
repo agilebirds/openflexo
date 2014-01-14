@@ -26,9 +26,16 @@ package org.openflexo.foundation.viewpoint.inspector;
  * @author sylvain
  * 
  */
-public class TextAreaInspectorEntry extends InspectorEntry {
+@ModelEntity
+@ImplementationClass(TextAreaInspectorEntry.TextAreaInspectorEntryImpl.class)
+@XMLElement(xmlTag="TextArea")
+public interface TextAreaInspectorEntry extends InspectorEntry{
 
-	public TextAreaInspectorEntry() {
+
+public static abstract  class TextAreaInspectorEntryImpl extends InspectorEntryImpl implements TextAreaInspectorEntry
+{
+
+	public TextAreaInspectorEntryImpl() {
 		super();
 	}
 
@@ -41,4 +48,5 @@ public class TextAreaInspectorEntry extends InspectorEntry {
 	public String getWidgetName() {
 		return "TextArea";
 	}
+}
 }

@@ -9,7 +9,24 @@ import org.openflexo.foundation.viewpoint.FMLRepresentationContext.FMLRepresenta
 import org.openflexo.localization.FlexoLocalization;
 import org.openflexo.logging.FlexoLogger;
 
-public class PrimitivePatternRole extends PatternRole<Object> {
+@ModelEntity
+@ImplementationClass(PrimitivePatternRole.PrimitivePatternRoleImpl.class)
+@XMLElement
+public interface PrimitivePatternRole extends PatternRole<Object>{
+
+@PropertyIdentifier(type=PrimitiveType.class)
+public static final String PRIMITIVE_TYPE_KEY = "primitiveType";
+
+@Getter(value=PRIMITIVE_TYPE_KEY)
+@XMLAttribute
+public PrimitiveType getPrimitiveType();
+
+@Setter(PRIMITIVE_TYPE_KEY)
+public void setPrimitiveType(PrimitiveType primitiveType);
+
+
+public static abstract  class PrimitivePatternRoleImpl extends PatternRole<Object>Impl implements PrimitivePatternRole
+{
 
 	protected static final Logger logger = FlexoLogger.getLogger(PrimitivePatternRole.class.getPackage().getName());
 
@@ -19,7 +36,7 @@ public class PrimitivePatternRole extends PatternRole<Object> {
 
 	private PrimitiveType primitiveType;
 
-	public PrimitivePatternRole() {
+	public PrimitivePatternRoleImpl() {
 		super();
 	}
 
@@ -101,4 +118,5 @@ public class PrimitivePatternRole extends PatternRole<Object> {
 		return null;
 	}
 
+}
 }

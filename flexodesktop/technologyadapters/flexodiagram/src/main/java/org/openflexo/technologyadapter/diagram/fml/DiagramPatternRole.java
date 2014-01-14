@@ -14,14 +14,31 @@ import org.openflexo.technologyadapter.diagram.metamodel.DiagramSpecification;
 import org.openflexo.technologyadapter.diagram.rm.DiagramSpecificationResource;
 import org.openflexo.toolbox.StringUtils;
 
-public class DiagramPatternRole extends PatternRole<View> {
+@ModelEntity
+@ImplementationClass(DiagramPatternRole.DiagramPatternRoleImpl.class)
+@XMLElement
+public interface DiagramPatternRole extends PatternRole<View>{
+
+@PropertyIdentifier(type=String.class)
+public static final String DIAGRAM_SPECIFICATION_URI_KEY = "diagramSpecificationURI";
+
+@Getter(value=DIAGRAM_SPECIFICATION_URI_KEY)
+@XMLAttribute
+public String getDiagramSpecificationURI();
+
+@Setter(DIAGRAM_SPECIFICATION_URI_KEY)
+public void setDiagramSpecificationURI(String diagramSpecificationURI);
+
+
+public static abstract  class DiagramPatternRoleImpl extends PatternRole<View>Impl implements DiagramPatternRole
+{
 
 	private static final Logger logger = Logger.getLogger(DiagramPatternRole.class.getPackage().getName());
 
 	private DiagramSpecificationResource diagramSpecificationResource;
 	private String diagramSpecificationURI;
 
-	public DiagramPatternRole() {
+	public DiagramPatternRoleImpl() {
 		super();
 	}
 
@@ -89,4 +106,5 @@ public class DiagramPatternRole extends PatternRole<View> {
 	public ModelObjectActorReference<View> makeActorReference(View object, EditionPatternInstance epi) {
 		return new ModelObjectActorReference<View>(object, this, epi);
 	}
+}
 }

@@ -18,13 +18,30 @@ import org.openflexo.technologyadapter.excel.model.ExcelSheet;
 import org.openflexo.technologyadapter.excel.model.ExcelWorkbook;
 
 @FIBPanel("Fib/SelectExcelRowPanel.fib")
-public class SelectExcelRow extends FetchRequest<BasicExcelModelSlot, ExcelRow> {
+@ModelEntity
+@ImplementationClass(SelectExcelRow.SelectExcelRowImpl.class)
+@XMLElement
+public interface SelectExcelRow extends FetchRequest<BasicExcelModelSlot, ExcelRow>{
+
+@PropertyIdentifier(type=DataBinding.class)
+public static final String EXCEL_SHEET_KEY = "excelSheet";
+
+@Getter(value=EXCEL_SHEET_KEY)
+@XMLAttribute
+public DataBinding getExcelSheet();
+
+@Setter(EXCEL_SHEET_KEY)
+public void setExcelSheet(DataBinding excelSheet);
+
+
+public static abstract  class SelectExcelRowImpl extends FetchRequest<BasicExcelModelSlot, ExcelRow>Impl implements SelectExcelRow
+{
 
 	private static final Logger logger = Logger.getLogger(SelectExcelRow.class.getPackage().getName());
 
 	private DataBinding<ExcelSheet> excelSheet;
 
-	public SelectExcelRow() {
+	public SelectExcelRowImpl() {
 		super();
 	}
 
@@ -92,4 +109,5 @@ public class SelectExcelRow extends FetchRequest<BasicExcelModelSlot, ExcelRow> 
 		}
 		this.excelSheet = excelSheet;
 	}
+}
 }

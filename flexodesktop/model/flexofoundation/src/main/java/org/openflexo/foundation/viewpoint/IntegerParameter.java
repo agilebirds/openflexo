@@ -21,9 +21,16 @@ package org.openflexo.foundation.viewpoint;
 
 import java.lang.reflect.Type;
 
-public class IntegerParameter extends EditionSchemeParameter {
+@ModelEntity
+@ImplementationClass(IntegerParameter.IntegerParameterImpl.class)
+@XMLElement
+public interface IntegerParameter extends EditionSchemeParameter{
 
-	public IntegerParameter() {
+
+public static abstract  class IntegerParameterImpl extends EditionSchemeParameterImpl implements IntegerParameter
+{
+
+	public IntegerParameterImpl() {
 		super();
 	}
 
@@ -37,4 +44,5 @@ public class IntegerParameter extends EditionSchemeParameter {
 		return WidgetType.INTEGER;
 	}
 
+}
 }

@@ -50,14 +50,41 @@ import org.openflexo.technologyadapter.owl.viewpoint.DataPropertyStatementPatter
 import org.openflexo.toolbox.StringUtils;
 
 @FIBPanel("Fib/AddDataPropertyStatementPanel.fib")
-public class AddDataPropertyStatement extends AddStatement<DataPropertyStatement> implements SetDataPropertyValueAction {
+@ModelEntity
+@ImplementationClass(AddDataPropertyStatement.AddDataPropertyStatementImpl.class)
+@XMLElement
+public interface AddDataPropertyStatement extends AddStatement<DataPropertyStatement>,SetDataPropertyValueAction{
+
+@PropertyIdentifier(type=DataBinding.class)
+public static final String VALUE_KEY = "value";
+@PropertyIdentifier(type=String.class)
+public static final String DATA_PROPERTY_URI_KEY = "dataPropertyURI";
+
+@Getter(value=VALUE_KEY)
+@XMLAttribute
+public DataBinding getValue();
+
+@Setter(VALUE_KEY)
+public void setValue(DataBinding value);
+
+
+@Getter(value=DATA_PROPERTY_URI_KEY)
+@XMLAttribute
+public String _getDataPropertyURI();
+
+@Setter(DATA_PROPERTY_URI_KEY)
+public void _setDataPropertyURI(String dataPropertyURI);
+
+
+public static abstract  class AddDataPropertyStatementImpl extends AddStatement<DataPropertyStatement>Impl implements AddDataPropertyStatement
+{
 
 	private static final Logger logger = Logger.getLogger(AddDataPropertyStatement.class.getPackage().getName());
 
 	private String dataPropertyURI = null;
 	private DataBinding<Object> value;
 
-	public AddDataPropertyStatement() {
+	public AddDataPropertyStatementImpl() {
 		super();
 	}
 
@@ -230,7 +257,7 @@ public class AddDataPropertyStatement extends AddStatement<DataPropertyStatement
 
 	public static class AddDataPropertyStatementActionMustDefineADataProperty extends
 			ValidationRule<AddDataPropertyStatementActionMustDefineADataProperty, AddDataPropertyStatement> {
-		public AddDataPropertyStatementActionMustDefineADataProperty() {
+		public AddDataPropertyStatementImplActionMustDefineADataProperty() {
 			super(AddDataPropertyStatement.class, "add_data_property_statement_action_must_define_a_data_property");
 		}
 
@@ -284,4 +311,5 @@ public class AddDataPropertyStatement extends AddStatement<DataPropertyStatement
 
 	}
 
+}
 }
