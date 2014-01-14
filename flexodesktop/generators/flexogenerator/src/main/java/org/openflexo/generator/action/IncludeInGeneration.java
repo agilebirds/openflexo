@@ -23,7 +23,7 @@ import java.util.Vector;
 
 import org.openflexo.foundation.FlexoEditor;
 import org.openflexo.foundation.FlexoException;
-import org.openflexo.foundation.FlexoModelObject;
+import org.openflexo.foundation.FlexoObject.FlexoObjectImpl;
 import org.openflexo.foundation.action.FlexoActionType;
 import org.openflexo.foundation.cg.CGObject;
 import org.openflexo.generator.file.AbstractCGFile;
@@ -69,7 +69,7 @@ public class IncludeInGeneration extends MultipleFileGCAction<IncludeInGeneratio
 	};
 
 	static {
-		TestModelObject.addActionForClass(IncludeInGeneration.actionType, CGObject.class);
+		FlexoObjectImpl.addActionForClass(IncludeInGeneration.actionType, CGObject.class);
 	}
 
 	/**

@@ -25,7 +25,7 @@ import java.util.logging.Logger;
 
 import org.openflexo.foundation.FlexoEditor;
 import org.openflexo.foundation.FlexoException;
-import org.openflexo.foundation.FlexoModelObject;
+import org.openflexo.foundation.FlexoObject.FlexoObjectImpl;
 import org.openflexo.foundation.action.FlexoActionType;
 import org.openflexo.foundation.action.LoadAllImportedProject;
 import org.openflexo.foundation.cg.CGObject;
@@ -77,7 +77,7 @@ public class SynchronizeRepositoryCodeGeneration extends GCAction<SynchronizeRep
 	};
 
 	static {
-		TestModelObject.addActionForClass(SynchronizeRepositoryCodeGeneration.actionType, GenerationRepository.class);
+		FlexoObjectImpl.addActionForClass(SynchronizeRepositoryCodeGeneration.actionType, GenerationRepository.class);
 	}
 
 	SynchronizeRepositoryCodeGeneration(GenerationRepository focusedObject, Vector<CGObject> globalSelection, FlexoEditor editor) {

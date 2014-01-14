@@ -26,7 +26,6 @@ import java.util.Vector;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 
-import org.flexo.model.TestModelObject;
 import org.openflexo.antar.binding.Bindable;
 import org.openflexo.antar.binding.BindingEvaluationContext;
 import org.openflexo.antar.binding.BindingFactory;
@@ -37,6 +36,7 @@ import org.openflexo.antar.binding.DataBinding.BindingDefinitionType;
 import org.openflexo.antar.expr.NotSettableContextException;
 import org.openflexo.antar.expr.NullReferenceException;
 import org.openflexo.antar.expr.TypeMismatchException;
+import org.openflexo.foundation.FlexoObject;
 import org.openflexo.foundation.FlexoProject;
 import org.openflexo.foundation.FlexoProjectObject;
 import org.openflexo.foundation.viewpoint.CloningScheme;
@@ -462,11 +462,11 @@ public class EditionPatternInstance extends VirtualModelInstanceObject implement
 	/**
 	 * Return the list of objects that will be deleted if default DeletionScheme is used
 	 */
-	public List<TestModelObject> objectsThatWillBeDeleted() {
-		Vector<TestModelObject> returned = new Vector<TestModelObject>();
+	public List<FlexoObject> objectsThatWillBeDeleted() {
+		Vector<FlexoObject> returned = new Vector<FlexoObject>();
 		for (PatternRole<?> pr : getEditionPattern().getPatternRoles()) {
-			if (pr.defaultBehaviourIsToBeDeleted() && getPatternActor(pr) instanceof TestModelObject) {
-				returned.add((TestModelObject) getPatternActor(pr));
+			if (pr.defaultBehaviourIsToBeDeleted() && getPatternActor(pr) instanceof FlexoObject) {
+				returned.add((FlexoObject) getPatternActor(pr));
 			}
 		}
 		return returned;
@@ -475,13 +475,13 @@ public class EditionPatternInstance extends VirtualModelInstanceObject implement
 	/**
 	 * Delete this EditionPattern instance using supplied DeletionScheme
 	 */
-	public List<TestModelObject> objectsThatWillBeDeleted(DeletionScheme deletionScheme) {
-		Vector<TestModelObject> returned = new Vector<TestModelObject>();
+	public List<FlexoObject> objectsThatWillBeDeleted(DeletionScheme deletionScheme) {
+		Vector<FlexoObject> returned = new Vector<FlexoObject>();
 		for (EditionAction editionAction : deletionScheme.getActions()) {
 			if (editionAction instanceof DeleteAction) {
 				DeleteAction deleteAction = (DeleteAction) editionAction;
 
-				returned.add((TestModelObject) getPatternActor(deleteAction.getPatternRole()));
+				returned.add((FlexoObject) getPatternActor(deleteAction.getPatternRole()));
 			}
 		}
 		return returned;

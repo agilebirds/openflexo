@@ -29,7 +29,7 @@ import java.util.zip.ZipOutputStream;
 
 import org.openflexo.foundation.FlexoEditor;
 import org.openflexo.foundation.FlexoException;
-import org.openflexo.foundation.FlexoModelObject;
+import org.openflexo.foundation.FlexoObject.FlexoObjectImpl;
 import org.openflexo.foundation.Format;
 import org.openflexo.foundation.IOFlexoException;
 import org.openflexo.foundation.action.FlexoActionType;
@@ -69,7 +69,7 @@ public class GenerateZip extends GenerateArtefact<GenerateZip, GenerationReposit
 	}
 
 	static {
-		TestModelObject.addActionForClass(GenerateZip.actionType, GenerationRepository.class);
+		FlexoObjectImpl.addActionForClass(GenerateZip.actionType, GenerationRepository.class);
 	}
 
 	protected class ZipFileFilter implements FileFilter {

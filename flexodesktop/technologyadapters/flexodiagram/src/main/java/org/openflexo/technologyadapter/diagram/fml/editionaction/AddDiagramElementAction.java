@@ -26,9 +26,9 @@ import org.openflexo.technologyadapter.diagram.fml.GraphicalElementSpecification
 import org.openflexo.technologyadapter.diagram.model.DiagramElement;
 import org.openflexo.toolbox.StringUtils;
 
-public abstract class AddSchemaElementAction<T extends DiagramElement<?>> extends DiagramAction<T> {
+public abstract class AddDiagramElementAction<T extends DiagramElement<?>> extends DiagramAction<T> {
 
-	public AddSchemaElementAction() {
+	public AddDiagramElementAction() {
 		super();
 	}
 

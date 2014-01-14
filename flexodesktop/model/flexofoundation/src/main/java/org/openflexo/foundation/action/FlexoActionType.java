@@ -29,7 +29,6 @@ import java.util.logging.Level;
 import java.util.logging.Logger;
 
 import org.apache.commons.lang3.reflect.TypeUtils;
-import org.flexo.model.TestModelObject;
 import org.openflexo.foundation.FlexoEditor;
 import org.openflexo.foundation.FlexoObject;
 import org.openflexo.localization.FlexoLocalization;
@@ -82,7 +81,7 @@ public abstract class FlexoActionType<A extends FlexoAction<A, T1, T2>, T1 exten
 				return e.getValue();
 			}
 		}
-		return TestModelObject.class;
+		return FlexoObject.class;
 	}
 
 	public Type getGlobalSelectionType() {
@@ -92,7 +91,7 @@ public abstract class FlexoActionType<A extends FlexoAction<A, T1, T2>, T1 exten
 				return e.getValue();
 			}
 		}
-		return TestModelObject.class;
+		return FlexoObject.class;
 	}
 
 	/*protected FlexoActionType (String actionName, Icon icon)

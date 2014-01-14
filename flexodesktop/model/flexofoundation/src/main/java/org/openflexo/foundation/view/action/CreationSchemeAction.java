@@ -24,9 +24,9 @@ import java.util.List;
 import java.util.Vector;
 import java.util.logging.Logger;
 
-import org.flexo.model.TestModelObject;
 import org.openflexo.antar.binding.BindingVariable;
 import org.openflexo.foundation.FlexoEditor;
+import org.openflexo.foundation.FlexoObject;
 import org.openflexo.foundation.FlexoObject.FlexoObjectImpl;
 import org.openflexo.foundation.action.FlexoActionType;
 import org.openflexo.foundation.action.InvalidParametersException;
@@ -173,6 +173,7 @@ public class CreationSchemeAction extends EditionSchemeAction<CreationSchemeActi
 		return getCreationScheme();
 	}
 
+	@Override
 	public EditionPatternInstance getEditionPatternInstance() {
 		return editionPatternInstance;
 	}
@@ -191,8 +192,8 @@ public class CreationSchemeAction extends EditionSchemeAction<CreationSchemeActi
 		Object assignedObject = super.performAction(action, performedActions);
 		if (assignedObject != null && action instanceof AssignableAction) {
 			AssignableAction assignableAction = (AssignableAction) action;
-			if (assignableAction.getPatternRole() != null && assignedObject instanceof TestModelObject) {
-				getEditionPatternInstance().setObjectForPatternRole((TestModelObject) assignedObject, assignableAction.getPatternRole());
+			if (assignableAction.getPatternRole() != null && assignedObject instanceof FlexoObject) {
+				getEditionPatternInstance().setObjectForPatternRole((FlexoObject) assignedObject, assignableAction.getPatternRole());
 			}
 		}
 

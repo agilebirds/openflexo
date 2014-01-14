@@ -21,14 +21,13 @@ package org.openflexo.foundation;
 
 import java.util.Vector;
 
-import org.openflexo.foundation.FlexoProject;
 import org.openflexo.localization.FlexoLocalization;
 
 /**
  * @author gpolet
  * 
  */
-public abstract class TargetType extends TestModelObject {
+public abstract class TargetType extends AgileBirdsObject {
 	public TargetType(FlexoProject project) {
 		super(project);
 	}

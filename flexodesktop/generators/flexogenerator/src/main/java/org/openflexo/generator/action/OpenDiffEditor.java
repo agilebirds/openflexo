@@ -22,7 +22,7 @@ package org.openflexo.generator.action;
 import java.util.Vector;
 
 import org.openflexo.foundation.FlexoEditor;
-import org.openflexo.foundation.FlexoModelObject;
+import org.openflexo.foundation.FlexoObject.FlexoObjectImpl;
 import org.openflexo.foundation.action.FlexoActionType;
 import org.openflexo.foundation.action.FlexoGUIAction;
 import org.openflexo.foundation.cg.CGFile;
@@ -56,7 +56,7 @@ public class OpenDiffEditor extends FlexoGUIAction<OpenDiffEditor, CGFile, CGObj
 	};
 
 	static {
-		TestModelObject.addActionForClass(OpenDiffEditor.actionType, CGFile.class);
+		FlexoObjectImpl.addActionForClass(OpenDiffEditor.actionType, CGFile.class);
 	}
 
 	OpenDiffEditor(CGFile focusedObject, Vector<CGObject> globalSelection, FlexoEditor editor) {

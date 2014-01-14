@@ -58,7 +58,7 @@ import org.openflexo.toolbox.StringUtils;
  * 
  */
 @FIBPanel("Fib/AddShapePanel.fib")
-public class AddShape extends AddSchemaElementAction<DiagramShape> {
+public class AddShape extends AddDiagramElementAction<DiagramShape> {
 
 	private static final Logger logger = Logger.getLogger(AddShape.class.getPackage().getName());
 

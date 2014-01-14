@@ -21,11 +21,11 @@ package org.openflexo.foundation.viewpoint;
 
 import java.lang.reflect.InvocationTargetException;
 
-import org.flexo.model.TestModelObject;
 import org.openflexo.antar.binding.DataBinding;
 import org.openflexo.antar.binding.DataBinding.BindingDefinitionType;
 import org.openflexo.antar.expr.NullReferenceException;
 import org.openflexo.antar.expr.TypeMismatchException;
+import org.openflexo.foundation.FlexoObject;
 import org.openflexo.foundation.view.EditionPatternInstance;
 import org.openflexo.foundation.viewpoint.annotations.FIBPanel;
 
@@ -40,7 +40,7 @@ public class NavigationScheme extends AbstractActionScheme {
 
 	public DataBinding<Object> getTargetObject() {
 		if (targetObject == null) {
-			targetObject = new DataBinding<Object>(this, TestModelObject.class, BindingDefinitionType.GET);
+			targetObject = new DataBinding<Object>(this, FlexoObject.class, BindingDefinitionType.GET);
 			targetObject.setBindingName("targetObject");
 		}
 		return targetObject;
@@ -50,16 +50,16 @@ public class NavigationScheme extends AbstractActionScheme {
 		if (targetObject != null) {
 			targetObject.setOwner(this);
 			targetObject.setBindingName("targetObject");
-			targetObject.setDeclaredType(TestModelObject.class);
+			targetObject.setDeclaredType(FlexoObject.class);
 			targetObject.setBindingDefinitionType(BindingDefinitionType.GET);
 		}
 		this.targetObject = targetObject;
 	}
 
-	public TestModelObject evaluateTargetObject(EditionPatternInstance editionPatternInstance) {
+	public FlexoObject evaluateTargetObject(EditionPatternInstance editionPatternInstance) {
 		if (getTargetObject().isValid()) {
 			try {
-				return (TestModelObject) getTargetObject().getBindingValue(editionPatternInstance);
+				return (FlexoObject) getTargetObject().getBindingValue(editionPatternInstance);
 			} catch (TypeMismatchException e) {
 				e.printStackTrace();
 			} catch (NullReferenceException e) {

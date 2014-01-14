@@ -19,20 +19,20 @@
  */
 package org.openflexo.generator.exception;
 
-import org.openflexo.foundation.FlexoModelObject;
+import org.openflexo.foundation.FlexoObject;
 import org.openflexo.foundation.cg.GenerationRepository;
 import org.openflexo.generator.AbstractProjectGenerator;
 
 public class ObjectGenerationException extends GenerationException {
-	private TestModelObject failedObjectGeneration;
+	private final FlexoObject failedObjectGeneration;
 
-	public ObjectGenerationException(TestModelObject failedObjectGeneration, String message, String localizationKey,
+	public ObjectGenerationException(FlexoObject failedObjectGeneration, String message, String localizationKey,
 			AbstractProjectGenerator<? extends GenerationRepository> projectGenerator) {
 		super(message, localizationKey);
 		this.failedObjectGeneration = failedObjectGeneration;
 	}
 
-	public TestModelObject getFailedObjectGeneration() {
+	public FlexoObject getFailedObjectGeneration() {
 		return failedObjectGeneration;
 	}
 }

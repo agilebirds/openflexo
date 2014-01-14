@@ -13,6 +13,8 @@ public class ConvertVirtualModel {
 		File foundationResourceDir = new File(currentDir.getParentFile().getParentFile(),
 				"flexodesktop/model/flexofoundation/src/main/resources");
 		File foundationJavaDir = new File(currentDir.getParentFile().getParentFile(), "flexodesktop/model/flexofoundation/src/main/java");
+		System.out.println("rootDir=" + rootDir);
+		System.out.println("foundationResourceDir=" + foundationResourceDir);
 		File mappingFile = new File(foundationResourceDir, "Models/ViewPointModel/VirtualModel/virtual_model_1.0.xml");
 		File tempFile = null;
 		try {

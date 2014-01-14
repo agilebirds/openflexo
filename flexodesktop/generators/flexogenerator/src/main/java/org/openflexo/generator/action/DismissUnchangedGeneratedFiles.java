@@ -24,7 +24,7 @@ import java.util.logging.Logger;
 
 import org.openflexo.foundation.FlexoEditor;
 import org.openflexo.foundation.FlexoException;
-import org.openflexo.foundation.FlexoModelObject;
+import org.openflexo.foundation.FlexoObject.FlexoObjectImpl;
 import org.openflexo.foundation.action.FlexoActionType;
 import org.openflexo.foundation.cg.CGObject;
 import org.openflexo.foundation.cg.CGRepository;
@@ -60,7 +60,7 @@ public class DismissUnchangedGeneratedFiles extends MultipleFileGCAction<Dismiss
 	};
 
 	static {
-		TestModelObject.addActionForClass(DismissUnchangedGeneratedFiles.actionType, CGObject.class);
+		FlexoObjectImpl.addActionForClass(DismissUnchangedGeneratedFiles.actionType, CGObject.class);
 	}
 
 	DismissUnchangedGeneratedFiles(CGObject focusedObject, Vector<CGObject> globalSelection, FlexoEditor editor) {

@@ -24,7 +24,7 @@ import java.util.logging.Logger;
 
 import org.openflexo.foundation.DataModification;
 import org.openflexo.foundation.FlexoEditor;
-import org.openflexo.foundation.FlexoModelObject;
+import org.openflexo.foundation.FlexoObject.FlexoObjectImpl;
 import org.openflexo.foundation.FlexoObservable;
 import org.openflexo.foundation.FlexoObserver;
 import org.openflexo.foundation.action.FlexoActionType;
@@ -67,7 +67,7 @@ public class ValidateProject extends GCAction<ValidateProject, GenerationReposit
 	};
 
 	static {
-		TestModelObject.addActionForClass(ValidateProject.actionType, GenerationRepository.class);
+		FlexoObjectImpl.addActionForClass(ValidateProject.actionType, GenerationRepository.class);
 	}
 
 	@Override
@@ -126,7 +126,7 @@ public class ValidateProject extends GCAction<ValidateProject, GenerationReposit
 		return errorsNb;
 	}
 
-	private FlexoObserver ieValidationObserver = new FlexoObserver() {
+	private final FlexoObserver ieValidationObserver = new FlexoObserver() {
 		@Override
 		public void update(FlexoObservable observable, DataModification dataModification) {
 			if (dataModification instanceof ValidationNotification) {
@@ -146,7 +146,7 @@ public class ValidateProject extends GCAction<ValidateProject, GenerationReposit
 		}
 	};
 
-	private FlexoObserver wkfValidationObserver = new FlexoObserver() {
+	private final FlexoObserver wkfValidationObserver = new FlexoObserver() {
 		@Override
 		public void update(FlexoObservable observable, DataModification dataModification) {
 			if (dataModification instanceof ValidationNotification) {
@@ -167,7 +167,7 @@ public class ValidateProject extends GCAction<ValidateProject, GenerationReposit
 		}
 	};
 
-	private FlexoObserver dkvValidationObserver = new FlexoObserver() {
+	private final FlexoObserver dkvValidationObserver = new FlexoObserver() {
 		@Override
 		public void update(FlexoObservable observable, DataModification dataModification) {
 			if (dataModification instanceof ValidationNotification) {
@@ -188,7 +188,7 @@ public class ValidateProject extends GCAction<ValidateProject, GenerationReposit
 		}
 	};
 
-	private FlexoObserver dmValidationObserver = new FlexoObserver() {
+	private final FlexoObserver dmValidationObserver = new FlexoObserver() {
 		@Override
 		public void update(FlexoObservable observable, DataModification dataModification) {
 			if (dataModification instanceof ValidationNotification) {

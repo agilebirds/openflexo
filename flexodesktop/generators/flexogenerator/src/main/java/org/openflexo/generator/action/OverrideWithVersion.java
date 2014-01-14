@@ -24,7 +24,7 @@ import java.util.logging.Logger;
 
 import org.openflexo.foundation.FlexoEditor;
 import org.openflexo.foundation.FlexoException;
-import org.openflexo.foundation.FlexoModelObject;
+import org.openflexo.foundation.FlexoObject.FlexoObjectImpl;
 import org.openflexo.foundation.action.FlexoActionType;
 import org.openflexo.foundation.cg.CGObject;
 import org.openflexo.foundation.cg.GenerationRepository;
@@ -42,7 +42,7 @@ public class OverrideWithVersion extends MultipleFileGCAction<OverrideWithVersio
 	private static final Logger logger = Logger.getLogger(OverrideWithVersion.class.getPackage().getName());
 
 	public static class OverrideWithVersionActionType extends MultipleFileGCActionType<OverrideWithVersion> {
-		private ContentSourceType _source;
+		private final ContentSourceType _source;
 
 		protected OverrideWithVersionActionType(String actionName, ContentSourceType source) {
 			super(actionName, MERGE_MENU, OVERRIDE_GROUP, FlexoActionType.NORMAL_ACTION_TYPE);
@@ -90,11 +90,11 @@ public class OverrideWithVersion extends MultipleFileGCAction<OverrideWithVersio
 			"override_with_last_accepted_version", ContentSourceType.LastAccepted);
 
 	static {
-		TestModelObject.addActionForClass(overrideWithPureGeneration, CGObject.class);
-		TestModelObject.addActionForClass(overrideWithGeneratedMerge, CGObject.class);
-		TestModelObject.addActionForClass(overrideWithLastGenerated, CGObject.class);
-		TestModelObject.addActionForClass(overrideWithLastAccepted, CGObject.class);
-		TestModelObject.addActionForClass(CancelOverrideWithVersion.actionType, CGObject.class);
+		FlexoObjectImpl.addActionForClass(overrideWithPureGeneration, CGObject.class);
+		FlexoObjectImpl.addActionForClass(overrideWithGeneratedMerge, CGObject.class);
+		FlexoObjectImpl.addActionForClass(overrideWithLastGenerated, CGObject.class);
+		FlexoObjectImpl.addActionForClass(overrideWithLastAccepted, CGObject.class);
+		FlexoObjectImpl.addActionForClass(CancelOverrideWithVersion.actionType, CGObject.class);
 	}
 
 	public static OverrideWithVersionActionType getActionTypeFor(ContentSourceType contentSource) {

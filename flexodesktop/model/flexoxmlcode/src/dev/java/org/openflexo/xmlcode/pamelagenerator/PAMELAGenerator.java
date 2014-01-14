@@ -64,17 +64,32 @@ public class PAMELAGenerator {
 		while (it.hasNext()) {
 			ModelEntity entity = it.next();
 			// System.out.println("entity: " + entity.getName());
-			File sourceFile = getSourceFile(entity);
-			if (sourceFile == null) {
-				System.err.println("ERROR: cannot lookup source file for " + entity.getName());
+
+			if (entity.getName().contains("fge") || entity.getName().equals("org.openflexo.foundation.viewpoint.NamedViewPointObject")
+					|| entity.getName().equals("org.openflexo.foundation.viewpoint.LocalizedDictionary")
+					|| entity.getName().equals("org.openflexo.foundation.viewpoint.LocalizedEntry")
+					|| entity.getName().equals("org.openflexo.foundation.viewpoint.ViewPointObject")
+					|| entity.getName().equals("org.openflexo.foundation.viewpoint.ViewPointObject")) {
+				// Just skip it
 			} else {
-				System.out.println("Processing source file: " + sourceFile);
-				try {
-					String generatedSource = generateEntity(entity, sourceFile);
-					sourcesToWrite.put(sourceFile, generatedSource);
-				} catch (IOException e) {
-					// TODO Auto-generated catch block
-					e.printStackTrace();
+
+				if (entity.getName().contains("$")) {
+					System.err.println("Cannot proceed to inner class: " + entity.getName());
+					System.exit(-1);
+				}
+
+				File sourceFile = getSourceFile(entity);
+				if (sourceFile == null) {
+					System.err.println("ERROR: cannot lookup source file for " + entity.getName());
+				} else {
+					System.out.println("Processing source file: " + sourceFile);
+					try {
+						String generatedSource = generateEntity(entity, sourceFile);
+						sourcesToWrite.put(sourceFile, generatedSource);
+					} catch (IOException e) {
+						// TODO Auto-generated catch block
+						e.printStackTrace();
+					}
 				}
 			}
 		}
@@ -97,7 +112,9 @@ public class PAMELAGenerator {
 	}
 
 	private File getSourceFile(ModelEntity entity) {
+		System.out.println("For class " + entity.getName());
 		Class entityClass = entity.getRelatedClass();
+		System.out.println("entityClass=" + entityClass);
 		// System.out.println("Searching source file for " + entityClass);
 		return getSourceFile(entityClass, sourceCode);
 	}
@@ -166,7 +183,6 @@ public class PAMELAGenerator {
 			} else {
 				sb.append("@XMLElement(xmlTag=\"" + entity.getDefaultXmlTag() + "\")" + LINE_SEPARATOR);
 			}
-			sb.append("@XMLElement(xmlTag=\"" + entity.getDefaultXmlTag() + "\")" + LINE_SEPARATOR);
 		}
 
 		sb.append(parsedJavaFile.header.headerForInterface() + "{" + LINE_SEPARATOR);
@@ -208,8 +224,12 @@ public class PAMELAGenerator {
 
 		while (it.hasNext()) {
 			ModelProperty p = it.next();
-			PropertyCode pCode = new PropertyCode(p);
-			pCodeList.add(pCode);
+			if (p.getModelEntity() == entity) {
+				// System.out.println(">>> la propriete " + p + " est une pte heritee de " + p.getModelEntity().getName() + " pour "
+				// + entity.getName());
+				PropertyCode pCode = new PropertyCode(p);
+				pCodeList.add(pCode);
+			}
 		}
 
 		for (PropertyCode pCode : pCodeList) {
@@ -286,6 +306,16 @@ public class PAMELAGenerator {
 					getterCode += "@XMLAttribute" + LINE_SEPARATOR;
 				} else {
 					getterCode += "@XMLAttribute(xmlTag=" + '"' + property.getDefaultXmlTag() + '"' + ")" + LINE_SEPARATOR;
+				}
+			} else {
+				try {
+					if (property.getDefaultXmlTag().equals(property.getName())) {
+						getterCode += "@XMLElement" + LINE_SEPARATOR;
+					} else {
+						getterCode += "@XMLElement(xmlTag=" + '"' + property.getDefaultXmlTag() + '"' + ")" + LINE_SEPARATOR;
+					}
+				} catch (InvalidModelException e) {
+					getterCode += "@XMLElement" + LINE_SEPARATOR;
 				}
 			}
 

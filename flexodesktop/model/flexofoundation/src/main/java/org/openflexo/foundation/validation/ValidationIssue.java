@@ -22,7 +22,6 @@ package org.openflexo.foundation.validation;
 import java.util.StringTokenizer;
 import java.util.logging.Logger;
 
-import org.flexo.model.TestModelObject;
 import org.openflexo.foundation.DataModification;
 import org.openflexo.foundation.FlexoObject;
 import org.openflexo.foundation.FlexoObservable;
@@ -101,7 +100,7 @@ public abstract class ValidationIssue<R extends ValidationRule<R, V>, V extends 
 
 	// TODO : Check if this is ok => generalized to fix a bug in selection of ViewPointObjects in Viewpoint validation tool
 	public FlexoObject getSelectableObject() {
-		if (_object instanceof TestModelObject || _object instanceof ViewPointObject) {
+		if (_object instanceof FlexoObject || _object instanceof ViewPointObject) {
 			return (FlexoObject) _object;
 		}
 		return null;
@@ -150,8 +149,8 @@ public abstract class ValidationIssue<R extends ValidationRule<R, V>, V extends 
 
 	@Override
 	public void update(FlexoObservable observable, DataModification dataModification) {
-		if (observable instanceof TestModelObject) {
-			if (((TestModelObject) observable).isDeleted()) {
+		if (observable instanceof FlexoObject) {
+			if (((FlexoObject) observable).isDeleted()) {
 				delete();
 			}
 		}

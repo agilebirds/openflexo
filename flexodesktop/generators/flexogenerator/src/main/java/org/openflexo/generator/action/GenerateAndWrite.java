@@ -24,7 +24,7 @@ import java.util.logging.Level;
 import java.util.logging.Logger;
 
 import org.openflexo.foundation.FlexoEditor;
-import org.openflexo.foundation.FlexoModelObject;
+import org.openflexo.foundation.FlexoObject.FlexoObjectImpl;
 import org.openflexo.foundation.action.FlexoActionType;
 import org.openflexo.foundation.cg.CGObject;
 import org.openflexo.foundation.rm.SaveResourceException;
@@ -53,7 +53,7 @@ public class GenerateAndWrite extends MultipleFileGCAction<GenerateAndWrite> {
 		/**
 		 * Overrides isEnabled
 		 * 
-		 * @see org.openflexo.foundation.action.FlexoActionType#isEnabled(org.openflexo.foundation.TestModelObject, java.util.Vector)
+		 * @see org.openflexo.foundation.action.FlexoActionType#isEnabled(org.openflexo.foundation.FlexoObjectImpl, java.util.Vector)
 		 */
 		@Override
 		public boolean isEnabled(CGObject object, Vector<CGObject> globalSelection) {
@@ -63,7 +63,7 @@ public class GenerateAndWrite extends MultipleFileGCAction<GenerateAndWrite> {
 	};
 
 	static {
-		TestModelObject.addActionForClass(GenerateAndWrite.actionType, CGObject.class);
+		FlexoObjectImpl.addActionForClass(GenerateAndWrite.actionType, CGObject.class);
 	}
 
 	GenerateAndWrite(CGObject focusedObject, Vector<CGObject> globalSelection, FlexoEditor editor) {

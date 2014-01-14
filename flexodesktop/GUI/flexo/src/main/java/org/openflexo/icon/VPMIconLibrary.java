@@ -50,6 +50,7 @@ import org.openflexo.foundation.viewpoint.FetchRequestIterationAction;
 import org.openflexo.foundation.viewpoint.IterationAction;
 import org.openflexo.foundation.viewpoint.LocalizedDictionary;
 import org.openflexo.foundation.viewpoint.MatchEditionPatternInstance;
+import org.openflexo.foundation.viewpoint.MatchingCriteria;
 import org.openflexo.foundation.viewpoint.NavigationScheme;
 import org.openflexo.foundation.viewpoint.ObjectPropertyAssertion;
 import org.openflexo.foundation.viewpoint.OntologicObjectPatternRole;
@@ -156,7 +157,7 @@ public class VPMIconLibrary extends IconLibrary {
 			return CONSTRAINT_ICON;
 		} else if (object instanceof FetchRequestCondition) {
 			return CONSTRAINT_ICON;
-		} else if (object instanceof MatchEditionPatternInstance.MatchingCriteria) {
+		} else if (object instanceof MatchingCriteria) {
 			return CONSTRAINT_ICON;
 		} else if (object instanceof DataPropertyAssertion) {
 			TechnologyAdapterController<?> tac = getTechnologyAdapterController(((DataPropertyAssertion) object).getAction().getModelSlot()

@@ -62,7 +62,7 @@ import org.openflexo.toolbox.StringUtils;
  * 
  */
 @FIBPanel("Fib/AddConnectorPanel.fib")
-public class AddConnector extends AddSchemaElementAction<DiagramConnector> {
+public class AddConnector extends AddDiagramElementAction<DiagramConnector> {
 
 	private static final Logger logger = Logger.getLogger(LinkSchemeAction.class.getPackage().getName());
 

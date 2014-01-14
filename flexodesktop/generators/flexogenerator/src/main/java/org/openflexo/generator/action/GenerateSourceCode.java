@@ -26,7 +26,7 @@ import java.util.logging.Logger;
 
 import org.openflexo.foundation.FlexoEditor;
 import org.openflexo.foundation.FlexoException;
-import org.openflexo.foundation.FlexoModelObject;
+import org.openflexo.foundation.FlexoObject.FlexoObjectImpl;
 import org.openflexo.foundation.action.FlexoActionType;
 import org.openflexo.foundation.cg.CGFile;
 import org.openflexo.foundation.cg.CGObject;
@@ -63,7 +63,7 @@ public class GenerateSourceCode extends MultipleFileGCAction<GenerateSourceCode>
 	private boolean generationSucceeded;
 
 	static {
-		TestModelObject.addActionForClass(GenerateSourceCode.actionType, CGObject.class);
+		FlexoObjectImpl.addActionForClass(GenerateSourceCode.actionType, CGObject.class);
 	}
 
 	GenerateSourceCode(CGObject focusedObject, Vector<CGObject> globalSelection, FlexoEditor editor) {

@@ -25,7 +25,7 @@ import java.util.logging.Level;
 import java.util.logging.Logger;
 
 import org.openflexo.foundation.FlexoEditor;
-import org.openflexo.foundation.FlexoModelObject;
+import org.openflexo.foundation.FlexoObject.FlexoObjectImpl;
 import org.openflexo.foundation.action.FlexoActionType;
 import org.openflexo.foundation.cg.CGFile;
 import org.openflexo.foundation.cg.CGObject;
@@ -62,7 +62,7 @@ public class ForceRegenerateSourceCode extends MultipleFileGCAction<ForceRegener
 	};
 
 	static {
-		TestModelObject.addActionForClass(ForceRegenerateSourceCode.actionType, CGObject.class);
+		FlexoObjectImpl.addActionForClass(ForceRegenerateSourceCode.actionType, CGObject.class);
 	}
 
 	/*    private class ForceRegenerateSourceCodeForFile extends GenerateSourceCode.CGFileRunnable {

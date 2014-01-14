@@ -22,7 +22,7 @@ package org.openflexo.generator.action;
 import java.util.Vector;
 
 import org.openflexo.foundation.FlexoEditor;
-import org.openflexo.foundation.FlexoModelObject;
+import org.openflexo.foundation.FlexoObject.FlexoObjectImpl;
 import org.openflexo.foundation.action.FlexoActionType;
 import org.openflexo.foundation.action.FlexoGUIAction;
 import org.openflexo.foundation.cg.CGFile;
@@ -37,7 +37,7 @@ import org.openflexo.generator.file.AbstractCGFile;
 public class ShowFileVersion extends FlexoGUIAction<ShowFileVersion, CGFile, CGObject> {
 
 	public static class ShowFileVersionActionType extends FlexoActionType<ShowFileVersion, CGFile, CGObject> {
-		private ContentSourceType _source;
+		private final ContentSourceType _source;
 
 		protected ShowFileVersionActionType(String actionName, ContentSourceType source) {
 			super(actionName, AbstractGCAction.SHOW_MENU, FlexoActionType.defaultGroup, FlexoActionType.NORMAL_ACTION_TYPE);
@@ -104,13 +104,13 @@ public class ShowFileVersion extends FlexoGUIAction<ShowFileVersion, CGFile, CGO
 			ContentSourceType.HistoryVersion);
 
 	static {
-		TestModelObject.addActionForClass(showPureGeneration, CGFile.class);
-		TestModelObject.addActionForClass(showGeneratedMerge, CGFile.class);
-		TestModelObject.addActionForClass(showContentOnDisk, CGFile.class);
-		TestModelObject.addActionForClass(showResultFileMerge, CGFile.class);
-		TestModelObject.addActionForClass(showLastGenerated, CGFile.class);
-		TestModelObject.addActionForClass(showLastAccepted, CGFile.class);
-		TestModelObject.addActionForClass(showHistoryVersion, CGFile.class);
+		FlexoObjectImpl.addActionForClass(showPureGeneration, CGFile.class);
+		FlexoObjectImpl.addActionForClass(showGeneratedMerge, CGFile.class);
+		FlexoObjectImpl.addActionForClass(showContentOnDisk, CGFile.class);
+		FlexoObjectImpl.addActionForClass(showResultFileMerge, CGFile.class);
+		FlexoObjectImpl.addActionForClass(showLastGenerated, CGFile.class);
+		FlexoObjectImpl.addActionForClass(showLastAccepted, CGFile.class);
+		FlexoObjectImpl.addActionForClass(showHistoryVersion, CGFile.class);
 	}
 
 	public static ShowFileVersionActionType getActionTypeFor(ContentSourceType contentSource) {

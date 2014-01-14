@@ -25,7 +25,7 @@ import java.util.logging.Logger;
 
 import org.openflexo.foundation.FlexoEditor;
 import org.openflexo.foundation.FlexoException;
-import org.openflexo.foundation.FlexoModelObject;
+import org.openflexo.foundation.FlexoObject.FlexoObjectImpl;
 import org.openflexo.foundation.action.FlexoActionType;
 import org.openflexo.foundation.cg.CGObject;
 import org.openflexo.foundation.cg.CGRepository;
@@ -63,7 +63,7 @@ public class WriteModifiedGeneratedFiles extends MultipleFileGCAction<WriteModif
 	};
 
 	static {
-		TestModelObject.addActionForClass(WriteModifiedGeneratedFiles.actionType, CGObject.class);
+		FlexoObjectImpl.addActionForClass(WriteModifiedGeneratedFiles.actionType, CGObject.class);
 	}
 
 	WriteModifiedGeneratedFiles(CGObject focusedObject, Vector<CGObject> globalSelection, FlexoEditor editor) {
