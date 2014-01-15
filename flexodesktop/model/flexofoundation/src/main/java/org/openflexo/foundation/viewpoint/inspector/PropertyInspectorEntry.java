@@ -70,6 +70,18 @@ public interface PropertyInspectorEntry extends InspectorEntry {
 	@Setter(DOMAIN_VALUE_KEY)
 	public void setDomainValue(DataBinding<IFlexoOntologyClass> domainValue);
 
+	public IFlexoOntologyStructuralProperty getParentProperty();
+
+	public void setParentProperty(IFlexoOntologyStructuralProperty ontologyProperty);
+
+	public IFlexoOntologyClass getDomain();
+
+	public void setDomain(IFlexoOntologyClass c);
+
+	public boolean getIsDynamicDomainValue();
+
+	public void setIsDynamicDomainValue(boolean isDynamic);
+
 	public static abstract class PropertyInspectorEntryImpl extends InspectorEntryImpl implements PropertyInspectorEntry {
 
 		private String parentPropertyURI;
@@ -101,10 +113,12 @@ public interface PropertyInspectorEntry extends InspectorEntry {
 			this.parentPropertyURI = parentPropertyURI;
 		}
 
+		@Override
 		public IFlexoOntologyStructuralProperty getParentProperty() {
 			return getVirtualModel().getOntologyProperty(_getParentPropertyURI());
 		}
 
+		@Override
 		public void setParentProperty(IFlexoOntologyStructuralProperty ontologyProperty) {
 			parentPropertyURI = ontologyProperty != null ? ontologyProperty.getURI() : null;
 		}
@@ -119,10 +133,12 @@ public interface PropertyInspectorEntry extends InspectorEntry {
 			this.domainURI = domainURI;
 		}
 
+		@Override
 		public IFlexoOntologyClass getDomain() {
 			return getVirtualModel().getOntologyClass(_getDomainURI());
 		}
 
+		@Override
 		public void setDomain(IFlexoOntologyClass c) {
 			_setDomainURI(c != null ? c.getURI() : null);
 		}
@@ -147,10 +163,12 @@ public interface PropertyInspectorEntry extends InspectorEntry {
 			this.domainValue = domainValue;
 		}
 
+		@Override
 		public boolean getIsDynamicDomainValue() {
 			return getDomainValue().isSet() || isDynamicDomainValueSet;
 		}
 
+		@Override
 		public void setIsDynamicDomainValue(boolean isDynamic) {
 			if (isDynamic) {
 				isDynamicDomainValueSet = true;

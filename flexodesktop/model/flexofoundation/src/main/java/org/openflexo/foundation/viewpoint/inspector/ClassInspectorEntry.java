@@ -65,6 +65,14 @@ public interface ClassInspectorEntry extends InspectorEntry {
 	@Setter(CONCEPT_VALUE_KEY)
 	public void setConceptValue(DataBinding<IFlexoOntologyClass> conceptValue);
 
+	public IFlexoOntologyClass getConcept();
+
+	public void setConcept(IFlexoOntologyClass c);
+
+	public boolean getIsDynamicConceptValue();
+
+	public void setIsDynamicConceptValue(boolean isDynamic);
+
 	public static abstract class ClassInspectorEntryImpl extends InspectorEntryImpl implements ClassInspectorEntry {
 
 		private String conceptURI;
@@ -96,10 +104,12 @@ public interface ClassInspectorEntry extends InspectorEntry {
 			this.conceptURI = conceptURI;
 		}
 
+		@Override
 		public IFlexoOntologyClass getConcept() {
 			return getVirtualModel().getOntologyClass(_getConceptURI());
 		}
 
+		@Override
 		public void setConcept(IFlexoOntologyClass c) {
 			_setConceptURI(c != null ? c.getURI() : null);
 		}
@@ -124,10 +134,12 @@ public interface ClassInspectorEntry extends InspectorEntry {
 			this.conceptValue = conceptValue;
 		}
 
+		@Override
 		public boolean getIsDynamicConceptValue() {
 			return getConceptValue().isSet() || isDynamicConceptValueSet;
 		}
 
+		@Override
 		public void setIsDynamicConceptValue(boolean isDynamic) {
 			if (isDynamic) {
 				isDynamicConceptValueSet = true;

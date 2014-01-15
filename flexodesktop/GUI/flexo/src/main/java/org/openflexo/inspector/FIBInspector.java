@@ -527,8 +527,8 @@ public interface FIBInspector extends FIBPanel {
 		}
 
 		protected void appendInspectorEntries(EditionPattern ep, String epIdentifier, FIBTab newTab) {
-			if (ep.getParentEditionPattern() != null) {
-				appendInspectorEntries(ep.getParentEditionPattern(), epIdentifier, newTab);
+			for (EditionPattern parentEP : ep.getParentEditionPatterns()) {
+				appendInspectorEntries(parentEP, epIdentifier, newTab);
 			}
 			LocalizedDictionary localizedDictionary = ep.getViewPoint().getLocalizedDictionary();
 			for (final InspectorEntry entry : ep.getInspector().getEntries()) {

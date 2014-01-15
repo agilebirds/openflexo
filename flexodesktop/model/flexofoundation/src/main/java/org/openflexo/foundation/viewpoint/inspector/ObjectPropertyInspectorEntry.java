@@ -66,6 +66,14 @@ public interface ObjectPropertyInspectorEntry extends PropertyInspectorEntry {
 	@Setter(RANGE_VALUE_KEY)
 	public void setRangeValue(DataBinding<IFlexoOntologyClass> rangeValue);
 
+	public IFlexoOntologyClass getRange();
+
+	public void setRange(IFlexoOntologyClass c);
+
+	public boolean getIsDynamicRangeValue();
+
+	public void setIsDynamicRangeValue(boolean isDynamic);
+
 	public static abstract class ObjectPropertyInspectorEntryImpl extends PropertyInspectorEntryImpl implements
 			ObjectPropertyInspectorEntry {
 
@@ -97,10 +105,12 @@ public interface ObjectPropertyInspectorEntry extends PropertyInspectorEntry {
 			this.rangeURI = domainURI;
 		}
 
+		@Override
 		public IFlexoOntologyClass getRange() {
 			return getVirtualModel().getOntologyClass(_getRangeURI());
 		}
 
+		@Override
 		public void setRange(IFlexoOntologyClass c) {
 			_setRangeURI(c != null ? c.getURI() : null);
 		}
@@ -127,10 +137,12 @@ public interface ObjectPropertyInspectorEntry extends PropertyInspectorEntry {
 
 		private boolean isDynamicRangeValueSet = false;
 
+		@Override
 		public boolean getIsDynamicRangeValue() {
 			return getRangeValue().isSet() || isDynamicRangeValueSet;
 		}
 
+		@Override
 		public void setIsDynamicRangeValue(boolean isDynamic) {
 			if (isDynamic) {
 				isDynamicRangeValueSet = true;
