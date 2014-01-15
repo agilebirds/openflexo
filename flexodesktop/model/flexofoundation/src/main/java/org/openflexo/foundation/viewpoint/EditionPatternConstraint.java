@@ -19,7 +19,6 @@
  */
 package org.openflexo.foundation.viewpoint;
 
-import java.util.Collection;
 import java.util.logging.Logger;
 
 import org.openflexo.antar.binding.BindingModel;
@@ -60,10 +59,10 @@ public interface EditionPatternConstraint extends EditionPatternObject {
 
 	@Getter(value = CONSTRAINT_KEY)
 	@XMLAttribute
-	public DataBinding getConstraint();
+	public DataBinding<Boolean> getConstraint();
 
 	@Setter(CONSTRAINT_KEY)
-	public void setConstraint(DataBinding constraint);
+	public void setConstraint(DataBinding<Boolean> constraint);
 
 	public static abstract class EditionPatternConstraintImpl extends EditionPatternObjectImpl implements EditionPatternConstraint {
 
@@ -74,11 +73,6 @@ public interface EditionPatternConstraint extends EditionPatternObject {
 
 		public EditionPatternConstraintImpl() {
 			super();
-		}
-
-		@Override
-		public Collection<ViewPointObject> getEmbeddedValidableObjects() {
-			return null;
 		}
 
 		@Override
@@ -114,6 +108,7 @@ public interface EditionPatternConstraint extends EditionPatternObject {
 			return constraint;
 		}
 
+		@Override
 		public void setConstraint(DataBinding<Boolean> constraint) {
 			if (constraint != null) {
 				constraint.setOwner(this);

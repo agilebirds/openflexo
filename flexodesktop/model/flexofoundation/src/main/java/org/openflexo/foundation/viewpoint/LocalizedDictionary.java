@@ -20,7 +20,6 @@
 package org.openflexo.foundation.viewpoint;
 
 import java.text.Collator;
-import java.util.Collection;
 import java.util.Collections;
 import java.util.Comparator;
 import java.util.Hashtable;
@@ -29,7 +28,6 @@ import java.util.Vector;
 import java.util.logging.Logger;
 
 import org.openflexo.antar.binding.BindingModel;
-import org.openflexo.foundation.validation.Validable;
 import org.openflexo.foundation.viewpoint.inspector.InspectorEntry;
 import org.openflexo.localization.FlexoLocalization;
 import org.openflexo.localization.Language;
@@ -392,9 +390,5 @@ public interface LocalizedDictionary extends ViewPointObject, LocalizedDelegate 
 			return "<not_implemented:" + getStringRepresentation() + ">";
 		}
 
-		@Override
-		public Collection<? extends Validable> getEmbeddedValidableObjects() {
-			return getEntries();
-		}
 	}
 }

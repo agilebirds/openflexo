@@ -44,6 +44,7 @@ import org.openflexo.foundation.viewpoint.IterationAction;
 import org.openflexo.foundation.viewpoint.MatchEditionPatternInstance;
 import org.openflexo.foundation.viewpoint.SelectEditionPatternInstance;
 import org.openflexo.foundation.viewpoint.ViewPointObject;
+import org.openflexo.foundation.viewpoint.VirtualModelModelFactory;
 import org.openflexo.localization.FlexoLocalization;
 
 public class CreateEditionAction extends FlexoAction<CreateEditionAction, EditionSchemeObject, ViewPointObject> {
@@ -227,6 +228,7 @@ public class CreateEditionAction extends FlexoAction<CreateEditionAction, Editio
 
 	private EditionAction makeEditionAction() {
 		EditionAction returned;
+		VirtualModelModelFactory factory = getFocusedObject().getVirtualModelFactory();
 		switch (actionChoice) {
 		case BuiltInAction:
 			if (builtInActionClass == null) {
@@ -234,23 +236,23 @@ public class CreateEditionAction extends FlexoAction<CreateEditionAction, Editio
 				return null;
 			}
 			if (org.openflexo.foundation.viewpoint.AssignationAction.class.isAssignableFrom(builtInActionClass)) {
-				return new org.openflexo.foundation.viewpoint.AssignationAction();
+				return factory.newAssignationAction();
 			} else if (org.openflexo.foundation.viewpoint.AddToListAction.class.isAssignableFrom(builtInActionClass)) {
-				return new org.openflexo.foundation.viewpoint.AddToListAction();
+				return factory.newAddToListAction();
 			} else if (org.openflexo.foundation.viewpoint.RemoveFromListAction.class.isAssignableFrom(builtInActionClass)) {
-				return new org.openflexo.foundation.viewpoint.RemoveFromListAction();
+				return factory.newRemoveFromListAction();
 			} else if (org.openflexo.foundation.viewpoint.ExecutionAction.class.isAssignableFrom(builtInActionClass)) {
-				return new org.openflexo.foundation.viewpoint.ExecutionAction();
+				return factory.newExecutionAction();
 			} else if (org.openflexo.foundation.viewpoint.DeclarePatternRole.class.isAssignableFrom(builtInActionClass)) {
-				return new org.openflexo.foundation.viewpoint.DeclarePatternRole();
+				return factory.newDeclarePatternRole();
 			} else if (AddEditionPatternInstance.class.isAssignableFrom(builtInActionClass)) {
-				return new AddEditionPatternInstance();
+				return factory.newAddEditionPatternInstance();
 			} else if (MatchEditionPatternInstance.class.isAssignableFrom(builtInActionClass)) {
-				return new MatchEditionPatternInstance();
+				return factory.newMatchEditionPatternInstance();
 			} else if (SelectEditionPatternInstance.class.isAssignableFrom(builtInActionClass)) {
-				return new SelectEditionPatternInstance();
+				return factory.newSelectEditionPatternInstance();
 			} else if (DeleteAction.class.isAssignableFrom(builtInActionClass)) {
-				return new DeleteAction();
+				return factory.newDeleteAction();
 			} else {
 				logger.warning("Unexpected " + builtInActionClass);
 				return null;
@@ -261,12 +263,12 @@ public class CreateEditionAction extends FlexoAction<CreateEditionAction, Editio
 				return null;
 			}
 			if (ConditionalAction.class.isAssignableFrom(controlActionClass)) {
-				return new ConditionalAction();
+				return factory.newConditionalAction();
 			} else if (IterationAction.class.isAssignableFrom(controlActionClass)) {
-				return new IterationAction();
+				return factory.newIterationAction();
 			} else if (FetchRequestIterationAction.class.isAssignableFrom(controlActionClass) && requestActionClass != null
 					&& modelSlot != null) {
-				returned = new FetchRequestIterationAction();
+				returned = factory.newFetchRequestIterationAction();
 				FetchRequest request = modelSlot.makeFetchRequest(requestActionClass);
 				request.setModelSlot(modelSlot);
 				((FetchRequestIterationAction) returned).setFetchRequest(request);

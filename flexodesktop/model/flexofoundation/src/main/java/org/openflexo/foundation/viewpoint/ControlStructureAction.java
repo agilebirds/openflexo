@@ -20,7 +20,6 @@
 package org.openflexo.foundation.viewpoint;
 
 import java.lang.reflect.Type;
-import java.util.Collection;
 import java.util.logging.Logger;
 
 import org.openflexo.antar.binding.BindingModel;
@@ -52,7 +51,7 @@ public abstract interface ControlStructureAction extends EditionAction<ModelSlot
 		}*/
 
 		@Override
-		protected void rebuildInferedBindingModel() {
+		public void rebuildInferedBindingModel() {
 			super.rebuildInferedBindingModel();
 			for (EditionAction<?, ?> action : getActions()) {
 				action.rebuildInferedBindingModel();
@@ -114,58 +113,59 @@ public abstract interface ControlStructureAction extends EditionAction<ModelSlot
 			notifyChange("actions", null, actions);
 		}*/
 
-		@Override
-		public int getIndex(EditionAction<?, ?> action) {
-			return getActions().indexOf(action);
-		}
+		/*	@Override
+			public int getIndex(EditionAction<?, ?> action) {
+				return getActions().indexOf(action);
+			}
 
-		@Override
-		public void insertActionAtIndex(EditionAction<?, ?> action, int index) {
-			// action.setScheme(getEditionScheme());
-			action.setActionContainer(this);
-			getActions().add(index, action);
-			setChanged();
-			notifyObservers();
-			notifyChange("actions", null, getActions());
-		}
+			@Override
+			public void insertActionAtIndex(EditionAction<?, ?> action, int index) {
+				// action.setScheme(getEditionScheme());
+				action.setActionContainer(this);
+				getActions().add(index, action);
+				setChanged();
+				notifyObservers();
+				notifyChange("actions", null, getActions());
+			}
 
-		@Override
-		public void actionFirst(EditionAction<?, ?> a) {
-			getActions().remove(a);
-			getActions().add(0, a);
-			setChanged();
-			notifyChange("actions", null, getActions());
-		}
-
-		@Override
-		public void actionUp(EditionAction<?, ?> a) {
-			int index = getActions().indexOf(a);
-			if (index > 0) {
+			@Override
+			public void actionFirst(EditionAction<?, ?> a) {
 				getActions().remove(a);
-				getActions().add(index - 1, a);
+				getActions().add(0, a);
 				setChanged();
 				notifyChange("actions", null, getActions());
 			}
-		}
 
-		@Override
-		public void actionDown(EditionAction<?, ?> a) {
-			int index = getActions().indexOf(a);
-			if (index > 0) {
+			@Override
+			public void actionUp(EditionAction<?, ?> a) {
+				int index = getActions().indexOf(a);
+				if (index > 0) {
+					getActions().remove(a);
+					getActions().add(index - 1, a);
+					setChanged();
+					notifyChange("actions", null, getActions());
+				}
+			}
+
+			@Override
+			public void actionDown(EditionAction<?, ?> a) {
+				int index = getActions().indexOf(a);
+				if (index > 0) {
+					getActions().remove(a);
+					getActions().add(index + 1, a);
+					setChanged();
+					notifyChange("actions", null, getActions());
+				}
+			}
+
+			@Override
+			public void actionLast(EditionAction<?, ?> a) {
 				getActions().remove(a);
-				getActions().add(index + 1, a);
+				getActions().add(a);
 				setChanged();
 				notifyChange("actions", null, getActions());
 			}
-		}
-
-		@Override
-		public void actionLast(EditionAction<?, ?> a) {
-			getActions().remove(a);
-			getActions().add(a);
-			setChanged();
-			notifyChange("actions", null, getActions());
-		}
+		*/
 
 		/*	@Override
 			public AddShape createAddShapeAction() {
@@ -330,11 +330,6 @@ public abstract interface ControlStructureAction extends EditionAction<ModelSlot
 		public final void finalizePerformAction(EditionSchemeAction action, Object initialContext) {
 			// Not applicable for ControlStructureAction
 		};
-
-		@Override
-		public Collection<EditionAction<?, ?>> getEmbeddedValidableObjects() {
-			return actions;
-		}
 
 	}
 }

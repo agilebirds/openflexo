@@ -39,10 +39,9 @@ import org.openflexo.model.annotations.XMLElement;
 @XMLElement
 public interface SynchronizationScheme extends AbstractActionScheme {
 
-	@Override
-	public VirtualModel getVirtualModel();
+	public VirtualModel getSynchronizedVirtualModel();
 
-	public void setVirtualModel(VirtualModel virtualModel);
+	public void setSynchronizedVirtualModel(VirtualModel virtualModel);
 
 	public static abstract class SynchronizationSchemeImpl extends AbstractActionSchemeImpl implements SynchronizationScheme {
 
@@ -51,12 +50,12 @@ public interface SynchronizationScheme extends AbstractActionScheme {
 		}
 
 		@Override
-		public VirtualModel getVirtualModel() {
-			return (VirtualModel) super.getEditionPattern();
+		public VirtualModel getSynchronizedVirtualModel() {
+			return (VirtualModel) getEditionPattern();
 		}
 
 		@Override
-		public void setVirtualModel(VirtualModel virtualModel) {
+		public void setSynchronizedVirtualModel(VirtualModel virtualModel) {
 			setEditionPattern(virtualModel);
 		}
 

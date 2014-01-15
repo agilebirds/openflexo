@@ -24,6 +24,7 @@ import org.openflexo.foundation.view.VirtualModelInstance;
 import org.openflexo.foundation.view.VirtualModelInstanceModelFactory;
 import org.openflexo.foundation.viewpoint.VirtualModel;
 import org.openflexo.foundation.viewpoint.VirtualModelTechnologyAdapter;
+import org.openflexo.foundation.viewpoint.rm.VirtualModelResource;
 import org.openflexo.model.exceptions.ModelDefinitionException;
 import org.openflexo.model.factory.AccessibleProxyObject;
 import org.openflexo.model.factory.ModelFactory;
@@ -65,7 +66,7 @@ public abstract class VirtualModelInstanceResourceImpl extends PamelaResourceImp
 			returned.setName(name);
 			returned.setFile(xmlFile);
 			returned.setURI(view.getResource().getURI() + "/" + baseName);
-			returned.setVirtualModelResource(virtualModel.getResource());
+			returned.setVirtualModelResource((VirtualModelResource) virtualModel.getResource());
 
 			returned.setServiceManager(view.getProject().getServiceManager());
 
@@ -101,8 +102,8 @@ public abstract class VirtualModelInstanceResourceImpl extends PamelaResourceImp
 			if (StringUtils.isNotEmpty(vmiInfo.virtualModelURI)) {
 				if (viewResource != null && viewResource.getViewPoint() != null
 						&& viewResource.getViewPoint().getVirtualModelNamed(vmiInfo.virtualModelURI) != null) {
-					returned.setVirtualModelResource(viewResource.getViewPoint().getVirtualModelNamed(vmiInfo.virtualModelURI)
-							.getResource());
+					returned.setVirtualModelResource((VirtualModelResource) viewResource.getViewPoint()
+							.getVirtualModelNamed(vmiInfo.virtualModelURI).getResource());
 				}
 			}
 			viewResource.addToContents(returned);

@@ -58,6 +58,28 @@ public interface TypeAwareModelSlot<M extends FlexoModel<M, MM>, MM extends Flex
 	public FlexoModelResource<M, MM, ?> createSharedEmptyModel(FlexoResourceCenter<?> resourceCenter, String relativePath, String filename,
 			String modelUri, FlexoMetaModelResource<M, MM, ?> metaModelResource);
 
+	/**
+	 * Return a new String (full URI) uniquely identifying a new object in related technology, according to the conventions of related
+	 * technology
+	 * 
+	 * @param msInstance
+	 * @param proposedName
+	 * @return
+	 */
+	public String generateUniqueURI(TypeAwareModelSlotInstance msInstance, String proposedName);
+
+	/**
+	 * Return a new String (the simple name) uniquely identifying a new object in related technology, according to the conventions of
+	 * related technology
+	 * 
+	 * @param msInstance
+	 * @param proposedName
+	 * @return
+	 */
+	public String generateUniqueURIName(TypeAwareModelSlotInstance msInstance, String proposedName);
+
+	public String generateUniqueURIName(TypeAwareModelSlotInstance msInstance, String proposedName, String uriPrefix);
+
 	public static abstract class TypeAwareModelSlotImpl<M extends FlexoModel<M, MM>, MM extends FlexoMetaModel<MM>> extends
 			ModelSlotImpl<M> implements TypeAwareModelSlot<M, MM> {
 
@@ -110,6 +132,7 @@ public interface TypeAwareModelSlot<M extends FlexoModel<M, MM>, MM extends Flex
 		 * @param proposedName
 		 * @return
 		 */
+		@Override
 		public String generateUniqueURI(TypeAwareModelSlotInstance msInstance, String proposedName) {
 			if (msInstance == null || msInstance.getResourceData() == null) {
 				return null;
@@ -125,6 +148,7 @@ public interface TypeAwareModelSlot<M extends FlexoModel<M, MM>, MM extends Flex
 		 * @param proposedName
 		 * @return
 		 */
+		@Override
 		public String generateUniqueURIName(TypeAwareModelSlotInstance msInstance, String proposedName) {
 			if (msInstance == null || msInstance.getResourceData() == null) {
 				return proposedName;
@@ -132,6 +156,7 @@ public interface TypeAwareModelSlot<M extends FlexoModel<M, MM>, MM extends Flex
 			return generateUniqueURIName(msInstance, proposedName, msInstance.getModelURI() + "#");
 		}
 
+		@Override
 		public String generateUniqueURIName(TypeAwareModelSlotInstance msInstance, String proposedName, String uriPrefix) {
 			if (msInstance == null || msInstance.getResourceData() == null) {
 				return proposedName;

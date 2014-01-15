@@ -20,6 +20,9 @@
 package org.openflexo.foundation.viewpoint;
 
 import org.openflexo.foundation.viewpoint.annotations.FIBPanel;
+import org.openflexo.model.annotations.ImplementationClass;
+import org.openflexo.model.annotations.ModelEntity;
+import org.openflexo.model.annotations.XMLElement;
 
 /**
  * A CloningScheme represents a behavioural feature encoding the cloning of an EditionPattern
@@ -31,15 +34,13 @@ import org.openflexo.foundation.viewpoint.annotations.FIBPanel;
 @ModelEntity
 @ImplementationClass(CloningScheme.CloningSchemeImpl.class)
 @XMLElement
-public interface CloningScheme extends AbstractCreationScheme{
+public interface CloningScheme extends AbstractCreationScheme {
 
+	public static abstract class CloningSchemeImpl extends AbstractCreationSchemeImpl implements CloningScheme {
 
-public static abstract  class CloningSchemeImpl extends AbstractCreationSchemeImpl implements CloningScheme
-{
+		public CloningSchemeImpl() {
+			super();
+		}
 
-	public CloningSchemeImpl() {
-		super();
 	}
-
-}
 }

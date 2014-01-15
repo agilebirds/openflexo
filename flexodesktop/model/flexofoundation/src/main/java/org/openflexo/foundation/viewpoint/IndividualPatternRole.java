@@ -97,27 +97,28 @@ public interface IndividualPatternRole<I extends IFlexoOntologyIndividual> exten
 			conceptURI = ontologyClass != null ? ontologyClass.getURI() : null;
 		}
 
-		public static class IndividualPatternRoleMustDefineAValidConceptClass extends
-				ValidationRule<IndividualPatternRoleMustDefineAValidConceptClass, IndividualPatternRole> {
-			public IndividualPatternRoleMustDefineAValidConceptClass() {
-				super(IndividualPatternRole.class, "pattern_role_must_define_a_valid_concept_class");
-			}
-
-			@Override
-			public ValidationIssue<IndividualPatternRoleMustDefineAValidConceptClass, IndividualPatternRole> applyValidation(
-					IndividualPatternRole patternRole) {
-				if (patternRole.getOntologicType() == null) {
-					return new ValidationError<IndividualPatternRoleMustDefineAValidConceptClass, IndividualPatternRole>(this, patternRole,
-							"pattern_role_does_not_define_any_concept_class");
-				}
-				return null;
-			}
-		}
-
 		@Override
 		public ConceptActorReference<I> makeActorReference(I object, EditionPatternInstance epi) {
 			return new ConceptActorReference<I>(object, this, epi);
 		}
 
 	}
+
+	public static class IndividualPatternRoleMustDefineAValidConceptClass extends
+			ValidationRule<IndividualPatternRoleMustDefineAValidConceptClass, IndividualPatternRole> {
+		public IndividualPatternRoleMustDefineAValidConceptClass() {
+			super(IndividualPatternRole.class, "pattern_role_must_define_a_valid_concept_class");
+		}
+
+		@Override
+		public ValidationIssue<IndividualPatternRoleMustDefineAValidConceptClass, IndividualPatternRole> applyValidation(
+				IndividualPatternRole patternRole) {
+			if (patternRole.getOntologicType() == null) {
+				return new ValidationError<IndividualPatternRoleMustDefineAValidConceptClass, IndividualPatternRole>(this, patternRole,
+						"pattern_role_does_not_define_any_concept_class");
+			}
+			return null;
+		}
+	}
+
 }

@@ -21,28 +21,30 @@ package org.openflexo.foundation.viewpoint;
 
 import java.lang.reflect.Type;
 
+import org.openflexo.model.annotations.ImplementationClass;
+import org.openflexo.model.annotations.ModelEntity;
+import org.openflexo.model.annotations.XMLElement;
+
 @ModelEntity
 @ImplementationClass(TextAreaParameter.TextAreaParameterImpl.class)
 @XMLElement
-public interface TextAreaParameter extends EditionSchemeParameter{
+public interface TextAreaParameter extends EditionSchemeParameter {
 
+	public static abstract class TextAreaParameterImpl extends EditionSchemeParameterImpl implements TextAreaParameter {
 
-public static abstract  class TextAreaParameterImpl extends EditionSchemeParameterImpl implements TextAreaParameter
-{
+		public TextAreaParameterImpl() {
+			super();
+		}
 
-	public TextAreaParameterImpl() {
-		super();
+		@Override
+		public Type getType() {
+			return String.class;
+		};
+
+		@Override
+		public WidgetType getWidget() {
+			return WidgetType.TEXT_AREA;
+		}
+
 	}
-
-	@Override
-	public Type getType() {
-		return String.class;
-	};
-
-	@Override
-	public WidgetType getWidget() {
-		return WidgetType.TEXT_AREA;
-	}
-
-}
 }

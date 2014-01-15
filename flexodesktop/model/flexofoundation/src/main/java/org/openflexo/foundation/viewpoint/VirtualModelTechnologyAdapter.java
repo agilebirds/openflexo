@@ -50,7 +50,8 @@ public class VirtualModelTechnologyAdapter extends TechnologyAdapter {
 	@Override
 	public <MS extends ModelSlot<?>> MS makeModelSlot(Class<MS> modelSlotClass, VirtualModel virtualModel) {
 		if (VirtualModelModelSlot.class.isAssignableFrom(modelSlotClass)) {
-			return (MS) new VirtualModelModelSlot(virtualModel, this);
+			VirtualModelModelFactory factory = virtualModel.getVirtualModelFactory();
+			return (MS) factory.newVirtualModelModelSlot(virtualModel, this);
 		}
 		logger.warning("Unexpected model slot: " + modelSlotClass.getName());
 		return null;

@@ -54,6 +54,7 @@ import org.openflexo.foundation.viewpoint.rm.VirtualModelResource;
 import org.openflexo.foundation.viewpoint.rm.VirtualModelResourceImpl;
 import org.openflexo.model.annotations.Adder;
 import org.openflexo.model.annotations.DeserializationFinalizer;
+import org.openflexo.model.annotations.Finder;
 import org.openflexo.model.annotations.Getter;
 import org.openflexo.model.annotations.Getter.Cardinality;
 import org.openflexo.model.annotations.ImplementationClass;
@@ -85,6 +86,8 @@ import org.openflexo.toolbox.ToolBox;
 @XMLElement
 public interface VirtualModel extends EditionPattern, FlexoMetaModel<VirtualModel>, ResourceData<VirtualModel> {
 
+	public static final String REFLEXIVE_MODEL_SLOT_NAME = "this";
+
 	public static final String RESOURCE = "resource";
 
 	@PropertyIdentifier(type = ViewPoint.class)
@@ -98,6 +101,7 @@ public interface VirtualModel extends EditionPattern, FlexoMetaModel<VirtualMode
 	@PropertyIdentifier(type = List.class)
 	public static final String MODEL_SLOTS_KEY = "modelSlots";
 
+	@Override
 	public VirtualModelModelFactory getVirtualModelFactory();
 
 	/**
@@ -178,8 +182,110 @@ public interface VirtualModel extends EditionPattern, FlexoMetaModel<VirtualMode
 	@Remover(MODEL_SLOTS_KEY)
 	public void removeFromModelSlots(ModelSlot<?> aModelSlot);
 
+	@Finder(collection = MODEL_SLOTS_KEY, attribute = ModelSlot.NAME_KEY)
+	public ModelSlot<?> getModelSlot(String modelSlotName);
+
 	@DeserializationFinalizer
 	public void finalizeDeserialization();
+
+	public <MS extends ModelSlot<?>> List<MS> getModelSlots(Class<MS> msType);
+
+	/**
+	 * Retrieve ontology object from its URI.<br>
+	 * Note that search is performed in the scope of current project only
+	 * 
+	 * @param uri
+	 * @return
+	 */
+	public IFlexoOntologyObject getOntologyObject(String uri);
+
+	/**
+	 * Retrieve ontology class from its URI.<br>
+	 * Note that search is performed in the scope of current project only
+	 * 
+	 * @param uri
+	 * @return
+	 */
+	public IFlexoOntologyClass getOntologyClass(String uri);
+
+	/**
+	 * Retrieve ontology individual from its URI.<br>
+	 * Note that search is performed in the scope of current project only
+	 * 
+	 * @param uri
+	 * @return
+	 */
+	public IFlexoOntologyIndividual getOntologyIndividual(String uri);
+
+	/**
+	 * Retrieve ontology property from its URI.<br>
+	 * Note that search is performed in the scope of current project only
+	 * 
+	 * @param uri
+	 * @return
+	 */
+	public IFlexoOntologyStructuralProperty getOntologyProperty(String uri);
+
+	/**
+	 * Retrieve ontology object property from its URI.<br>
+	 * Note that search is performed in the scope of current project only
+	 * 
+	 * @param uri
+	 * @return
+	 */
+	public IFlexoOntologyObjectProperty getOntologyObjectProperty(String uri);
+
+	/**
+	 * Retrieve ontology object property from its URI.<br>
+	 * Note that search is performed in the scope of current project only
+	 * 
+	 * @param uri
+	 * @return
+	 */
+	public IFlexoOntologyDataProperty getOntologyDataProperty(String uri);
+
+	/**
+	 * Return true if URI is well formed and valid regarding its unicity (no one other object has same URI)
+	 * 
+	 * @param uri
+	 * @return
+	 */
+	public boolean testValidURI(String ontologyURI, String conceptURI);
+
+	/**
+	 * Return true if URI is duplicated in the context of this project
+	 * 
+	 * @param uri
+	 * @return
+	 */
+	public boolean isDuplicatedURI(String modelURI, String conceptURI);
+
+	/**
+	 * Retrieve metamodel referenced by its URI<br>
+	 * Note that search is performed in the scope of current project only
+	 * 
+	 * @param modelURI
+	 * @return
+	 */
+	public FlexoMetaModel<?> getMetaModel(String metaModelURI);
+
+	/**
+	 * Return reflexive model slot<br>
+	 * The reflexive model slot is an abstraction which allow to consider the virtual model as a model which can be accessed from itself
+	 * (Reentrance implementation)
+	 * 
+	 * @return
+	 */
+	public VirtualModelModelSlot getReflexiveModelSlot();
+
+	/**
+	 * Return flag indicating if supplied BindingVariable is set at runtime
+	 * 
+	 * @param variable
+	 * @return
+	 * @see VirtualModelInstance#getValueForVariable(BindingVariable)
+	 */
+	public boolean handleVariable(BindingVariable variable);
 
 	public static abstract class VirtualModelImpl extends EditionPatternImpl implements VirtualModel {
 
@@ -263,14 +369,13 @@ public interface VirtualModel extends EditionPattern, FlexoMetaModel<VirtualMode
 
 		private VirtualModelModelSlot reflexiveModelSlot;
 
-		public static final String REFLEXIVE_MODEL_SLOT_NAME = "this";
-
 		/**
 		 * Return reflexive model slot<br>
 		 * The reflexive model slot is an abstraction which allow to consider the virtual model as a model which can be accessed from itself
 		 * 
 		 * @return
 		 */
+		@Override
 		public VirtualModelModelSlot getReflexiveModelSlot() {
 			if (reflexiveModelSlot == null) {
 				reflexiveModelSlot = (VirtualModelModelSlot) getModelSlot(REFLEXIVE_MODEL_SLOT_NAME);
@@ -435,7 +540,7 @@ public interface VirtualModel extends EditionPattern, FlexoMetaModel<VirtualMode
 
 		public SynchronizationScheme createSynchronizationScheme() {
 			SynchronizationScheme newSynchronizationScheme = getVirtualModelFactory().newSynchronizationScheme();
-			newSynchronizationScheme.setVirtualModel(this);
+			newSynchronizationScheme.setSynchronizedVirtualModel(this);
 			newSynchronizationScheme.setName("synchronization");
 			addToEditionSchemes(newSynchronizationScheme);
 			return newSynchronizationScheme;
@@ -509,6 +614,7 @@ public interface VirtualModel extends EditionPattern, FlexoMetaModel<VirtualMode
 			modelSlot.delete();
 		}
 
+		@Override
 		public <MS extends ModelSlot<?>> List<MS> getModelSlots(Class<MS> msType) {
 			List<MS> returned = new ArrayList<MS>();
 			for (ModelSlot<?> ms : getModelSlots()) {
@@ -519,14 +625,14 @@ public interface VirtualModel extends EditionPattern, FlexoMetaModel<VirtualMode
 			return returned;
 		}
 
-		public ModelSlot<?> getModelSlot(String modelSlotName) {
+		/*public ModelSlot<?> getModelSlot(String modelSlotName) {
 			for (ModelSlot<?> ms : getModelSlots()) {
 				if (ms.getName() != null && ms.getName().equals(modelSlotName)) {
 					return ms;
 				}
 			}
 			return null;
-		}
+		}*/
 
 		public List<ModelSlot<?>> getRequiredModelSlots() {
 			List<ModelSlot<?>> requiredModelSlots = new ArrayList<ModelSlot<?>>();
@@ -565,6 +671,7 @@ public interface VirtualModel extends EditionPattern, FlexoMetaModel<VirtualMode
 		 * @param uri
 		 * @return
 		 */
+		@Override
 		public IFlexoOntologyObject getOntologyObject(String uri) {
 			Object returned = getObject(uri);
 			if (returned instanceof IFlexoOntologyObject) {
@@ -580,6 +687,7 @@ public interface VirtualModel extends EditionPattern, FlexoMetaModel<VirtualMode
 		 * @param uri
 		 * @return
 		 */
+		@Override
 		public IFlexoOntologyClass getOntologyClass(String uri) {
 			Object returned = getOntologyObject(uri);
 			if (returned instanceof IFlexoOntologyClass) {
@@ -595,6 +703,7 @@ public interface VirtualModel extends EditionPattern, FlexoMetaModel<VirtualMode
 		 * @param uri
 		 * @return
 		 */
+		@Override
 		public IFlexoOntologyIndividual getOntologyIndividual(String uri) {
 			Object returned = getOntologyObject(uri);
 			if (returned instanceof IFlexoOntologyIndividual) {
@@ -610,6 +719,7 @@ public interface VirtualModel extends EditionPattern, FlexoMetaModel<VirtualMode
 		 * @param uri
 		 * @return
 		 */
+		@Override
 		public IFlexoOntologyStructuralProperty getOntologyProperty(String uri) {
 			Object returned = getOntologyObject(uri);
 			if (returned instanceof IFlexoOntologyStructuralProperty) {
@@ -625,6 +735,7 @@ public interface VirtualModel extends EditionPattern, FlexoMetaModel<VirtualMode
 		 * @param uri
 		 * @return
 		 */
+		@Override
 		public IFlexoOntologyObjectProperty getOntologyObjectProperty(String uri) {
 			Object returned = getOntologyObject(uri);
 			if (returned instanceof IFlexoOntologyObjectProperty) {
@@ -640,6 +751,7 @@ public interface VirtualModel extends EditionPattern, FlexoMetaModel<VirtualMode
 		 * @param uri
 		 * @return
 		 */
+		@Override
 		public IFlexoOntologyDataProperty getOntologyDataProperty(String uri) {
 			Object returned = getOntologyObject(uri);
 			if (returned instanceof IFlexoOntologyDataProperty) {
@@ -654,6 +766,7 @@ public interface VirtualModel extends EditionPattern, FlexoMetaModel<VirtualMode
 		 * @param uri
 		 * @return
 		 */
+		@Override
 		public boolean testValidURI(String ontologyURI, String conceptURI) {
 			if (StringUtils.isEmpty(conceptURI)) {
 				return false;
@@ -670,6 +783,7 @@ public interface VirtualModel extends EditionPattern, FlexoMetaModel<VirtualMode
 		 * @param uri
 		 * @return
 		 */
+		@Override
 		public boolean isDuplicatedURI(String modelURI, String conceptURI) {
 			FlexoMetaModel<?> m = getMetaModel(modelURI);
 			if (m != null) {
@@ -685,6 +799,7 @@ public interface VirtualModel extends EditionPattern, FlexoMetaModel<VirtualMode
 		 * @param modelURI
 		 * @return
 		 */
+		@Override
 		public FlexoMetaModel<?> getMetaModel(String metaModelURI) {
 			for (FlexoMetaModel<?> m : getAllReferencedMetaModels()) {
 				if (m.getURI().equals(metaModelURI)) {
@@ -865,6 +980,7 @@ public interface VirtualModel extends EditionPattern, FlexoMetaModel<VirtualMode
 		 * @return
 		 * @see VirtualModelInstance#getValueForVariable(BindingVariable)
 		 */
+		@Override
 		public boolean handleVariable(BindingVariable variable) {
 			return false;
 		}

@@ -29,126 +29,134 @@ import org.openflexo.antar.expr.NullReferenceException;
 import org.openflexo.antar.expr.TypeMismatchException;
 import org.openflexo.foundation.ontology.IFlexoOntologyClass;
 import org.openflexo.foundation.technologyadapter.TypeAwareModelSlot;
+import org.openflexo.model.annotations.Getter;
+import org.openflexo.model.annotations.ImplementationClass;
+import org.openflexo.model.annotations.ModelEntity;
+import org.openflexo.model.annotations.PropertyIdentifier;
+import org.openflexo.model.annotations.Setter;
+import org.openflexo.model.annotations.XMLAttribute;
+import org.openflexo.model.annotations.XMLElement;
 
 @ModelEntity
 @ImplementationClass(ClassParameter.ClassParameterImpl.class)
 @XMLElement
-public interface ClassParameter extends InnerModelSlotParameter<TypeAwareModelSlot<?, ?>>{
+public interface ClassParameter extends InnerModelSlotParameter<TypeAwareModelSlot<?, ?>> {
 
-@PropertyIdentifier(type=String.class)
-public static final String CONCEPT_URI_KEY = "conceptURI";
-@PropertyIdentifier(type=DataBinding.class)
-public static final String CONCEPT_VALUE_KEY = "conceptValue";
+	@PropertyIdentifier(type = String.class)
+	public static final String CONCEPT_URI_KEY = "conceptURI";
+	@PropertyIdentifier(type = DataBinding.class)
+	public static final String CONCEPT_VALUE_KEY = "conceptValue";
 
-@Getter(value=CONCEPT_URI_KEY)
-@XMLAttribute
-public String _getConceptURI();
+	@Getter(value = CONCEPT_URI_KEY)
+	@XMLAttribute
+	public String _getConceptURI();
 
-@Setter(CONCEPT_URI_KEY)
-public void _setConceptURI(String conceptURI);
+	@Setter(CONCEPT_URI_KEY)
+	public void _setConceptURI(String conceptURI);
 
+	@Getter(value = CONCEPT_VALUE_KEY)
+	@XMLAttribute
+	public DataBinding<IFlexoOntologyClass> getConceptValue();
 
-@Getter(value=CONCEPT_VALUE_KEY)
-@XMLAttribute
-public DataBinding getConceptValue();
+	@Setter(CONCEPT_VALUE_KEY)
+	public void setConceptValue(DataBinding<IFlexoOntologyClass> conceptValue);
 
-@Setter(CONCEPT_VALUE_KEY)
-public void setConceptValue(DataBinding conceptValue);
+	public static abstract class ClassParameterImpl extends InnerModelSlotParameterImpl<TypeAwareModelSlot<?, ?>> implements ClassParameter {
 
+		private String conceptURI;
+		private DataBinding<IFlexoOntologyClass> conceptValue;
+		private boolean isDynamicConceptValueSet = false;
 
-public static abstract  class ClassParameterImpl extends InnerModelSlotParameter<TypeAwareModelSlot<?, ?>>Impl implements ClassParameter
-{
-
-	private String conceptURI;
-	private DataBinding<IFlexoOntologyClass> conceptValue;
-	private boolean isDynamicConceptValueSet = false;
-
-	public ClassParameterImpl() {
-		super();
-	}
-
-	@Override
-	public Type getType() {
-		return IFlexoOntologyClass.class;
-	};
-
-	@Override
-	public WidgetType getWidget() {
-		return WidgetType.CLASS;
-	}
-
-	public String _getConceptURI() {
-		return conceptURI;
-	}
-
-	public void _setConceptURI(String conceptURI) {
-		this.conceptURI = conceptURI;
-	}
-
-	public IFlexoOntologyClass getConcept() {
-		return getVirtualModel().getOntologyClass(_getConceptURI());
-	}
-
-	public void setConcept(IFlexoOntologyClass c) {
-		_setConceptURI(c != null ? c.getURI() : null);
-	}
-
-	public DataBinding<IFlexoOntologyClass> getConceptValue() {
-		if (conceptValue == null) {
-			conceptValue = new DataBinding<IFlexoOntologyClass>(this, IFlexoOntologyClass.class, BindingDefinitionType.GET);
-			conceptValue.setBindingName("conceptValue");
+		public ClassParameterImpl() {
+			super();
 		}
-		return conceptValue;
-	}
 
-	public void setConceptValue(DataBinding<IFlexoOntologyClass> conceptValue) {
-		if (conceptValue != null) {
-			conceptValue.setOwner(this);
-			conceptValue.setBindingName("conceptValue");
-			conceptValue.setDeclaredType(IFlexoOntologyClass.class);
-			conceptValue.setBindingDefinitionType(BindingDefinitionType.GET);
+		@Override
+		public Type getType() {
+			return IFlexoOntologyClass.class;
+		};
+
+		@Override
+		public WidgetType getWidget() {
+			return WidgetType.CLASS;
 		}
-		this.conceptValue = conceptValue;
-	}
 
-	public boolean getIsDynamicConceptValue() {
-		return getConceptValue().isSet() || isDynamicConceptValueSet;
-	}
-
-	public void setIsDynamicConceptValue(boolean isDynamic) {
-		if (isDynamic) {
-			isDynamicConceptValueSet = true;
-		} else {
-			conceptValue = null;
-			isDynamicConceptValueSet = false;
+		@Override
+		public String _getConceptURI() {
+			return conceptURI;
 		}
-	}
 
-	public IFlexoOntologyClass evaluateConceptValue(BindingEvaluationContext parameterRetriever) {
-		if (getConceptValue().isValid()) {
-			try {
-				return getConceptValue().getBindingValue(parameterRetriever);
-			} catch (TypeMismatchException e) {
-				e.printStackTrace();
-			} catch (NullReferenceException e) {
-				e.printStackTrace();
-			} catch (InvocationTargetException e) {
-				e.printStackTrace();
+		@Override
+		public void _setConceptURI(String conceptURI) {
+			this.conceptURI = conceptURI;
+		}
+
+		public IFlexoOntologyClass getConcept() {
+			return getVirtualModel().getOntologyClass(_getConceptURI());
+		}
+
+		public void setConcept(IFlexoOntologyClass c) {
+			_setConceptURI(c != null ? c.getURI() : null);
+		}
+
+		@Override
+		public DataBinding<IFlexoOntologyClass> getConceptValue() {
+			if (conceptValue == null) {
+				conceptValue = new DataBinding<IFlexoOntologyClass>(this, IFlexoOntologyClass.class, BindingDefinitionType.GET);
+				conceptValue.setBindingName("conceptValue");
+			}
+			return conceptValue;
+		}
+
+		@Override
+		public void setConceptValue(DataBinding<IFlexoOntologyClass> conceptValue) {
+			if (conceptValue != null) {
+				conceptValue.setOwner(this);
+				conceptValue.setBindingName("conceptValue");
+				conceptValue.setDeclaredType(IFlexoOntologyClass.class);
+				conceptValue.setBindingDefinitionType(BindingDefinitionType.GET);
+			}
+			this.conceptValue = conceptValue;
+		}
+
+		public boolean getIsDynamicConceptValue() {
+			return getConceptValue().isSet() || isDynamicConceptValueSet;
+		}
+
+		public void setIsDynamicConceptValue(boolean isDynamic) {
+			if (isDynamic) {
+				isDynamicConceptValueSet = true;
+			} else {
+				conceptValue = null;
+				isDynamicConceptValueSet = false;
 			}
 		}
-		return null;
-	}
 
-	@Override
-	public TypeAwareModelSlot<?, ?> getModelSlot() {
-		TypeAwareModelSlot<?, ?> returned = super.getModelSlot();
-		if (returned == null) {
-			if (getVirtualModel() != null && getVirtualModel().getModelSlots(TypeAwareModelSlot.class).size() > 0) {
-				return getVirtualModel().getModelSlots(TypeAwareModelSlot.class).get(0);
+		public IFlexoOntologyClass evaluateConceptValue(BindingEvaluationContext parameterRetriever) {
+			if (getConceptValue().isValid()) {
+				try {
+					return getConceptValue().getBindingValue(parameterRetriever);
+				} catch (TypeMismatchException e) {
+					e.printStackTrace();
+				} catch (NullReferenceException e) {
+					e.printStackTrace();
+				} catch (InvocationTargetException e) {
+					e.printStackTrace();
+				}
 			}
+			return null;
 		}
-		return returned;
-	}
 
-}
+		@Override
+		public TypeAwareModelSlot<?, ?> getModelSlot() {
+			TypeAwareModelSlot<?, ?> returned = super.getModelSlot();
+			if (returned == null) {
+				if (getVirtualModel() != null && getVirtualModel().getModelSlots(TypeAwareModelSlot.class).size() > 0) {
+					return getVirtualModel().getModelSlots(TypeAwareModelSlot.class).get(0);
+				}
+			}
+			return returned;
+		}
+
+	}
 }

@@ -32,110 +32,135 @@ import org.openflexo.foundation.validation.ValidationError;
 import org.openflexo.foundation.validation.ValidationIssue;
 import org.openflexo.foundation.validation.ValidationRule;
 import org.openflexo.foundation.view.action.EditionSchemeAction;
+import org.openflexo.model.annotations.Getter;
+import org.openflexo.model.annotations.ImplementationClass;
+import org.openflexo.model.annotations.ModelEntity;
+import org.openflexo.model.annotations.PropertyIdentifier;
+import org.openflexo.model.annotations.Setter;
+import org.openflexo.model.annotations.XMLAttribute;
+import org.openflexo.model.annotations.XMLElement;
 
 @ModelEntity
 @ImplementationClass(DataPropertyAssertion.DataPropertyAssertionImpl.class)
 @XMLElement
-public interface DataPropertyAssertion extends AbstractAssertion{
+public interface DataPropertyAssertion extends AbstractAssertion {
 
-@PropertyIdentifier(type=String.class)
-public static final String DATA_PROPERTY_URI_KEY = "dataPropertyURI";
-@PropertyIdentifier(type=DataBinding.class)
-public static final String VALUE_KEY = "value";
+	@PropertyIdentifier(type = AddIndividual.class)
+	public static final String ACTION_KEY = "action";
 
-@Getter(value=DATA_PROPERTY_URI_KEY)
-@XMLAttribute
-public String _getDataPropertyURI();
+	@PropertyIdentifier(type = String.class)
+	public static final String DATA_PROPERTY_URI_KEY = "dataPropertyURI";
+	@PropertyIdentifier(type = DataBinding.class)
+	public static final String VALUE_KEY = "value";
 
-@Setter(DATA_PROPERTY_URI_KEY)
-public void _setDataPropertyURI(String dataPropertyURI);
+	@Getter(value = ACTION_KEY, inverse = AddIndividual.DATA_ASSERTIONS_KEY)
+	public AddIndividual<?, ?> getAction();
 
+	@Setter(ACTION_KEY)
+	public void setAction(AddIndividual<?, ?> action);
 
-@Getter(value=VALUE_KEY)
-@XMLAttribute
-public DataBinding getValue();
+	@Getter(value = DATA_PROPERTY_URI_KEY)
+	@XMLAttribute
+	public String _getDataPropertyURI();
 
-@Setter(VALUE_KEY)
-public void setValue(DataBinding value);
+	@Setter(DATA_PROPERTY_URI_KEY)
+	public void _setDataPropertyURI(String dataPropertyURI);
 
+	@Getter(value = VALUE_KEY)
+	@XMLAttribute
+	public DataBinding<?> getValue();
 
-public static abstract  class DataPropertyAssertionImpl extends AbstractAssertionImpl implements DataPropertyAssertion
-{
+	@Setter(VALUE_KEY)
+	public void setValue(DataBinding<?> value);
 
-	private String dataPropertyURI;
-	private DataBinding<Object> value;
+	public IFlexoOntologyStructuralProperty getOntologyProperty();
 
-	public DataPropertyAssertionImpl() {
-		super();
-	}
+	public void setOntologyProperty(IFlexoOntologyStructuralProperty p);
 
-	public String _getDataPropertyURI() {
-		return dataPropertyURI;
-	}
+	public static abstract class DataPropertyAssertionImpl extends AbstractAssertionImpl implements DataPropertyAssertion {
 
-	public void _setDataPropertyURI(String dataPropertyURI) {
-		this.dataPropertyURI = dataPropertyURI;
-	}
+		private String dataPropertyURI;
+		private DataBinding<?> value;
 
-	public IFlexoOntologyStructuralProperty getOntologyProperty() {
-		if (getVirtualModel() != null) {
-			return getVirtualModel().getOntologyProperty(_getDataPropertyURI());
+		public DataPropertyAssertionImpl() {
+			super();
 		}
-		return null;
-	}
 
-	public void setOntologyProperty(IFlexoOntologyStructuralProperty p) {
-		_setDataPropertyURI(p != null ? p.getURI() : null);
-	}
-
-	public Object getValue(EditionSchemeAction action) {
-		try {
-			return getValue().getBindingValue(action);
-		} catch (TypeMismatchException e) {
-			e.printStackTrace();
-		} catch (NullReferenceException e) {
-			e.printStackTrace();
-		} catch (InvocationTargetException e) {
-			e.printStackTrace();
+		@Override
+		public String _getDataPropertyURI() {
+			return dataPropertyURI;
 		}
-		return null;
-	}
 
-	@Override
-	public BindingModel getBindingModel() {
-		return getEditionScheme().getBindingModel();
-	}
+		@Override
+		public void _setDataPropertyURI(String dataPropertyURI) {
+			this.dataPropertyURI = dataPropertyURI;
+		}
 
-	public java.lang.reflect.Type getType() {
-		if (getOntologyProperty() instanceof IFlexoOntologyDataProperty) {
-			if (((IFlexoOntologyDataProperty) getOntologyProperty()).getRange() != null) {
-				return ((IFlexoOntologyDataProperty) getOntologyProperty()).getRange().getAccessedType();
+		@Override
+		public IFlexoOntologyStructuralProperty getOntologyProperty() {
+			if (getVirtualModel() != null) {
+				return getVirtualModel().getOntologyProperty(_getDataPropertyURI());
 			}
+			return null;
 		}
-		return Object.class;
-	};
 
-	public DataBinding<Object> getValue() {
-		if (value == null) {
-			value = new DataBinding<Object>(this, getType(), BindingDefinitionType.GET);
-			value.setBindingName("value");
+		@Override
+		public void setOntologyProperty(IFlexoOntologyStructuralProperty p) {
+			_setDataPropertyURI(p != null ? p.getURI() : null);
 		}
-		return value;
-	}
 
-	public void setValue(DataBinding<Object> value) {
-		if (value != null) {
-			value.setOwner(this);
-			value.setBindingName("value");
-			value.setDeclaredType(getType());
-			value.setBindingDefinitionType(BindingDefinitionType.GET);
+		public Object getValue(EditionSchemeAction action) {
+			try {
+				return getValue().getBindingValue(action);
+			} catch (TypeMismatchException e) {
+				e.printStackTrace();
+			} catch (NullReferenceException e) {
+				e.printStackTrace();
+			} catch (InvocationTargetException e) {
+				e.printStackTrace();
+			}
+			return null;
 		}
-		this.value = value;
+
+		@Override
+		public BindingModel getBindingModel() {
+			return getEditionScheme().getBindingModel();
+		}
+
+		public java.lang.reflect.Type getType() {
+			if (getOntologyProperty() instanceof IFlexoOntologyDataProperty) {
+				if (((IFlexoOntologyDataProperty) getOntologyProperty()).getRange() != null) {
+					return ((IFlexoOntologyDataProperty) getOntologyProperty()).getRange().getAccessedType();
+				}
+			}
+			return Object.class;
+		};
+
+		@Override
+		public DataBinding<?> getValue() {
+			if (value == null) {
+				value = new DataBinding<Object>(this, getType(), BindingDefinitionType.GET);
+				value.setBindingName("value");
+			}
+			return value;
+		}
+
+		@Override
+		public void setValue(DataBinding<?> value) {
+			if (value != null) {
+				value.setOwner(this);
+				value.setBindingName("value");
+				value.setDeclaredType(getType());
+				value.setBindingDefinitionType(BindingDefinitionType.GET);
+			}
+			this.value = value;
+		}
+
 	}
 
 	public static class DataPropertyAssertionMustDefineAnOntologyProperty extends
 			ValidationRule<DataPropertyAssertionMustDefineAnOntologyProperty, DataPropertyAssertion> {
-		public DataPropertyAssertionImplMustDefineAnOntologyProperty() {
+		public DataPropertyAssertionMustDefineAnOntologyProperty() {
 			super(DataPropertyAssertion.class, "data_property_assertion_must_define_an_ontology_property");
 		}
 
@@ -157,11 +182,10 @@ public static abstract  class DataPropertyAssertionImpl extends AbstractAssertio
 		}
 
 		@Override
-		public DataBinding<Object> getBinding(DataPropertyAssertion object) {
+		public DataBinding<?> getBinding(DataPropertyAssertion object) {
 			return object.getValue();
 		}
 
 	}
 
-}
 }

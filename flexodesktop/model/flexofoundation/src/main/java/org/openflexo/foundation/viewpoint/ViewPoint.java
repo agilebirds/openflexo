@@ -22,7 +22,6 @@ package org.openflexo.foundation.viewpoint;
 import java.io.File;
 import java.io.IOException;
 import java.util.ArrayList;
-import java.util.Collection;
 import java.util.Iterator;
 import java.util.List;
 import java.util.Vector;
@@ -663,10 +662,10 @@ public interface ViewPoint extends NamedViewPointObject, ResourceData<ViewPoint>
 			return out.toString();
 		}
 
-		@Override
+		/*@Override
 		public Collection<VirtualModel> getEmbeddedValidableObjects() {
 			return getVirtualModels();
-		}
+		}*/
 
 		// Implementation of XMLStorageResourceData
 

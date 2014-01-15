@@ -29,115 +29,123 @@ import org.openflexo.antar.expr.NullReferenceException;
 import org.openflexo.antar.expr.TypeMismatchException;
 import org.openflexo.foundation.ontology.IFlexoOntologyClass;
 import org.openflexo.foundation.ontology.IFlexoOntologyObjectProperty;
+import org.openflexo.model.annotations.Getter;
+import org.openflexo.model.annotations.ImplementationClass;
+import org.openflexo.model.annotations.ModelEntity;
+import org.openflexo.model.annotations.PropertyIdentifier;
+import org.openflexo.model.annotations.Setter;
+import org.openflexo.model.annotations.XMLAttribute;
+import org.openflexo.model.annotations.XMLElement;
 
 @ModelEntity
 @ImplementationClass(ObjectPropertyParameter.ObjectPropertyParameterImpl.class)
 @XMLElement
-public interface ObjectPropertyParameter extends PropertyParameter{
+public interface ObjectPropertyParameter extends PropertyParameter {
 
-@PropertyIdentifier(type=String.class)
-public static final String RANGE_URI_KEY = "rangeURI";
-@PropertyIdentifier(type=DataBinding.class)
-public static final String RANGE_VALUE_KEY = "rangeValue";
+	@PropertyIdentifier(type = String.class)
+	public static final String RANGE_URI_KEY = "rangeURI";
+	@PropertyIdentifier(type = DataBinding.class)
+	public static final String RANGE_VALUE_KEY = "rangeValue";
 
-@Getter(value=RANGE_URI_KEY)
-@XMLAttribute(xmlTag="range")
-public String _getRangeURI();
+	@Getter(value = RANGE_URI_KEY)
+	@XMLAttribute(xmlTag = "range")
+	public String _getRangeURI();
 
-@Setter(RANGE_URI_KEY)
-public void _setRangeURI(String rangeURI);
+	@Setter(RANGE_URI_KEY)
+	public void _setRangeURI(String rangeURI);
 
+	@Getter(value = RANGE_VALUE_KEY)
+	@XMLAttribute
+	public DataBinding<IFlexoOntologyClass> getRangeValue();
 
-@Getter(value=RANGE_VALUE_KEY)
-@XMLAttribute
-public DataBinding getRangeValue();
+	@Setter(RANGE_VALUE_KEY)
+	public void setRangeValue(DataBinding<IFlexoOntologyClass> rangeValue);
 
-@Setter(RANGE_VALUE_KEY)
-public void setRangeValue(DataBinding rangeValue);
+	public static abstract class ObjectPropertyParameterImpl extends PropertyParameterImpl implements ObjectPropertyParameter {
 
+		private String rangeURI;
+		private DataBinding<IFlexoOntologyClass> rangeValue;
+		private boolean isDynamicRangeValueSet = false;
 
-public static abstract  class ObjectPropertyParameterImpl extends PropertyParameterImpl implements ObjectPropertyParameter
-{
-
-	private String rangeURI;
-	private DataBinding<IFlexoOntologyClass> rangeValue;
-	private boolean isDynamicRangeValueSet = false;
-
-	public ObjectPropertyParameterImpl() {
-		super();
-	}
-
-	@Override
-	public Type getType() {
-		return IFlexoOntologyObjectProperty.class;
-	};
-
-	@Override
-	public WidgetType getWidget() {
-		return WidgetType.OBJECT_PROPERTY;
-	}
-
-	public String _getRangeURI() {
-		return rangeURI;
-	}
-
-	public void _setRangeURI(String rangeURI) {
-		this.rangeURI = rangeURI;
-	}
-
-	public IFlexoOntologyClass getRange() {
-		return getVirtualModel().getOntologyClass(_getRangeURI());
-	}
-
-	public void setRange(IFlexoOntologyClass c) {
-		_setRangeURI(c != null ? c.getURI() : null);
-	}
-
-	public DataBinding<IFlexoOntologyClass> getRangeValue() {
-		if (rangeValue == null) {
-			rangeValue = new DataBinding<IFlexoOntologyClass>(this, IFlexoOntologyClass.class, BindingDefinitionType.GET);
-			rangeValue.setBindingName("rangeValue");
+		public ObjectPropertyParameterImpl() {
+			super();
 		}
-		return rangeValue;
-	}
 
-	public void setRangeValue(DataBinding<IFlexoOntologyClass> rangeValue) {
-		if (rangeValue != null) {
-			rangeValue.setOwner(this);
-			rangeValue.setBindingName("rangeValue");
-			rangeValue.setDeclaredType(IFlexoOntologyClass.class);
-			rangeValue.setBindingDefinitionType(BindingDefinitionType.GET);
+		@Override
+		public Type getType() {
+			return IFlexoOntologyObjectProperty.class;
+		};
+
+		@Override
+		public WidgetType getWidget() {
+			return WidgetType.OBJECT_PROPERTY;
 		}
-		this.rangeValue = rangeValue;
-	}
 
-	public boolean getIsDynamicRangeValue() {
-		return getRangeValue().isSet() || isDynamicRangeValueSet;
-	}
-
-	public void setIsDynamicRangeValue(boolean isDynamic) {
-		if (isDynamic) {
-			isDynamicRangeValueSet = true;
-		} else {
-			rangeValue = null;
-			isDynamicRangeValueSet = false;
+		@Override
+		public String _getRangeURI() {
+			return rangeURI;
 		}
-	}
 
-	public IFlexoOntologyClass evaluateRangeValue(BindingEvaluationContext parameterRetriever) {
-		if (getRangeValue().isValid()) {
-			try {
-				return getRangeValue().getBindingValue(parameterRetriever);
-			} catch (TypeMismatchException e) {
-				e.printStackTrace();
-			} catch (NullReferenceException e) {
-				e.printStackTrace();
-			} catch (InvocationTargetException e) {
-				e.printStackTrace();
+		@Override
+		public void _setRangeURI(String rangeURI) {
+			this.rangeURI = rangeURI;
+		}
+
+		public IFlexoOntologyClass getRange() {
+			return getVirtualModel().getOntologyClass(_getRangeURI());
+		}
+
+		public void setRange(IFlexoOntologyClass c) {
+			_setRangeURI(c != null ? c.getURI() : null);
+		}
+
+		@Override
+		public DataBinding<IFlexoOntologyClass> getRangeValue() {
+			if (rangeValue == null) {
+				rangeValue = new DataBinding<IFlexoOntologyClass>(this, IFlexoOntologyClass.class, BindingDefinitionType.GET);
+				rangeValue.setBindingName("rangeValue");
+			}
+			return rangeValue;
+		}
+
+		@Override
+		public void setRangeValue(DataBinding<IFlexoOntologyClass> rangeValue) {
+			if (rangeValue != null) {
+				rangeValue.setOwner(this);
+				rangeValue.setBindingName("rangeValue");
+				rangeValue.setDeclaredType(IFlexoOntologyClass.class);
+				rangeValue.setBindingDefinitionType(BindingDefinitionType.GET);
+			}
+			this.rangeValue = rangeValue;
+		}
+
+		public boolean getIsDynamicRangeValue() {
+			return getRangeValue().isSet() || isDynamicRangeValueSet;
+		}
+
+		public void setIsDynamicRangeValue(boolean isDynamic) {
+			if (isDynamic) {
+				isDynamicRangeValueSet = true;
+			} else {
+				rangeValue = null;
+				isDynamicRangeValueSet = false;
 			}
 		}
-		return null;
-	}
 
-}
+		public IFlexoOntologyClass evaluateRangeValue(BindingEvaluationContext parameterRetriever) {
+			if (getRangeValue().isValid()) {
+				try {
+					return getRangeValue().getBindingValue(parameterRetriever);
+				} catch (TypeMismatchException e) {
+					e.printStackTrace();
+				} catch (NullReferenceException e) {
+					e.printStackTrace();
+				} catch (InvocationTargetException e) {
+					e.printStackTrace();
+				}
+			}
+			return null;
+		}
+
+	}
 }

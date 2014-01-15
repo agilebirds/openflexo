@@ -107,6 +107,12 @@ public interface EditionSchemeParameter extends EditionSchemeObject, FunctionArg
 
 	public abstract Type getType();
 
+	public boolean isValid(EditionSchemeAction action, Object value);
+
+	public Object getDefaultValue(EditionSchemeAction<?, ?, ?> action);
+
+	public boolean evaluateCondition(BindingEvaluationContext parameterRetriever);
+
 	public static abstract class EditionSchemeParameterImpl extends EditionSchemeObjectImpl implements EditionSchemeParameter {
 
 		private static final Logger logger = Logger.getLogger(EditionSchemeParameter.class.getPackage().getName());
@@ -220,6 +226,7 @@ public interface EditionSchemeParameter extends EditionSchemeObject, FunctionArg
 			this.usePaletteLabelAsDefaultValue = usePaletteLabelAsDefaultValue;
 		}*/
 
+		@Override
 		public boolean evaluateCondition(BindingEvaluationContext parameterRetriever) {
 			if (getConditional().isValid()) {
 				try {
@@ -294,6 +301,7 @@ public interface EditionSchemeParameter extends EditionSchemeObject, FunctionArg
 			this.defaultValue = defaultValue;
 		}
 
+		@Override
 		public Object getDefaultValue(EditionSchemeAction<?, ?, ?> action) {
 			// DiagramPaletteElement paletteElement = action instanceof DropSchemeAction ? ((DropSchemeAction) action).getPaletteElement() :
 			// null;
@@ -328,6 +336,7 @@ public interface EditionSchemeParameter extends EditionSchemeObject, FunctionArg
 			isRequired = flag;
 		}
 
+		@Override
 		public boolean isValid(EditionSchemeAction action, Object value) {
 			return !getIsRequired() || value != null;
 		}

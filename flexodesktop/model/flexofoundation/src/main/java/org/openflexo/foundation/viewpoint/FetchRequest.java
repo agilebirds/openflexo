@@ -26,11 +26,18 @@ import java.util.Vector;
 import java.util.logging.Logger;
 
 import org.openflexo.antar.binding.ParameterizedTypeImpl;
-import org.openflexo.foundation.DataModification;
 import org.openflexo.foundation.technologyadapter.ModelSlot;
 import org.openflexo.foundation.view.action.EditionSchemeAction;
 import org.openflexo.foundation.viewpoint.FMLRepresentationContext.FMLRepresentationOutput;
-
+import org.openflexo.model.annotations.Adder;
+import org.openflexo.model.annotations.Getter;
+import org.openflexo.model.annotations.Getter.Cardinality;
+import org.openflexo.model.annotations.ImplementationClass;
+import org.openflexo.model.annotations.ModelEntity;
+import org.openflexo.model.annotations.PropertyIdentifier;
+import org.openflexo.model.annotations.Remover;
+import org.openflexo.model.annotations.Setter;
+import org.openflexo.model.annotations.XMLElement;
 
 /**
  * Abstract class representing a fetch request, which is a primitive allowing to browse in the model while configuring requests
@@ -40,141 +47,158 @@ import org.openflexo.foundation.viewpoint.FMLRepresentationContext.FMLRepresenta
  */
 @ModelEntity(isAbstract = true)
 @ImplementationClass(FetchRequest.FetchRequestImpl.class)
-public abstract interface FetchRequest<MS extends ModelSlot<?>, T> extends AssignableAction<MS, List<T>>{
+public abstract interface FetchRequest<MS extends ModelSlot<?>, T> extends AssignableAction<MS, List<T>> {
 
-@PropertyIdentifier(type=Vector.class)
-public static final String CONDITIONS_KEY = "conditions";
+	@PropertyIdentifier(type = Vector.class)
+	public static final String CONDITIONS_KEY = "conditions";
 
-@Getter(value=CONDITIONS_KEY,cardinality = Cardinality.LIST)
-@XMLElement
-public List<FetchRequestCondition> getConditions();
+	@Getter(value = CONDITIONS_KEY, cardinality = Cardinality.LIST, inverse = FetchRequestCondition.ACTION_KEY)
+	@XMLElement
+	public List<FetchRequestCondition> getConditions();
 
-@Setter(CONDITIONS_KEY)
-public void setConditions(List<FetchRequestCondition> conditions);
+	@Setter(CONDITIONS_KEY)
+	public void setConditions(List<FetchRequestCondition> conditions);
 
-@Adder(CONDITIONS_KEY)
-public void addToConditions(FetchRequestCondition aCondition);
+	@Adder(CONDITIONS_KEY)
+	public void addToConditions(FetchRequestCondition aCondition);
 
-@Remover(CONDITIONS_KEY)
-public void removeFromConditions(FetchRequestCondition aCondition);
+	@Remover(CONDITIONS_KEY)
+	public void removeFromConditions(FetchRequestCondition aCondition);
 
+	public FetchRequestCondition createCondition();
 
-public static abstract  abstract class FetchRequest<MSImpl extends ModelSlot<?>, T> extends AssignableAction<MS, List<T>>Impl implements FetchRequest<MS
-{
+	public void deleteCondition(FetchRequestCondition aCondition);
 
-	private static final Logger logger = Logger.getLogger(FetchRequest.class.getPackage().getName());
+	public FetchRequestIterationAction getEmbeddingIteration();
 
-	private Vector<FetchRequestCondition> conditions;
+	public void setEmbeddingIteration(FetchRequestIterationAction embeddingIteration);
 
-	// null in fetch request is not embedded in an iteration
-	private FetchRequestIterationAction embeddingIteration;
+	public Type getFetchedType();
 
-	public FetchRequestImpl() {
-		super();
-		conditions = new Vector<FetchRequestCondition>();
-	}
+	public static abstract class FetchRequestImpl<MS extends ModelSlot<?>, T> extends AssignableActionImpl<MS, List<T>> implements
+			FetchRequest<MS, T> {
 
-	@Override
-	public String getFMLRepresentation(FMLRepresentationContext context) {
-		FMLRepresentationOutput out = new FMLRepresentationOutput(context);
-		if (getAssignation().isSet()) {
-			out.append(getAssignation().toString() + " = ", context);
+		private static final Logger logger = Logger.getLogger(FetchRequest.class.getPackage().getName());
+
+		// private Vector<FetchRequestCondition> conditions;
+
+		// null in fetch request is not embedded in an iteration
+		private FetchRequestIterationAction embeddingIteration;
+
+		public FetchRequestImpl() {
+			super();
+			// conditions = new Vector<FetchRequestCondition>();
 		}
-		out.append(getClass().getSimpleName(), context);
-		return out.toString();
-	}
 
-	protected String getWhereClausesFMLRepresentation(FMLRepresentationContext context) {
-		if (conditions.size() > 0) {
-			StringBuffer sb = new StringBuffer();
-			sb.append("where ");
-			if (conditions.size() > 1) {
-				sb.append("(");
+		@Override
+		public String getFMLRepresentation(FMLRepresentationContext context) {
+			FMLRepresentationOutput out = new FMLRepresentationOutput(context);
+			if (getAssignation().isSet()) {
+				out.append(getAssignation().toString() + " = ", context);
 			}
-			boolean isFirst = true;
-			for (FetchRequestCondition c : conditions) {
-				sb.append(c.getCondition().toString() + (isFirst ? "" : " and "));
-			}
-			if (conditions.size() > 1) {
-				sb.append(")");
-			}
-			return sb.toString();
+			out.append(getClass().getSimpleName(), context);
+			return out.toString();
 		}
-		return null;
-	}
 
-	public abstract Type getFetchedType();
+		protected String getWhereClausesFMLRepresentation(FMLRepresentationContext context) {
+			if (getConditions().size() > 0) {
+				StringBuffer sb = new StringBuffer();
+				sb.append("where ");
+				if (getConditions().size() > 1) {
+					sb.append("(");
+				}
+				boolean isFirst = true;
+				for (FetchRequestCondition c : getConditions()) {
+					sb.append(c.getCondition().toString() + (isFirst ? "" : " and "));
+				}
+				if (getConditions().size() > 1) {
+					sb.append(")");
+				}
+				return sb.toString();
+			}
+			return null;
+		}
 
-	@Override
-	public Type getAssignableType() {
-		return new ParameterizedTypeImpl(List.class, getFetchedType());
-	}
+		@Override
+		public abstract Type getFetchedType();
 
-	public Vector<FetchRequestCondition> getConditions() {
-		return conditions;
-	}
+		@Override
+		public Type getAssignableType() {
+			return new ParameterizedTypeImpl(List.class, getFetchedType());
+		}
 
-	public void setConditions(Vector<FetchRequestCondition> conditions) {
-		this.conditions = conditions;
-	}
+		/*@Override
+		public Vector<FetchRequestCondition> getConditions() {
+			return conditions;
+		}
 
-	public void addToConditions(FetchRequestCondition condition) {
-		condition.setFetchRequest(this);
-		conditions.add(condition);
-		setChanged();
-		notifyObservers(new DataModification("conditions", null, condition));
-	}
+		public void setConditions(Vector<FetchRequestCondition> conditions) {
+			this.conditions = conditions;
+		}
 
-	public void removeFromConditions(FetchRequestCondition condition) {
-		condition.setFetchRequest(null);
-		conditions.remove(condition);
-		setChanged();
-		notifyObservers(new DataModification("conditions", condition, null));
-	}
+		@Override
+		public void addToConditions(FetchRequestCondition condition) {
+			condition.setFetchRequest(this);
+			conditions.add(condition);
+			setChanged();
+			notifyObservers(new DataModification("conditions", null, condition));
+		}
 
-	public FetchRequestImplCondition createCondition() {
-		FetchRequestCondition newCondition = new FetchRequestCondition();
-		addToConditions(newCondition);
-		return newCondition;
-	}
+		@Override
+		public void removeFromConditions(FetchRequestCondition condition) {
+			condition.setFetchRequest(null);
+			conditions.remove(condition);
+			setChanged();
+			notifyObservers(new DataModification("conditions", condition, null));
+		}*/
 
-	public void deleteCondition(FetchRequestCondition aCondition) {
-		removeFromConditions(aCondition);
-	}
+		@Override
+		public FetchRequestCondition createCondition() {
+			FetchRequestCondition newCondition = getVirtualModelFactory().newFetchRequestCondition();
+			addToConditions(newCondition);
+			return newCondition;
+		}
 
-	public List<T> filterWithConditions(List<T> fetchResult, final EditionSchemeAction action) {
-		if (getConditions().size() == 0) {
-			return fetchResult;
-		} else {
-			// System.out.println("Filtering with " + getConditions() + " fetchResult=" + fetchResult);
-			List<T> returned = new ArrayList<T>();
-			for (final T proposedFetchResult : fetchResult) {
-				boolean takeIt = true;
-				for (FetchRequestCondition condition : getConditions()) {
-					if (!condition.evaluateCondition(proposedFetchResult, action)) {
-						takeIt = false;
-						// System.out.println("I dismiss " + proposedFetchResult + " because of " + condition.getCondition() + " valid="
-						// + condition.getCondition().isValid());
-						break;
+		@Override
+		public void deleteCondition(FetchRequestCondition aCondition) {
+			removeFromConditions(aCondition);
+		}
+
+		public List<T> filterWithConditions(List<T> fetchResult, final EditionSchemeAction action) {
+			if (getConditions().size() == 0) {
+				return fetchResult;
+			} else {
+				// System.out.println("Filtering with " + getConditions() + " fetchResult=" + fetchResult);
+				List<T> returned = new ArrayList<T>();
+				for (final T proposedFetchResult : fetchResult) {
+					boolean takeIt = true;
+					for (FetchRequestCondition condition : getConditions()) {
+						if (!condition.evaluateCondition(proposedFetchResult, action)) {
+							takeIt = false;
+							// System.out.println("I dismiss " + proposedFetchResult + " because of " + condition.getCondition() + " valid="
+							// + condition.getCondition().isValid());
+							break;
+						}
+					}
+					if (takeIt) {
+						returned.add(proposedFetchResult);
+						// System.out.println("I take " + proposedFetchResult);
+					} else {
 					}
 				}
-				if (takeIt) {
-					returned.add(proposedFetchResult);
-					// System.out.println("I take " + proposedFetchResult);
-				} else {
-				}
+				return returned;
 			}
-			return returned;
 		}
-	}
 
-	public FetchRequestImplIterationAction getEmbeddingIteration() {
-		return embeddingIteration;
-	}
+		@Override
+		public FetchRequestIterationAction getEmbeddingIteration() {
+			return embeddingIteration;
+		}
 
-	public void setEmbeddingIteration(FetchRequestIterationAction embeddingIteration) {
-		this.embeddingIteration = embeddingIteration;
-	}
+		@Override
+		public void setEmbeddingIteration(FetchRequestIterationAction embeddingIteration) {
+			this.embeddingIteration = embeddingIteration;
+		}
 
-}
+	}
 }

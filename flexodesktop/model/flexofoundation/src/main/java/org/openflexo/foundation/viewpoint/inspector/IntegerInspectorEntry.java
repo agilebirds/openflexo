@@ -19,6 +19,9 @@
  */
 package org.openflexo.foundation.viewpoint.inspector;
 
+import org.openflexo.model.annotations.ImplementationClass;
+import org.openflexo.model.annotations.ModelEntity;
+import org.openflexo.model.annotations.XMLElement;
 
 /**
  * Represents an inspector entry for an integer
@@ -28,25 +31,23 @@ package org.openflexo.foundation.viewpoint.inspector;
  */
 @ModelEntity
 @ImplementationClass(IntegerInspectorEntry.IntegerInspectorEntryImpl.class)
-@XMLElement(xmlTag="Integer")
-public interface IntegerInspectorEntry extends InspectorEntry{
+@XMLElement(xmlTag = "Integer")
+public interface IntegerInspectorEntry extends InspectorEntry {
 
+	public static abstract class IntegerInspectorEntryImpl extends InspectorEntryImpl implements IntegerInspectorEntry {
 
-public static abstract  class IntegerInspectorEntryImpl extends InspectorEntryImpl implements IntegerInspectorEntry
-{
+		public IntegerInspectorEntryImpl() {
+			super();
+		}
 
-	public IntegerInspectorEntryImpl() {
-		super();
+		@Override
+		public Class getDefaultDataClass() {
+			return Integer.class;
+		}
+
+		@Override
+		public String getWidgetName() {
+			return "Integer";
+		}
 	}
-
-	@Override
-	public Class getDefaultDataClass() {
-		return Integer.class;
-	}
-
-	@Override
-	public String getWidgetName() {
-		return "Integer";
-	}
-}
 }

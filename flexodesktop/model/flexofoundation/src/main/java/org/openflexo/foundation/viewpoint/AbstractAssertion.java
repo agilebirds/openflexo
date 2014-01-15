@@ -20,120 +20,115 @@
 package org.openflexo.foundation.viewpoint;
 
 import java.lang.reflect.InvocationTargetException;
-import java.util.Collection;
 
 import org.openflexo.antar.binding.BindingModel;
 import org.openflexo.antar.binding.DataBinding;
 import org.openflexo.antar.expr.NullReferenceException;
 import org.openflexo.antar.expr.TypeMismatchException;
-import org.openflexo.foundation.validation.Validable;
 import org.openflexo.foundation.view.action.EditionSchemeAction;
+import org.openflexo.model.annotations.Getter;
+import org.openflexo.model.annotations.ImplementationClass;
+import org.openflexo.model.annotations.ModelEntity;
+import org.openflexo.model.annotations.PropertyIdentifier;
+import org.openflexo.model.annotations.Setter;
+import org.openflexo.model.annotations.XMLAttribute;
 
 @ModelEntity(isAbstract = true)
 @ImplementationClass(AbstractAssertion.AbstractAssertionImpl.class)
-public abstract interface AbstractAssertion extends EditionSchemeObject{
+public abstract interface AbstractAssertion extends EditionSchemeObject {
 
-@PropertyIdentifier(type=DataBinding.class)
-public static final String CONDITIONAL_KEY = "conditional";
+	@PropertyIdentifier(type = DataBinding.class)
+	public static final String CONDITIONAL_KEY = "conditional";
 
-@Getter(value=CONDITIONAL_KEY)
-@XMLAttribute
-public DataBinding getConditional();
+	@Getter(value = CONDITIONAL_KEY)
+	@XMLAttribute
+	public DataBinding<Boolean> getConditional();
 
-@Setter(CONDITIONAL_KEY)
-public void setConditional(DataBinding conditional);
+	@Setter(CONDITIONAL_KEY)
+	public void setConditional(DataBinding<Boolean> conditional);
 
+	public static abstract class AbstractAssertionImpl extends EditionSchemeObjectImpl implements AbstractAssertion {
 
-public static abstract  abstract class AbstractAssertionImpl extends EditionSchemeObjectImpl implements AbstractAssertion
-{
+		private AddIndividual _action;
+		private DataBinding<Boolean> conditional;
 
-	private AddIndividual _action;
-	private DataBinding<Boolean> conditional;
-
-	public AbstractAssertionImpl() {
-		super();
-	}
-
-	@Override
-	public String getURI() {
-		return null;
-	}
-
-	@Override
-	public Collection<? extends Validable> getEmbeddedValidableObjects() {
-		return null;
-	}
-
-	public void setAction(AddIndividual action) {
-		_action = action;
-	}
-
-	public AddIndividual getAction() {
-		return _action;
-	}
-
-	public EditionScheme getScheme() {
-		if (getAction() != null) {
-			return getAction().getScheme();
+		public AbstractAssertionImpl() {
+			super();
 		}
-		return null;
-	}
 
-	@Override
-	public EditionScheme getEditionScheme() {
-		return getScheme();
-	}
-
-	@Override
-	public VirtualModel getVirtualModel() {
-		if (getAction() != null) {
-			return getAction().getVirtualModel();
+		@Override
+		public String getURI() {
+			return null;
 		}
-		return null;
-	}
 
-	public boolean evaluateCondition(EditionSchemeAction action) {
-		if (getConditional().isValid()) {
-			try {
-				return getConditional().getBindingValue(action);
-			} catch (TypeMismatchException e) {
-				e.printStackTrace();
-			} catch (NullReferenceException e) {
-				e.printStackTrace();
-			} catch (InvocationTargetException e) {
-				e.printStackTrace();
+		public void setAction(AddIndividual action) {
+			_action = action;
+		}
+
+		public AddIndividual getAction() {
+			return _action;
+		}
+
+		@Override
+		public EditionScheme getEditionScheme() {
+			if (getAction() != null) {
+				return getAction().getEditionScheme();
 			}
+			return null;
 		}
-		return true;
-	}
 
-	@Override
-	public EditionPattern getEditionPattern() {
-		return getScheme() != null ? getScheme().getEditionPattern() : null;
-	}
-
-	@Override
-	public BindingModel getBindingModel() {
-		return getEditionPattern().getBindingModel();
-	}
-
-	public DataBinding<Boolean> getConditional() {
-		if (conditional == null) {
-			conditional = new DataBinding<Boolean>(this, Boolean.class, DataBinding.BindingDefinitionType.GET);
-			conditional.setBindingName("conditional");
+		@Override
+		public VirtualModel getVirtualModel() {
+			if (getAction() != null) {
+				return getAction().getVirtualModel();
+			}
+			return null;
 		}
-		return conditional;
-	}
 
-	public void setConditional(DataBinding<Boolean> conditional) {
-		if (conditional != null) {
-			conditional.setOwner(this);
-			conditional.setDeclaredType(Boolean.class);
-			conditional.setBindingDefinitionType(DataBinding.BindingDefinitionType.GET);
-			conditional.setBindingName("conditional");
+		public boolean evaluateCondition(EditionSchemeAction action) {
+			if (getConditional().isValid()) {
+				try {
+					return getConditional().getBindingValue(action);
+				} catch (TypeMismatchException e) {
+					e.printStackTrace();
+				} catch (NullReferenceException e) {
+					e.printStackTrace();
+				} catch (InvocationTargetException e) {
+					e.printStackTrace();
+				}
+			}
+			return true;
 		}
-		this.conditional = conditional;
-	}
 
-}
+		@Override
+		public EditionPattern getEditionPattern() {
+			return getEditionScheme() != null ? getEditionScheme().getEditionPattern() : null;
+		}
+
+		@Override
+		public BindingModel getBindingModel() {
+			return getEditionPattern().getBindingModel();
+		}
+
+		@Override
+		public DataBinding<Boolean> getConditional() {
+			if (conditional == null) {
+				conditional = new DataBinding<Boolean>(this, Boolean.class, DataBinding.BindingDefinitionType.GET);
+				conditional.setBindingName("conditional");
+			}
+			return conditional;
+		}
+
+		@Override
+		public void setConditional(DataBinding<Boolean> conditional) {
+			if (conditional != null) {
+				conditional.setOwner(this);
+				conditional.setDeclaredType(Boolean.class);
+				conditional.setBindingDefinitionType(DataBinding.BindingDefinitionType.GET);
+				conditional.setBindingName("conditional");
+			}
+			this.conditional = conditional;
+		}
+
+	}
 }

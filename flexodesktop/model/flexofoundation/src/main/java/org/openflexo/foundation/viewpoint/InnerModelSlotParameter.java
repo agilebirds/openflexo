@@ -21,40 +21,47 @@ package org.openflexo.foundation.viewpoint;
 
 import org.openflexo.foundation.DataModification;
 import org.openflexo.foundation.technologyadapter.ModelSlot;
+import org.openflexo.model.annotations.Getter;
+import org.openflexo.model.annotations.ImplementationClass;
+import org.openflexo.model.annotations.ModelEntity;
+import org.openflexo.model.annotations.PropertyIdentifier;
+import org.openflexo.model.annotations.Setter;
+import org.openflexo.model.annotations.XMLElement;
 
 @ModelEntity(isAbstract = true)
 @ImplementationClass(InnerModelSlotParameter.InnerModelSlotParameterImpl.class)
-public abstract interface InnerModelSlotParameter<MS extends ModelSlot<?>> extends EditionSchemeParameter{
+public abstract interface InnerModelSlotParameter<MS extends ModelSlot<?>> extends EditionSchemeParameter {
 
-@PropertyIdentifier(type=ModelSlot.class)
-public static final String MODEL_SLOT_KEY = "modelSlot";
+	@PropertyIdentifier(type = ModelSlot.class)
+	public static final String MODEL_SLOT_KEY = "modelSlot";
 
-@Getter(value=MODEL_SLOT_KEY)
-@XMLElement
-public ModelSlot getModelSlot();
+	@Getter(value = MODEL_SLOT_KEY)
+	@XMLElement
+	public MS getModelSlot();
 
-@Setter(MODEL_SLOT_KEY)
-public void setModelSlot(ModelSlot modelSlot);
+	@Setter(MODEL_SLOT_KEY)
+	public void setModelSlot(MS modelSlot);
 
+	public static abstract class InnerModelSlotParameterImpl<MS extends ModelSlot<?>> extends EditionSchemeParameterImpl implements
+			InnerModelSlotParameter<MS> {
 
-public static abstract  abstract class InnerModelSlotParameter<MSImpl extends ModelSlot<?>> extends EditionSchemeParameterImpl implements InnerModelSlotParameter<MS
-{
+		private MS modelSlot;
 
-	private MS modelSlot;
+		public InnerModelSlotParameterImpl() {
+			super();
+		}
 
-	public InnerModelSlotParameterImpl() {
-		super();
+		@Override
+		public MS getModelSlot() {
+			return modelSlot;
+		}
+
+		@Override
+		public void setModelSlot(MS modelSlot) {
+			this.modelSlot = modelSlot;
+			setChanged();
+			notifyObservers(new DataModification("modelSlot", null, modelSlot));
+		}
+
 	}
-
-	public MS getModelSlot() {
-		return modelSlot;
-	}
-
-	public void setModelSlot(MS modelSlot) {
-		this.modelSlot = modelSlot;
-		setChanged();
-		notifyObservers(new DataModification("modelSlot", null, modelSlot));
-	}
-
-}
 }

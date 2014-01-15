@@ -31,110 +31,117 @@ import org.openflexo.foundation.technologyadapter.ModelSlot;
 import org.openflexo.foundation.view.action.EditionSchemeAction;
 import org.openflexo.foundation.viewpoint.FMLRepresentationContext.FMLRepresentationOutput;
 import org.openflexo.foundation.viewpoint.annotations.FIBPanel;
+import org.openflexo.model.annotations.Getter;
+import org.openflexo.model.annotations.ImplementationClass;
+import org.openflexo.model.annotations.ModelEntity;
+import org.openflexo.model.annotations.PropertyIdentifier;
+import org.openflexo.model.annotations.Setter;
+import org.openflexo.model.annotations.XMLAttribute;
+import org.openflexo.model.annotations.XMLElement;
 
 @FIBPanel("Fib/AssignationActionPanel.fib")
 @ModelEntity
 @ImplementationClass(AssignationAction.AssignationActionImpl.class)
 @XMLElement
-public interface AssignationAction<T> extends AssignableAction<ModelSlot<?>, T>{
+public interface AssignationAction<T> extends AssignableAction<ModelSlot<?>, T> {
 
-@PropertyIdentifier(type=DataBinding.class)
-public static final String VALUE_KEY = "value";
+	@PropertyIdentifier(type = DataBinding.class)
+	public static final String VALUE_KEY = "value";
 
-@Getter(value=VALUE_KEY)
-@XMLAttribute
-public DataBinding getValue();
+	@Getter(value = VALUE_KEY)
+	@XMLAttribute
+	public DataBinding<T> getValue();
 
-@Setter(VALUE_KEY)
-public void setValue(DataBinding value);
+	@Setter(VALUE_KEY)
+	public void setValue(DataBinding<T> value);
 
+	public static abstract class AssignationActionImpl<T> extends AssignableActionImpl<ModelSlot<?>, T> implements AssignationAction<T> {
 
-public static abstract  class AssignationAction<T>Impl extends AssignableAction<ModelSlot<?>, T>Impl implements AssignationAction<T>
-{
+		private static final Logger logger = Logger.getLogger(AssignationAction.class.getPackage().getName());
 
-	private static final Logger logger = Logger.getLogger(AssignationAction.class.getPackage().getName());
+		private DataBinding<T> value;
 
-	private DataBinding<Object> value;
-
-	public AssignationActionImpl() {
-		super();
-	}
-
-	@Override
-	public String getFMLRepresentation(FMLRepresentationContext context) {
-		FMLRepresentationOutput out = new FMLRepresentationOutput(context);
-		out.append(getAssignation().toString() + " = " + getValue().toString() + ";", context);
-		return out.toString();
-	}
-
-	@Override
-	public boolean isAssignationRequired() {
-		return true;
-	}
-
-	public Object getDeclaredObject(EditionSchemeAction action) {
-		try {
-			return getValue().getBindingValue(action);
-		} catch (TypeMismatchException e) {
-			e.printStackTrace();
-		} catch (NullReferenceException e) {
-			e.printStackTrace();
-		} catch (InvocationTargetException e) {
-			e.printStackTrace();
-		}
-		return null;
-	}
-
-	public DataBinding<Object> getValue() {
-		if (value == null) {
-			value = new DataBinding<Object>(this, Object.class, BindingDefinitionType.GET);
-			value.setBindingName("value");
-		}
-		return value;
-	}
-
-	public void setValue(DataBinding<Object> value) {
-		if (value != null) {
-			value.setOwner(this);
-			value.setBindingName("value");
-			value.setDeclaredType(Object.class);
-			value.setBindingDefinitionType(BindingDefinitionType.GET);
-		}
-		this.value = value;
-	}
-
-	@Override
-	public Type getAssignableType() {
-		if (getValue().isSet() && getValue().isValid()) {
-			return getValue().getAnalyzedType();
-		}
-		return Object.class;
-	}
-
-	@Override
-	public T performAction(EditionSchemeAction action) {
-		return (T) getDeclaredObject(action);
-	}
-
-	@Override
-	public void notifiedBindingChanged(DataBinding<?> dataBinding) {
-		if (dataBinding == getValue()) {
-			updateVariableAssignation();
-		}
-		super.notifiedBindingChanged(dataBinding);
-	}
-
-	public static class ValueBindingIsRequiredAndMustBeValid extends BindingIsRequiredAndMustBeValid<AssignationAction> {
-		public ValueBindingIsRequiredAndMustBeValid() {
-			super("'value'_binding_is_not_valid", AssignationAction.class);
+		public AssignationActionImpl() {
+			super();
 		}
 
 		@Override
-		public DataBinding<Object> getBinding(AssignationAction object) {
-			return object.getValue();
+		public String getFMLRepresentation(FMLRepresentationContext context) {
+			FMLRepresentationOutput out = new FMLRepresentationOutput(context);
+			out.append(getAssignation().toString() + " = " + getValue().toString() + ";", context);
+			return out.toString();
+		}
+
+		@Override
+		public boolean isAssignationRequired() {
+			return true;
+		}
+
+		public Object getDeclaredObject(EditionSchemeAction action) {
+			try {
+				return getValue().getBindingValue(action);
+			} catch (TypeMismatchException e) {
+				e.printStackTrace();
+			} catch (NullReferenceException e) {
+				e.printStackTrace();
+			} catch (InvocationTargetException e) {
+				e.printStackTrace();
+			}
+			return null;
+		}
+
+		@Override
+		public DataBinding<T> getValue() {
+			if (value == null) {
+				value = new DataBinding<T>(this, Object.class, BindingDefinitionType.GET);
+				value.setBindingName("value");
+			}
+			return value;
+		}
+
+		@Override
+		public void setValue(DataBinding<T> value) {
+			if (value != null) {
+				value.setOwner(this);
+				value.setBindingName("value");
+				value.setDeclaredType(Object.class);
+				value.setBindingDefinitionType(BindingDefinitionType.GET);
+			}
+			this.value = value;
+		}
+
+		@Override
+		public Type getAssignableType() {
+			if (getValue().isSet() && getValue().isValid()) {
+				return getValue().getAnalyzedType();
+			}
+			return Object.class;
+		}
+
+		@Override
+		public T performAction(EditionSchemeAction action) {
+			return (T) getDeclaredObject(action);
+		}
+
+		@Override
+		public void notifiedBindingChanged(DataBinding<?> dataBinding) {
+			if (dataBinding == getValue()) {
+				updateVariableAssignation();
+			}
+			super.notifiedBindingChanged(dataBinding);
+		}
+
+		public static class ValueBindingIsRequiredAndMustBeValid extends BindingIsRequiredAndMustBeValid<AssignationAction> {
+			public ValueBindingIsRequiredAndMustBeValid() {
+				super("'value'_binding_is_not_valid", AssignationAction.class);
+			}
+
+			@Override
+			public DataBinding<Object> getBinding(AssignationAction object) {
+				return object.getValue();
+			}
+
 		}
 
 	}
-
-}
 }

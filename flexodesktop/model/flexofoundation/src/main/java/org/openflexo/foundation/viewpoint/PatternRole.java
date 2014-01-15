@@ -93,6 +93,26 @@ public abstract interface PatternRole<T> extends EditionPatternObject {
 	@DeserializationFinalizer
 	public void finalizePatternRoleDeserialization();
 
+	public Type getType();
+
+	public String getPreciseType();
+
+	/**
+	 * Encodes the default deletion strategy
+	 * 
+	 * @return
+	 */
+	public abstract boolean defaultBehaviourIsToBeDeleted();
+
+	/**
+	 * Instanciate run-time-level object encoding reference to object (see {@link ActorReference})
+	 * 
+	 * @param object
+	 * @param epi
+	 * @return
+	 */
+	public abstract ActorReference<T> makeActorReference(T object, EditionPatternInstance epi);
+
 	public static abstract class PatternRoleImpl<T> extends EditionPatternObjectImpl implements PatternRole<T> {
 
 		// private static final Logger logger = Logger.getLogger(PatternRole.class.getPackage().getName());
@@ -161,8 +181,10 @@ public abstract interface PatternRole<T> extends EditionPatternObject {
 							: "null") + "][" + Integer.toHexString(hashCode()) + "]";
 		}
 
+		@Override
 		public abstract Type getType();
 
+		@Override
 		public abstract String getPreciseType();
 
 		@Override
@@ -178,26 +200,29 @@ public abstract interface PatternRole<T> extends EditionPatternObject {
 
 		// public abstract void setIsPrimaryRole(boolean isPrimary);
 
+		@Override
 		public abstract boolean defaultBehaviourIsToBeDeleted();
 
+		@Override
 		public abstract ActorReference<T> makeActorReference(T object, EditionPatternInstance epi);
 
 		// @Override
 		// public abstract String getLanguageRepresentation();
 
-		public static class PatternRoleMustHaveAName extends ValidationRule<PatternRoleMustHaveAName, PatternRole> {
-			public PatternRoleMustHaveAName() {
-				super(PatternRole.class, "pattern_role_must_have_a_name");
-			}
+	}
 
-			@Override
-			public ValidationIssue<PatternRoleMustHaveAName, PatternRole> applyValidation(PatternRole patternRole) {
-				if (StringUtils.isEmpty(patternRole.getPatternRoleName())) {
-					return new ValidationError<PatternRoleMustHaveAName, PatternRole>(this, patternRole, "pattern_role_has_no_name");
-				}
-				return null;
-			}
+	public static class PatternRoleMustHaveAName extends ValidationRule<PatternRoleMustHaveAName, PatternRole> {
+		public PatternRoleMustHaveAName() {
+			super(PatternRole.class, "pattern_role_must_have_a_name");
 		}
 
+		@Override
+		public ValidationIssue<PatternRoleMustHaveAName, PatternRole> applyValidation(PatternRole patternRole) {
+			if (StringUtils.isEmpty(patternRole.getPatternRoleName())) {
+				return new ValidationError<PatternRoleMustHaveAName, PatternRole>(this, patternRole, "pattern_role_has_no_name");
+			}
+			return null;
+		}
 	}
+
 }

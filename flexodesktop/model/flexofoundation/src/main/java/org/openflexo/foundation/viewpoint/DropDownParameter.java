@@ -22,25 +22,32 @@ package org.openflexo.foundation.viewpoint;
 import java.lang.reflect.Type;
 import java.util.Vector;
 
-public class DropDownParameter extends EditionSchemeParameter {
+import org.openflexo.model.annotations.ImplementationClass;
+import org.openflexo.model.annotations.ModelEntity;
+import org.openflexo.model.annotations.XMLElement;
 
-	public DropDownParameter() {
-		super();
+@ModelEntity
+@ImplementationClass(DropDownParameter.DropDownParameterImpl.class)
+@XMLElement
+public interface DropDownParameter extends EditionSchemeParameter {
+
+	public abstract class DropDownParameterImpl extends EditionSchemeParameterImpl implements DropDownParameter {
+
+		@Override
+		public Type getType() {
+			return Object.class;
+		};
+
+		@Override
+		public WidgetType getWidget() {
+			return WidgetType.DROPDOWN;
+		}
+
+		public Vector<String> getValueList() {
+			return null;
+		}
+
+		public String values;
 	}
 
-	@Override
-	public Type getType() {
-		return Object.class;
-	};
-
-	@Override
-	public WidgetType getWidget() {
-		return WidgetType.DROPDOWN;
-	}
-
-	public Vector<String> getValueList() {
-		return null;
-	}
-
-	public String values;
 }

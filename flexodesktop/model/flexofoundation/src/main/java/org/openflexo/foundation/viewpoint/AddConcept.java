@@ -28,73 +28,74 @@ import org.openflexo.foundation.technologyadapter.TypeAwareModelSlot;
 import org.openflexo.foundation.view.TypeAwareModelSlotInstance;
 import org.openflexo.foundation.view.action.EditionSchemeAction;
 import org.openflexo.logging.FlexoLogger;
+import org.openflexo.model.annotations.ImplementationClass;
+import org.openflexo.model.annotations.ModelEntity;
 
 @ModelEntity(isAbstract = true)
 @ImplementationClass(AddConcept.AddConceptImpl.class)
-public abstract interface AddConcept<MS extends TypeAwareModelSlot<?, ?>, T> extends AssignableAction<MS, T>{
+public abstract interface AddConcept<MS extends TypeAwareModelSlot<?, ?>, T> extends AssignableAction<MS, T> {
 
+	public static abstract class AddConceptImpl<MS extends TypeAwareModelSlot<?, ?>, T> extends AssignableActionImpl<MS, T> implements
+			AddConcept<MS, T> {
 
-public static abstract  abstract class AddConcept<MSImpl extends TypeAwareModelSlot<?, ?>, T> extends AssignableAction<MS, T>Impl implements AddConcept<MS
-{
+		protected static final Logger logger = FlexoLogger.getLogger(AddConcept.class.getPackage().getName());
 
-	protected static final Logger logger = FlexoLogger.getLogger(AddConcept.class.getPackage().getName());
-
-	public AddConceptImpl() {
-		super();
-	}
-
-	public abstract IFlexoOntologyClass getOntologyClass();
-
-	public abstract void setOntologyClass(IFlexoOntologyClass ontologyClass);
-
-	/*public IFlexoOntologyConcept getOntologyObject(FlexoProject project)
-	{
-		getCalc().loadWhenUnloaded();
-		if (StringUtils.isEmpty(getConceptURI())) return null;
-		return project.getOntologyLibrary().getOntologyObject(getConceptURI());
-	}*/
-
-	/*@Override
-	public R getPatternRole() {
-		try {
-			return super.getPatternRole();
-		} catch (ClassCastException e) {
-			logger.warning("Unexpected pattern role type");
-			setPatternRole(null);
-			return null;
+		public AddConceptImpl() {
+			super();
 		}
-	}*/
 
-	// FIXME: if we remove this useless code, some FIB won't work (see EditionPatternView.fib, inspect an AddIndividual)
-	// Need to be fixed in KeyValueProperty.java
-	/*@Override
-	public void setPatternRole(R patternRole) {
-		super.setPatternRole(patternRole);
-	}*/
+		public abstract IFlexoOntologyClass getOntologyClass();
 
-	@Override
-	public abstract Type getAssignableType();
+		public abstract void setOntologyClass(IFlexoOntologyClass ontologyClass);
 
-	/**
-	 * Overrides parent method by returning default model slot if model slot is not defined for this action
-	 */
-	@Override
-	public MS getModelSlot() {
-		MS returned = super.getModelSlot();
-		if (returned == null && getVirtualModel() != null) {
-			@SuppressWarnings("rawtypes")
-			List<TypeAwareModelSlot> msList = getVirtualModel().getModelSlots(TypeAwareModelSlot.class);
-			if (msList.size() > 0) {
-				return (MS) msList.get(0);
+		/*public IFlexoOntologyConcept getOntologyObject(FlexoProject project)
+		{
+			getCalc().loadWhenUnloaded();
+			if (StringUtils.isEmpty(getConceptURI())) return null;
+			return project.getOntologyLibrary().getOntologyObject(getConceptURI());
+		}*/
+
+		/*@Override
+		public R getPatternRole() {
+			try {
+				return super.getPatternRole();
+			} catch (ClassCastException e) {
+				logger.warning("Unexpected pattern role type");
+				setPatternRole(null);
+				return null;
 			}
+		}*/
+
+		// FIXME: if we remove this useless code, some FIB won't work (see EditionPatternView.fib, inspect an AddIndividual)
+		// Need to be fixed in KeyValueProperty.java
+		/*@Override
+		public void setPatternRole(R patternRole) {
+			super.setPatternRole(patternRole);
+		}*/
+
+		@Override
+		public abstract Type getAssignableType();
+
+		/**
+		 * Overrides parent method by returning default model slot if model slot is not defined for this action
+		 */
+		@Override
+		public MS getModelSlot() {
+			MS returned = super.getModelSlot();
+			if (returned == null && getVirtualModel() != null) {
+				@SuppressWarnings("rawtypes")
+				List<TypeAwareModelSlot> msList = getVirtualModel().getModelSlots(TypeAwareModelSlot.class);
+				if (msList.size() > 0) {
+					return (MS) msList.get(0);
+				}
+			}
+			return returned;
 		}
-		return returned;
-	}
 
-	@Override
-	public TypeAwareModelSlotInstance<?, ?, MS> getModelSlotInstance(EditionSchemeAction action) {
-		return (TypeAwareModelSlotInstance<?, ?, MS>) super.getModelSlotInstance(action);
-	}
+		@Override
+		public TypeAwareModelSlotInstance<?, ?, MS> getModelSlotInstance(EditionSchemeAction action) {
+			return (TypeAwareModelSlotInstance<?, ?, MS>) super.getModelSlotInstance(action);
+		}
 
-}
+	}
 }

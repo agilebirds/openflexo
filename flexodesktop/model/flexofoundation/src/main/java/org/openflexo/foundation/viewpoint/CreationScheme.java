@@ -20,20 +20,21 @@
 package org.openflexo.foundation.viewpoint;
 
 import org.openflexo.foundation.viewpoint.annotations.FIBPanel;
+import org.openflexo.model.annotations.ImplementationClass;
+import org.openflexo.model.annotations.ModelEntity;
+import org.openflexo.model.annotations.XMLElement;
 
 @FIBPanel("Fib/CreationSchemePanel.fib")
 @ModelEntity
 @ImplementationClass(CreationScheme.CreationSchemeImpl.class)
 @XMLElement
-public interface CreationScheme extends AbstractCreationScheme{
+public interface CreationScheme extends AbstractCreationScheme {
 
+	public static abstract class CreationSchemeImpl extends AbstractCreationSchemeImpl implements CreationScheme {
 
-public static abstract  class CreationSchemeImpl extends AbstractCreationSchemeImpl implements CreationScheme
-{
+		public CreationSchemeImpl() {
+			super();
+		}
 
-	public CreationSchemeImpl() {
-		super();
 	}
-
-}
 }

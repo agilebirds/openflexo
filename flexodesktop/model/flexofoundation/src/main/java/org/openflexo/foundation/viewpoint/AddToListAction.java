@@ -33,220 +33,229 @@ import org.openflexo.foundation.technologyadapter.ModelSlot;
 import org.openflexo.foundation.view.action.EditionSchemeAction;
 import org.openflexo.foundation.viewpoint.FMLRepresentationContext.FMLRepresentationOutput;
 import org.openflexo.foundation.viewpoint.annotations.FIBPanel;
+import org.openflexo.model.annotations.Getter;
+import org.openflexo.model.annotations.ImplementationClass;
+import org.openflexo.model.annotations.ModelEntity;
+import org.openflexo.model.annotations.PropertyIdentifier;
+import org.openflexo.model.annotations.Setter;
+import org.openflexo.model.annotations.XMLAttribute;
+import org.openflexo.model.annotations.XMLElement;
 
 @FIBPanel("Fib/AddToListActionPanel.fib")
 @ModelEntity
 @ImplementationClass(AddToListAction.AddToListActionImpl.class)
 @XMLElement
-public interface AddToListAction<MS extends ModelSlot<?>, T> extends EditionAction<MS, Object>{
+public interface AddToListAction<MS extends ModelSlot<?>, T> extends EditionAction<MS, Object> {
 
-@PropertyIdentifier(type=DataBinding.class)
-public static final String VALUE_KEY = "value";
-@PropertyIdentifier(type=DataBinding.class)
-public static final String LIST_KEY = "list";
+	@PropertyIdentifier(type = DataBinding.class)
+	public static final String VALUE_KEY = "value";
+	@PropertyIdentifier(type = DataBinding.class)
+	public static final String LIST_KEY = "list";
 
-@Getter(value=VALUE_KEY)
-@XMLAttribute
-public DataBinding getValue();
+	@Getter(value = VALUE_KEY)
+	@XMLAttribute
+	public DataBinding<T> getValue();
 
-@Setter(VALUE_KEY)
-public void setValue(DataBinding value);
+	@Setter(VALUE_KEY)
+	public void setValue(DataBinding<T> value);
 
+	@Getter(value = LIST_KEY)
+	@XMLAttribute
+	public DataBinding<List<T>> getList();
 
-@Getter(value=LIST_KEY)
-@XMLAttribute
-public DataBinding getList();
+	@Setter(LIST_KEY)
+	public void setList(DataBinding<List<T>> list);
 
-@Setter(LIST_KEY)
-public void setList(DataBinding list);
+	public static abstract class AddToListActionImpl<MS extends ModelSlot<?>, T> extends EditionActionImpl<MS, Object> implements
+			AddToListAction<MS, T> {
 
+		private static final Logger logger = Logger.getLogger(AddToListAction.class.getPackage().getName());
 
-public static abstract  class AddToListAction<MSImpl extends ModelSlot<?>, T> extends EditionAction<MS, Object>Impl implements AddToListAction<MS
-{
+		private DataBinding<T> value;
+		private DataBinding<List<T>> list;
 
-	private static final Logger logger = Logger.getLogger(AddToListAction.class.getPackage().getName());
-
-	private DataBinding<Object> value;
-	private DataBinding<Object> list;
-
-	public AddToListActionImpl() {
-		super();
-	}
-
-	@Override
-	public String getFMLRepresentation(FMLRepresentationContext context) {
-		FMLRepresentationOutput out = new FMLRepresentationOutput(context);
-		out.append(getList().toString() + " .add( " + getValue().toString() + ");", context);
-		return out.toString();
-	}
-
-	public boolean isListRequired() {
-		return true;
-	}
-
-	public boolean isValueRequired() {
-		return true;
-	}
-
-	public Object getDeclaredObject(EditionSchemeAction action) {
-		try {
-			return getValue().getBindingValue(action);
-		} catch (TypeMismatchException e) {
-			e.printStackTrace();
-		} catch (NullReferenceException e) {
-			e.printStackTrace();
-		} catch (InvocationTargetException e) {
-			e.printStackTrace();
+		public AddToListActionImpl() {
+			super();
 		}
-		return null;
-	}
 
-	public Type getListType() {
-		if (getValue().isSet() && getValue().isValid()) {
-			return new ParameterizedTypeImpl(List.class, getValueType());
+		@Override
+		public String getFMLRepresentation(FMLRepresentationContext context) {
+			FMLRepresentationOutput out = new FMLRepresentationOutput(context);
+			out.append(getList().toString() + " .add( " + getValue().toString() + ");", context);
+			return out.toString();
 		}
-		return new ParameterizedTypeImpl(List.class, Object.class);
-	}
 
-	public DataBinding<Object> getList() {
-
-		// TODO Xtof: when I will have found how to set same kind of Individual:<name> type in the XSD TA
-		if (list == null) {
-			list = new DataBinding<Object>(this, new ParameterizedTypeImpl(List.class, Object.class), BindingDefinitionType.GET);
-			list.setBindingName("list");
+		public boolean isListRequired() {
+			return true;
 		}
-		return list;
-	}
 
-	public void setList(DataBinding<Object> list) {
-
-		// TODO Xtof: when I will have found how to set same kind of Individual:<name> type in the XSD TA
-		if (list != null) {
-			list.setOwner(this);
-			list.setBindingName("list");
-			list.setDeclaredType(new ParameterizedTypeImpl(List.class, Object.class));
-			list.setBindingDefinitionType(BindingDefinitionType.GET);
+		public boolean isValueRequired() {
+			return true;
 		}
-		this.list = list;
-	}
 
-	public Type getValueType() {
-		if (getValue().isSet() && getValue().isValid()) {
-			return getValue().getAnalyzedType();
-		}
-		return Object.class;
-	}
-
-	public DataBinding<Object> getValue() {
-		if (value == null) {
-			value = new DataBinding<Object>(this, Object.class, BindingDefinitionType.GET);
-			value.setBindingName("value");
-		}
-		return value;
-	}
-
-	public void setValue(DataBinding<Object> value) {
-		if (value != null) {
-			value.setOwner(this);
-			value.setBindingName("value");
-			value.setDeclaredType(Object.class);
-			value.setBindingDefinitionType(BindingDefinitionType.GET);
-		}
-		this.value = value;
-	}
-
-	@Override
-	public Object performAction(EditionSchemeAction action) {
-		logger.info("performing AddToListAction");
-
-		DataBinding<Object> list = getList();
-		Object objToAdd = getDeclaredObject(action);
-
-		try {
-
-			if (list != null) {
-				Object listObj = list.getBindingValue(action);
-				if (listObj instanceof List) {
-					if (objToAdd != null) {
-						((List) listObj).add(objToAdd);
-					} else {
-						logger.warning("Won't add null object to list");
-
-					}
-				} else {
-					if (listObj == null) {
-						logger.warning("Cannot add object to a null target : " + list.getUnparsedBinding());
-					} else {
-						logger.warning("Cannot add object to a non list target : " + listObj.toString());
-					}
-					return null;
-				}
-
-			} else {
-				logger.warning("Cannot perform Assignation as assignation is null");
+		public T getDeclaredObject(EditionSchemeAction action) {
+			try {
+				return getValue().getBindingValue(action);
+			} catch (TypeMismatchException e) {
+				e.printStackTrace();
+			} catch (NullReferenceException e) {
+				e.printStackTrace();
+			} catch (InvocationTargetException e) {
+				e.printStackTrace();
 			}
-		} catch (TypeMismatchException e) {
-			// TODO Auto-generated catch block
-			e.printStackTrace();
-		} catch (NullReferenceException e) {
-			// TODO Auto-generated catch block
-			e.printStackTrace();
-		} catch (InvocationTargetException e) {
-			// TODO Auto-generated catch block
-			e.printStackTrace();
+			return null;
 		}
 
-		return objToAdd;
-	}
-
-	protected void updateVariableValue() {
-		value = new DataBinding<Object>("value", this, getValueType(), BindingDefinitionType.GET_SET);
-	}
-
-	protected void updateVariableList() {
-		list = new DataBinding<Object>("list", this, getListType(), BindingDefinitionType.GET_SET);
-	}
-
-	@Override
-	public void notifiedBindingChanged(DataBinding<?> dataBinding) {
-		if (dataBinding == getValue()) {
-			updateVariableValue();
-		}
-		if (dataBinding == getList()) {
-			updateVariableList();
-		}
-		super.notifiedBindingChanged(dataBinding);
-	}
-
-	public static class ValueBindingIsRequiredAndMustBeValid extends BindingIsRequiredAndMustBeValid<AddToListAction> {
-		public ValueBindingIsRequiredAndMustBeValid() {
-			super("'value'_binding_is_not_valid", AddToListAction.class);
+		public Type getListType() {
+			if (getValue().isSet() && getValue().isValid()) {
+				return new ParameterizedTypeImpl(List.class, getValueType());
+			}
+			return new ParameterizedTypeImpl(List.class, Object.class);
 		}
 
 		@Override
-		public DataBinding<Object> getBinding(AddToListAction object) {
-			return object.getValue();
-		}
+		public DataBinding<List<T>> getList() {
 
-	}
-
-	public static class ListBindingIsRequiredAndMustBeValid extends BindingIsRequiredAndMustBeValid<AddToListAction> {
-		public ListBindingIsRequiredAndMustBeValid() {
-			super("'list'_binding_is_not_valid", AddToListAction.class);
+			// TODO Xtof: when I will have found how to set same kind of Individual:<name> type in the XSD TA
+			if (list == null) {
+				list = new DataBinding<List<T>>(this, new ParameterizedTypeImpl(List.class, Object.class), BindingDefinitionType.GET);
+				list.setBindingName("list");
+			}
+			return list;
 		}
 
 		@Override
-		public DataBinding<Object> getBinding(AddToListAction object) {
-			return object.getList();
+		public void setList(DataBinding<List<T>> list) {
+
+			// TODO Xtof: when I will have found how to set same kind of Individual:<name> type in the XSD TA
+			if (list != null) {
+				list.setOwner(this);
+				list.setBindingName("list");
+				list.setDeclaredType(new ParameterizedTypeImpl(List.class, Object.class));
+				list.setBindingDefinitionType(BindingDefinitionType.GET);
+			}
+			this.list = list;
+		}
+
+		public Type getValueType() {
+			if (getValue().isSet() && getValue().isValid()) {
+				return getValue().getAnalyzedType();
+			}
+			return Object.class;
+		}
+
+		@Override
+		public DataBinding<T> getValue() {
+			if (value == null) {
+				value = new DataBinding<T>(this, Object.class, BindingDefinitionType.GET);
+				value.setBindingName("value");
+			}
+			return value;
+		}
+
+		@Override
+		public void setValue(DataBinding<T> value) {
+			if (value != null) {
+				value.setOwner(this);
+				value.setBindingName("value");
+				value.setDeclaredType(Object.class);
+				value.setBindingDefinitionType(BindingDefinitionType.GET);
+			}
+			this.value = value;
+		}
+
+		@Override
+		public Object performAction(EditionSchemeAction action) {
+			logger.info("performing AddToListAction");
+
+			DataBinding<List<T>> list = getList();
+			T objToAdd = getDeclaredObject(action);
+
+			try {
+
+				if (list != null) {
+					Object listObj = list.getBindingValue(action);
+					if (listObj instanceof List) {
+						if (objToAdd != null) {
+							((List) listObj).add(objToAdd);
+						} else {
+							logger.warning("Won't add null object to list");
+
+						}
+					} else {
+						if (listObj == null) {
+							logger.warning("Cannot add object to a null target : " + list.getUnparsedBinding());
+						} else {
+							logger.warning("Cannot add object to a non list target : " + listObj.toString());
+						}
+						return null;
+					}
+
+				} else {
+					logger.warning("Cannot perform Assignation as assignation is null");
+				}
+			} catch (TypeMismatchException e) {
+				// TODO Auto-generated catch block
+				e.printStackTrace();
+			} catch (NullReferenceException e) {
+				// TODO Auto-generated catch block
+				e.printStackTrace();
+			} catch (InvocationTargetException e) {
+				// TODO Auto-generated catch block
+				e.printStackTrace();
+			}
+
+			return objToAdd;
+		}
+
+		protected void updateVariableValue() {
+			value = new DataBinding<T>("value", this, getValueType(), BindingDefinitionType.GET_SET);
+		}
+
+		protected void updateVariableList() {
+			list = new DataBinding<List<T>>("list", this, getListType(), BindingDefinitionType.GET_SET);
+		}
+
+		@Override
+		public void notifiedBindingChanged(DataBinding<?> dataBinding) {
+			if (dataBinding == getValue()) {
+				updateVariableValue();
+			}
+			if (dataBinding == getList()) {
+				updateVariableList();
+			}
+			super.notifiedBindingChanged(dataBinding);
+		}
+
+		public static class ValueBindingIsRequiredAndMustBeValid extends BindingIsRequiredAndMustBeValid<AddToListAction> {
+			public ValueBindingIsRequiredAndMustBeValid() {
+				super("'value'_binding_is_not_valid", AddToListAction.class);
+			}
+
+			@Override
+			public DataBinding<Object> getBinding(AddToListAction object) {
+				return object.getValue();
+			}
+
+		}
+
+		public static class ListBindingIsRequiredAndMustBeValid extends BindingIsRequiredAndMustBeValid<AddToListAction> {
+			public ListBindingIsRequiredAndMustBeValid() {
+				super("'list'_binding_is_not_valid", AddToListAction.class);
+			}
+
+			@Override
+			public DataBinding<Object> getBinding(AddToListAction object) {
+				return object.getList();
+			}
+
+		}
+
+		@Override
+		public void finalizePerformAction(EditionSchemeAction action, Object initialContext) {
+			// TODO Auto-generated method stub
+
 		}
 
 	}
-
-	@Override
-	public void finalizePerformAction(EditionSchemeAction action, Object initialContext) {
-		// TODO Auto-generated method stub
-
-	}
-
-}
 }

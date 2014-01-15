@@ -31,6 +31,7 @@ import org.openflexo.foundation.action.NotImplementedException;
 import org.openflexo.foundation.viewpoint.EditionPattern;
 import org.openflexo.foundation.viewpoint.ViewPointObject;
 import org.openflexo.foundation.viewpoint.VirtualModel;
+import org.openflexo.foundation.viewpoint.VirtualModelModelFactory;
 
 public class AddEditionPattern extends FlexoAction<AddEditionPattern, VirtualModel, ViewPointObject> {
 
@@ -76,7 +77,9 @@ public class AddEditionPattern extends FlexoAction<AddEditionPattern, VirtualMod
 	protected void doAction(Object context) throws NotImplementedException, InvalidParameterException {
 		logger.info("Add new edition pattern");
 
-		_newEditionPattern = new EditionPattern();
+		VirtualModelModelFactory factory = getFocusedObject().getVirtualModelFactory();
+
+		_newEditionPattern = factory.newEditionPattern();
 		_newEditionPattern.setName(getNewEditionPatternName());
 		getFocusedObject().addToEditionPatterns(_newEditionPattern);
 	}

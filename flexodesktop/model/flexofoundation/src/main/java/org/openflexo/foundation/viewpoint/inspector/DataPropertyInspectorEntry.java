@@ -21,6 +21,13 @@ package org.openflexo.foundation.viewpoint.inspector;
 
 import org.openflexo.foundation.ontology.BuiltInDataType;
 import org.openflexo.foundation.ontology.IFlexoOntologyDataProperty;
+import org.openflexo.model.annotations.Getter;
+import org.openflexo.model.annotations.ImplementationClass;
+import org.openflexo.model.annotations.ModelEntity;
+import org.openflexo.model.annotations.PropertyIdentifier;
+import org.openflexo.model.annotations.Setter;
+import org.openflexo.model.annotations.XMLAttribute;
+import org.openflexo.model.annotations.XMLElement;
 
 /**
  * Represents an inspector entry for an ontology object property
@@ -30,46 +37,46 @@ import org.openflexo.foundation.ontology.IFlexoOntologyDataProperty;
  */
 @ModelEntity
 @ImplementationClass(DataPropertyInspectorEntry.DataPropertyInspectorEntryImpl.class)
-@XMLElement(xmlTag="DataProperty")
-public interface DataPropertyInspectorEntry extends PropertyInspectorEntry{
+@XMLElement(xmlTag = "DataProperty")
+public interface DataPropertyInspectorEntry extends PropertyInspectorEntry {
 
-@PropertyIdentifier(type=BuiltInDataType.class)
-public static final String DATA_TYPE_KEY = "dataType";
+	@PropertyIdentifier(type = BuiltInDataType.class)
+	public static final String DATA_TYPE_KEY = "dataType";
 
-@Getter(value=DATA_TYPE_KEY)
-@XMLAttribute
-public BuiltInDataType getDataType();
+	@Getter(value = DATA_TYPE_KEY)
+	@XMLAttribute
+	public BuiltInDataType getDataType();
 
-@Setter(DATA_TYPE_KEY)
-public void setDataType(BuiltInDataType dataType);
+	@Setter(DATA_TYPE_KEY)
+	public void setDataType(BuiltInDataType dataType);
 
+	public static abstract class DataPropertyInspectorEntryImpl extends PropertyInspectorEntryImpl implements DataPropertyInspectorEntry {
 
-public static abstract  class DataPropertyInspectorEntryImpl extends PropertyInspectorEntryImpl implements DataPropertyInspectorEntry
-{
+		private BuiltInDataType dataType;
 
-	private BuiltInDataType dataType;
+		public DataPropertyInspectorEntryImpl() {
+			super();
+		}
 
-	public DataPropertyInspectorEntryImpl() {
-		super();
+		@Override
+		public Class getDefaultDataClass() {
+			return IFlexoOntologyDataProperty.class;
+		}
+
+		@Override
+		public String getWidgetName() {
+			return "DataPropertySelector";
+		}
+
+		@Override
+		public BuiltInDataType getDataType() {
+			return dataType;
+		}
+
+		@Override
+		public void setDataType(BuiltInDataType dataType) {
+			this.dataType = dataType;
+		}
+
 	}
-
-	@Override
-	public Class getDefaultDataClass() {
-		return IFlexoOntologyDataProperty.class;
-	}
-
-	@Override
-	public String getWidgetName() {
-		return "DataPropertySelector";
-	}
-
-	public BuiltInDataType getDataType() {
-		return dataType;
-	}
-
-	public void setDataType(BuiltInDataType dataType) {
-		this.dataType = dataType;
-	}
-
-}
 }

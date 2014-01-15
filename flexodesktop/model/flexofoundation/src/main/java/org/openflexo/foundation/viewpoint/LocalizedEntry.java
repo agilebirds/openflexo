@@ -19,10 +19,7 @@
  */
 package org.openflexo.foundation.viewpoint;
 
-import java.util.Collection;
-
 import org.openflexo.antar.binding.BindingModel;
-import org.openflexo.foundation.validation.Validable;
 import org.openflexo.model.annotations.Getter;
 import org.openflexo.model.annotations.ImplementationClass;
 import org.openflexo.model.annotations.ModelEntity;
@@ -146,9 +143,5 @@ public interface LocalizedEntry extends ViewPointObject {
 			return "<not_implemented:" + getStringRepresentation() + ">";
 		}
 
-		@Override
-		public Collection<? extends Validable> getEmbeddedValidableObjects() {
-			return null;
-		}
 	}
 }

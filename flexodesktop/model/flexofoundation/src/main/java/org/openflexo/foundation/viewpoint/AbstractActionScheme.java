@@ -26,77 +26,86 @@ import org.openflexo.antar.binding.DataBinding;
 import org.openflexo.antar.expr.NullReferenceException;
 import org.openflexo.antar.expr.TypeMismatchException;
 import org.openflexo.foundation.view.EditionPatternInstance;
+import org.openflexo.model.annotations.Getter;
+import org.openflexo.model.annotations.ImplementationClass;
+import org.openflexo.model.annotations.ModelEntity;
+import org.openflexo.model.annotations.PropertyIdentifier;
+import org.openflexo.model.annotations.Setter;
+import org.openflexo.model.annotations.XMLAttribute;
 
 @ModelEntity(isAbstract = true)
 @ImplementationClass(AbstractActionScheme.AbstractActionSchemeImpl.class)
-public abstract interface AbstractActionScheme extends EditionScheme{
+public abstract interface AbstractActionScheme extends EditionScheme {
 
-@PropertyIdentifier(type=DataBinding.class)
-public static final String CONDITIONAL_KEY = "conditional";
+	@PropertyIdentifier(type = DataBinding.class)
+	public static final String CONDITIONAL_KEY = "conditional";
 
-@Getter(value=CONDITIONAL_KEY)
-@XMLAttribute
-public DataBinding getConditional();
+	@Getter(value = CONDITIONAL_KEY)
+	@XMLAttribute
+	public DataBinding<Boolean> getConditional();
 
-@Setter(CONDITIONAL_KEY)
-public void setConditional(DataBinding conditional);
+	@Setter(CONDITIONAL_KEY)
+	public void setConditional(DataBinding<Boolean> conditional);
 
+	public boolean evaluateCondition(EditionPatternInstance editionPatternInstance);
 
-public static abstract  abstract class AbstractActionSchemeImpl extends EditionSchemeImpl implements AbstractActionScheme
-{
+	public static abstract class AbstractActionSchemeImpl extends EditionSchemeImpl implements AbstractActionScheme {
 
-	private DataBinding<Boolean> conditional;
+		private DataBinding<Boolean> conditional;
 
-	public AbstractActionSchemeImpl() {
-		super();
-	}
-
-	public DataBinding<Boolean> getConditional() {
-		if (conditional == null) {
-			conditional = new DataBinding<Boolean>(this, Boolean.class, DataBinding.BindingDefinitionType.GET);
-			conditional.setBindingName("conditional");
+		public AbstractActionSchemeImpl() {
+			super();
 		}
-		return conditional;
-	}
 
-	public void setConditional(DataBinding<Boolean> conditional) {
-		if (conditional != null) {
-			conditional.setOwner(this);
-			conditional.setDeclaredType(Boolean.class);
-			conditional.setBindingDefinitionType(DataBinding.BindingDefinitionType.GET);
-			conditional.setBindingName("conditional");
-		}
-		this.conditional = conditional;
-	}
-
-	public boolean evaluateCondition(EditionPatternInstance editionPatternInstance) {
-		if (getConditional().isSet() && getConditional().isValid()) {
-			try {
-				Boolean returned = getConditional().getBindingValue(editionPatternInstance);
-				return returned;
-			} catch (TypeMismatchException e) {
-				e.printStackTrace();
-			} catch (NullReferenceException e) {
-				e.printStackTrace();
-			} catch (InvocationTargetException e) {
-				e.printStackTrace();
+		@Override
+		public DataBinding<Boolean> getConditional() {
+			if (conditional == null) {
+				conditional = new DataBinding<Boolean>(this, Boolean.class, DataBinding.BindingDefinitionType.GET);
+				conditional.setBindingName("conditional");
 			}
+			return conditional;
 		}
-		return true;
-	}
 
-	@Override
-	protected void appendContextualBindingVariables(BindingModel bindingModel) {
-		super.appendContextualBindingVariables(bindingModel);
-		/*bindingModel.addToBindingVariables(new EditionPatternPathElement<AbstractActionScheme>(EditionScheme.THIS, getEditionPattern(),
-				this));*/
-	}
+		@Override
+		public void setConditional(DataBinding<Boolean> conditional) {
+			if (conditional != null) {
+				conditional.setOwner(this);
+				conditional.setDeclaredType(Boolean.class);
+				conditional.setBindingDefinitionType(DataBinding.BindingDefinitionType.GET);
+				conditional.setBindingName("conditional");
+			}
+			this.conditional = conditional;
+		}
 
-	@Override
-	public void setEditionPattern(EditionPattern editionPattern) {
-		super.setEditionPattern(editionPattern);
-		updateBindingModels();
-	}
+		@Override
+		public boolean evaluateCondition(EditionPatternInstance editionPatternInstance) {
+			if (getConditional().isSet() && getConditional().isValid()) {
+				try {
+					Boolean returned = getConditional().getBindingValue(editionPatternInstance);
+					return returned;
+				} catch (TypeMismatchException e) {
+					e.printStackTrace();
+				} catch (NullReferenceException e) {
+					e.printStackTrace();
+				} catch (InvocationTargetException e) {
+					e.printStackTrace();
+				}
+			}
+			return true;
+		}
 
-}
+		@Override
+		protected void appendContextualBindingVariables(BindingModel bindingModel) {
+			super.appendContextualBindingVariables(bindingModel);
+			/*bindingModel.addToBindingVariables(new EditionPatternPathElement<AbstractActionScheme>(EditionScheme.THIS, getEditionPattern(),
+					this));*/
+		}
+
+		@Override
+		public void setEditionPattern(EditionPattern editionPattern) {
+			super.setEditionPattern(editionPattern);
+			updateBindingModels();
+		}
+
+	}
 }

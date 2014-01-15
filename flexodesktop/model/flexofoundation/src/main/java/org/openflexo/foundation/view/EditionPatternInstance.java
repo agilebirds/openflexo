@@ -118,19 +118,20 @@ public class EditionPatternInstance extends VirtualModelInstanceObject implement
 		// logger.info(">>>>>>>> EditionPatternInstance "+Integer.toHexString(hashCode())+" getPatternActor() actors="+actors);
 		ActorReference<T> actorReference = (ActorReference<T>) actors.get(patternRole);
 		// Pragmatic attempt to fix "inheritance issue...."
-		EditionPattern parentEP = this.getEditionPattern().getParentEditionPattern();
-		while (actorReference == null && parentEP != null) {
-			if (parentEP != null) {
-				PatternRole ppPatternRole = parentEP.getPatternRole(patternRole.getName());
-				if (ppPatternRole == patternRole) {
-					patternRole = this.getEditionPattern().getPatternRole(ppPatternRole.getName());
-					actorReference = (ActorReference<T>) actors.get(patternRole);
+		for (EditionPattern parentEP : this.getEditionPattern().getParentEditionPatterns()) {
+			while (actorReference == null && parentEP != null) {
+				if (parentEP != null) {
+					PatternRole ppPatternRole = parentEP.getPatternRole(patternRole.getName());
+					if (ppPatternRole == patternRole) {
+						patternRole = (PatternRole<T>) this.getEditionPattern().getPatternRole(ppPatternRole.getName());
+						actorReference = (ActorReference<T>) actors.get(patternRole);
+					}
 				}
-			}
-			if (actorReference == null) {
-				parentEP = parentEP.getParentEditionPattern();
-			}
+				if (actorReference != null) {
+					break;
+				}
 
+			}
 		}
 		if (actorReference != null) {
 			return actorReference.retrieveObject();

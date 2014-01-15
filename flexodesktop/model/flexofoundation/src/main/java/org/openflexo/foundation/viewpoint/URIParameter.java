@@ -31,166 +31,175 @@ import org.openflexo.antar.expr.TypeMismatchException;
 import org.openflexo.foundation.technologyadapter.TypeAwareModelSlot;
 import org.openflexo.foundation.view.TypeAwareModelSlotInstance;
 import org.openflexo.foundation.view.action.EditionSchemeAction;
+import org.openflexo.model.annotations.Getter;
+import org.openflexo.model.annotations.ImplementationClass;
+import org.openflexo.model.annotations.ModelEntity;
+import org.openflexo.model.annotations.PropertyIdentifier;
+import org.openflexo.model.annotations.Setter;
+import org.openflexo.model.annotations.XMLAttribute;
+import org.openflexo.model.annotations.XMLElement;
 import org.openflexo.toolbox.StringUtils;
 
 @ModelEntity
 @ImplementationClass(URIParameter.URIParameterImpl.class)
 @XMLElement
-public interface URIParameter extends InnerModelSlotParameter<TypeAwareModelSlot<?, ?>>{
+public interface URIParameter extends InnerModelSlotParameter<TypeAwareModelSlot<?, ?>> {
 
-@PropertyIdentifier(type=DataBinding.class)
-public static final String BASE_URI_KEY = "baseURI";
+	@PropertyIdentifier(type = DataBinding.class)
+	public static final String BASE_URI_KEY = "baseURI";
 
-@Getter(value=BASE_URI_KEY)
-@XMLAttribute(xmlTag="base")
-public DataBinding getBaseURI();
+	@Getter(value = BASE_URI_KEY)
+	@XMLAttribute(xmlTag = "base")
+	public DataBinding<String> getBaseURI();
 
-@Setter(BASE_URI_KEY)
-public void setBaseURI(DataBinding baseURI);
+	@Setter(BASE_URI_KEY)
+	public void setBaseURI(DataBinding<String> baseURI);
 
+	public static abstract class URIParameterImpl extends InnerModelSlotParameterImpl<TypeAwareModelSlot<?, ?>> implements URIParameter {
 
-public static abstract  class URIParameterImpl extends InnerModelSlotParameter<TypeAwareModelSlot<?, ?>>Impl implements URIParameter
-{
+		private DataBinding<String> baseURI;
 
-	private DataBinding<String> baseURI;
+		public URIParameterImpl() {
+			super();
+		}
 
-	public URIParameterImpl() {
-		super();
-	}
-
-	@Override
-	public TypeAwareModelSlot<?, ?> getModelSlot() {
-		TypeAwareModelSlot<?, ?> returned = super.getModelSlot();
-		if (returned != null) {
-			return returned;
-		} else {
-			if (getEditionScheme() != null && getEditionScheme().getVirtualModel() != null) {
-				if (getEditionScheme().getVirtualModel().getModelSlots(TypeAwareModelSlot.class).size() > 0) {
-					return getEditionScheme().getVirtualModel().getModelSlots(TypeAwareModelSlot.class).get(0);
+		@Override
+		public TypeAwareModelSlot<?, ?> getModelSlot() {
+			TypeAwareModelSlot<?, ?> returned = super.getModelSlot();
+			if (returned != null) {
+				return returned;
+			} else {
+				if (getEditionScheme() != null && getEditionScheme().getVirtualModel() != null) {
+					if (getEditionScheme().getVirtualModel().getModelSlots(TypeAwareModelSlot.class).size() > 0) {
+						return getEditionScheme().getVirtualModel().getModelSlots(TypeAwareModelSlot.class).get(0);
+					}
 				}
 			}
-		}
-		return null;
-	}
-
-	public DataBinding<String> getBaseURI() {
-		if (baseURI == null) {
-			baseURI = new DataBinding<String>(this, String.class, BindingDefinitionType.GET);
-			baseURI.setBindingName("baseURI");
-		}
-		return baseURI;
-	}
-
-	public void setBaseURI(DataBinding<String> baseURI) {
-		if (baseURI != null) {
-			baseURI.setOwner(this);
-			baseURI.setBindingName("baseURI");
-			baseURI.setDeclaredType(String.class);
-			baseURI.setBindingDefinitionType(BindingDefinitionType.GET);
-		}
-		this.baseURI = baseURI;
-	}
-
-	@Override
-	public Type getType() {
-		return String.class;
-	}
-
-	@Override
-	public WidgetType getWidget() {
-		return WidgetType.URI;
-	}
-
-	@Override
-	public boolean getIsRequired() {
-		return true;
-	}
-
-	@Override
-	public boolean isValid(EditionSchemeAction action, Object value) {
-		if (!(value instanceof String)) {
-			return false;
-		}
-
-		String proposedURI = (String) value;
-
-		if (StringUtils.isEmpty(proposedURI)) {
-			return false;
-		}
-		if (proposalIsNotUnique(action, proposedURI)) {
-			// declared_uri_must_be_unique_please_choose_an_other_uri
-			return false;
-		} else if (proposalIsWellFormed(action, proposedURI) == false) {
-			// declared_uri_is_not_well_formed_please_choose_an_other_uri
-			return false;
-		}
-
-		return true;
-	}
-
-	private String getActionOntologyURI(EditionSchemeAction<?, ?, ?> action) {
-		return action.getProject().getURI();
-	}
-
-	private boolean proposalIsNotUnique(EditionSchemeAction<?, ?, ?> action, String uriProposal) {
-		return action.getProject().isDuplicatedURI(getActionOntologyURI(action), uriProposal);
-	}
-
-	private boolean proposalIsWellFormed(EditionSchemeAction<?, ?, ?> action, String uriProposal) {
-		return action.getProject().testValidURI(getActionOntologyURI(action), uriProposal);
-	}
-
-	@Override
-	public Object getDefaultValue(EditionSchemeAction<?, ?, ?> action) {
-		if (getBaseURI().isValid()) {
-			String baseProposal = null;
-			try {
-				baseProposal = getBaseURI().getBindingValue(action);
-			} catch (TypeMismatchException e) {
-				e.printStackTrace();
-			} catch (NullReferenceException e) {
-				e.printStackTrace();
-			} catch (InvocationTargetException e) {
-				e.printStackTrace();
-			}
-			if (baseProposal == null) {
-				return null;
-			}
-			TypeAwareModelSlot modelSlot = getModelSlot();
-
-			return modelSlot.generateUniqueURIName(
-					(TypeAwareModelSlotInstance) action.getVirtualModelInstance().getModelSlotInstance(modelSlot), baseProposal);
-
-			/*baseProposal = JavaUtils.getClassName(baseProposal);
-			String proposal = baseProposal;
-			Integer i = null;
-			while (proposalIsNotUnique(action, proposal)) {
-				if (i == null) {
-					i = 1;
-				} else {
-					i++;
-				}
-				proposal = baseProposal + i;
-			}
-			System.out.println("Generate URI " + proposal);
-			return proposal;*/
-		}
-		return null;
-	}
-
-	public Vector<EditionSchemeParameter> getDependancies() {
-		if (getBaseURI().isSet() && getBaseURI().isValid()) {
-			Vector<EditionSchemeParameter> returned = new Vector<EditionSchemeParameter>();
-			for (BindingValue bv : getBaseURI().getExpression().getAllBindingValues()) {
-				EditionSchemeParameter p = getScheme().getParameter(bv.getVariableName());
-				if (p != null) {
-					returned.add(p);
-				}
-			}
-			return returned;
-		} else {
 			return null;
 		}
+
+		@Override
+		public DataBinding<String> getBaseURI() {
+			if (baseURI == null) {
+				baseURI = new DataBinding<String>(this, String.class, BindingDefinitionType.GET);
+				baseURI.setBindingName("baseURI");
+			}
+			return baseURI;
+		}
+
+		@Override
+		public void setBaseURI(DataBinding<String> baseURI) {
+			if (baseURI != null) {
+				baseURI.setOwner(this);
+				baseURI.setBindingName("baseURI");
+				baseURI.setDeclaredType(String.class);
+				baseURI.setBindingDefinitionType(BindingDefinitionType.GET);
+			}
+			this.baseURI = baseURI;
+		}
+
+		@Override
+		public Type getType() {
+			return String.class;
+		}
+
+		@Override
+		public WidgetType getWidget() {
+			return WidgetType.URI;
+		}
+
+		@Override
+		public boolean getIsRequired() {
+			return true;
+		}
+
+		@Override
+		public boolean isValid(EditionSchemeAction action, Object value) {
+			if (!(value instanceof String)) {
+				return false;
+			}
+
+			String proposedURI = (String) value;
+
+			if (StringUtils.isEmpty(proposedURI)) {
+				return false;
+			}
+			if (proposalIsNotUnique(action, proposedURI)) {
+				// declared_uri_must_be_unique_please_choose_an_other_uri
+				return false;
+			} else if (proposalIsWellFormed(action, proposedURI) == false) {
+				// declared_uri_is_not_well_formed_please_choose_an_other_uri
+				return false;
+			}
+
+			return true;
+		}
+
+		private String getActionOntologyURI(EditionSchemeAction<?, ?, ?> action) {
+			return action.getProject().getURI();
+		}
+
+		private boolean proposalIsNotUnique(EditionSchemeAction<?, ?, ?> action, String uriProposal) {
+			return action.getProject().isDuplicatedURI(getActionOntologyURI(action), uriProposal);
+		}
+
+		private boolean proposalIsWellFormed(EditionSchemeAction<?, ?, ?> action, String uriProposal) {
+			return action.getProject().testValidURI(getActionOntologyURI(action), uriProposal);
+		}
+
+		@Override
+		public Object getDefaultValue(EditionSchemeAction<?, ?, ?> action) {
+			if (getBaseURI().isValid()) {
+				String baseProposal = null;
+				try {
+					baseProposal = getBaseURI().getBindingValue(action);
+				} catch (TypeMismatchException e) {
+					e.printStackTrace();
+				} catch (NullReferenceException e) {
+					e.printStackTrace();
+				} catch (InvocationTargetException e) {
+					e.printStackTrace();
+				}
+				if (baseProposal == null) {
+					return null;
+				}
+				TypeAwareModelSlot modelSlot = getModelSlot();
+
+				return modelSlot.generateUniqueURIName(
+						(TypeAwareModelSlotInstance) action.getVirtualModelInstance().getModelSlotInstance(modelSlot), baseProposal);
+
+				/*baseProposal = JavaUtils.getClassName(baseProposal);
+				String proposal = baseProposal;
+				Integer i = null;
+				while (proposalIsNotUnique(action, proposal)) {
+					if (i == null) {
+						i = 1;
+					} else {
+						i++;
+					}
+					proposal = baseProposal + i;
+				}
+				System.out.println("Generate URI " + proposal);
+				return proposal;*/
+			}
+			return null;
+		}
+
+		public Vector<EditionSchemeParameter> getDependancies() {
+			if (getBaseURI().isSet() && getBaseURI().isValid()) {
+				Vector<EditionSchemeParameter> returned = new Vector<EditionSchemeParameter>();
+				for (BindingValue bv : getBaseURI().getExpression().getAllBindingValues()) {
+					EditionSchemeParameter p = getScheme().getParameter(bv.getVariableName());
+					if (p != null) {
+						returned.add(p);
+					}
+				}
+				return returned;
+			} else {
+				return null;
+			}
+		}
+
 	}
 
 	public static class BaseURIBindingIsRequiredAndMustBeValid extends BindingIsRequiredAndMustBeValid<URIParameter> {
@@ -205,5 +214,4 @@ public static abstract  class URIParameterImpl extends InnerModelSlotParameter<T
 
 	}
 
-}
 }

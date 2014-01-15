@@ -32,110 +32,122 @@ import org.openflexo.foundation.ontology.IFlexoOntologyDataProperty;
 import org.openflexo.foundation.ontology.IFlexoOntologyObjectProperty;
 import org.openflexo.foundation.ontology.IFlexoOntologyStructuralProperty;
 import org.openflexo.foundation.view.action.EditionSchemeAction;
+import org.openflexo.foundation.viewpoint.ListParameter.ListParameterImpl.ListType;
+import org.openflexo.model.annotations.Getter;
+import org.openflexo.model.annotations.ImplementationClass;
+import org.openflexo.model.annotations.ModelEntity;
+import org.openflexo.model.annotations.PropertyIdentifier;
+import org.openflexo.model.annotations.Setter;
+import org.openflexo.model.annotations.XMLAttribute;
+import org.openflexo.model.annotations.XMLElement;
 
 @ModelEntity
 @ImplementationClass(ListParameter.ListParameterImpl.class)
 @XMLElement
-public interface ListParameter extends EditionSchemeParameter{
+public interface ListParameter extends EditionSchemeParameter {
 
-@PropertyIdentifier(type=ListType.class)
-public static final String LIST_TYPE_KEY = "listType";
-@PropertyIdentifier(type=DataBinding.class)
-public static final String LIST_KEY = "list";
+	@PropertyIdentifier(type = ListType.class)
+	public static final String LIST_TYPE_KEY = "listType";
+	@PropertyIdentifier(type = DataBinding.class)
+	public static final String LIST_KEY = "list";
 
-@Getter(value=LIST_TYPE_KEY)
-@XMLAttribute
-public ListType getListType();
+	@Getter(value = LIST_TYPE_KEY)
+	@XMLAttribute
+	public ListType getListType();
 
-@Setter(LIST_TYPE_KEY)
-public void setListType(ListType listType);
+	@Setter(LIST_TYPE_KEY)
+	public void setListType(ListType listType);
 
+	@Getter(value = LIST_KEY)
+	@XMLAttribute
+	public DataBinding<List<?>> getList();
 
-@Getter(value=LIST_KEY)
-@XMLAttribute
-public DataBinding getList();
+	@Setter(LIST_KEY)
+	public void setList(DataBinding<List<?>> list);
 
-@Setter(LIST_KEY)
-public void setList(DataBinding list);
+	public Object getList(EditionSchemeAction<?, ?, ?> action);
 
+	public static abstract class ListParameterImpl extends EditionSchemeParameterImpl implements ListParameter {
 
-public static abstract  class ListParameterImpl extends EditionSchemeParameterImpl implements ListParameter
-{
-
-	public enum ListType {
-		String, Property, ObjectProperty, DataProperty
-	}
-
-	private ListType listType;
-	private DataBinding<List<?>> list;
-
-	public ListParameterImpl() {
-		super();
-	}
-
-	@Override
-	public Type getType() {
-		if (getListType() == null) {
-			return List.class;
+		public enum ListType {
+			String, Property, ObjectProperty, DataProperty
 		}
-		switch (getListType()) {
-		case String:
-			return new ParameterizedTypeImpl(List.class, String.class);
-		case Property:
-			return new ParameterizedTypeImpl(List.class, IFlexoOntologyStructuralProperty.class);
-		case ObjectProperty:
-			return new ParameterizedTypeImpl(List.class, IFlexoOntologyObjectProperty.class);
-		case DataProperty:
-			return new ParameterizedTypeImpl(List.class, IFlexoOntologyDataProperty.class);
-		default:
-			return List.class;
+
+		private ListType listType;
+		private DataBinding<List<?>> list;
+
+		public ListParameterImpl() {
+			super();
 		}
-	};
 
-	@Override
-	public WidgetType getWidget() {
-		return WidgetType.LIST;
-	}
-
-	public ListType getListType() {
-		return listType;
-	}
-
-	public void setListType(ListType listType) {
-		this.listType = listType;
-	}
-
-	public DataBinding<List<?>> getList() {
-		if (list == null) {
-			list = new DataBinding<List<?>>(this, getType(), BindingDefinitionType.GET);
-		}
-		return list;
-	}
-
-	public void setList(DataBinding<List<?>> list) {
-		if (list != null) {
-			list.setOwner(this);
-			list.setBindingName("list");
-			list.setDeclaredType(getType());
-			list.setBindingDefinitionType(BindingDefinitionType.GET);
-		}
-		this.list = list;
-	}
-
-	public Object getList(EditionSchemeAction<?, ?, ?> action) {
-		if (getList().isValid()) {
-			try {
-				return getList().getBindingValue(action);
-			} catch (TypeMismatchException e) {
-				e.printStackTrace();
-			} catch (NullReferenceException e) {
-				e.printStackTrace();
-			} catch (InvocationTargetException e) {
-				e.printStackTrace();
+		@Override
+		public Type getType() {
+			if (getListType() == null) {
+				return List.class;
 			}
-		}
-		return null;
-	}
+			switch (getListType()) {
+			case String:
+				return new ParameterizedTypeImpl(List.class, String.class);
+			case Property:
+				return new ParameterizedTypeImpl(List.class, IFlexoOntologyStructuralProperty.class);
+			case ObjectProperty:
+				return new ParameterizedTypeImpl(List.class, IFlexoOntologyObjectProperty.class);
+			case DataProperty:
+				return new ParameterizedTypeImpl(List.class, IFlexoOntologyDataProperty.class);
+			default:
+				return List.class;
+			}
+		};
 
-}
+		@Override
+		public WidgetType getWidget() {
+			return WidgetType.LIST;
+		}
+
+		@Override
+		public ListType getListType() {
+			return listType;
+		}
+
+		@Override
+		public void setListType(ListType listType) {
+			this.listType = listType;
+		}
+
+		@Override
+		public DataBinding<List<?>> getList() {
+			if (list == null) {
+				list = new DataBinding<List<?>>(this, getType(), BindingDefinitionType.GET);
+			}
+			return list;
+		}
+
+		@Override
+		public void setList(DataBinding<List<?>> list) {
+			if (list != null) {
+				list.setOwner(this);
+				list.setBindingName("list");
+				list.setDeclaredType(getType());
+				list.setBindingDefinitionType(BindingDefinitionType.GET);
+			}
+			this.list = list;
+		}
+
+		@Override
+		public Object getList(EditionSchemeAction<?, ?, ?> action) {
+			if (getList().isValid()) {
+				try {
+					return getList().getBindingValue(action);
+				} catch (TypeMismatchException e) {
+					e.printStackTrace();
+				} catch (NullReferenceException e) {
+					e.printStackTrace();
+				} catch (InvocationTargetException e) {
+					e.printStackTrace();
+				}
+			}
+			return null;
+		}
+
+	}
 }

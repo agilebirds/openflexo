@@ -30,6 +30,13 @@ import org.openflexo.antar.expr.TypeMismatchException;
 import org.openflexo.foundation.ontology.IFlexoOntologyClass;
 import org.openflexo.foundation.ontology.IFlexoOntologyIndividual;
 import org.openflexo.foundation.ontology.IndividualOfClass;
+import org.openflexo.model.annotations.Getter;
+import org.openflexo.model.annotations.ImplementationClass;
+import org.openflexo.model.annotations.ModelEntity;
+import org.openflexo.model.annotations.PropertyIdentifier;
+import org.openflexo.model.annotations.Setter;
+import org.openflexo.model.annotations.XMLAttribute;
+import org.openflexo.model.annotations.XMLElement;
 
 /**
  * Represents an inspector entry for an ontology individual
@@ -39,152 +46,154 @@ import org.openflexo.foundation.ontology.IndividualOfClass;
  */
 @ModelEntity
 @ImplementationClass(IndividualInspectorEntry.IndividualInspectorEntryImpl.class)
-@XMLElement(xmlTag="Individual")
-public interface IndividualInspectorEntry extends InspectorEntry{
+@XMLElement(xmlTag = "Individual")
+public interface IndividualInspectorEntry extends InspectorEntry {
 
-@PropertyIdentifier(type=String.class)
-public static final String CONCEPT_URI_KEY = "conceptURI";
-@PropertyIdentifier(type=DataBinding.class)
-public static final String CONCEPT_VALUE_KEY = "conceptValue";
-@PropertyIdentifier(type=String.class)
-public static final String RENDERER_KEY = "renderer";
+	@PropertyIdentifier(type = String.class)
+	public static final String CONCEPT_URI_KEY = "conceptURI";
+	@PropertyIdentifier(type = DataBinding.class)
+	public static final String CONCEPT_VALUE_KEY = "conceptValue";
+	@PropertyIdentifier(type = String.class)
+	public static final String RENDERER_KEY = "renderer";
 
-@Getter(value=CONCEPT_URI_KEY)
-@XMLAttribute
-public String _getConceptURI();
+	@Getter(value = CONCEPT_URI_KEY)
+	@XMLAttribute
+	public String _getConceptURI();
 
-@Setter(CONCEPT_URI_KEY)
-public void _setConceptURI(String conceptURI);
+	@Setter(CONCEPT_URI_KEY)
+	public void _setConceptURI(String conceptURI);
 
+	@Getter(value = CONCEPT_VALUE_KEY)
+	@XMLAttribute
+	public DataBinding<IFlexoOntologyClass> getConceptValue();
 
-@Getter(value=CONCEPT_VALUE_KEY)
-@XMLAttribute
-public DataBinding getConceptValue();
+	@Setter(CONCEPT_VALUE_KEY)
+	public void setConceptValue(DataBinding<IFlexoOntologyClass> conceptValue);
 
-@Setter(CONCEPT_VALUE_KEY)
-public void setConceptValue(DataBinding conceptValue);
+	@Getter(value = RENDERER_KEY)
+	@XMLAttribute
+	public String getRenderer();
 
+	@Setter(RENDERER_KEY)
+	public void setRenderer(String renderer);
 
-@Getter(value=RENDERER_KEY)
-@XMLAttribute
-public String getRenderer();
+	public static abstract class IndividualInspectorEntryImpl extends InspectorEntryImpl implements IndividualInspectorEntry {
 
-@Setter(RENDERER_KEY)
-public void setRenderer(String renderer);
+		private String conceptURI;
+		private DataBinding<IFlexoOntologyClass> conceptValue;
+		private String renderer;
 
-
-public static abstract  class IndividualInspectorEntryImpl extends InspectorEntryImpl implements IndividualInspectorEntry
-{
-
-	private String conceptURI;
-	private DataBinding<IFlexoOntologyClass> conceptValue;
-	private String renderer;
-
-	public IndividualInspectorEntryImpl() {
-		super();
-	}
-
-	@Override
-	public Type getType() {
-		if (getConcept() != null) {
-			return IndividualOfClass.getIndividualOfClass(getConcept());
+		public IndividualInspectorEntryImpl() {
+			super();
 		}
-		return super.getType();
-	}
 
-	@Override
-	public Class getDefaultDataClass() {
-		return IFlexoOntologyIndividual.class;
-	}
-
-	@Override
-	public String getWidgetName() {
-		return "OntologyIndividualSelector";
-	}
-
-	public String _getConceptURI() {
-		return conceptURI;
-	}
-
-	public void _setConceptURI(String conceptURI) {
-		this.conceptURI = conceptURI;
-	}
-
-	public IFlexoOntologyClass getConcept() {
-		if (getVirtualModel() != null) {
-			return getVirtualModel().getOntologyClass(_getConceptURI());
+		@Override
+		public Type getType() {
+			if (getConcept() != null) {
+				return IndividualOfClass.getIndividualOfClass(getConcept());
+			}
+			return super.getType();
 		}
-		return null;
-	}
 
-	public void setConcept(IFlexoOntologyClass c) {
-		_setConceptURI(c != null ? c.getURI() : null);
-	}
-
-	public DataBinding<IFlexoOntologyClass> getConceptValue() {
-		if (conceptValue == null) {
-			conceptValue = new DataBinding<IFlexoOntologyClass>(this, IFlexoOntologyClass.class, BindingDefinitionType.GET);
-			conceptValue.setBindingName("conceptValue");
+		@Override
+		public Class getDefaultDataClass() {
+			return IFlexoOntologyIndividual.class;
 		}
-		return conceptValue;
-	}
 
-	public void setConceptValue(DataBinding<IFlexoOntologyClass> conceptValue) {
-		if (conceptValue != null) {
-			conceptValue.setOwner(this);
-			conceptValue.setBindingName("conceptValue");
-			conceptValue.setDeclaredType(IFlexoOntologyClass.class);
-			conceptValue.setBindingDefinitionType(BindingDefinitionType.GET);
+		@Override
+		public String getWidgetName() {
+			return "OntologyIndividualSelector";
 		}
-		this.conceptValue = conceptValue;
-	}
 
-	private boolean isDynamicConceptValueSet = false;
-
-	public boolean getIsDynamicConceptValue() {
-		return getConceptValue().isSet() || isDynamicConceptValueSet;
-	}
-
-	public void setIsDynamicConceptValue(boolean isDynamic) {
-		if (isDynamic) {
-			isDynamicConceptValueSet = true;
-		} else {
-			conceptValue = null;
-			isDynamicConceptValueSet = false;
+		@Override
+		public String _getConceptURI() {
+			return conceptURI;
 		}
-	}
 
-	public IFlexoOntologyClass evaluateConceptValue(BindingEvaluationContext parameterRetriever) {
-		if (getConceptValue().isValid()) {
-			try {
-				return getConceptValue().getBindingValue(parameterRetriever);
-			} catch (TypeMismatchException e) {
-				e.printStackTrace();
-			} catch (NullReferenceException e) {
-				e.printStackTrace();
-			} catch (InvocationTargetException e) {
-				e.printStackTrace();
+		@Override
+		public void _setConceptURI(String conceptURI) {
+			this.conceptURI = conceptURI;
+		}
+
+		public IFlexoOntologyClass getConcept() {
+			if (getVirtualModel() != null) {
+				return getVirtualModel().getOntologyClass(_getConceptURI());
+			}
+			return null;
+		}
+
+		public void setConcept(IFlexoOntologyClass c) {
+			_setConceptURI(c != null ? c.getURI() : null);
+		}
+
+		@Override
+		public DataBinding<IFlexoOntologyClass> getConceptValue() {
+			if (conceptValue == null) {
+				conceptValue = new DataBinding<IFlexoOntologyClass>(this, IFlexoOntologyClass.class, BindingDefinitionType.GET);
+				conceptValue.setBindingName("conceptValue");
+			}
+			return conceptValue;
+		}
+
+		@Override
+		public void setConceptValue(DataBinding<IFlexoOntologyClass> conceptValue) {
+			if (conceptValue != null) {
+				conceptValue.setOwner(this);
+				conceptValue.setBindingName("conceptValue");
+				conceptValue.setDeclaredType(IFlexoOntologyClass.class);
+				conceptValue.setBindingDefinitionType(BindingDefinitionType.GET);
+			}
+			this.conceptValue = conceptValue;
+		}
+
+		private boolean isDynamicConceptValueSet = false;
+
+		public boolean getIsDynamicConceptValue() {
+			return getConceptValue().isSet() || isDynamicConceptValueSet;
+		}
+
+		public void setIsDynamicConceptValue(boolean isDynamic) {
+			if (isDynamic) {
+				isDynamicConceptValueSet = true;
+			} else {
+				conceptValue = null;
+				isDynamicConceptValueSet = false;
 			}
 		}
-		return null;
-	}
 
-	/**
-	 * Return renderer for this individual, under the form eg individual.name
-	 * 
-	 * @return
-	 */
-	public String getRenderer() {
-		return renderer;
-	}
+		public IFlexoOntologyClass evaluateConceptValue(BindingEvaluationContext parameterRetriever) {
+			if (getConceptValue().isValid()) {
+				try {
+					return getConceptValue().getBindingValue(parameterRetriever);
+				} catch (TypeMismatchException e) {
+					e.printStackTrace();
+				} catch (NullReferenceException e) {
+					e.printStackTrace();
+				} catch (InvocationTargetException e) {
+					e.printStackTrace();
+				}
+			}
+			return null;
+		}
 
-	/**
-	 * Sets renderer for this individual, under the form eg individual.name
-	 * 
-	 * @param renderer
-	 */
-	public void setRenderer(String renderer) {
-		this.renderer = renderer;
+		/**
+		 * Return renderer for this individual, under the form eg individual.name
+		 * 
+		 * @return
+		 */
+		@Override
+		public String getRenderer() {
+			return renderer;
+		}
+
+		/**
+		 * Sets renderer for this individual, under the form eg individual.name
+		 * 
+		 * @param renderer
+		 */
+		@Override
+		public void setRenderer(String renderer) {
+			this.renderer = renderer;
+		}
 	}
-}
 }

@@ -21,28 +21,30 @@ package org.openflexo.foundation.viewpoint;
 
 import java.lang.reflect.Type;
 
+import org.openflexo.model.annotations.ImplementationClass;
+import org.openflexo.model.annotations.ModelEntity;
+import org.openflexo.model.annotations.XMLElement;
+
 @ModelEntity
 @ImplementationClass(CheckboxParameter.CheckboxParameterImpl.class)
-@XMLElement(xmlTag="CheckBoxParameter")
-public interface CheckboxParameter extends EditionSchemeParameter{
+@XMLElement(xmlTag = "CheckBoxParameter")
+public interface CheckboxParameter extends EditionSchemeParameter {
 
+	public static abstract class CheckboxParameterImpl extends EditionSchemeParameterImpl implements CheckboxParameter {
 
-public static abstract  class CheckboxParameterImpl extends EditionSchemeParameterImpl implements CheckboxParameter
-{
+		public CheckboxParameterImpl() {
+			super();
+		}
 
-	public CheckboxParameterImpl() {
-		super();
+		@Override
+		public Type getType() {
+			return Boolean.class;
+		};
+
+		@Override
+		public WidgetType getWidget() {
+			return WidgetType.CHECKBOX;
+		}
+
 	}
-
-	@Override
-	public Type getType() {
-		return Boolean.class;
-	};
-
-	@Override
-	public WidgetType getWidget() {
-		return WidgetType.CHECKBOX;
-	}
-
-}
 }

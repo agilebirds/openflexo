@@ -35,161 +35,171 @@ import org.openflexo.antar.expr.TypeMismatchException;
 import org.openflexo.foundation.view.action.EditionSchemeAction;
 import org.openflexo.foundation.viewpoint.FMLRepresentationContext.FMLRepresentationOutput;
 import org.openflexo.foundation.viewpoint.annotations.FIBPanel;
+import org.openflexo.model.annotations.Getter;
+import org.openflexo.model.annotations.ImplementationClass;
+import org.openflexo.model.annotations.ModelEntity;
+import org.openflexo.model.annotations.PropertyIdentifier;
+import org.openflexo.model.annotations.Setter;
+import org.openflexo.model.annotations.XMLAttribute;
+import org.openflexo.model.annotations.XMLElement;
 import org.openflexo.toolbox.StringUtils;
 
 @FIBPanel("Fib/IterationActionPanel.fib")
 @ModelEntity
 @ImplementationClass(IterationAction.IterationActionImpl.class)
 @XMLElement
-public interface IterationAction extends ControlStructureAction{
+public interface IterationAction extends ControlStructureAction {
 
-@PropertyIdentifier(type=DataBinding.class)
-public static final String ITERATION_KEY = "iteration";
-@PropertyIdentifier(type=String.class)
-public static final String ITERATOR_NAME_KEY = "iteratorName";
+	@PropertyIdentifier(type = DataBinding.class)
+	public static final String ITERATION_KEY = "iteration";
+	@PropertyIdentifier(type = String.class)
+	public static final String ITERATOR_NAME_KEY = "iteratorName";
 
-@Getter(value=ITERATION_KEY)
-@XMLAttribute
-public DataBinding getIteration();
+	@Getter(value = ITERATION_KEY)
+	@XMLAttribute
+	public DataBinding<List<?>> getIteration();
 
-@Setter(ITERATION_KEY)
-public void setIteration(DataBinding iteration);
+	@Setter(ITERATION_KEY)
+	public void setIteration(DataBinding<List<?>> iteration);
 
+	@Getter(value = ITERATOR_NAME_KEY)
+	@XMLAttribute
+	public String getIteratorName();
 
-@Getter(value=ITERATOR_NAME_KEY)
-@XMLAttribute
-public String getIteratorName();
+	@Setter(ITERATOR_NAME_KEY)
+	public void setIteratorName(String iteratorName);
 
-@Setter(ITERATOR_NAME_KEY)
-public void setIteratorName(String iteratorName);
+	public static abstract class IterationActionImpl extends ControlStructureActionImpl implements IterationAction {
 
+		private static final Logger logger = Logger.getLogger(IterationAction.class.getPackage().getName());
 
-public static abstract  class IterationActionImpl extends ControlStructureActionImpl implements IterationAction
-{
+		private String iteratorName = "item";
 
-	private static final Logger logger = Logger.getLogger(IterationAction.class.getPackage().getName());
+		public IterationActionImpl() {
+			super();
+		}
 
-	private String iteratorName = "item";
-
-	public IterationActionImpl() {
-		super();
-	}
-
-	@Override
-	public String getFMLRepresentation(FMLRepresentationContext context) {
-		FMLRepresentationOutput out = new FMLRepresentationOutput(context);
-		out.append("for (" + getIteratorName() + " in " + getIteration().toString(), context);
-		out.append(") {", context);
-		out.append(StringUtils.LINE_SEPARATOR, context);
-		for (EditionAction action : getActions()) {
-			out.append(action.getFMLRepresentation(context), context, 1);
+		@Override
+		public String getFMLRepresentation(FMLRepresentationContext context) {
+			FMLRepresentationOutput out = new FMLRepresentationOutput(context);
+			out.append("for (" + getIteratorName() + " in " + getIteration().toString(), context);
+			out.append(") {", context);
 			out.append(StringUtils.LINE_SEPARATOR, context);
+			for (EditionAction action : getActions()) {
+				out.append(action.getFMLRepresentation(context), context, 1);
+				out.append(StringUtils.LINE_SEPARATOR, context);
+			}
+
+			out.append("}", context);
+			return out.toString();
 		}
 
-		out.append("}", context);
-		return out.toString();
-	}
+		private DataBinding<List<?>> iteration;
 
-	private DataBinding<List<?>> iteration;
-
-	public DataBinding<List<?>> getIteration() {
-		if (iteration == null) {
-			iteration = new DataBinding<List<?>>(this, List.class, BindingDefinitionType.GET);
+		@Override
+		public DataBinding<List<?>> getIteration() {
+			if (iteration == null) {
+				iteration = new DataBinding<List<?>>(this, List.class, BindingDefinitionType.GET);
+			}
+			return iteration;
 		}
-		return iteration;
-	}
 
-	public void setIteration(DataBinding<List<?>> iteration) {
-		if (iteration != null) {
-			iteration.setOwner(this);
-			iteration.setBindingName("iteration");
-			iteration.setDeclaredType(List.class);
-			iteration.setBindingDefinitionType(BindingDefinitionType.GET);
-		}
-		this.iteration = iteration;
-		rebuildInferedBindingModel();
-	}
-
-	@Override
-	public void notifiedBindingChanged(DataBinding<?> binding) {
-		super.notifiedBindingChanged(binding);
-		if (binding == iteration) {
+		@Override
+		public void setIteration(DataBinding<List<?>> iteration) {
+			if (iteration != null) {
+				iteration.setOwner(this);
+				iteration.setBindingName("iteration");
+				iteration.setDeclaredType(List.class);
+				iteration.setBindingDefinitionType(BindingDefinitionType.GET);
+			}
+			this.iteration = iteration;
 			rebuildInferedBindingModel();
 		}
-	}
 
-	public String getIteratorName() {
-		return iteratorName;
-	}
-
-	public void setIteratorName(String iteratorName) {
-		this.iteratorName = iteratorName;
-		rebuildInferedBindingModel();
-	}
-
-	public Type getItemType() {
-		if (getIteration() != null && getIteration().isSet()) {
-			Type accessedType = getIteration().getAnalyzedType();
-			if (accessedType instanceof ParameterizedType && ((ParameterizedType) accessedType).getActualTypeArguments().length > 0) {
-				return ((ParameterizedType) accessedType).getActualTypeArguments()[0];
+		@Override
+		public void notifiedBindingChanged(DataBinding<?> binding) {
+			super.notifiedBindingChanged(binding);
+			if (binding == iteration) {
+				rebuildInferedBindingModel();
 			}
 		}
-		return Object.class;
-	}
 
-	@Override
-	protected BindingModel buildInferedBindingModel() {
-		BindingModel returned = super.buildInferedBindingModel();
-		returned.addToBindingVariables(new BindingVariable(getIteratorName(), getItemType()) {
-			@Override
-			public Object getBindingValue(Object target, BindingEvaluationContext context) {
-				logger.info("What should i return for " + getIteratorName() + " ? target " + target + " context=" + context);
-				return super.getBindingValue(target, context);
-			}
-
-			@Override
-			public Type getType() {
-				return getItemType();
-			}
-		});
-		return returned;
-	}
-
-	public List<?> evaluateIteration(EditionSchemeAction action) {
-		if (getIteration().isValid()) {
-			try {
-				return getIteration().getBindingValue(action);
-			} catch (TypeMismatchException e) {
-				e.printStackTrace();
-			} catch (NullReferenceException e) {
-				e.printStackTrace();
-			} catch (InvocationTargetException e) {
-				e.printStackTrace();
-			}
+		@Override
+		public String getIteratorName() {
+			return iteratorName;
 		}
-		return null;
-	}
 
-	@Override
-	public Object performAction(EditionSchemeAction action) {
-		List<?> items = evaluateIteration(action);
-		if (items != null) {
-			for (Object item : items) {
-				System.out.println("> working with " + getIteratorName() + "=" + item);
-				action.declareVariable(getIteratorName(), item);
-				performBatchOfActions(getActions(), action);
+		@Override
+		public void setIteratorName(String iteratorName) {
+			this.iteratorName = iteratorName;
+			rebuildInferedBindingModel();
+		}
+
+		public Type getItemType() {
+			if (getIteration() != null && getIteration().isSet()) {
+				Type accessedType = getIteration().getAnalyzedType();
+				if (accessedType instanceof ParameterizedType && ((ParameterizedType) accessedType).getActualTypeArguments().length > 0) {
+					return ((ParameterizedType) accessedType).getActualTypeArguments()[0];
+				}
 			}
+			return Object.class;
 		}
-		action.dereferenceVariable(getIteratorName());
-		return null;
-	}
 
-	@Override
-	public String getStringRepresentation() {
-		if (getIteration().isSet() && getIteration().isValid()) {
-			return getIteratorName() + " : " + getIteration();
+		@Override
+		protected BindingModel buildInferedBindingModel() {
+			BindingModel returned = super.buildInferedBindingModel();
+			returned.addToBindingVariables(new BindingVariable(getIteratorName(), getItemType()) {
+				@Override
+				public Object getBindingValue(Object target, BindingEvaluationContext context) {
+					logger.info("What should i return for " + getIteratorName() + " ? target " + target + " context=" + context);
+					return super.getBindingValue(target, context);
+				}
+
+				@Override
+				public Type getType() {
+					return getItemType();
+				}
+			});
+			return returned;
 		}
-		return super.getStringRepresentation();
+
+		public List<?> evaluateIteration(EditionSchemeAction action) {
+			if (getIteration().isValid()) {
+				try {
+					return getIteration().getBindingValue(action);
+				} catch (TypeMismatchException e) {
+					e.printStackTrace();
+				} catch (NullReferenceException e) {
+					e.printStackTrace();
+				} catch (InvocationTargetException e) {
+					e.printStackTrace();
+				}
+			}
+			return null;
+		}
+
+		@Override
+		public Object performAction(EditionSchemeAction action) {
+			List<?> items = evaluateIteration(action);
+			if (items != null) {
+				for (Object item : items) {
+					System.out.println("> working with " + getIteratorName() + "=" + item);
+					action.declareVariable(getIteratorName(), item);
+					performBatchOfActions(getActions(), action);
+				}
+			}
+			action.dereferenceVariable(getIteratorName());
+			return null;
+		}
+
+		@Override
+		public String getStringRepresentation() {
+			if (getIteration().isSet() && getIteration().isValid()) {
+				return getIteratorName() + " : " + getIteration();
+			}
+			return super.getStringRepresentation();
+		}
+
 	}
 
 	public static class IterationBindingIsRequiredAndMustBeValid extends BindingIsRequiredAndMustBeValid<IterationAction> {
@@ -204,5 +214,4 @@ public static abstract  class IterationActionImpl extends ControlStructureAction
 
 	}
 
-}
 }

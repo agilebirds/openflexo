@@ -31,83 +31,127 @@ import org.openflexo.foundation.technologyadapter.ModelSlot;
 import org.openflexo.foundation.view.action.EditionSchemeAction;
 import org.openflexo.foundation.viewpoint.FMLRepresentationContext.FMLRepresentationOutput;
 import org.openflexo.foundation.viewpoint.annotations.FIBPanel;
+import org.openflexo.model.annotations.Getter;
+import org.openflexo.model.annotations.ImplementationClass;
+import org.openflexo.model.annotations.ModelEntity;
+import org.openflexo.model.annotations.PropertyIdentifier;
+import org.openflexo.model.annotations.Setter;
+import org.openflexo.model.annotations.XMLAttribute;
+import org.openflexo.model.annotations.XMLElement;
 
 @FIBPanel("Fib/DeletionActionPanel.fib")
 @ModelEntity
 @ImplementationClass(DeleteAction.DeleteActionImpl.class)
 @XMLElement
-public interface DeleteAction<MS extends ModelSlot<?>, T extends FlexoObject> extends EditionAction<MS, T>{
+public interface DeleteAction<MS extends ModelSlot<?>, T extends FlexoObject> extends EditionAction<MS, T> {
 
-@PropertyIdentifier(type=DataBinding.class)
-public static final String OBJECT_KEY = "object";
+	@PropertyIdentifier(type = DataBinding.class)
+	public static final String OBJECT_KEY = "object";
 
-@Getter(value=OBJECT_KEY)
-@XMLAttribute
-public DataBinding getObject();
+	@Getter(value = OBJECT_KEY)
+	@XMLAttribute
+	public DataBinding<?> getObject();
 
-@Setter(OBJECT_KEY)
-public void setObject(DataBinding object);
+	@Setter(OBJECT_KEY)
+	public void setObject(DataBinding<?> object);
 
+	public PatternRole getPatternRole();
 
-public static abstract  class DeleteAction<MSImpl extends ModelSlot<?>, T extends FlexoObject> extends EditionAction<MS, T>Impl implements DeleteAction<MS
-{
+	public static abstract class DeleteActionImpl<MS extends ModelSlot<?>, T extends FlexoObject> extends EditionActionImpl<MS, T>
+			implements DeleteAction<MS, T> {
 
-	private static final Logger logger = Logger.getLogger(DeleteAction.class.getPackage().getName());
+		private static final Logger logger = Logger.getLogger(DeleteAction.class.getPackage().getName());
 
-	private DataBinding<Object> object;
+		private DataBinding<?> object;
 
-	public DeleteActionImpl() {
-		super();
-	}
-
-	@Override
-	public String getFMLRepresentation(FMLRepresentationContext context) {
-		FMLRepresentationOutput out = new FMLRepresentationOutput(context);
-		out.append("delete " + getObject().toString(), context);
-		return out.toString();
-	}
-
-	public Object getDeclaredObject(EditionSchemeAction action) {
-		try {
-			return getObject().getBindingValue(action);
-		} catch (TypeMismatchException e) {
-			e.printStackTrace();
-		} catch (NullReferenceException e) {
-			e.printStackTrace();
-		} catch (InvocationTargetException e) {
-			e.printStackTrace();
+		public DeleteActionImpl() {
+			super();
 		}
-		return null;
-	}
 
-	public DataBinding<Object> getObject() {
-		if (object == null) {
-			object = new DataBinding<Object>(this, Object.class, BindingDefinitionType.GET);
-			object.setBindingName("object");
+		@Override
+		public String getFMLRepresentation(FMLRepresentationContext context) {
+			FMLRepresentationOutput out = new FMLRepresentationOutput(context);
+			out.append("delete " + getObject().toString(), context);
+			return out.toString();
 		}
-		return object;
-	}
 
-	public void setObject(DataBinding<Object> object) {
-		if (object != null) {
-			object.setOwner(this);
-			object.setBindingName("object");
-			object.setDeclaredType(Object.class);
-			object.setBindingDefinitionType(BindingDefinitionType.GET);
-		}
-		this.object = object;
-	}
-
-	@Override
-	public String getStringRepresentation() {
-		return "Delete " + getObject();
-	}
-
-	public PatternRole getPatternRole() {
-		if (getEditionPattern() == null) {
+		public Object getDeclaredObject(EditionSchemeAction action) {
+			try {
+				return getObject().getBindingValue(action);
+			} catch (TypeMismatchException e) {
+				e.printStackTrace();
+			} catch (NullReferenceException e) {
+				e.printStackTrace();
+			} catch (InvocationTargetException e) {
+				e.printStackTrace();
+			}
 			return null;
 		}
-		return getEditionPattern().getPatternRole(getObject().toString());
+
+		@Override
+		public DataBinding<?> getObject() {
+			if (object == null) {
+				object = new DataBinding<Object>(this, Object.class, BindingDefinitionType.GET);
+				object.setBindingName("object");
+			}
+			return object;
+		}
+
+		@Override
+		public void setObject(DataBinding<?> object) {
+			if (object != null) {
+				object.setOwner(this);
+				object.setBindingName("object");
+				object.setDeclaredType(Object.class);
+				object.setBindingDefinitionType(BindingDefinitionType.GET);
+			}
+			this.object = object;
+		}
+
+		@Override
+		public String getStringRepresentation() {
+			return "Delete " + getObject();
+		}
+
+		@Override
+		public PatternRole getPatternRole() {
+			if (getEditionPattern() == null) {
+				return null;
+			}
+			return getEditionPattern().getPatternRole(getObject().toString());
+		}
+
+		@Override
+		public T performAction(EditionSchemeAction action) {
+			T objectToDelete = null;
+			try {
+				objectToDelete = (T) getObject().getBindingValue(action);
+			} catch (TypeMismatchException e1) {
+				e1.printStackTrace();
+			} catch (NullReferenceException e1) {
+				e1.printStackTrace();
+			} catch (InvocationTargetException e1) {
+				e1.printStackTrace();
+			}
+			if (objectToDelete == null) {
+				return null;
+			}
+			try {
+				logger.info("Delete object " + objectToDelete + " for object " + getObject() + " this=" + this);
+				objectToDelete.delete();
+			} catch (Exception e) {
+				logger.warning("Unexpected exception occured during deletion: " + e.getMessage());
+				e.printStackTrace();
+			}
+			return objectToDelete;
+		}
+
+		@Override
+		public void finalizePerformAction(EditionSchemeAction action, T initialContext) {
+			// TODO Auto-generated method stub
+
+		}
+
 	}
 
 	public static class ObjectToDeleteBindingIsRequiredAndMustBeValid extends BindingIsRequiredAndMustBeValid<DeleteAction> {
@@ -122,36 +166,4 @@ public static abstract  class DeleteAction<MSImpl extends ModelSlot<?>, T extend
 
 	}
 
-	@Override
-	public T performAction(EditionSchemeAction action) {
-		T objectToDelete = null;
-		try {
-			objectToDelete = (T) getObject().getBindingValue(action);
-		} catch (TypeMismatchException e1) {
-			e1.printStackTrace();
-		} catch (NullReferenceException e1) {
-			e1.printStackTrace();
-		} catch (InvocationTargetException e1) {
-			e1.printStackTrace();
-		}
-		if (objectToDelete == null) {
-			return null;
-		}
-		try {
-			logger.info("Delete object " + objectToDelete + " for object " + getObject() + " this=" + this);
-			objectToDelete.delete();
-		} catch (Exception e) {
-			logger.warning("Unexpected exception occured during deletion: " + e.getMessage());
-			e.printStackTrace();
-		}
-		return objectToDelete;
-	}
-
-	@Override
-	public void finalizePerformAction(EditionSchemeAction action, T initialContext) {
-		// TODO Auto-generated method stub
-
-	}
-
-}
 }

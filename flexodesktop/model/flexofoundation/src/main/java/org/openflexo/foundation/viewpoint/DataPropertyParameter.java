@@ -23,49 +23,57 @@ import java.lang.reflect.Type;
 
 import org.openflexo.foundation.ontology.BuiltInDataType;
 import org.openflexo.foundation.ontology.IFlexoOntologyDataProperty;
+import org.openflexo.foundation.viewpoint.EditionSchemeParameter.EditionSchemeParameterImpl.WidgetType;
+import org.openflexo.model.annotations.Getter;
+import org.openflexo.model.annotations.ImplementationClass;
+import org.openflexo.model.annotations.ModelEntity;
+import org.openflexo.model.annotations.PropertyIdentifier;
+import org.openflexo.model.annotations.Setter;
+import org.openflexo.model.annotations.XMLAttribute;
+import org.openflexo.model.annotations.XMLElement;
 
 @ModelEntity
 @ImplementationClass(DataPropertyParameter.DataPropertyParameterImpl.class)
 @XMLElement
-public interface DataPropertyParameter extends PropertyParameter{
+public interface DataPropertyParameter extends PropertyParameter {
 
-@PropertyIdentifier(type=BuiltInDataType.class)
-public static final String DATA_TYPE_KEY = "dataType";
+	@PropertyIdentifier(type = BuiltInDataType.class)
+	public static final String DATA_TYPE_KEY = "dataType";
 
-@Getter(value=DATA_TYPE_KEY)
-@XMLAttribute
-public BuiltInDataType getDataType();
+	@Getter(value = DATA_TYPE_KEY)
+	@XMLAttribute
+	public BuiltInDataType getDataType();
 
-@Setter(DATA_TYPE_KEY)
-public void setDataType(BuiltInDataType dataType);
+	@Setter(DATA_TYPE_KEY)
+	public void setDataType(BuiltInDataType dataType);
 
+	public static abstract class DataPropertyParameterImpl extends PropertyParameterImpl implements DataPropertyParameter {
 
-public static abstract  class DataPropertyParameterImpl extends PropertyParameterImpl implements DataPropertyParameter
-{
+		private BuiltInDataType dataType;
 
-	private BuiltInDataType dataType;
+		public DataPropertyParameterImpl() {
+			super();
+		}
 
-	public DataPropertyParameterImpl() {
-		super();
+		@Override
+		public Type getType() {
+			return IFlexoOntologyDataProperty.class;
+		};
+
+		@Override
+		public WidgetType getWidget() {
+			return WidgetType.DATA_PROPERTY;
+		}
+
+		@Override
+		public BuiltInDataType getDataType() {
+			return dataType;
+		}
+
+		@Override
+		public void setDataType(BuiltInDataType dataType) {
+			this.dataType = dataType;
+		}
+
 	}
-
-	@Override
-	public Type getType() {
-		return IFlexoOntologyDataProperty.class;
-	};
-
-	@Override
-	public WidgetType getWidget() {
-		return WidgetType.DATA_PROPERTY;
-	}
-
-	public BuiltInDataType getDataType() {
-		return dataType;
-	}
-
-	public void setDataType(BuiltInDataType dataType) {
-		this.dataType = dataType;
-	}
-
-}
 }

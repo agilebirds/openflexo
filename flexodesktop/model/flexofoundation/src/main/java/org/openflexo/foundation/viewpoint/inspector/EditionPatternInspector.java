@@ -20,7 +20,7 @@
 package org.openflexo.foundation.viewpoint.inspector;
 
 import java.lang.reflect.Type;
-import java.util.Collection;
+import java.util.List;
 import java.util.Vector;
 import java.util.logging.Logger;
 
@@ -85,12 +85,12 @@ public interface EditionPatternInspector extends EditionPatternObject, Bindable 
 
 	@Getter(value = RENDERER_KEY)
 	@XMLAttribute
-	public DataBinding getRenderer();
+	public DataBinding<String> getRenderer();
 
 	@Setter(RENDERER_KEY)
-	public void setRenderer(DataBinding renderer);
+	public void setRenderer(DataBinding<String> renderer);
 
-	@Getter(value = ENTRIES_KEY, cardinality = Cardinality.LIST)
+	@Getter(value = ENTRIES_KEY, cardinality = Cardinality.LIST, inverse = InspectorEntry.INSPECTOR_KEY)
 	@XMLElement
 	public List<InspectorEntry> getEntries();
 
@@ -115,7 +115,7 @@ public interface EditionPatternInspector extends EditionPatternObject, Bindable 
 		private final EditionPatternFormatter formatter;
 
 		public static EditionPatternInspector makeEditionPatternInspector(EditionPattern ep) {
-			EditionPatternInspector returned = new EditionPatternInspector();
+			EditionPatternInspector returned = ep.getVirtualModelFactory().newEditionPatternInspector(ep);
 			returned.setInspectorTitle(ep.getName());
 			ep.setInspector(returned);
 			return returned;
@@ -134,11 +134,6 @@ public interface EditionPatternInspector extends EditionPatternObject, Bindable 
 
 		public EditionPatternFormatter getFormatter() {
 			return formatter;
-		}
-
-		@Override
-		public Collection<InspectorEntry> getEmbeddedValidableObjects() {
-			return entries;
 		}
 
 		@Override
@@ -200,7 +195,7 @@ public interface EditionPatternInspector extends EditionPatternObject, Bindable 
 		}
 
 		public TextFieldInspectorEntry createNewTextField() {
-			TextFieldInspectorEntry newEntry = new TextFieldInspectorEntry();
+			TextFieldInspectorEntry newEntry = getVirtualModelFactory().newTextFieldInspectorEntry();
 			newEntry.setName("textfield");
 			// newEntry.setLabel("textfield");
 			addToEntries(newEntry);
@@ -208,7 +203,7 @@ public interface EditionPatternInspector extends EditionPatternObject, Bindable 
 		}
 
 		public TextAreaInspectorEntry createNewTextArea() {
-			TextAreaInspectorEntry newEntry = new TextAreaInspectorEntry();
+			TextAreaInspectorEntry newEntry = getVirtualModelFactory().newTextAreaInspectorEntry();
 			newEntry.setName("textarea");
 			// newEntry.setLabel("textarea");
 			addToEntries(newEntry);
@@ -216,7 +211,7 @@ public interface EditionPatternInspector extends EditionPatternObject, Bindable 
 		}
 
 		public IntegerInspectorEntry createNewInteger() {
-			IntegerInspectorEntry newEntry = new IntegerInspectorEntry();
+			IntegerInspectorEntry newEntry = getVirtualModelFactory().newIntegerInspectorEntry();
 			newEntry.setName("integer");
 			// newEntry.setLabel("integer");
 			addToEntries(newEntry);
@@ -224,7 +219,7 @@ public interface EditionPatternInspector extends EditionPatternObject, Bindable 
 		}
 
 		public CheckboxInspectorEntry createNewCheckbox() {
-			CheckboxInspectorEntry newEntry = new CheckboxInspectorEntry();
+			CheckboxInspectorEntry newEntry = getVirtualModelFactory().newCheckboxInspectorEntry();
 			newEntry.setName("checkbox");
 			// newEntry.setLabel("checkbox");
 			addToEntries(newEntry);
@@ -232,7 +227,7 @@ public interface EditionPatternInspector extends EditionPatternObject, Bindable 
 		}
 
 		public IndividualInspectorEntry createNewIndividual() {
-			IndividualInspectorEntry newEntry = new IndividualInspectorEntry();
+			IndividualInspectorEntry newEntry = getVirtualModelFactory().newIndividualInspectorEntry();
 			newEntry.setName("individual");
 			// newEntry.setLabel("individual");
 			addToEntries(newEntry);
@@ -240,7 +235,7 @@ public interface EditionPatternInspector extends EditionPatternObject, Bindable 
 		}
 
 		public ClassInspectorEntry createNewClass() {
-			ClassInspectorEntry newEntry = new ClassInspectorEntry();
+			ClassInspectorEntry newEntry = getVirtualModelFactory().newClassInspectorEntry();
 			newEntry.setName("class");
 			// newEntry.setLabel("class");
 			addToEntries(newEntry);
@@ -248,7 +243,7 @@ public interface EditionPatternInspector extends EditionPatternObject, Bindable 
 		}
 
 		public PropertyInspectorEntry createNewProperty() {
-			PropertyInspectorEntry newEntry = new PropertyInspectorEntry();
+			PropertyInspectorEntry newEntry = getVirtualModelFactory().newPropertyInspectorEntry();
 			newEntry.setName("property");
 			// newEntry.setLabel("class");
 			addToEntries(newEntry);
@@ -256,7 +251,7 @@ public interface EditionPatternInspector extends EditionPatternObject, Bindable 
 		}
 
 		public ObjectPropertyInspectorEntry createNewObjectProperty() {
-			ObjectPropertyInspectorEntry newEntry = new ObjectPropertyInspectorEntry();
+			ObjectPropertyInspectorEntry newEntry = getVirtualModelFactory().newObjectPropertyInspectorEntry();
 			newEntry.setName("property");
 			// newEntry.setLabel("class");
 			addToEntries(newEntry);
@@ -264,7 +259,7 @@ public interface EditionPatternInspector extends EditionPatternObject, Bindable 
 		}
 
 		public DataPropertyInspectorEntry createNewDataProperty() {
-			DataPropertyInspectorEntry newEntry = new DataPropertyInspectorEntry();
+			DataPropertyInspectorEntry newEntry = getVirtualModelFactory().newDataPropertyInspectorEntry();
 			newEntry.setName("property");
 			// newEntry.setLabel("class");
 			addToEntries(newEntry);
@@ -364,6 +359,7 @@ public interface EditionPatternInspector extends EditionPatternObject, Bindable 
 			return renderer;
 		}
 
+		@Override
 		public void setRenderer(DataBinding<String> renderer) {
 			if (renderer != null) {
 				renderer.setOwner(formatter);
@@ -384,7 +380,7 @@ public interface EditionPatternInspector extends EditionPatternObject, Bindable 
 
 			@Override
 			public BindingFactory getBindingFactory() {
-				return EditionPatternInspector.this.getBindingFactory();
+				return EditionPatternInspectorImpl.this.getBindingFactory();
 			}
 
 			@Override
@@ -409,14 +405,14 @@ public interface EditionPatternInspector extends EditionPatternObject, Bindable 
 			@Override
 			public void notifiedBindingChanged(DataBinding<?> dataBinding) {
 				if (dataBinding == getRenderer()) {
-					EditionPatternInspector.this.notifiedBindingChanged(dataBinding);
+					EditionPatternInspectorImpl.this.notifiedBindingChanged(dataBinding);
 				}
 			}
 
 			@Override
 			public void notifiedBindingDecoded(DataBinding<?> dataBinding) {
 				if (dataBinding == getRenderer()) {
-					EditionPatternInspector.this.notifiedBindingDecoded(dataBinding);
+					EditionPatternInspectorImpl.this.notifiedBindingDecoded(dataBinding);
 				}
 			}
 

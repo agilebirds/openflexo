@@ -19,6 +19,9 @@
  */
 package org.openflexo.foundation.viewpoint.inspector;
 
+import org.openflexo.model.annotations.ImplementationClass;
+import org.openflexo.model.annotations.ModelEntity;
+import org.openflexo.model.annotations.XMLElement;
 
 /**
  * Represents an inspector entry for an float
@@ -26,19 +29,21 @@ package org.openflexo.foundation.viewpoint.inspector;
  * @author sylvain
  * 
  */
-public class FloatInspectorEntry extends InspectorEntry {
+@ModelEntity
+@ImplementationClass(FloatInspectorEntry.FloatInspectorEntryImpl.class)
+@XMLElement(xmlTag = "TextField")
+public interface FloatInspectorEntry extends InspectorEntry {
 
-	public FloatInspectorEntry() {
-		super();
-	}
+	public abstract class FloatInspectorEntryImpl extends InspectorEntryImpl implements FloatInspectorEntry {
 
-	@Override
-	public Class getDefaultDataClass() {
-		return Float.class;
-	}
+		@Override
+		public Class getDefaultDataClass() {
+			return Float.class;
+		}
 
-	@Override
-	public String getWidgetName() {
-		return "Float";
+		@Override
+		public String getWidgetName() {
+			return "Float";
+		}
 	}
 }

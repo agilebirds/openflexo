@@ -32,81 +32,96 @@ import org.openflexo.foundation.technologyadapter.ModelSlot;
 import org.openflexo.foundation.view.action.EditionSchemeAction;
 import org.openflexo.foundation.viewpoint.FMLRepresentationContext.FMLRepresentationOutput;
 import org.openflexo.foundation.viewpoint.annotations.FIBPanel;
+import org.openflexo.model.annotations.Getter;
+import org.openflexo.model.annotations.ImplementationClass;
+import org.openflexo.model.annotations.ModelEntity;
+import org.openflexo.model.annotations.PropertyIdentifier;
+import org.openflexo.model.annotations.Setter;
+import org.openflexo.model.annotations.XMLAttribute;
+import org.openflexo.model.annotations.XMLElement;
 
 @FIBPanel("Fib/DeclarePatternRolePanel.fib")
 @ModelEntity
 @ImplementationClass(DeclarePatternRole.DeclarePatternRoleImpl.class)
 @XMLElement
-public interface DeclarePatternRole extends AssignableAction<ModelSlot<?>, FlexoObject>{
+public interface DeclarePatternRole extends AssignableAction<ModelSlot<?>, FlexoObject> {
 
-@PropertyIdentifier(type=DataBinding.class)
-public static final String OBJECT_KEY = "object";
+	@PropertyIdentifier(type = DataBinding.class)
+	public static final String OBJECT_KEY = "object";
 
-@Getter(value=OBJECT_KEY)
-@XMLAttribute
-public DataBinding getObject();
+	@Getter(value = OBJECT_KEY)
+	@XMLAttribute
+	public DataBinding<?> getObject();
 
-@Setter(OBJECT_KEY)
-public void setObject(DataBinding object);
+	@Setter(OBJECT_KEY)
+	public void setObject(DataBinding<?> object);
 
+	public static abstract class DeclarePatternRoleImpl extends AssignableActionImpl<ModelSlot<?>, FlexoObject> implements
+			DeclarePatternRole {
 
-public static abstract  class DeclarePatternRoleImpl extends AssignableAction<ModelSlot<?>, FlexoObject>Impl implements DeclarePatternRole
-{
+		private static final Logger logger = Logger.getLogger(DeclarePatternRole.class.getPackage().getName());
 
-	private static final Logger logger = Logger.getLogger(DeclarePatternRole.class.getPackage().getName());
+		private DataBinding<?> object;
 
-	private DataBinding<Object> object;
-
-	public DeclarePatternRoleImpl() {
-		super();
-	}
-
-	@Override
-	public String getFMLRepresentation(FMLRepresentationContext context) {
-		FMLRepresentationOutput out = new FMLRepresentationOutput(context);
-		out.append(getAssignation().toString() + " = " + getObject().toString() + ";", context);
-		return out.toString();
-	}
-
-	@Override
-	public boolean isAssignationRequired() {
-		return true;
-	}
-
-	public Object getDeclaredObject(EditionSchemeAction action) {
-		try {
-			return getObject().getBindingValue(action);
-		} catch (TypeMismatchException e) {
-			e.printStackTrace();
-		} catch (NullReferenceException e) {
-			e.printStackTrace();
-		} catch (InvocationTargetException e) {
-			e.printStackTrace();
+		public DeclarePatternRoleImpl() {
+			super();
 		}
-		return null;
-	}
 
-	public DataBinding<Object> getObject() {
-		if (object == null) {
-			object = new DataBinding<Object>(this, Object.class, BindingDefinitionType.GET);
-			object.setBindingName("object");
+		@Override
+		public String getFMLRepresentation(FMLRepresentationContext context) {
+			FMLRepresentationOutput out = new FMLRepresentationOutput(context);
+			out.append(getAssignation().toString() + " = " + getObject().toString() + ";", context);
+			return out.toString();
 		}
-		return object;
-	}
 
-	public void setObject(DataBinding<Object> object) {
-		if (object != null) {
-			object.setOwner(this);
-			object.setBindingName("object");
-			object.setDeclaredType(Object.class);
-			object.setBindingDefinitionType(BindingDefinitionType.GET);
+		@Override
+		public boolean isAssignationRequired() {
+			return true;
 		}
-		this.object = object;
-	}
 
-	@Override
-	public Type getAssignableType() {
-		return Object.class;
+		public Object getDeclaredObject(EditionSchemeAction action) {
+			try {
+				return getObject().getBindingValue(action);
+			} catch (TypeMismatchException e) {
+				e.printStackTrace();
+			} catch (NullReferenceException e) {
+				e.printStackTrace();
+			} catch (InvocationTargetException e) {
+				e.printStackTrace();
+			}
+			return null;
+		}
+
+		@Override
+		public DataBinding<?> getObject() {
+			if (object == null) {
+				object = new DataBinding<Object>(this, Object.class, BindingDefinitionType.GET);
+				object.setBindingName("object");
+			}
+			return object;
+		}
+
+		@Override
+		public void setObject(DataBinding<?> object) {
+			if (object != null) {
+				object.setOwner(this);
+				object.setBindingName("object");
+				object.setDeclaredType(Object.class);
+				object.setBindingDefinitionType(BindingDefinitionType.GET);
+			}
+			this.object = object;
+		}
+
+		@Override
+		public Type getAssignableType() {
+			return Object.class;
+		}
+
+		@Override
+		public FlexoObject performAction(EditionSchemeAction action) {
+			return (FlexoObject) getDeclaredObject(action);
+		}
+
 	}
 
 	public static class AssignationBindingIsRequiredAndMustBeValid extends BindingIsRequiredAndMustBeValid<DeclarePatternRole> {
@@ -115,7 +130,7 @@ public static abstract  class DeclarePatternRoleImpl extends AssignableAction<Mo
 		}
 
 		@Override
-		public DataBinding<Object> getBinding(DeclarePatternRole object) {
+		public DataBinding<?> getBinding(DeclarePatternRole object) {
 			return object.getAssignation();
 		}
 
@@ -127,16 +142,10 @@ public static abstract  class DeclarePatternRoleImpl extends AssignableAction<Mo
 		}
 
 		@Override
-		public DataBinding<Object> getBinding(DeclarePatternRole object) {
+		public DataBinding<?> getBinding(DeclarePatternRole object) {
 			return object.getObject();
 		}
 
 	}
 
-	@Override
-	public FlexoObject performAction(EditionSchemeAction action) {
-		return (FlexoObject) getDeclaredObject(action);
-	}
-
-}
 }

@@ -19,6 +19,9 @@
  */
 package org.openflexo.foundation.viewpoint.inspector;
 
+import org.openflexo.model.annotations.ImplementationClass;
+import org.openflexo.model.annotations.ModelEntity;
+import org.openflexo.model.annotations.XMLElement;
 
 /**
  * Represents an inspector entry for a check box (boolean value)
@@ -28,25 +31,23 @@ package org.openflexo.foundation.viewpoint.inspector;
  */
 @ModelEntity
 @ImplementationClass(CheckboxInspectorEntry.CheckboxInspectorEntryImpl.class)
-@XMLElement(xmlTag="Checkbox")
-public interface CheckboxInspectorEntry extends InspectorEntry{
+@XMLElement(xmlTag = "Checkbox")
+public interface CheckboxInspectorEntry extends InspectorEntry {
 
+	public static abstract class CheckboxInspectorEntryImpl extends InspectorEntryImpl implements CheckboxInspectorEntry {
 
-public static abstract  class CheckboxInspectorEntryImpl extends InspectorEntryImpl implements CheckboxInspectorEntry
-{
+		public CheckboxInspectorEntryImpl() {
+			super();
+		}
 
-	public CheckboxInspectorEntryImpl() {
-		super();
+		@Override
+		public Class getDefaultDataClass() {
+			return Boolean.class;
+		}
+
+		@Override
+		public String getWidgetName() {
+			return "Checkbox";
+		}
 	}
-
-	@Override
-	public Class getDefaultDataClass() {
-		return Boolean.class;
-	}
-
-	@Override
-	public String getWidgetName() {
-		return "Checkbox";
-	}
-}
 }

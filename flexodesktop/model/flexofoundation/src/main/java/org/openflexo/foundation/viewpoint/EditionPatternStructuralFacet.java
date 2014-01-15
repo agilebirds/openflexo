@@ -19,47 +19,56 @@
  */
 package org.openflexo.foundation.viewpoint;
 
-import java.util.Collection;
-
 import org.openflexo.antar.binding.BindingModel;
-import org.openflexo.foundation.validation.Validable;
+import org.openflexo.model.annotations.ImplementationClass;
+import org.openflexo.model.annotations.ModelEntity;
 
-public class EditionPatternStructuralFacet extends EditionPatternObject implements FlexoFacet<EditionPattern> {
-
-	private final EditionPattern editionPattern;
-
-	public EditionPatternStructuralFacet(EditionPattern editionPattern) {
-		super();
-		this.editionPattern = editionPattern;
-	}
+@ModelEntity
+@ImplementationClass(EditionPatternStructuralFacet.EditionPatternStructuralFacetImpl.class)
+public interface EditionPatternStructuralFacet extends EditionPatternObject, FlexoFacet<EditionPattern> {
 
 	@Override
-	public EditionPattern getEditionPattern() {
-		return editionPattern;
-	}
+	public EditionPattern getEditionPattern();
 
-	@Override
-	public BindingModel getBindingModel() {
-		return getEditionPattern().getBindingModel();
-	}
+	public void setEditionPattern(EditionPattern editionPattern);
 
-	@Override
-	public Collection<? extends Validable> getEmbeddedValidableObjects() {
-		return getEditionPattern().getPatternRoles();
-	}
+	public abstract class EditionPatternStructuralFacetImpl extends EditionPatternObjectImpl implements EditionPatternStructuralFacet {
 
-	@Override
-	public EditionPattern getObject() {
-		return getEditionPattern();
-	}
+		private EditionPattern editionPattern;
 
-	@Override
-	public String getURI() {
-		return getEditionPattern().getURI();
-	}
+		@Override
+		public EditionPattern getEditionPattern() {
+			return editionPattern;
+		}
 
-	@Override
-	public VirtualModel getVirtualModel() {
-		return getEditionPattern().getVirtualModel();
+		@Override
+		public void setEditionPattern(EditionPattern editionPattern) {
+			this.editionPattern = editionPattern;
+		}
+
+		@Override
+		public BindingModel getBindingModel() {
+			return getEditionPattern().getBindingModel();
+		}
+
+		/*@Override
+		public Collection<? extends Validable> getEmbeddedValidableObjects() {
+			return getEditionPattern().getPatternRoles();
+		}*/
+
+		@Override
+		public EditionPattern getObject() {
+			return getEditionPattern();
+		}
+
+		@Override
+		public String getURI() {
+			return getEditionPattern().getURI();
+		}
+
+		@Override
+		public VirtualModel getVirtualModel() {
+			return getEditionPattern().getVirtualModel();
+		}
 	}
 }

@@ -20,20 +20,21 @@
 package org.openflexo.foundation.viewpoint;
 
 import org.openflexo.foundation.viewpoint.annotations.FIBPanel;
+import org.openflexo.model.annotations.ImplementationClass;
+import org.openflexo.model.annotations.ModelEntity;
+import org.openflexo.model.annotations.XMLElement;
 
 @FIBPanel("Fib/ActionSchemePanel.fib")
 @ModelEntity
 @ImplementationClass(ActionScheme.ActionSchemeImpl.class)
 @XMLElement
-public interface ActionScheme extends AbstractActionScheme{
+public interface ActionScheme extends AbstractActionScheme {
 
+	public static abstract class ActionSchemeImpl extends AbstractActionSchemeImpl implements ActionScheme {
 
-public static abstract  class ActionSchemeImpl extends AbstractActionSchemeImpl implements ActionScheme
-{
+		public ActionSchemeImpl() {
+			super();
+		}
 
-	public ActionSchemeImpl() {
-		super();
 	}
-
-}
 }

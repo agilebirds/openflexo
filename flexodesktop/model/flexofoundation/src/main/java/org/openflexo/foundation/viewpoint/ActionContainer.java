@@ -24,9 +24,11 @@ import java.util.Vector;
 
 import org.openflexo.antar.binding.BindingModel;
 import org.openflexo.foundation.technologyadapter.ModelSlot;
+import org.openflexo.foundation.viewpoint.EditionSchemeObject.EditionSchemeObjectImpl;
 import org.openflexo.model.annotations.Adder;
 import org.openflexo.model.annotations.Getter;
 import org.openflexo.model.annotations.Getter.Cardinality;
+import org.openflexo.model.annotations.Implementation;
 import org.openflexo.model.annotations.PropertyIdentifier;
 import org.openflexo.model.annotations.Remover;
 import org.openflexo.model.annotations.Setter;
@@ -73,4 +75,61 @@ public interface ActionContainer {
 	public EditionAction<?, ?> deleteAction(EditionAction<?, ?> anAction);
 
 	public void variableAdded(AssignableAction action);
+
+	@Implementation
+	public abstract class ActionContainerImpl extends EditionSchemeObjectImpl implements ActionContainer {
+		@Override
+		public int getIndex(EditionAction<?, ?> action) {
+			return getActions().indexOf(action);
+		}
+
+		@Override
+		public void insertActionAtIndex(EditionAction<?, ?> action, int index) {
+			// action.setScheme(getEditionScheme());
+			action.setActionContainer(this);
+			getActions().add(index, action);
+			setChanged();
+			notifyObservers();
+			notifyChange("actions", null, getActions());
+		}
+
+		@Override
+		public void actionFirst(EditionAction<?, ?> a) {
+			getActions().remove(a);
+			getActions().add(0, a);
+			setChanged();
+			notifyChange("actions", null, getActions());
+		}
+
+		@Override
+		public void actionUp(EditionAction<?, ?> a) {
+			int index = getActions().indexOf(a);
+			if (index > 0) {
+				getActions().remove(a);
+				getActions().add(index - 1, a);
+				setChanged();
+				notifyChange("actions", null, getActions());
+			}
+		}
+
+		@Override
+		public void actionDown(EditionAction<?, ?> a) {
+			int index = getActions().indexOf(a);
+			if (index > 0) {
+				getActions().remove(a);
+				getActions().add(index + 1, a);
+				setChanged();
+				notifyChange("actions", null, getActions());
+			}
+		}
+
+		@Override
+		public void actionLast(EditionAction<?, ?> a) {
+			getActions().remove(a);
+			getActions().add(a);
+			setChanged();
+			notifyChange("actions", null, getActions());
+		}
+
+	}
 }

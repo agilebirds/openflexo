@@ -22,6 +22,7 @@ package org.openflexo.foundation.viewpoint;
 
 import java.lang.reflect.InvocationTargetException;
 import java.lang.reflect.Type;
+import java.util.List;
 import java.util.Vector;
 import java.util.logging.Logger;
 
@@ -37,6 +38,16 @@ import org.openflexo.foundation.view.VirtualModelInstance;
 import org.openflexo.foundation.view.action.CreationSchemeAction;
 import org.openflexo.foundation.view.action.EditionSchemeAction;
 import org.openflexo.foundation.viewpoint.annotations.FIBPanel;
+import org.openflexo.model.annotations.Adder;
+import org.openflexo.model.annotations.Getter;
+import org.openflexo.model.annotations.Getter.Cardinality;
+import org.openflexo.model.annotations.ImplementationClass;
+import org.openflexo.model.annotations.ModelEntity;
+import org.openflexo.model.annotations.PropertyIdentifier;
+import org.openflexo.model.annotations.Remover;
+import org.openflexo.model.annotations.Setter;
+import org.openflexo.model.annotations.XMLAttribute;
+import org.openflexo.model.annotations.XMLElement;
 
 /**
  * This action is used to explicitely instanciate a new {@link EditionPatternInstance} in a given {@link VirtualModelInstance} with some
@@ -52,220 +63,238 @@ import org.openflexo.foundation.viewpoint.annotations.FIBPanel;
 @ModelEntity
 @ImplementationClass(AddEditionPatternInstance.AddEditionPatternInstanceImpl.class)
 @XMLElement
-public interface AddEditionPatternInstance extends AssignableAction<VirtualModelModelSlot, EditionPatternInstance>{
+public interface AddEditionPatternInstance extends AssignableAction<VirtualModelModelSlot, EditionPatternInstance> {
 
-@PropertyIdentifier(type=DataBinding.class)
-public static final String VIRTUAL_MODEL_INSTANCE_KEY = "virtualModelInstance";
-@PropertyIdentifier(type=String.class)
-public static final String CREATION_SCHEME_URI_KEY = "creationSchemeURI";
-@PropertyIdentifier(type=Vector.class)
-public static final String PARAMETERS_KEY = "parameters";
+	@PropertyIdentifier(type = DataBinding.class)
+	public static final String VIRTUAL_MODEL_INSTANCE_KEY = "virtualModelInstance";
+	@PropertyIdentifier(type = String.class)
+	public static final String CREATION_SCHEME_URI_KEY = "creationSchemeURI";
+	@PropertyIdentifier(type = Vector.class)
+	public static final String PARAMETERS_KEY = "parameters";
 
-@Getter(value=VIRTUAL_MODEL_INSTANCE_KEY)
-@XMLAttribute
-public DataBinding getVirtualModelInstance();
+	@Getter(value = VIRTUAL_MODEL_INSTANCE_KEY)
+	@XMLAttribute
+	public DataBinding<VirtualModelInstance> getVirtualModelInstance();
 
-@Setter(VIRTUAL_MODEL_INSTANCE_KEY)
-public void setVirtualModelInstance(DataBinding virtualModelInstance);
+	@Setter(VIRTUAL_MODEL_INSTANCE_KEY)
+	public void setVirtualModelInstance(DataBinding<VirtualModelInstance> virtualModelInstance);
 
+	@Getter(value = CREATION_SCHEME_URI_KEY)
+	@XMLAttribute
+	public String _getCreationSchemeURI();
 
-@Getter(value=CREATION_SCHEME_URI_KEY)
-@XMLAttribute
-public String _getCreationSchemeURI();
+	@Setter(CREATION_SCHEME_URI_KEY)
+	public void _setCreationSchemeURI(String creationSchemeURI);
 
-@Setter(CREATION_SCHEME_URI_KEY)
-public void _setCreationSchemeURI(String creationSchemeURI);
+	public CreationScheme getCreationScheme();
 
+	public void setCreationScheme(CreationScheme creationScheme);
 
-@Getter(value=PARAMETERS_KEY,cardinality = Cardinality.LIST)
-@XMLElement
-public List<AddEditionPatternInstanceParameter> getParameters();
+	@Getter(value = PARAMETERS_KEY, cardinality = Cardinality.LIST, inverse = AddEditionPatternInstanceParameter.ACTION_KEY)
+	@XMLElement
+	public List<AddEditionPatternInstanceParameter> getParameters();
 
-@Setter(PARAMETERS_KEY)
-public void setParameters(List<AddEditionPatternInstanceParameter> parameters);
+	@Setter(PARAMETERS_KEY)
+	public void setParameters(List<AddEditionPatternInstanceParameter> parameters);
 
-@Adder(PARAMETERS_KEY)
-public void addToParameters(AddEditionPatternInstanceParameter aParameter);
+	@Adder(PARAMETERS_KEY)
+	public void addToParameters(AddEditionPatternInstanceParameter aParameter);
 
-@Remover(PARAMETERS_KEY)
-public void removeFromParameters(AddEditionPatternInstanceParameter aParameter);
+	@Remover(PARAMETERS_KEY)
+	public void removeFromParameters(AddEditionPatternInstanceParameter aParameter);
 
+	public EditionPattern getEditionPatternType();
 
-public static abstract  class AddEditionPatternInstanceImpl extends AssignableAction<VirtualModelModelSlot, EditionPatternInstance>Impl implements AddEditionPatternInstance
-{
+	public void setEditionPatternType(EditionPattern editionPatternType);
 
-	static final Logger logger = Logger.getLogger(AddEditionPatternInstance.class.getPackage().getName());
+	public static abstract class AddEditionPatternInstanceImpl extends AssignableActionImpl<VirtualModelModelSlot, EditionPatternInstance>
+			implements AddEditionPatternInstance {
 
-	private EditionPattern editionPatternType;
-	private CreationScheme creationScheme;
-	private String _creationSchemeURI;
+		static final Logger logger = Logger.getLogger(AddEditionPatternInstance.class.getPackage().getName());
 
-	public AddEditionPatternInstanceImpl() {
-		super();
-	}
+		private EditionPattern editionPatternType;
+		private CreationScheme creationScheme;
+		private String _creationSchemeURI;
 
-	public VirtualModelInstance getVirtualModelInstance(EditionSchemeAction action) {
-		try {
-			// System.out.println("getVirtualModelInstance() with " + getVirtualModelInstance());
-			// System.out.println("Valid=" + getVirtualModelInstance().isValid() + " " + getVirtualModelInstance().invalidBindingReason());
-			// System.out.println("returned: " + getVirtualModelInstance().getBindingValue(action));
-			return getVirtualModelInstance().getBindingValue(action);
-		} catch (TypeMismatchException e) {
-			e.printStackTrace();
-		} catch (NullReferenceException e) {
-			e.printStackTrace();
-		} catch (InvocationTargetException e) {
-			e.printStackTrace();
+		public AddEditionPatternInstanceImpl() {
+			super();
 		}
-		return null;
-	}
 
-	private DataBinding<VirtualModelInstance> virtualModelInstance;
-
-	public DataBinding<VirtualModelInstance> getVirtualModelInstance() {
-		if (virtualModelInstance == null) {
-			virtualModelInstance = new DataBinding<VirtualModelInstance>(this, VirtualModelInstance.class,
-					DataBinding.BindingDefinitionType.GET);
-			virtualModelInstance.setBindingName("virtualModelInstance");
+		public VirtualModelInstance getVirtualModelInstance(EditionSchemeAction action) {
+			try {
+				// System.out.println("getVirtualModelInstance() with " + getVirtualModelInstance());
+				// System.out.println("Valid=" + getVirtualModelInstance().isValid() + " " +
+				// getVirtualModelInstance().invalidBindingReason());
+				// System.out.println("returned: " + getVirtualModelInstance().getBindingValue(action));
+				return getVirtualModelInstance().getBindingValue(action);
+			} catch (TypeMismatchException e) {
+				e.printStackTrace();
+			} catch (NullReferenceException e) {
+				e.printStackTrace();
+			} catch (InvocationTargetException e) {
+				e.printStackTrace();
+			}
+			return null;
 		}
-		return virtualModelInstance;
-	}
 
-	public void setVirtualModelInstance(DataBinding<VirtualModelInstance> aVirtualModelInstance) {
-		if (aVirtualModelInstance != null) {
-			aVirtualModelInstance.setOwner(this);
-			aVirtualModelInstance.setBindingName("virtualModelInstance");
-			aVirtualModelInstance.setDeclaredType(VirtualModelInstance.class);
-			aVirtualModelInstance.setBindingDefinitionType(DataBinding.BindingDefinitionType.GET);
+		private DataBinding<VirtualModelInstance> virtualModelInstance;
+
+		@Override
+		public DataBinding<VirtualModelInstance> getVirtualModelInstance() {
+			if (virtualModelInstance == null) {
+				virtualModelInstance = new DataBinding<VirtualModelInstance>(this, VirtualModelInstance.class,
+						DataBinding.BindingDefinitionType.GET);
+				virtualModelInstance.setBindingName("virtualModelInstance");
+			}
+			return virtualModelInstance;
 		}
-		this.virtualModelInstance = aVirtualModelInstance;
-	}
 
-	public EditionPattern getEditionPatternType() {
-		if (getCreationScheme() != null) {
-			return getCreationScheme().getEditionPattern();
+		@Override
+		public void setVirtualModelInstance(DataBinding<VirtualModelInstance> aVirtualModelInstance) {
+			if (aVirtualModelInstance != null) {
+				aVirtualModelInstance.setOwner(this);
+				aVirtualModelInstance.setBindingName("virtualModelInstance");
+				aVirtualModelInstance.setDeclaredType(VirtualModelInstance.class);
+				aVirtualModelInstance.setBindingDefinitionType(DataBinding.BindingDefinitionType.GET);
+			}
+			this.virtualModelInstance = aVirtualModelInstance;
 		}
-		return editionPatternType;
-	}
 
-	public void setEditionPatternType(EditionPattern editionPatternType) {
-		this.editionPatternType = editionPatternType;
-		if (getCreationScheme() != null && getCreationScheme().getEditionPattern() != editionPatternType) {
-			setCreationScheme(null);
+		@Override
+		public EditionPattern getEditionPatternType() {
+			if (getCreationScheme() != null) {
+				return getCreationScheme().getEditionPattern();
+			}
+			return editionPatternType;
 		}
-	}
 
-	public String _getCreationSchemeURI() {
-		if (getCreationScheme() != null) {
-			return getCreationScheme().getURI();
-		}
-		return _creationSchemeURI;
-	}
-
-	public void _setCreationSchemeURI(String uri) {
-		if (getViewPointLibrary() != null) {
-			creationScheme = (CreationScheme) getViewPointLibrary().getEditionScheme(uri);
-		}
-		_creationSchemeURI = uri;
-	}
-
-	public CreationScheme getCreationScheme() {
-		if (creationScheme == null && _creationSchemeURI != null && getViewPointLibrary() != null) {
-			creationScheme = (CreationScheme) getViewPointLibrary().getEditionScheme(_creationSchemeURI);
-		}
-		if (creationScheme == null && getPatternRole() instanceof EditionPatternInstancePatternRole) {
-			creationScheme = ((EditionPatternInstancePatternRole) getPatternRole()).getCreationScheme();
-		}
-		return creationScheme;
-	}
-
-	public void setCreationScheme(CreationScheme creationScheme) {
-		this.creationScheme = creationScheme;
-		if (creationScheme != null) {
-			_creationSchemeURI = creationScheme.getURI();
-		}
-	}
-
-	private Vector<AddEditionPatternInstanceParameter> parameters = new Vector<AddEditionPatternInstanceParameter>();
-
-	public Vector<AddEditionPatternInstanceParameter> getParameters() {
-		updateParameters();
-		return parameters;
-	}
-
-	public void setParameters(Vector<AddEditionPatternInstanceParameter> parameters) {
-		this.parameters = parameters;
-	}
-
-	public void addToParameters(AddEditionPatternInstanceParameter parameter) {
-		parameter.setAction(this);
-		parameters.add(parameter);
-	}
-
-	public void removeFromParameters(AddEditionPatternInstanceParameter parameter) {
-		parameter.setAction(null);
-		parameters.remove(parameter);
-	}
-
-	public AddEditionPatternInstanceImplParameter getParameter(EditionSchemeParameter p) {
-		for (AddEditionPatternInstanceParameter addEPParam : parameters) {
-			if (addEPParam.getParam() == p) {
-				return addEPParam;
+		@Override
+		public void setEditionPatternType(EditionPattern editionPatternType) {
+			this.editionPatternType = editionPatternType;
+			if (getCreationScheme() != null && getCreationScheme().getEditionPattern() != editionPatternType) {
+				setCreationScheme(null);
 			}
 		}
-		return null;
-	}
 
-	private void updateParameters() {
-		Vector<AddEditionPatternInstanceParameter> parametersToRemove = new Vector<AddEditionPatternInstanceParameter>(
-				parameters);
-		if (getCreationScheme() != null) {
-			for (EditionSchemeParameter p : getCreationScheme().getParameters()) {
-				AddEditionPatternInstanceParameter existingParam = getParameter(p);
-				if (existingParam != null) {
-					parametersToRemove.remove(existingParam);
-				} else {
-					addToParameters(new AddEditionPatternInstanceParameter(p));
+		@Override
+		public String _getCreationSchemeURI() {
+			if (getCreationScheme() != null) {
+				return getCreationScheme().getURI();
+			}
+			return _creationSchemeURI;
+		}
+
+		@Override
+		public void _setCreationSchemeURI(String uri) {
+			if (getViewPointLibrary() != null) {
+				creationScheme = (CreationScheme) getViewPointLibrary().getEditionScheme(uri);
+			}
+			_creationSchemeURI = uri;
+		}
+
+		@Override
+		public CreationScheme getCreationScheme() {
+			if (creationScheme == null && _creationSchemeURI != null && getViewPointLibrary() != null) {
+				creationScheme = (CreationScheme) getViewPointLibrary().getEditionScheme(_creationSchemeURI);
+			}
+			if (creationScheme == null && getPatternRole() instanceof EditionPatternInstancePatternRole) {
+				creationScheme = ((EditionPatternInstancePatternRole) getPatternRole()).getCreationScheme();
+			}
+			return creationScheme;
+		}
+
+		@Override
+		public void setCreationScheme(CreationScheme creationScheme) {
+			this.creationScheme = creationScheme;
+			if (creationScheme != null) {
+				_creationSchemeURI = creationScheme.getURI();
+			}
+		}
+
+		private Vector<AddEditionPatternInstanceParameter> parameters = new Vector<AddEditionPatternInstanceParameter>();
+
+		@Override
+		public Vector<AddEditionPatternInstanceParameter> getParameters() {
+			updateParameters();
+			return parameters;
+		}
+
+		public void setParameters(Vector<AddEditionPatternInstanceParameter> parameters) {
+			this.parameters = parameters;
+		}
+
+		@Override
+		public void addToParameters(AddEditionPatternInstanceParameter parameter) {
+			parameter.setAction(this);
+			parameters.add(parameter);
+		}
+
+		@Override
+		public void removeFromParameters(AddEditionPatternInstanceParameter parameter) {
+			parameter.setAction(null);
+			parameters.remove(parameter);
+		}
+
+		public AddEditionPatternInstanceParameter getParameter(EditionSchemeParameter p) {
+			for (AddEditionPatternInstanceParameter addEPParam : parameters) {
+				if (addEPParam.getParam() == p) {
+					return addEPParam;
 				}
 			}
+			return null;
 		}
-		for (AddEditionPatternInstanceParameter removeThis : parametersToRemove) {
-			removeFromParameters(removeThis);
-		}
-	}
 
-	@Override
-	public EditionPatternInstance performAction(EditionSchemeAction action) {
-		logger.info("Perform performAddEditionPatternInstance " + action);
-		VirtualModelInstance vmInstance = getVirtualModelInstance(action);
-		logger.info("VirtualModelInstance: " + vmInstance);
-		CreationSchemeAction creationSchemeAction = CreationSchemeAction.actionType.makeNewEmbeddedAction(vmInstance, null, action);
-		creationSchemeAction.setVirtualModelInstance(vmInstance);
-		creationSchemeAction.setCreationScheme(getCreationScheme());
-		for (AddEditionPatternInstanceParameter p : getParameters()) {
-			EditionSchemeParameter param = p.getParam();
-			Object value = p.evaluateParameterValue(action);
-			logger.info("For parameter " + param + " value is " + value);
-			if (value != null) {
-				creationSchemeAction.setParameterValue(p.getParam(), p.evaluateParameterValue(action));
+		private void updateParameters() {
+			Vector<AddEditionPatternInstanceParameter> parametersToRemove = new Vector<AddEditionPatternInstanceParameter>(parameters);
+			if (getCreationScheme() != null) {
+				for (EditionSchemeParameter p : getCreationScheme().getParameters()) {
+					AddEditionPatternInstanceParameter existingParam = getParameter(p);
+					if (existingParam != null) {
+						parametersToRemove.remove(existingParam);
+					} else {
+						addToParameters(getVirtualModelFactory().newAddEditionPatternInstanceParameter(p));
+					}
+				}
+			}
+			for (AddEditionPatternInstanceParameter removeThis : parametersToRemove) {
+				removeFromParameters(removeThis);
 			}
 		}
-		creationSchemeAction.doAction();
-		if (creationSchemeAction.hasActionExecutionSucceeded()) {
-			logger.info("Successfully performed performAddEditionPattern " + action);
-			return creationSchemeAction.getEditionPatternInstance();
-		}
-		return null;
-	}
 
-	@Override
-	public Type getAssignableType() {
-		return EditionPatternInstanceType.getEditionPatternInstanceType(getEditionPatternType());
+		@Override
+		public EditionPatternInstance performAction(EditionSchemeAction action) {
+			logger.info("Perform performAddEditionPatternInstance " + action);
+			VirtualModelInstance vmInstance = getVirtualModelInstance(action);
+			logger.info("VirtualModelInstance: " + vmInstance);
+			CreationSchemeAction creationSchemeAction = CreationSchemeAction.actionType.makeNewEmbeddedAction(vmInstance, null, action);
+			creationSchemeAction.setVirtualModelInstance(vmInstance);
+			creationSchemeAction.setCreationScheme(getCreationScheme());
+			for (AddEditionPatternInstanceParameter p : getParameters()) {
+				EditionSchemeParameter param = p.getParam();
+				Object value = p.evaluateParameterValue(action);
+				logger.info("For parameter " + param + " value is " + value);
+				if (value != null) {
+					creationSchemeAction.setParameterValue(p.getParam(), p.evaluateParameterValue(action));
+				}
+			}
+			creationSchemeAction.doAction();
+			if (creationSchemeAction.hasActionExecutionSucceeded()) {
+				logger.info("Successfully performed performAddEditionPattern " + action);
+				return creationSchemeAction.getEditionPatternInstance();
+			}
+			return null;
+		}
+
+		@Override
+		public Type getAssignableType() {
+			return EditionPatternInstanceType.getEditionPatternInstanceType(getEditionPatternType());
+		}
+
 	}
 
 	public static class AddEditionPatternInstanceMustAddressACreationScheme extends
 			ValidationRule<AddEditionPatternInstanceMustAddressACreationScheme, AddEditionPatternInstance> {
-		public AddEditionPatternInstanceImplMustAddressACreationScheme() {
+		public AddEditionPatternInstanceMustAddressACreationScheme() {
 			super(AddEditionPatternInstance.class, "add_edition_pattern_action_must_address_a_valid_creation_scheme");
 		}
 
@@ -288,7 +317,7 @@ public static abstract  class AddEditionPatternInstanceImpl extends AssignableAc
 	public static class AddEditionPatternInstanceParametersMustBeValid extends
 			ValidationRule<AddEditionPatternInstanceParametersMustBeValid, AddEditionPatternInstance> {
 
-		public AddEditionPatternInstanceImplParametersMustBeValid() {
+		public AddEditionPatternInstanceParametersMustBeValid() {
 			super(AddEditionPatternInstance.class, "add_edition_pattern_parameters_must_be_valid");
 		}
 
@@ -309,8 +338,9 @@ public static abstract  class AddEditionPatternInstanceImpl extends AssignableAc
 								issues.add(new ValidationError(this, action, "parameter_s_value_is_not_defined: " + param.getName()));
 							}
 						} else if (!p.getValue().isValid()) {
-							logger.info("Binding NOT valid: " + p.getValue() + " for " + p.paramName + " object="
-									+ p.action.getStringRepresentation() + ". Reason: " + p.getValue().invalidBindingReason());
+							AddEditionPatternInstanceImpl.logger.info("Binding NOT valid: " + p.getValue() + " for " + p.getName()
+									+ " object=" + p.getAction().getStringRepresentation() + ". Reason: "
+									+ p.getValue().invalidBindingReason());
 							issues.add(new ValidationError(this, action, "parameter_s_value_is_not_valid: " + param.getName()));
 						}
 					}
@@ -320,8 +350,7 @@ public static abstract  class AddEditionPatternInstanceImpl extends AssignableAc
 				} else if (issues.size() == 1) {
 					return issues.firstElement();
 				} else {
-					return new CompoundIssue<AddEditionPatternInstance.AddEditionPatternInstanceParametersMustBeValid, AddEditionPatternInstance>(
-							action, issues);
+					return new CompoundIssue<AddEditionPatternInstanceParametersMustBeValid, AddEditionPatternInstance>(action, issues);
 				}
 			}
 			return null;
@@ -341,5 +370,4 @@ public static abstract  class AddEditionPatternInstanceImpl extends AssignableAc
 
 	}
 
-}
 }

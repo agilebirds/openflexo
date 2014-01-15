@@ -28,9 +28,11 @@ import org.openflexo.foundation.IOFlexoException;
 import org.openflexo.foundation.action.FlexoAction;
 import org.openflexo.foundation.action.FlexoActionType;
 import org.openflexo.foundation.ontology.IFlexoOntology;
+import org.openflexo.foundation.resource.SaveResourceException;
 import org.openflexo.foundation.viewpoint.ViewPoint;
 import org.openflexo.foundation.viewpoint.ViewPointObject;
 import org.openflexo.foundation.viewpoint.VirtualModel;
+import org.openflexo.foundation.viewpoint.VirtualModel.VirtualModelImpl;
 import org.openflexo.toolbox.StringUtils;
 
 public class CreateVirtualModel extends FlexoAction<CreateVirtualModel, ViewPoint, ViewPointObject> {
@@ -77,9 +79,9 @@ public class CreateVirtualModel extends FlexoAction<CreateVirtualModel, ViewPoin
 	}
 
 	@Override
-	protected void doAction(Object context) throws IOFlexoException {
+	protected void doAction(Object context) throws IOFlexoException, SaveResourceException {
 
-		newVirtualModel = VirtualModel.newVirtualModel(newVirtualModelName, getFocusedObject());
+		newVirtualModel = VirtualModelImpl.newVirtualModel(newVirtualModelName, getFocusedObject());
 		newVirtualModel.setDescription(newVirtualModelDescription);
 		getFocusedObject().addToVirtualModels(newVirtualModel);
 

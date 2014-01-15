@@ -5,6 +5,13 @@ import org.openflexo.foundation.technologyadapter.ModelSlot;
 import org.openflexo.foundation.viewpoint.PatternRole;
 import org.openflexo.toolbox.StringUtils;
 
+/**
+ * Represents run-time-level object encoding reference to object
+ * 
+ * @author sylvain
+ * 
+ * @param <T>
+ */
 public abstract class ActorReference<T> extends VirtualModelInstanceObject {
 	private PatternRole<T> patternRole;
 	private String patternRoleName;
@@ -43,7 +50,7 @@ public abstract class ActorReference<T> extends VirtualModelInstanceObject {
 
 	public PatternRole<T> getPatternRole() {
 		if (patternRole == null && epi != null && StringUtils.isNotEmpty(patternRoleName)) {
-			patternRole = epi.getEditionPattern().getPatternRole(patternRoleName);
+			patternRole = (PatternRole<T>) epi.getEditionPattern().getPatternRole(patternRoleName);
 		}
 		return patternRole;
 	}

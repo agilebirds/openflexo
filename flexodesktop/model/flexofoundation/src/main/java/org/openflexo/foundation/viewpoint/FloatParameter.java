@@ -21,20 +21,27 @@ package org.openflexo.foundation.viewpoint;
 
 import java.lang.reflect.Type;
 
-public class FloatParameter extends EditionSchemeParameter {
+import org.openflexo.model.annotations.ImplementationClass;
+import org.openflexo.model.annotations.ModelEntity;
+import org.openflexo.model.annotations.XMLElement;
 
-	public FloatParameter() {
-		super();
-	}
+@ModelEntity
+@ImplementationClass(FloatParameter.FloatParameterImpl.class)
+@XMLElement
+public interface FloatParameter extends EditionSchemeParameter {
 
-	@Override
-	public Type getType() {
-		return Integer.class;
-	};
+	public abstract class FloatParameterImpl extends EditionSchemeParameterImpl implements FloatParameter {
 
-	@Override
-	public WidgetType getWidget() {
-		return WidgetType.FLOAT;
+		@Override
+		public Type getType() {
+			return Integer.class;
+		};
+
+		@Override
+		public WidgetType getWidget() {
+			return WidgetType.FLOAT;
+		}
+
 	}
 
 }

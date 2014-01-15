@@ -23,103 +23,111 @@ import java.lang.reflect.Type;
 
 import org.openflexo.foundation.DataModification;
 import org.openflexo.foundation.view.EditionPatternInstance;
+import org.openflexo.model.annotations.Getter;
+import org.openflexo.model.annotations.ImplementationClass;
+import org.openflexo.model.annotations.ModelEntity;
+import org.openflexo.model.annotations.PropertyIdentifier;
+import org.openflexo.model.annotations.Setter;
+import org.openflexo.model.annotations.XMLAttribute;
+import org.openflexo.model.annotations.XMLElement;
 
 @ModelEntity
 @ImplementationClass(EditionPatternInstanceParameter.EditionPatternInstanceParameterImpl.class)
 @XMLElement
-public interface EditionPatternInstanceParameter extends InnerModelSlotParameter<VirtualModelModelSlot>{
+public interface EditionPatternInstanceParameter extends InnerModelSlotParameter<VirtualModelModelSlot> {
 
-@PropertyIdentifier(type=String.class)
-public static final String EDITION_PATTERN_TYPE_URI_KEY = "editionPatternTypeURI";
+	@PropertyIdentifier(type = String.class)
+	public static final String EDITION_PATTERN_TYPE_URI_KEY = "editionPatternTypeURI";
 
-@Getter(value=EDITION_PATTERN_TYPE_URI_KEY)
-@XMLAttribute
-public String _getEditionPatternTypeURI();
+	@Getter(value = EDITION_PATTERN_TYPE_URI_KEY)
+	@XMLAttribute
+	public String _getEditionPatternTypeURI();
 
-@Setter(EDITION_PATTERN_TYPE_URI_KEY)
-public void _setEditionPatternTypeURI(String editionPatternTypeURI);
+	@Setter(EDITION_PATTERN_TYPE_URI_KEY)
+	public void _setEditionPatternTypeURI(String editionPatternTypeURI);
 
+	public static abstract class EditionPatternInstanceParameterImpl extends InnerModelSlotParameterImpl<VirtualModelModelSlot> implements
+			EditionPatternInstanceParameter {
 
-public static abstract  class EditionPatternInstanceParameterImpl extends InnerModelSlotParameter<VirtualModelModelSlot>Impl implements EditionPatternInstanceParameter
-{
+		private EditionPattern editionPatternType;
+		private String editionPatternTypeURI;
 
-	private EditionPattern editionPatternType;
-	private String editionPatternTypeURI;
-
-	public EditionPatternInstanceParameterImpl() {
-		super();
-	}
-
-	@Override
-	public Type getType() {
-		if (getEditionPatternType() != null) {
-			return EditionPatternInstanceType.getEditionPatternInstanceType(getEditionPatternType());
+		public EditionPatternInstanceParameterImpl() {
+			super();
 		}
-		return EditionPatternInstance.class;
-	};
 
-	@Override
-	public WidgetType getWidget() {
-		return WidgetType.EDITION_PATTERN;
-	}
-
-	public String _getEditionPatternTypeURI() {
-		if (editionPatternType != null) {
-			return editionPatternType.getURI();
-		}
-		return editionPatternTypeURI;
-	}
-
-	public void _setEditionPatternTypeURI(String editionPatternURI) {
-		this.editionPatternTypeURI = editionPatternURI;
-	}
-
-	public EditionPattern getEditionPatternType() {
-		if (editionPatternType == null && editionPatternTypeURI != null && getModelSlotVirtualModel() != null) {
-			editionPatternType = getModelSlotVirtualModel().getEditionPattern(editionPatternTypeURI);
-			for (EditionScheme s : getEditionPattern().getEditionSchemes()) {
-				s.updateBindingModels();
+		@Override
+		public Type getType() {
+			if (getEditionPatternType() != null) {
+				return EditionPatternInstanceType.getEditionPatternInstanceType(getEditionPatternType());
 			}
-		}
-		return editionPatternType;
-	}
+			return EditionPatternInstance.class;
+		};
 
-	public void setEditionPatternType(EditionPattern editionPatternType) {
-		if (editionPatternType != this.editionPatternType) {
-			this.editionPatternType = editionPatternType;
-			for (EditionScheme s : getEditionPattern().getEditionSchemes()) {
-				s.updateBindingModels();
+		@Override
+		public WidgetType getWidget() {
+			return WidgetType.EDITION_PATTERN;
+		}
+
+		@Override
+		public String _getEditionPatternTypeURI() {
+			if (editionPatternType != null) {
+				return editionPatternType.getURI();
 			}
+			return editionPatternTypeURI;
 		}
-	}
 
-	@Override
-	public void setModelSlot(VirtualModelModelSlot modelSlot) {
-		super.setModelSlot(modelSlot);
-		setChanged();
-		notifyObservers(new DataModification("modelSlotVirtualModel", null, modelSlot));
-	}
-
-	public VirtualModel getModelSlotVirtualModel() {
-		if (getModelSlot() != null && getModelSlot().getVirtualModelResource() != null) {
-			return getModelSlot().getVirtualModelResource().getVirtualModel();
+		@Override
+		public void _setEditionPatternTypeURI(String editionPatternURI) {
+			this.editionPatternTypeURI = editionPatternURI;
 		}
-		return null;
-	}
 
-	@Override
-	public VirtualModelModelSlot getModelSlot() {
-		if (super.getModelSlot() instanceof VirtualModelModelSlot) {
-			VirtualModelModelSlot returned = super.getModelSlot();
-			if (returned == null) {
-				if (getVirtualModel() != null && getVirtualModel().getModelSlots(VirtualModelModelSlot.class).size() > 0) {
-					return getVirtualModel().getModelSlots(VirtualModelModelSlot.class).get(0);
+		public EditionPattern getEditionPatternType() {
+			if (editionPatternType == null && editionPatternTypeURI != null && getModelSlotVirtualModel() != null) {
+				editionPatternType = getModelSlotVirtualModel().getEditionPattern(editionPatternTypeURI);
+				for (EditionScheme s : getEditionPattern().getEditionSchemes()) {
+					s.updateBindingModels();
 				}
 			}
-			return returned;
+			return editionPatternType;
 		}
-		return null;
-	}
 
-}
+		public void setEditionPatternType(EditionPattern editionPatternType) {
+			if (editionPatternType != this.editionPatternType) {
+				this.editionPatternType = editionPatternType;
+				for (EditionScheme s : getEditionPattern().getEditionSchemes()) {
+					s.updateBindingModels();
+				}
+			}
+		}
+
+		@Override
+		public void setModelSlot(VirtualModelModelSlot modelSlot) {
+			super.setModelSlot(modelSlot);
+			setChanged();
+			notifyObservers(new DataModification("modelSlotVirtualModel", null, modelSlot));
+		}
+
+		public VirtualModel getModelSlotVirtualModel() {
+			if (getModelSlot() != null && getModelSlot().getVirtualModelResource() != null) {
+				return getModelSlot().getVirtualModelResource().getVirtualModel();
+			}
+			return null;
+		}
+
+		@Override
+		public VirtualModelModelSlot getModelSlot() {
+			if (super.getModelSlot() instanceof VirtualModelModelSlot) {
+				VirtualModelModelSlot returned = super.getModelSlot();
+				if (returned == null) {
+					if (getVirtualModel() != null && getVirtualModel().getModelSlots(VirtualModelModelSlot.class).size() > 0) {
+						return getVirtualModel().getModelSlots(VirtualModelModelSlot.class).get(0);
+					}
+				}
+				return returned;
+			}
+			return null;
+		}
+
+	}
 }

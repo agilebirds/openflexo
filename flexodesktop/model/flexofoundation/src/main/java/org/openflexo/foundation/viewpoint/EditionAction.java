@@ -86,19 +86,45 @@ public abstract interface EditionAction<MS extends ModelSlot<?>, T> extends Edit
 
 	@Getter(value = CONDITIONAL_KEY)
 	@XMLAttribute
-	public DataBinding getConditional();
+	public DataBinding<Boolean> getConditional();
 
 	@Setter(CONDITIONAL_KEY)
-	public void setConditional(DataBinding conditional);
+	public void setConditional(DataBinding<Boolean> conditional);
 
 	@Getter(value = MODEL_SLOT_KEY)
 	@XMLElement
-	public ModelSlot getModelSlot();
+	public MS getModelSlot();
 
 	@Setter(MODEL_SLOT_KEY)
-	public void setModelSlot(ModelSlot modelSlot);
+	public void setModelSlot(MS modelSlot);
 
-	public static abstract class EditionActionImpl<MS extends ModelSlot<?>, T> extends EditionSchemeObjectImpl implements EditionAction<MS> {
+	public boolean evaluateCondition(EditionSchemeAction<?, ?, ?> action);
+
+	/**
+	 * Execute edition action in the context provided by supplied {@link EditionSchemeAction}<br>
+	 * Note than returned object will be used to be further reinjected in finalizer
+	 * 
+	 * @param action
+	 * @return
+	 */
+	public T performAction(EditionSchemeAction<?, ?, ?> action);
+
+	/**
+	 * Provides hooks after executing edition action in the context provided by supplied {@link EditionSchemeAction}
+	 * 
+	 * @param action
+	 * @param initialContext
+	 *            the object that was returned during {@link #performAction(EditionSchemeAction)} call
+	 * @return
+	 */
+	public void finalizePerformAction(EditionSchemeAction<?, ?, ?> action, T initialContext);
+
+	public BindingModel getInferedBindingModel();
+
+	public void rebuildInferedBindingModel();
+
+	public static abstract class EditionActionImpl<MS extends ModelSlot<?>, T> extends EditionSchemeObjectImpl implements
+			EditionAction<MS, T> {
 
 		private static final Logger logger = Logger.getLogger(EditionAction.class.getPackage().getName());
 
@@ -137,10 +163,12 @@ public abstract interface EditionAction<MS extends ModelSlot<?>, T> extends Edit
 			return null;
 		}
 
+		@Override
 		public MS getModelSlot() {
 			return modelSlot;
 		}
 
+		@Override
 		public void setModelSlot(MS modelSlot) {
 			this.modelSlot = modelSlot;
 		}
@@ -167,6 +195,7 @@ public abstract interface EditionAction<MS extends ModelSlot<?>, T> extends Edit
 			}
 		}
 
+		@Override
 		public boolean evaluateCondition(EditionSchemeAction action) {
 			if (getConditional().isValid()) {
 				try {
@@ -190,11 +219,11 @@ public abstract interface EditionAction<MS extends ModelSlot<?>, T> extends Edit
 		 * @param action
 		 * @return
 		 */
-		public static void performBatchOfActions(Collection<EditionAction<?, ?>> actions, EditionSchemeAction contextAction) {
+		public static void performBatchOfActions(Collection<EditionAction<?, ?>> actions, EditionSchemeAction<?, ?, ?> contextAction) {
 
-			Hashtable<EditionAction, Object> performedActions = new Hashtable<EditionAction, Object>();
+			Hashtable<EditionAction<?, ?>, Object> performedActions = new Hashtable<EditionAction<?, ?>, Object>();
 
-			for (EditionAction editionAction : actions) {
+			for (EditionAction<?, ?> editionAction : actions) {
 				if (editionAction.evaluateCondition(contextAction)) {
 					Object assignedObject = editionAction.performAction(contextAction);
 					if (assignedObject != null) {
@@ -255,6 +284,7 @@ public abstract interface EditionAction<MS extends ModelSlot<?>, T> extends Edit
 		 * @param action
 		 * @return
 		 */
+		@Override
 		public abstract T performAction(EditionSchemeAction action);
 
 		/**
@@ -265,14 +295,15 @@ public abstract interface EditionAction<MS extends ModelSlot<?>, T> extends Edit
 		 *            the object that was returned during {@link #performAction(EditionSchemeAction)} call
 		 * @return
 		 */
+		@Override
 		public abstract void finalizePerformAction(EditionSchemeAction action, T initialContext);
 
 		@Override
 		public EditionPattern getEditionPattern() {
-			if (getScheme() == null) {
+			if (getEditionScheme() == null) {
 				return null;
 			}
-			return getScheme().getEditionPattern();
+			return getEditionScheme().getEditionPattern();
 		}
 
 		public Type getActionClass() {
@@ -280,8 +311,8 @@ public abstract interface EditionAction<MS extends ModelSlot<?>, T> extends Edit
 		}
 
 		public int getIndex() {
-			if (getScheme() != null && getScheme().getActions() != null) {
-				return getScheme().getActions().indexOf(this);
+			if (getEditionScheme() != null && getEditionScheme().getActions() != null) {
+				return getEditionScheme().getActions().indexOf(this);
 			}
 			return -1;
 		}
@@ -294,6 +325,7 @@ public abstract interface EditionAction<MS extends ModelSlot<?>, T> extends Edit
 			return null;
 		}
 
+		@Override
 		public final BindingModel getInferedBindingModel() {
 			if (inferedBindingModel == null) {
 				rebuildInferedBindingModel();
@@ -301,7 +333,8 @@ public abstract interface EditionAction<MS extends ModelSlot<?>, T> extends Edit
 			return inferedBindingModel;
 		}
 
-		protected void rebuildInferedBindingModel() {
+		@Override
+		public void rebuildInferedBindingModel() {
 			inferedBindingModel = buildInferedBindingModel();
 		}
 
@@ -315,6 +348,7 @@ public abstract interface EditionAction<MS extends ModelSlot<?>, T> extends Edit
 			return returned;
 		}
 
+		@Override
 		public DataBinding<Boolean> getConditional() {
 			if (conditional == null) {
 				conditional = new DataBinding<Boolean>(this, Boolean.class, DataBinding.BindingDefinitionType.GET);
@@ -323,6 +357,7 @@ public abstract interface EditionAction<MS extends ModelSlot<?>, T> extends Edit
 			return conditional;
 		}
 
+		@Override
 		public void setConditional(DataBinding<Boolean> conditional) {
 			if (conditional != null) {
 				conditional.setOwner(this);
@@ -343,12 +378,15 @@ public abstract interface EditionAction<MS extends ModelSlot<?>, T> extends Edit
 			return getStringRepresentation();
 		}
 
+		/*@Override
 		public ActionContainer getActionContainer() {
 			return actionContainer;
-		}
+		}*/
 
+		@Override
 		public void setActionContainer(ActionContainer actionContainer) {
-			this.actionContainer = actionContainer;
+			// this.actionContainer = actionContainer;
+			performSuperSetter(ACTION_CONTAINER_KEY, actionContainer);
 			rebuildInferedBindingModel();
 		}
 
@@ -485,17 +523,18 @@ public abstract interface EditionAction<MS extends ModelSlot<?>, T> extends Edit
 			return null;
 		}
 
-		public static class ConditionalBindingMustBeValid extends BindingMustBeValid<EditionAction> {
-			public ConditionalBindingMustBeValid() {
-				super("'conditional'_binding_is_not_valid", EditionAction.class);
-			}
+	}
 
-			@Override
-			public DataBinding<Boolean> getBinding(EditionAction object) {
-				return object.getConditional();
-			}
+	public static class ConditionalBindingMustBeValid extends BindingMustBeValid<EditionAction> {
+		public ConditionalBindingMustBeValid() {
+			super("'conditional'_binding_is_not_valid", EditionAction.class);
+		}
 
+		@Override
+		public DataBinding<Boolean> getBinding(EditionAction object) {
+			return object.getConditional();
 		}
 
 	}
+
 }

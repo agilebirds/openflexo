@@ -30,154 +30,164 @@ import org.openflexo.antar.expr.TypeMismatchException;
 import org.openflexo.foundation.ontology.IFlexoOntologyClass;
 import org.openflexo.foundation.ontology.IFlexoOntologyStructuralProperty;
 import org.openflexo.foundation.technologyadapter.TypeAwareModelSlot;
+import org.openflexo.model.annotations.Getter;
+import org.openflexo.model.annotations.ImplementationClass;
+import org.openflexo.model.annotations.ModelEntity;
+import org.openflexo.model.annotations.PropertyIdentifier;
+import org.openflexo.model.annotations.Setter;
+import org.openflexo.model.annotations.XMLAttribute;
+import org.openflexo.model.annotations.XMLElement;
 
 @ModelEntity
 @ImplementationClass(PropertyParameter.PropertyParameterImpl.class)
 @XMLElement
-public interface PropertyParameter extends InnerModelSlotParameter<TypeAwareModelSlot<?, ?>>{
+public interface PropertyParameter extends InnerModelSlotParameter<TypeAwareModelSlot<?, ?>> {
 
-@PropertyIdentifier(type=String.class)
-public static final String PARENT_PROPERTY_URI_KEY = "parentPropertyURI";
-@PropertyIdentifier(type=String.class)
-public static final String DOMAIN_URI_KEY = "domainURI";
-@PropertyIdentifier(type=DataBinding.class)
-public static final String DOMAIN_VALUE_KEY = "domainValue";
+	@PropertyIdentifier(type = String.class)
+	public static final String PARENT_PROPERTY_URI_KEY = "parentPropertyURI";
+	@PropertyIdentifier(type = String.class)
+	public static final String DOMAIN_URI_KEY = "domainURI";
+	@PropertyIdentifier(type = DataBinding.class)
+	public static final String DOMAIN_VALUE_KEY = "domainValue";
 
-@Getter(value=PARENT_PROPERTY_URI_KEY)
-@XMLAttribute(xmlTag="parentProperty")
-public String _getParentPropertyURI();
+	@Getter(value = PARENT_PROPERTY_URI_KEY)
+	@XMLAttribute(xmlTag = "parentProperty")
+	public String _getParentPropertyURI();
 
-@Setter(PARENT_PROPERTY_URI_KEY)
-public void _setParentPropertyURI(String parentPropertyURI);
+	@Setter(PARENT_PROPERTY_URI_KEY)
+	public void _setParentPropertyURI(String parentPropertyURI);
 
+	@Getter(value = DOMAIN_URI_KEY)
+	@XMLAttribute(xmlTag = "domain")
+	public String _getDomainURI();
 
-@Getter(value=DOMAIN_URI_KEY)
-@XMLAttribute(xmlTag="domain")
-public String _getDomainURI();
+	@Setter(DOMAIN_URI_KEY)
+	public void _setDomainURI(String domainURI);
 
-@Setter(DOMAIN_URI_KEY)
-public void _setDomainURI(String domainURI);
+	@Getter(value = DOMAIN_VALUE_KEY)
+	@XMLAttribute
+	public DataBinding<IFlexoOntologyClass> getDomainValue();
 
+	@Setter(DOMAIN_VALUE_KEY)
+	public void setDomainValue(DataBinding<IFlexoOntologyClass> domainValue);
 
-@Getter(value=DOMAIN_VALUE_KEY)
-@XMLAttribute
-public DataBinding getDomainValue();
+	public static abstract class PropertyParameterImpl extends InnerModelSlotParameterImpl<TypeAwareModelSlot<?, ?>> implements
+			PropertyParameter {
 
-@Setter(DOMAIN_VALUE_KEY)
-public void setDomainValue(DataBinding domainValue);
+		private String domainURI;
+		private String parentPropertyURI;
+		private boolean isDynamicDomainValueSet = false;
 
+		private DataBinding<IFlexoOntologyClass> domainValue;
 
-public static abstract  class PropertyParameterImpl extends InnerModelSlotParameter<TypeAwareModelSlot<?, ?>>Impl implements PropertyParameter
-{
-
-	private String domainURI;
-	private String parentPropertyURI;
-	private boolean isDynamicDomainValueSet = false;
-
-	private DataBinding<IFlexoOntologyClass> domainValue;
-
-	public PropertyParameterImpl() {
-		super();
-	}
-
-	@Override
-	public WidgetType getWidget() {
-		return WidgetType.PROPERTY;
-	}
-
-	@Override
-	public Type getType() {
-		return IFlexoOntologyStructuralProperty.class;
-	};
-
-	public String _getDomainURI() {
-		return domainURI;
-	}
-
-	public void _setDomainURI(String domainURI) {
-		this.domainURI = domainURI;
-	}
-
-	public IFlexoOntologyClass getDomain() {
-		return getVirtualModel().getOntologyClass(_getDomainURI());
-	}
-
-	public void setDomain(IFlexoOntologyClass c) {
-		_setDomainURI(c != null ? c.getURI() : null);
-	}
-
-	public DataBinding<IFlexoOntologyClass> getDomainValue() {
-		if (domainValue == null) {
-			domainValue = new DataBinding<IFlexoOntologyClass>(this, IFlexoOntologyClass.class, BindingDefinitionType.GET);
-			domainValue.setBindingName("domainValue");
+		public PropertyParameterImpl() {
+			super();
 		}
-		return domainValue;
-	}
 
-	public void setDomainValue(DataBinding<IFlexoOntologyClass> domainValue) {
-		if (domainValue != null) {
-			domainValue.setOwner(this);
-			domainValue.setBindingName("domainValue");
-			domainValue.setDeclaredType(IFlexoOntologyClass.class);
-			domainValue.setBindingDefinitionType(BindingDefinitionType.GET);
+		@Override
+		public WidgetType getWidget() {
+			return WidgetType.PROPERTY;
 		}
-		this.domainValue = domainValue;
-	}
 
-	public boolean getIsDynamicDomainValue() {
-		return getDomainValue().isSet() || isDynamicDomainValueSet;
-	}
+		@Override
+		public Type getType() {
+			return IFlexoOntologyStructuralProperty.class;
+		};
 
-	public void setIsDynamicDomainValue(boolean isDynamic) {
-		if (isDynamic) {
-			isDynamicDomainValueSet = true;
-		} else {
-			domainValue = null;
-			isDynamicDomainValueSet = false;
+		@Override
+		public String _getDomainURI() {
+			return domainURI;
 		}
-	}
 
-	public IFlexoOntologyClass evaluateDomainValue(BindingEvaluationContext parameterRetriever) {
-		if (getDomainValue().isValid()) {
-			try {
-				return getDomainValue().getBindingValue(parameterRetriever);
-			} catch (TypeMismatchException e) {
-				e.printStackTrace();
-			} catch (NullReferenceException e) {
-				e.printStackTrace();
-			} catch (InvocationTargetException e) {
-				e.printStackTrace();
+		@Override
+		public void _setDomainURI(String domainURI) {
+			this.domainURI = domainURI;
+		}
+
+		public IFlexoOntologyClass getDomain() {
+			return getVirtualModel().getOntologyClass(_getDomainURI());
+		}
+
+		public void setDomain(IFlexoOntologyClass c) {
+			_setDomainURI(c != null ? c.getURI() : null);
+		}
+
+		@Override
+		public DataBinding<IFlexoOntologyClass> getDomainValue() {
+			if (domainValue == null) {
+				domainValue = new DataBinding<IFlexoOntologyClass>(this, IFlexoOntologyClass.class, BindingDefinitionType.GET);
+				domainValue.setBindingName("domainValue");
+			}
+			return domainValue;
+		}
+
+		@Override
+		public void setDomainValue(DataBinding<IFlexoOntologyClass> domainValue) {
+			if (domainValue != null) {
+				domainValue.setOwner(this);
+				domainValue.setBindingName("domainValue");
+				domainValue.setDeclaredType(IFlexoOntologyClass.class);
+				domainValue.setBindingDefinitionType(BindingDefinitionType.GET);
+			}
+			this.domainValue = domainValue;
+		}
+
+		public boolean getIsDynamicDomainValue() {
+			return getDomainValue().isSet() || isDynamicDomainValueSet;
+		}
+
+		public void setIsDynamicDomainValue(boolean isDynamic) {
+			if (isDynamic) {
+				isDynamicDomainValueSet = true;
+			} else {
+				domainValue = null;
+				isDynamicDomainValueSet = false;
 			}
 		}
-		return null;
-	}
 
-	public String _getParentPropertyURI() {
-		return parentPropertyURI;
-	}
-
-	public void _setParentPropertyURI(String parentPropertyURI) {
-		this.parentPropertyURI = parentPropertyURI;
-	}
-
-	public IFlexoOntologyStructuralProperty getParentProperty() {
-		return getVirtualModel().getOntologyProperty(_getParentPropertyURI());
-	}
-
-	public void setParentProperty(IFlexoOntologyStructuralProperty ontologyProperty) {
-		parentPropertyURI = ontologyProperty != null ? ontologyProperty.getURI() : null;
-	}
-
-	@Override
-	public TypeAwareModelSlot<?, ?> getModelSlot() {
-		TypeAwareModelSlot<?, ?> returned = super.getModelSlot();
-		if (returned == null) {
-			if (getVirtualModel() != null && getVirtualModel().getModelSlots(TypeAwareModelSlot.class).size() > 0) {
-				return getVirtualModel().getModelSlots(TypeAwareModelSlot.class).get(0);
+		public IFlexoOntologyClass evaluateDomainValue(BindingEvaluationContext parameterRetriever) {
+			if (getDomainValue().isValid()) {
+				try {
+					return getDomainValue().getBindingValue(parameterRetriever);
+				} catch (TypeMismatchException e) {
+					e.printStackTrace();
+				} catch (NullReferenceException e) {
+					e.printStackTrace();
+				} catch (InvocationTargetException e) {
+					e.printStackTrace();
+				}
 			}
+			return null;
 		}
-		return returned;
-	}
 
-}
+		@Override
+		public String _getParentPropertyURI() {
+			return parentPropertyURI;
+		}
+
+		@Override
+		public void _setParentPropertyURI(String parentPropertyURI) {
+			this.parentPropertyURI = parentPropertyURI;
+		}
+
+		public IFlexoOntologyStructuralProperty getParentProperty() {
+			return getVirtualModel().getOntologyProperty(_getParentPropertyURI());
+		}
+
+		public void setParentProperty(IFlexoOntologyStructuralProperty ontologyProperty) {
+			parentPropertyURI = ontologyProperty != null ? ontologyProperty.getURI() : null;
+		}
+
+		@Override
+		public TypeAwareModelSlot<?, ?> getModelSlot() {
+			TypeAwareModelSlot<?, ?> returned = super.getModelSlot();
+			if (returned == null) {
+				if (getVirtualModel() != null && getVirtualModel().getModelSlots(TypeAwareModelSlot.class).size() > 0) {
+					return getVirtualModel().getModelSlots(TypeAwareModelSlot.class).get(0);
+				}
+			}
+			return returned;
+		}
+
+	}
 }

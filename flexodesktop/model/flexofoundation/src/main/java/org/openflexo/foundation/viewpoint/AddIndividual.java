@@ -20,6 +20,7 @@
 package org.openflexo.foundation.viewpoint;
 
 import java.lang.reflect.Type;
+import java.util.List;
 import java.util.Vector;
 import java.util.logging.Logger;
 
@@ -35,290 +36,315 @@ import org.openflexo.foundation.validation.ValidationRule;
 import org.openflexo.foundation.viewpoint.FMLRepresentationContext.FMLRepresentationOutput;
 import org.openflexo.foundation.viewpoint.annotations.FIBPanel;
 import org.openflexo.logging.FlexoLogger;
+import org.openflexo.model.annotations.Adder;
+import org.openflexo.model.annotations.Getter;
+import org.openflexo.model.annotations.Getter.Cardinality;
+import org.openflexo.model.annotations.ImplementationClass;
+import org.openflexo.model.annotations.ModelEntity;
+import org.openflexo.model.annotations.PropertyIdentifier;
+import org.openflexo.model.annotations.Remover;
+import org.openflexo.model.annotations.Setter;
+import org.openflexo.model.annotations.XMLAttribute;
+import org.openflexo.model.annotations.XMLElement;
 import org.openflexo.toolbox.StringUtils;
 
 @FIBPanel("Fib/AddIndividualPanel.fib")
 @ModelEntity(isAbstract = true)
 @ImplementationClass(AddIndividual.AddIndividualImpl.class)
-public abstract interface AddIndividual<MS extends TypeAwareModelSlot<?, ?>, T extends IFlexoOntologyIndividual> extends AddConcept<MS, T>{
+public abstract interface AddIndividual<MS extends TypeAwareModelSlot<?, ?>, T extends IFlexoOntologyIndividual> extends AddConcept<MS, T> {
 
-@PropertyIdentifier(type=DataBinding.class)
-public static final String INDIVIDUAL_NAME_KEY = "individualName";
-@PropertyIdentifier(type=Vector.class)
-public static final String DATA_ASSERTIONS_KEY = "dataAssertions";
-@PropertyIdentifier(type=Vector.class)
-public static final String OBJECT_ASSERTIONS_KEY = "objectAssertions";
-@PropertyIdentifier(type=String.class)
-public static final String ONTOLOGY_CLASS_URI_KEY = "ontologyClassURI";
-@PropertyIdentifier(type=TypeAwareModelSlot.class)
-public static final String MODEL_SLOT_KEY = "modelSlot";
+	@PropertyIdentifier(type = DataBinding.class)
+	public static final String INDIVIDUAL_NAME_KEY = "individualName";
+	@PropertyIdentifier(type = Vector.class)
+	public static final String DATA_ASSERTIONS_KEY = "dataAssertions";
+	@PropertyIdentifier(type = Vector.class)
+	public static final String OBJECT_ASSERTIONS_KEY = "objectAssertions";
+	@PropertyIdentifier(type = String.class)
+	public static final String ONTOLOGY_CLASS_URI_KEY = "ontologyClassURI";
+	@PropertyIdentifier(type = TypeAwareModelSlot.class)
+	public static final String MODEL_SLOT_KEY = "modelSlot";
 
-@Getter(value=INDIVIDUAL_NAME_KEY)
-@XMLAttribute
-public DataBinding getIndividualName();
+	@Getter(value = INDIVIDUAL_NAME_KEY)
+	@XMLAttribute
+	public DataBinding<String> getIndividualName();
 
-@Setter(INDIVIDUAL_NAME_KEY)
-public void setIndividualName(DataBinding individualName);
+	@Setter(INDIVIDUAL_NAME_KEY)
+	public void setIndividualName(DataBinding<String> individualName);
 
+	@Getter(value = DATA_ASSERTIONS_KEY, cardinality = Cardinality.LIST, inverse = DataPropertyAssertion.ACTION_KEY)
+	@XMLElement(xmlTag = "DataPropertyAssertion")
+	public List<DataPropertyAssertion> getDataAssertions();
 
-@Getter(value=DATA_ASSERTIONS_KEY,cardinality = Cardinality.LIST)
-@XMLElement(xmlTag="DataPropertyAssertion")
-public List<DataPropertyAssertion> getDataAssertions();
+	@Setter(DATA_ASSERTIONS_KEY)
+	public void setDataAssertions(List<DataPropertyAssertion> dataAssertions);
 
-@Setter(DATA_ASSERTIONS_KEY)
-public void setDataAssertions(List<DataPropertyAssertion> dataAssertions);
+	@Adder(DATA_ASSERTIONS_KEY)
+	public void addToDataAssertions(DataPropertyAssertion aDataAssertion);
 
-@Adder(DATA_ASSERTIONS_KEY)
-public void addToDataAssertions(DataPropertyAssertion aDataAssertion);
+	@Remover(DATA_ASSERTIONS_KEY)
+	public void removeFromDataAssertions(DataPropertyAssertion aDataAssertion);
 
-@Remover(DATA_ASSERTIONS_KEY)
-public void removeFromDataAssertions(DataPropertyAssertion aDataAssertion);
+	@Getter(value = OBJECT_ASSERTIONS_KEY, cardinality = Cardinality.LIST, inverse = ObjectPropertyAssertion.ACTION_KEY)
+	@XMLElement(xmlTag = "ObjectPropertyAssertion")
+	public List<ObjectPropertyAssertion> getObjectAssertions();
 
+	@Setter(OBJECT_ASSERTIONS_KEY)
+	public void setObjectAssertions(List<ObjectPropertyAssertion> objectAssertions);
 
-@Getter(value=OBJECT_ASSERTIONS_KEY,cardinality = Cardinality.LIST)
-@XMLElement(xmlTag="ObjectPropertyAssertion")
-public List<ObjectPropertyAssertion> getObjectAssertions();
+	@Adder(OBJECT_ASSERTIONS_KEY)
+	public void addToObjectAssertions(ObjectPropertyAssertion aObjectAssertion);
 
-@Setter(OBJECT_ASSERTIONS_KEY)
-public void setObjectAssertions(List<ObjectPropertyAssertion> objectAssertions);
+	@Remover(OBJECT_ASSERTIONS_KEY)
+	public void removeFromObjectAssertions(ObjectPropertyAssertion aObjectAssertion);
 
-@Adder(OBJECT_ASSERTIONS_KEY)
-public void addToObjectAssertions(ObjectPropertyAssertion aObjectAssertion);
+	@Getter(value = ONTOLOGY_CLASS_URI_KEY)
+	@XMLAttribute
+	public String _getOntologyClassURI();
 
-@Remover(OBJECT_ASSERTIONS_KEY)
-public void removeFromObjectAssertions(ObjectPropertyAssertion aObjectAssertion);
+	@Setter(ONTOLOGY_CLASS_URI_KEY)
+	public void _setOntologyClassURI(String ontologyClassURI);
 
+	public IFlexoOntologyClass getOntologyClass();
 
-@Getter(value=ONTOLOGY_CLASS_URI_KEY)
-@XMLAttribute
-public String _getOntologyClassURI();
-
-@Setter(ONTOLOGY_CLASS_URI_KEY)
-public void _setOntologyClassURI(String ontologyClassURI);
-
-
-@Getter(value=MODEL_SLOT_KEY)
-@XMLElement
-public TypeAwareModelSlot getModelSlot();
-
-@Setter(MODEL_SLOT_KEY)
-public void setModelSlot(TypeAwareModelSlot modelSlot);
-
-
-public static abstract  abstract class AddIndividual<MSImpl extends TypeAwareModelSlot<?, ?>, T extends IFlexoOntologyIndividual> extends AddConcept<MS, T>Impl implements AddIndividual<MS
-{
-
-	protected static final Logger logger = FlexoLogger.getLogger(AddIndividual.class.getPackage().getName());
-
-	private Vector<DataPropertyAssertion> dataAssertions;
-	private Vector<ObjectPropertyAssertion> objectAssertions;
-	protected String ontologyClassURI = null;
-
-	private DataBinding<String> individualName;
-
-	public AddIndividualImpl() {
-		super();
-		dataAssertions = new Vector<DataPropertyAssertion>();
-		objectAssertions = new Vector<ObjectPropertyAssertion>();
-	}
+	public void setOntologyClass(IFlexoOntologyClass ontologyClass);
 
 	@Override
-	public String getFMLRepresentation(FMLRepresentationContext context) {
-		FMLRepresentationOutput out = new FMLRepresentationOutput(context);
-		if (getAssignation().isSet()) {
-			out.append(getAssignation().toString() + " = (", context);
-		}
-		out.append(getClass().getSimpleName() + (getOntologyClass() != null ? " conformTo " + getOntologyClass().getName() : "") + " from "
-				+ getModelSlot().getName() + " {" + StringUtils.LINE_SEPARATOR, context);
-		out.append(getAssertionsFMLRepresentation(context), context);
-		out.append("}", context);
-		if (getAssignation().isSet()) {
-			out.append(")", context);
-		}
-		return out.toString();
-	}
+	@Getter(value = MODEL_SLOT_KEY)
+	@XMLElement
+	public MS getModelSlot();
 
-	protected String getAssertionsFMLRepresentation(FMLRepresentationContext context) {
-		if (getDataAssertions().size() > 0) {
-			StringBuffer sb = new StringBuffer();
-			for (DataPropertyAssertion a : getDataAssertions()) {
-				if (a.getOntologyProperty() != null) {
-					sb.append("  " + a.getOntologyProperty().getName() + " = " + a.getValue().toString() + ";" + StringUtils.LINE_SEPARATOR);
+	@Override
+	@Setter(MODEL_SLOT_KEY)
+	public void setModelSlot(MS modelSlot);
+
+	public static abstract class AddIndividualImpl<MS extends TypeAwareModelSlot<?, ?>, T extends IFlexoOntologyIndividual> extends
+			AddConceptImpl<MS, T> implements AddIndividual<MS, T> {
+
+		protected static final Logger logger = FlexoLogger.getLogger(AddIndividual.class.getPackage().getName());
+
+		private Vector<DataPropertyAssertion> dataAssertions;
+		private Vector<ObjectPropertyAssertion> objectAssertions;
+		protected String ontologyClassURI = null;
+
+		private DataBinding<String> individualName;
+
+		public AddIndividualImpl() {
+			super();
+			dataAssertions = new Vector<DataPropertyAssertion>();
+			objectAssertions = new Vector<ObjectPropertyAssertion>();
+		}
+
+		@Override
+		public String getFMLRepresentation(FMLRepresentationContext context) {
+			FMLRepresentationOutput out = new FMLRepresentationOutput(context);
+			if (getAssignation().isSet()) {
+				out.append(getAssignation().toString() + " = (", context);
+			}
+			out.append(getClass().getSimpleName() + (getOntologyClass() != null ? " conformTo " + getOntologyClass().getName() : "")
+					+ " from " + getModelSlot().getName() + " {" + StringUtils.LINE_SEPARATOR, context);
+			out.append(getAssertionsFMLRepresentation(context), context);
+			out.append("}", context);
+			if (getAssignation().isSet()) {
+				out.append(")", context);
+			}
+			return out.toString();
+		}
+
+		protected String getAssertionsFMLRepresentation(FMLRepresentationContext context) {
+			if (getDataAssertions().size() > 0) {
+				StringBuffer sb = new StringBuffer();
+				for (DataPropertyAssertion a : getDataAssertions()) {
+					if (a.getOntologyProperty() != null) {
+						sb.append("  " + a.getOntologyProperty().getName() + " = " + a.getValue().toString() + ";"
+								+ StringUtils.LINE_SEPARATOR);
+					}
 				}
+				return sb.toString();
 			}
-			return sb.toString();
-		}
-		if (getObjectAssertions().size() > 0) {
-			StringBuffer sb = new StringBuffer();
-			for (ObjectPropertyAssertion a : getObjectAssertions()) {
-				sb.append("  " + a.getOntologyProperty().getName() + " = " + a.getObject().toString() + ";" + StringUtils.LINE_SEPARATOR);
+			if (getObjectAssertions().size() > 0) {
+				StringBuffer sb = new StringBuffer();
+				for (ObjectPropertyAssertion a : getObjectAssertions()) {
+					sb.append("  " + a.getOntologyProperty().getName() + " = " + a.getObject().toString() + ";"
+							+ StringUtils.LINE_SEPARATOR);
+				}
+				return sb.toString();
 			}
-			return sb.toString();
-		}
-		return null;
-	}
-
-	public abstract Class<T> getOntologyIndividualClass();
-
-	@Override
-	public IndividualPatternRole getPatternRole() {
-		PatternRole superPatternRole = super.getPatternRole();
-		if (superPatternRole instanceof IndividualPatternRole) {
-			return (IndividualPatternRole) superPatternRole;
-		} else if (superPatternRole != null) {
-			// logger.warning("Unexpected pattern role of type " + superPatternRole.getClass().getSimpleName());
 			return null;
 		}
-		return null;
-	}
 
-	public IFlexoOntologyClass getType() {
-		return getOntologyClass();
-	}
+		public abstract Class<T> getOntologyIndividualClass();
 
-	public void setType(IFlexoOntologyClass type) {
-		setOntologyClass(type);
-	}
-
-	@Override
-	public IFlexoOntologyClass getOntologyClass() {
-		// System.out.println("AddIndividual: ontologyClassURI=" + ontologyClassURI);
-		if (StringUtils.isNotEmpty(ontologyClassURI) && getVirtualModel() != null) {
-			return getVirtualModel().getOntologyClass(ontologyClassURI);
-		} else {
-			if (getPatternRole() != null) {
-				// System.out.println("Je reponds avec le pattern role " + getPatternRole());
-				IFlexoOntologyClass t = getPatternRole().getOntologicType();
-				setOntologyClass(t);
-				return t;
-			}
-		}
-		// System.out.println("Je reponds null");
-		return null;
-	}
-
-	@Override
-	public void setOntologyClass(IFlexoOntologyClass ontologyClass) {
-		if (ontologyClass != null) {
-			if (getPatternRole() instanceof IndividualPatternRole) {
-				if (getPatternRole().getOntologicType().isSuperConceptOf(ontologyClass)) {
-					ontologyClassURI = ontologyClass.getURI();
-				} else {
-					getPatternRole().setOntologicType(ontologyClass);
-				}
-			} else {
-				ontologyClassURI = ontologyClass.getURI();
-			}
-		} else {
-			ontologyClassURI = null;
-		}
-		System.out.println("ontologyClassURI=" + ontologyClassURI);
-	}
-
-	public String _getOntologyClassURI() {
-		if (getOntologyClass() != null) {
-			if (getPatternRole() instanceof IndividualPatternRole && getPatternRole().getOntologicType() == getOntologyClass()) {
-				// No need to store an overriding type, just use default provided by pattern role
+		@Override
+		public IndividualPatternRole getPatternRole() {
+			PatternRole superPatternRole = super.getPatternRole();
+			if (superPatternRole instanceof IndividualPatternRole) {
+				return (IndividualPatternRole) superPatternRole;
+			} else if (superPatternRole != null) {
+				// logger.warning("Unexpected pattern role of type " + superPatternRole.getClass().getSimpleName());
 				return null;
 			}
-			return getOntologyClass().getURI();
+			return null;
 		}
-		return ontologyClassURI;
-	}
 
-	public void _setOntologyClassURI(String ontologyClassURI) {
-		this.ontologyClassURI = ontologyClassURI;
-	}
-
-	public Vector<DataPropertyAssertion> getDataAssertions() {
-		return dataAssertions;
-	}
-
-	public void setDataAssertions(Vector<DataPropertyAssertion> assertions) {
-		this.dataAssertions = assertions;
-	}
-
-	public void addToDataAssertions(DataPropertyAssertion assertion) {
-		assertion.setAction(this);
-		dataAssertions.add(assertion);
-	}
-
-	public void removeFromDataAssertions(DataPropertyAssertion assertion) {
-		assertion.setAction(null);
-		dataAssertions.remove(assertion);
-	}
-
-	public DataPropertyAssertion createDataPropertyAssertion() {
-		DataPropertyAssertion newDataPropertyAssertion = new DataPropertyAssertion();
-		addToDataAssertions(newDataPropertyAssertion);
-		return newDataPropertyAssertion;
-	}
-
-	public DataPropertyAssertion deleteDataPropertyAssertion(DataPropertyAssertion assertion) {
-		removeFromDataAssertions(assertion);
-		assertion.delete();
-		return assertion;
-	}
-
-	public Vector<ObjectPropertyAssertion> getObjectAssertions() {
-		return objectAssertions;
-	}
-
-	public void setObjectAssertions(Vector<ObjectPropertyAssertion> assertions) {
-		this.objectAssertions = assertions;
-	}
-
-	public void addToObjectAssertions(ObjectPropertyAssertion assertion) {
-		assertion.setAction(this);
-		objectAssertions.add(assertion);
-	}
-
-	public void removeFromObjectAssertions(ObjectPropertyAssertion assertion) {
-		assertion.setAction(null);
-		objectAssertions.remove(assertion);
-	}
-
-	public ObjectPropertyAssertion createObjectPropertyAssertion() {
-		ObjectPropertyAssertion newObjectPropertyAssertion = new ObjectPropertyAssertion();
-		addToObjectAssertions(newObjectPropertyAssertion);
-		return newObjectPropertyAssertion;
-	}
-
-	public ObjectPropertyAssertion deleteObjectPropertyAssertion(ObjectPropertyAssertion assertion) {
-		removeFromObjectAssertions(assertion);
-		assertion.delete();
-		return assertion;
-	}
-
-	public DataBinding<String> getIndividualName() {
-		if (individualName == null) {
-			individualName = new DataBinding<String>(this, String.class, DataBinding.BindingDefinitionType.GET);
-			individualName.setBindingName("individualName");
+		public IFlexoOntologyClass getType() {
+			return getOntologyClass();
 		}
-		return individualName;
-	}
 
-	public void setIndividualName(DataBinding<String> individualName) {
-		if (individualName != null) {
-			individualName.setOwner(this);
-			individualName.setDeclaredType(String.class);
-			individualName.setBindingDefinitionType(DataBinding.BindingDefinitionType.GET);
-			individualName.setBindingName("individualName");
+		public void setType(IFlexoOntologyClass type) {
+			setOntologyClass(type);
 		}
-		this.individualName = individualName;
-	}
 
-	@Override
-	public Type getAssignableType() {
-		if (getOntologyClass() == null) {
-			return IFlexoOntologyIndividual.class;
+		@Override
+		public IFlexoOntologyClass getOntologyClass() {
+			// System.out.println("AddIndividual: ontologyClassURI=" + ontologyClassURI);
+			if (StringUtils.isNotEmpty(ontologyClassURI) && getVirtualModel() != null) {
+				return getVirtualModel().getOntologyClass(ontologyClassURI);
+			} else {
+				if (getPatternRole() != null) {
+					// System.out.println("Je reponds avec le pattern role " + getPatternRole());
+					IFlexoOntologyClass t = getPatternRole().getOntologicType();
+					setOntologyClass(t);
+					return t;
+				}
+			}
+			// System.out.println("Je reponds null");
+			return null;
 		}
-		return IndividualOfClass.getIndividualOfClass(getOntologyClass());
+
+		@Override
+		public void setOntologyClass(IFlexoOntologyClass ontologyClass) {
+			if (ontologyClass != null) {
+				if (getPatternRole() instanceof IndividualPatternRole) {
+					if (getPatternRole().getOntologicType().isSuperConceptOf(ontologyClass)) {
+						ontologyClassURI = ontologyClass.getURI();
+					} else {
+						getPatternRole().setOntologicType(ontologyClass);
+					}
+				} else {
+					ontologyClassURI = ontologyClass.getURI();
+				}
+			} else {
+				ontologyClassURI = null;
+			}
+			System.out.println("ontologyClassURI=" + ontologyClassURI);
+		}
+
+		@Override
+		public String _getOntologyClassURI() {
+			if (getOntologyClass() != null) {
+				if (getPatternRole() instanceof IndividualPatternRole && getPatternRole().getOntologicType() == getOntologyClass()) {
+					// No need to store an overriding type, just use default provided by pattern role
+					return null;
+				}
+				return getOntologyClass().getURI();
+			}
+			return ontologyClassURI;
+		}
+
+		@Override
+		public void _setOntologyClassURI(String ontologyClassURI) {
+			this.ontologyClassURI = ontologyClassURI;
+		}
+
+		@Override
+		public Vector<DataPropertyAssertion> getDataAssertions() {
+			return dataAssertions;
+		}
+
+		public void setDataAssertions(Vector<DataPropertyAssertion> assertions) {
+			this.dataAssertions = assertions;
+		}
+
+		@Override
+		public void addToDataAssertions(DataPropertyAssertion assertion) {
+			assertion.setAction(this);
+			dataAssertions.add(assertion);
+		}
+
+		@Override
+		public void removeFromDataAssertions(DataPropertyAssertion assertion) {
+			assertion.setAction(null);
+			dataAssertions.remove(assertion);
+		}
+
+		public DataPropertyAssertion createDataPropertyAssertion() {
+			DataPropertyAssertion newDataPropertyAssertion = getVirtualModelFactory().newDataPropertyAssertion();
+			addToDataAssertions(newDataPropertyAssertion);
+			return newDataPropertyAssertion;
+		}
+
+		public DataPropertyAssertion deleteDataPropertyAssertion(DataPropertyAssertion assertion) {
+			removeFromDataAssertions(assertion);
+			assertion.delete();
+			return assertion;
+		}
+
+		@Override
+		public Vector<ObjectPropertyAssertion> getObjectAssertions() {
+			return objectAssertions;
+		}
+
+		public void setObjectAssertions(Vector<ObjectPropertyAssertion> assertions) {
+			this.objectAssertions = assertions;
+		}
+
+		@Override
+		public void addToObjectAssertions(ObjectPropertyAssertion assertion) {
+			assertion.setAction(this);
+			objectAssertions.add(assertion);
+		}
+
+		@Override
+		public void removeFromObjectAssertions(ObjectPropertyAssertion assertion) {
+			assertion.setAction(null);
+			objectAssertions.remove(assertion);
+		}
+
+		public ObjectPropertyAssertion createObjectPropertyAssertion() {
+			ObjectPropertyAssertion newObjectPropertyAssertion = getVirtualModelFactory().newObjectPropertyAssertion();
+			addToObjectAssertions(newObjectPropertyAssertion);
+			return newObjectPropertyAssertion;
+		}
+
+		public ObjectPropertyAssertion deleteObjectPropertyAssertion(ObjectPropertyAssertion assertion) {
+			removeFromObjectAssertions(assertion);
+			assertion.delete();
+			return assertion;
+		}
+
+		@Override
+		public DataBinding<String> getIndividualName() {
+			if (individualName == null) {
+				individualName = new DataBinding<String>(this, String.class, DataBinding.BindingDefinitionType.GET);
+				individualName.setBindingName("individualName");
+			}
+			return individualName;
+		}
+
+		@Override
+		public void setIndividualName(DataBinding<String> individualName) {
+			if (individualName != null) {
+				individualName.setOwner(this);
+				individualName.setDeclaredType(String.class);
+				individualName.setBindingDefinitionType(DataBinding.BindingDefinitionType.GET);
+				individualName.setBindingName("individualName");
+			}
+			this.individualName = individualName;
+		}
+
+		@Override
+		public Type getAssignableType() {
+			if (getOntologyClass() == null) {
+				return IFlexoOntologyIndividual.class;
+			}
+			return IndividualOfClass.getIndividualOfClass(getOntologyClass());
+		}
+
 	}
 
 	public static class AddIndividualActionMustDefineAnOntologyClass extends
 			ValidationRule<AddIndividualActionMustDefineAnOntologyClass, AddIndividual> {
-		public AddIndividualImplActionMustDefineAnOntologyClass() {
+		public AddIndividualActionMustDefineAnOntologyClass() {
 			super(AddIndividual.class, "add_individual_action_must_define_an_ontology_class");
 		}
 
@@ -369,5 +395,4 @@ public static abstract  abstract class AddIndividual<MSImpl extends TypeAwareMod
 
 	}
 
-}
 }

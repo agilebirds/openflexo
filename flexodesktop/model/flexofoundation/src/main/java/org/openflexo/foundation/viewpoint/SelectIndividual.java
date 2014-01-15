@@ -29,6 +29,12 @@ import org.openflexo.foundation.technologyadapter.TypeAwareModelSlot;
 import org.openflexo.foundation.viewpoint.FMLRepresentationContext.FMLRepresentationOutput;
 import org.openflexo.foundation.viewpoint.annotations.FIBPanel;
 import org.openflexo.logging.FlexoLogger;
+import org.openflexo.model.annotations.Getter;
+import org.openflexo.model.annotations.ImplementationClass;
+import org.openflexo.model.annotations.ModelEntity;
+import org.openflexo.model.annotations.PropertyIdentifier;
+import org.openflexo.model.annotations.Setter;
+import org.openflexo.model.annotations.XMLAttribute;
 import org.openflexo.toolbox.StringUtils;
 
 /**
@@ -44,81 +50,83 @@ import org.openflexo.toolbox.StringUtils;
 @FIBPanel("Fib/SelectIndividualPanel.fib")
 @ModelEntity(isAbstract = true)
 @ImplementationClass(SelectIndividual.SelectIndividualImpl.class)
-public abstract interface SelectIndividual<MS extends TypeAwareModelSlot<?, ?>, T extends IFlexoOntologyIndividual> extends FetchRequest<MS, T>{
+public abstract interface SelectIndividual<MS extends TypeAwareModelSlot<?, ?>, T extends IFlexoOntologyIndividual> extends
+		FetchRequest<MS, T> {
 
-@PropertyIdentifier(type=String.class)
-public static final String ONTOLOGY_CLASS_URI_KEY = "ontologyClassURI";
+	@PropertyIdentifier(type = String.class)
+	public static final String ONTOLOGY_CLASS_URI_KEY = "ontologyClassURI";
 
-@Getter(value=ONTOLOGY_CLASS_URI_KEY)
-@XMLAttribute
-public String _getOntologyClassURI();
+	@Getter(value = ONTOLOGY_CLASS_URI_KEY)
+	@XMLAttribute
+	public String _getOntologyClassURI();
 
-@Setter(ONTOLOGY_CLASS_URI_KEY)
-public void _setOntologyClassURI(String ontologyClassURI);
+	@Setter(ONTOLOGY_CLASS_URI_KEY)
+	public void _setOntologyClassURI(String ontologyClassURI);
 
+	public static abstract class SelectIndividualImpl<MS extends TypeAwareModelSlot<?, ?>, T extends IFlexoOntologyIndividual> extends
+			FetchRequestImpl<MS, T> implements SelectIndividual<MS, T> {
 
-public static abstract  abstract class SelectIndividual<MSImpl extends TypeAwareModelSlot<?, ?>, T extends IFlexoOntologyIndividual> extends FetchRequest<MS, T>Impl implements SelectIndividual<MS
-{
+		protected static final Logger logger = FlexoLogger.getLogger(SelectIndividual.class.getPackage().getName());
 
-	protected static final Logger logger = FlexoLogger.getLogger(SelectIndividual.class.getPackage().getName());
+		private String typeURI = null;
 
-	private String typeURI = null;
-
-	public SelectIndividualImpl() {
-		super();
-	}
-
-	@Override
-	public String getFMLRepresentation(FMLRepresentationContext context) {
-		FMLRepresentationOutput out = new FMLRepresentationOutput(context);
-		if (getAssignation().isSet()) {
-			out.append(getAssignation().toString() + " = (", context);
+		public SelectIndividualImpl() {
+			super();
 		}
-		out.append(getClass().getSimpleName() + (getModelSlot() != null ? " from " + getModelSlot().getName() : " ")
-				+ (getType() != null ? " as " + getType().getName() : "")
-				+ (getConditions().size() > 0 ? " " + getWhereClausesFMLRepresentation(context) : ""), context);
-		if (getAssignation().isSet()) {
-			out.append(")", context);
+
+		@Override
+		public String getFMLRepresentation(FMLRepresentationContext context) {
+			FMLRepresentationOutput out = new FMLRepresentationOutput(context);
+			if (getAssignation().isSet()) {
+				out.append(getAssignation().toString() + " = (", context);
+			}
+			out.append(getClass().getSimpleName() + (getModelSlot() != null ? " from " + getModelSlot().getName() : " ")
+					+ (getType() != null ? " as " + getType().getName() : "")
+					+ (getConditions().size() > 0 ? " " + getWhereClausesFMLRepresentation(context) : ""), context);
+			if (getAssignation().isSet()) {
+				out.append(")", context);
+			}
+			return out.toString();
 		}
-		return out.toString();
-	}
 
-	@Override
-	public IndividualOfClass getFetchedType() {
-		return IndividualOfClass.getIndividualOfClass(getType());
-	}
-
-	public IFlexoOntologyClass getType() {
-		if (StringUtils.isNotEmpty(typeURI) && getModelSlot() != null && getModelSlot().getMetaModelResource() != null
-				&& getModelSlot().getMetaModelResource().getMetaModelData() != null) {
-			return (IFlexoOntologyClass) getModelSlot().getMetaModelResource().getMetaModelData().getObject(typeURI);
+		@Override
+		public IndividualOfClass getFetchedType() {
+			return IndividualOfClass.getIndividualOfClass(getType());
 		}
-		return null;
-	}
 
-	public void setType(IFlexoOntologyClass ontologyClass) {
-		if (ontologyClass != null) {
-			typeURI = ontologyClass.getURI();
-		} else {
-			typeURI = null;
+		public IFlexoOntologyClass getType() {
+			if (StringUtils.isNotEmpty(typeURI) && getModelSlot() != null && getModelSlot().getMetaModelResource() != null
+					&& getModelSlot().getMetaModelResource().getMetaModelData() != null) {
+				return (IFlexoOntologyClass) getModelSlot().getMetaModelResource().getMetaModelData().getObject(typeURI);
+			}
+			return null;
+		}
+
+		public void setType(IFlexoOntologyClass ontologyClass) {
+			if (ontologyClass != null) {
+				typeURI = ontologyClass.getURI();
+			} else {
+				typeURI = null;
+			}
+		}
+
+		@Override
+		public String _getOntologyClassURI() {
+			if (getType() != null) {
+				return getType().getURI();
+			}
+			return typeURI;
+		}
+
+		@Override
+		public void _setOntologyClassURI(String ontologyClassURI) {
+			this.typeURI = ontologyClassURI;
+		}
+
+		@Override
+		public String getStringRepresentation() {
+			return getClass().getSimpleName() + (getType() != null ? " : " + getType().getName() : "")
+					+ (StringUtils.isNotEmpty(getAssignation().toString()) ? " (" + getAssignation().toString() + ")" : "");
 		}
 	}
-
-	public String _getOntologyClassURI() {
-		if (getType() != null) {
-			return getType().getURI();
-		}
-		return typeURI;
-	}
-
-	public void _setOntologyClassURI(String ontologyClassURI) {
-		this.typeURI = ontologyClassURI;
-	}
-
-	@Override
-	public String getStringRepresentation() {
-		return getClass().getSimpleName() + (getType() != null ? " : " + getType().getName() : "")
-				+ (StringUtils.isNotEmpty(getAssignation().toString()) ? " (" + getAssignation().toString() + ")" : "");
-	}
-}
 }

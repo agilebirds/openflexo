@@ -93,8 +93,6 @@ public interface EditionPattern extends EditionPatternObject {
 	@PropertyIdentifier(type = List.class)
 	public static final String EDITION_PATTERN_CONSTRAINTS_KEY = "editionPatternConstraints";
 
-	public VirtualModelModelFactory getVirtualModelFactory();
-
 	@Override
 	@Getter(value = VIRTUAL_MODEL_KEY, inverse = VirtualModel.EDITION_PATTERNS_KEY)
 	public VirtualModel getVirtualModel();
@@ -248,6 +246,29 @@ public interface EditionPattern extends EditionPatternObject {
 
 	public DeletionScheme generateDefaultDeletionScheme();
 
+	public List<IndividualPatternRole> getIndividualPatternRoles();
+
+	public List<ClassPatternRole> getClassPatternRoles();
+
+	public EditionPatternInstanceType getInstanceType();
+
+	public EditionPatternStructuralFacet getStructuralFacet();
+
+	public EditionPatternBehaviouralFacet getBehaviouralFacet();
+
+	public boolean isAssignableFrom(EditionPattern editionPattern);
+
+	public String getAvailableRoleName(String baseName);
+
+	/**
+	 * Duplicates this EditionPattern, given a new name<br>
+	 * Newly created EditionPattern is added to ViewPoint
+	 * 
+	 * @param newName
+	 * @return
+	 */
+	public EditionPattern duplicate(String newName);
+
 	public static abstract class EditionPatternImpl extends EditionPatternObjectImpl implements EditionPattern {
 
 		protected static final Logger logger = FlexoLogger.getLogger(EditionPattern.class.getPackage().getName());
@@ -283,26 +304,21 @@ public interface EditionPattern extends EditionPatternObject {
 			// patternRoles = new ArrayList<PatternRole<?>>();
 			// editionSchemes = new Vector<EditionScheme>();
 			// editionPatternConstraints = new Vector<EditionPatternConstraint>();
-			structuralFacet = new EditionPatternStructuralFacet(this);
-			behaviouralFacet = new EditionPatternBehaviouralFacet(this);
+			structuralFacet = getVirtualModelFactory().newEditionPatternStructuralFacet(this);
+			behaviouralFacet = getVirtualModelFactory().newEditionPatternBehaviouralFacet(this);
 		}
 
 		@Override
-		public VirtualModelModelFactory getVirtualModelFactory() {
-			if (getVirtualModel() != null) {
-				return getVirtualModel().getVirtualModelFactory();
-			}
-			return null;
-		}
-
 		public EditionPatternInstanceType getInstanceType() {
 			return instanceType;
 		}
 
+		@Override
 		public EditionPatternStructuralFacet getStructuralFacet() {
 			return structuralFacet;
 		}
 
+		@Override
 		public EditionPatternBehaviouralFacet getBehaviouralFacet() {
 			return behaviouralFacet;
 		}
@@ -465,10 +481,12 @@ public interface EditionPattern extends EditionPatternObject {
 			return returned;
 		}
 
+		@Override
 		public List<IndividualPatternRole> getIndividualPatternRoles() {
 			return getPatternRoles(IndividualPatternRole.class);
 		}
 
+		@Override
 		public List<ClassPatternRole> getClassPatternRoles() {
 			return getPatternRoles(ClassPatternRole.class);
 		}
@@ -513,6 +531,7 @@ public interface EditionPattern extends EditionPatternObject {
 			return availablePatternRoleNames;
 		}
 
+		@Override
 		public String getAvailableRoleName(String baseName) {
 			String testName = baseName;
 			int index = 2;
@@ -902,6 +921,7 @@ public interface EditionPattern extends EditionPatternObject {
 		 * @param newName
 		 * @return
 		 */
+		@Override
 		public EditionPattern duplicate(String newName) {
 			EditionPattern newEditionPattern = (EditionPattern) cloneObject();
 			newEditionPattern.setName(newName);
@@ -995,6 +1015,7 @@ public interface EditionPattern extends EditionPatternObject {
 			return childEditionPatterns;
 		}*/
 
+		@Override
 		public boolean isAssignableFrom(EditionPattern editionPattern) {
 			if (editionPattern == this) {
 				return true;
@@ -1042,81 +1063,82 @@ public interface EditionPattern extends EditionPatternObject {
 			return out.toString();
 		}
 
-		public static class EditionPatternShouldHaveRoles extends ValidationRule<EditionPatternShouldHaveRoles, EditionPattern> {
-			public EditionPatternShouldHaveRoles() {
-				super(EditionPattern.class, "edition_pattern_should_have_roles");
-			}
+	}
 
-			@Override
-			public ValidationIssue<EditionPatternShouldHaveRoles, EditionPattern> applyValidation(EditionPattern editionPattern) {
-				if (!(editionPattern instanceof VirtualModel) && editionPattern.getPatternRoles().size() == 0) {
-					return new ValidationWarning<EditionPatternShouldHaveRoles, EditionPattern>(this, editionPattern,
-							"edition_pattern_role_has_no_role");
-				}
-				return null;
-			}
+	public static class EditionPatternShouldHaveRoles extends ValidationRule<EditionPatternShouldHaveRoles, EditionPattern> {
+		public EditionPatternShouldHaveRoles() {
+			super(EditionPattern.class, "edition_pattern_should_have_roles");
 		}
 
-		public static class EditionPatternShouldHaveEditionSchemes extends
-				ValidationRule<EditionPatternShouldHaveEditionSchemes, EditionPattern> {
-			public EditionPatternShouldHaveEditionSchemes() {
-				super(EditionPattern.class, "edition_pattern_should_have_edition_scheme");
+		@Override
+		public ValidationIssue<EditionPatternShouldHaveRoles, EditionPattern> applyValidation(EditionPattern editionPattern) {
+			if (!(editionPattern instanceof VirtualModel) && editionPattern.getPatternRoles().size() == 0) {
+				return new ValidationWarning<EditionPatternShouldHaveRoles, EditionPattern>(this, editionPattern,
+						"edition_pattern_role_has_no_role");
 			}
+			return null;
+		}
+	}
 
-			@Override
-			public ValidationIssue<EditionPatternShouldHaveEditionSchemes, EditionPattern> applyValidation(EditionPattern editionPattern) {
-				if (editionPattern.getEditionSchemes().size() == 0) {
-					return new ValidationWarning<EditionPatternShouldHaveEditionSchemes, EditionPattern>(this, editionPattern,
-							"edition_pattern_has_no_edition_scheme");
-				}
-				return null;
-			}
+	public static class EditionPatternShouldHaveEditionSchemes extends
+			ValidationRule<EditionPatternShouldHaveEditionSchemes, EditionPattern> {
+		public EditionPatternShouldHaveEditionSchemes() {
+			super(EditionPattern.class, "edition_pattern_should_have_edition_scheme");
 		}
 
-		public static class EditionPatternShouldHaveDeletionScheme extends
-				ValidationRule<EditionPatternShouldHaveDeletionScheme, EditionPattern> {
-			public EditionPatternShouldHaveDeletionScheme() {
-				super(EditionPattern.class, "edition_pattern_should_have_deletion_scheme");
+		@Override
+		public ValidationIssue<EditionPatternShouldHaveEditionSchemes, EditionPattern> applyValidation(EditionPattern editionPattern) {
+			if (editionPattern.getEditionSchemes().size() == 0) {
+				return new ValidationWarning<EditionPatternShouldHaveEditionSchemes, EditionPattern>(this, editionPattern,
+						"edition_pattern_has_no_edition_scheme");
+			}
+			return null;
+		}
+	}
+
+	public static class EditionPatternShouldHaveDeletionScheme extends
+			ValidationRule<EditionPatternShouldHaveDeletionScheme, EditionPattern> {
+		public EditionPatternShouldHaveDeletionScheme() {
+			super(EditionPattern.class, "edition_pattern_should_have_deletion_scheme");
+		}
+
+		@Override
+		public ValidationIssue<EditionPatternShouldHaveDeletionScheme, EditionPattern> applyValidation(EditionPattern editionPattern) {
+			if (editionPattern.getDeletionSchemes().size() == 0) {
+				CreateDefaultDeletionScheme fixProposal = new CreateDefaultDeletionScheme(editionPattern);
+				return new ValidationWarning<EditionPatternShouldHaveDeletionScheme, EditionPattern>(this, editionPattern,
+						"edition_pattern_has_no_deletion_scheme", fixProposal);
+			}
+			return null;
+		}
+
+		protected static class CreateDefaultDeletionScheme extends FixProposal<EditionPatternShouldHaveDeletionScheme, EditionPattern> {
+
+			private final EditionPattern editionPattern;
+			private DeletionScheme newDefaultDeletionScheme;
+
+			public CreateDefaultDeletionScheme(EditionPattern anEditionPattern) {
+				super("create_default_deletion_scheme");
+				this.editionPattern = anEditionPattern;
+			}
+
+			public EditionPattern getEditionPattern() {
+				return editionPattern;
+			}
+
+			public DeletionScheme getDeletionScheme() {
+				return newDefaultDeletionScheme;
 			}
 
 			@Override
-			public ValidationIssue<EditionPatternShouldHaveDeletionScheme, EditionPattern> applyValidation(EditionPattern editionPattern) {
-				if (editionPattern.getDeletionSchemes().size() == 0) {
-					CreateDefaultDeletionScheme fixProposal = new CreateDefaultDeletionScheme(editionPattern);
-					return new ValidationWarning<EditionPatternShouldHaveDeletionScheme, EditionPattern>(this, editionPattern,
-							"edition_pattern_has_no_deletion_scheme", fixProposal);
-				}
-				return null;
-			}
-
-			protected static class CreateDefaultDeletionScheme extends FixProposal<EditionPatternShouldHaveDeletionScheme, EditionPattern> {
-
-				private final EditionPattern editionPattern;
-				private DeletionScheme newDefaultDeletionScheme;
-
-				public CreateDefaultDeletionScheme(EditionPattern anEditionPattern) {
-					super("create_default_deletion_scheme");
-					this.editionPattern = anEditionPattern;
-				}
-
-				public EditionPattern getEditionPattern() {
-					return editionPattern;
-				}
-
-				public DeletionScheme getDeletionScheme() {
-					return newDefaultDeletionScheme;
-				}
-
-				@Override
-				protected void fixAction() {
-					newDefaultDeletionScheme = editionPattern.createDeletionScheme();
-					// AddIndividual action = getObject();
-					// action.setAssignation(new ViewPointDataBinding(patternRole.getPatternRoleName()));
-				}
-
+			protected void fixAction() {
+				newDefaultDeletionScheme = editionPattern.createDeletionScheme();
+				// AddIndividual action = getObject();
+				// action.setAssignation(new ViewPointDataBinding(patternRole.getPatternRoleName()));
 			}
 
 		}
 
 	}
+
 }

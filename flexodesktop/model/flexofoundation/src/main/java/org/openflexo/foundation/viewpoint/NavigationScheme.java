@@ -28,65 +28,75 @@ import org.openflexo.antar.expr.TypeMismatchException;
 import org.openflexo.foundation.FlexoObject;
 import org.openflexo.foundation.view.EditionPatternInstance;
 import org.openflexo.foundation.viewpoint.annotations.FIBPanel;
+import org.openflexo.model.annotations.Getter;
+import org.openflexo.model.annotations.ImplementationClass;
+import org.openflexo.model.annotations.ModelEntity;
+import org.openflexo.model.annotations.PropertyIdentifier;
+import org.openflexo.model.annotations.Setter;
+import org.openflexo.model.annotations.XMLAttribute;
+import org.openflexo.model.annotations.XMLElement;
 
 @FIBPanel("Fib/NavigationSchemePanel.fib")
 @ModelEntity
 @ImplementationClass(NavigationScheme.NavigationSchemeImpl.class)
 @XMLElement
-public interface NavigationScheme extends AbstractActionScheme{
+public interface NavigationScheme extends AbstractActionScheme {
 
-@PropertyIdentifier(type=DataBinding.class)
-public static final String TARGET_OBJECT_KEY = "targetObject";
+	@PropertyIdentifier(type = DataBinding.class)
+	public static final String TARGET_OBJECT_KEY = "targetObject";
 
-@Getter(value=TARGET_OBJECT_KEY)
-@XMLAttribute
-public DataBinding getTargetObject();
+	@Getter(value = TARGET_OBJECT_KEY)
+	@XMLAttribute
+	public DataBinding<?> getTargetObject();
 
-@Setter(TARGET_OBJECT_KEY)
-public void setTargetObject(DataBinding targetObject);
+	@Setter(TARGET_OBJECT_KEY)
+	public void setTargetObject(DataBinding<?> targetObject);
 
+	public FlexoObject evaluateTargetObject(EditionPatternInstance editionPatternInstance);
 
-public static abstract  class NavigationSchemeImpl extends AbstractActionSchemeImpl implements NavigationScheme
-{
+	public static abstract class NavigationSchemeImpl extends AbstractActionSchemeImpl implements NavigationScheme {
 
-	private DataBinding<Object> targetObject;
+		private DataBinding<?> targetObject;
 
-	public NavigationSchemeImpl() {
-		super();
-	}
-
-	public DataBinding<Object> getTargetObject() {
-		if (targetObject == null) {
-			targetObject = new DataBinding<Object>(this, FlexoObject.class, BindingDefinitionType.GET);
-			targetObject.setBindingName("targetObject");
+		public NavigationSchemeImpl() {
+			super();
 		}
-		return targetObject;
-	}
 
-	public void setTargetObject(DataBinding<Object> targetObject) {
-		if (targetObject != null) {
-			targetObject.setOwner(this);
-			targetObject.setBindingName("targetObject");
-			targetObject.setDeclaredType(FlexoObject.class);
-			targetObject.setBindingDefinitionType(BindingDefinitionType.GET);
-		}
-		this.targetObject = targetObject;
-	}
-
-	public FlexoObject evaluateTargetObject(EditionPatternInstance editionPatternInstance) {
-		if (getTargetObject().isValid()) {
-			try {
-				return (FlexoObject) getTargetObject().getBindingValue(editionPatternInstance);
-			} catch (TypeMismatchException e) {
-				e.printStackTrace();
-			} catch (NullReferenceException e) {
-				e.printStackTrace();
-			} catch (InvocationTargetException e) {
-				e.printStackTrace();
+		@Override
+		public DataBinding<?> getTargetObject() {
+			if (targetObject == null) {
+				targetObject = new DataBinding<Object>(this, FlexoObject.class, BindingDefinitionType.GET);
+				targetObject.setBindingName("targetObject");
 			}
+			return targetObject;
 		}
-		return null;
-	}
 
-}
+		@Override
+		public void setTargetObject(DataBinding<?> targetObject) {
+			if (targetObject != null) {
+				targetObject.setOwner(this);
+				targetObject.setBindingName("targetObject");
+				targetObject.setDeclaredType(FlexoObject.class);
+				targetObject.setBindingDefinitionType(BindingDefinitionType.GET);
+			}
+			this.targetObject = targetObject;
+		}
+
+		@Override
+		public FlexoObject evaluateTargetObject(EditionPatternInstance editionPatternInstance) {
+			if (getTargetObject().isValid()) {
+				try {
+					return (FlexoObject) getTargetObject().getBindingValue(editionPatternInstance);
+				} catch (TypeMismatchException e) {
+					e.printStackTrace();
+				} catch (NullReferenceException e) {
+					e.printStackTrace();
+				} catch (InvocationTargetException e) {
+					e.printStackTrace();
+				}
+			}
+			return null;
+		}
+
+	}
 }

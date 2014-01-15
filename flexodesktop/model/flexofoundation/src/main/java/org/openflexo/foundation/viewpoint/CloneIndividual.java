@@ -22,6 +22,8 @@ package org.openflexo.foundation.viewpoint;
 import java.util.logging.Logger;
 
 import org.openflexo.foundation.viewpoint.annotations.FIBPanel;
+import org.openflexo.model.annotations.ImplementationClass;
+import org.openflexo.model.annotations.ModelEntity;
 
 /**
  * This edition primitive addresses the duplication of an individual
@@ -32,17 +34,15 @@ import org.openflexo.foundation.viewpoint.annotations.FIBPanel;
 @FIBPanel("Fib/CloneIndividualPanel.fib")
 @ModelEntity(isAbstract = true)
 @ImplementationClass(CloneIndividual.CloneIndividualImpl.class)
-public abstract interface CloneIndividual extends AddIndividual{
+public abstract interface CloneIndividual extends AddIndividual {
 
+	public static abstract class CloneIndividualImpl extends AddIndividualImpl implements CloneIndividual {
 
-public static abstract  abstract class CloneIndividualImpl extends AddIndividualImpl implements CloneIndividual
-{
+		private static final Logger logger = Logger.getLogger(CloneIndividual.class.getPackage().getName());
 
-	private static final Logger logger = Logger.getLogger(CloneIndividual.class.getPackage().getName());
+		public CloneIndividualImpl() {
+			super();
+		}
 
-	public CloneIndividualImpl() {
-		super();
 	}
-
-}
 }

@@ -21,28 +21,30 @@ package org.openflexo.foundation.viewpoint;
 
 import java.lang.reflect.Type;
 
+import org.openflexo.model.annotations.ImplementationClass;
+import org.openflexo.model.annotations.ModelEntity;
+import org.openflexo.model.annotations.XMLElement;
+
 @ModelEntity
 @ImplementationClass(IntegerParameter.IntegerParameterImpl.class)
 @XMLElement
-public interface IntegerParameter extends EditionSchemeParameter{
+public interface IntegerParameter extends EditionSchemeParameter {
 
+	public static abstract class IntegerParameterImpl extends EditionSchemeParameterImpl implements IntegerParameter {
 
-public static abstract  class IntegerParameterImpl extends EditionSchemeParameterImpl implements IntegerParameter
-{
+		public IntegerParameterImpl() {
+			super();
+		}
 
-	public IntegerParameterImpl() {
-		super();
+		@Override
+		public Type getType() {
+			return Integer.class;
+		};
+
+		@Override
+		public WidgetType getWidget() {
+			return WidgetType.INTEGER;
+		}
+
 	}
-
-	@Override
-	public Type getType() {
-		return Integer.class;
-	};
-
-	@Override
-	public WidgetType getWidget() {
-		return WidgetType.INTEGER;
-	}
-
-}
 }

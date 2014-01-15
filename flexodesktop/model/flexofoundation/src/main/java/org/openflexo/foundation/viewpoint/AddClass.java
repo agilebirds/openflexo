@@ -32,143 +32,156 @@ import org.openflexo.foundation.validation.ValidationError;
 import org.openflexo.foundation.validation.ValidationIssue;
 import org.openflexo.foundation.validation.ValidationRule;
 import org.openflexo.foundation.viewpoint.annotations.FIBPanel;
+import org.openflexo.model.annotations.Getter;
+import org.openflexo.model.annotations.ImplementationClass;
+import org.openflexo.model.annotations.ModelEntity;
+import org.openflexo.model.annotations.PropertyIdentifier;
+import org.openflexo.model.annotations.Setter;
+import org.openflexo.model.annotations.XMLAttribute;
 import org.openflexo.toolbox.StringUtils;
 
 @FIBPanel("Fib/AddClassPanel.fib")
 @ModelEntity(isAbstract = true)
 @ImplementationClass(AddClass.AddClassImpl.class)
-public abstract interface AddClass<MS extends TypeAwareModelSlot<?, ?>, T extends IFlexoOntologyClass> extends AddConcept<MS, T>{
+public abstract interface AddClass<MS extends TypeAwareModelSlot<?, ?>, T extends IFlexoOntologyClass> extends AddConcept<MS, T> {
 
-@PropertyIdentifier(type=DataBinding.class)
-public static final String CLASS_NAME_KEY = "className";
-@PropertyIdentifier(type=String.class)
-public static final String ONTOLOGY_CLASS_URI_KEY = "ontologyClassURI";
-@PropertyIdentifier(type=TypeAwareModelSlot.class)
-public static final String MODEL_SLOT_KEY = "modelSlot";
+	@PropertyIdentifier(type = DataBinding.class)
+	public static final String CLASS_NAME_KEY = "className";
+	@PropertyIdentifier(type = String.class)
+	public static final String ONTOLOGY_CLASS_URI_KEY = "ontologyClassURI";
+	@PropertyIdentifier(type = TypeAwareModelSlot.class)
+	public static final String MODEL_SLOT_KEY = "modelSlot";
 
-@Getter(value=CLASS_NAME_KEY)
-@XMLAttribute(xmlTag="newClassName")
-public DataBinding getClassName();
+	@Getter(value = CLASS_NAME_KEY)
+	@XMLAttribute(xmlTag = "newClassName")
+	public DataBinding<String> getClassName();
 
-@Setter(CLASS_NAME_KEY)
-public void setClassName(DataBinding className);
+	@Setter(CLASS_NAME_KEY)
+	public void setClassName(DataBinding<String> className);
 
+	@Getter(value = ONTOLOGY_CLASS_URI_KEY)
+	@XMLAttribute
+	public String _getOntologyClassURI();
 
-@Getter(value=ONTOLOGY_CLASS_URI_KEY)
-@XMLAttribute
-public String _getOntologyClassURI();
+	@Setter(ONTOLOGY_CLASS_URI_KEY)
+	public void _setOntologyClassURI(String ontologyClassURI);
 
-@Setter(ONTOLOGY_CLASS_URI_KEY)
-public void _setOntologyClassURI(String ontologyClassURI);
-
-
-@Getter(value=MODEL_SLOT_KEY)
-@XMLAttribute
-public TypeAwareModelSlot getModelSlot();
-
-@Setter(MODEL_SLOT_KEY)
-public void setModelSlot(TypeAwareModelSlot modelSlot);
-
-
-public static abstract  abstract class AddClass<MSImpl extends TypeAwareModelSlot<?, ?>, T extends IFlexoOntologyClass> extends AddConcept<MS, T>Impl implements AddClass<MS
-{
-
-	private static final Logger logger = Logger.getLogger(AddClass.class.getPackage().getName());
-
-	private String ontologyClassURI = null;
-
-	private DataBinding<String> className;
-
-	public AddClassImpl() {
-		super();
-	}
+	public IFlexoOntologyClass getOntologyClass();
 
 	@Override
-	public ClassPatternRole getPatternRole() {
-		PatternRole superPatternRole = super.getPatternRole();
-		if (superPatternRole instanceof ClassPatternRole) {
-			return (ClassPatternRole) superPatternRole;
-		} else if (superPatternRole != null) {
-			// logger.warning("Unexpected pattern role of type " + superPatternRole.getClass().getSimpleName());
-			return null;
-		}
-		return null;
-	}
+	@Getter(value = MODEL_SLOT_KEY)
+	@XMLAttribute
+	public MS getModelSlot();
 
 	@Override
-	public IFlexoOntologyClass getOntologyClass() {
-		if (StringUtils.isNotEmpty(ontologyClassURI)) {
-			return getVirtualModel().getOntologyClass(ontologyClassURI);
-		} else {
-			if (getPatternRole() instanceof ClassPatternRole) {
-				return getPatternRole().getOntologicType();
-			}
+	@Setter(MODEL_SLOT_KEY)
+	public void setModelSlot(MS modelSlot);
+
+	public static abstract class AddClassImpl<MS extends TypeAwareModelSlot<?, ?>, T extends IFlexoOntologyClass> extends
+			AddConceptImpl<MS, T> implements AddClass<MS, T> {
+
+		private static final Logger logger = Logger.getLogger(AddClass.class.getPackage().getName());
+
+		private String ontologyClassURI = null;
+
+		private DataBinding<String> className;
+
+		public AddClassImpl() {
+			super();
 		}
-		return null;
-	}
 
-	public abstract Class<T> getOntologyClassClass();
-
-	@Override
-	public void setOntologyClass(IFlexoOntologyClass ontologyClass) {
-		if (ontologyClass != null) {
-			if (getPatternRole() instanceof ClassPatternRole) {
-				if (getPatternRole().getOntologicType().isSuperConceptOf(ontologyClass)) {
-					ontologyClassURI = ontologyClass.getURI();
-				} else {
-					getPatternRole().setOntologicType(ontologyClass);
-				}
-			} else {
-				ontologyClassURI = ontologyClass.getURI();
-			}
-		} else {
-			ontologyClassURI = null;
-		}
-	}
-
-	public String _getOntologyClassURI() {
-		if (getOntologyClass() != null) {
-			if (getPatternRole() instanceof ClassPatternRole && getPatternRole().getOntologicType() == getOntologyClass()) {
-				// No need to store an overriding type, just use default provided by pattern role
+		@Override
+		public ClassPatternRole getPatternRole() {
+			PatternRole superPatternRole = super.getPatternRole();
+			if (superPatternRole instanceof ClassPatternRole) {
+				return (ClassPatternRole) superPatternRole;
+			} else if (superPatternRole != null) {
+				// logger.warning("Unexpected pattern role of type " + superPatternRole.getClass().getSimpleName());
 				return null;
 			}
-			return getOntologyClass().getURI();
+			return null;
 		}
-		return ontologyClassURI;
-	}
 
-	public void _setOntologyClassURI(String ontologyClassURI) {
-		this.ontologyClassURI = ontologyClassURI;
-	}
-
-	public DataBinding<String> getClassName() {
-		if (className == null) {
-			className = new DataBinding<String>(this, String.class, DataBinding.BindingDefinitionType.GET);
-			className.setBindingName("className");
+		@Override
+		public IFlexoOntologyClass getOntologyClass() {
+			if (StringUtils.isNotEmpty(ontologyClassURI)) {
+				return getVirtualModel().getOntologyClass(ontologyClassURI);
+			} else {
+				if (getPatternRole() instanceof ClassPatternRole) {
+					return getPatternRole().getOntologicType();
+				}
+			}
+			return null;
 		}
-		return className;
-	}
 
-	public void setClassName(DataBinding<String> className) {
-		if (className != null) {
-			className.setOwner(this);
-			className.setDeclaredType(String.class);
-			className.setBindingDefinitionType(DataBinding.BindingDefinitionType.GET);
-			className.setBindingName("className");
-		}
-		this.className = className;
-	}
+		public abstract Class<T> getOntologyClassClass();
 
-	@Override
-	public Type getAssignableType() {
-		if (getOntologyClass() == null) {
-			return IFlexoOntologyClass.class;
+		@Override
+		public void setOntologyClass(IFlexoOntologyClass ontologyClass) {
+			if (ontologyClass != null) {
+				if (getPatternRole() instanceof ClassPatternRole) {
+					if (getPatternRole().getOntologicType().isSuperConceptOf(ontologyClass)) {
+						ontologyClassURI = ontologyClass.getURI();
+					} else {
+						getPatternRole().setOntologicType(ontologyClass);
+					}
+				} else {
+					ontologyClassURI = ontologyClass.getURI();
+				}
+			} else {
+				ontologyClassURI = null;
+			}
 		}
-		return SubClassOfClass.getSubClassOfClass(getOntologyClass());
+
+		@Override
+		public String _getOntologyClassURI() {
+			if (getOntologyClass() != null) {
+				if (getPatternRole() instanceof ClassPatternRole && getPatternRole().getOntologicType() == getOntologyClass()) {
+					// No need to store an overriding type, just use default provided by pattern role
+					return null;
+				}
+				return getOntologyClass().getURI();
+			}
+			return ontologyClassURI;
+		}
+
+		@Override
+		public void _setOntologyClassURI(String ontologyClassURI) {
+			this.ontologyClassURI = ontologyClassURI;
+		}
+
+		@Override
+		public DataBinding<String> getClassName() {
+			if (className == null) {
+				className = new DataBinding<String>(this, String.class, DataBinding.BindingDefinitionType.GET);
+				className.setBindingName("className");
+			}
+			return className;
+		}
+
+		@Override
+		public void setClassName(DataBinding<String> className) {
+			if (className != null) {
+				className.setOwner(this);
+				className.setDeclaredType(String.class);
+				className.setBindingDefinitionType(DataBinding.BindingDefinitionType.GET);
+				className.setBindingName("className");
+			}
+			this.className = className;
+		}
+
+		@Override
+		public Type getAssignableType() {
+			if (getOntologyClass() == null) {
+				return IFlexoOntologyClass.class;
+			}
+			return SubClassOfClass.getSubClassOfClass(getOntologyClass());
+		}
+
 	}
 
 	public static class AddClassActionMustDefineAnOntologyClass extends ValidationRule<AddClassActionMustDefineAnOntologyClass, AddClass> {
-		public AddClassImplActionMustDefineAnOntologyClass() {
+		public AddClassActionMustDefineAnOntologyClass() {
 			super(AddClass.class, "add_individual_action_must_define_an_ontology_class");
 		}
 
@@ -219,5 +232,4 @@ public static abstract  abstract class AddClass<MSImpl extends TypeAwareModelSlo
 
 	}
 
-}
 }

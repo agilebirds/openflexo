@@ -32,100 +32,108 @@ import org.openflexo.foundation.technologyadapter.ModelSlot;
 import org.openflexo.foundation.view.action.EditionSchemeAction;
 import org.openflexo.foundation.viewpoint.FMLRepresentationContext.FMLRepresentationOutput;
 import org.openflexo.foundation.viewpoint.annotations.FIBPanel;
+import org.openflexo.model.annotations.Getter;
+import org.openflexo.model.annotations.ImplementationClass;
+import org.openflexo.model.annotations.ModelEntity;
+import org.openflexo.model.annotations.PropertyIdentifier;
+import org.openflexo.model.annotations.Setter;
+import org.openflexo.model.annotations.XMLAttribute;
+import org.openflexo.model.annotations.XMLElement;
 
 @FIBPanel("Fib/ExecutionActionPanel.fib")
 @ModelEntity
 @ImplementationClass(ExecutionAction.ExecutionActionImpl.class)
 @XMLElement
-public interface ExecutionAction<MS extends ModelSlot<?>> extends AssignableAction<MS, FlexoObject>{
+public interface ExecutionAction<MS extends ModelSlot<?>> extends AssignableAction<MS, FlexoObject> {
 
-@PropertyIdentifier(type=DataBinding.class)
-public static final String EXECUTION_KEY = "execution";
+	@PropertyIdentifier(type = DataBinding.class)
+	public static final String EXECUTION_KEY = "execution";
 
-@Getter(value=EXECUTION_KEY)
-@XMLAttribute
-public DataBinding getExecution();
+	@Getter(value = EXECUTION_KEY)
+	@XMLAttribute
+	public DataBinding<?> getExecution();
 
-@Setter(EXECUTION_KEY)
-public void setExecution(DataBinding execution);
+	@Setter(EXECUTION_KEY)
+	public void setExecution(DataBinding<?> execution);
 
+	public static abstract class ExecutionActionImpl<MS extends ModelSlot<?>> extends AssignableActionImpl<MS, FlexoObject> implements
+			ExecutionAction<MS> {
 
-public static abstract  class ExecutionAction<MSImpl extends ModelSlot<?>> extends AssignableAction<MS, FlexoObject>Impl implements ExecutionAction<MS
-{
+		private static final Logger logger = Logger.getLogger(ExecutionAction.class.getPackage().getName());
 
-	private static final Logger logger = Logger.getLogger(ExecutionAction.class.getPackage().getName());
+		private DataBinding<?> execution;
 
-	private DataBinding<Object> execution;
-
-	public ExecutionActionImpl() {
-		super();
-	}
-
-	@Override
-	public String getFMLRepresentation(FMLRepresentationContext context) {
-		FMLRepresentationOutput out = new FMLRepresentationOutput(context);
-		out.append((getAssignation().isSet() ? getAssignation().toString() + " = " : "") + getExecution().toString() + ";", context);
-		return out.toString();
-	}
-
-	public DataBinding<Object> getExecution() {
-		if (execution == null) {
-			execution = new DataBinding<Object>(this, Object.class, BindingDefinitionType.EXECUTE);
-			execution.setBindingName("execution");
-		}
-		return execution;
-	}
-
-	public void setExecution(DataBinding<Object> execution) {
-		if (execution != null) {
-			execution.setOwner(this);
-			execution.setBindingName("execution");
-			execution.setDeclaredType(Object.class);
-			execution.setBindingDefinitionType(BindingDefinitionType.EXECUTE);
-		}
-		this.execution = execution;
-	}
-
-	@Override
-	public Type getAssignableType() {
-		if (getExecution().isSet() && getExecution().isValid()) {
-			return getExecution().getAnalyzedType();
-		}
-		return Object.class;
-	}
-
-	@Override
-	public FlexoObject performAction(EditionSchemeAction action) {
-		try {
-			getExecution().execute(action);
-		} catch (TypeMismatchException e) {
-			e.printStackTrace();
-		} catch (NullReferenceException e) {
-			e.printStackTrace();
-		} catch (InvocationTargetException e) {
-			e.printStackTrace();
-		}
-		return null;
-	}
-
-	@Override
-	public void notifiedBindingChanged(DataBinding<?> dataBinding) {
-		if (dataBinding == getExecution()) {
-		}
-		super.notifiedBindingChanged(dataBinding);
-	}
-
-	public static class ExecutionBindingIsRequiredAndMustBeValid extends BindingIsRequiredAndMustBeValid<ExecutionAction> {
-		public ExecutionBindingIsRequiredAndMustBeValid() {
-			super("'execution'_binding_is_not_valid", ExecutionAction.class);
+		public ExecutionActionImpl() {
+			super();
 		}
 
 		@Override
-		public DataBinding<Object> getBinding(ExecutionAction object) {
-			return object.getExecution();
+		public String getFMLRepresentation(FMLRepresentationContext context) {
+			FMLRepresentationOutput out = new FMLRepresentationOutput(context);
+			out.append((getAssignation().isSet() ? getAssignation().toString() + " = " : "") + getExecution().toString() + ";", context);
+			return out.toString();
+		}
+
+		@Override
+		public DataBinding<?> getExecution() {
+			if (execution == null) {
+				execution = new DataBinding<Object>(this, Object.class, BindingDefinitionType.EXECUTE);
+				execution.setBindingName("execution");
+			}
+			return execution;
+		}
+
+		@Override
+		public void setExecution(DataBinding<?> execution) {
+			if (execution != null) {
+				execution.setOwner(this);
+				execution.setBindingName("execution");
+				execution.setDeclaredType(Object.class);
+				execution.setBindingDefinitionType(BindingDefinitionType.EXECUTE);
+			}
+			this.execution = execution;
+		}
+
+		@Override
+		public Type getAssignableType() {
+			if (getExecution().isSet() && getExecution().isValid()) {
+				return getExecution().getAnalyzedType();
+			}
+			return Object.class;
+		}
+
+		@Override
+		public FlexoObject performAction(EditionSchemeAction action) {
+			try {
+				getExecution().execute(action);
+			} catch (TypeMismatchException e) {
+				e.printStackTrace();
+			} catch (NullReferenceException e) {
+				e.printStackTrace();
+			} catch (InvocationTargetException e) {
+				e.printStackTrace();
+			}
+			return null;
+		}
+
+		@Override
+		public void notifiedBindingChanged(DataBinding<?> dataBinding) {
+			if (dataBinding == getExecution()) {
+			}
+			super.notifiedBindingChanged(dataBinding);
+		}
+
+		public static class ExecutionBindingIsRequiredAndMustBeValid extends BindingIsRequiredAndMustBeValid<ExecutionAction> {
+			public ExecutionBindingIsRequiredAndMustBeValid() {
+				super("'execution'_binding_is_not_valid", ExecutionAction.class);
+			}
+
+			@Override
+			public DataBinding<Object> getBinding(ExecutionAction object) {
+				return object.getExecution();
+			}
+
 		}
 
 	}
-
-}
 }

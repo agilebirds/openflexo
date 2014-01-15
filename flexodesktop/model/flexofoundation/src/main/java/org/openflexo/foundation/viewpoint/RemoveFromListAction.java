@@ -34,110 +34,118 @@ import org.openflexo.foundation.technologyadapter.ModelSlot;
 import org.openflexo.foundation.view.action.EditionSchemeAction;
 import org.openflexo.foundation.viewpoint.FMLRepresentationContext.FMLRepresentationOutput;
 import org.openflexo.foundation.viewpoint.annotations.FIBPanel;
+import org.openflexo.model.annotations.Getter;
+import org.openflexo.model.annotations.ImplementationClass;
+import org.openflexo.model.annotations.ModelEntity;
+import org.openflexo.model.annotations.PropertyIdentifier;
+import org.openflexo.model.annotations.Setter;
+import org.openflexo.model.annotations.XMLAttribute;
+import org.openflexo.model.annotations.XMLElement;
 
 @FIBPanel("Fib/RemoveFromListActionPanel.fib")
 @ModelEntity
 @ImplementationClass(RemoveFromListAction.RemoveFromListActionImpl.class)
 @XMLElement
-public interface RemoveFromListAction<MS extends ModelSlot<?>, T> extends AssignableAction<MS, Object>{
+public interface RemoveFromListAction<MS extends ModelSlot<?>, T> extends AssignableAction<MS, Object> {
 
-@PropertyIdentifier(type=DataBinding.class)
-public static final String VALUE_KEY = "value";
+	@PropertyIdentifier(type = DataBinding.class)
+	public static final String VALUE_KEY = "value";
 
-@Getter(value=VALUE_KEY)
-@XMLAttribute
-public DataBinding getValue();
+	@Getter(value = VALUE_KEY)
+	@XMLAttribute
+	public DataBinding<?> getValue();
 
-@Setter(VALUE_KEY)
-public void setValue(DataBinding value);
+	@Setter(VALUE_KEY)
+	public void setValue(DataBinding<?> value);
 
+	public static abstract class RemoveFromListActionImpl<MS extends ModelSlot<?>, T> extends AssignableActionImpl<MS, Object> implements
+			RemoveFromListAction<MS, T> {
 
-public static abstract  class RemoveFromListAction<MSImpl extends ModelSlot<?>, T> extends AssignableAction<MS, Object>Impl implements RemoveFromListAction<MS
-{
+		private static final Logger logger = Logger.getLogger(RemoveFromListAction.class.getPackage().getName());
 
-	private static final Logger logger = Logger.getLogger(RemoveFromListAction.class.getPackage().getName());
+		private DataBinding<?> value;
 
-	private DataBinding<Object> value;
-
-	public RemoveFromListActionImpl() {
-		super();
-	}
-
-	@Override
-	public String getFMLRepresentation(FMLRepresentationContext context) {
-		FMLRepresentationOutput out = new FMLRepresentationOutput(context);
-		out.append(getAssignation().toString() + " = " + getValue().toString() + ";", context);
-		return out.toString();
-	}
-
-	@Override
-	public boolean isAssignationRequired() {
-		return true;
-	}
-
-	public Object getDeclaredObject(EditionSchemeAction action) {
-		try {
-			return getValue().getBindingValue(action);
-		} catch (TypeMismatchException e) {
-			e.printStackTrace();
-		} catch (NullReferenceException e) {
-			e.printStackTrace();
-		} catch (InvocationTargetException e) {
-			e.printStackTrace();
-		}
-		return null;
-	}
-
-	public DataBinding<Object> getValue() {
-		if (value == null) {
-			value = new DataBinding<Object>(this, Object.class, BindingDefinitionType.GET);
-			value.setBindingName("value");
-		}
-		return value;
-	}
-
-	public void setValue(DataBinding<Object> value) {
-		if (value != null) {
-			value.setOwner(this);
-			value.setBindingName("value");
-			value.setDeclaredType(Object.class);
-			value.setBindingDefinitionType(BindingDefinitionType.GET);
-		}
-		this.value = value;
-	}
-
-	@Override
-	public Type getAssignableType() {
-		if (getValue().isSet() && getValue().isValid()) {
-			return new ParameterizedTypeImpl(List.class, getValue().getAnalyzedType());
-		}
-		return new ParameterizedTypeImpl(List.class, IFlexoOntologyIndividual.class);
-	}
-
-	@Override
-	public Object performAction(EditionSchemeAction action) {
-		return getDeclaredObject(action);
-	}
-
-	@Override
-	public void notifiedBindingChanged(DataBinding<?> dataBinding) {
-		if (dataBinding == getValue()) {
-			updateVariableAssignation();
-		}
-		super.notifiedBindingChanged(dataBinding);
-	}
-
-	public static class ValueBindingIsRequiredAndMustBeValid extends BindingIsRequiredAndMustBeValid<RemoveFromListAction> {
-		public ValueBindingIsRequiredAndMustBeValid() {
-			super("'value'_binding_is_not_valid", RemoveFromListAction.class);
+		public RemoveFromListActionImpl() {
+			super();
 		}
 
 		@Override
-		public DataBinding<Object> getBinding(RemoveFromListAction object) {
-			return object.getValue();
+		public String getFMLRepresentation(FMLRepresentationContext context) {
+			FMLRepresentationOutput out = new FMLRepresentationOutput(context);
+			out.append(getAssignation().toString() + " = " + getValue().toString() + ";", context);
+			return out.toString();
+		}
+
+		@Override
+		public boolean isAssignationRequired() {
+			return true;
+		}
+
+		public Object getDeclaredObject(EditionSchemeAction action) {
+			try {
+				return getValue().getBindingValue(action);
+			} catch (TypeMismatchException e) {
+				e.printStackTrace();
+			} catch (NullReferenceException e) {
+				e.printStackTrace();
+			} catch (InvocationTargetException e) {
+				e.printStackTrace();
+			}
+			return null;
+		}
+
+		@Override
+		public DataBinding<?> getValue() {
+			if (value == null) {
+				value = new DataBinding<Object>(this, Object.class, BindingDefinitionType.GET);
+				value.setBindingName("value");
+			}
+			return value;
+		}
+
+		@Override
+		public void setValue(DataBinding<?> value) {
+			if (value != null) {
+				value.setOwner(this);
+				value.setBindingName("value");
+				value.setDeclaredType(Object.class);
+				value.setBindingDefinitionType(BindingDefinitionType.GET);
+			}
+			this.value = value;
+		}
+
+		@Override
+		public Type getAssignableType() {
+			if (getValue().isSet() && getValue().isValid()) {
+				return new ParameterizedTypeImpl(List.class, getValue().getAnalyzedType());
+			}
+			return new ParameterizedTypeImpl(List.class, IFlexoOntologyIndividual.class);
+		}
+
+		@Override
+		public Object performAction(EditionSchemeAction action) {
+			return getDeclaredObject(action);
+		}
+
+		@Override
+		public void notifiedBindingChanged(DataBinding<?> dataBinding) {
+			if (dataBinding == getValue()) {
+				updateVariableAssignation();
+			}
+			super.notifiedBindingChanged(dataBinding);
+		}
+
+		public static class ValueBindingIsRequiredAndMustBeValid extends BindingIsRequiredAndMustBeValid<RemoveFromListAction> {
+			public ValueBindingIsRequiredAndMustBeValid() {
+				super("'value'_binding_is_not_valid", RemoveFromListAction.class);
+			}
+
+			@Override
+			public DataBinding<Object> getBinding(RemoveFromListAction object) {
+				return object.getValue();
+			}
+
 		}
 
 	}
-
-}
 }

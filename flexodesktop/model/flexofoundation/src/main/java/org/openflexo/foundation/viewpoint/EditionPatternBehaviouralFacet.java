@@ -19,47 +19,56 @@
  */
 package org.openflexo.foundation.viewpoint;
 
-import java.util.Collection;
-
 import org.openflexo.antar.binding.BindingModel;
-import org.openflexo.foundation.validation.Validable;
+import org.openflexo.model.annotations.ImplementationClass;
+import org.openflexo.model.annotations.ModelEntity;
 
-public class EditionPatternBehaviouralFacet extends EditionPatternObject implements FlexoFacet<EditionPattern> {
-
-	private final EditionPattern editionPattern;
-
-	public EditionPatternBehaviouralFacet(EditionPattern editionPattern) {
-		super();
-		this.editionPattern = editionPattern;
-	}
+@ModelEntity
+@ImplementationClass(EditionPatternBehaviouralFacet.EditionPatternBehaviouralFacetImpl.class)
+public interface EditionPatternBehaviouralFacet extends EditionPatternObject, FlexoFacet<EditionPattern> {
 
 	@Override
-	public EditionPattern getEditionPattern() {
-		return editionPattern;
-	}
+	public EditionPattern getEditionPattern();
 
-	@Override
-	public BindingModel getBindingModel() {
-		return getEditionPattern().getBindingModel();
-	}
+	public void setEditionPattern(EditionPattern editionPattern);
 
-	@Override
-	public Collection<? extends Validable> getEmbeddedValidableObjects() {
-		return getEditionPattern().getEditionSchemes();
-	}
+	public abstract class EditionPatternBehaviouralFacetImpl extends EditionPatternObjectImpl implements EditionPatternBehaviouralFacet {
 
-	@Override
-	public EditionPattern getObject() {
-		return getEditionPattern();
-	}
+		private EditionPattern editionPattern;
 
-	@Override
-	public String getURI() {
-		return getEditionPattern().getURI();
-	}
+		@Override
+		public EditionPattern getEditionPattern() {
+			return editionPattern;
+		}
 
-	@Override
-	public VirtualModel getVirtualModel() {
-		return getEditionPattern().getVirtualModel();
+		@Override
+		public void setEditionPattern(EditionPattern editionPattern) {
+			this.editionPattern = editionPattern;
+		}
+
+		@Override
+		public BindingModel getBindingModel() {
+			return getEditionPattern().getBindingModel();
+		}
+
+		/*@Override
+		public Collection<? extends Validable> getEmbeddedValidableObjects() {
+			return getEditionPattern().getEditionSchemes();
+		}*/
+
+		@Override
+		public EditionPattern getObject() {
+			return getEditionPattern();
+		}
+
+		@Override
+		public String getURI() {
+			return getEditionPattern().getURI();
+		}
+
+		@Override
+		public VirtualModel getVirtualModel() {
+			return getEditionPattern().getVirtualModel();
+		}
 	}
 }

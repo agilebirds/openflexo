@@ -22,6 +22,9 @@ package org.openflexo.foundation.viewpoint;
 import java.lang.reflect.Type;
 
 import org.openflexo.foundation.technologyadapter.ModelSlot;
+import org.openflexo.model.annotations.ImplementationClass;
+import org.openflexo.model.annotations.ModelEntity;
+import org.openflexo.model.annotations.XMLElement;
 
 /**
  * Allows the manipulation of an instance of a TechnologyObject
@@ -32,25 +35,24 @@ import org.openflexo.foundation.technologyadapter.ModelSlot;
 @ModelEntity
 @ImplementationClass(TechnologyObjectParameter.TechnologyObjectParameterImpl.class)
 @XMLElement
-public interface TechnologyObjectParameter<MS extends ModelSlot<?>> extends InnerModelSlotParameter<MS>{
+public interface TechnologyObjectParameter<MS extends ModelSlot<?>> extends InnerModelSlotParameter<MS> {
 
+	public static abstract class TechnologyObjectParameterImpl<MS extends ModelSlot<?>> extends InnerModelSlotParameterImpl<MS> implements
+			TechnologyObjectParameter<MS> {
 
-public static abstract  class TechnologyObjectParameter<MSImpl extends ModelSlot<?>> extends InnerModelSlotParameter<MS>Impl implements TechnologyObjectParameter<MS
-{
+		public TechnologyObjectParameterImpl() {
+			super();
+		}
 
-	public TechnologyObjectParameterImpl() {
-		super();
+		@Override
+		public Type getType() {
+			return Object.class;
+		};
+
+		@Override
+		public WidgetType getWidget() {
+			return WidgetType.TECHNOLOGY_OBJECT;
+		}
+
 	}
-
-	@Override
-	public Type getType() {
-		return Object.class;
-	};
-
-	@Override
-	public WidgetType getWidget() {
-		return WidgetType.TECHNOLOGY_OBJECT;
-	}
-
-}
 }

@@ -19,6 +19,9 @@
  */
 package org.openflexo.foundation.viewpoint.inspector;
 
+import org.openflexo.model.annotations.ImplementationClass;
+import org.openflexo.model.annotations.ModelEntity;
+import org.openflexo.model.annotations.XMLElement;
 
 /**
  * Represents an inspector entry for a text field
@@ -28,25 +31,23 @@ package org.openflexo.foundation.viewpoint.inspector;
  */
 @ModelEntity
 @ImplementationClass(TextFieldInspectorEntry.TextFieldInspectorEntryImpl.class)
-@XMLElement(xmlTag="TextField")
-public interface TextFieldInspectorEntry extends InspectorEntry{
+@XMLElement(xmlTag = "TextField")
+public interface TextFieldInspectorEntry extends InspectorEntry {
 
+	public static abstract class TextFieldInspectorEntryImpl extends InspectorEntryImpl implements TextFieldInspectorEntry {
 
-public static abstract  class TextFieldInspectorEntryImpl extends InspectorEntryImpl implements TextFieldInspectorEntry
-{
+		public TextFieldInspectorEntryImpl() {
+			super();
+		}
 
-	public TextFieldInspectorEntryImpl() {
-		super();
+		@Override
+		public Class getDefaultDataClass() {
+			return String.class;
+		}
+
+		@Override
+		public String getWidgetName() {
+			return "TextField";
+		}
 	}
-
-	@Override
-	public Class getDefaultDataClass() {
-		return String.class;
-	}
-
-	@Override
-	public String getWidgetName() {
-		return "TextField";
-	}
-}
 }

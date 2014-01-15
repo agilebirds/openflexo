@@ -37,130 +37,155 @@ import org.openflexo.foundation.validation.ValidationError;
 import org.openflexo.foundation.validation.ValidationIssue;
 import org.openflexo.foundation.validation.ValidationRule;
 import org.openflexo.foundation.view.action.EditionSchemeAction;
+import org.openflexo.model.annotations.Getter;
+import org.openflexo.model.annotations.ImplementationClass;
+import org.openflexo.model.annotations.ModelEntity;
+import org.openflexo.model.annotations.PropertyIdentifier;
+import org.openflexo.model.annotations.Setter;
+import org.openflexo.model.annotations.XMLAttribute;
+import org.openflexo.model.annotations.XMLElement;
 
 @ModelEntity
 @ImplementationClass(ObjectPropertyAssertion.ObjectPropertyAssertionImpl.class)
 @XMLElement
-public interface ObjectPropertyAssertion extends AbstractAssertion{
+public interface ObjectPropertyAssertion extends AbstractAssertion {
 
-@PropertyIdentifier(type=String.class)
-public static final String OBJECT_PROPERTY_URI_KEY = "objectPropertyURI";
-@PropertyIdentifier(type=DataBinding.class)
-public static final String OBJECT_KEY = "object";
+	@PropertyIdentifier(type = AddIndividual.class)
+	public static final String ACTION_KEY = "action";
 
-@Getter(value=OBJECT_PROPERTY_URI_KEY)
-@XMLAttribute
-public String _getObjectPropertyURI();
+	@PropertyIdentifier(type = String.class)
+	public static final String OBJECT_PROPERTY_URI_KEY = "objectPropertyURI";
+	@PropertyIdentifier(type = DataBinding.class)
+	public static final String OBJECT_KEY = "object";
 
-@Setter(OBJECT_PROPERTY_URI_KEY)
-public void _setObjectPropertyURI(String objectPropertyURI);
+	@Getter(value = ACTION_KEY, inverse = AddIndividual.OBJECT_ASSERTIONS_KEY)
+	public AddIndividual<?, ?> getAction();
 
+	@Setter(ACTION_KEY)
+	public void setAction(AddIndividual<?, ?> action);
 
-@Getter(value=OBJECT_KEY)
-@XMLAttribute
-public DataBinding getObject();
+	@Getter(value = OBJECT_PROPERTY_URI_KEY)
+	@XMLAttribute
+	public String _getObjectPropertyURI();
 
-@Setter(OBJECT_KEY)
-public void setObject(DataBinding object);
+	@Setter(OBJECT_PROPERTY_URI_KEY)
+	public void _setObjectPropertyURI(String objectPropertyURI);
 
+	@Getter(value = OBJECT_KEY)
+	@XMLAttribute
+	public DataBinding<?> getObject();
 
-public static abstract  class ObjectPropertyAssertionImpl extends AbstractAssertionImpl implements ObjectPropertyAssertion
-{
+	@Setter(OBJECT_KEY)
+	public void setObject(DataBinding<?> object);
 
-	private static final Logger logger = Logger.getLogger(ObjectPropertyAssertion.class.getPackage().getName());
+	public IFlexoOntologyStructuralProperty getOntologyProperty();
 
-	private String objectPropertyURI;
+	public void setOntologyProperty(IFlexoOntologyStructuralProperty p);
 
-	public ObjectPropertyAssertionImpl() {
-		super();
-	}
+	public static abstract class ObjectPropertyAssertionImpl extends AbstractAssertionImpl implements ObjectPropertyAssertion {
 
-	public void _setObjectPropertyURI(String objectPropertyURI) {
-		this.objectPropertyURI = objectPropertyURI;
-	}
+		private static final Logger logger = Logger.getLogger(ObjectPropertyAssertion.class.getPackage().getName());
 
-	public String _getObjectPropertyURI() {
-		return objectPropertyURI;
-	}
+		private String objectPropertyURI;
 
-	public IFlexoOntologyStructuralProperty getOntologyProperty() {
-		if (getVirtualModel() != null) {
-			return getVirtualModel().getOntologyObjectProperty(_getObjectPropertyURI());
+		public ObjectPropertyAssertionImpl() {
+			super();
 		}
-		return null;
-	}
 
-	public void setOntologyProperty(IFlexoOntologyStructuralProperty p) {
-		_setObjectPropertyURI(p != null ? p.getURI() : null);
-	}
-
-	@Override
-	public BindingModel getBindingModel() {
-		return getEditionScheme().getBindingModel();
-	}
-
-	private DataBinding<Object> object;
-
-	public Type getObjectType() {
-		if (getOntologyProperty() instanceof IFlexoOntologyObjectProperty
-				&& ((IFlexoOntologyObjectProperty) getOntologyProperty()).getRange() instanceof IFlexoOntologyClass) {
-			return IndividualOfClass.getIndividualOfClass((IFlexoOntologyClass) ((IFlexoOntologyObjectProperty) getOntologyProperty())
-					.getRange());
+		@Override
+		public void _setObjectPropertyURI(String objectPropertyURI) {
+			this.objectPropertyURI = objectPropertyURI;
 		}
-		return IFlexoOntologyConcept.class;
-	}
 
-	public DataBinding<Object> getObject() {
-		if (object == null) {
-			object = new DataBinding<Object>(this, getObjectType(), BindingDefinitionType.GET);
-			object.setBindingName("object");
+		@Override
+		public String _getObjectPropertyURI() {
+			return objectPropertyURI;
 		}
-		return object;
-	}
 
-	public void setObject(DataBinding<Object> object) {
-		if (object != null) {
-			object.setOwner(this);
-			object.setBindingName("object");
-			object.setDeclaredType(getObjectType());
-			object.setBindingDefinitionType(BindingDefinitionType.GET);
+		@Override
+		public IFlexoOntologyStructuralProperty getOntologyProperty() {
+			if (getVirtualModel() != null) {
+				return getVirtualModel().getOntologyObjectProperty(_getObjectPropertyURI());
+			}
+			return null;
 		}
-		this.object = object;
-	}
 
-	public IFlexoOntologyConcept getAssertionObject(EditionSchemeAction action) {
-		Object value = null;
-		try {
-			value = getObject().getBindingValue(action);
-		} catch (TypeMismatchException e) {
-			e.printStackTrace();
-		} catch (NullReferenceException e) {
-			e.printStackTrace();
-		} catch (InvocationTargetException e) {
-			e.printStackTrace();
+		@Override
+		public void setOntologyProperty(IFlexoOntologyStructuralProperty p) {
+			_setObjectPropertyURI(p != null ? p.getURI() : null);
 		}
-		if (value instanceof IFlexoOntologyConcept) {
-			return (IFlexoOntologyConcept) value;
-		}
-		return null;
-	}
 
-	public Object getValue(EditionSchemeAction action) {
-		try {
-			return getObject().getBindingValue(action);
-		} catch (TypeMismatchException e) {
-			e.printStackTrace();
-		} catch (NullReferenceException e) {
-			e.printStackTrace();
-		} catch (InvocationTargetException e) {
-			e.printStackTrace();
+		@Override
+		public BindingModel getBindingModel() {
+			return getEditionScheme().getBindingModel();
 		}
-		return null;
+
+		private DataBinding<?> object;
+
+		public Type getObjectType() {
+			if (getOntologyProperty() instanceof IFlexoOntologyObjectProperty
+					&& ((IFlexoOntologyObjectProperty) getOntologyProperty()).getRange() instanceof IFlexoOntologyClass) {
+				return IndividualOfClass.getIndividualOfClass((IFlexoOntologyClass) ((IFlexoOntologyObjectProperty) getOntologyProperty())
+						.getRange());
+			}
+			return IFlexoOntologyConcept.class;
+		}
+
+		@Override
+		public DataBinding<?> getObject() {
+			if (object == null) {
+				object = new DataBinding<Object>(this, getObjectType(), BindingDefinitionType.GET);
+				object.setBindingName("object");
+			}
+			return object;
+		}
+
+		@Override
+		public void setObject(DataBinding<?> object) {
+			if (object != null) {
+				object.setOwner(this);
+				object.setBindingName("object");
+				object.setDeclaredType(getObjectType());
+				object.setBindingDefinitionType(BindingDefinitionType.GET);
+			}
+			this.object = object;
+		}
+
+		public IFlexoOntologyConcept getAssertionObject(EditionSchemeAction action) {
+			Object value = null;
+			try {
+				value = getObject().getBindingValue(action);
+			} catch (TypeMismatchException e) {
+				e.printStackTrace();
+			} catch (NullReferenceException e) {
+				e.printStackTrace();
+			} catch (InvocationTargetException e) {
+				e.printStackTrace();
+			}
+			if (value instanceof IFlexoOntologyConcept) {
+				return (IFlexoOntologyConcept) value;
+			}
+			return null;
+		}
+
+		public Object getValue(EditionSchemeAction action) {
+			try {
+				return getObject().getBindingValue(action);
+			} catch (TypeMismatchException e) {
+				e.printStackTrace();
+			} catch (NullReferenceException e) {
+				e.printStackTrace();
+			} catch (InvocationTargetException e) {
+				e.printStackTrace();
+			}
+			return null;
+		}
+
 	}
 
 	public static class ObjectPropertyAssertionMustDefineAnOntologyProperty extends
 			ValidationRule<ObjectPropertyAssertionMustDefineAnOntologyProperty, ObjectPropertyAssertion> {
-		public ObjectPropertyAssertionImplMustDefineAnOntologyProperty() {
+		public ObjectPropertyAssertionMustDefineAnOntologyProperty() {
 			super(ObjectPropertyAssertion.class, "object_property_assertion_must_define_an_ontology_property");
 		}
 
@@ -182,11 +207,10 @@ public static abstract  class ObjectPropertyAssertionImpl extends AbstractAssert
 		}
 
 		@Override
-		public DataBinding<Object> getBinding(ObjectPropertyAssertion object) {
+		public DataBinding<?> getBinding(ObjectPropertyAssertion object) {
 			return object.getObject();
 		}
 
 	}
 
-}
 }

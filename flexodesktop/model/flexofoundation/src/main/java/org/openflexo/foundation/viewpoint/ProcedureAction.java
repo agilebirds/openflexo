@@ -26,63 +26,80 @@ import org.openflexo.antar.binding.DataBinding;
 import org.openflexo.foundation.technologyadapter.ModelSlot;
 import org.openflexo.foundation.view.action.EditionSchemeAction;
 import org.openflexo.foundation.viewpoint.annotations.FIBPanel;
+import org.openflexo.model.annotations.Getter;
+import org.openflexo.model.annotations.PropertyIdentifier;
+import org.openflexo.model.annotations.Setter;
+import org.openflexo.model.annotations.XMLAttribute;
 
 @FIBPanel("Fib/ProcedureActionPanel.fib")
-public abstract class ProcedureAction<MS extends ModelSlot<?>, T> extends EditionAction<MS, T> {
+public interface ProcedureAction<MS extends ModelSlot<?>, T> extends EditionAction<MS, T> {
 
-	private static final Logger logger = Logger.getLogger(ProcedureAction.class.getPackage().getName());
+	@PropertyIdentifier(type = DataBinding.class)
+	public static final String PARAMETER_KEY = "parameter";
 
-	private DataBinding<Object> parameter;
+	@Getter(value = PARAMETER_KEY)
+	@XMLAttribute
+	public DataBinding<Object> getParameter();
 
-	public ProcedureAction() {
-		super();
-	}
+	@Setter(value = PARAMETER_KEY)
+	public void setParameter(DataBinding<Object> param);
 
-	public DataBinding<Object> getParameter() {
+	public abstract class ProcedureActionImpl<MS extends ModelSlot<?>, T> extends EditionActionImpl<MS, T> implements
+			ProcedureAction<MS, T> {
 
-		if (parameter == null) {
-			parameter = new DataBinding<Object>(this, Object.class, DataBinding.BindingDefinitionType.GET);
-			parameter.setBindingName("parameter");
-		}
-		return parameter;
+		private static final Logger logger = Logger.getLogger(ProcedureAction.class.getPackage().getName());
 
-	}
+		private DataBinding<Object> parameter;
 
-	public void setParameter(DataBinding<Object> paramIndivBinding) {
+		@Override
+		public DataBinding<Object> getParameter() {
 
-		if (paramIndivBinding != null) {
-			paramIndivBinding.setOwner(this);
-			paramIndivBinding.setDeclaredType(Object.class);
-			paramIndivBinding.setBindingDefinitionType(DataBinding.BindingDefinitionType.GET);
-			paramIndivBinding.setBindingName("parameter");
-		}
+			if (parameter == null) {
+				parameter = new DataBinding<Object>(this, Object.class, DataBinding.BindingDefinitionType.GET);
+				parameter.setBindingName("parameter");
+			}
+			return parameter;
 
-		this.parameter = paramIndivBinding;
-
-	}
-
-	@Override
-	public void notifiedBindingChanged(DataBinding<?> dataBinding) {
-		if (dataBinding == getParameter()) {
-		}
-		super.notifiedBindingChanged(dataBinding);
-	}
-
-	public static class ExecutionBindingIsRequiredAndMustBeValid extends BindingIsRequiredAndMustBeValid<ProcedureAction> {
-		public ExecutionBindingIsRequiredAndMustBeValid() {
-			super("'parameter'_binding_is_not_valid", ProcedureAction.class);
 		}
 
 		@Override
-		public DataBinding<Object> getBinding(ProcedureAction object) {
-			return object.getParameter();
+		public void setParameter(DataBinding<Object> paramIndivBinding) {
+
+			if (paramIndivBinding != null) {
+				paramIndivBinding.setOwner(this);
+				paramIndivBinding.setDeclaredType(Object.class);
+				paramIndivBinding.setBindingDefinitionType(DataBinding.BindingDefinitionType.GET);
+				paramIndivBinding.setBindingName("parameter");
+			}
+
+			this.parameter = paramIndivBinding;
+
 		}
 
-	}
+		@Override
+		public void notifiedBindingChanged(DataBinding<?> dataBinding) {
+			if (dataBinding == getParameter()) {
+			}
+			super.notifiedBindingChanged(dataBinding);
+		}
 
-	@Override
-	public void finalizePerformAction(EditionSchemeAction action, T initialContext) {
-		// TODO Auto-generated method stub
+		public static class ExecutionBindingIsRequiredAndMustBeValid extends BindingIsRequiredAndMustBeValid<ProcedureAction> {
+			public ExecutionBindingIsRequiredAndMustBeValid() {
+				super("'parameter'_binding_is_not_valid", ProcedureAction.class);
+			}
+
+			@Override
+			public DataBinding<Object> getBinding(ProcedureAction object) {
+				return object.getParameter();
+			}
+
+		}
+
+		@Override
+		public void finalizePerformAction(EditionSchemeAction action, T initialContext) {
+			// TODO Auto-generated method stub
+
+		}
 
 	}
 
