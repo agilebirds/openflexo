@@ -22,6 +22,7 @@ package org.openflexo.foundation.view.diagram.viewpoint;
 import org.openflexo.antar.binding.BindingModel;
 import org.openflexo.antar.binding.BindingVariable;
 import org.openflexo.antar.binding.DataBinding;
+import org.openflexo.fge.geom.FGEPoint;
 import org.openflexo.foundation.technologyadapter.ModelSlot;
 import org.openflexo.foundation.view.diagram.model.DiagramElement;
 import org.openflexo.foundation.view.diagram.viewpoint.editionaction.AddShape;
@@ -121,9 +122,12 @@ public class DropScheme extends AbstractCreationScheme implements DiagramEdition
 		if (getTargetEditionPattern() != null) {
 			bindingModel.addToBindingVariables(new BindingVariable(DiagramEditionScheme.TARGET, EditionPatternInstanceType
 					.getEditionPatternInstanceType(getTargetEditionPattern())));
+			bindingModel.addToBindingVariables(new BindingVariable(DiagramEditionScheme.DROP_LOCATION, FGEPoint.class));
 		} else if (_getTarget() != null && !_getTarget().equals("top")) {
 			// logger.warning("Cannot find edition pattern " + _getTarget() + " !!!!!!!!!!!!!!");
 			bindingModelNeedToBeRecomputed = true;
+		} else {
+			bindingModel.addToBindingVariables(new BindingVariable(DiagramEditionScheme.DROP_LOCATION, FGEPoint.class));
 		}
 	}
 

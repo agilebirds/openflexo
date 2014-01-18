@@ -35,4 +35,7 @@ public interface DiagramEditionScheme {
 	public static final String FROM_TARGET = "fromTarget";
 	public static final String TO_TARGET = "toTarget";
 	public static final String DIAGRAM = "diagram";
+	public static final String DROP_LOCATION = "drop_location";
+	// public static final String CONNECTOR_START_LOCATION = "connectorStartLocation";
+	// public static final String CONNECTOR_END_LOCATION = "connectorEndLocation";
 }

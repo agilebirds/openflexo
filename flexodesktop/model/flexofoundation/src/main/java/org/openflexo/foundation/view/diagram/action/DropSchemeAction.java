@@ -242,6 +242,9 @@ public class DropSchemeAction extends DiagramEditionSchemeAction<DropSchemeActio
 				return ((DiagramShape) getParent()).getEditionPatternInstance();
 			}
 		}
+		if (variable.getVariableName().equals(DiagramEditionScheme.DROP_LOCATION)) {
+			return dropLocation;
+		}
 		return super.getValue(variable);
 	}
 
