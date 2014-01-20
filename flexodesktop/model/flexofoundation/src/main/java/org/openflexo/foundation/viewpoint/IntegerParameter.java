@@ -47,4 +47,5 @@ public interface IntegerParameter extends EditionSchemeParameter {
 		}
 
 	}
+
 }

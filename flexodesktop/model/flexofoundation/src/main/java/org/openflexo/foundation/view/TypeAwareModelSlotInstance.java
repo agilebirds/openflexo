@@ -97,4 +97,27 @@ public class TypeAwareModelSlotInstance<M extends FlexoModel<M, MM>, MM extends 
 	public String getBindingDescription() {
 		return getModelURI();
 	}
+
+	@Override
+	public void updateActorReferencesURI() {
+		// Browse the epi and their actors
+		for (EditionPatternInstance epi : getVirtualModelInstance().getEditionPatternInstancesList()) {
+			for (ActorReference<?> actor : epi.getActorList()) {
+				// If it is provided by the right model slot
+				if (actor instanceof ConceptActorReference && actor.getModelSlotInstance().equals(this)) {
+
+					// This should be changed
+					ConceptActorReference<?> conceptActorRef = (ConceptActorReference<?>) actor;
+					String id = conceptActorRef._getObjectURI().substring(conceptActorRef._getObjectURI().lastIndexOf("#"));
+					conceptActorRef._setObjectURI(getAccessedResourceData().getURI() + id);
+					if (conceptActorRef.getObject() == null) {
+						logger.warning("cannot retrieve objects in this resource " + conceptActorRef);
+						// conceptActorRef.delete();
+					}
+				}
+			}
+		}
+
+		setModelURI(getAccessedResourceData().getURI());
+	}
 }

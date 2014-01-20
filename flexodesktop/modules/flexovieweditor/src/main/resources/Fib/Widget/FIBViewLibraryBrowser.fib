@@ -11,7 +11,7 @@
     <BrowserElement dataClassName="org.openflexo.foundation.rm.ViewResource" label="viewResource.name" icon="controller.iconForObject(viewResource)" tooltip="" enabled="viewResource.isLoaded" visible="" isEditable="false" editableLabel="" filtered="false" defaultVisible="true" dynamicFont="" name="viewResource">
       <Children data="viewResource.contents" visible="viewResource.isLoaded" cast="" name="children" />
     </BrowserElement>
-    <BrowserElement dataClassName="org.openflexo.foundation.rm.VirtualModelInstanceResource" label="virtualModelInstanceResource.name" icon="controller.iconForObject(virtualModelInstanceResource)" tooltip="" enabled="virtualModelInstanceResource.isLoaded" visible="" isEditable="false" editableLabel="" filtered="false" defaultVisible="true" dynamicFont="" name="virtualModelInstanceResource" />
+    <BrowserElement dataClassName="org.openflexo.foundation.rm.VirtualModelInstanceResource" label="virtualModelInstanceResource.title" icon="controller.iconForObject(virtualModelInstanceResource)" tooltip="" enabled="virtualModelInstanceResource.isLoaded" visible="" isEditable="false" editableLabel="" filtered="false" defaultVisible="true" dynamicFont="" name="virtualModelInstanceResource" />
   </Browser>
   <LocalizedDictionary />
 </Panel>

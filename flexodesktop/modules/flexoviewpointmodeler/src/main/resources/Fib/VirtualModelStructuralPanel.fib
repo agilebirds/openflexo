@@ -33,7 +33,7 @@
     </Panel>
   </SplitPanel>
   <LocalizedDictionary>
-    <Localized key="example_diagram" lang="English">example_diagram</Localized>
+    <Localized key="example_diagram" lang="English">Example diagram</Localized>
     <Localized key="example_diagram" lang="French">Diagramme exemple</Localized>
     <Localized key="example_diagram" lang="Dutch">example_diagram</Localized>
     <Localized key="pattern_role" lang="English">Pattern Role</Localized>

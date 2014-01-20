@@ -21,6 +21,7 @@ package org.openflexo.foundation.viewpoint;
 
 import java.util.Collection;
 import java.util.Hashtable;
+import java.util.Iterator;
 import java.util.List;
 import java.util.Map;
 import java.util.Vector;
@@ -31,6 +32,7 @@ import org.openflexo.foundation.FlexoService;
 import org.openflexo.foundation.FlexoServiceManager;
 import org.openflexo.foundation.resource.DefaultResourceCenterService.ResourceCenterAdded;
 import org.openflexo.foundation.resource.DefaultResourceCenterService.ResourceCenterRemoved;
+import org.openflexo.foundation.resource.FileSystemBasedResourceCenter;
 import org.openflexo.foundation.resource.FlexoResourceCenter;
 import org.openflexo.foundation.resource.FlexoResourceCenterService;
 import org.openflexo.foundation.validation.Validable;
@@ -142,13 +144,20 @@ public class ViewPointLibrary extends DefaultFlexoObject implements FlexoService
 	}
 
 	/**
-	 * Register supplied ViewPointResource in this library
+	 * UnRegister supplied ViewPointResource in this library
 	 * 
 	 * @param vpRes
 	 * @return
 	 */
 	public ViewPointResource unregisterViewPoint(ViewPointResource vpRes) {
-		map.remove(vpRes);
+
+		// Unregister the viewpoint resource from the viewpoint library
+		for (Iterator<Map.Entry<String, ViewPointResource>> i = map.entrySet().iterator(); i.hasNext();) {
+			Map.Entry<String, ViewPointResource> entry = i.next();
+			if ((entry.getValue().equals(vpRes))) {
+				i.remove();
+			}
+		}
 
 		// Unregister the viewpoint resource from the viewpoint repository
 		List<FlexoResourceCenter> resourceCenters = getResourceCenterService().getResourceCenters();
@@ -309,10 +318,22 @@ public class ViewPointLibrary extends DefaultFlexoObject implements FlexoService
 				newRC.initialize(this);
 			}
 			if (notification instanceof ResourceCenterRemoved) {
-				FlexoResourceCenter newRC = ((ResourceCenterRemoved) notification).getRemovedResourceCenter();
-				// A new resource center has just been dereferenced
+				FileSystemBasedResourceCenter newRC = (FileSystemBasedResourceCenter) ((ResourceCenterRemoved) notification)
+						.getRemovedResourceCenter();
+
+				// A resource center must be been dereferenced
+				ViewPointRepository vpr = newRC.getViewPointRepository();
+				for (ViewPointResource vpR : vpr.getAllResources()) {
+					if (((FileSystemBasedResourceCenter) vpr.getResourceCenter()).getResource(vpR.getURI()) != null) {
+						vpR.unloadResourceData();
+						unregisterViewPoint(vpR);
+						vpr.unregisterResource(vpR);
+					}
+				}
+				vpr.delete();
+
 				// TODO implement this
-				logger.warning("TODO: Please implement resource center dereferencing in ViewPointLibrary");
+				// logger.warning("TODO: Please implement resource center dereferencing in ViewPointLibrary");
 			}
 		}
 	}

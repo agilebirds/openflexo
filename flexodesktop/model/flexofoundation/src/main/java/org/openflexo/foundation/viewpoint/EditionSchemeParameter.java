@@ -284,7 +284,7 @@ public interface EditionSchemeParameter extends EditionSchemeObject, FunctionArg
 		@Override
 		public DataBinding<?> getDefaultValue() {
 			if (defaultValue == null) {
-				defaultValue = new DataBinding<Object>(this, Object.class, BindingDefinitionType.GET);
+				defaultValue = new DataBinding<Object>(this, getType(), BindingDefinitionType.GET);
 				defaultValue.setBindingName("defaultValue");
 			}
 			return defaultValue;
@@ -295,7 +295,7 @@ public interface EditionSchemeParameter extends EditionSchemeObject, FunctionArg
 			if (defaultValue != null) {
 				defaultValue.setOwner(this);
 				defaultValue.setBindingName("defaultValue");
-				defaultValue.setDeclaredType(Object.class);
+				defaultValue.setDeclaredType(getType());
 				defaultValue.setBindingDefinitionType(BindingDefinitionType.GET);
 			}
 			this.defaultValue = defaultValue;

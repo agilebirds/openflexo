@@ -87,6 +87,12 @@ public class VirtualModelModelFactory extends ModelFactory {
 		return returned;
 	}
 
+	public DeleteEditionPatternInstanceParameter newDeleteEditionPatternInstanceParameter(EditionSchemeParameter p) {
+		DeleteEditionPatternInstanceParameter returned = newInstance(DeleteEditionPatternInstanceParameter.class);
+		returned.setParam(p);
+		return returned;
+	}
+
 	public DataPropertyAssertion newDataPropertyAssertion() {
 		return newInstance(DataPropertyAssertion.class);
 	}

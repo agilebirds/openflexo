@@ -22,6 +22,7 @@ package org.openflexo.foundation.viewpoint;
 
 import java.lang.reflect.InvocationTargetException;
 import java.lang.reflect.Type;
+import java.util.ArrayList;
 import java.util.List;
 import java.util.Vector;
 import java.util.logging.Logger;
@@ -69,7 +70,7 @@ public interface AddEditionPatternInstance extends AssignableAction<VirtualModel
 	public static final String VIRTUAL_MODEL_INSTANCE_KEY = "virtualModelInstance";
 	@PropertyIdentifier(type = String.class)
 	public static final String CREATION_SCHEME_URI_KEY = "creationSchemeURI";
-	@PropertyIdentifier(type = Vector.class)
+	@PropertyIdentifier(type = List.class)
 	public static final String PARAMETERS_KEY = "parameters";
 
 	@Getter(value = VIRTUAL_MODEL_INSTANCE_KEY)
@@ -211,32 +212,16 @@ public interface AddEditionPatternInstance extends AssignableAction<VirtualModel
 			}
 		}
 
-		private Vector<AddEditionPatternInstanceParameter> parameters = new Vector<AddEditionPatternInstanceParameter>();
+		// private Vector<AddEditionPatternInstanceParameter> parameters = new Vector<AddEditionPatternInstanceParameter>();
 
 		@Override
-		public Vector<AddEditionPatternInstanceParameter> getParameters() {
+		public List<AddEditionPatternInstanceParameter> getParameters() {
 			updateParameters();
-			return parameters;
-		}
-
-		public void setParameters(Vector<AddEditionPatternInstanceParameter> parameters) {
-			this.parameters = parameters;
-		}
-
-		@Override
-		public void addToParameters(AddEditionPatternInstanceParameter parameter) {
-			parameter.setAction(this);
-			parameters.add(parameter);
-		}
-
-		@Override
-		public void removeFromParameters(AddEditionPatternInstanceParameter parameter) {
-			parameter.setAction(null);
-			parameters.remove(parameter);
+			return (List<AddEditionPatternInstanceParameter>) performSuperGetter(PARAMETERS_KEY);
 		}
 
 		public AddEditionPatternInstanceParameter getParameter(EditionSchemeParameter p) {
-			for (AddEditionPatternInstanceParameter addEPParam : parameters) {
+			for (AddEditionPatternInstanceParameter addEPParam : getParameters()) {
 				if (addEPParam.getParam() == p) {
 					return addEPParam;
 				}
@@ -245,7 +230,7 @@ public interface AddEditionPatternInstance extends AssignableAction<VirtualModel
 		}
 
 		private void updateParameters() {
-			Vector<AddEditionPatternInstanceParameter> parametersToRemove = new Vector<AddEditionPatternInstanceParameter>(parameters);
+			List<AddEditionPatternInstanceParameter> parametersToRemove = new ArrayList<AddEditionPatternInstanceParameter>(getParameters());
 			if (getCreationScheme() != null) {
 				for (EditionSchemeParameter p : getCreationScheme().getParameters()) {
 					AddEditionPatternInstanceParameter existingParam = getParameter(p);
@@ -285,9 +270,21 @@ public interface AddEditionPatternInstance extends AssignableAction<VirtualModel
 			return null;
 		}
 
-		@Override
+		/*@Override
 		public Type getAssignableType() {
 			return EditionPatternInstanceType.getEditionPatternInstanceType(getEditionPatternType());
+		}*/
+
+		@Override
+		public Type getAssignableType() {
+			// NPE Protection
+			ViewPoint vp = this.getViewPoint();
+			if (vp != null) {
+				return vp.getInstanceType(getEditionPatternType());
+			} else {
+				logger.warning("Adding FlexoConcept Instance in a null ViewPoint !");
+				return null;
+			}
 		}
 
 	}

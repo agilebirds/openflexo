@@ -59,10 +59,10 @@ public interface EditionPatternInstanceParameter extends InnerModelSlotParameter
 		@Override
 		public Type getType() {
 			if (getEditionPatternType() != null) {
-				return EditionPatternInstanceType.getEditionPatternInstanceType(getEditionPatternType());
+				return getViewPoint().getInstanceType(getEditionPatternType());
 			}
 			return EditionPatternInstance.class;
-		};
+		}
 
 		@Override
 		public WidgetType getWidget() {

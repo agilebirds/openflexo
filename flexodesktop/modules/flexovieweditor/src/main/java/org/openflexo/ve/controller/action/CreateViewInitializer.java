@@ -32,6 +32,8 @@ import org.openflexo.foundation.action.NotImplementedException;
 import org.openflexo.foundation.resource.RepositoryFolder;
 import org.openflexo.foundation.rm.DuplicateResourceException;
 import org.openflexo.foundation.view.action.CreateView;
+import org.openflexo.foundation.view.action.CreateVirtualModelInstance.CreateConcreteVirtualModelInstance;
+import org.openflexo.foundation.view.diagram.action.CreateDiagram;
 import org.openflexo.foundation.view.diagram.model.DiagramElement;
 import org.openflexo.icon.VEIconLibrary;
 import org.openflexo.localization.FlexoLocalization;
@@ -75,6 +77,15 @@ public class CreateViewInitializer extends ActionInitializer<CreateView, Reposit
 			public boolean run(EventObject e, CreateView action) {
 				// getController().setCurrentEditedObjectAsModuleView(action.getNewView());
 				getController().selectAndFocusObject(action.getNewView());
+				if (action.createVirtualModel) {
+					CreateConcreteVirtualModelInstance actionVMi = CreateConcreteVirtualModelInstance.actionType.makeNewAction(
+							action.getNewView(), null, getEditor());
+					actionVMi.doAction();
+				}
+				if (action.createDiagram) {
+					CreateDiagram actionDiagramInstance = CreateDiagram.actionType.makeNewAction(action.getNewView(), null, getEditor());
+					actionDiagramInstance.doAction();
+				}
 				return true;
 			}
 		};

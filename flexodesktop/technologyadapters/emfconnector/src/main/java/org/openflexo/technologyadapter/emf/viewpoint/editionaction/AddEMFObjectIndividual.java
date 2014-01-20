@@ -1,5 +1,6 @@
 /*
  * (c) Copyright 2010-2011 AgileBirds
+ * (c) Copyright 2012-2013 Openflexo
  *
  * This file is part of OpenFlexo.
  *
@@ -17,18 +18,25 @@
  * along with OpenFlexo. If not, see <http://www.gnu.org/licenses/>.
  *
  */
+
 package org.openflexo.technologyadapter.emf.viewpoint.editionaction;
 
+import java.lang.reflect.InvocationTargetException;
+import java.util.List;
 import java.util.logging.Logger;
 
 import org.eclipse.emf.ecore.EObject;
 import org.eclipse.emf.ecore.util.EcoreUtil;
+import org.openflexo.antar.binding.DataBinding;
+import org.openflexo.antar.expr.NullReferenceException;
+import org.openflexo.antar.expr.TypeMismatchException;
 import org.openflexo.foundation.ontology.IFlexoOntologyClass;
 import org.openflexo.foundation.view.TypeAwareModelSlotInstance;
 import org.openflexo.foundation.view.action.EditionSchemeAction;
 import org.openflexo.foundation.viewpoint.AddIndividual;
 import org.openflexo.foundation.viewpoint.DataPropertyAssertion;
 import org.openflexo.foundation.viewpoint.ObjectPropertyAssertion;
+import org.openflexo.foundation.viewpoint.annotations.FIBPanel;
 import org.openflexo.model.annotations.ImplementationClass;
 import org.openflexo.model.annotations.ModelEntity;
 import org.openflexo.model.annotations.XMLElement;
@@ -41,6 +49,7 @@ import org.openflexo.technologyadapter.emf.metamodel.EMFMetaModel;
 import org.openflexo.technologyadapter.emf.metamodel.EMFReferenceObjectProperty;
 import org.openflexo.technologyadapter.emf.model.EMFModel;
 import org.openflexo.technologyadapter.emf.model.EMFObjectIndividual;
+import org.openflexo.technologyadapter.emf.model.EMFObjectIndividualReferenceObjectPropertyValueAsList;
 
 /**
  * Create EMF Object.
@@ -48,6 +57,8 @@ import org.openflexo.technologyadapter.emf.model.EMFObjectIndividual;
  * @author gbesancon
  * 
  */
+
+@FIBPanel("Fib/AddEMFObjectIndividual.fib")
 @ModelEntity
 @ImplementationClass(AddEMFObjectIndividual.AddEMFObjectIndividualImpl.class)
 @XMLElement
@@ -57,6 +68,9 @@ public interface AddEMFObjectIndividual extends AddIndividual<EMFModelSlot, EMFO
 			AddEMFObjectIndividual {
 
 		private static final Logger logger = Logger.getLogger(AddEMFObjectIndividual.class.getPackage().getName());
+
+		// Binding to host the container specification for the individual to be created
+		private DataBinding<List> container;
 
 		public AddEMFObjectIndividualImpl() {
 			super();
@@ -79,6 +93,7 @@ public interface AddEMFObjectIndividual extends AddIndividual<EMFModelSlot, EMFO
 		@Override
 		public EMFObjectIndividual performAction(EditionSchemeAction action) {
 			EMFObjectIndividual result = null;
+			List container = null;
 			TypeAwareModelSlotInstance<EMFModel, EMFMetaModel, EMFModelSlot> modelSlotInstance = (TypeAwareModelSlotInstance<EMFModel, EMFMetaModel, EMFModelSlot>) getModelSlotInstance(action);
 			if (modelSlotInstance.getResourceData() != null) {
 				IFlexoOntologyClass aClass = getOntologyClass();
@@ -86,15 +101,45 @@ public interface AddEMFObjectIndividual extends AddIndividual<EMFModelSlot, EMFO
 					EMFClassClass emfClassClass = (EMFClassClass) aClass;
 					// Create EMF Object
 					EObject eObject = EcoreUtil.create(emfClassClass.getObject());
-					modelSlotInstance.getAccessedResourceData().getEMFResource().getContents().add(eObject);
+					// put it in its container
+					try {
+						container = getContainer().getBindingValue(action);
+					} catch (TypeMismatchException e) {
+						// TODO Auto-generated catch block
+						e.printStackTrace();
+					} catch (NullReferenceException e) {
+						// TODO Auto-generated catch block
+						e.printStackTrace();
+					} catch (InvocationTargetException e) {
+						// TODO Auto-generated catch block
+						e.printStackTrace();
+					}
+
 					// Instanciate Wrapper.
 					result = modelSlotInstance.getAccessedResourceData().getConverter()
 							.convertObjectIndividual(modelSlotInstance.getAccessedResourceData(), eObject);
+
+					// Put it in its container
+					if (container == null) {
+						modelSlotInstance.getAccessedResourceData().getEMFResource().getContents().add(eObject);
+					} else {
+						// TODO This needs strong testing
+						container.add(result);
+						result.setContainPropertyValue((EMFObjectIndividualReferenceObjectPropertyValueAsList) container);
+					}
+
 					for (DataPropertyAssertion dataPropertyAssertion : getDataAssertions()) {
 						if (dataPropertyAssertion.evaluateCondition(action)) {
 							logger.info("DataPropertyAssertion=" + dataPropertyAssertion);
 							EMFAttributeDataProperty property = (EMFAttributeDataProperty) dataPropertyAssertion.getOntologyProperty();
 							logger.info("Property=" + property);
+							// Vincent: force to recompute the declared type(since it is automatically compute from the uri).
+							// Not sure of this, when loading a view/viewpoint, the declared type is seek from the ontology
+							// but while the virtual model is null, the declared type is always Object.(see DataPropertyAssertion).
+							// In the case we manipulate IntegerParameters in openflexo connected with int in EMF, then value of Integer is
+							// a
+							// Long, producing a cast exception.
+							dataPropertyAssertion.getValue().setDeclaredType(dataPropertyAssertion.getType());
 							Object value = dataPropertyAssertion.getValue(action);
 							logger.info("Value=" + value);
 							// Set Data Attribute in EMF
@@ -127,9 +172,10 @@ public interface AddEMFObjectIndividual extends AddIndividual<EMFModelSlot, EMFO
 									result.getObject().eSet(property.getObject(), ((AEMFMetaModelObjectImpl<?>) value).getObject());
 								} else {
 									if (value instanceof EMFObjectIndividual) {
-										result.getObject().eSet(property.getObject(), ((EMFObjectIndividual) value).getObject());
+										((EMFObjectIndividual) result).getObject().eSet(property.getObject(),
+												((EMFObjectIndividual) value).getObject());
 									} else {
-										result.getObject().eSet(property.getObject(), value);
+										((EMFObjectIndividual) result).getObject().eSet(property.getObject(), value);
 									}
 								}
 							} else {
@@ -155,5 +201,21 @@ public interface AddEMFObjectIndividual extends AddIndividual<EMFModelSlot, EMFO
 			return result;
 		}
 
+		public DataBinding<List> getContainer() {
+			if (container == null) {
+				container = new DataBinding<List>(this, List.class, DataBinding.BindingDefinitionType.GET);
+			}
+			return container;
+		}
+
+		public void setContainer(DataBinding<List> containerReference) {
+			if (containerReference != null) {
+				containerReference.setOwner(this);
+				containerReference.setBindingName("container");
+				containerReference.setDeclaredType(List.class);
+				containerReference.setBindingDefinitionType(DataBinding.BindingDefinitionType.GET);
+			}
+			this.container = containerReference;
+		}
 	}
 }

@@ -103,58 +103,9 @@ public class PowerpointSlideView extends JPanel {
 		Dimension dimension = slide.getSlideshow().getSlideShow().getPageSize();
 		slidePane.setPreferredSize(dimension);
 
-
+		JScrollPane pan = new JScrollPane(slidePane);
 		
-        BufferedImage img = new BufferedImage(dimension.width, dimension.height, BufferedImage.TYPE_INT_RGB);
-        Graphics2D graphics = img.createGraphics();
-        //clear the drawing area
-        graphics.setPaint(Color.white);
-        graphics.fill(new Rectangle2D.Float(0, 0, dimension.width, dimension.height));
-
-        try { //render
-	        slide.getSlide().draw(graphics);
-	        //save the output
-	        FileOutputStream out;
-		
-			out = new FileOutputStream("slide-"  + slide.getName()  + ".png");
-			javax.imageio.ImageIO.write(img, "png", out);
-		    out.close();
-		}catch (FileNotFoundException e1) {
-			// TODO Auto-generated catch block
-			e1.printStackTrace();
-		} catch (IOException e) {
-			// TODO Auto-generated catch block
-			e.printStackTrace();
-		}
-        catch(Exception e2){
-        	return;
-        }
-  
-        JLabel lab = new JLabel(new ImageIcon(img)); 
-        lab.setBounds(0, 0, dimension.width, dimension.height); 
-        add(lab);
-		/*for(PowerpointShape shape :slide.getPowerpointShapes()){
-			if(shape instanceof PowerpointTextBox){
-				JLabel label = new JLabel(shape.getShape().getShapeName());
-				label.setVerticalAlignment(JLabel.TOP);
-				label.setHorizontalAlignment(JLabel.CENTER);
-				label.setOpaque(true);
-				label.setBackground(shape.getShape().getFill().getBackgroundColor());
-				label.setForeground(Color.black);
-				label.setBorder(BorderFactory.createLineBorder(Color.black));
-				label.setPreferredSize(new Dimension((int)shape.getWidth(), (int)shape.getHeight()));
-				label.setLocation((int)shape.getShape().getAnchor().getCenterX(), (int)shape.getShape().getAnchor().getCenterY());
-				add(label);
-			}
-			if(shape instanceof PowerpointAutoShape){
-				AutoShape autoShape = (AutoShape)shape.getShape();
-				autoShape.
-				add(label);
-			}
-		}*/
-		
-		//add(new JScrollPane(slidePane), BorderLayout.CENTER);
-		
+		add(pan, BorderLayout.CENTER);
 	}
 
 	public PowerpointSlide getSlide() {
@@ -180,6 +131,18 @@ public class PowerpointSlideView extends JPanel {
 		
 		public void setSlide(PowerpointSlide slide) {
 			this.slide = slide;
+		}
+		
+		@Override
+		public void paintComponent(Graphics g) {
+			super.paintComponents(g);
+			try{
+				slide.getSlide().draw((Graphics2D)g);
+			}
+			catch(ArrayIndexOutOfBoundsException e){
+				logger.warning("This slide might contains unparsable comments");
+			}
+
 		}
 	}
 

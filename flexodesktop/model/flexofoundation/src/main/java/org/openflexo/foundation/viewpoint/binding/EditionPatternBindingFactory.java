@@ -1,3 +1,24 @@
+/*
+ * (c) Copyright 2010-2011 AgileBirds
+ * (c) Copyright 2012-2013 Openflexo
+ *
+ * This file is part of OpenFlexo.
+ *
+ * OpenFlexo is free software: you can redistribute it and/or modify
+ * it under the terms of the GNU General Public License as published by
+ * the Free Software Foundation, either version 3 of the License, or
+ * (at your option) any later version.
+ *
+ * OpenFlexo is distributed in the hope that it will be useful,
+ * but WITHOUT ANY WARRANTY; without even the implied warranty of
+ * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE. See the
+ * GNU General Public License for more details.
+ *
+ * You should have received a copy of the GNU General Public License
+ * along with OpenFlexo. If not, see <http://www.gnu.org/licenses/>.
+ *
+ */
+
 package org.openflexo.foundation.viewpoint.binding;
 
 import java.lang.reflect.Type;
@@ -82,8 +103,10 @@ public final class EditionPatternBindingFactory extends JavaBindingFactory {
 	@Override
 	public List<? extends SimplePathElement> getAccessibleSimplePathElements(BindingPathElement parent) {
 
-		if (parent.getType() instanceof TechnologySpecificCustomType) {
-			TechnologySpecificCustomType parentType = (TechnologySpecificCustomType) parent.getType();
+		Type pType = parent.getType();
+		
+		if (pType instanceof TechnologySpecificCustomType) {
+			TechnologySpecificCustomType parentType = (TechnologySpecificCustomType) pType;
 			TechnologyAdapter ta = parentType.getTechnologyAdapter();
 			if (ta != null && ta.getTechnologyAdapterBindingFactory().handleType(parentType)) {
 				List<? extends SimplePathElement> returned = ta.getTechnologyAdapterBindingFactory()
@@ -93,17 +116,18 @@ public final class EditionPatternBindingFactory extends JavaBindingFactory {
 			}
 		}
 
-		if (parent.getType() instanceof EditionSchemeParametersType) {
+		if (pType instanceof EditionSchemeParametersType) {
 			List<SimplePathElement> returned = new ArrayList<SimplePathElement>();
-			EditionScheme es = ((EditionSchemeParametersType) parent.getType()).getEditionScheme();
+			EditionScheme es = ((EditionSchemeParametersType) pType).getEditionScheme();
 			for (EditionSchemeParameter p : es.getParameters()) {
 				returned.add(getSimplePathElement(p, parent));
 			}
 			Collections.sort(returned, BindingPathElement.COMPARATOR);
 			return returned;
-		} else if (parent.getType() instanceof EditionSchemeParametersValuesType) {
+		}
+		else if (pType instanceof EditionSchemeParametersValuesType) {
 			List<SimplePathElement> returned = new ArrayList<SimplePathElement>();
-			EditionScheme es = ((EditionSchemeParametersValuesType) parent.getType()).getEditionScheme();
+			EditionScheme es = ((EditionSchemeParametersValuesType) pType).getEditionScheme();
 			for (EditionSchemeParameter p : es.getParameters()) {
 				returned.add(getSimplePathElement(p, parent));
 			}
@@ -134,16 +158,18 @@ public final class EditionPatternBindingFactory extends JavaBindingFactory {
 			}
 			Collections.sort(returned, BindingPathElement.COMPARATOR);
 			return returned;
-		}*//*else if (TypeUtils.isTypeAssignableFrom(EditionPattern.class, parent.getType())) {
+		}*//*else if (TypeUtils.isTypeAssignableFrom(EditionPattern.class, pType)) {
 			List<SimplePathElement> returned = new ArrayList<SimplePathElement>();
-				EditionPattern ep = (EditionPattern) parent.getType();
+				EditionPattern ep = (EditionPattern) pType;
 				for (PatternRole<?> pr : ep.getPatternRoles()) {
 					returned.add(getSimplePathElement(pr, parent));
 				}
 			return returned;
-			} */else if (parent.getType() instanceof EditionPatternInstanceType) {
+			} */
+		else if (pType instanceof EditionPatternInstanceType) {
 			List<SimplePathElement> returned = new ArrayList<SimplePathElement>();
-			EditionPattern ep = ((EditionPatternInstanceType) parent.getType()).getEditionPattern();
+			EditionPattern ep = ((EditionPatternInstanceType) pType).getEditionPattern();
+			
 			if (ep instanceof VirtualModel) {
 				VirtualModel vm = (VirtualModel) ep;
 				for (ModelSlot ms : vm.getModelSlots()) {
@@ -158,18 +184,18 @@ public final class EditionPatternBindingFactory extends JavaBindingFactory {
 				returned.add(new EPIRendererPathElement(parent));
 			}
 			return returned;
-		} else if (parent.getType() instanceof EditionSchemeType) {
+		} else if (pType instanceof EditionSchemeType) {
 			List<SimplePathElement> returned = new ArrayList<SimplePathElement>();
-			EditionScheme editionScheme = ((EditionSchemeType) parent.getType()).getEditionScheme();
+			EditionScheme editionScheme = ((EditionSchemeType) pType).getEditionScheme();
 			returned.add(new EditionSchemeParametersValuesPathElement(parent, editionScheme));
 			returned.add(new EditionSchemeParametersDefinitionsPathElement(parent, editionScheme));
 			for (PatternRole<?> pr : editionScheme.getEditionPattern().getPatternRoles()) {
 				returned.add(getSimplePathElement(pr, parent));
 			}
 			return returned;
-		} else if (parent.getType() instanceof EditionSchemeActionType) {
+		} else if (pType instanceof EditionSchemeActionType) {
 			List<SimplePathElement> returned = new ArrayList<SimplePathElement>();
-			EditionScheme editionScheme = ((EditionSchemeActionType) parent.getType()).getEditionScheme();
+			EditionScheme editionScheme = ((EditionSchemeActionType) pType).getEditionScheme();
 			returned.add(new EditionSchemeParametersValuesPathElement(parent, editionScheme));
 			returned.add(new EditionSchemeParametersDefinitionsPathElement(parent, editionScheme));
 			for (PatternRole<?> pr : editionScheme.getEditionPattern().getPatternRoles()) {
@@ -184,8 +210,10 @@ public final class EditionPatternBindingFactory extends JavaBindingFactory {
 
 	@Override
 	public List<? extends FunctionPathElement> getAccessibleFunctionPathElements(BindingPathElement parent) {
-		if (parent.getType() instanceof EditionPatternInstanceType) {
-			return getEditionSchemePathElements(parent, ((EditionPatternInstanceType) parent.getType()).getEditionPattern());
+
+		Type pType = parent.getType();
+		if (pType instanceof EditionPatternInstanceType) {
+			return getEditionSchemePathElements(parent, ((EditionPatternInstanceType) pType).getEditionPattern());
 		}
 		return super.getAccessibleFunctionPathElements(parent);
 	}

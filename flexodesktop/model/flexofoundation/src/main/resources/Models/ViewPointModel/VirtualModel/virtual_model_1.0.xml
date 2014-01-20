@@ -499,6 +499,7 @@
 	<entity name="org.openflexo.technologyadapter.diagram.fml.editionaction.AddDiagram"
 		xmlTag="AddDiagram">
 		<property name="diagramName" xmlTag="diagramName" attribute="YES" />
+		<property name="diagramSpecificationURI" xmlTag="diagramSpecificationURI" attribute="YES" />
 	</entity>
 
 	<entity name="org.openflexo.foundation.viewpoint.SelectEditionPatternInstance" xmlTag="SelectEditionPatternInstance">
@@ -513,6 +514,18 @@
 	</entity>
 
 	<entity name="org.openflexo.foundation.viewpoint.AddEditionPatternInstanceParameter" xmlTag="AddEditionPatternInstanceParameter">
+		<property name="paramName" xmlTag="paramName" attribute="YES" />
+		<property name="value" xmlTag="value" attribute="YES" />
+	</entity>
+
+
+	<entity name="org.openflexo.foundation.viewpoint.DeleteEditionPatternInstance" xmlTag="DeleteEditionPatternInstance">
+		<property name="virtualModelInstance" xmlTag="virtualModelInstance" attribute="YES" />
+		<property name="deletionSchemeURI" xmlTag="deletionSchemeURI" attribute="YES" />
+		<property name="parameters" type="vector" contains="org.openflexo.foundation.viewpoint.DeleteEditionPatternInstance$DeleteEditionPatternInstanceParameter" />
+	</entity>
+
+	<entity name="org.openflexo.foundation.viewpoint.DeleteEditionPatternInstance$DeleteEditionPatternInstanceParameter" xmlTag="DeleteEditionPatternInstanceParameter">
 		<property name="paramName" xmlTag="paramName" attribute="YES" />
 		<property name="value" xmlTag="value" attribute="YES" />
 	</entity>
@@ -563,6 +576,7 @@
 
 	<entity name="org.openflexo.technologyadapter.emf.viewpoint.editionaction.AddEMFObjectIndividual"
 		xmlTag="AddEMFObjectIndividual">
+		<property name="container" xmlTag="container" attribute="YES" />
 	</entity>
 	
 	<entity name="org.openflexo.technologyadapter.excel.viewpoint.editionaction.CellStyleAction"
@@ -570,6 +584,8 @@
 		<property name="subject" xmlTag="subject" attribute="YES" />
 		<property name="value" xmlTag="value" attribute="YES" />
 		<property name="cellStyle" xmlTag="cellStyle" attribute="YES" />
+		<property name="cellBorderStyle" xmlTag="cellBorderStyle" attribute="YES" />
+		<property name="cellAlignmentStyle" xmlTag="cellAlignmentStyle" attribute="YES" />
 	</entity>
 
 	<entity name="org.openflexo.technologyadapter.excel.viewpoint.editionaction.AddExcelSheet"

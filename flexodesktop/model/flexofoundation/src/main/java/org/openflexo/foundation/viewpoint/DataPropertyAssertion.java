@@ -79,6 +79,8 @@ public interface DataPropertyAssertion extends AbstractAssertion {
 
 	public Object getValue(EditionSchemeAction action);
 
+	public java.lang.reflect.Type getType();
+
 	public static abstract class DataPropertyAssertionImpl extends AbstractAssertionImpl implements DataPropertyAssertion {
 
 		private String dataPropertyURI;
@@ -130,6 +132,7 @@ public interface DataPropertyAssertion extends AbstractAssertion {
 			return getEditionScheme().getBindingModel();
 		}
 
+		@Override
 		public java.lang.reflect.Type getType() {
 			if (getOntologyProperty() instanceof IFlexoOntologyDataProperty) {
 				if (((IFlexoOntologyDataProperty) getOntologyProperty()).getRange() != null) {

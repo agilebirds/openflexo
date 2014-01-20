@@ -246,6 +246,8 @@ public interface EditionPattern extends EditionPatternObject {
 
 	public DeletionScheme getDefaultDeletionScheme();
 
+	
+	
 	public DeletionScheme generateDefaultDeletionScheme();
 
 	public List<IndividualPatternRole> getIndividualPatternRoles();

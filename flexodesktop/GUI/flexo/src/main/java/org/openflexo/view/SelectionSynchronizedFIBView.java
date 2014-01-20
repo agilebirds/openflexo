@@ -27,8 +27,10 @@ import java.util.logging.Level;
 import java.util.logging.Logger;
 
 import org.openflexo.fib.FIBLibrary;
+import org.openflexo.fib.controller.FIBController;
 import org.openflexo.fib.model.FIBComponent;
 import org.openflexo.fib.model.listener.FIBSelectionListener;
+import org.openflexo.fib.view.FIBView;
 import org.openflexo.foundation.FlexoException;
 import org.openflexo.foundation.FlexoObject;
 import org.openflexo.foundation.GraphicalFlexoObserver;
@@ -81,7 +83,14 @@ public class SelectionSynchronizedFIBView extends FlexoFIBView implements Select
 
 	@Override
 	public void deleteView() {
-		getFIBView().getController().removeSelectionListener(this);
+		FIBView aFibView = getFIBView();
+		FIBController aController = null;
+		if (aFibView != null){ 
+			aController = aFibView.getController();
+			if (aController != null){
+				aController.removeSelectionListener(this);
+				}
+		}
 		getFlexoController().getSelectionManager().removeFromSelectionListeners(this);
 		super.deleteView();
 	}

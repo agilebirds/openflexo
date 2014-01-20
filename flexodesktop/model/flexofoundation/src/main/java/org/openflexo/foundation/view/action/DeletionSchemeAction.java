@@ -70,12 +70,11 @@ public class DeletionSchemeAction extends EditionSchemeAction<DeletionSchemeActi
 
 	private VirtualModelInstance vmInstance;
 	private DeletionScheme deletionScheme;
+	private EditionPatternInstance editionPatternInstanceToDelete;
 
 	DeletionSchemeAction(EditionPatternInstance focusedObject, Vector<VirtualModelInstanceObject> globalSelection, FlexoEditor editor) {
 		super(actionType, focusedObject, globalSelection, editor);
 	}
-
-	// private EditionPatternInstance editionPatternInstanceToDelete;
 
 	@Override
 	protected void doAction(Object context) throws NotImplementedException, InvalidParametersException {
@@ -102,8 +101,11 @@ public class DeletionSchemeAction extends EditionSchemeAction<DeletionSchemeActi
 	@Override
 	public VirtualModelInstance getVirtualModelInstance() {
 		if (vmInstance == null) {
-			if (getFocusedObject() instanceof VirtualModelInstance) {
+			EditionPatternInstance vObject = getFocusedObject();
+			if (vObject instanceof VirtualModelInstance) {
 				vmInstance = (VirtualModelInstance) getFocusedObject();
+			} else if (vObject instanceof EditionPatternInstance) {
+				vmInstance = ((EditionPatternInstance) vObject).getVirtualModelInstance();
 			}
 		}
 		return vmInstance;
@@ -164,6 +166,17 @@ public class DeletionSchemeAction extends EditionSchemeAction<DeletionSchemeActi
 			return;
 		}
 		super.setValue(value, variable);
+	}
+
+	public EditionPatternInstance getEditionPatternInstanceToDelete() {
+		if (editionPatternInstanceToDelete == null && getFocusedObject() != null) {
+			editionPatternInstanceToDelete = getFocusedObject();
+		}
+		return editionPatternInstanceToDelete;
+	}
+
+	public void setEditionPatternInstanceToDelete(EditionPatternInstance editionPatternInstanceToDelete) {
+		this.editionPatternInstanceToDelete = editionPatternInstanceToDelete;
 	}
 
 }

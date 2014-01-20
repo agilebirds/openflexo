@@ -91,10 +91,10 @@ public interface SelectEditionPatternInstance extends FetchRequest<VirtualModelM
 			return out.toString();
 		}
 
-		@Override
-		public EditionPatternInstanceType getFetchedType() {
-			return EditionPatternInstanceType.getEditionPatternInstanceType(getEditionPatternType());
-		}
+	@Override
+	public EditionPatternInstanceType getFetchedType() {
+		return (EditionPatternInstanceType) EditionPatternInstanceType.getEditionPatternInstanceType(getEditionPatternType());
+	}
 
 		@Override
 		public String _getEditionPatternTypeURI() {

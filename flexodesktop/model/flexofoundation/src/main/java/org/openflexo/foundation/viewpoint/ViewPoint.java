@@ -1,5 +1,6 @@
 /*
  * (c) Copyright 2010-2011 AgileBirds
+ * (c) Copyright 2012-2013 Openflexo
  *
  * This file is part of OpenFlexo.
  *
@@ -22,8 +23,10 @@ package org.openflexo.foundation.viewpoint;
 import java.io.File;
 import java.io.IOException;
 import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.Iterator;
 import java.util.List;
+import java.util.Map;
 import java.util.Vector;
 import java.util.logging.Logger;
 
@@ -124,11 +127,18 @@ public interface ViewPoint extends NamedViewPointObject, ResourceData<ViewPoint>
 	@Setter(MODEL_VERSION_KEY)
 	public void setModelVersion(FlexoVersion modelVersion);
 
+	@Override
 	@Getter(value = LOCALIZED_DICTIONARY_KEY, inverse = LocalizedDictionary.OWNER_KEY)
 	public LocalizedDictionary getLocalizedDictionary();
 
 	@Setter(LOCALIZED_DICTIONARY_KEY)
 	public void setLocalizedDictionary(LocalizedDictionary localizedDictionary);
+
+	/**
+	 * Retrieves the right type given the EditionPattern
+	 */
+
+	public EditionPatternInstanceType getInstanceType(EditionPattern anEditionPattern);
 
 	/**
 	 * Return EditionPattern matching supplied id represented as a string, which could be either the name of EditionPattern, or its URI
@@ -174,6 +184,11 @@ public interface ViewPoint extends NamedViewPointObject, ResourceData<ViewPoint>
 		private ViewPointResource resource;
 		private BindingModel bindingModel;
 		private final EditionPatternBindingFactory bindingFactory = new EditionPatternBindingFactory(this);
+
+		// Maps to reference all the EditionPatternInstanceType, DiagramType, VirtualModelType used in this context
+
+		private final Map<EditionPattern, EditionPatternInstanceType> editionPatternTypesMap = new HashMap<EditionPattern, EditionPatternInstanceType>();
+		private final Map<EditionPattern, VirtualModelInstanceType> virtualModelTypesMap = new HashMap<EditionPattern, VirtualModelInstanceType>();
 
 		/**
 		 * Stores a chained collections of objects which are involved in validation
@@ -723,5 +738,32 @@ public interface ViewPoint extends NamedViewPointObject, ResourceData<ViewPoint>
 
 			return true;
 		}
+
+		/**
+		 * Retrieves the right type given the EditionPattern
+		 */
+		@Override
+		public EditionPatternInstanceType getInstanceType(EditionPattern anEditionPattern) {
+			EditionPatternInstanceType instanceType = null;
+
+			if (anEditionPattern != null) {
+				if (anEditionPattern instanceof VirtualModel) {
+					instanceType = virtualModelTypesMap.get(anEditionPattern);
+					if (instanceType == null) {
+						instanceType = new VirtualModelInstanceType((VirtualModel) anEditionPattern);
+						virtualModelTypesMap.put(anEditionPattern, (VirtualModelInstanceType) instanceType);
+					}
+				} else {
+					instanceType = editionPatternTypesMap.get(anEditionPattern);
+					if (instanceType == null) {
+						instanceType = new EditionPatternInstanceType(anEditionPattern);
+						editionPatternTypesMap.put(anEditionPattern, instanceType);
+					}
+				}
+			}
+
+			return instanceType;
+		}
+
 	}
 }

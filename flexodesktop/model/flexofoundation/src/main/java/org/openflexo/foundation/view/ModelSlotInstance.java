@@ -104,6 +104,9 @@ public abstract class ModelSlotInstance<MS extends ModelSlot<RD>, RD extends Res
 		return modelSlot;
 	}
 
+	public void updateActorReferencesURI() {
+	}
+
 	/**
 	 * Return the data this model slot gives access to.<br>
 	 * This is the data contractualized by the related model slot
@@ -120,8 +123,22 @@ public abstract class ModelSlotInstance<MS extends ModelSlot<RD>, RD extends Res
 	 * @param accessedResourceData
 	 */
 	public void setAccessedResourceData(RD accessedResourceData) {
+		boolean requiresUpdate = false;
+		if (this.accessedResourceData != accessedResourceData) {
+			requiresUpdate = true;
+		}
+
 		this.accessedResourceData = accessedResourceData;
 		this.resource = (TechnologyAdapterResource<RD, ?>) accessedResourceData.getResource();
+
+		if (requiresUpdate) {
+			// The virtual model can be synchronized with the new resource data.
+			updateActorReferencesURI();
+			if (getVirtualModelInstance().isSynchronizable()) {
+				getVirtualModelInstance().synchronize(null);
+			}
+		}
+
 	}
 
 	/**

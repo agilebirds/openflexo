@@ -109,6 +109,7 @@ public abstract interface EditionAction<MS extends ModelSlot<?>, T> extends Edit
 	 */
 	public T performAction(EditionSchemeAction<?, ?, ?> action);
 
+
 	/**
 	 * Provides hooks after executing edition action in the context provided by supplied {@link EditionSchemeAction}
 	 * 
@@ -536,5 +537,6 @@ public abstract interface EditionAction<MS extends ModelSlot<?>, T> extends Edit
 		}
 
 	}
-
+	
+	
 }

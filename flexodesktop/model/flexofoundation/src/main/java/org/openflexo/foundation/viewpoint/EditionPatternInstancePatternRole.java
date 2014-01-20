@@ -74,9 +74,9 @@ public interface EditionPatternInstancePatternRole extends PatternRole<EditionPa
 			return out.toString();
 		}
 
-		@Override
-		public Type getType() {
-			return EditionPatternInstanceType.getEditionPatternInstanceType(getEditionPatternType());
+	@Override
+	public Type getType() {
+		return this.getViewPoint().getInstanceType(getEditionPatternType());
 		}
 
 		@Override

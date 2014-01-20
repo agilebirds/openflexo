@@ -42,6 +42,7 @@ import org.openflexo.inspector.FIBInspectorPanel;
 import org.openflexo.localization.FlexoLocalization;
 import org.openflexo.ve.diagram.DiagramController;
 import org.openflexo.ve.diagram.DiagramModuleView;
+import org.openflexo.ve.view.ViewModuleView;
 import org.openflexo.ve.view.VirtualModelInstanceView;
 import org.openflexo.ve.widget.FIBViewLibraryBrowser;
 import org.openflexo.view.ModuleView;
@@ -145,7 +146,7 @@ public class ViewLibraryPerspective extends FlexoPerspective {
 
 	@Override
 	public boolean hasModuleViewForObject(FlexoObject object) {
-		return object instanceof Diagram || object instanceof VirtualModelInstance;
+		return object instanceof Diagram || object instanceof VirtualModelInstance || object instanceof View;
 	}
 
 	@Override
@@ -155,6 +156,9 @@ public class ViewLibraryPerspective extends FlexoPerspective {
 		}
 		if (object instanceof VirtualModelInstance) {
 			return new VirtualModelInstanceView((VirtualModelInstance) object, (VEController) controller);
+		}
+		if (object instanceof View) {
+			return new ViewModuleView((View) object, (VEController) controller, this);
 		}
 		return null;
 	}
@@ -209,6 +213,9 @@ public class ViewLibraryPerspective extends FlexoPerspective {
 		}
 		if (object instanceof ViewLibrary) {
 			return FlexoLocalization.localizedForKey("view_library");
+		}
+		if (object instanceof VirtualModelInstance) {
+			return ((VirtualModelInstance) object).getTitle();
 		}
 		if (object instanceof View) {
 			return ((View) object).getName();
