@@ -24,46 +24,39 @@ import java.lang.reflect.Type;
 import org.openflexo.foundation.view.ActorReference;
 import org.openflexo.foundation.view.EditionPatternInstance;
 import org.openflexo.foundation.viewpoint.PatternRole;
+import org.openflexo.model.annotations.ImplementationClass;
+import org.openflexo.model.annotations.ModelEntity;
+import org.openflexo.model.annotations.XMLElement;
 import org.openflexo.technologyadapter.powerpoint.model.PowerpointSlide;
 
-public class PowerpointSlidePatternRole extends PatternRole<PowerpointSlide> {
+@ModelEntity
+@ImplementationClass(PowerpointSlidePatternRole.PowerpointSlidePatternRoleImpl.class)
+@XMLElement
+public interface PowerpointSlidePatternRole extends PatternRole<PowerpointSlide> {
 
-	public PowerpointSlidePatternRole() {
-		super();
-		// TODO Auto-generated constructor stub
-	}
+	public static abstract class PowerpointSlidePatternRoleImpl extends PatternRoleImpl<PowerpointSlide> {
 
-	@Override
-	public Type getType() {
-		return PowerpointSlide.class;
-	}
+		@Override
+		public Type getType() {
+			return PowerpointSlide.class;
+		}
 
-	@Override
-	public String getPreciseType() {
-		return PowerpointSlide.class.getSimpleName();
-	}
+		@Override
+		public String getPreciseType() {
+			return PowerpointSlide.class.getSimpleName();
+		}
 
-	/*@Override
-	public boolean getIsPrimaryRole() {
-		// TODO Auto-generated method stub
-		return false;
-	}
+		@Override
+		public boolean defaultBehaviourIsToBeDeleted() {
+			// TODO Auto-generated method stub
+			return false;
+		}
 
-	@Override
-	public void setIsPrimaryRole(boolean isPrimary) {
-		// TODO Auto-generated method stub
+		@Override
+		public ActorReference<PowerpointSlide> makeActorReference(PowerpointSlide object, EditionPatternInstance epi) {
+			return new PowerpointActorReference(object, this, epi);
+		}
 
-	}*/
-
-	@Override
-	public boolean defaultBehaviourIsToBeDeleted() {
-		// TODO Auto-generated method stub
-		return false;
-	}
-
-	@Override
-	public ActorReference<PowerpointSlide> makeActorReference(PowerpointSlide object, EditionPatternInstance epi) {
-		return new PowerpointActorReference(object, this, epi);
 	}
 
 }

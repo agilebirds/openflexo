@@ -14,91 +14,96 @@ import org.openflexo.foundation.view.FreeModelSlotInstance;
 import org.openflexo.foundation.view.action.EditionSchemeAction;
 import org.openflexo.foundation.viewpoint.AssignableAction;
 import org.openflexo.foundation.viewpoint.annotations.FIBPanel;
+import org.openflexo.model.annotations.ImplementationClass;
+import org.openflexo.model.annotations.ModelEntity;
+import org.openflexo.model.annotations.XMLElement;
 import org.openflexo.technologyadapter.powerpoint.BasicPowerpointModelSlot;
 import org.openflexo.technologyadapter.powerpoint.model.PowerpointShape;
 import org.openflexo.technologyadapter.powerpoint.model.PowerpointSlide;
 import org.openflexo.technologyadapter.powerpoint.model.PowerpointSlideshow;
 
 @FIBPanel("Fib/AddPowerpointShapePanel.fib")
-public class AddPowerpointShape extends AssignableAction<BasicPowerpointModelSlot, PowerpointShape> {
+@ModelEntity
+@ImplementationClass(AddPowerpointShape.AddPowerpointShapeImpl.class)
+@XMLElement
+public interface AddPowerpointShape extends AssignableAction<BasicPowerpointModelSlot, PowerpointShape> {
 
-	private static final Logger logger = Logger.getLogger(AddPowerpointShape.class.getPackage().getName());
+	public static abstract class AddPowerpointShapeImpl extends AssignableActionImpl<BasicPowerpointModelSlot, PowerpointShape> {
 
-	private DataBinding<List<PowerpointShape>> powerpointShapes;
+		private static final Logger logger = Logger.getLogger(AddPowerpointShape.class.getPackage().getName());
 
-	private DataBinding<PowerpointSlide> powerpointSlide;
+		private DataBinding<List<PowerpointShape>> powerpointShapes;
 
-	public AddPowerpointShape() {
-		super();
-		// TODO Auto-generated constructor stub
-	}
+		private DataBinding<PowerpointSlide> powerpointSlide;
 
-	@Override
-	public Type getAssignableType() {
-		return PowerpointShape.class;
-	}
+		@Override
+		public Type getAssignableType() {
+			return PowerpointShape.class;
+		}
 
-	@Override
-	public PowerpointShape performAction(EditionSchemeAction action) {
-		PowerpointShape powerpointShape = null;
+		@Override
+		public PowerpointShape performAction(EditionSchemeAction action) {
+			PowerpointShape powerpointShape = null;
 
-		FreeModelSlotInstance<PowerpointSlideshow, BasicPowerpointModelSlot> modelSlotInstance = getModelSlotInstance(action);
-		if (modelSlotInstance.getResourceData() != null) {
+			FreeModelSlotInstance<PowerpointSlideshow, BasicPowerpointModelSlot> modelSlotInstance = getModelSlotInstance(action);
+			if (modelSlotInstance.getResourceData() != null) {
 
-			try {
-				PowerpointSlide powerpointSlide = getPowerpointSlide().getBindingValue(action);
-				if (powerpointSlide != null) {
+				try {
+					PowerpointSlide powerpointSlide = getPowerpointSlide().getBindingValue(action);
+					if (powerpointSlide != null) {
 
-					AutoShape shape = new AutoShape(ShapeTypes.Chevron);
+						AutoShape shape = new AutoShape(ShapeTypes.Chevron);
 
-					powerpointShape = modelSlotInstance.getAccessedResourceData().getConverter()
-							.convertPowerpointShapeToShape(shape, powerpointSlide, null);
-					powerpointSlide.getSlide().addShape(shape);
-					modelSlotInstance.getResourceData().setIsModified();
-				} else {
-					logger.warning("Create a row requires a sheet");
+						powerpointShape = modelSlotInstance.getAccessedResourceData().getConverter()
+								.convertPowerpointShapeToShape(shape, powerpointSlide, null);
+						powerpointSlide.getSlide().addShape(shape);
+						modelSlotInstance.getResourceData().setIsModified();
+					} else {
+						logger.warning("Create a row requires a sheet");
+					}
+
+				} catch (TypeMismatchException e) {
+					// TODO Auto-generated catch block
+					e.printStackTrace();
+				} catch (NullReferenceException e) {
+					// TODO Auto-generated catch block
+					e.printStackTrace();
+				} catch (InvocationTargetException e) {
+					// TODO Auto-generated catch block
+					e.printStackTrace();
 				}
 
-			} catch (TypeMismatchException e) {
-				// TODO Auto-generated catch block
-				e.printStackTrace();
-			} catch (NullReferenceException e) {
-				// TODO Auto-generated catch block
-				e.printStackTrace();
-			} catch (InvocationTargetException e) {
-				// TODO Auto-generated catch block
-				e.printStackTrace();
+			} else {
+				logger.warning("Model slot not correctly initialised : model is null");
+				return null;
 			}
 
-		} else {
-			logger.warning("Model slot not correctly initialised : model is null");
-			return null;
+			return powerpointShape;
 		}
 
-		return powerpointShape;
-	}
-
-	public DataBinding<PowerpointSlide> getPowerpointSlide() {
-		if (powerpointSlide == null) {
-			powerpointSlide = new DataBinding<PowerpointSlide>(this, PowerpointSlide.class, DataBinding.BindingDefinitionType.GET);
-			powerpointSlide.setBindingName("powerpointSlide");
+		public DataBinding<PowerpointSlide> getPowerpointSlide() {
+			if (powerpointSlide == null) {
+				powerpointSlide = new DataBinding<PowerpointSlide>(this, PowerpointSlide.class, DataBinding.BindingDefinitionType.GET);
+				powerpointSlide.setBindingName("powerpointSlide");
+			}
+			return powerpointSlide;
 		}
-		return powerpointSlide;
-	}
 
-	public void setPowerpointSlide(DataBinding<PowerpointSlide> powerpointSlide) {
-		if (powerpointSlide != null) {
-			powerpointSlide.setOwner(this);
-			powerpointSlide.setDeclaredType(PowerpointSlide.class);
-			powerpointSlide.setBindingDefinitionType(DataBinding.BindingDefinitionType.GET);
-			powerpointSlide.setBindingName("powerpointSlide");
+		public void setPowerpointSlide(DataBinding<PowerpointSlide> powerpointSlide) {
+			if (powerpointSlide != null) {
+				powerpointSlide.setOwner(this);
+				powerpointSlide.setDeclaredType(PowerpointSlide.class);
+				powerpointSlide.setBindingDefinitionType(DataBinding.BindingDefinitionType.GET);
+				powerpointSlide.setBindingName("powerpointSlide");
+			}
+			this.powerpointSlide = powerpointSlide;
 		}
-		this.powerpointSlide = powerpointSlide;
-	}
 
-	@Override
-	public FreeModelSlotInstance<PowerpointSlideshow, BasicPowerpointModelSlot> getModelSlotInstance(EditionSchemeAction action) {
-		return (FreeModelSlotInstance<PowerpointSlideshow, BasicPowerpointModelSlot>) super.getModelSlotInstance(action);
+		@Override
+		public FreeModelSlotInstance<PowerpointSlideshow, BasicPowerpointModelSlot> getModelSlotInstance(EditionSchemeAction action) {
+			return (FreeModelSlotInstance<PowerpointSlideshow, BasicPowerpointModelSlot>) super.getModelSlotInstance(action);
+		}
+
 	}
 
 }

@@ -34,269 +34,123 @@ import org.openflexo.antar.binding.BindingModel;
 import org.openflexo.foundation.validation.Validable;
 import org.openflexo.foundation.view.ModelSlotInstance;
 import org.openflexo.foundation.viewpoint.FMLRepresentationContext;
-import org.openflexo.foundation.viewpoint.NamedViewPointObject.NamedViewPointObjectImpl;
+import org.openflexo.foundation.viewpoint.NamedViewPointObject;
 import org.openflexo.foundation.viewpoint.ViewPoint;
+import org.openflexo.model.annotations.ImplementationClass;
+import org.openflexo.model.annotations.ModelEntity;
+import org.openflexo.model.annotations.XMLElement;
 import org.openflexo.technologyadapter.powerpoint.model.PowerpointObject;
 
-public class BasicPowerpointModelSlotURIProcessor extends NamedViewPointObjectImpl {
+@ModelEntity
+@ImplementationClass(BasicPowerpointModelSlotURIProcessor.BasicPowerpointModelSlotURIProcessorImpl.class)
+@XMLElement
+public interface BasicPowerpointModelSlotURIProcessor extends NamedViewPointObject {
 
-	private static final Logger logger = Logger.getLogger(BasicPowerpointModelSlotURIProcessor.class.getPackage().getName());
-
-	// Properties actually used to calculate URis
-	private BasicPowerpointModelSlot modelSlot;
-
-	// Cache des URis Pour aller plus vite ??
-	// TODO some optimization required
-	private final Map<String, PowerpointObject> uriCache = new HashMap<String, PowerpointObject>();
-
-	public void setModelSlot(BasicPowerpointModelSlot powerpointModelSlot) {
-		modelSlot = powerpointModelSlot;
-	}
-
-	// Serialized properties
-
-	protected URI typeURI;
-	protected String attributeName;
-
-	public String _getTypeURI() {
-		return typeURI.toString();
-	}
-
-	public void _setTypeURI(String name) {
-		typeURI = URI.create(name);
-	}
-
-	public String _getAttributeName() {
-		return attributeName;
-	}
-
-	public void _setAttributeName(String attributeName) {
-		this.attributeName = attributeName;
-	}
-
-	// Lifecycle management methods
-	public void reset() {
-		modelSlot = null;
-	}
-
-	public BasicPowerpointModelSlotURIProcessor() {
-		super();
-	}
-
-	public BasicPowerpointModelSlotURIProcessor(String typeURI) {
-		super();
-		this.typeURI = URI.create(typeURI);
-	}
-
-	// URI Calculation
-
-	public String getURIForObject(ModelSlotInstance msInstance, PowerpointObject powerpointObject) {
-		String builtURI = null;
-
-		try {
-			builtURI = URLEncoder.encode(powerpointObject.getUri(), "UTF-8");
-		} catch (UnsupportedEncodingException e) {
-			logger.warning("Cannot process URI - Unexpected encoding error");
-			e.printStackTrace();
-		}
-
-		if (builtURI != null) {
-			if (uriCache.get(builtURI) == null) {
-				// TODO Manage the fact that URI May Change
-				uriCache.put(builtURI, powerpointObject);
-			}
-		}
-		return builtURI.toString();
-	}
+	public String getURIForObject(ModelSlotInstance msInstance, PowerpointObject powerpointObject);
 
 	// get the Object given the URI
-	public Object retrieveObjectWithURI(ModelSlotInstance msInstance, String objectURI) throws Exception {
-		PowerpointObject o = uriCache.get(objectURI);
-		return o;
-	}
+	public Object retrieveObjectWithURI(ModelSlotInstance msInstance, String objectURI) throws Exception;
 
-	@Override
-	public BindingModel getBindingModel() {
-		// TODO Auto-generated method stub
-		return null;
-	}
+	public static abstract class BasicPowerpointModelSlotURIProcessorImpl extends NamedViewPointObjectImpl {
 
-	@Override
-	public Collection<? extends Validable> getEmbeddedValidableObjects() {
-		return Collections.emptyList();
-	}
+		private static final Logger logger = Logger.getLogger(BasicPowerpointModelSlotURIProcessor.class.getPackage().getName());
 
-	@Override
-	public String getURI() {
-		// TODO Auto-generated method stub
-		return null;
-	}
+		// Properties actually used to calculate URis
+		private BasicPowerpointModelSlot modelSlot;
 
-	@Override
-	public ViewPoint getViewPoint() {
-		return this.modelSlot.getViewPoint();
-	}
+		// Cache des URis Pour aller plus vite ??
+		// TODO some optimization required
+		private final Map<String, PowerpointObject> uriCache = new HashMap<String, PowerpointObject>();
 
-	@Override
-	public String getFMLRepresentation(FMLRepresentationContext context) {
-		// TODO Auto-generated method stub
-		return null;
-	}
+		public BasicPowerpointModelSlotURIProcessorImpl(String typeURI) {
+			super();
+			this.typeURI = URI.create(typeURI);
+		}
 
-	@Override
-	public Object performSuperGetter(String propertyIdentifier) {
-		// TODO Auto-generated method stub
-		return null;
-	}
+		public void setModelSlot(BasicPowerpointModelSlot powerpointModelSlot) {
+			modelSlot = powerpointModelSlot;
+		}
 
-	@Override
-	public void performSuperSetter(String propertyIdentifier, Object value) {
-		// TODO Auto-generated method stub
+		// Serialized properties
 
-	}
+		protected URI typeURI;
+		protected String attributeName;
 
-	@Override
-	public void performSuperAdder(String propertyIdentifier, Object value) {
-		// TODO Auto-generated method stub
+		public String _getTypeURI() {
+			return typeURI.toString();
+		}
 
-	}
+		public void _setTypeURI(String name) {
+			typeURI = URI.create(name);
+		}
 
-	@Override
-	public void performSuperRemover(String propertyIdentifier, Object value) {
-		// TODO Auto-generated method stub
+		public String _getAttributeName() {
+			return attributeName;
+		}
 
-	}
+		public void _setAttributeName(String attributeName) {
+			this.attributeName = attributeName;
+		}
 
-	@Override
-	public Object performSuperGetter(String propertyIdentifier, Class<?> modelEntityInterface) {
-		// TODO Auto-generated method stub
-		return null;
-	}
+		// Lifecycle management methods
+		public void reset() {
+			modelSlot = null;
+		}
 
-	@Override
-	public void performSuperSetter(String propertyIdentifier, Object value, Class<?> modelEntityInterface) {
-		// TODO Auto-generated method stub
+		// URI Calculation
 
-	}
+		public String getURIForObject(ModelSlotInstance msInstance, PowerpointObject powerpointObject) {
+			String builtURI = null;
 
-	@Override
-	public void performSuperAdder(String propertyIdentifier, Object value, Class<?> modelEntityInterface) {
-		// TODO Auto-generated method stub
+			try {
+				builtURI = URLEncoder.encode(powerpointObject.getUri(), "UTF-8");
+			} catch (UnsupportedEncodingException e) {
+				logger.warning("Cannot process URI - Unexpected encoding error");
+				e.printStackTrace();
+			}
 
-	}
+			if (builtURI != null) {
+				if (uriCache.get(builtURI) == null) {
+					// TODO Manage the fact that URI May Change
+					uriCache.put(builtURI, powerpointObject);
+				}
+			}
+			return builtURI.toString();
+		}
 
-	@Override
-	public void performSuperRemover(String propertyIdentifier, Object value, Class<?> modelEntityInterface) {
-		// TODO Auto-generated method stub
+		// get the Object given the URI
+		public Object retrieveObjectWithURI(ModelSlotInstance msInstance, String objectURI) throws Exception {
+			PowerpointObject o = uriCache.get(objectURI);
+			return o;
+		}
 
-	}
+		@Override
+		public BindingModel getBindingModel() {
+			// TODO Auto-generated method stub
+			return null;
+		}
 
-	@Override
-	public void performSuperSetModified(boolean modified) {
-		// TODO Auto-generated method stub
+		@Override
+		public Collection<? extends Validable> getEmbeddedValidableObjects() {
+			return Collections.emptyList();
+		}
 
-	}
+		@Override
+		public String getURI() {
+			// TODO Auto-generated method stub
+			return null;
+		}
 
-	@Override
-	public Object performSuperFinder(String finderIdentifier, Object value) {
-		// TODO Auto-generated method stub
-		return null;
-	}
+		@Override
+		public ViewPoint getViewPoint() {
+			return this.modelSlot.getViewPoint();
+		}
 
-	@Override
-	public Object performSuperFinder(String finderIdentifier, Object value, Class<?> modelEntityInterface) {
-		// TODO Auto-generated method stub
-		return null;
-	}
-
-	@Override
-	public boolean isSerializing() {
-		// TODO Auto-generated method stub
-		return false;
-	}
-
-	@Override
-	public boolean isDeserializing() {
-		// TODO Auto-generated method stub
-		return false;
-	}
-
-	@Override
-	public void setModified(boolean modified) {
-		// TODO Auto-generated method stub
+		@Override
+		public String getFMLRepresentation(FMLRepresentationContext context) {
+			// TODO Auto-generated method stub
+			return null;
+		}
 
 	}
-
-	@Override
-	public boolean equalsObject(Object obj) {
-		// TODO Auto-generated method stub
-		return false;
-	}
-
-	@Override
-	public void destroy() {
-		// TODO Auto-generated method stub
-
-	}
-
-	@Override
-	public boolean hasKey(String key) {
-		// TODO Auto-generated method stub
-		return false;
-	}
-
-	@Override
-	public boolean performSuperDelete(Object... context) {
-		// TODO Auto-generated method stub
-		return false;
-	}
-
-	@Override
-	public boolean performSuperUndelete() {
-		// TODO Auto-generated method stub
-		return false;
-	}
-
-	@Override
-	public void performSuperDelete(Class<?> modelEntityInterface, Object... context) {
-		// TODO Auto-generated method stub
-
-	}
-
-	@Override
-	public boolean delete(Object... context) {
-		// TODO Auto-generated method stub
-		return false;
-	}
-
-	@Override
-	public boolean undelete() {
-		// TODO Auto-generated method stub
-		return false;
-	}
-
-	@Override
-	public Object cloneObject() {
-		// TODO Auto-generated method stub
-		return null;
-	}
-
-	@Override
-	public Object cloneObject(Object... context) {
-		// TODO Auto-generated method stub
-		return null;
-	}
-
-	@Override
-	public boolean isCreatedByCloning() {
-		// TODO Auto-generated method stub
-		return false;
-	}
-
-	@Override
-	public boolean isBeingCloned() {
-		// TODO Auto-generated method stub
-		return false;
-	}
-
 }

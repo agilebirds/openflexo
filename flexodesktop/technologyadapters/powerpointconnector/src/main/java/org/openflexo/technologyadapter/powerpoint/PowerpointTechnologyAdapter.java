@@ -24,20 +24,18 @@ import java.io.IOException;
 import java.util.Iterator;
 import java.util.logging.Logger;
 
+import org.openflexo.foundation.FlexoProject;
 import org.openflexo.foundation.resource.FlexoResourceCenter;
 import org.openflexo.foundation.resource.FlexoResourceCenterService;
 import org.openflexo.foundation.resource.RepositoryFolder;
 import org.openflexo.foundation.resource.ResourceRepository;
-import org.openflexo.foundation.FlexoProject;
 import org.openflexo.foundation.technologyadapter.DeclareModelSlot;
 import org.openflexo.foundation.technologyadapter.DeclareModelSlots;
 import org.openflexo.foundation.technologyadapter.DeclareRepositoryType;
-import org.openflexo.foundation.technologyadapter.ModelSlot;
 import org.openflexo.foundation.technologyadapter.TechnologyAdapter;
 import org.openflexo.foundation.technologyadapter.TechnologyAdapterBindingFactory;
 import org.openflexo.foundation.technologyadapter.TechnologyAdapterInitializationException;
 import org.openflexo.foundation.technologyadapter.TechnologyContextManager;
-import org.openflexo.foundation.viewpoint.VirtualModel;
 import org.openflexo.technologyadapter.powerpoint.rm.PowerpointSlideShowRepository;
 import org.openflexo.technologyadapter.powerpoint.rm.PowerpointSlideshowResource;
 import org.openflexo.technologyadapter.powerpoint.rm.PowerpointSlideshowResourceImpl;
@@ -52,7 +50,7 @@ import org.openflexo.technologyadapter.powerpoint.viewpoint.binding.PowerpointBi
 @DeclareModelSlots({ // ModelSlot(s) declaration
 @DeclareModelSlot(FML = "BasicPowerpointModelSlot", modelSlotClass = BasicPowerpointModelSlot.class) // Pure spreadsheet interpretation
 })
-@DeclareRepositoryType({ PowerpointSlideShowRepository.class})
+@DeclareRepositoryType({ PowerpointSlideShowRepository.class })
 public class PowerpointTechnologyAdapter extends TechnologyAdapter {
 
 	protected static final Logger logger = Logger.getLogger(PowerpointTechnologyAdapter.class.getPackage().getName());
@@ -76,24 +74,6 @@ public class PowerpointTechnologyAdapter extends TechnologyAdapter {
 	@Override
 	public TechnologyContextManager createTechnologyContextManager(FlexoResourceCenterService service) {
 		return new PowerpointTechnologyContextManager(this, service);
-	}
-
-	/**
-	 * Creates and return a new {@link ModelSlot} of supplied class.<br>
-	 * This responsability is delegated to the {@link TechnologyAdapter} which manages with introspection its own {@link ModelSlot} types
-	 * 
-	 * @param modelSlotClass
-	 * @return
-	 */
-	@Override
-	public <MS extends ModelSlot<?>> MS makeModelSlot(Class<MS> modelSlotClass, VirtualModel virtualModel) {
-		if (BasicPowerpointModelSlot.class.isAssignableFrom(modelSlotClass)) {
-			return (MS) new BasicPowerpointModelSlot(virtualModel, this);
-		} else{
-			logger.warning("Unexpected model slot: " + modelSlotClass.getName());
-		}
-		
-		return null;
 	}
 
 	@Override
@@ -120,7 +100,7 @@ public class PowerpointTechnologyAdapter extends TechnologyAdapter {
 		while (it.hasNext()) {
 			I item = it.next();
 			if (item instanceof File) {
-				//System.out.println("searching " + item);
+				// System.out.println("searching " + item);
 				File candidateFile = (File) item;
 				PowerpointSlideshowResource ssRes = tryToLookupSlideshow(resourceCenter, candidateFile);
 			}
@@ -216,8 +196,7 @@ public class PowerpointTechnologyAdapter extends TechnologyAdapter {
 		resourceCenter.registerRepository(returned, PowerpointSlideShowRepository.class, this);
 		return returned;
 	}
-	
-	
+
 	/**
 	 * Create empty model.
 	 * 
@@ -233,7 +212,8 @@ public class PowerpointTechnologyAdapter extends TechnologyAdapter {
 
 		modelUri = pptFile.toURI().toString();
 
-		PowerpointSlideshowResource slideshowResource = PowerpointSlideshowResourceImpl.makePowerpointSlideshowResource(modelUri, pptFile, getTechnologyContextManager());
+		PowerpointSlideshowResource slideshowResource = PowerpointSlideshowResourceImpl.makePowerpointSlideshowResource(modelUri, pptFile,
+				getTechnologyContextManager());
 
 		getTechnologyContextManager().registerResource(slideshowResource);
 
