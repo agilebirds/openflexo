@@ -26,18 +26,16 @@ import java.io.IOException;
 import java.util.Iterator;
 import java.util.logging.Logger;
 
+import org.openflexo.foundation.FlexoProject;
 import org.openflexo.foundation.resource.FileSystemBasedResourceCenter;
 import org.openflexo.foundation.resource.FlexoResource;
 import org.openflexo.foundation.resource.FlexoResourceCenter;
 import org.openflexo.foundation.resource.FlexoResourceCenterService;
 import org.openflexo.foundation.resource.RepositoryFolder;
 import org.openflexo.foundation.resource.ResourceRepository;
-import org.openflexo.foundation.FlexoProject;
-import org.openflexo.foundation.technologyadapter.ModelSlot;
 import org.openflexo.foundation.technologyadapter.TechnologyAdapter;
 import org.openflexo.foundation.technologyadapter.TechnologyAdapterBindingFactory;
 import org.openflexo.foundation.technologyadapter.TechnologyContextManager;
-import org.openflexo.foundation.viewpoint.VirtualModel;
 import org.openflexo.technologyadapter.xml.model.XMLModel;
 import org.openflexo.technologyadapter.xml.model.XMLTechnologyContextManager;
 import org.openflexo.technologyadapter.xml.rm.XMLFileResource;
@@ -219,12 +217,6 @@ public class XMLTechnologyAdapter extends TechnologyAdapter {
 	public <I> void contentsDeleted(FlexoResourceCenter<I> resourceCenter, I contents) {
 		// TODO Auto-generated method stub
 
-	}
-
-	@Override
-	public <MS extends ModelSlot<?>> MS makeModelSlot(Class<MS> modelSlotClass, VirtualModel virtualModel) {
-		// TODO Auto-generated method stub
-		return null;
 	}
 
 	/**

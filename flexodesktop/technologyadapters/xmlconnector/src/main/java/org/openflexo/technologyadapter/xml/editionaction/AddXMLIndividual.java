@@ -25,29 +25,33 @@ import java.lang.reflect.Type;
 
 import org.openflexo.foundation.view.action.EditionSchemeAction;
 import org.openflexo.foundation.viewpoint.AssignableAction;
+import org.openflexo.model.annotations.ImplementationClass;
+import org.openflexo.model.annotations.ModelEntity;
 import org.openflexo.technologyadapter.xml.XMLModelSlot;
 import org.openflexo.technologyadapter.xml.model.XMLIndividual;
+import org.openflexo.technologyadapter.xml.viewpoint.XMLIndividualPatternRole;
 
 /**
  * @author xtof
  * 
  */
-public class AddXMLIndividual extends AssignableAction<XMLModelSlot, XMLIndividual> {
+@ModelEntity
+@ImplementationClass(XMLIndividualPatternRole.XMLIndividualPatternRoleImpl.class)
+public interface AddXMLIndividual extends AssignableAction<XMLModelSlot, XMLIndividual> {
 
-	public AddXMLIndividual() {
-		super();
+	public abstract static class AddXMLIndividualImpl extends AssignableActionImpl<XMLModelSlot, XMLIndividual> implements AddXMLIndividual {
+
+		@Override
+		public Type getAssignableType() {
+			// TODO Auto-generated method stub
+			return null;
+		}
+
+		@Override
+		public XMLIndividual performAction(EditionSchemeAction action) {
+			// TODO Auto-generated method stub
+			return null;
+		}
+
 	}
-
-	@Override
-	public Type getAssignableType() {
-		// TODO Auto-generated method stub
-		return null;
-	}
-
-	@Override
-	public XMLIndividual performAction(EditionSchemeAction action) {
-		// TODO Auto-generated method stub
-		return null;
-	}
-
 }

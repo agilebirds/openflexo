@@ -25,61 +25,69 @@ import java.lang.reflect.Type;
 import org.openflexo.foundation.view.ActorReference;
 import org.openflexo.foundation.view.EditionPatternInstance;
 import org.openflexo.foundation.viewpoint.PatternRole;
+import org.openflexo.model.annotations.Getter;
+import org.openflexo.model.annotations.ImplementationClass;
+import org.openflexo.model.annotations.ModelEntity;
+import org.openflexo.model.annotations.PropertyIdentifier;
+import org.openflexo.model.annotations.Setter;
+import org.openflexo.model.annotations.XMLAttribute;
 import org.openflexo.technologyadapter.xml.model.XMLIndividual;
 
 /**
  * @author xtof
  * 
  */
-public class XMLIndividualPatternRole extends PatternRole<XMLIndividual> {
+@ModelEntity
+@ImplementationClass(XMLIndividualPatternRole.XMLIndividualPatternRoleImpl.class)
+public interface XMLIndividualPatternRole extends PatternRole<XMLIndividual> {
 
-	private String individualURI;
+	@PropertyIdentifier(type = String.class)
+	public static final String INDIVIDUAL_URI_KEY = "individualURI";
 
-	public XMLIndividualPatternRole() {
-		super();
-	}
+	@Getter(value = INDIVIDUAL_URI_KEY)
+	@XMLAttribute
+	public String getIndividualURI();
 
-	@Override
-	public Type getType() {
-		// TODO Auto-generated method stub
-		return null;
-	}
+	@Setter(INDIVIDUAL_URI_KEY)
+	public void setIndividualURI(String conceptURI);
 
-	@Override
-	public String getPreciseType() {
-		// TODO Auto-generated method stub
-		return null;
-	}
+	public static abstract class XMLIndividualPatternRoleImpl extends PatternRoleImpl<XMLIndividual> implements XMLIndividualPatternRole {
 
-	/*@Override
-	public boolean getIsPrimaryRole() {
-		// TODO Auto-generated method stub
-		return false;
-	}
+		private String individualURI;
 
-	@Override
-	public void setIsPrimaryRole(boolean isPrimary) {
-		// TODO Auto-generated method stub
-		
-	}*/
+		@Override
+		public Type getType() {
+			// TODO Auto-generated method stub
+			return null;
+		}
 
-	@Override
-	public boolean defaultBehaviourIsToBeDeleted() {
-		// TODO Auto-generated method stub
-		return false;
-	}
+		@Override
+		public String getPreciseType() {
+			// TODO Auto-generated method stub
+			return null;
+		}
 
-	@Override
-	public ActorReference<XMLIndividual> makeActorReference(XMLIndividual object, EditionPatternInstance epi) {
-		return new XMLActorReference(object, this, epi);
-	}
+		@Override
+		public boolean defaultBehaviourIsToBeDeleted() {
+			// TODO Auto-generated method stub
+			return false;
+		}
 
-	public String _geIndividualURI() {
-		return individualURI;
-	}
+		@Override
+		public ActorReference<XMLIndividual> makeActorReference(XMLIndividual object, EditionPatternInstance epi) {
+			return new XMLActorReference(object, this, epi);
+		}
 
-	public void _setIndividualURI(String conceptURI) {
-		this.individualURI = conceptURI;
+		@Override
+		public String getIndividualURI() {
+			return individualURI;
+		}
+
+		@Override
+		public void setIndividualURI(String conceptURI) {
+			this.individualURI = conceptURI;
+		}
+
 	}
 
 }
