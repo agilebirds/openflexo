@@ -29,6 +29,9 @@ import org.openflexo.foundation.view.action.EditionSchemeAction;
 import org.openflexo.foundation.viewpoint.AddIndividual;
 import org.openflexo.foundation.viewpoint.DataPropertyAssertion;
 import org.openflexo.foundation.viewpoint.ObjectPropertyAssertion;
+import org.openflexo.model.annotations.ImplementationClass;
+import org.openflexo.model.annotations.ModelEntity;
+import org.openflexo.model.annotations.XMLElement;
 import org.openflexo.technologyadapter.xsd.XSDModelSlot;
 import org.openflexo.technologyadapter.xsd.metamodel.XSDMetaModel;
 import org.openflexo.technologyadapter.xsd.metamodel.XSOntClass;
@@ -39,89 +42,87 @@ import org.openflexo.technologyadapter.xsd.model.XSOntIndividual;
 @ModelEntity
 @ImplementationClass(AddXSIndividual.AddXSIndividualImpl.class)
 @XMLElement
-public interface AddXSIndividual extends AddIndividual<XSDModelSlot, XSOntIndividual>{
+public interface AddXSIndividual extends AddIndividual<XSDModelSlot, XSOntIndividual> {
 
+	public static abstract class AddXSIndividualImpl extends AddIndividualImpl<XSDModelSlot, XSOntIndividual> implements AddXSIndividual {
 
-public static abstract  class AddXSIndividualImpl extends AddIndividual<XSDModelSlot, XSOntIndividual>Impl implements AddXSIndividual
-{
-
-	@Override
-	public void setOntologyClass(IFlexoOntologyClass ontologyClass) {
-		super.setOntologyClass(ontologyClass);
-		if (ontologyClassURI == null) {
-			logger.warning("OntologyURI is null for XSIndividual");
+		@Override
+		public void setOntologyClass(IFlexoOntologyClass ontologyClass) {
+			super.setOntologyClass(ontologyClass);
+			if (ontologyClassURI == null) {
+				logger.warning("OntologyURI is null for XSIndividual");
+			}
 		}
-	}
 
-	private static final Logger logger = Logger.getLogger(AddXSIndividual.class.getPackage().getName());
+		private static final Logger logger = Logger.getLogger(AddXSIndividual.class.getPackage().getName());
 
-	public AddXSIndividualImpl() {
-		super();
-	}
+		public AddXSIndividualImpl() {
+			super();
+		}
 
-	@Override
-	public XSOntClass getOntologyClass() {
-		return (XSOntClass) super.getOntologyClass();
-	}
+		@Override
+		public XSOntClass getOntologyClass() {
+			return (XSOntClass) super.getOntologyClass();
+		}
 
-	@Override
-	public Class<XSOntIndividual> getOntologyIndividualClass() {
-		return XSOntIndividual.class;
-	}
+		@Override
+		public Class<XSOntIndividual> getOntologyIndividualClass() {
+			return XSOntIndividual.class;
+		}
 
-	@Override
-	public XSOntIndividual performAction(EditionSchemeAction action) {
-		XSOntClass father = getOntologyClass();
+		@Override
+		public XSOntIndividual performAction(EditionSchemeAction action) {
+			XSOntClass father = getOntologyClass();
 
-		XSOntIndividual newIndividual = null;
-		try {
+			XSOntIndividual newIndividual = null;
+			try {
 
-			TypeAwareModelSlotInstance<XMLXSDModel, XSDMetaModel, XSDModelSlot> modelSlotInstance = (TypeAwareModelSlotInstance<XMLXSDModel, XSDMetaModel, XSDModelSlot>) getModelSlotInstance(action);
-			XMLXSDModel model = modelSlotInstance.getAccessedResourceData();
-			XSDModelSlot modelSlot = modelSlotInstance.getModelSlot();
+				TypeAwareModelSlotInstance<XMLXSDModel, XSDMetaModel, XSDModelSlot> modelSlotInstance = (TypeAwareModelSlotInstance<XMLXSDModel, XSDMetaModel, XSDModelSlot>) getModelSlotInstance(action);
+				XMLXSDModel model = modelSlotInstance.getAccessedResourceData();
+				XSDModelSlot modelSlot = modelSlotInstance.getModelSlot();
 
-			newIndividual = model.createOntologyIndividual(father);
+				newIndividual = model.createOntologyIndividual(father);
 
-			for (DataPropertyAssertion dataPropertyAssertion : getDataAssertions()) {
-				if (dataPropertyAssertion.evaluateCondition(action)) {
-					logger.info("DataPropertyAssertion=" + dataPropertyAssertion);
-					XSOntDataProperty property = (XSOntDataProperty) dataPropertyAssertion.getOntologyProperty();
-					logger.info("Property=" + property);
-					Object value = dataPropertyAssertion.getValue(action);
-					logger.info("Value=" + value);
-					newIndividual.addToPropertyValue(property, value);
-				}
-			}
-
-			for (ObjectPropertyAssertion objectPropertyAssertion : getObjectAssertions()) {
-				if (objectPropertyAssertion.evaluateCondition(action)) {
-					// ... TODO
-					logger.warning("***** AddObjectProperty Not Implemented yet");
-				}
-			}
-
-			// add it to the model
-			// Two phase creation, then addition, to be able to process URIs once you have the property values
-			// and verify that there is no duplicate URIs
-
-			String processedURI = modelSlot.getURIForObject(modelSlotInstance, newIndividual);
-			if (processedURI != null) {
-				Object o = modelSlot.retrieveObjectWithURI(modelSlotInstance, processedURI);
-				if (o == null) {
-					model.addIndividual(newIndividual);
-					modelSlotInstance.getResourceData().setIsModified();
-				} else {
-					throw new DuplicateURIException("Error while creating Individual of type " + father.getURI());
+				for (DataPropertyAssertion dataPropertyAssertion : getDataAssertions()) {
+					if (dataPropertyAssertion.evaluateCondition(action)) {
+						logger.info("DataPropertyAssertion=" + dataPropertyAssertion);
+						XSOntDataProperty property = (XSOntDataProperty) dataPropertyAssertion.getOntologyProperty();
+						logger.info("Property=" + property);
+						Object value = dataPropertyAssertion.getValue(action);
+						logger.info("Value=" + value);
+						newIndividual.addToPropertyValue(property, value);
+					}
 				}
 
-				return newIndividual;
-			} else
+				for (ObjectPropertyAssertion objectPropertyAssertion : getObjectAssertions()) {
+					if (objectPropertyAssertion.evaluateCondition(action)) {
+						// ... TODO
+						logger.warning("***** AddObjectProperty Not Implemented yet");
+					}
+				}
+
+				// add it to the model
+				// Two phase creation, then addition, to be able to process URIs once you have the property values
+				// and verify that there is no duplicate URIs
+
+				String processedURI = modelSlot.getURIForObject(modelSlotInstance, newIndividual);
+				if (processedURI != null) {
+					Object o = modelSlot.retrieveObjectWithURI(modelSlotInstance, processedURI);
+					if (o == null) {
+						model.addIndividual(newIndividual);
+						modelSlotInstance.getResourceData().setIsModified();
+					} else {
+						throw new DuplicateURIException("Error while creating Individual of type " + father.getURI());
+					}
+
+					return newIndividual;
+				} else
+					return null;
+			} catch (DuplicateURIException e) {
+				e.printStackTrace();
 				return null;
-		} catch (DuplicateURIException e) {
-			e.printStackTrace();
-			return null;
+			}
 		}
-	}
 
-}
+	}
 }

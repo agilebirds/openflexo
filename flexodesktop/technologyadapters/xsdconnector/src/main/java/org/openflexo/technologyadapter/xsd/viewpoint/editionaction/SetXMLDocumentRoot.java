@@ -27,6 +27,9 @@ import org.openflexo.antar.expr.TypeMismatchException;
 import org.openflexo.foundation.view.ModelSlotInstance;
 import org.openflexo.foundation.view.action.EditionSchemeAction;
 import org.openflexo.foundation.viewpoint.ProcedureAction;
+import org.openflexo.model.annotations.ImplementationClass;
+import org.openflexo.model.annotations.ModelEntity;
+import org.openflexo.model.annotations.XMLElement;
 import org.openflexo.technologyadapter.xsd.XSDModelSlot;
 import org.openflexo.technologyadapter.xsd.model.XMLXSDModel;
 import org.openflexo.technologyadapter.xsd.model.XSOntIndividual;
@@ -34,61 +37,50 @@ import org.openflexo.technologyadapter.xsd.model.XSOntIndividual;
 @ModelEntity
 @ImplementationClass(SetXMLDocumentRoot.SetXMLDocumentRootImpl.class)
 @XMLElement
-public interface SetXMLDocumentRoot extends ProcedureAction<XSDModelSlot, XSOntIndividual>{
+public interface SetXMLDocumentRoot extends ProcedureAction<XSDModelSlot, XSOntIndividual> {
 
-@PropertyIdentifier(type=DataBinding.class)
-public static final String PARAMETER_KEY = "parameter";
+	public static abstract class SetXMLDocumentRootImpl extends ProcedureActionImpl<XSDModelSlot, XSOntIndividual> implements
+			SetXMLDocumentRoot {
 
-@Getter(value=PARAMETER_KEY)
-@XMLAttribute
-public DataBinding getParameter();
+		private static final Logger logger = Logger.getLogger(SetXMLDocumentRoot.class.getPackage().getName());
 
-@Setter(PARAMETER_KEY)
-public void setParameter(DataBinding parameter);
+		public SetXMLDocumentRootImpl() {
+			super();
+		}
 
+		@Override
+		public XSOntIndividual performAction(EditionSchemeAction action) {
 
-public static abstract  class SetXMLDocumentRootImpl extends ProcedureAction<XSDModelSlot, XSOntIndividual>Impl implements SetXMLDocumentRoot
-{
+			ModelSlotInstance<XSDModelSlot, XMLXSDModel> modelSlotInstance = (ModelSlotInstance<XSDModelSlot, XMLXSDModel>) getModelSlotInstance(action);
+			XMLXSDModel model = modelSlotInstance.getAccessedResourceData();
+			XSDModelSlot modelSlot = modelSlotInstance.getModelSlot();
 
-	private static final Logger logger = Logger.getLogger(SetXMLDocumentRoot.class.getPackage().getName());
+			XSOntIndividual rootIndiv = null;
 
-	public SetXMLDocumentRootImpl() {
-		super();
-	}
-
-	@Override
-	public XSOntIndividual performAction(EditionSchemeAction action) {
-
-		ModelSlotInstance<XSDModelSlot, XMLXSDModel> modelSlotInstance = (ModelSlotInstance<XSDModelSlot, XMLXSDModel>) getModelSlotInstance(action);
-		XMLXSDModel model = modelSlotInstance.getAccessedResourceData();
-		XSDModelSlot modelSlot = modelSlotInstance.getModelSlot();
-
-		XSOntIndividual rootIndiv = null;
-
-		try {
-			Object o = getParameter().getBindingValue(action);
-			if (o instanceof XSOntIndividual) {
-				rootIndiv = (XSOntIndividual) o;
-			} else {
-				logger.warning("Invalid value in Binding :" + getParameter().getUnparsedBinding());
+			try {
+				Object o = getParameter().getBindingValue(action);
+				if (o instanceof XSOntIndividual) {
+					rootIndiv = (XSOntIndividual) o;
+				} else {
+					logger.warning("Invalid value in Binding :" + getParameter().getUnparsedBinding());
+				}
+			} catch (TypeMismatchException e) {
+				// TODO Auto-generated catch block
+				e.printStackTrace();
+			} catch (NullReferenceException e) {
+				// TODO Auto-generated catch block
+				e.printStackTrace();
+			} catch (InvocationTargetException e) {
+				// TODO Auto-generated catch block
+				e.printStackTrace();
 			}
-		} catch (TypeMismatchException e) {
-			// TODO Auto-generated catch block
-			e.printStackTrace();
-		} catch (NullReferenceException e) {
-			// TODO Auto-generated catch block
-			e.printStackTrace();
-		} catch (InvocationTargetException e) {
-			// TODO Auto-generated catch block
-			e.printStackTrace();
+
+			if (rootIndiv != null) {
+				model.setRoot(rootIndiv);
+			}
+
+			return rootIndiv;
 		}
 
-		if (rootIndiv != null) {
-			model.setRoot(rootIndiv);
-		}
-
-		return rootIndiv;
 	}
-
-}
 }

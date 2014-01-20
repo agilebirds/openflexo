@@ -26,6 +26,9 @@ import org.openflexo.foundation.view.ModelSlotInstance;
 import org.openflexo.foundation.view.action.EditionSchemeAction;
 import org.openflexo.foundation.viewpoint.AssignableAction;
 import org.openflexo.foundation.viewpoint.annotations.FIBPanel;
+import org.openflexo.model.annotations.ImplementationClass;
+import org.openflexo.model.annotations.ModelEntity;
+import org.openflexo.model.annotations.XMLElement;
 import org.openflexo.technologyadapter.xsd.XSDModelSlot;
 import org.openflexo.technologyadapter.xsd.model.XMLXSDModel;
 import org.openflexo.technologyadapter.xsd.model.XSOntIndividual;
@@ -34,33 +37,32 @@ import org.openflexo.technologyadapter.xsd.model.XSOntIndividual;
 @ModelEntity
 @ImplementationClass(GetXMLDocumentRoot.GetXMLDocumentRootImpl.class)
 @XMLElement
-public interface GetXMLDocumentRoot extends AssignableAction<XSDModelSlot, XSOntIndividual>{
+public interface GetXMLDocumentRoot extends AssignableAction<XSDModelSlot, XSOntIndividual> {
 
+	public static abstract class GetXMLDocumentRootImpl extends AssignableActionImpl<XSDModelSlot, XSOntIndividual> implements
+			GetXMLDocumentRoot {
 
-public static abstract  class GetXMLDocumentRootImpl extends AssignableAction<XSDModelSlot, XSOntIndividual>Impl implements GetXMLDocumentRoot
-{
+		private static final Logger logger = Logger.getLogger(GetXMLDocumentRoot.class.getPackage().getName());
 
-	private static final Logger logger = Logger.getLogger(GetXMLDocumentRoot.class.getPackage().getName());
+		public GetXMLDocumentRootImpl() {
+			super();
+		}
 
-	public GetXMLDocumentRootImpl() {
-		super();
+		@Override
+		public XSOntIndividual performAction(EditionSchemeAction action) {
+
+			ModelSlotInstance<XSDModelSlot, XMLXSDModel> modelSlotInstance = (ModelSlotInstance<XSDModelSlot, XMLXSDModel>) getModelSlotInstance(action);
+			XMLXSDModel model = modelSlotInstance.getAccessedResourceData();
+
+			XSOntIndividual rootIndiv = (XSOntIndividual) model.getRoot();
+
+			return rootIndiv;
+		}
+
+		@Override
+		public Type getAssignableType() {
+			return Object.class;
+		}
+
 	}
-
-	@Override
-	public XSOntIndividual performAction(EditionSchemeAction action) {
-
-		ModelSlotInstance<XSDModelSlot, XMLXSDModel> modelSlotInstance = (ModelSlotInstance<XSDModelSlot, XMLXSDModel>) getModelSlotInstance(action);
-		XMLXSDModel model = modelSlotInstance.getAccessedResourceData();
-
-		XSOntIndividual rootIndiv = (XSOntIndividual) model.getRoot();
-
-		return rootIndiv;
-	}
-
-	@Override
-	public Type getAssignableType() {
-		return Object.class;
-	}
-
-}
 }

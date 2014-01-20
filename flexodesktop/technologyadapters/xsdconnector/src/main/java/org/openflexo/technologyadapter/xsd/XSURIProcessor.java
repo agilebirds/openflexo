@@ -28,10 +28,18 @@ import java.net.URLEncoder;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
+import java.util.logging.Logger;
 
 import org.openflexo.foundation.ontology.DuplicateURIException;
 import org.openflexo.foundation.technologyadapter.FlexoModelResource;
 import org.openflexo.foundation.view.ModelSlotInstance;
+import org.openflexo.model.annotations.Getter;
+import org.openflexo.model.annotations.ImplementationClass;
+import org.openflexo.model.annotations.ModelEntity;
+import org.openflexo.model.annotations.PropertyIdentifier;
+import org.openflexo.model.annotations.Setter;
+import org.openflexo.model.annotations.XMLAttribute;
+import org.openflexo.model.annotations.XMLElement;
 import org.openflexo.technologyadapter.xml.XMLURIProcessor;
 import org.openflexo.technologyadapter.xml.model.IXMLType;
 import org.openflexo.technologyadapter.xsd.metamodel.XSDMetaModel;
@@ -53,235 +61,245 @@ import org.openflexo.technologyadapter.xsd.rm.XSDMetaModelResource;
 
 @ModelEntity
 @ImplementationClass(XSURIProcessor.XSURIProcessorImpl.class)
-@XMLElement(xmlTag="URIProcessor")
-public interface XSURIProcessor extends XMLURIProcessor{
+@XMLElement(xmlTag = "URIProcessor")
+public interface XSURIProcessor extends XMLURIProcessor {
 
-@PropertyIdentifier(type=String.class)
-public static final String TYPE_URI_KEY = "typeURI";
-@PropertyIdentifier(type=MappingStyle.class)
-public static final String MAPPING_STYLE_KEY = "mappingStyle";
-@PropertyIdentifier(type=String.class)
-public static final String ATTRIBUTE_NAME_KEY = "attributeName";
+	@PropertyIdentifier(type = String.class)
+	public static final String TYPE_URI_KEY = "typeURI";
+	@PropertyIdentifier(type = MappingStyle.class)
+	public static final String MAPPING_STYLE_KEY = "mappingStyle";
+	@PropertyIdentifier(type = String.class)
+	public static final String ATTRIBUTE_NAME_KEY = "attributeName";
 
-@Getter(value=TYPE_URI_KEY)
-@XMLAttribute
-public String _getTypeURI();
+	@Getter(value = TYPE_URI_KEY)
+	@XMLAttribute
+	public String _getTypeURI();
 
-@Setter(TYPE_URI_KEY)
-public void _setTypeURI(String typeURI);
+	@Setter(TYPE_URI_KEY)
+	public void _setTypeURI(String typeURI);
 
+	@Getter(value = MAPPING_STYLE_KEY)
+	@XMLAttribute
+	public MappingStyle getMappingStyle();
 
-@Getter(value=MAPPING_STYLE_KEY)
-@XMLAttribute
-public MappingStyle getMappingStyle();
+	@Setter(MAPPING_STYLE_KEY)
+	public void setMappingStyle(MappingStyle mappingStyle);
 
-@Setter(MAPPING_STYLE_KEY)
-public void setMappingStyle(MappingStyle mappingStyle);
+	@Getter(value = ATTRIBUTE_NAME_KEY)
+	@XMLAttribute
+	public String _getAttributeName();
 
+	@Setter(ATTRIBUTE_NAME_KEY)
+	public void _setAttributeName(String attributeName);
 
-@Getter(value=ATTRIBUTE_NAME_KEY)
-@XMLAttribute
-public String _getAttributeName();
+	public Object retrieveObjectWithURI(ModelSlotInstance msInstance, String objectURI) throws DuplicateURIException;
 
-@Setter(ATTRIBUTE_NAME_KEY)
-public void _setAttributeName(String attributeName);
+	public String getURIForObject(ModelSlotInstance msInstance, AbstractXSOntObject xsO);
 
+	public void reset();
 
-public static abstract  class XSURIProcessorImpl extends XMLURIProcessorImpl implements XSURIProcessor
-{
+	public static abstract class XSURIProcessorImpl extends XMLURIProcessorImpl implements XSURIProcessor {
 
-	// Properties actually used to calculate URis
+		static final Logger logger = Logger.getLogger(XSURIProcessor.class.getPackage().getName());
 
-	// Cache des URis Pour aller plus vite ??
-	// TODO some optimization required
-	private final Map<String, AbstractXSOntObject> uriCache = new HashMap<String, AbstractXSOntObject>();
+		// Properties actually used to calculate URis
 
-	// Lifecycle management methods
-	@Override
-	public void reset() {
-		super.reset();
-		this.setBaseAttributeForURI(null);
-	}
+		// Cache des URis Pour aller plus vite ??
+		// TODO some optimization required
+		private final Map<String, AbstractXSOntObject> uriCache = new HashMap<String, AbstractXSOntObject>();
 
-	// TODO WARNING!!! Pb avec les typeURI....
-	@Override
-	public void _setTypeURI(String name) {
-		typeURI = URI.create(name);
-		bindtypeURIToMappedClass();
-	}
+		public XSURIProcessorImpl(String typeURI) {
+			super(typeURI);
+		}
 
-	// TODO
-	@Override
-	public IXMLType getMappedClass() {
-		IXMLType mappedClass = super.getMappedClass();
-		if (mappedClass == null && typeURI != null) {
+		// Lifecycle management methods
+		@Override
+		public void reset() {
+			super.reset();
+			this.setBaseAttributeForURI(null);
+		}
+
+		// TODO WARNING!!! Pb avec les typeURI....
+		@Override
+		public void _setTypeURI(String name) {
+			typeURI = URI.create(name);
 			bindtypeURIToMappedClass();
 		}
-		return mappedClass;
-	}
 
-	// TODO
-	@Override
-	public void setMappedClass(IXMLType mappedClass) {
-		super.setMappedClass(mappedClass);
-		if (mappedClass != null && !mappedClass.getURI().equals(_getTypeURI())) {
-			_setTypeURI(mappedClass.getURI());
+		// TODO
+		@Override
+		public IXMLType getMappedClass() {
+			IXMLType mappedClass = super.getMappedClass();
+			if (mappedClass == null && typeURI != null) {
+				bindtypeURIToMappedClass();
+			}
+			return mappedClass;
 		}
-		setChanged();
-		notifyObservers();
-	}
 
-	@Override
-	public void bindtypeURIToMappedClass() {
-		XSDModelSlot modelSlot = (XSDModelSlot) getModelSlot();
-		if (modelSlot != null) {
-			String mmURI = modelSlot.getMetaModelURI();
-			if (mmURI != null) {
-				// FIXME : to be re-factored
-				XSDMetaModelResource mmResource = (XSDMetaModelResource) modelSlot.getMetaModelResource();
-				if (mmResource != null) {
-					setMappedClass(mmResource.getMetaModelData().getClass(typeURI.toString()));
-					if (mappingStyle == MappingStyle.ATTRIBUTE_VALUE && attributeName != null) {
-						setBaseAttributeForURI(((XSOntClass) getMappedClass()).getPropertyByName(attributeName));
-					}
-				} else {
-					XSDModelSlot.logger.warning("unable to map typeURI to an OntClass, as metaModelResource is Null ");
-				}
-			} else
-				setMappedClass(null);
-		} else {
-			XSDModelSlot.logger.warning("unable to map typeURI to an OntClass, as modelSlot is Null ");
+		// TODO
+		@Override
+		public void setMappedClass(IXMLType mappedClass) {
+			super.setMappedClass(mappedClass);
+			if (mappedClass != null && !mappedClass.getURI().equals(_getTypeURI())) {
+				_setTypeURI(mappedClass.getURI());
+			}
+			setChanged();
+			notifyObservers();
 		}
-	}
 
-	// URI Calculation
-
-	public String getURIForObject(ModelSlotInstance msInstance, AbstractXSOntObject xsO) {
-		String builtURI = null;
-		StringBuffer completeURIStr = new StringBuffer();
-
-		// if processor not initialized
-		if (getMappedClass() == null) {
-			bindtypeURIToMappedClass();
-		}
-		// processor should be initialized
-		if (getMappedClass() == null) {
-			XSDModelSlot.logger.warning("Cannot process URI as URIProcessor is not initialized for that class: " + typeURI);
-			return null;
-		} else {
-			if (mappingStyle == MappingStyle.ATTRIBUTE_VALUE && attributeName != null && getMappedClass() != null) {
-
-				XSOntProperty aProperty = ((XSOntClass) getMappedClass()).getPropertyByName(attributeName);
-				XSPropertyValue value = ((XSOntIndividual) xsO).getPropertyValue(aProperty);
-				try {
-					// NPE protection
-					if (value != null) {
-						builtURI = URLEncoder.encode(value.toString(), "UTF-8");
+		@Override
+		public void bindtypeURIToMappedClass() {
+			XSDModelSlot modelSlot = (XSDModelSlot) getModelSlot();
+			if (modelSlot != null) {
+				String mmURI = modelSlot.getMetaModelURI();
+				if (mmURI != null) {
+					// FIXME : to be re-factored
+					XSDMetaModelResource mmResource = (XSDMetaModelResource) modelSlot.getMetaModelResource();
+					if (mmResource != null) {
+						setMappedClass(mmResource.getMetaModelData().getClass(typeURI.toString()));
+						if (mappingStyle == MappingStyle.ATTRIBUTE_VALUE && attributeName != null) {
+							setBaseAttributeForURI(((XSOntClass) getMappedClass()).getPropertyByName(attributeName));
+						}
 					} else {
-						XSDModelSlot.logger.severe("XSURI: unable to compute an URI for given object");
-						builtURI = null;
+						logger.warning("unable to map typeURI to an OntClass, as metaModelResource is Null ");
 					}
-				} catch (UnsupportedEncodingException e) {
-					XSDModelSlot.logger.warning("Cannot process URI - Unexpected encoding error");
-					e.printStackTrace();
-				}
-			} else if (mappingStyle == MappingStyle.SINGLETON) {
-				try {
-					builtURI = URLEncoder.encode(((XSOntClass) ((XSOntIndividual) xsO).getType()).getURI(), "UTF-8");
-				} catch (UnsupportedEncodingException e) {
-					XSDModelSlot.logger.warning("Cannot process URI - Unexpected encoding error");
-					e.printStackTrace();
-				}
+				} else
+					setMappedClass(null);
 			} else {
-				XSDModelSlot.logger.warning("Cannot process URI - Unexpected or Unspecified mapping parameters");
+				logger.warning("unable to map typeURI to an OntClass, as modelSlot is Null ");
 			}
 		}
 
-		if (builtURI != null) {
-			if (uriCache.get(builtURI) == null) {
-				// TODO Manage the fact that URI May Change
-				uriCache.put(builtURI, xsO);
+		// URI Calculation
+
+		@Override
+		public String getURIForObject(ModelSlotInstance msInstance, AbstractXSOntObject xsO) {
+			String builtURI = null;
+			StringBuffer completeURIStr = new StringBuffer();
+
+			// if processor not initialized
+			if (getMappedClass() == null) {
+				bindtypeURIToMappedClass();
 			}
-		}
-		completeURIStr.append(typeURI.getScheme()).append("://").append(typeURI.getHost()).append(typeURI.getPath()).append("?")
-				.append(builtURI).append("#").append(typeURI.getFragment());
-		return completeURIStr.toString();
-	}
+			// processor should be initialized
+			if (getMappedClass() == null) {
+				logger.warning("Cannot process URI as URIProcessor is not initialized for that class: " + typeURI);
+				return null;
+			} else {
+				if (mappingStyle == MappingStyle.ATTRIBUTE_VALUE && attributeName != null && getMappedClass() != null) {
 
-	// get the Object given the URI
-
-	@Override
-	public Object retrieveObjectWithURI(ModelSlotInstance msInstance, String objectURI) throws DuplicateURIException {
-
-		AbstractXSOntObject o = uriCache.get(objectURI);
-
-		// if processor not initialized
-		if (getMappedClass() == null) {
-			bindtypeURIToMappedClass();
-		}
-
-		// modelResource must also be loaded!
-
-		FlexoModelResource<XMLXSDModel, XSDMetaModel, XSDTechnologyAdapter> resource = (FlexoModelResource<XMLXSDModel, XSDMetaModel, XSDTechnologyAdapter>) msInstance
-				.getResource();
-
-		// should not be a preoccupation of XSURI
-		// if (!resource.isLoaded()) {
-		// resource.getModelData();
-		// }
-
-		// retrieve object
-		if (o == null) {
-
-			if (mappingStyle == MappingStyle.ATTRIBUTE_VALUE && attributeName != null) {
-
-				XSOntProperty aProperty = ((XSOntClass) getMappedClass()).getPropertyByName(attributeName);
-				String attrValue = URI.create(objectURI).getQuery();
-
-				for (XSOntIndividual obj : ((XSOntology) resource.getModel()).getIndividualsOfClass(getMappedClass())) {
-
-					XSPropertyValue value = obj.getPropertyValue(aProperty);
+					XSOntProperty aProperty = ((XSOntClass) getMappedClass()).getPropertyByName(attributeName);
+					XSPropertyValue value = ((XSOntIndividual) xsO).getPropertyValue(aProperty);
 					try {
-						if (value.equals(URLDecoder.decode(attrValue, "UTF-8"))) {
-							return obj;
+						// NPE protection
+						if (value != null) {
+							builtURI = URLEncoder.encode(value.toString(), "UTF-8");
+						} else {
+							logger.severe("XSURI: unable to compute an URI for given object");
+							builtURI = null;
 						}
 					} catch (UnsupportedEncodingException e) {
-						// TODO Auto-generated catch block
+						logger.warning("Cannot process URI - Unexpected encoding error");
 						e.printStackTrace();
 					}
-				}
-
-			} else if (mappingStyle == MappingStyle.SINGLETON) {
-				List<?> indivList = ((XSOntology) msInstance.getAccessedResourceData()).getIndividualsOfClass(getMappedClass());
-				if (indivList.size() > 1) {
-					throw new DuplicateURIException("Cannot process URI - Several individuals found for singleton of type "
-							+ this._getTypeURI().toString());
-				} else if (indivList.size() == 0) {
-					XSDModelSlot.logger.warning("Cannot find Singleton for type : " + this._getTypeURI().toString());
+				} else if (mappingStyle == MappingStyle.SINGLETON) {
+					try {
+						builtURI = URLEncoder.encode(((XSOntClass) ((XSOntIndividual) xsO).getType()).getURI(), "UTF-8");
+					} catch (UnsupportedEncodingException e) {
+						logger.warning("Cannot process URI - Unexpected encoding error");
+						e.printStackTrace();
+					}
 				} else {
-					o = (AbstractXSOntObject) indivList.get(0);
+					logger.warning("Cannot process URI - Unexpected or Unspecified mapping parameters");
 				}
 			}
-		} else {
-			XSDModelSlot.logger.warning("Cannot process URI - Unexpected or Unspecified mapping parameters");
 
+			if (builtURI != null) {
+				if (uriCache.get(builtURI) == null) {
+					// TODO Manage the fact that URI May Change
+					uriCache.put(builtURI, xsO);
+				}
+			}
+			completeURIStr.append(typeURI.getScheme()).append("://").append(typeURI.getHost()).append(typeURI.getPath()).append("?")
+					.append(builtURI).append("#").append(typeURI.getFragment());
+			return completeURIStr.toString();
 		}
 
-		return o;
+		// get the Object given the URI
+
+		@Override
+		public Object retrieveObjectWithURI(ModelSlotInstance msInstance, String objectURI) throws DuplicateURIException {
+
+			AbstractXSOntObject o = uriCache.get(objectURI);
+
+			// if processor not initialized
+			if (getMappedClass() == null) {
+				bindtypeURIToMappedClass();
+			}
+
+			// modelResource must also be loaded!
+
+			FlexoModelResource<XMLXSDModel, XSDMetaModel, XSDTechnologyAdapter> resource = (FlexoModelResource<XMLXSDModel, XSDMetaModel, XSDTechnologyAdapter>) msInstance
+					.getResource();
+
+			// should not be a preoccupation of XSURI
+			// if (!resource.isLoaded()) {
+			// resource.getModelData();
+			// }
+
+			// retrieve object
+			if (o == null) {
+
+				if (mappingStyle == MappingStyle.ATTRIBUTE_VALUE && attributeName != null) {
+
+					XSOntProperty aProperty = ((XSOntClass) getMappedClass()).getPropertyByName(attributeName);
+					String attrValue = URI.create(objectURI).getQuery();
+
+					for (XSOntIndividual obj : ((XSOntology) resource.getModel()).getIndividualsOfClass(getMappedClass())) {
+
+						XSPropertyValue value = obj.getPropertyValue(aProperty);
+						try {
+							if (value.equals(URLDecoder.decode(attrValue, "UTF-8"))) {
+								return obj;
+							}
+						} catch (UnsupportedEncodingException e) {
+							// TODO Auto-generated catch block
+							e.printStackTrace();
+						}
+					}
+
+				} else if (mappingStyle == MappingStyle.SINGLETON) {
+					List<?> indivList = ((XSOntology) msInstance.getAccessedResourceData()).getIndividualsOfClass(getMappedClass());
+					if (indivList.size() > 1) {
+						throw new DuplicateURIException("Cannot process URI - Several individuals found for singleton of type "
+								+ this._getTypeURI().toString());
+					} else if (indivList.size() == 0) {
+						logger.warning("Cannot find Singleton for type : " + this._getTypeURI().toString());
+					} else {
+						o = (AbstractXSOntObject) indivList.get(0);
+					}
+				}
+			} else {
+				logger.warning("Cannot process URI - Unexpected or Unspecified mapping parameters");
+
+			}
+
+			return o;
+		}
+
+		// get the right URIProcessor for URI
+
+		public static String retrieveTypeURI(ModelSlotInstance msInstance, String objectURI) {
+
+			URI fullURI;
+			StringBuffer typeURIStr = new StringBuffer();
+
+			fullURI = URI.create(objectURI);
+			typeURIStr.append(fullURI.getScheme()).append("://").append(fullURI.getHost()).append(fullURI.getPath()).append("#")
+					.append(fullURI.getFragment());
+
+			return typeURIStr.toString();
+		}
+
 	}
-
-	// get the right URIProcessor for URI
-
-	static public String retrieveTypeURI(ModelSlotInstance msInstance, String objectURI) {
-
-		URI fullURI;
-		StringBuffer typeURIStr = new StringBuffer();
-
-		fullURI = URI.create(objectURI);
-		typeURIStr.append(fullURI.getScheme()).append("://").append(fullURI.getHost()).append(fullURI.getPath()).append("#")
-				.append(fullURI.getFragment());
-
-		return typeURIStr.toString();
-	}
-
-}}
+}

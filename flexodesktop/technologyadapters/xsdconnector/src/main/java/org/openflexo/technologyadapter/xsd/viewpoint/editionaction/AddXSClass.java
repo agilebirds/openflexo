@@ -28,6 +28,9 @@ import org.openflexo.foundation.ontology.DuplicateURIException;
 import org.openflexo.foundation.view.TypeAwareModelSlotInstance;
 import org.openflexo.foundation.view.action.EditionSchemeAction;
 import org.openflexo.foundation.viewpoint.AddClass;
+import org.openflexo.model.annotations.ImplementationClass;
+import org.openflexo.model.annotations.ModelEntity;
+import org.openflexo.model.annotations.XMLElement;
 import org.openflexo.technologyadapter.xsd.XSDModelSlot;
 import org.openflexo.technologyadapter.xsd.metamodel.XSDMetaModel;
 import org.openflexo.technologyadapter.xsd.metamodel.XSOntClass;
@@ -36,60 +39,58 @@ import org.openflexo.technologyadapter.xsd.model.XMLXSDModel;
 @ModelEntity
 @ImplementationClass(AddXSClass.AddXSClassImpl.class)
 @XMLElement
-public interface AddXSClass extends AddClass<XSDModelSlot, XSOntClass>{
+public interface AddXSClass extends AddClass<XSDModelSlot, XSOntClass> {
 
+	public static abstract class AddXSClassImpl extends AddClassImpl<XSDModelSlot, XSOntClass> implements AddXSClass {
 
-public static abstract  class AddXSClassImpl extends AddClass<XSDModelSlot, XSOntClass>Impl implements AddXSClass
-{
+		private static final Logger logger = Logger.getLogger(AddXSClass.class.getPackage().getName());
 
-	private static final Logger logger = Logger.getLogger(AddXSClass.class.getPackage().getName());
+		private final String dataPropertyURI = null;
 
-	private final String dataPropertyURI = null;
-
-	public AddXSClassImpl() {
-		super();
-	}
-
-	@Override
-	public XSOntClass getOntologyClass() {
-		return (XSOntClass) super.getOntologyClass();
-	}
-
-	@Override
-	public Class<XSOntClass> getOntologyClassClass() {
-		return XSOntClass.class;
-	}
-
-	@Override
-	public XSOntClass performAction(EditionSchemeAction action) {
-		XSOntClass father = getOntologyClass();
-		String newClassName = null;
-		try {
-			newClassName = getClassName().getBindingValue(action);
-		} catch (TypeMismatchException e1) {
-			e1.printStackTrace();
-		} catch (NullReferenceException e1) {
-			e1.printStackTrace();
-		} catch (InvocationTargetException e1) {
-			e1.printStackTrace();
+		public AddXSClassImpl() {
+			super();
 		}
-		XSOntClass newClass = null;
-		try {
-			logger.info("Adding class " + newClassName + " as " + father);
-			// FIXME : Something wrong here!
-			// newClass = getModelSlotInstance(action).getModel().getMetaModel().createOntologyClass(newClassName, father);
-			newClass = getModelSlotInstance(action).getAccessedResourceData().getMetaModel().createOntologyClass(newClassName, father);
-			logger.info("Added class " + newClass.getName() + " as " + father);
-		} catch (DuplicateURIException e) {
-			e.printStackTrace();
+
+		@Override
+		public XSOntClass getOntologyClass() {
+			return (XSOntClass) super.getOntologyClass();
 		}
-		return newClass;
-	}
 
-	@Override
-	public TypeAwareModelSlotInstance<XMLXSDModel, XSDMetaModel, XSDModelSlot> getModelSlotInstance(EditionSchemeAction action) {
-		return (TypeAwareModelSlotInstance<XMLXSDModel, XSDMetaModel, XSDModelSlot>) super.getModelSlotInstance(action);
-	}
+		@Override
+		public Class<XSOntClass> getOntologyClassClass() {
+			return XSOntClass.class;
+		}
 
-}
+		@Override
+		public XSOntClass performAction(EditionSchemeAction action) {
+			XSOntClass father = getOntologyClass();
+			String newClassName = null;
+			try {
+				newClassName = getClassName().getBindingValue(action);
+			} catch (TypeMismatchException e1) {
+				e1.printStackTrace();
+			} catch (NullReferenceException e1) {
+				e1.printStackTrace();
+			} catch (InvocationTargetException e1) {
+				e1.printStackTrace();
+			}
+			XSOntClass newClass = null;
+			try {
+				logger.info("Adding class " + newClassName + " as " + father);
+				// FIXME : Something wrong here!
+				// newClass = getModelSlotInstance(action).getModel().getMetaModel().createOntologyClass(newClassName, father);
+				newClass = getModelSlotInstance(action).getAccessedResourceData().getMetaModel().createOntologyClass(newClassName, father);
+				logger.info("Added class " + newClass.getName() + " as " + father);
+			} catch (DuplicateURIException e) {
+				e.printStackTrace();
+			}
+			return newClass;
+		}
+
+		@Override
+		public TypeAwareModelSlotInstance<XMLXSDModel, XSDMetaModel, XSDModelSlot> getModelSlotInstance(EditionSchemeAction action) {
+			return (TypeAwareModelSlotInstance<XMLXSDModel, XSDMetaModel, XSDModelSlot>) super.getModelSlotInstance(action);
+		}
+
+	}
 }

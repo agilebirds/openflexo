@@ -60,6 +60,10 @@ public interface XMLURIProcessor extends NamedViewPointObject {
 		ATTRIBUTE_VALUE, SINGLETON;
 	}
 
+	public void setModelSlot(ModelSlot aModelSlot);
+
+	public TypeAwareModelSlot<?, ?> getModelSlot();
+
 	public abstract static class XMLURIProcessorImpl extends NamedViewPointObjectImpl {
 
 		private static final Logger logger = Logger.getLogger(XMLURIProcessor.class.getPackage().getName());
