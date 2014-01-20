@@ -391,7 +391,7 @@ public interface VirtualModel extends EditionPattern, FlexoMetaModel<VirtualMode
 					&& getViewPoint().getViewPointLibrary().getServiceManager().getService(TechnologyAdapterService.class) != null) {
 				VirtualModelTechnologyAdapter builtInTA = getViewPoint().getViewPointLibrary().getServiceManager()
 						.getService(TechnologyAdapterService.class).getTechnologyAdapter(VirtualModelTechnologyAdapter.class);
-				VirtualModelModelSlot returned = builtInTA.makeModelSlot(VirtualModelModelSlot.class, this);
+				VirtualModelModelSlot returned = builtInTA.makeVirtualModelModelSlot(this, this);
 				returned.setVirtualModelResource(getResource());
 				returned.setName(REFLEXIVE_MODEL_SLOT_NAME);
 				addToModelSlots(returned);

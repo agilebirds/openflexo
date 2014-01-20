@@ -20,28 +20,27 @@
 package org.openflexo.technologyadapter.diagram.fml.editionaction;
 
 import org.openflexo.foundation.viewpoint.AssignableAction;
+import org.openflexo.model.annotations.ImplementationClass;
+import org.openflexo.model.annotations.ModelEntity;
 import org.openflexo.technologyadapter.diagram.TypedDiagramModelSlot;
 
-public abstract class DiagramAction<T> extends AssignableAction<TypedDiagramModelSlot, T> {
+@ModelEntity(isAbstract = true)
+@ImplementationClass(DiagramAction.DiagramActionImpl.class)
+public interface DiagramAction<T> extends AssignableAction<TypedDiagramModelSlot, T> {
 
-	public DiagramAction() {
-		super();
-	}
+	public abstract class DiagramActionImpl<T> extends AssignableActionImpl<TypedDiagramModelSlot, T> {
 
-	/*@Override
-	protected void updatePatternRoleType()
-	{
-	}*/
-
-	@Override
-	public TypedDiagramModelSlot getModelSlot() {
-		TypedDiagramModelSlot returned = super.getModelSlot();
-		if (returned == null) {
-			if (getVirtualModel() != null && getVirtualModel().getModelSlots(TypedDiagramModelSlot.class).size() > 0) {
-				return getVirtualModel().getModelSlots(TypedDiagramModelSlot.class).get(0);
+		@Override
+		public TypedDiagramModelSlot getModelSlot() {
+			TypedDiagramModelSlot returned = super.getModelSlot();
+			if (returned == null) {
+				if (getVirtualModel() != null && getVirtualModel().getModelSlots(TypedDiagramModelSlot.class).size() > 0) {
+					return getVirtualModel().getModelSlots(TypedDiagramModelSlot.class).get(0);
+				}
 			}
+			return returned;
 		}
-		return returned;
+
 	}
 
 }

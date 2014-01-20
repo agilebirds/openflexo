@@ -22,100 +22,151 @@ package org.openflexo.technologyadapter.diagram.fml;
 import org.openflexo.antar.binding.BindingModel;
 import org.openflexo.foundation.viewpoint.EditionSchemeParameter;
 import org.openflexo.foundation.viewpoint.FMLRepresentationContext;
-import org.openflexo.foundation.viewpoint.NamedViewPointObject.NamedViewPointObjectImpl;
+import org.openflexo.foundation.viewpoint.NamedViewPointObject;
 import org.openflexo.foundation.viewpoint.URIParameter;
 import org.openflexo.foundation.viewpoint.ViewPoint;
 import org.openflexo.foundation.viewpoint.VirtualModel;
+import org.openflexo.model.annotations.Getter;
+import org.openflexo.model.annotations.ImplementationClass;
+import org.openflexo.model.annotations.ModelEntity;
+import org.openflexo.model.annotations.PropertyIdentifier;
+import org.openflexo.model.annotations.Setter;
+import org.openflexo.model.annotations.XMLAttribute;
+import org.openflexo.model.annotations.XMLElement;
 import org.openflexo.technologyadapter.diagram.metamodel.DiagramPalette;
 
-public class FMLDiagramPaletteElementBindingParameter extends NamedViewPointObjectImpl {
+/**
+ * Represents a valued parameter in the context of a {@link FMLDiagramPaletteElementBinding}
+ * 
+ * @author sylvain
+ * 
+ */
+@ModelEntity
+@ImplementationClass(FMLDiagramPaletteElementBindingParameter.FMLDiagramPaletteElementBindingParameterImpl.class)
+@XMLElement
+public interface FMLDiagramPaletteElementBindingParameter extends NamedViewPointObject {
 
-	private EditionSchemeParameter _parameter;
-	private FMLDiagramPaletteElementBinding elementBinding;
-	private String value;
+	@PropertyIdentifier(type = FMLDiagramPaletteElementBinding.class)
+	public static final String PALETTE_ELEMENT_BINDING_KEY = "paletteElementBinding";
+	@PropertyIdentifier(type = EditionSchemeParameter.class)
+	public static final String PARAMETER_KEY = "parameter";
+	@PropertyIdentifier(type = String.class)
+	public static final String VALUE_KEY = "value";
 
-	public FMLDiagramPaletteElementBindingParameter() {
-		super();
-	}
+	@Getter(value = PALETTE_ELEMENT_BINDING_KEY, inverse = FMLDiagramPaletteElementBinding.PARAMETERS_KEY)
+	public FMLDiagramPaletteElementBinding getDiagramPaletteElementBinding();
 
-	public FMLDiagramPaletteElementBindingParameter(EditionSchemeParameter p) {
-		super();
-		_parameter = p;
-		setName(p.getName());
-		setValue(p.getDefaultValue().toString());
-	}
+	@Setter(PALETTE_ELEMENT_BINDING_KEY)
+	public void setDiagramPaletteElementBinding(FMLDiagramPaletteElementBinding diagramPaletteElementBinding);
 
-	@Override
-	public String getURI() {
-		return null;
-	}
+	@Getter(PARAMETER_KEY)
+	public EditionSchemeParameter getParameter();
 
-	public String getValue() {
-		if (getParameter() != null) {
-			if (getParameter() instanceof URIParameter) {
-				return "< Computed URI >";
+	@Setter(PARAMETER_KEY)
+	public void setParameter(EditionSchemeParameter parameter);
+
+	@Getter(VALUE_KEY)
+	@XMLAttribute
+	public String getValue();
+
+	@Setter(VALUE_KEY)
+	public void setValue(String value);
+
+	public abstract class FMLDiagramPaletteElementBindingParameterImpl extends NamedViewPointObjectImpl implements
+			FMLDiagramPaletteElementBindingParameter {
+
+		private EditionSchemeParameter _parameter;
+		private FMLDiagramPaletteElementBinding elementBinding;
+		private String value;
+
+		public FMLDiagramPaletteElementBindingParameterImpl() {
+			super();
+		}
+
+		public FMLDiagramPaletteElementBindingParameterImpl(EditionSchemeParameter p) {
+			super();
+			_parameter = p;
+			setName(p.getName());
+			setValue(p.getDefaultValue().toString());
+		}
+
+		@Override
+		public String getURI() {
+			return null;
+		}
+
+		@Override
+		public String getValue() {
+			if (getParameter() != null) {
+				if (getParameter() instanceof URIParameter) {
+					return "< Computed URI >";
+				}
+				/*if (getParameter().getUsePaletteLabelAsDefaultValue()) {
+					return "< Takes palette element label >";
+				}*/
 			}
-			/*if (getParameter().getUsePaletteLabelAsDefaultValue()) {
-				return "< Takes palette element label >";
-			}*/
+			return value;
 		}
-		return value;
-	}
 
-	public void setValue(String value) {
-		this.value = value;
-	}
-
-	public boolean isEditable() {
-		if (getParameter() != null) {
-			return !(getParameter() instanceof URIParameter) /*&& !getParameter().getUsePaletteLabelAsDefaultValue()*/;
+		@Override
+		public void setValue(String value) {
+			this.value = value;
 		}
-		return true;
-	}
 
-	public DiagramPalette getPalette() {
-		if (getElementBinding() != null) {
-			return getElementBinding().getPaletteElement().getPalette();
+		public boolean isEditable() {
+			if (getParameter() != null) {
+				return !(getParameter() instanceof URIParameter) /*&& !getParameter().getUsePaletteLabelAsDefaultValue()*/;
+			}
+			return true;
 		}
-		return null;
-	}
 
-	@Override
-	public ViewPoint getViewPoint() {
-		return getVirtualModel().getViewPoint();
-	}
-
-	public VirtualModel getVirtualModel() {
-		if (getElementBinding() != null) {
-			return getElementBinding().getVirtualModel();
+		public DiagramPalette getPalette() {
+			if (getElementBinding() != null) {
+				return getElementBinding().getPaletteElement().getPalette();
+			}
+			return null;
 		}
-		return null;
-	}
 
-	public void setElementBinding(FMLDiagramPaletteElementBinding elementBinding) {
-		this.elementBinding = elementBinding;
-	}
+		@Override
+		public ViewPoint getViewPoint() {
+			return getVirtualModel().getViewPoint();
+		}
 
-	public FMLDiagramPaletteElementBinding getElementBinding() {
-		return elementBinding;
-	}
+		public VirtualModel getVirtualModel() {
+			if (getElementBinding() != null) {
+				return getElementBinding().getVirtualModel();
+			}
+			return null;
+		}
 
-	public EditionSchemeParameter getParameter() {
-		return _parameter;
-	}
+		public void setElementBinding(FMLDiagramPaletteElementBinding elementBinding) {
+			this.elementBinding = elementBinding;
+		}
 
-	public void setParameter(EditionSchemeParameter parameter) {
-		_parameter = parameter;
-	}
+		public FMLDiagramPaletteElementBinding getElementBinding() {
+			return elementBinding;
+		}
 
-	@Override
-	public BindingModel getBindingModel() {
-		return getViewPoint().getBindingModel();
-	}
+		@Override
+		public EditionSchemeParameter getParameter() {
+			return _parameter;
+		}
 
-	@Override
-	public String getFMLRepresentation(FMLRepresentationContext context) {
-		return "<not_implemented:" + getStringRepresentation() + ">";
+		@Override
+		public void setParameter(EditionSchemeParameter parameter) {
+			_parameter = parameter;
+		}
+
+		@Override
+		public BindingModel getBindingModel() {
+			return getViewPoint().getBindingModel();
+		}
+
+		@Override
+		public String getFMLRepresentation(FMLRepresentationContext context) {
+			return "<not_implemented:" + getStringRepresentation() + ">";
+		}
+
 	}
 
 }

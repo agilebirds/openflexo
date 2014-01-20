@@ -32,6 +32,13 @@ import org.openflexo.foundation.viewpoint.FMLRepresentationContext;
 import org.openflexo.foundation.viewpoint.FMLRepresentationContext.FMLRepresentationOutput;
 import org.openflexo.foundation.viewpoint.PatternRole;
 import org.openflexo.foundation.viewpoint.annotations.FIBPanel;
+import org.openflexo.model.annotations.Getter;
+import org.openflexo.model.annotations.ImplementationClass;
+import org.openflexo.model.annotations.ModelEntity;
+import org.openflexo.model.annotations.PropertyIdentifier;
+import org.openflexo.model.annotations.Setter;
+import org.openflexo.model.annotations.XMLAttribute;
+import org.openflexo.model.annotations.XMLElement;
 import org.openflexo.technologyadapter.diagram.fml.DiagramPatternRole;
 import org.openflexo.technologyadapter.diagram.metamodel.DiagramSpecification;
 import org.openflexo.technologyadapter.diagram.model.Diagram;
@@ -41,152 +48,151 @@ import org.openflexo.toolbox.StringUtils;
 @ModelEntity
 @ImplementationClass(AddDiagram.AddDiagramImpl.class)
 @XMLElement
-public interface AddDiagram extends DiagramAction<Diagram>{
+public interface AddDiagram extends DiagramAction<Diagram> {
 
-@PropertyIdentifier(type=DataBinding.class)
-public static final String DIAGRAM_NAME_KEY = "diagramName";
+	@PropertyIdentifier(type = DataBinding.class)
+	public static final String DIAGRAM_NAME_KEY = "diagramName";
 
-@Getter(value=DIAGRAM_NAME_KEY)
-@XMLAttribute
-public DataBinding getDiagramName();
+	@Getter(value = DIAGRAM_NAME_KEY)
+	@XMLAttribute
+	public DataBinding getDiagramName();
 
-@Setter(DIAGRAM_NAME_KEY)
-public void setDiagramName(DataBinding diagramName);
+	@Setter(DIAGRAM_NAME_KEY)
+	public void setDiagramName(DataBinding diagramName);
 
+	public static abstract class AddDiagramImpl extends DiagramActionImpl<Diagram> implements AddDiagram {
 
-public static abstract  class AddDiagramImpl extends DiagramAction<Diagram>Impl implements AddDiagram
-{
+		private static final Logger logger = Logger.getLogger(AddDiagram.class.getPackage().getName());
 
-	private static final Logger logger = Logger.getLogger(AddDiagram.class.getPackage().getName());
-
-	public AddDiagramImpl() {
-		super();
-	}
-
-	@Override
-	public String getFMLRepresentation(FMLRepresentationContext context) {
-		FMLRepresentationOutput out = new FMLRepresentationOutput(context);
-		if (getAssignation().isSet()) {
-			out.append(getAssignation().toString() + " = (", context);
+		public AddDiagramImpl() {
+			super();
 		}
-		out.append(getClass().getSimpleName() + " conformTo " + getDiagramSpecification().getURI() + " from " + getModelSlot().getName()
-				+ " {" + StringUtils.LINE_SEPARATOR, context);
-		out.append("}", context);
-		if (getAssignation().isSet()) {
-			out.append(")", context);
-		}
-		return out.toString();
-	}
 
-	@Override
-	public DiagramPatternRole getPatternRole() {
-		PatternRole superPatternRole = super.getPatternRole();
-		if (superPatternRole instanceof DiagramPatternRole) {
-			return (DiagramPatternRole) superPatternRole;
-		} else if (superPatternRole != null) {
-			// logger.warning("Unexpected pattern role of type " + superPatternRole.getClass().getSimpleName());
+		@Override
+		public String getFMLRepresentation(FMLRepresentationContext context) {
+			FMLRepresentationOutput out = new FMLRepresentationOutput(context);
+			if (getAssignation().isSet()) {
+				out.append(getAssignation().toString() + " = (", context);
+			}
+			out.append(getClass().getSimpleName() + " conformTo " + getDiagramSpecification().getURI() + " from "
+					+ getModelSlot().getName() + " {" + StringUtils.LINE_SEPARATOR, context);
+			out.append("}", context);
+			if (getAssignation().isSet()) {
+				out.append(")", context);
+			}
+			return out.toString();
+		}
+
+		@Override
+		public DiagramPatternRole getPatternRole() {
+			PatternRole superPatternRole = super.getPatternRole();
+			if (superPatternRole instanceof DiagramPatternRole) {
+				return (DiagramPatternRole) superPatternRole;
+			} else if (superPatternRole != null) {
+				// logger.warning("Unexpected pattern role of type " + superPatternRole.getClass().getSimpleName());
+				return null;
+			}
 			return null;
 		}
-		return null;
-	}
 
-	public String getDiagramName(EditionSchemeAction action) {
-		try {
-			return getDiagramName().getBindingValue(action);
-		} catch (TypeMismatchException e) {
-			e.printStackTrace();
-		} catch (NullReferenceException e) {
-			e.printStackTrace();
-		} catch (InvocationTargetException e) {
-			e.printStackTrace();
-		}
-		return null;
-	}
-
-	private DataBinding<String> diagramName;
-
-	public DataBinding<String> getDiagramName() {
-		if (diagramName == null) {
-			diagramName = new DataBinding<String>(this, String.class, DataBinding.BindingDefinitionType.GET);
-			diagramName.setBindingName("diagramName");
-		}
-		return diagramName;
-	}
-
-	public void setDiagramName(DataBinding<String> diagramName) {
-		if (diagramName != null) {
-			diagramName.setOwner(this);
-			diagramName.setDeclaredType(String.class);
-			diagramName.setBindingDefinitionType(DataBinding.BindingDefinitionType.GET);
-			diagramName.setBindingName("diagramName");
-		}
-		this.diagramName = diagramName;
-	}
-
-	public DiagramSpecification getDiagramSpecification() {
-		if (getPatternRole() instanceof DiagramPatternRole) {
-			return getPatternRole().getDiagramSpecification();
-		}
-		return null;
-	}
-
-	public void setDiagramSpecification(DiagramSpecification diagramSpecification) {
-		if (getPatternRole() instanceof DiagramPatternRole) {
-			getPatternRole().setDiagramSpecification(diagramSpecification);
-		}
-	}
-
-	@Override
-	public Type getAssignableType() {
-		return View.class;
-	}
-
-	@Override
-	public Diagram performAction(EditionSchemeAction action) {
-		// TODO: reimplement this
-		logger.warning("AddDiagram not implemented yet");
-		/*Diagram initialDiagram = (Diagram) action.retrieveVirtualModelInstance();
-		ViewResource viewResource = initialDiagram.getView().getResource();
-		org.openflexo.technologyadapter.diagram.model.action.CreateDiagram addDiagramAction = org.openflexo.technologyadapter.diagram.model.action.CreateDiagram.actionType
-				.makeNewEmbeddedAction(initialDiagram.getView(), null, action);
-		addDiagramAction.setNewVirtualModelInstanceName(getDiagramName(action));
-		addDiagramAction.setDiagramSpecification(getPatternRole().getDiagramSpecification());
-		addDiagramAction.skipChoosePopup = true;
-		addDiagramAction.doAction();*/
-		// if (addDiagramAction.hasActionExecutionSucceeded() && addDiagramAction.getNewDiagram() != null) {
-		// Diagram newDiagram = addDiagramAction.getNewDiagram();
-		/*ShapePatternRole shapePatternRole = action.getShapePatternRole();
-		if (shapePatternRole == null) {
-			logger.warning("Sorry, shape pattern role is undefined");
-			return newShema;
-		}
-		// logger.info("ShapeSpecification pattern role: " + shapePatternRole);
-		EditionPatternInstance newEditionPatternInstance = getProject().makeNewEditionPatternInstance(getEditionPattern());
-		DiagramShape newShape = new DiagramShape(newShema);
-		if (getEditionPatternInstance().getPatternActor(shapePatternRole) instanceof DiagramShape) {
-			DiagramShape primaryShape = (DiagramShape) getEditionPatternInstance().getPatternActor(shapePatternRole);
-			newShape.setGraphicalRepresentation(primaryShape.getGraphicalRepresentation());
-		} else if (shapePatternRole.getGraphicalRepresentation() != null) {
-			newShape.setGraphicalRepresentation(shapePatternRole.getGraphicalRepresentation());
-		}
-		// Register reference
-		newShape.registerEditionPatternReference(newEditionPatternInstance, shapePatternRole);
-		newShema.addToChilds(newShape);
-		newEditionPatternInstance.setObjectForPatternRole(newShape, shapePatternRole);
-		// Duplicates all other pattern roles
-		for (PatternRole role : getEditionPattern().getPatternRoles()) {
-			if (role != action.getPatternRole() && role != shapePatternRole) {
-				FlexoModelObject patternActor = getEditionPatternInstance().getPatternActor(role);
-				logger.info("Duplicate pattern actor for role " + role + " value=" + patternActor);
-				newEditionPatternInstance.setObjectForPatternRole(patternActor, role);
-				patternActor.registerEditionPatternReference(newEditionPatternInstance, role);
+		public String getDiagramName(EditionSchemeAction action) {
+			try {
+				return getDiagramName().getBindingValue(action);
+			} catch (TypeMismatchException e) {
+				e.printStackTrace();
+			} catch (NullReferenceException e) {
+				e.printStackTrace();
+			} catch (InvocationTargetException e) {
+				e.printStackTrace();
 			}
-		}*/
+			return null;
+		}
 
-		// return newDiagram;
-		// }
-		return null;
+		private DataBinding<String> diagramName;
+
+		@Override
+		public DataBinding<String> getDiagramName() {
+			if (diagramName == null) {
+				diagramName = new DataBinding<String>(this, String.class, DataBinding.BindingDefinitionType.GET);
+				diagramName.setBindingName("diagramName");
+			}
+			return diagramName;
+		}
+
+		public void setDiagramName(DataBinding<String> diagramName) {
+			if (diagramName != null) {
+				diagramName.setOwner(this);
+				diagramName.setDeclaredType(String.class);
+				diagramName.setBindingDefinitionType(DataBinding.BindingDefinitionType.GET);
+				diagramName.setBindingName("diagramName");
+			}
+			this.diagramName = diagramName;
+		}
+
+		public DiagramSpecification getDiagramSpecification() {
+			if (getPatternRole() instanceof DiagramPatternRole) {
+				return getPatternRole().getDiagramSpecification();
+			}
+			return null;
+		}
+
+		public void setDiagramSpecification(DiagramSpecification diagramSpecification) {
+			if (getPatternRole() instanceof DiagramPatternRole) {
+				getPatternRole().setDiagramSpecification(diagramSpecification);
+			}
+		}
+
+		@Override
+		public Type getAssignableType() {
+			return View.class;
+		}
+
+		@Override
+		public Diagram performAction(EditionSchemeAction action) {
+			// TODO: reimplement this
+			logger.warning("AddDiagram not implemented yet");
+			/*Diagram initialDiagram = (Diagram) action.retrieveVirtualModelInstance();
+			ViewResource viewResource = initialDiagram.getView().getResource();
+			org.openflexo.technologyadapter.diagram.model.action.CreateDiagram addDiagramAction = org.openflexo.technologyadapter.diagram.model.action.CreateDiagram.actionType
+					.makeNewEmbeddedAction(initialDiagram.getView(), null, action);
+			addDiagramAction.setNewVirtualModelInstanceName(getDiagramName(action));
+			addDiagramAction.setDiagramSpecification(getPatternRole().getDiagramSpecification());
+			addDiagramAction.skipChoosePopup = true;
+			addDiagramAction.doAction();*/
+			// if (addDiagramAction.hasActionExecutionSucceeded() && addDiagramAction.getNewDiagram() != null) {
+			// Diagram newDiagram = addDiagramAction.getNewDiagram();
+			/*ShapePatternRole shapePatternRole = action.getShapePatternRole();
+			if (shapePatternRole == null) {
+				logger.warning("Sorry, shape pattern role is undefined");
+				return newShema;
+			}
+			// logger.info("ShapeSpecification pattern role: " + shapePatternRole);
+			EditionPatternInstance newEditionPatternInstance = getProject().makeNewEditionPatternInstance(getEditionPattern());
+			DiagramShape newShape = new DiagramShape(newShema);
+			if (getEditionPatternInstance().getPatternActor(shapePatternRole) instanceof DiagramShape) {
+				DiagramShape primaryShape = (DiagramShape) getEditionPatternInstance().getPatternActor(shapePatternRole);
+				newShape.setGraphicalRepresentation(primaryShape.getGraphicalRepresentation());
+			} else if (shapePatternRole.getGraphicalRepresentation() != null) {
+				newShape.setGraphicalRepresentation(shapePatternRole.getGraphicalRepresentation());
+			}
+			// Register reference
+			newShape.registerEditionPatternReference(newEditionPatternInstance, shapePatternRole);
+			newShema.addToChilds(newShape);
+			newEditionPatternInstance.setObjectForPatternRole(newShape, shapePatternRole);
+			// Duplicates all other pattern roles
+			for (PatternRole role : getEditionPattern().getPatternRoles()) {
+				if (role != action.getPatternRole() && role != shapePatternRole) {
+					FlexoModelObject patternActor = getEditionPatternInstance().getPatternActor(role);
+					logger.info("Duplicate pattern actor for role " + role + " value=" + patternActor);
+					newEditionPatternInstance.setObjectForPatternRole(patternActor, role);
+					patternActor.registerEditionPatternReference(newEditionPatternInstance, role);
+				}
+			}*/
+
+			// return newDiagram;
+			// }
+			return null;
+		}
+
 	}
-
-}
 }

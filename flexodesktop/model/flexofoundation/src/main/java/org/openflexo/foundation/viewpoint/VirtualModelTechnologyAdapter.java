@@ -23,7 +23,6 @@ import java.util.logging.Logger;
 
 import org.openflexo.foundation.resource.FlexoResourceCenter;
 import org.openflexo.foundation.resource.FlexoResourceCenterService;
-import org.openflexo.foundation.technologyadapter.ModelSlot;
 import org.openflexo.foundation.technologyadapter.TechnologyAdapter;
 import org.openflexo.foundation.technologyadapter.TechnologyAdapterBindingFactory;
 import org.openflexo.foundation.technologyadapter.TechnologyAdapterInitializationException;
@@ -47,14 +46,20 @@ public class VirtualModelTechnologyAdapter extends TechnologyAdapter {
 		return "Openflexo virtual model";
 	}
 
-	@Override
-	public <MS extends ModelSlot<?>> MS makeModelSlot(Class<MS> modelSlotClass, VirtualModel virtualModel) {
-		if (VirtualModelModelSlot.class.isAssignableFrom(modelSlotClass)) {
-			VirtualModelModelFactory factory = virtualModel.getVirtualModelFactory();
-			return (MS) factory.newVirtualModelModelSlot(virtualModel, this);
-		}
-		logger.warning("Unexpected model slot: " + modelSlotClass.getName());
-		return null;
+	/**
+	 * Creates and return a new {@link VirtualModelModelSlot} adressing supplied VirtualModel.<br>
+	 * 
+	 * @param modelSlotClass
+	 * @param containerVirtualModel
+	 *            the virtual model in which model slot should be created
+	 * @param addressedVirtualModel
+	 *            the virtual model referenced by the model slot
+	 * @return
+	 */
+	public VirtualModelModelSlot makeVirtualModelModelSlot(VirtualModel containerVirtualModel, VirtualModel addressedVirtualModel) {
+		VirtualModelModelSlot returned = makeModelSlot(VirtualModelModelSlot.class, containerVirtualModel);
+		returned.setAddressedVirtualModel(addressedVirtualModel);
+		return returned;
 	}
 
 	@Override

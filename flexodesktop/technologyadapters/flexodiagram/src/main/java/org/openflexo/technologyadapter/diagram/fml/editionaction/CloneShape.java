@@ -22,6 +22,9 @@ package org.openflexo.technologyadapter.diagram.fml.editionaction;
 import java.util.logging.Logger;
 
 import org.openflexo.foundation.viewpoint.annotations.FIBPanel;
+import org.openflexo.model.annotations.ImplementationClass;
+import org.openflexo.model.annotations.ModelEntity;
+import org.openflexo.model.annotations.XMLElement;
 
 /**
  * This edition primitive addresses the duplication of a shape
@@ -33,17 +36,15 @@ import org.openflexo.foundation.viewpoint.annotations.FIBPanel;
 @ModelEntity
 @ImplementationClass(CloneShape.CloneShapeImpl.class)
 @XMLElement
-public interface CloneShape extends AddShape{
+public interface CloneShape extends AddShape {
 
+	public static abstract class CloneShapeImpl extends AddShapeImpl implements CloneShape {
 
-public static abstract  class CloneShapeImpl extends AddShapeImpl implements CloneShape
-{
+		private static final Logger logger = Logger.getLogger(CloneShape.class.getPackage().getName());
 
-	private static final Logger logger = Logger.getLogger(CloneShape.class.getPackage().getName());
+		public CloneShapeImpl() {
+			super();
+		}
 
-	public CloneShapeImpl() {
-		super();
 	}
-
-}
 }

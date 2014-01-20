@@ -13,11 +13,6 @@ import org.openflexo.foundation.technologyadapter.FreeModelSlot;
 import org.openflexo.foundation.view.FreeModelSlotInstance;
 import org.openflexo.foundation.view.View;
 import org.openflexo.foundation.view.action.CreateVirtualModelInstance;
-import org.openflexo.foundation.viewpoint.DeleteAction;
-import org.openflexo.foundation.viewpoint.EditionAction;
-import org.openflexo.foundation.viewpoint.FetchRequest;
-import org.openflexo.foundation.viewpoint.PatternRole;
-import org.openflexo.foundation.viewpoint.VirtualModel;
 import org.openflexo.technologyadapter.diagram.fml.ConnectorPatternRole;
 import org.openflexo.technologyadapter.diagram.fml.DiagramPatternRole;
 import org.openflexo.technologyadapter.diagram.fml.ShapePatternRole;
@@ -49,125 +44,66 @@ import org.openflexo.technologyadapter.diagram.rm.DiagramResource;
 		@DeclareEditionAction(FML = "GraphicalAction", editionActionClass = GraphicalAction.class) })
 @DeclareFetchRequests({ // All requests available through this model slot
 })
-public class FreeDiagramModelSlot extends FreeModelSlot<Diagram> implements DiagramModelSlot {
+public interface FreeDiagramModelSlot extends FreeModelSlot<Diagram>, DiagramModelSlot {
 
-	private static final Logger logger = Logger.getLogger(FreeDiagramModelSlot.class.getPackage().getName());
+	public abstract class FreeDiagramModelSlotImpl extends FreeModelSlotImpl<Diagram> implements FreeDiagramModelSlot {
 
-	public FreeDiagramModelSlot(VirtualModel virtualModel, DiagramTechnologyAdapter adapter) {
-		super(virtualModel, adapter);
-	}
+		private static final Logger logger = Logger.getLogger(FreeDiagramModelSlot.class.getPackage().getName());
 
-	public FreeDiagramModelSlot() {
-		super();
-	}
-
-	/*public DiagramModelSlot(ViewPointBuilder builder) {
-		super(builder);
-	}*/
-
-	@Override
-	public String getStringRepresentation() {
-		return "FreeDiagramModelSlot";
-	}
-
-	@Override
-	public Class<DiagramTechnologyAdapter> getTechnologyAdapterClass() {
-		return DiagramTechnologyAdapter.class;
-	}
-
-	@Override
-	public DiagramTechnologyAdapter getTechnologyAdapter() {
-		return (DiagramTechnologyAdapter) super.getTechnologyAdapter();
-	}
-
-	@SuppressWarnings("unchecked")
-	@Override
-	public <PR extends PatternRole<?>> PR makePatternRole(Class<PR> patternRoleClass) {
-		if (DiagramPatternRole.class.isAssignableFrom(patternRoleClass)) {
-			return (PR) new DiagramPatternRole();
-		} else if (ShapePatternRole.class.isAssignableFrom(patternRoleClass)) {
-			return (PR) new ShapePatternRole();
-		} else if (ConnectorPatternRole.class.isAssignableFrom(patternRoleClass)) {
-			return (PR) new ConnectorPatternRole();
+		@Override
+		public String getStringRepresentation() {
+			return "FreeDiagramModelSlot";
 		}
-		logger.warning("Unexpected pattern role: " + patternRoleClass.getName());
-		return null;
-	}
 
-	@Override
-	public <PR extends PatternRole<?>> String defaultPatternRoleName(Class<PR> patternRoleClass) {
-		if (DiagramPatternRole.class.isAssignableFrom(patternRoleClass)) {
-			return "diagram";
-		} else if (ShapePatternRole.class.isAssignableFrom(patternRoleClass)) {
-			return "shape";
-		} else if (ConnectorPatternRole.class.isAssignableFrom(patternRoleClass)) {
-			return "connector";
+		@Override
+		public Class<DiagramTechnologyAdapter> getTechnologyAdapterClass() {
+			return DiagramTechnologyAdapter.class;
 		}
-		logger.warning("Unexpected pattern role: " + patternRoleClass.getName());
-		return null;
-	}
 
-	@Override
-	public <EA extends EditionAction<?, ?>> EA makeEditionAction(Class<EA> editionActionClass) {
-		if (AddDiagram.class.isAssignableFrom(editionActionClass)) {
-			return (EA) new AddDiagram();
-		} else if (AddShape.class.isAssignableFrom(editionActionClass)) {
-			return (EA) new AddShape();
-		} else if (AddConnector.class.isAssignableFrom(editionActionClass)) {
-			return (EA) new AddConnector();
-		} else if (GraphicalAction.class.isAssignableFrom(editionActionClass)) {
-			return (EA) new GraphicalAction();
-		} else if (DeleteAction.class.isAssignableFrom(editionActionClass)) {
-			return (EA) new DeleteAction();
-		} else {
-			logger.warning("Unexpected EditionAction: " + editionActionClass.getName());
+		@Override
+		public DiagramTechnologyAdapter getTechnologyAdapter() {
+			return (DiagramTechnologyAdapter) super.getTechnologyAdapter();
+		}
+
+		@Override
+		public boolean getIsRequired() {
+			return true;
+		}
+
+		@Override
+		public FreeDiagramModelSlotInstanceConfiguration createConfiguration(CreateVirtualModelInstance<?> action) {
+			return new FreeDiagramModelSlotInstanceConfiguration(this, action);
+		}
+
+		@Override
+		public DiagramResource createProjectSpecificEmptyResource(View view, String filename, String modelUri) {
 			return null;
 		}
-	}
 
-	@Override
-	public boolean getIsRequired() {
-		return true;
-	}
+		@Override
+		public DiagramResource createSharedEmptyResource(FlexoResourceCenter<?> resourceCenter, String relativePath, String filename,
+				String modelUri) {
+			return null;
+		}
 
-	@Override
-	public FreeDiagramModelSlotInstanceConfiguration createConfiguration(CreateVirtualModelInstance<?> action) {
-		return new FreeDiagramModelSlotInstanceConfiguration(this, action);
-	}
+		@Override
+		public String getURIForObject(FreeModelSlotInstance<Diagram, ? extends FreeModelSlot<Diagram>> msInstance, Object o) {
+			// TODO Auto-generated method stub
+			return null;
+		}
 
-	@Override
-	public DiagramResource createProjectSpecificEmptyResource(View view, String filename, String modelUri) {
-		return null;
-	}
+		@Override
+		public Object retrieveObjectWithURI(FreeModelSlotInstance<Diagram, ? extends FreeModelSlot<Diagram>> msInstance, String objectURI) {
+			// TODO Auto-generated method stub
+			return null;
+		}
 
-	@Override
-	public DiagramResource createSharedEmptyResource(FlexoResourceCenter<?> resourceCenter, String relativePath, String filename,
-			String modelUri) {
-		return null;
-	}
+		@Override
+		public Type getType() {
+			// TODO Auto-generated method stub
+			return null;
+		}
 
-	@Override
-	public String getURIForObject(FreeModelSlotInstance<Diagram, ? extends FreeModelSlot<Diagram>> msInstance, Object o) {
-		// TODO Auto-generated method stub
-		return null;
-	}
-
-	@Override
-	public Object retrieveObjectWithURI(FreeModelSlotInstance<Diagram, ? extends FreeModelSlot<Diagram>> msInstance, String objectURI) {
-		// TODO Auto-generated method stub
-		return null;
-	}
-
-	@Override
-	public Type getType() {
-		// TODO Auto-generated method stub
-		return null;
-	}
-
-	@Override
-	public <FR extends FetchRequest<?, ?>> FR makeFetchRequest(Class<FR> fetchRequestClass) {
-		// TODO Auto-generated method stub
-		return null;
 	}
 
 }

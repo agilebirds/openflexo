@@ -15,11 +15,16 @@ import org.openflexo.foundation.technologyadapter.TypeAwareModelSlot;
 import org.openflexo.foundation.view.TypeAwareModelSlotInstance;
 import org.openflexo.foundation.view.View;
 import org.openflexo.foundation.view.action.CreateVirtualModelInstance;
-import org.openflexo.foundation.viewpoint.DeleteAction;
-import org.openflexo.foundation.viewpoint.EditionAction;
-import org.openflexo.foundation.viewpoint.FetchRequest;
-import org.openflexo.foundation.viewpoint.PatternRole;
 import org.openflexo.foundation.viewpoint.VirtualModel;
+import org.openflexo.model.annotations.Adder;
+import org.openflexo.model.annotations.Getter;
+import org.openflexo.model.annotations.Getter.Cardinality;
+import org.openflexo.model.annotations.ImplementationClass;
+import org.openflexo.model.annotations.ModelEntity;
+import org.openflexo.model.annotations.PropertyIdentifier;
+import org.openflexo.model.annotations.Remover;
+import org.openflexo.model.annotations.Setter;
+import org.openflexo.model.annotations.XMLElement;
 import org.openflexo.technologyadapter.diagram.fml.ConnectorPatternRole;
 import org.openflexo.technologyadapter.diagram.fml.DiagramPatternRole;
 import org.openflexo.technologyadapter.diagram.fml.FMLDiagramPaletteElementBinding;
@@ -54,163 +59,135 @@ import org.openflexo.technologyadapter.diagram.rm.DiagramResource;
 })
 @ModelEntity
 @ImplementationClass(TypedDiagramModelSlot.TypedDiagramModelSlotImpl.class)
-@XMLElement(xmlTag="DiagramModelSlot")
-public interface TypedDiagramModelSlot extends TypeAwareModelSlot<Diagram, DiagramSpecification>,DiagramModelSlot{
+@XMLElement(xmlTag = "DiagramModelSlot")
+public interface TypedDiagramModelSlot extends TypeAwareModelSlot<Diagram, DiagramSpecification>, DiagramModelSlot {
 
+	@PropertyIdentifier(type = List.class)
+	public static final String PALETTE_ELEMENTS_BINDING_KEY = "paletteElementBindings";
 
-public static abstract  class TypedDiagramModelSlotImpl extends TypeAwareModelSlot<Diagram, DiagramSpecification>Impl implements TypedDiagramModelSlot
-{
+	@Getter(
+			value = PALETTE_ELEMENTS_BINDING_KEY,
+			cardinality = Cardinality.LIST,
+			inverse = FMLDiagramPaletteElementBinding.DIAGRAM_MODEL_SLOT_KEY)
+	@XMLElement
+	public List<FMLDiagramPaletteElementBinding> getPaletteElementBindings();
 
-	private static final Logger logger = Logger.getLogger(TypedDiagramModelSlot.class.getPackage().getName());
+	@Setter(PALETTE_ELEMENTS_BINDING_KEY)
+	public void setPaletteElementBindings(List<FMLDiagramPaletteElementBinding> paletteElementBindings);
 
-	private List<FMLDiagramPaletteElementBinding> paletteElementBindings;
+	@Adder(PALETTE_ELEMENTS_BINDING_KEY)
+	public void addToPaletteElementBindings(FMLDiagramPaletteElementBinding paletteElementBinding);
 
-	public TypedDiagramModelSlotImpl(VirtualModel virtualModel, DiagramTechnologyAdapter adapter) {
-		super(virtualModel, adapter);
-	}
+	@Remover(PALETTE_ELEMENTS_BINDING_KEY)
+	public void removeFromPaletteElementBindings(FMLDiagramPaletteElementBinding paletteElementBinding);
 
-	public TypedDiagramModelSlotImpl(VirtualModel virtualModel, DiagramSpecification diagramSpecification, DiagramTechnologyAdapter adapter) {
-		this(virtualModel, adapter);
-		setMetaModelResource(diagramSpecification.getResource());
-	}
+	public static abstract class TypedDiagramModelSlotImpl extends TypeAwareModelSlotImpl<Diagram, DiagramSpecification> implements
+			TypedDiagramModelSlot {
 
-	/*public DiagramModelSlot(ViewPointBuilder builder) {
-		super(builder);
-	}*/
+		private static final Logger logger = Logger.getLogger(TypedDiagramModelSlot.class.getPackage().getName());
 
-	@Override
-	public String getStringRepresentation() {
-		return "TypedDiagramModelSlot";
-	}
+		private List<FMLDiagramPaletteElementBinding> paletteElementBindings;
 
-	@Override
-	public Class<DiagramTechnologyAdapter> getTechnologyAdapterClass() {
-		return DiagramTechnologyAdapter.class;
-	}
-
-	@Override
-	public DiagramTechnologyAdapter getTechnologyAdapter() {
-		return (DiagramTechnologyAdapter) super.getTechnologyAdapter();
-	}
-
-	@SuppressWarnings("unchecked")
-	@Override
-	public <PR extends PatternRole<?>> PR makePatternRole(Class<PR> patternRoleClass) {
-		if (DiagramPatternRole.class.isAssignableFrom(patternRoleClass)) {
-			return (PR) new DiagramPatternRole();
-		} else if (ShapePatternRole.class.isAssignableFrom(patternRoleClass)) {
-			return (PR) new ShapePatternRole();
-		} else if (ConnectorPatternRole.class.isAssignableFrom(patternRoleClass)) {
-			return (PR) new ConnectorPatternRole();
+		public TypedDiagramModelSlotImpl(VirtualModel virtualModel, DiagramTechnologyAdapter adapter) {
+			super(virtualModel, adapter);
 		}
-		logger.warning("Unexpected pattern role: " + patternRoleClass.getName());
-		return null;
-	}
 
-	@Override
-	public <PR extends PatternRole<?>> String defaultPatternRoleName(Class<PR> patternRoleClass) {
-		if (DiagramPatternRole.class.isAssignableFrom(patternRoleClass)) {
-			return "diagram";
-		} else if (ShapePatternRole.class.isAssignableFrom(patternRoleClass)) {
-			return "shape";
-		} else if (ConnectorPatternRole.class.isAssignableFrom(patternRoleClass)) {
-			return "connector";
+		public TypedDiagramModelSlotImpl(VirtualModel virtualModel, DiagramSpecification diagramSpecification,
+				DiagramTechnologyAdapter adapter) {
+			this(virtualModel, adapter);
+			setMetaModelResource(diagramSpecification.getResource());
 		}
-		logger.warning("Unexpected pattern role: " + patternRoleClass.getName());
-		return null;
-	}
 
-	@Override
-	public <EA extends EditionAction<?, ?>> EA makeEditionAction(Class<EA> editionActionClass) {
-		if (AddDiagram.class.isAssignableFrom(editionActionClass)) {
-			return (EA) new AddDiagram();
-		} else if (AddShape.class.isAssignableFrom(editionActionClass)) {
-			return (EA) new AddShape();
-		} else if (AddConnector.class.isAssignableFrom(editionActionClass)) {
-			return (EA) new AddConnector();
-		} else if (GraphicalAction.class.isAssignableFrom(editionActionClass)) {
-			return (EA) new GraphicalAction();
-		} else if (DeleteAction.class.isAssignableFrom(editionActionClass)) {
-			return (EA) new DeleteAction();
-		} else {
-			logger.warning("Unexpected EditionAction: " + editionActionClass.getName());
+		/*public DiagramModelSlot(ViewPointBuilder builder) {
+			super(builder);
+		}*/
+
+		@Override
+		public String getStringRepresentation() {
+			return "TypedDiagramModelSlot";
+		}
+
+		@Override
+		public Class<DiagramTechnologyAdapter> getTechnologyAdapterClass() {
+			return DiagramTechnologyAdapter.class;
+		}
+
+		@Override
+		public DiagramTechnologyAdapter getTechnologyAdapter() {
+			return (DiagramTechnologyAdapter) super.getTechnologyAdapter();
+		}
+
+		@Override
+		public boolean getIsRequired() {
+			return true;
+		}
+
+		@Override
+		public TypedDiagramModelSlotInstanceConfiguration createConfiguration(CreateVirtualModelInstance<?> action) {
+			return new TypedDiagramModelSlotInstanceConfiguration(this, action);
+		}
+
+		@Override
+		public DiagramResource createProjectSpecificEmptyModel(View view, String filename, String modelUri,
+				FlexoMetaModelResource<Diagram, DiagramSpecification, ?> metaModelResource) {
+			// TODO Auto-generated method stub
 			return null;
 		}
-	}
 
-	@Override
-	public boolean getIsRequired() {
-		return true;
-	}
+		@Override
+		public DiagramResource createSharedEmptyModel(FlexoResourceCenter<?> resourceCenter, String relativePath, String filename,
+				String modelUri, FlexoMetaModelResource<Diagram, DiagramSpecification, ?> metaModelResource) {
+			// TODO Auto-generated method stub
+			return null;
+		}
 
-	@Override
-	public TypedDiagramModelSlotImplInstanceConfiguration createConfiguration(CreateVirtualModelInstance<?> action) {
-		return new TypedDiagramModelSlotInstanceConfiguration(this, action);
-	}
+		@Override
+		public String getURIForObject(
+				TypeAwareModelSlotInstance<Diagram, DiagramSpecification, ? extends TypeAwareModelSlot<Diagram, DiagramSpecification>> msInstance,
+				Object o) {
+			// TODO Auto-generated method stub
+			return null;
+		}
 
-	@Override
-	public DiagramResource createProjectSpecificEmptyModel(View view, String filename, String modelUri,
-			FlexoMetaModelResource<Diagram, DiagramSpecification, ?> metaModelResource) {
-		// TODO Auto-generated method stub
-		return null;
-	}
+		@Override
+		public Object retrieveObjectWithURI(
+				TypeAwareModelSlotInstance<Diagram, DiagramSpecification, ? extends TypeAwareModelSlot<Diagram, DiagramSpecification>> msInstance,
+				String objectURI) {
+			// TODO Auto-generated method stub
+			return null;
+		}
 
-	@Override
-	public DiagramResource createSharedEmptyModel(FlexoResourceCenter<?> resourceCenter, String relativePath, String filename,
-			String modelUri, FlexoMetaModelResource<Diagram, DiagramSpecification, ?> metaModelResource) {
-		// TODO Auto-generated method stub
-		return null;
-	}
+		@Override
+		public boolean isStrictMetaModelling() {
+			// TODO Auto-generated method stub
+			return false;
+		}
 
-	@Override
-	public String getURIForObject(
-			TypeAwareModelSlotInstance<Diagram, DiagramSpecification, ? extends TypeAwareModelSlot<Diagram, DiagramSpecification>> msInstance,
-			Object o) {
-		// TODO Auto-generated method stub
-		return null;
-	}
+		@Override
+		public Type getType() {
+			// TODO Auto-generated method stub
+			return null;
+		}
 
-	@Override
-	public Object retrieveObjectWithURI(
-			TypeAwareModelSlotInstance<Diagram, DiagramSpecification, ? extends TypeAwareModelSlot<Diagram, DiagramSpecification>> msInstance,
-			String objectURI) {
-		// TODO Auto-generated method stub
-		return null;
-	}
+		@Override
+		public List<FMLDiagramPaletteElementBinding> getPaletteElementBindings() {
+			return paletteElementBindings;
+		}
 
-	@Override
-	public boolean isStrictMetaModelling() {
-		// TODO Auto-generated method stub
-		return false;
-	}
+		@Override
+		public void setPaletteElementBindings(List<FMLDiagramPaletteElementBinding> paletteElementBindings) {
+			this.paletteElementBindings = paletteElementBindings;
+		}
 
-	@Override
-	public Type getType() {
-		// TODO Auto-generated method stub
-		return null;
-	}
+		@Override
+		public void addToPaletteElementBindings(FMLDiagramPaletteElementBinding paletteElementBinding) {
+			paletteElementBindings.add(paletteElementBinding);
+		}
 
-	@Override
-	public <FR extends FetchRequest<?, ?>> FR makeFetchRequest(Class<FR> fetchRequestClass) {
-		// TODO Auto-generated method stub
-		return null;
-	}
+		@Override
+		public void removeFromPaletteElementBindings(FMLDiagramPaletteElementBinding paletteElementBinding) {
+			paletteElementBindings.remove(paletteElementBinding);
+		}
 
-	public List<FMLDiagramPaletteElementBinding> getPaletteElementBindings() {
-		return paletteElementBindings;
 	}
-
-	public void setPaletteElementBindings(List<FMLDiagramPaletteElementBinding> paletteElementBindings) {
-		this.paletteElementBindings = paletteElementBindings;
-	}
-
-	public void addToPaletteElementBindings(FMLDiagramPaletteElementBinding paletteElementBinding) {
-		paletteElementBindings.add(paletteElementBinding);
-	}
-
-	public void removeFromPaletteElementBindings(FMLDiagramPaletteElementBinding paletteElementBinding) {
-		paletteElementBindings.remove(paletteElementBinding);
-	}
-
-}
 }

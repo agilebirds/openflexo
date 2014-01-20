@@ -32,131 +32,150 @@ import org.openflexo.foundation.viewpoint.AbstractActionScheme;
 import org.openflexo.foundation.viewpoint.EditionPattern;
 import org.openflexo.foundation.viewpoint.EditionPatternObject;
 import org.openflexo.foundation.viewpoint.VirtualModel;
+import org.openflexo.model.annotations.Getter;
+import org.openflexo.model.annotations.ImplementationClass;
+import org.openflexo.model.annotations.ModelEntity;
+import org.openflexo.model.annotations.PropertyIdentifier;
+import org.openflexo.model.annotations.Setter;
+import org.openflexo.model.annotations.XMLAttribute;
+import org.openflexo.model.annotations.XMLElement;
 
 @ModelEntity
 @ImplementationClass(GraphicalElementAction.GraphicalElementActionImpl.class)
-@XMLElement(xmlTag="Action")
-public interface GraphicalElementAction extends EditionPatternObject{
-
-@PropertyIdentifier(type=ActionMask.class)
-public static final String ACTION_MASK_KEY = "actionMask";
-@PropertyIdentifier(type=AbstractActionScheme.class)
-public static final String ABSTRACT_ACTION_SCHEME_KEY = "abstractActionScheme";
-
-@Getter(value=ACTION_MASK_KEY)
-@XMLAttribute
-public ActionMask getActionMask();
-
-@Setter(ACTION_MASK_KEY)
-public void setActionMask(ActionMask actionMask);
-
-
-@Getter(value=ABSTRACT_ACTION_SCHEME_KEY)
-@XMLElement
-public AbstractActionScheme getAbstractActionScheme();
-
-@Setter(ABSTRACT_ACTION_SCHEME_KEY)
-public void setAbstractActionScheme(AbstractActionScheme abstractActionScheme);
-
-
-public static abstract  class GraphicalElementActionImpl extends EditionPatternObjectImpl implements GraphicalElementAction
-{
-
-	private ActionMask actionMask = ActionMask.DoubleClick;
-	private AbstractActionScheme abstractActionScheme;
-	private GraphicalElementPatternRole graphicalElementPatternRole;
+@XMLElement(xmlTag = "Action")
+public interface GraphicalElementAction extends EditionPatternObject {
 
 	public static enum ActionMask {
 		SingleClick, DoubleClick, ShiftClick, AltClick, CtrlClick, MetaClick;
 	}
 
-	private DataBinding<Boolean> conditional;
+	@PropertyIdentifier(type = GraphicalElementPatternRole.class)
+	public static final String GRAPHICAL_ELEMENT_PATTERN_ROLE_KEY = "graphicalElementPatternRole";
+	@PropertyIdentifier(type = ActionMask.class)
+	public static final String ACTION_MASK_KEY = "actionMask";
+	@PropertyIdentifier(type = AbstractActionScheme.class)
+	public static final String ABSTRACT_ACTION_SCHEME_KEY = "abstractActionScheme";
 
-	public GraphicalElementActionImpl() {
-		super();
-	}
+	@Getter(value = GRAPHICAL_ELEMENT_PATTERN_ROLE_KEY, inverse = GraphicalElementPatternRole.ACTIONS_KEY)
+	public GraphicalElementPatternRole<?, ?> getGraphicalElementPatternRole();
 
-	@Override
-	public String getURI() {
-		return null;
-	}
+	@Setter(GRAPHICAL_ELEMENT_PATTERN_ROLE_KEY)
+	public void setGraphicalElementPatternRole(GraphicalElementPatternRole<?, ?> patternRole);
 
-	@Override
-	public Collection<? extends Validable> getEmbeddedValidableObjects() {
-		return null;
-	}
+	@Getter(value = ACTION_MASK_KEY)
+	@XMLAttribute
+	public ActionMask getActionMask();
 
-	public GraphicalElementPatternRole getGraphicalElementPatternRole() {
-		return graphicalElementPatternRole;
-	}
+	@Setter(ACTION_MASK_KEY)
+	public void setActionMask(ActionMask actionMask);
 
-	public void setGraphicalElementPatternRole(GraphicalElementPatternRole graphicalElementPatternRole) {
-		this.graphicalElementPatternRole = graphicalElementPatternRole;
-	}
+	@Getter(value = ABSTRACT_ACTION_SCHEME_KEY)
+	@XMLElement
+	public AbstractActionScheme getAbstractActionScheme();
 
-	public DataBinding<Boolean> getConditional() {
-		if (conditional == null) {
-			conditional = new DataBinding<Boolean>(this, Boolean.class, DataBinding.BindingDefinitionType.GET);
-			conditional.setBindingName("conditional");
+	@Setter(ABSTRACT_ACTION_SCHEME_KEY)
+	public void setAbstractActionScheme(AbstractActionScheme abstractActionScheme);
+
+	public static abstract class GraphicalElementActionImpl extends EditionPatternObjectImpl implements GraphicalElementAction {
+
+		private ActionMask actionMask = ActionMask.DoubleClick;
+		private AbstractActionScheme abstractActionScheme;
+
+		// private GraphicalElementPatternRole graphicalElementPatternRole;
+
+		private DataBinding<Boolean> conditional;
+
+		public GraphicalElementActionImpl() {
+			super();
 		}
-		return conditional;
-	}
 
-	public void setConditional(DataBinding<Boolean> conditional) {
-		if (conditional != null) {
-			conditional.setOwner(this);
-			conditional.setDeclaredType(Boolean.class);
-			conditional.setBindingDefinitionType(DataBinding.BindingDefinitionType.GET);
-			conditional.setBindingName("conditional");
+		@Override
+		public String getURI() {
+			return null;
 		}
-		this.conditional = conditional;
-	}
 
-	public boolean evaluateCondition(EditionPatternInstance editionPatternInstance) {
-		if (getConditional().isValid()) {
-			try {
-				return getConditional().getBindingValue(editionPatternInstance);
-			} catch (TypeMismatchException e) {
-				e.printStackTrace();
-			} catch (NullReferenceException e) {
-				e.printStackTrace();
-			} catch (InvocationTargetException e) {
-				e.printStackTrace();
+		@Override
+		public Collection<? extends Validable> getEmbeddedValidableObjects() {
+			return null;
+		}
+
+		/*@Override
+		public GraphicalElementPatternRole getGraphicalElementPatternRole() {
+			return graphicalElementPatternRole;
+		}
+
+		@Override
+		public void setGraphicalElementPatternRole(GraphicalElementPatternRole graphicalElementPatternRole) {
+			this.graphicalElementPatternRole = graphicalElementPatternRole;
+		}*/
+
+		public DataBinding<Boolean> getConditional() {
+			if (conditional == null) {
+				conditional = new DataBinding<Boolean>(this, Boolean.class, DataBinding.BindingDefinitionType.GET);
+				conditional.setBindingName("conditional");
 			}
+			return conditional;
 		}
-		return true;
-	}
 
-	@Override
-	public EditionPattern getEditionPattern() {
-		return getGraphicalElementPatternRole() != null ? getGraphicalElementPatternRole().getEditionPattern() : null;
-	}
+		public void setConditional(DataBinding<Boolean> conditional) {
+			if (conditional != null) {
+				conditional.setOwner(this);
+				conditional.setDeclaredType(Boolean.class);
+				conditional.setBindingDefinitionType(DataBinding.BindingDefinitionType.GET);
+				conditional.setBindingName("conditional");
+			}
+			this.conditional = conditional;
+		}
 
-	@Override
-	public BindingModel getBindingModel() {
-		return getEditionPattern().getBindingModel();
-	}
+		public boolean evaluateCondition(EditionPatternInstance editionPatternInstance) {
+			if (getConditional().isValid()) {
+				try {
+					return getConditional().getBindingValue(editionPatternInstance);
+				} catch (TypeMismatchException e) {
+					e.printStackTrace();
+				} catch (NullReferenceException e) {
+					e.printStackTrace();
+				} catch (InvocationTargetException e) {
+					e.printStackTrace();
+				}
+			}
+			return true;
+		}
 
-	@Override
-	public VirtualModel getVirtualModel() {
-		return getEditionPattern().getVirtualModel();
-	}
+		@Override
+		public EditionPattern getEditionPattern() {
+			return getGraphicalElementPatternRole() != null ? getGraphicalElementPatternRole().getEditionPattern() : null;
+		}
 
-	public AbstractActionScheme getAbstractActionScheme() {
-		return abstractActionScheme;
-	}
+		@Override
+		public BindingModel getBindingModel() {
+			return getEditionPattern().getBindingModel();
+		}
 
-	public void setAbstractActionScheme(AbstractActionScheme abstractActionScheme) {
-		this.abstractActionScheme = abstractActionScheme;
-	}
+		@Override
+		public VirtualModel getVirtualModel() {
+			return getEditionPattern().getVirtualModel();
+		}
 
-	public ActionMask getActionMask() {
-		return actionMask;
-	}
+		@Override
+		public AbstractActionScheme getAbstractActionScheme() {
+			return abstractActionScheme;
+		}
 
-	public void setActionMask(ActionMask actionMask) {
-		this.actionMask = actionMask;
-	}
+		@Override
+		public void setAbstractActionScheme(AbstractActionScheme abstractActionScheme) {
+			this.abstractActionScheme = abstractActionScheme;
+		}
 
-}
+		@Override
+		public ActionMask getActionMask() {
+			return actionMask;
+		}
+
+		@Override
+		public void setActionMask(ActionMask actionMask) {
+			this.actionMask = actionMask;
+		}
+
+	}
 }

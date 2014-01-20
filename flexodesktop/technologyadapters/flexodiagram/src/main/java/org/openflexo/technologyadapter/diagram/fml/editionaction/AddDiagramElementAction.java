@@ -21,6 +21,8 @@ package org.openflexo.technologyadapter.diagram.fml.editionaction;
 
 import org.openflexo.foundation.viewpoint.FMLRepresentationContext;
 import org.openflexo.foundation.viewpoint.PatternRole;
+import org.openflexo.model.annotations.ImplementationClass;
+import org.openflexo.model.annotations.ModelEntity;
 import org.openflexo.technologyadapter.diagram.fml.GraphicalElementPatternRole;
 import org.openflexo.technologyadapter.diagram.fml.GraphicalElementSpecification;
 import org.openflexo.technologyadapter.diagram.model.DiagramElement;
@@ -28,48 +30,47 @@ import org.openflexo.toolbox.StringUtils;
 
 @ModelEntity(isAbstract = true)
 @ImplementationClass(AddDiagramElementAction.AddDiagramElementActionImpl.class)
-public abstract interface AddDiagramElementAction<T extends DiagramElement<?>> extends DiagramAction<T>{
+public abstract interface AddDiagramElementAction<T extends DiagramElement<?>> extends DiagramAction<T> {
 
+	public static abstract class AddDiagramElementActionImpl<T extends DiagramElement<?>> extends DiagramActionImpl<T> implements
+			AddDiagramElementAction<T> {
 
-public static abstract  abstract class AddDiagramElementAction<TImpl extends DiagramElement<?>> extends DiagramAction<T>Impl implements AddDiagramElementAction<T
-{
+		public AddDiagramElementActionImpl() {
+			super();
+		}
 
-	public AddDiagramElementActionImpl() {
-		super();
-	}
+		/*@Override
+		protected void updatePatternRoleType()
+		{
+		}*/
 
-	/*@Override
-	protected void updatePatternRoleType()
-	{
-	}*/
-
-	@Override
-	public GraphicalElementPatternRole<?, ?> getPatternRole() {
-		PatternRole<?> superPatternRole = super.getPatternRole();
-		if (superPatternRole instanceof GraphicalElementPatternRole) {
-			return (GraphicalElementPatternRole<?, ?>) superPatternRole;
-		} else if (superPatternRole != null) {
-			// logger.warning("Unexpected pattern role of type " + superPatternRole.getClass().getSimpleName());
+		@Override
+		public GraphicalElementPatternRole<?, ?> getPatternRole() {
+			PatternRole<?> superPatternRole = super.getPatternRole();
+			if (superPatternRole instanceof GraphicalElementPatternRole) {
+				return (GraphicalElementPatternRole<?, ?>) superPatternRole;
+			} else if (superPatternRole != null) {
+				// logger.warning("Unexpected pattern role of type " + superPatternRole.getClass().getSimpleName());
+				return null;
+			}
 			return null;
 		}
-		return null;
-	}
 
-	protected String getGraphicalElementSpecificationFMLRepresentation(FMLRepresentationContext context) {
+		protected String getGraphicalElementSpecificationFMLRepresentation(FMLRepresentationContext context) {
 
-		if (getPatternRole() != null) {
-			if (getPatternRole().getGrSpecifications().size() > 0) {
-				StringBuffer sb = new StringBuffer();
-				for (GraphicalElementSpecification ges : getPatternRole().getGrSpecifications()) {
-					if (ges.getValue().isSet()) {
-						sb.append("  " + ges.getFeatureName() + " = " + ges.getValue().toString() + ";" + StringUtils.LINE_SEPARATOR);
+			if (getPatternRole() != null) {
+				if (getPatternRole().getGrSpecifications().size() > 0) {
+					StringBuffer sb = new StringBuffer();
+					for (GraphicalElementSpecification ges : getPatternRole().getGrSpecifications()) {
+						if (ges.getValue().isSet()) {
+							sb.append("  " + ges.getFeatureName() + " = " + ges.getValue().toString() + ";" + StringUtils.LINE_SEPARATOR);
+						}
 					}
+					return sb.toString();
 				}
-				return sb.toString();
 			}
+			return null;
 		}
-		return null;
-	}
 
-}
+	}
 }

@@ -31,6 +31,7 @@ import org.openflexo.foundation.resource.FlexoResourceCenterService;
 import org.openflexo.foundation.resource.RepositoryFolder;
 import org.openflexo.foundation.resource.ResourceRepository;
 import org.openflexo.foundation.viewpoint.VirtualModel;
+import org.openflexo.foundation.viewpoint.VirtualModelModelFactory;
 
 /**
  * This class represents a technology adapter<br>
@@ -331,9 +332,15 @@ public abstract class TechnologyAdapter {
 	 * This responsability is delegated to the {@link TechnologyAdapter} which manages with introspection its own {@link ModelSlot} types
 	 * 
 	 * @param modelSlotClass
+	 * @param containerVirtualModel
+	 *            the virtual model in which model slot should be created
 	 * @return
 	 */
-	public abstract <MS extends ModelSlot<?>> MS makeModelSlot(Class<MS> modelSlotClass, VirtualModel virtualModel);
+	public final <MS extends ModelSlot<?>> MS makeModelSlot(Class<MS> modelSlotClass, VirtualModel containerVirtualModel) {
+		VirtualModelModelFactory factory = containerVirtualModel.getVirtualModelFactory();
+		return factory.newInstance(modelSlotClass);
+
+	}
 
 	/**
 	 * Retrieve (creates it when not existant) folder containing supplied file

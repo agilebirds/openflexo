@@ -42,6 +42,7 @@ import org.openflexo.foundation.viewpoint.FMLRepresentationContext;
 import org.openflexo.foundation.viewpoint.FMLRepresentationContext.FMLRepresentationOutput;
 import org.openflexo.foundation.viewpoint.PatternRole;
 import org.openflexo.foundation.viewpoint.annotations.FIBPanel;
+import org.openflexo.model.annotations.*;
 import org.openflexo.technologyadapter.diagram.fml.DiagramEditionScheme;
 import org.openflexo.technologyadapter.diagram.fml.DropScheme;
 import org.openflexo.technologyadapter.diagram.fml.ShapePatternRole;
@@ -61,170 +62,171 @@ import org.openflexo.toolbox.StringUtils;
 @ModelEntity
 @ImplementationClass(AddShape.AddShapeImpl.class)
 @XMLElement
-public interface AddShape extends AddDiagramElementAction<DiagramShape>{
+public interface AddShape extends AddDiagramElementAction<DiagramShape> {
 
-@PropertyIdentifier(type=DataBinding.class)
-public static final String CONTAINER_KEY = "container";
-@PropertyIdentifier(type=boolean.class)
-public static final String EXTEND_PARENT_BOUNDS_TO_HOST_THIS_SHAPE_KEY = "extendParentBoundsToHostThisShape";
+	@PropertyIdentifier(type = DataBinding.class)
+	public static final String CONTAINER_KEY = "container";
+	@PropertyIdentifier(type = boolean.class)
+	public static final String EXTEND_PARENT_BOUNDS_TO_HOST_THIS_SHAPE_KEY = "extendParentBoundsToHostThisShape";
 
-@Getter(value=CONTAINER_KEY)
-@XMLAttribute
-public DataBinding getContainer();
+	@Getter(value = CONTAINER_KEY)
+	@XMLAttribute
+	public DataBinding getContainer();
 
-@Setter(CONTAINER_KEY)
-public void setContainer(DataBinding container);
+	@Setter(CONTAINER_KEY)
+	public void setContainer(DataBinding container);
 
+	@Getter(value = EXTEND_PARENT_BOUNDS_TO_HOST_THIS_SHAPE_KEY, defaultValue = "false")
+	@XMLAttribute
+	public boolean getExtendParentBoundsToHostThisShape();
 
-@Getter(value=EXTEND_PARENT_BOUNDS_TO_HOST_THIS_SHAPE_KEY,defaultValue = "false")
-@XMLAttribute
-public boolean getExtendParentBoundsToHostThisShape();
+	@Setter(EXTEND_PARENT_BOUNDS_TO_HOST_THIS_SHAPE_KEY)
+	public void setExtendParentBoundsToHostThisShape(boolean extendParentBoundsToHostThisShape);
 
-@Setter(EXTEND_PARENT_BOUNDS_TO_HOST_THIS_SHAPE_KEY)
-public void setExtendParentBoundsToHostThisShape(boolean extendParentBoundsToHostThisShape);
+	public static abstract class AddShapeImpl extends AddDiagramElementActionImpl<DiagramShape> implements AddShape {
 
+		private static final Logger logger = Logger.getLogger(AddShape.class.getPackage().getName());
 
-public static abstract  class AddShapeImpl extends AddDiagramElementAction<DiagramShape>Impl implements AddShape
-{
+		private boolean extendParentBoundsToHostThisShape = false;
 
-	private static final Logger logger = Logger.getLogger(AddShape.class.getPackage().getName());
-
-	private boolean extendParentBoundsToHostThisShape = false;
-
-	public AddShapeImpl() {
-		super();
-	}
-
-	@Override
-	public String getFMLRepresentation(FMLRepresentationContext context) {
-		FMLRepresentationOutput out = new FMLRepresentationOutput(context);
-		if (getAssignation().isSet()) {
-			out.append(getAssignation().toString() + " = (", context);
+		public AddShapeImpl() {
+			super();
 		}
-		out.append(getClass().getSimpleName() + " conformTo ShapeSpecification from " + getModelSlot().getName() + " {"
-				+ StringUtils.LINE_SEPARATOR, context);
-		out.append(getGraphicalElementSpecificationFMLRepresentation(context), context);
-		out.append("}", context);
-		if (getAssignation().isSet()) {
-			out.append(")", context);
-		}
-		return out.toString();
-	}
 
-	public DiagramContainerElement<?> getContainer(EditionSchemeAction action) {
-		if (getPatternRole() != null && !getPatternRole().getParentShapeAsDefinedInAction()) {
-			FlexoObject returned = action.getEditionPatternInstance().getPatternActor(getPatternRole().getParentShapePatternRole());
-			return action.getEditionPatternInstance().getPatternActor(getPatternRole().getParentShapePatternRole());
-		} else {
-			try {
-				return getContainer().getBindingValue(action);
-			} catch (TypeMismatchException e) {
-				e.printStackTrace();
-			} catch (NullReferenceException e) {
-				e.printStackTrace();
-			} catch (InvocationTargetException e) {
-				e.printStackTrace();
+		@Override
+		public String getFMLRepresentation(FMLRepresentationContext context) {
+			FMLRepresentationOutput out = new FMLRepresentationOutput(context);
+			if (getAssignation().isSet()) {
+				out.append(getAssignation().toString() + " = (", context);
+			}
+			out.append(getClass().getSimpleName() + " conformTo ShapeSpecification from " + getModelSlot().getName() + " {"
+					+ StringUtils.LINE_SEPARATOR, context);
+			out.append(getGraphicalElementSpecificationFMLRepresentation(context), context);
+			out.append("}", context);
+			if (getAssignation().isSet()) {
+				out.append(")", context);
+			}
+			return out.toString();
+		}
+
+		public DiagramContainerElement<?> getContainer(EditionSchemeAction action) {
+			if (getPatternRole() != null && !getPatternRole().getParentShapeAsDefinedInAction()) {
+				FlexoObject returned = action.getEditionPatternInstance().getPatternActor(getPatternRole().getParentShapePatternRole());
+				return action.getEditionPatternInstance().getPatternActor(getPatternRole().getParentShapePatternRole());
+			} else {
+				try {
+					return getContainer().getBindingValue(action);
+				} catch (TypeMismatchException e) {
+					e.printStackTrace();
+				} catch (NullReferenceException e) {
+					e.printStackTrace();
+				} catch (InvocationTargetException e) {
+					e.printStackTrace();
+				}
+				return null;
+			}
+		}
+
+		@Override
+		public ShapePatternRole getPatternRole() {
+			PatternRole superPatternRole = super.getPatternRole();
+			if (superPatternRole instanceof ShapePatternRole) {
+				return (ShapePatternRole) superPatternRole;
+			} else if (superPatternRole != null) {
+				// logger.warning("Unexpected pattern role of type " + superPatternRole.getClass().getSimpleName());
+				return null;
 			}
 			return null;
 		}
-	}
 
-	@Override
-	public ShapePatternRole getPatternRole() {
-		PatternRole superPatternRole = super.getPatternRole();
-		if (superPatternRole instanceof ShapePatternRole) {
-			return (ShapePatternRole) superPatternRole;
-		} else if (superPatternRole != null) {
-			// logger.warning("Unexpected pattern role of type " + superPatternRole.getClass().getSimpleName());
-			return null;
-		}
-		return null;
-	}
+		private DataBinding<DiagramContainerElement<?>> container;
 
-	private DataBinding<DiagramContainerElement<?>> container;
-
-	public DataBinding<DiagramContainerElement<?>> getContainer() {
-		if (container == null) {
-			container = new DataBinding<DiagramContainerElement<?>>(this, DiagramContainerElement.class, BindingDefinitionType.GET);
-			container.setBindingName("container");
-		}
-		return container;
-	}
-
-	public void setContainer(DataBinding<DiagramContainerElement<?>> container) {
-		if (container != null) {
-			container.setOwner(this);
-			container.setBindingName("container");
-			container.setDeclaredType(DiagramContainerElement.class);
-			container.setBindingDefinitionType(BindingDefinitionType.GET);
-		}
-		this.container = container;
-		notifiedBindingChanged(this.container);
-	}
-
-	public boolean getExtendParentBoundsToHostThisShape() {
-		return extendParentBoundsToHostThisShape;
-	}
-
-	public void setExtendParentBoundsToHostThisShape(boolean extendParentBoundsToHostThisShape) {
-		this.extendParentBoundsToHostThisShape = extendParentBoundsToHostThisShape;
-	}
-
-	@Override
-	public Type getAssignableType() {
-		return DiagramShape.class;
-	}
-
-	@Override
-	public boolean isAssignationRequired() {
-		return true;
-	}
-
-	@Override
-	public DiagramShape performAction(EditionSchemeAction action) {
-		DiagramContainerElement<?> container = getContainer(action);
-		Diagram diagram = container.getDiagram();
-
-		DiagramFactory factory = diagram.getDiagramFactory();
-		DiagramShape newShape = factory.newInstance(DiagramShape.class);
-
-		GraphicalRepresentation grToUse = null;
-
-		// If an overriden graphical representation is defined, use it
-		/*if (action.getOverridingGraphicalRepresentation(getPatternRole()) != null) {
-			grToUse = action.getOverridingGraphicalRepresentation(getPatternRole());
-		} else*/if (getPatternRole().getGraphicalRepresentation() != null) {
-			grToUse = getPatternRole().getGraphicalRepresentation();
+		@Override
+		public DataBinding<DiagramContainerElement<?>> getContainer() {
+			if (container == null) {
+				container = new DataBinding<DiagramContainerElement<?>>(this, DiagramContainerElement.class, BindingDefinitionType.GET);
+				container.setBindingName("container");
+			}
+			return container;
 		}
 
-		ShapeGraphicalRepresentation newGR = factory.makeShapeGraphicalRepresentation();
-		newGR.setsWith(grToUse);
-		newShape.setGraphicalRepresentation(newGR);
-
-		// Register reference
-		newShape.registerEditionPatternReference(action.getEditionPatternInstance());
-
-		if (container == null) {
-			logger.warning("When adding shape, cannot find container for action " + getPatternRole() + " container=" + getContainer(action)
-					+ " container=" + getContainer());
-			return null;
+		public void setContainer(DataBinding<DiagramContainerElement<?>> container) {
+			if (container != null) {
+				container.setOwner(this);
+				container.setBindingName("container");
+				container.setDeclaredType(DiagramContainerElement.class);
+				container.setBindingDefinitionType(BindingDefinitionType.GET);
+			}
+			this.container = container;
+			notifiedBindingChanged(this.container);
 		}
 
-		container.addToShapes(newShape);
-
-		if (logger.isLoggable(Level.FINE)) {
-			logger.fine("Added shape " + newShape + " under " + container);
+		@Override
+		public boolean getExtendParentBoundsToHostThisShape() {
+			return extendParentBoundsToHostThisShape;
 		}
 
-		System.out.println("Added shape " + newShape);
-		return newShape;
-	}
+		@Override
+		public void setExtendParentBoundsToHostThisShape(boolean extendParentBoundsToHostThisShape) {
+			this.extendParentBoundsToHostThisShape = extendParentBoundsToHostThisShape;
+		}
 
-	@Override
-	public void finalizePerformAction(EditionSchemeAction action, DiagramShape newShape) {
-		super.finalizePerformAction(action, newShape);
-		// Be sure that the newly created shape is updated
-		// newShape.update();
+		@Override
+		public Type getAssignableType() {
+			return DiagramShape.class;
+		}
+
+		@Override
+		public boolean isAssignationRequired() {
+			return true;
+		}
+
+		@Override
+		public DiagramShape performAction(EditionSchemeAction action) {
+			DiagramContainerElement<?> container = getContainer(action);
+			Diagram diagram = container.getDiagram();
+
+			DiagramFactory factory = diagram.getDiagramFactory();
+			DiagramShape newShape = factory.newInstance(DiagramShape.class);
+
+			GraphicalRepresentation grToUse = null;
+
+			// If an overriden graphical representation is defined, use it
+			/*if (action.getOverridingGraphicalRepresentation(getPatternRole()) != null) {
+				grToUse = action.getOverridingGraphicalRepresentation(getPatternRole());
+			} else*/if (getPatternRole().getGraphicalRepresentation() != null) {
+				grToUse = getPatternRole().getGraphicalRepresentation();
+			}
+
+			ShapeGraphicalRepresentation newGR = factory.makeShapeGraphicalRepresentation();
+			newGR.setsWith(grToUse);
+			newShape.setGraphicalRepresentation(newGR);
+
+			// Register reference
+			newShape.registerEditionPatternReference(action.getEditionPatternInstance());
+
+			if (container == null) {
+				logger.warning("When adding shape, cannot find container for action " + getPatternRole() + " container="
+						+ getContainer(action) + " container=" + getContainer());
+				return null;
+			}
+
+			container.addToShapes(newShape);
+
+			if (logger.isLoggable(Level.FINE)) {
+				logger.fine("Added shape " + newShape + " under " + container);
+			}
+
+			System.out.println("Added shape " + newShape);
+			return newShape;
+		}
+
+		@Override
+		public void finalizePerformAction(EditionSchemeAction action, DiagramShape newShape) {
+			super.finalizePerformAction(action, newShape);
+			// Be sure that the newly created shape is updated
+			// newShape.update();
+		}
 	}
 
 	public static class AddShapeActionMustAdressAValidShapePatternRole extends
@@ -269,7 +271,7 @@ public static abstract  class AddShapeImpl extends AddDiagramElementAction<Diagr
 	}
 
 	public static class AddShapeActionMustHaveAValidContainer extends ValidationRule<AddShapeActionMustHaveAValidContainer, AddShape> {
-		public AddShapeImplActionMustHaveAValidContainer() {
+		public AddShapeActionMustHaveAValidContainer() {
 			super(AddShape.class, "add_shape_action_must_have_a_valid_container");
 		}
 
@@ -359,5 +361,4 @@ public static abstract  class AddShapeImpl extends AddDiagramElementAction<Diagr
 
 	}
 
-}
 }

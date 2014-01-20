@@ -25,12 +25,10 @@ import org.openflexo.foundation.resource.FlexoResourceCenter;
 import org.openflexo.foundation.resource.FlexoResourceCenterService;
 import org.openflexo.foundation.technologyadapter.DeclareModelSlot;
 import org.openflexo.foundation.technologyadapter.DeclareModelSlots;
-import org.openflexo.foundation.technologyadapter.ModelSlot;
 import org.openflexo.foundation.technologyadapter.TechnologyAdapter;
 import org.openflexo.foundation.technologyadapter.TechnologyAdapterBindingFactory;
 import org.openflexo.foundation.technologyadapter.TechnologyAdapterInitializationException;
 import org.openflexo.foundation.technologyadapter.TechnologyContextManager;
-import org.openflexo.foundation.viewpoint.VirtualModel;
 
 /**
  * This class defines and implements the Openflexo built-in diagram technology adapter
@@ -53,18 +51,6 @@ public class DiagramTechnologyAdapter extends TechnologyAdapter {
 	@Override
 	public String getName() {
 		return "Openflexo diagram";
-	}
-
-	@Override
-	public <MS extends ModelSlot<?>> MS makeModelSlot(Class<MS> modelSlotClass, VirtualModel virtualModel) {
-		if (TypedDiagramModelSlot.class.isAssignableFrom(modelSlotClass)) {
-			return (MS) new TypedDiagramModelSlot(virtualModel, this);
-		} else if (FreeDiagramModelSlot.class.isAssignableFrom(modelSlotClass)) {
-			return (MS) new FreeDiagramModelSlot(virtualModel, this);
-		} else {
-			logger.warning("Unexpected model slot: " + modelSlotClass.getName());
-			return null;
-		}
 	}
 
 	@Override

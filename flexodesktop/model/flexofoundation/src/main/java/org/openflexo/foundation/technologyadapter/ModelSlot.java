@@ -257,7 +257,10 @@ public interface ModelSlot<RD extends ResourceData<RD>> extends NamedViewPointOb
 		 * @return
 		 */
 		@Override
-		public abstract <PR extends PatternRole<?>> PR makePatternRole(Class<PR> patternRoleClass);
+		public final <PR extends PatternRole<?>> PR makePatternRole(Class<PR> patternRoleClass) {
+			VirtualModelModelFactory factory = getVirtualModelFactory();
+			return factory.newInstance(patternRoleClass);
+		}
 
 		/**
 		 * Return default name for supplied pattern role class
@@ -459,7 +462,10 @@ public interface ModelSlot<RD extends ResourceData<RD>> extends NamedViewPointOb
 		 * @return
 		 */
 		@Override
-		public abstract <EA extends EditionAction<?, ?>> EA makeEditionAction(Class<EA> editionActionClass);
+		public final <EA extends EditionAction<?, ?>> EA makeEditionAction(Class<EA> editionActionClass) {
+			VirtualModelModelFactory factory = getVirtualModelFactory();
+			return factory.newInstance(editionActionClass);
+		}
 
 		/**
 		 * Creates and return a new {@link FetchRequest} of supplied class.<br>
@@ -470,7 +476,10 @@ public interface ModelSlot<RD extends ResourceData<RD>> extends NamedViewPointOb
 		 * @return
 		 */
 		@Override
-		public abstract <FR extends FetchRequest<?, ?>> FR makeFetchRequest(Class<FR> fetchRequestClass);
+		public final <FR extends FetchRequest<?, ?>> FR makeFetchRequest(Class<FR> fetchRequestClass) {
+			VirtualModelModelFactory factory = getVirtualModelFactory();
+			return factory.newInstance(fetchRequestClass);
+		}
 
 		@Override
 		public abstract ModelSlotInstanceConfiguration<? extends ModelSlot<RD>, RD> createConfiguration(CreateVirtualModelInstance<?> action);

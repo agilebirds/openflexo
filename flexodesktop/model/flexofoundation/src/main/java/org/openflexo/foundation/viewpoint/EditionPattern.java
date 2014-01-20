@@ -80,9 +80,9 @@ public interface EditionPattern extends EditionPatternObject {
 	public static final String NAME_KEY = "name";
 	@PropertyIdentifier(type = String.class)
 	public static final String DESCRIPTION_KEY = "description";
-	@PropertyIdentifier(type = Vector.class)
+	@PropertyIdentifier(type = List.class)
 	public static final String EDITION_SCHEMES_KEY = "editionSchemes";
-	@PropertyIdentifier(type = Vector.class)
+	@PropertyIdentifier(type = List.class)
 	public static final String PATTERN_ROLES_KEY = "patternRoles";
 	@PropertyIdentifier(type = EditionPatternInspector.class)
 	public static final String INSPECTOR_KEY = "inspector";
@@ -149,6 +149,8 @@ public interface EditionPattern extends EditionPatternObject {
 
 	@Finder(collection = PATTERN_ROLES_KEY, attribute = PatternRole.NAME_KEY)
 	public PatternRole<?> getPatternRole(String patternRoleName);
+
+	public <R> List<R> getPatternRoles(Class<R> type);
 
 	@Getter(value = INSPECTOR_KEY, inverse = EditionPatternInspector.EDITION_PATTERN_KEY)
 	@XMLElement(xmlTag = "Inspector")
@@ -471,6 +473,7 @@ public interface EditionPattern extends EditionPatternObject {
 			}
 		}
 
+		@Override
 		public <R> List<R> getPatternRoles(Class<R> type) {
 			List<R> returned = new ArrayList<R>();
 			for (PatternRole<?> r : getPatternRoles()) {

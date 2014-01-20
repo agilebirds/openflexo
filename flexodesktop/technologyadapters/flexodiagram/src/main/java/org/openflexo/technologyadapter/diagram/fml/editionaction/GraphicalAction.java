@@ -37,6 +37,13 @@ import org.openflexo.foundation.validation.ValidationRule;
 import org.openflexo.foundation.view.action.EditionSchemeAction;
 import org.openflexo.foundation.viewpoint.EditionAction;
 import org.openflexo.foundation.viewpoint.annotations.FIBPanel;
+import org.openflexo.model.annotations.Getter;
+import org.openflexo.model.annotations.ImplementationClass;
+import org.openflexo.model.annotations.ModelEntity;
+import org.openflexo.model.annotations.PropertyIdentifier;
+import org.openflexo.model.annotations.Setter;
+import org.openflexo.model.annotations.XMLAttribute;
+import org.openflexo.model.annotations.XMLElement;
 import org.openflexo.technologyadapter.diagram.TypedDiagramModelSlot;
 import org.openflexo.technologyadapter.diagram.fml.ConnectorPatternRole;
 import org.openflexo.technologyadapter.diagram.fml.GraphicalElementPatternRole;
@@ -50,239 +57,242 @@ import org.openflexo.technologyadapter.diagram.model.DiagramShape;
 @ModelEntity
 @ImplementationClass(GraphicalAction.GraphicalActionImpl.class)
 @XMLElement
-public interface GraphicalAction extends EditionAction<TypedDiagramModelSlot, DiagramElement<?>>{
+public interface GraphicalAction extends EditionAction<TypedDiagramModelSlot, DiagramElement<?>> {
 
-@PropertyIdentifier(type=DataBinding.class)
-public static final String SUBJECT_KEY = "subject";
-@PropertyIdentifier(type=DataBinding.class)
-public static final String VALUE_KEY = "value";
-@PropertyIdentifier(type=String.class)
-public static final String GRAPHICAL_FEATURE_NAME_KEY = "graphicalFeatureName";
+	@PropertyIdentifier(type = DataBinding.class)
+	public static final String SUBJECT_KEY = "subject";
+	@PropertyIdentifier(type = DataBinding.class)
+	public static final String VALUE_KEY = "value";
+	@PropertyIdentifier(type = String.class)
+	public static final String GRAPHICAL_FEATURE_NAME_KEY = "graphicalFeatureName";
 
-@Getter(value=SUBJECT_KEY)
-@XMLAttribute
-public DataBinding getSubject();
+	@Getter(value = SUBJECT_KEY)
+	@XMLAttribute
+	public DataBinding getSubject();
 
-@Setter(SUBJECT_KEY)
-public void setSubject(DataBinding subject);
+	@Setter(SUBJECT_KEY)
+	public void setSubject(DataBinding subject);
 
+	@Getter(value = VALUE_KEY)
+	@XMLAttribute
+	public DataBinding getValue();
 
-@Getter(value=VALUE_KEY)
-@XMLAttribute
-public DataBinding getValue();
+	@Setter(VALUE_KEY)
+	public void setValue(DataBinding value);
 
-@Setter(VALUE_KEY)
-public void setValue(DataBinding value);
+	@Getter(value = GRAPHICAL_FEATURE_NAME_KEY)
+	@XMLAttribute(xmlTag = "feature")
+	public String _getGraphicalFeatureName();
 
+	@Setter(GRAPHICAL_FEATURE_NAME_KEY)
+	public void _setGraphicalFeatureName(String graphicalFeatureName);
 
-@Getter(value=GRAPHICAL_FEATURE_NAME_KEY)
-@XMLAttribute(xmlTag="feature")
-public String _getGraphicalFeatureName();
+	public static abstract class GraphicalActionImpl extends EditionActionImpl<TypedDiagramModelSlot, DiagramElement<?>> implements
+			GraphicalAction {
 
-@Setter(GRAPHICAL_FEATURE_NAME_KEY)
-public void _setGraphicalFeatureName(String graphicalFeatureName);
+		private static final Logger logger = Logger.getLogger(GraphicalAction.class.getPackage().getName());
 
+		private GraphicalFeature<?, ?> graphicalFeature = null;
+		private DataBinding<Object> value;
 
-public static abstract  class GraphicalActionImpl extends EditionAction<TypedDiagramModelSlot, DiagramElement<?>>Impl implements GraphicalAction
-{
-
-	private static final Logger logger = Logger.getLogger(GraphicalAction.class.getPackage().getName());
-
-	private GraphicalFeature<?, ?> graphicalFeature = null;
-	private DataBinding<Object> value;
-
-	public GraphicalActionImpl() {
-		super();
-	}
-
-	public java.lang.reflect.Type getGraphicalFeatureType() {
-		if (getGraphicalFeature() != null) {
-			return getGraphicalFeature().getType();
+		public GraphicalActionImpl() {
+			super();
 		}
-		return Object.class;
-	}
 
-	public Object getValue(EditionSchemeAction action) {
-		try {
-			return getValue().getBindingValue(action);
-		} catch (TypeMismatchException e) {
-			e.printStackTrace();
-		} catch (NullReferenceException e) {
-			e.printStackTrace();
-		} catch (InvocationTargetException e) {
-			e.printStackTrace();
-		}
-		return null;
-	}
-
-	public DataBinding<Object> getValue() {
-		if (value == null) {
-			value = new DataBinding<Object>(this, getGraphicalFeatureType(), BindingDefinitionType.GET);
-			value.setBindingName("value");
-		}
-		return value;
-	}
-
-	public void setValue(DataBinding<Object> value) {
-		if (value != null) {
-			value.setOwner(this);
-			value.setBindingName("value");
-			value.setDeclaredType(getGraphicalFeatureType());
-			value.setBindingDefinitionType(BindingDefinitionType.GET);
-		}
-		this.value = value;
-	}
-
-	public GraphicalFeature getGraphicalFeature() {
-		if (graphicalFeature == null) {
-			if (_graphicalFeatureName != null) {
-				for (GraphicalFeature<?, ?> GF : getAvailableGraphicalFeatures()) {
-					if (GF.getName().equals(_graphicalFeatureName)) {
-						return GF;
-					}
-				}
+		public java.lang.reflect.Type getGraphicalFeatureType() {
+			if (getGraphicalFeature() != null) {
+				return getGraphicalFeature().getType();
 			}
+			return Object.class;
 		}
-		return graphicalFeature;
-	}
 
-	public void setGraphicalFeature(GraphicalFeature graphicalFeature) {
-		this.graphicalFeature = graphicalFeature;
-	}
-
-	private List<GraphicalFeature<?, ?>> availableFeatures = null;
-
-	/*@Override
-	public GraphicalElementPatternRole getPatternRole() {
-		try {
-			return super.getPatternRole();
-		} catch (ClassCastException e) {
-			logger.warning("Unexpected pattern role type");
-			setPatternRole(null);
+		public Object getValue(EditionSchemeAction action) {
+			try {
+				return getValue().getBindingValue(action);
+			} catch (TypeMismatchException e) {
+				e.printStackTrace();
+			} catch (NullReferenceException e) {
+				e.printStackTrace();
+			} catch (InvocationTargetException e) {
+				e.printStackTrace();
+			}
 			return null;
 		}
-	}
 
-	@Override
-	public void setPatternRole(GraphicalElementPatternRole patternRole) {
-		System.out.println("set pattern role with " + patternRole);
-		super.setPatternRole(patternRole);
-		availableFeatures = null;
-	}*/
+		@Override
+		public DataBinding<Object> getValue() {
+			if (value == null) {
+				value = new DataBinding<Object>(this, getGraphicalFeatureType(), BindingDefinitionType.GET);
+				value.setBindingName("value");
+			}
+			return value;
+		}
 
-	public List<GraphicalFeature<?, ?>> getAvailableGraphicalFeatures() {
-		if (availableFeatures == null) {
-			availableFeatures = new Vector<GraphicalFeature<?, ?>>();
-			if (getSubject().isSet() && getSubject().isValid()) {
-				Class accessedClass = TypeUtils.getBaseClass(getSubject().getAnalyzedType());
-				if (DiagramElement.class.isAssignableFrom(accessedClass)) {
-					for (GraphicalFeature<?, ?> GF : GraphicalElementPatternRole.AVAILABLE_FEATURES) {
-						availableFeatures.add(GF);
-					}
-					if (DiagramShape.class.isAssignableFrom(accessedClass)) {
-						for (GraphicalFeature<?, ?> GF : ShapePatternRole.AVAILABLE_FEATURES) {
-							availableFeatures.add(GF);
-						}
-					}
-					if (DiagramConnector.class.isAssignableFrom(accessedClass)) {
-						for (GraphicalFeature<?, ?> GF : ConnectorPatternRole.AVAILABLE_FEATURES) {
-							availableFeatures.add(GF);
+		public void setValue(DataBinding<Object> value) {
+			if (value != null) {
+				value.setOwner(this);
+				value.setBindingName("value");
+				value.setDeclaredType(getGraphicalFeatureType());
+				value.setBindingDefinitionType(BindingDefinitionType.GET);
+			}
+			this.value = value;
+		}
+
+		public GraphicalFeature getGraphicalFeature() {
+			if (graphicalFeature == null) {
+				if (_graphicalFeatureName != null) {
+					for (GraphicalFeature<?, ?> GF : getAvailableGraphicalFeatures()) {
+						if (GF.getName().equals(_graphicalFeatureName)) {
+							return GF;
 						}
 					}
 				}
 			}
+			return graphicalFeature;
 		}
-		return availableFeatures;
-	}
 
-	private String _graphicalFeatureName = null;
-
-	public String _getGraphicalFeatureName() {
-		if (getGraphicalFeature() == null) {
-			return _graphicalFeatureName;
+		public void setGraphicalFeature(GraphicalFeature graphicalFeature) {
+			this.graphicalFeature = graphicalFeature;
 		}
-		return getGraphicalFeature().getName();
-	}
 
-	public void _setGraphicalFeatureName(String featureName) {
-		_graphicalFeatureName = featureName;
-	}
+		private List<GraphicalFeature<?, ?>> availableFeatures = null;
 
-	private DataBinding<DiagramElement> subject;
-
-	public DataBinding<DiagramElement> getSubject() {
-		if (subject == null) {
-			subject = new DataBinding<DiagramElement>(this, DiagramElement.class, DataBinding.BindingDefinitionType.GET);
-			subject.setBindingName("subject");
+		/*@Override
+		public GraphicalElementPatternRole getPatternRole() {
+			try {
+				return super.getPatternRole();
+			} catch (ClassCastException e) {
+				logger.warning("Unexpected pattern role type");
+				setPatternRole(null);
+				return null;
+			}
 		}
-		return subject;
-	}
 
-	public void setSubject(DataBinding<DiagramElement> subject) {
-		if (subject != null) {
-			subject.setOwner(this);
-			subject.setBindingName("subject");
-			subject.setDeclaredType(DiagramElement.class);
-			subject.setBindingDefinitionType(BindingDefinitionType.GET);
-		}
-		this.subject = subject;
-	}
-
-	public DiagramElement getSubject(EditionSchemeAction action) {
-		try {
-			return getSubject().getBindingValue(action);
-		} catch (TypeMismatchException e) {
-			e.printStackTrace();
-		} catch (NullReferenceException e) {
-			e.printStackTrace();
-		} catch (InvocationTargetException e) {
-			e.printStackTrace();
-		}
-		return null;
-	}
-
-	@Override
-	public void notifiedBindingChanged(DataBinding<?> binding) {
-		super.notifiedBindingChanged(binding);
-		if (binding == getSubject()) {
+		@Override
+		public void setPatternRole(GraphicalElementPatternRole patternRole) {
+			System.out.println("set pattern role with " + patternRole);
+			super.setPatternRole(patternRole);
 			availableFeatures = null;
-		}
-	}
+		}*/
 
-	@Override
-	public String getStringRepresentation() {
-		return getClass().getSimpleName() + " (" + getSubject() + "." + _getGraphicalFeatureName() + "=" + getValue() + ")";
-	}
-
-	@Override
-	public DiagramElement performAction(EditionSchemeAction action) {
-		logger.info("Perform graphical action " + action);
-		DiagramElement graphicalElement = getSubject(action);
-		Object value = null;
-		try {
-			value = getValue().getBindingValue(action);
-		} catch (TypeMismatchException e) {
-			e.printStackTrace();
-		} catch (NullReferenceException e) {
-			e.printStackTrace();
-		} catch (InvocationTargetException e) {
-			e.printStackTrace();
+		public List<GraphicalFeature<?, ?>> getAvailableGraphicalFeatures() {
+			if (availableFeatures == null) {
+				availableFeatures = new Vector<GraphicalFeature<?, ?>>();
+				if (getSubject().isSet() && getSubject().isValid()) {
+					Class accessedClass = TypeUtils.getBaseClass(getSubject().getAnalyzedType());
+					if (DiagramElement.class.isAssignableFrom(accessedClass)) {
+						for (GraphicalFeature<?, ?> GF : GraphicalElementPatternRole.AVAILABLE_FEATURES) {
+							availableFeatures.add(GF);
+						}
+						if (DiagramShape.class.isAssignableFrom(accessedClass)) {
+							for (GraphicalFeature<?, ?> GF : ShapePatternRole.AVAILABLE_FEATURES) {
+								availableFeatures.add(GF);
+							}
+						}
+						if (DiagramConnector.class.isAssignableFrom(accessedClass)) {
+							for (GraphicalFeature<?, ?> GF : ConnectorPatternRole.AVAILABLE_FEATURES) {
+								availableFeatures.add(GF);
+							}
+						}
+					}
+				}
+			}
+			return availableFeatures;
 		}
-		if (logger.isLoggable(Level.FINE)) {
-			logger.fine("Element is " + graphicalElement);
-			logger.fine("Feature is " + getGraphicalFeature());
-			logger.fine("Value is " + value);
-		}
-		getGraphicalFeature().applyToGraphicalRepresentation(graphicalElement.getGraphicalRepresentation(), value);
-		return graphicalElement;
-	}
 
-	@Override
-	public void finalizePerformAction(EditionSchemeAction action, DiagramElement initialContext) {
+		private String _graphicalFeatureName = null;
+
+		@Override
+		public String _getGraphicalFeatureName() {
+			if (getGraphicalFeature() == null) {
+				return _graphicalFeatureName;
+			}
+			return getGraphicalFeature().getName();
+		}
+
+		@Override
+		public void _setGraphicalFeatureName(String featureName) {
+			_graphicalFeatureName = featureName;
+		}
+
+		private DataBinding<DiagramElement> subject;
+
+		@Override
+		public DataBinding<DiagramElement> getSubject() {
+			if (subject == null) {
+				subject = new DataBinding<DiagramElement>(this, DiagramElement.class, DataBinding.BindingDefinitionType.GET);
+				subject.setBindingName("subject");
+			}
+			return subject;
+		}
+
+		public void setSubject(DataBinding<DiagramElement> subject) {
+			if (subject != null) {
+				subject.setOwner(this);
+				subject.setBindingName("subject");
+				subject.setDeclaredType(DiagramElement.class);
+				subject.setBindingDefinitionType(BindingDefinitionType.GET);
+			}
+			this.subject = subject;
+		}
+
+		public DiagramElement getSubject(EditionSchemeAction action) {
+			try {
+				return getSubject().getBindingValue(action);
+			} catch (TypeMismatchException e) {
+				e.printStackTrace();
+			} catch (NullReferenceException e) {
+				e.printStackTrace();
+			} catch (InvocationTargetException e) {
+				e.printStackTrace();
+			}
+			return null;
+		}
+
+		@Override
+		public void notifiedBindingChanged(DataBinding<?> binding) {
+			super.notifiedBindingChanged(binding);
+			if (binding == getSubject()) {
+				availableFeatures = null;
+			}
+		}
+
+		@Override
+		public String getStringRepresentation() {
+			return getClass().getSimpleName() + " (" + getSubject() + "." + _getGraphicalFeatureName() + "=" + getValue() + ")";
+		}
+
+		@Override
+		public DiagramElement performAction(EditionSchemeAction action) {
+			logger.info("Perform graphical action " + action);
+			DiagramElement graphicalElement = getSubject(action);
+			Object value = null;
+			try {
+				value = getValue().getBindingValue(action);
+			} catch (TypeMismatchException e) {
+				e.printStackTrace();
+			} catch (NullReferenceException e) {
+				e.printStackTrace();
+			} catch (InvocationTargetException e) {
+				e.printStackTrace();
+			}
+			if (logger.isLoggable(Level.FINE)) {
+				logger.fine("Element is " + graphicalElement);
+				logger.fine("Feature is " + getGraphicalFeature());
+				logger.fine("Value is " + value);
+			}
+			getGraphicalFeature().applyToGraphicalRepresentation(graphicalElement.getGraphicalRepresentation(), value);
+			return graphicalElement;
+		}
+
+		@Override
+		public void finalizePerformAction(EditionSchemeAction action, DiagramElement initialContext) {
+		}
+
 	}
 
 	public static class GraphicalActionMustHaveASubject extends ValidationRule<GraphicalActionMustHaveASubject, GraphicalAction> {
-		public GraphicalActionImplMustHaveASubject() {
+		public GraphicalActionMustHaveASubject() {
 			super(GraphicalAction.class, "graphical_action_must_have_a_subject");
 		}
 
@@ -326,7 +336,7 @@ public static abstract  class GraphicalActionImpl extends EditionAction<TypedDia
 	}
 
 	public static class GraphicalActionMustDefineAValue extends BindingIsRequiredAndMustBeValid<GraphicalAction> {
-		public GraphicalActionImplMustDefineAValue() {
+		public GraphicalActionMustDefineAValue() {
 			super("'value'_binding_is_not_valid", GraphicalAction.class);
 		}
 
@@ -337,5 +347,4 @@ public static abstract  class GraphicalActionImpl extends EditionAction<TypedDia
 
 	}
 
-}
 }

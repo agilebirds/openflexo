@@ -22,6 +22,9 @@ package org.openflexo.technologyadapter.diagram.fml.editionaction;
 import java.util.logging.Logger;
 
 import org.openflexo.foundation.viewpoint.annotations.FIBPanel;
+import org.openflexo.model.annotations.ImplementationClass;
+import org.openflexo.model.annotations.ModelEntity;
+import org.openflexo.model.annotations.XMLElement;
 import org.openflexo.technologyadapter.diagram.model.action.LinkSchemeAction;
 
 /**
@@ -34,22 +37,20 @@ import org.openflexo.technologyadapter.diagram.model.action.LinkSchemeAction;
 @ModelEntity
 @ImplementationClass(CloneConnector.CloneConnectorImpl.class)
 @XMLElement
-public interface CloneConnector extends AddConnector{
+public interface CloneConnector extends AddConnector {
 
+	public static abstract class CloneConnectorImpl extends AddConnectorImpl implements CloneConnector {
 
-public static abstract  class CloneConnectorImpl extends AddConnectorImpl implements CloneConnector
-{
+		private static final Logger logger = Logger.getLogger(LinkSchemeAction.class.getPackage().getName());
 
-	private static final Logger logger = Logger.getLogger(LinkSchemeAction.class.getPackage().getName());
+		public CloneConnectorImpl() {
+			super();
+		}
 
-	public CloneConnectorImpl() {
-		super();
+		@Override
+		public String toString() {
+			return "CloneConnector " + Integer.toHexString(hashCode()) + " patternRole=" + getPatternRole();
+		}
+
 	}
-
-	@Override
-	public String toString() {
-		return "CloneConnector " + Integer.toHexString(hashCode()) + " patternRole=" + getPatternRole();
-	}
-
-}
 }

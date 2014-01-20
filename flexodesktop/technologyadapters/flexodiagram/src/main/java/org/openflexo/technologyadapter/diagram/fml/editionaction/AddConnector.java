@@ -42,6 +42,7 @@ import org.openflexo.foundation.viewpoint.FMLRepresentationContext;
 import org.openflexo.foundation.viewpoint.FMLRepresentationContext.FMLRepresentationOutput;
 import org.openflexo.foundation.viewpoint.PatternRole;
 import org.openflexo.foundation.viewpoint.annotations.FIBPanel;
+import org.openflexo.model.annotations.*;
 import org.openflexo.technologyadapter.diagram.fml.ConnectorPatternRole;
 import org.openflexo.technologyadapter.diagram.fml.DiagramEditionScheme;
 import org.openflexo.technologyadapter.diagram.fml.LinkScheme;
@@ -65,425 +66,427 @@ import org.openflexo.toolbox.StringUtils;
 @ModelEntity
 @ImplementationClass(AddConnector.AddConnectorImpl.class)
 @XMLElement
-public interface AddConnector extends AddDiagramElementAction<DiagramConnector>{
+public interface AddConnector extends AddDiagramElementAction<DiagramConnector> {
 
-@PropertyIdentifier(type=DataBinding.class)
-public static final String FROM_SHAPE_KEY = "fromShape";
-@PropertyIdentifier(type=DataBinding.class)
-public static final String TO_SHAPE_KEY = "toShape";
+	@PropertyIdentifier(type = DataBinding.class)
+	public static final String FROM_SHAPE_KEY = "fromShape";
+	@PropertyIdentifier(type = DataBinding.class)
+	public static final String TO_SHAPE_KEY = "toShape";
 
-@Getter(value=FROM_SHAPE_KEY)
-@XMLAttribute
-public DataBinding getFromShape();
+	@Getter(value = FROM_SHAPE_KEY)
+	@XMLAttribute
+	public DataBinding getFromShape();
 
-@Setter(FROM_SHAPE_KEY)
-public void setFromShape(DataBinding fromShape);
+	@Setter(FROM_SHAPE_KEY)
+	public void setFromShape(DataBinding fromShape);
 
+	@Getter(value = TO_SHAPE_KEY)
+	@XMLAttribute
+	public DataBinding getToShape();
 
-@Getter(value=TO_SHAPE_KEY)
-@XMLAttribute
-public DataBinding getToShape();
+	@Setter(TO_SHAPE_KEY)
+	public void setToShape(DataBinding toShape);
 
-@Setter(TO_SHAPE_KEY)
-public void setToShape(DataBinding toShape);
+	public static abstract class AddConnectorImpl extends AddDiagramElementActionImpl<DiagramConnector> implements AddConnector {
 
+		private static final Logger logger = Logger.getLogger(LinkSchemeAction.class.getPackage().getName());
 
-public static abstract  class AddConnectorImpl extends AddDiagramElementAction<DiagramConnector>Impl implements AddConnector
-{
-
-	private static final Logger logger = Logger.getLogger(LinkSchemeAction.class.getPackage().getName());
-
-	public AddConnectorImpl() {
-		super();
-	}
-
-	@Override
-	public String getFMLRepresentation(FMLRepresentationContext context) {
-		FMLRepresentationOutput out = new FMLRepresentationOutput(context);
-		if (getAssignation().isSet()) {
-			out.append(getAssignation().toString() + " = (", context);
-		}
-		out.append(getClass().getSimpleName() + " conformTo ConnectorSpecification from " + getModelSlot().getName() + " {"
-				+ StringUtils.LINE_SEPARATOR, context);
-		out.append(getGraphicalElementSpecificationFMLRepresentation(context), context);
-		out.append("}", context);
-		if (getAssignation().isSet()) {
-			out.append(")", context);
-		}
-		return out.toString();
-	}
-
-	/*@Override
-	public List<ConnectorPatternRole> getAvailablePatternRoles() {
-		if (getEditionPattern() != null) {
-			return getEditionPattern().getPatternRoles(ConnectorPatternRole.class);
-		}
-		return null;
-	}*/
-
-	@Override
-	public ConnectorPatternRole getPatternRole() {
-		PatternRole superPatternRole = super.getPatternRole();
-		if (superPatternRole instanceof ConnectorPatternRole) {
-			return (ConnectorPatternRole) superPatternRole;
-		} else if (superPatternRole != null) {
-			// logger.warning("Unexpected pattern role of type " + superPatternRole.getClass().getSimpleName());
-			return null;
-		}
-		return null;
-	}
-
-	public DiagramShape getFromShape(EditionSchemeAction action) {
-		if (getPatternRole() != null && !getPatternRole().getStartShapeAsDefinedInAction()) {
-			FlexoObject returned = action.getEditionPatternInstance().getPatternActor(getPatternRole().getStartShapePatternRole());
-			return action.getEditionPatternInstance().getPatternActor(getPatternRole().getStartShapePatternRole());
-		} else {
-			try {
-				return getFromShape().getBindingValue(action);
-			} catch (TypeMismatchException e) {
-				e.printStackTrace();
-			} catch (NullReferenceException e) {
-				e.printStackTrace();
-			} catch (InvocationTargetException e) {
-				e.printStackTrace();
-			}
-			return null;
-		}
-	}
-
-	public DiagramShape getToShape(EditionSchemeAction action) {
-		if (getPatternRole() != null && !getPatternRole().getEndShapeAsDefinedInAction()) {
-			return action.getEditionPatternInstance().getPatternActor(getPatternRole().getEndShapePatternRole());
-		} else {
-			try {
-				return getToShape().getBindingValue(action);
-			} catch (TypeMismatchException e) {
-				e.printStackTrace();
-			} catch (NullReferenceException e) {
-				e.printStackTrace();
-			} catch (InvocationTargetException e) {
-				e.printStackTrace();
-			}
-			return null;
-		}
-	}
-
-	@Override
-	public String toString() {
-		return "AddConnector " + Integer.toHexString(hashCode()) + " patternRole=" + getPatternRole();
-	}
-
-	/*@Override
-	public ConnectorPatternRole getPatternRole() {
-		try {
-			return super.getPatternRole();
-		} catch (ClassCastException e) {
-			logger.warning("Unexpected pattern role type");
-			setPatternRole(null);
-			return null;
-		}
-	}*/
-
-	// FIXME: if we remove this useless code, some FIB won't work (see EditionPatternView.fib, inspect an AddIndividual)
-	// Need to be fixed in KeyValueProperty.java
-	/*@Override
-	public void setPatternRole(ConnectorPatternRole patternRole) {
-		super.setPatternRole(patternRole);
-	}*/
-
-	private DataBinding<DiagramShape> fromShape;
-	private DataBinding<DiagramShape> toShape;
-
-	public DataBinding<DiagramShape> getFromShape() {
-		if (fromShape == null) {
-			fromShape = new DataBinding<DiagramShape>(this, DiagramShape.class, BindingDefinitionType.GET);
-			fromShape.setBindingName("fromShape");
-		}
-		return fromShape;
-	}
-
-	public void setFromShape(DataBinding<DiagramShape> fromShape) {
-		if (fromShape != null) {
-			fromShape.setOwner(this);
-			fromShape.setBindingName("fromShape");
-			fromShape.setDeclaredType(DiagramShape.class);
-			fromShape.setBindingDefinitionType(BindingDefinitionType.GET);
-		}
-		this.fromShape = fromShape;
-		notifiedBindingChanged(this.fromShape);
-	}
-
-	public DataBinding<DiagramShape> getToShape() {
-		if (toShape == null) {
-			toShape = new DataBinding<DiagramShape>(this, DiagramShape.class, BindingDefinitionType.GET);
-			toShape.setBindingName("toShape");
-		}
-		return toShape;
-	}
-
-	public void setToShape(DataBinding<DiagramShape> toShape) {
-		if (toShape != null) {
-			toShape.setOwner(this);
-			toShape.setBindingName("toShape");
-			toShape.setDeclaredType(DiagramShape.class);
-			toShape.setBindingDefinitionType(BindingDefinitionType.GET);
-		}
-		this.toShape = toShape;
-		notifiedBindingChanged(this.toShape);
-	}
-
-	@Override
-	public Type getAssignableType() {
-		return DiagramConnector.class;
-	}
-
-	@Override
-	public boolean isAssignationRequired() {
-		return true;
-	}
-
-	@Override
-	public DiagramConnector performAction(EditionSchemeAction action) {
-
-		DiagramShape fromShape = getFromShape(action);
-		DiagramShape toShape = getToShape(action);
-		Diagram diagram = fromShape.getDiagram();
-		DiagramFactory factory = diagram.getDiagramFactory();
-		DiagramConnector newConnector = factory.newInstance(DiagramConnector.class);
-		newConnector.setStartShape(fromShape);
-		newConnector.setEndShape(toShape);
-		DiagramContainerElement<?> parent = DiagramElementImpl.getFirstCommonAncestor(fromShape, toShape);
-		if (parent == null) {
-			throw new IllegalArgumentException("No common ancestor");
-		}
-
-		GraphicalRepresentation grToUse = null;
-
-		// If an overriden graphical representation is defined, use it
-		/*if (action.getOverridingGraphicalRepresentation(getPatternRole()) != null) {
-			grToUse = action.getOverridingGraphicalRepresentation(getPatternRole());
-		} else*/if (getPatternRole().getGraphicalRepresentation() != null) {
-			grToUse = getPatternRole().getGraphicalRepresentation();
-		}
-
-		ConnectorGraphicalRepresentation newGR = factory.makeConnectorGraphicalRepresentation();
-		newGR.setsWith(grToUse);
-		newConnector.setGraphicalRepresentation(newGR);
-
-		parent.addToConnectors(newConnector);
-
-		// Register reference
-		newConnector.registerEditionPatternReference(action.getEditionPatternInstance());
-
-		if (logger.isLoggable(Level.FINE)) {
-			logger.fine("Added connector " + newConnector + " under " + parent);
-		}
-		return newConnector;
-	}
-
-	@Override
-	public void finalizePerformAction(EditionSchemeAction action, DiagramConnector newConnector) {
-		super.finalizePerformAction(action, newConnector);
-		// Be sure that the newly created connector is updated
-		// newConnector.update();
-	}
-
-	public static class AddConnectorActionMustAdressAValidConnectorPatternRole extends
-			ValidationRule<AddConnectorActionMustAdressAValidConnectorPatternRole, AddConnector> {
-		public AddConnectorImplActionMustAdressAValidConnectorPatternRole() {
-			super(AddConnector.class, "add_connector_action_must_address_a_valid_connector_pattern_role");
+		public AddConnectorImpl() {
+			super();
 		}
 
 		@Override
-		public ValidationIssue<AddConnectorActionMustAdressAValidConnectorPatternRole, AddConnector> applyValidation(AddConnector action) {
-			if (action.getPatternRole() == null) {
-				Vector<FixProposal<AddConnectorActionMustAdressAValidConnectorPatternRole, AddConnector>> v = new Vector<FixProposal<AddConnectorActionMustAdressAValidConnectorPatternRole, AddConnector>>();
-				for (ConnectorPatternRole pr : action.getEditionPattern().getPatternRoles(ConnectorPatternRole.class)) {
-					v.add(new SetsPatternRole(pr));
-				}
-				return new ValidationError<AddConnectorActionMustAdressAValidConnectorPatternRole, AddConnector>(this, action,
-						"add_connector_action_does_not_address_a_valid_connector_pattern_role", v);
+		public String getFMLRepresentation(FMLRepresentationContext context) {
+			FMLRepresentationOutput out = new FMLRepresentationOutput(context);
+			if (getAssignation().isSet()) {
+				out.append(getAssignation().toString() + " = (", context);
+			}
+			out.append(getClass().getSimpleName() + " conformTo ConnectorSpecification from " + getModelSlot().getName() + " {"
+					+ StringUtils.LINE_SEPARATOR, context);
+			out.append(getGraphicalElementSpecificationFMLRepresentation(context), context);
+			out.append("}", context);
+			if (getAssignation().isSet()) {
+				out.append(")", context);
+			}
+			return out.toString();
+		}
+
+		/*@Override
+		public List<ConnectorPatternRole> getAvailablePatternRoles() {
+			if (getEditionPattern() != null) {
+				return getEditionPattern().getPatternRoles(ConnectorPatternRole.class);
+			}
+			return null;
+		}*/
+
+		@Override
+		public ConnectorPatternRole getPatternRole() {
+			PatternRole superPatternRole = super.getPatternRole();
+			if (superPatternRole instanceof ConnectorPatternRole) {
+				return (ConnectorPatternRole) superPatternRole;
+			} else if (superPatternRole != null) {
+				// logger.warning("Unexpected pattern role of type " + superPatternRole.getClass().getSimpleName());
+				return null;
 			}
 			return null;
 		}
 
-		protected static class SetsPatternRole extends FixProposal<AddConnectorActionMustAdressAValidConnectorPatternRole, AddConnector> {
+		public DiagramShape getFromShape(EditionSchemeAction action) {
+			if (getPatternRole() != null && !getPatternRole().getStartShapeAsDefinedInAction()) {
+				FlexoObject returned = action.getEditionPatternInstance().getPatternActor(getPatternRole().getStartShapePatternRole());
+				return action.getEditionPatternInstance().getPatternActor(getPatternRole().getStartShapePatternRole());
+			} else {
+				try {
+					return getFromShape().getBindingValue(action);
+				} catch (TypeMismatchException e) {
+					e.printStackTrace();
+				} catch (NullReferenceException e) {
+					e.printStackTrace();
+				} catch (InvocationTargetException e) {
+					e.printStackTrace();
+				}
+				return null;
+			}
+		}
 
-			private final ConnectorPatternRole patternRole;
+		public DiagramShape getToShape(EditionSchemeAction action) {
+			if (getPatternRole() != null && !getPatternRole().getEndShapeAsDefinedInAction()) {
+				return action.getEditionPatternInstance().getPatternActor(getPatternRole().getEndShapePatternRole());
+			} else {
+				try {
+					return getToShape().getBindingValue(action);
+				} catch (TypeMismatchException e) {
+					e.printStackTrace();
+				} catch (NullReferenceException e) {
+					e.printStackTrace();
+				} catch (InvocationTargetException e) {
+					e.printStackTrace();
+				}
+				return null;
+			}
+		}
 
-			public SetsPatternRole(ConnectorPatternRole patternRole) {
-				super("assign_action_to_pattern_role_($patternRole.patternRoleName)");
-				this.patternRole = patternRole;
+		@Override
+		public String toString() {
+			return "AddConnector " + Integer.toHexString(hashCode()) + " patternRole=" + getPatternRole();
+		}
+
+		/*@Override
+		public ConnectorPatternRole getPatternRole() {
+			try {
+				return super.getPatternRole();
+			} catch (ClassCastException e) {
+				logger.warning("Unexpected pattern role type");
+				setPatternRole(null);
+				return null;
+			}
+		}*/
+
+		// FIXME: if we remove this useless code, some FIB won't work (see EditionPatternView.fib, inspect an AddIndividual)
+		// Need to be fixed in KeyValueProperty.java
+		/*@Override
+		public void setPatternRole(ConnectorPatternRole patternRole) {
+			super.setPatternRole(patternRole);
+		}*/
+
+		private DataBinding<DiagramShape> fromShape;
+		private DataBinding<DiagramShape> toShape;
+
+		@Override
+		public DataBinding<DiagramShape> getFromShape() {
+			if (fromShape == null) {
+				fromShape = new DataBinding<DiagramShape>(this, DiagramShape.class, BindingDefinitionType.GET);
+				fromShape.setBindingName("fromShape");
+			}
+			return fromShape;
+		}
+
+		public void setFromShape(DataBinding<DiagramShape> fromShape) {
+			if (fromShape != null) {
+				fromShape.setOwner(this);
+				fromShape.setBindingName("fromShape");
+				fromShape.setDeclaredType(DiagramShape.class);
+				fromShape.setBindingDefinitionType(BindingDefinitionType.GET);
+			}
+			this.fromShape = fromShape;
+			notifiedBindingChanged(this.fromShape);
+		}
+
+		@Override
+		public DataBinding<DiagramShape> getToShape() {
+			if (toShape == null) {
+				toShape = new DataBinding<DiagramShape>(this, DiagramShape.class, BindingDefinitionType.GET);
+				toShape.setBindingName("toShape");
+			}
+			return toShape;
+		}
+
+		public void setToShape(DataBinding<DiagramShape> toShape) {
+			if (toShape != null) {
+				toShape.setOwner(this);
+				toShape.setBindingName("toShape");
+				toShape.setDeclaredType(DiagramShape.class);
+				toShape.setBindingDefinitionType(BindingDefinitionType.GET);
+			}
+			this.toShape = toShape;
+			notifiedBindingChanged(this.toShape);
+		}
+
+		@Override
+		public Type getAssignableType() {
+			return DiagramConnector.class;
+		}
+
+		@Override
+		public boolean isAssignationRequired() {
+			return true;
+		}
+
+		@Override
+		public DiagramConnector performAction(EditionSchemeAction action) {
+
+			DiagramShape fromShape = getFromShape(action);
+			DiagramShape toShape = getToShape(action);
+			Diagram diagram = fromShape.getDiagram();
+			DiagramFactory factory = diagram.getDiagramFactory();
+			DiagramConnector newConnector = factory.newInstance(DiagramConnector.class);
+			newConnector.setStartShape(fromShape);
+			newConnector.setEndShape(toShape);
+			DiagramContainerElement<?> parent = DiagramElementImpl.getFirstCommonAncestor(fromShape, toShape);
+			if (parent == null) {
+				throw new IllegalArgumentException("No common ancestor");
 			}
 
-			public ConnectorPatternRole getPatternRole() {
-				return patternRole;
+			GraphicalRepresentation grToUse = null;
+
+			// If an overriden graphical representation is defined, use it
+			/*if (action.getOverridingGraphicalRepresentation(getPatternRole()) != null) {
+				grToUse = action.getOverridingGraphicalRepresentation(getPatternRole());
+			} else*/if (getPatternRole().getGraphicalRepresentation() != null) {
+				grToUse = getPatternRole().getGraphicalRepresentation();
+			}
+
+			ConnectorGraphicalRepresentation newGR = factory.makeConnectorGraphicalRepresentation();
+			newGR.setsWith(grToUse);
+			newConnector.setGraphicalRepresentation(newGR);
+
+			parent.addToConnectors(newConnector);
+
+			// Register reference
+			newConnector.registerEditionPatternReference(action.getEditionPatternInstance());
+
+			if (logger.isLoggable(Level.FINE)) {
+				logger.fine("Added connector " + newConnector + " under " + parent);
+			}
+			return newConnector;
+		}
+
+		@Override
+		public void finalizePerformAction(EditionSchemeAction action, DiagramConnector newConnector) {
+			super.finalizePerformAction(action, newConnector);
+			// Be sure that the newly created connector is updated
+			// newConnector.update();
+		}
+
+		public static class AddConnectorActionMustAdressAValidConnectorPatternRole extends
+				ValidationRule<AddConnectorActionMustAdressAValidConnectorPatternRole, AddConnector> {
+			public AddConnectorImplActionMustAdressAValidConnectorPatternRole() {
+				super(AddConnector.class, "add_connector_action_must_address_a_valid_connector_pattern_role");
 			}
 
 			@Override
-			protected void fixAction() {
-				AddConnector action = getObject();
-				action.setAssignation(new DataBinding<Object>(patternRole.getPatternRoleName()));
+			public ValidationIssue<AddConnectorActionMustAdressAValidConnectorPatternRole, AddConnector> applyValidation(AddConnector action) {
+				if (action.getPatternRole() == null) {
+					Vector<FixProposal<AddConnectorActionMustAdressAValidConnectorPatternRole, AddConnector>> v = new Vector<FixProposal<AddConnectorActionMustAdressAValidConnectorPatternRole, AddConnector>>();
+					for (ConnectorPatternRole pr : action.getEditionPattern().getPatternRoles(ConnectorPatternRole.class)) {
+						v.add(new SetsPatternRole(pr));
+					}
+					return new ValidationError<AddConnectorActionMustAdressAValidConnectorPatternRole, AddConnector>(this, action,
+							"add_connector_action_does_not_address_a_valid_connector_pattern_role", v);
+				}
+				return null;
 			}
 
-		}
-	}
+			protected static class SetsPatternRole extends
+					FixProposal<AddConnectorActionMustAdressAValidConnectorPatternRole, AddConnector> {
 
-	public static class AddConnectorActionMustHaveAValidStartingShape extends
-			ValidationRule<AddConnectorActionMustHaveAValidStartingShape, AddConnector> {
-		public AddConnectorImplActionMustHaveAValidStartingShape() {
-			super(AddConnector.class, "add_connector_action_must_have_a_valid_starting_shape");
+				private final ConnectorPatternRole patternRole;
+
+				public SetsPatternRole(ConnectorPatternRole patternRole) {
+					super("assign_action_to_pattern_role_($patternRole.patternRoleName)");
+					this.patternRole = patternRole;
+				}
+
+				public ConnectorPatternRole getPatternRole() {
+					return patternRole;
+				}
+
+				@Override
+				protected void fixAction() {
+					AddConnector action = getObject();
+					action.setAssignation(new DataBinding<Object>(patternRole.getPatternRoleName()));
+				}
+
+			}
 		}
 
-		@Override
-		public ValidationIssue<AddConnectorActionMustHaveAValidStartingShape, AddConnector> applyValidation(AddConnector action) {
-			ConnectorPatternRole pr = action.getPatternRole();
-			DataBinding<DiagramShape> db = action.getFromShape();
-			if (pr != null && pr.getStartShapeAsDefinedInAction() && !(db.isSet() && db.isValid())) {
-				Vector<FixProposal<AddConnectorActionMustHaveAValidStartingShape, AddConnector>> v = new Vector<FixProposal<AddConnectorActionMustHaveAValidStartingShape, AddConnector>>();
-				if (action.getEditionScheme() instanceof LinkScheme) {
-					EditionPattern targetEditionPattern = ((LinkScheme) action.getEditionScheme()).getFromTargetEditionPattern();
-					if (targetEditionPattern != null) {
-						for (ShapePatternRole spr : action.getEditionPattern().getPatternRoles(ShapePatternRole.class)) {
-							v.add(new SetsStartingShapeToStartTargetShape(targetEditionPattern, spr));
+		public static class AddConnectorActionMustHaveAValidStartingShape extends
+				ValidationRule<AddConnectorActionMustHaveAValidStartingShape, AddConnector> {
+			public AddConnectorImplActionMustHaveAValidStartingShape() {
+				super(AddConnector.class, "add_connector_action_must_have_a_valid_starting_shape");
+			}
+
+			@Override
+			public ValidationIssue<AddConnectorActionMustHaveAValidStartingShape, AddConnector> applyValidation(AddConnector action) {
+				ConnectorPatternRole pr = action.getPatternRole();
+				DataBinding<DiagramShape> db = action.getFromShape();
+				if (pr != null && pr.getStartShapeAsDefinedInAction() && !(db.isSet() && db.isValid())) {
+					Vector<FixProposal<AddConnectorActionMustHaveAValidStartingShape, AddConnector>> v = new Vector<FixProposal<AddConnectorActionMustHaveAValidStartingShape, AddConnector>>();
+					if (action.getEditionScheme() instanceof LinkScheme) {
+						EditionPattern targetEditionPattern = ((LinkScheme) action.getEditionScheme()).getFromTargetEditionPattern();
+						if (targetEditionPattern != null) {
+							for (ShapePatternRole spr : action.getEditionPattern().getPatternRoles(ShapePatternRole.class)) {
+								v.add(new SetsStartingShapeToStartTargetShape(targetEditionPattern, spr));
+							}
 						}
 					}
+					for (ShapePatternRole spr : action.getEditionPattern().getPatternRoles(ShapePatternRole.class)) {
+						v.add(new SetsStartingShapeToShape(spr));
+					}
+					return new ValidationError<AddConnectorActionMustHaveAValidStartingShape, AddConnector>(this, action,
+							"add_connector_action_does_not_have_a_valid_starting_shape", v);
 				}
-				for (ShapePatternRole spr : action.getEditionPattern().getPatternRoles(ShapePatternRole.class)) {
-					v.add(new SetsStartingShapeToShape(spr));
-				}
-				return new ValidationError<AddConnectorActionMustHaveAValidStartingShape, AddConnector>(this, action,
-						"add_connector_action_does_not_have_a_valid_starting_shape", v);
+				return null;
 			}
-			return null;
+
+			protected static class SetsStartingShapeToShape extends
+					FixProposal<AddConnectorActionMustHaveAValidStartingShape, AddConnector> {
+
+				private final ShapePatternRole patternRole;
+
+				public SetsStartingShapeToShape(ShapePatternRole patternRole) {
+					super("sets_starting_shape_to_($patternRole.patternRoleName)");
+					this.patternRole = patternRole;
+				}
+
+				public ShapePatternRole getPatternRole() {
+					return patternRole;
+				}
+
+				@Override
+				protected void fixAction() {
+					AddConnector action = getObject();
+					action.setFromShape(new DataBinding<DiagramShape>(patternRole.getPatternRoleName()));
+				}
+			}
+
+			protected static class SetsStartingShapeToStartTargetShape extends
+					FixProposal<AddConnectorActionMustHaveAValidStartingShape, AddConnector> {
+
+				private final EditionPattern target;
+				private final ShapePatternRole patternRole;
+
+				public SetsStartingShapeToStartTargetShape(EditionPattern target, ShapePatternRole patternRole) {
+					super("sets_starting_shape_to_fromTarget.($patternRole.patternRoleName)");
+					this.target = target;
+					this.patternRole = patternRole;
+				}
+
+				public ShapePatternRole getPatternRole() {
+					return patternRole;
+				}
+
+				public EditionPattern getTarget() {
+					return target;
+				}
+
+				@Override
+				protected void fixAction() {
+					AddConnector action = getObject();
+					action.setFromShape(new DataBinding<DiagramShape>(DiagramEditionScheme.FROM_TARGET + "."
+							+ patternRole.getPatternRoleName()));
+				}
+			}
+
 		}
 
-		protected static class SetsStartingShapeToShape extends FixProposal<AddConnectorActionMustHaveAValidStartingShape, AddConnector> {
-
-			private final ShapePatternRole patternRole;
-
-			public SetsStartingShapeToShape(ShapePatternRole patternRole) {
-				super("sets_starting_shape_to_($patternRole.patternRoleName)");
-				this.patternRole = patternRole;
-			}
-
-			public ShapePatternRole getPatternRole() {
-				return patternRole;
+		public static class AddConnectorActionMustHaveAValidEndingShape extends
+				ValidationRule<AddConnectorActionMustHaveAValidEndingShape, AddConnector> {
+			public AddConnectorImplActionMustHaveAValidEndingShape() {
+				super(AddConnector.class, "add_connector_action_must_have_a_valid_ending_shape");
 			}
 
 			@Override
-			protected void fixAction() {
-				AddConnector action = getObject();
-				action.setFromShape(new DataBinding<DiagramShape>(patternRole.getPatternRoleName()));
-			}
-		}
-
-		protected static class SetsStartingShapeToStartTargetShape extends
-				FixProposal<AddConnectorActionMustHaveAValidStartingShape, AddConnector> {
-
-			private final EditionPattern target;
-			private final ShapePatternRole patternRole;
-
-			public SetsStartingShapeToStartTargetShape(EditionPattern target, ShapePatternRole patternRole) {
-				super("sets_starting_shape_to_fromTarget.($patternRole.patternRoleName)");
-				this.target = target;
-				this.patternRole = patternRole;
-			}
-
-			public ShapePatternRole getPatternRole() {
-				return patternRole;
-			}
-
-			public EditionPattern getTarget() {
-				return target;
-			}
-
-			@Override
-			protected void fixAction() {
-				AddConnector action = getObject();
-				action.setFromShape(new DataBinding<DiagramShape>(DiagramEditionScheme.FROM_TARGET + "." + patternRole.getPatternRoleName()));
-			}
-		}
-
-	}
-
-	public static class AddConnectorActionMustHaveAValidEndingShape extends
-			ValidationRule<AddConnectorActionMustHaveAValidEndingShape, AddConnector> {
-		public AddConnectorImplActionMustHaveAValidEndingShape() {
-			super(AddConnector.class, "add_connector_action_must_have_a_valid_ending_shape");
-		}
-
-		@Override
-		public ValidationIssue<AddConnectorActionMustHaveAValidEndingShape, AddConnector> applyValidation(AddConnector action) {
-			ConnectorPatternRole pr = action.getPatternRole();
-			DataBinding<DiagramShape> shape = action.getToShape();
-			if (pr != null && pr.getEndShapeAsDefinedInAction() && !(shape.isSet() && shape.isValid())) {
-				Vector<FixProposal<AddConnectorActionMustHaveAValidEndingShape, AddConnector>> v = new Vector<FixProposal<AddConnectorActionMustHaveAValidEndingShape, AddConnector>>();
-				if (action.getEditionScheme() instanceof LinkScheme) {
-					EditionPattern targetEditionPattern = ((LinkScheme) action.getEditionScheme()).getToTargetEditionPattern();
-					if (targetEditionPattern != null) {
-						for (ShapePatternRole spr : action.getEditionPattern().getPatternRoles(ShapePatternRole.class)) {
-							v.add(new SetsEndingShapeToToTargetShape(targetEditionPattern, spr));
+			public ValidationIssue<AddConnectorActionMustHaveAValidEndingShape, AddConnector> applyValidation(AddConnector action) {
+				ConnectorPatternRole pr = action.getPatternRole();
+				DataBinding<DiagramShape> shape = action.getToShape();
+				if (pr != null && pr.getEndShapeAsDefinedInAction() && !(shape.isSet() && shape.isValid())) {
+					Vector<FixProposal<AddConnectorActionMustHaveAValidEndingShape, AddConnector>> v = new Vector<FixProposal<AddConnectorActionMustHaveAValidEndingShape, AddConnector>>();
+					if (action.getEditionScheme() instanceof LinkScheme) {
+						EditionPattern targetEditionPattern = ((LinkScheme) action.getEditionScheme()).getToTargetEditionPattern();
+						if (targetEditionPattern != null) {
+							for (ShapePatternRole spr : action.getEditionPattern().getPatternRoles(ShapePatternRole.class)) {
+								v.add(new SetsEndingShapeToToTargetShape(targetEditionPattern, spr));
+							}
 						}
 					}
+					for (ShapePatternRole spr : action.getEditionPattern().getPatternRoles(ShapePatternRole.class)) {
+						v.add(new SetsEndingShapeToShape(spr));
+					}
+					return new ValidationError<AddConnectorActionMustHaveAValidEndingShape, AddConnector>(this, action,
+							"add_connector_action_does_not_have_a_valid_ending_shape", v);
 				}
-				for (ShapePatternRole spr : action.getEditionPattern().getPatternRoles(ShapePatternRole.class)) {
-					v.add(new SetsEndingShapeToShape(spr));
+				return null;
+			}
+
+			protected static class SetsEndingShapeToShape extends FixProposal<AddConnectorActionMustHaveAValidEndingShape, AddConnector> {
+
+				private final ShapePatternRole patternRole;
+
+				public SetsEndingShapeToShape(ShapePatternRole patternRole) {
+					super("sets_ending_shape_to_($patternRole.patternRoleName)");
+					this.patternRole = patternRole;
 				}
-				return new ValidationError<AddConnectorActionMustHaveAValidEndingShape, AddConnector>(this, action,
-						"add_connector_action_does_not_have_a_valid_ending_shape", v);
-			}
-			return null;
-		}
 
-		protected static class SetsEndingShapeToShape extends FixProposal<AddConnectorActionMustHaveAValidEndingShape, AddConnector> {
+				public ShapePatternRole getPatternRole() {
+					return patternRole;
+				}
 
-			private final ShapePatternRole patternRole;
-
-			public SetsEndingShapeToShape(ShapePatternRole patternRole) {
-				super("sets_ending_shape_to_($patternRole.patternRoleName)");
-				this.patternRole = patternRole;
+				@Override
+				protected void fixAction() {
+					AddConnector action = getObject();
+					action.setToShape(new DataBinding<DiagramShape>(patternRole.getPatternRoleName()));
+				}
 			}
 
-			public ShapePatternRole getPatternRole() {
-				return patternRole;
+			protected static class SetsEndingShapeToToTargetShape extends
+					FixProposal<AddConnectorActionMustHaveAValidEndingShape, AddConnector> {
+
+				private final EditionPattern target;
+				private final ShapePatternRole patternRole;
+
+				public SetsEndingShapeToToTargetShape(EditionPattern target, ShapePatternRole patternRole) {
+					super("sets_ending_shape_to_toTarget.($patternRole.patternRoleName)");
+					this.target = target;
+					this.patternRole = patternRole;
+				}
+
+				public ShapePatternRole getPatternRole() {
+					return patternRole;
+				}
+
+				public EditionPattern getTarget() {
+					return target;
+				}
+
+				@Override
+				protected void fixAction() {
+					AddConnector action = getObject();
+					action.setToShape(new DataBinding<DiagramShape>(DiagramEditionScheme.TO_TARGET + "." + patternRole.getPatternRoleName()));
+				}
 			}
 
-			@Override
-			protected void fixAction() {
-				AddConnector action = getObject();
-				action.setToShape(new DataBinding<DiagramShape>(patternRole.getPatternRoleName()));
-			}
-		}
-
-		protected static class SetsEndingShapeToToTargetShape extends
-				FixProposal<AddConnectorActionMustHaveAValidEndingShape, AddConnector> {
-
-			private final EditionPattern target;
-			private final ShapePatternRole patternRole;
-
-			public SetsEndingShapeToToTargetShape(EditionPattern target, ShapePatternRole patternRole) {
-				super("sets_ending_shape_to_toTarget.($patternRole.patternRoleName)");
-				this.target = target;
-				this.patternRole = patternRole;
-			}
-
-			public ShapePatternRole getPatternRole() {
-				return patternRole;
-			}
-
-			public EditionPattern getTarget() {
-				return target;
-			}
-
-			@Override
-			protected void fixAction() {
-				AddConnector action = getObject();
-				action.setToShape(new DataBinding<DiagramShape>(DiagramEditionScheme.TO_TARGET + "." + patternRole.getPatternRoleName()));
-			}
 		}
 
 	}
-
-}
 }

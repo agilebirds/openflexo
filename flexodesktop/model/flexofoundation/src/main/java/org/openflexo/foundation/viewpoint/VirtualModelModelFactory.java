@@ -227,14 +227,6 @@ public class VirtualModelModelFactory extends ModelFactory {
 		return returned;
 	}
 
-	public VirtualModelModelSlot newVirtualModelModelSlot(VirtualModel virtualModel,
-			VirtualModelTechnologyAdapter virtualModelTechnologyAdapter) {
-		VirtualModelModelSlot returned = newInstance(VirtualModelModelSlot.class);
-		returned.setTechnologyAdapter(virtualModelTechnologyAdapter);
-		returned.setAddressedVirtualModel(virtualModel);
-		return returned;
-	}
-
 	public EditionPatternInstancePatternRole newEditionPatternInstancePatternRole() {
 		return newInstance(EditionPatternInstancePatternRole.class);
 	}
