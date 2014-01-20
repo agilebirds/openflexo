@@ -24,46 +24,39 @@ import java.lang.reflect.Type;
 import org.openflexo.foundation.view.ActorReference;
 import org.openflexo.foundation.view.EditionPatternInstance;
 import org.openflexo.foundation.viewpoint.PatternRole;
+import org.openflexo.model.annotations.ImplementationClass;
+import org.openflexo.model.annotations.ModelEntity;
+import org.openflexo.model.annotations.XMLElement;
 import org.openflexo.technologyadapter.excel.model.ExcelColumn;
 
-public class ExcelColumnPatternRole extends PatternRole<ExcelColumn> {
+@ModelEntity
+@ImplementationClass(ExcelColumnPatternRole.ExcelColumnPatternRoleImpl.class)
+@XMLElement
+public interface ExcelColumnPatternRole extends PatternRole<ExcelColumn> {
 
-	public ExcelColumnPatternRole() {
-		super();
-		// TODO Auto-generated constructor stub
-	}
+	public abstract static class ExcelColumnPatternRoleImpl extends PatternRoleImpl<ExcelColumn> implements ExcelColumnPatternRole {
 
-	@Override
-	public Type getType() {
-		return ExcelColumn.class;
-	}
+		@Override
+		public Type getType() {
+			return ExcelColumn.class;
+		}
 
-	@Override
-	public String getPreciseType() {
-		return ExcelColumn.class.getSimpleName();
-	}
+		@Override
+		public String getPreciseType() {
+			return ExcelColumn.class.getSimpleName();
+		}
 
-	/*@Override
-	public boolean getIsPrimaryRole() {
-		// TODO Auto-generated method stub
-		return false;
-	}
+		@Override
+		public boolean defaultBehaviourIsToBeDeleted() {
+			// TODO Auto-generated method stub
+			return false;
+		}
 
-	@Override
-	public void setIsPrimaryRole(boolean isPrimary) {
-		// TODO Auto-generated method stub
+		@Override
+		public ActorReference<ExcelColumn> makeActorReference(ExcelColumn object, EditionPatternInstance epi) {
+			return new ExcelActorReference(object, this, epi);
+		}
 
-	}*/
-
-	@Override
-	public boolean defaultBehaviourIsToBeDeleted() {
-		// TODO Auto-generated method stub
-		return false;
-	}
-
-	@Override
-	public ActorReference<ExcelColumn> makeActorReference(ExcelColumn object, EditionPatternInstance epi) {
-		return new ExcelActorReference(object, this, epi);
 	}
 
 }

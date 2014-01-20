@@ -5,27 +5,33 @@ import java.lang.reflect.Type;
 import org.openflexo.foundation.view.action.EditionSchemeAction;
 import org.openflexo.foundation.viewpoint.AssignableAction;
 import org.openflexo.foundation.viewpoint.annotations.FIBPanel;
+import org.openflexo.model.annotations.ImplementationClass;
+import org.openflexo.model.annotations.ModelEntity;
+import org.openflexo.model.annotations.XMLElement;
 import org.openflexo.technologyadapter.excel.SemanticsExcelModelSlot;
 import org.openflexo.technologyadapter.excel.model.semantics.BusinessConceptInstance;
 
 @FIBPanel("Fib/AddBusinessConceptInstancePanel.fib")
-public class AddBusinessConceptInstance extends AssignableAction<SemanticsExcelModelSlot, BusinessConceptInstance> {
+@ModelEntity
+@ImplementationClass(AddBusinessConceptInstance.AddBusinessConceptInstanceImpl.class)
+@XMLElement
+public interface AddBusinessConceptInstance extends AssignableAction<SemanticsExcelModelSlot, BusinessConceptInstance> {
 
-	public AddBusinessConceptInstance() {
-		super();
-		// TODO Auto-generated constructor stub
-	}
+	public static abstract class AddBusinessConceptInstanceImpl extends
+			AssignableActionImpl<SemanticsExcelModelSlot, BusinessConceptInstance> implements AddBusinessConceptInstance {
 
-	@Override
-	public Type getAssignableType() {
-		// TODO Auto-generated method stub
-		return null;
-	}
+		@Override
+		public Type getAssignableType() {
+			// TODO Auto-generated method stub
+			return null;
+		}
 
-	@Override
-	public BusinessConceptInstance performAction(EditionSchemeAction action) {
-		// TODO Auto-generated method stub
-		return null;
+		@Override
+		public BusinessConceptInstance performAction(EditionSchemeAction action) {
+			// TODO Auto-generated method stub
+			return null;
+		}
+
 	}
 
 }

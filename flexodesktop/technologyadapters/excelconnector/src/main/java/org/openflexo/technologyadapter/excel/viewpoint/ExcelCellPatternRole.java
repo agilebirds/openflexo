@@ -24,54 +24,55 @@ import java.lang.reflect.Type;
 import org.openflexo.foundation.view.ActorReference;
 import org.openflexo.foundation.view.EditionPatternInstance;
 import org.openflexo.foundation.viewpoint.PatternRole;
+import org.openflexo.model.annotations.ImplementationClass;
+import org.openflexo.model.annotations.ModelEntity;
+import org.openflexo.model.annotations.XMLElement;
 import org.openflexo.technologyadapter.excel.model.ExcelCell;
 
 @ModelEntity
 @ImplementationClass(ExcelCellPatternRole.ExcelCellPatternRoleImpl.class)
 @XMLElement
-public interface ExcelCellPatternRole extends PatternRole<ExcelCell>{
+public interface ExcelCellPatternRole extends PatternRole<ExcelCell> {
 
+	public static abstract class ExcelCellPatternRoleImpl extends PatternRoleImpl<ExcelCell> implements ExcelCellPatternRole {
 
-public static abstract  class ExcelCellPatternRoleImpl extends PatternRole<ExcelCell>Impl implements ExcelCellPatternRole
-{
+		public ExcelCellPatternRoleImpl() {
+			super();
+			// TODO Auto-generated constructor stub
+		}
 
-	public ExcelCellPatternRoleImpl() {
-		super();
-		// TODO Auto-generated constructor stub
+		@Override
+		public Type getType() {
+			return ExcelCell.class;
+		}
+
+		@Override
+		public String getPreciseType() {
+			return ExcelCell.class.getSimpleName();
+		}
+
+		/*@Override
+		public boolean getIsPrimaryRole() {
+			// TODO Auto-generated method stub
+			return false;
+		}
+
+		@Override
+		public void setIsPrimaryRole(boolean isPrimary) {
+			// TODO Auto-generated method stub
+
+		}*/
+
+		@Override
+		public boolean defaultBehaviourIsToBeDeleted() {
+			// TODO Auto-generated method stub
+			return false;
+		}
+
+		@Override
+		public ActorReference<ExcelCell> makeActorReference(ExcelCell object, EditionPatternInstance epi) {
+			return new ExcelActorReference(object, this, epi);
+		}
+
 	}
-
-	@Override
-	public Type getType() {
-		return ExcelCell.class;
-	}
-
-	@Override
-	public String getPreciseType() {
-		return ExcelCell.class.getSimpleName();
-	}
-
-	/*@Override
-	public boolean getIsPrimaryRole() {
-		// TODO Auto-generated method stub
-		return false;
-	}
-
-	@Override
-	public void setIsPrimaryRole(boolean isPrimary) {
-		// TODO Auto-generated method stub
-
-	}*/
-
-	@Override
-	public boolean defaultBehaviourIsToBeDeleted() {
-		// TODO Auto-generated method stub
-		return false;
-	}
-
-	@Override
-	public ActorReference<ExcelCell> makeActorReference(ExcelCell object, EditionPatternInstance epi) {
-		return new ExcelActorReference(object, this, epi);
-	}
-
-}
 }

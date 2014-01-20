@@ -24,20 +24,18 @@ import java.io.IOException;
 import java.util.Iterator;
 import java.util.logging.Logger;
 
+import org.openflexo.foundation.FlexoProject;
 import org.openflexo.foundation.resource.FlexoResourceCenter;
 import org.openflexo.foundation.resource.FlexoResourceCenterService;
 import org.openflexo.foundation.resource.RepositoryFolder;
 import org.openflexo.foundation.resource.ResourceRepository;
-import org.openflexo.foundation.FlexoProject;
 import org.openflexo.foundation.technologyadapter.DeclareModelSlot;
 import org.openflexo.foundation.technologyadapter.DeclareModelSlots;
 import org.openflexo.foundation.technologyadapter.DeclareRepositoryType;
-import org.openflexo.foundation.technologyadapter.ModelSlot;
 import org.openflexo.foundation.technologyadapter.TechnologyAdapter;
 import org.openflexo.foundation.technologyadapter.TechnologyAdapterBindingFactory;
 import org.openflexo.foundation.technologyadapter.TechnologyAdapterInitializationException;
 import org.openflexo.foundation.technologyadapter.TechnologyContextManager;
-import org.openflexo.foundation.viewpoint.VirtualModel;
 import org.openflexo.technologyadapter.excel.rm.ExcelMetaModelRepository;
 import org.openflexo.technologyadapter.excel.rm.ExcelModelRepository;
 import org.openflexo.technologyadapter.excel.rm.ExcelWorkbookRepository;
@@ -81,24 +79,6 @@ public class ExcelTechnologyAdapter extends TechnologyAdapter {
 		return new ExcelTechnologyContextManager(this, service);
 	}
 
-	/**
-	 * Creates and return a new {@link ModelSlot} of supplied class.<br>
-	 * This responsability is delegated to the {@link TechnologyAdapter} which manages with introspection its own {@link ModelSlot} types
-	 * 
-	 * @param modelSlotClass
-	 * @return
-	 */
-	@Override
-	public <MS extends ModelSlot<?>> MS makeModelSlot(Class<MS> modelSlotClass, VirtualModel virtualModel) {
-		if (BasicExcelModelSlot.class.isAssignableFrom(modelSlotClass)) {
-			return (MS) new BasicExcelModelSlot(virtualModel, this);
-		} else if (SemanticsExcelModelSlot.class.isAssignableFrom(modelSlotClass)) {
-			return (MS) new SemanticsExcelModelSlot(virtualModel, this);
-		}
-		logger.warning("Unexpected model slot: " + modelSlotClass.getName());
-		return null;
-	}
-
 	@Override
 	public TechnologyAdapterBindingFactory getTechnologyAdapterBindingFactory() {
 		return BINDING_FACTORY;
@@ -123,7 +103,7 @@ public class ExcelTechnologyAdapter extends TechnologyAdapter {
 		while (it.hasNext()) {
 			I item = it.next();
 			if (item instanceof File) {
-				//System.out.println("searching " + item);
+				// System.out.println("searching " + item);
 				File candidateFile = (File) item;
 				ExcelWorkbookResource wbRes = tryToLookupWorkbook(resourceCenter, candidateFile);
 			}
@@ -218,8 +198,7 @@ public class ExcelTechnologyAdapter extends TechnologyAdapter {
 		resourceCenter.registerRepository(returned, ExcelWorkbookRepository.class, this);
 		return returned;
 	}
-	
-	
+
 	/**
 	 * Create empty model.
 	 * 
@@ -235,7 +214,8 @@ public class ExcelTechnologyAdapter extends TechnologyAdapter {
 
 		modelUri = excelFile.toURI().toString();
 
-		ExcelWorkbookResource workbookResource = ExcelWorkbookResourceImpl.makeExcelWorkbookResource(modelUri, excelFile, getTechnologyContextManager());
+		ExcelWorkbookResource workbookResource = ExcelWorkbookResourceImpl.makeExcelWorkbookResource(modelUri, excelFile,
+				getTechnologyContextManager());
 
 		getTechnologyContextManager().registerResource(workbookResource);
 

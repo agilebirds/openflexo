@@ -24,49 +24,42 @@ import java.lang.reflect.Type;
 import org.openflexo.foundation.view.ActorReference;
 import org.openflexo.foundation.view.EditionPatternInstance;
 import org.openflexo.foundation.viewpoint.PatternRole;
+import org.openflexo.model.annotations.ImplementationClass;
+import org.openflexo.model.annotations.ModelEntity;
+import org.openflexo.model.annotations.XMLElement;
 import org.openflexo.technologyadapter.excel.model.semantics.BusinessConceptType;
 
-public class BusinessConceptTypePatternRole extends PatternRole<BusinessConceptType> {
+@ModelEntity
+@ImplementationClass(BusinessConceptTypePatternRole.BusinessConceptTypePatternRoleImpl.class)
+@XMLElement
+public interface BusinessConceptTypePatternRole extends PatternRole<BusinessConceptType> {
 
-	public BusinessConceptTypePatternRole() {
-		super();
-		// TODO Auto-generated constructor stub
+	public static abstract class BusinessConceptTypePatternRoleImpl extends PatternRoleImpl<BusinessConceptType> implements
+			BusinessConceptTypePatternRole {
+
+		@Override
+		public Type getType() {
+			// TODO Auto-generated method stub
+			return null;
+		}
+
+		@Override
+		public String getPreciseType() {
+			// TODO Auto-generated method stub
+			return null;
+		}
+
+		@Override
+		public boolean defaultBehaviourIsToBeDeleted() {
+			// TODO Auto-generated method stub
+			return false;
+		}
+
+		@Override
+		public ActorReference<BusinessConceptType> makeActorReference(BusinessConceptType object, EditionPatternInstance epi) {
+			// TODO Auto-generated method stub
+			return null;
+		}
+
 	}
-
-	@Override
-	public Type getType() {
-		// TODO Auto-generated method stub
-		return null;
-	}
-
-	@Override
-	public String getPreciseType() {
-		// TODO Auto-generated method stub
-		return null;
-	}
-
-	/*@Override
-	public boolean getIsPrimaryRole() {
-		// TODO Auto-generated method stub
-		return false;
-	}
-
-	@Override
-	public void setIsPrimaryRole(boolean isPrimary) {
-		// TODO Auto-generated method stub
-
-	}*/
-
-	@Override
-	public boolean defaultBehaviourIsToBeDeleted() {
-		// TODO Auto-generated method stub
-		return false;
-	}
-
-	@Override
-	public ActorReference<BusinessConceptType> makeActorReference(BusinessConceptType object, EditionPatternInstance epi) {
-		// TODO Auto-generated method stub
-		return null;
-	}
-
 }

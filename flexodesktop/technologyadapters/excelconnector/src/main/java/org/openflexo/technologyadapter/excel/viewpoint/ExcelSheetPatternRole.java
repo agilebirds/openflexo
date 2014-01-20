@@ -24,51 +24,37 @@ import java.lang.reflect.Type;
 import org.openflexo.foundation.view.ActorReference;
 import org.openflexo.foundation.view.EditionPatternInstance;
 import org.openflexo.foundation.viewpoint.PatternRole;
+import org.openflexo.model.annotations.ImplementationClass;
+import org.openflexo.model.annotations.ModelEntity;
+import org.openflexo.model.annotations.XMLElement;
 import org.openflexo.technologyadapter.excel.model.ExcelSheet;
 
 @ModelEntity
 @ImplementationClass(ExcelSheetPatternRole.ExcelSheetPatternRoleImpl.class)
 @XMLElement
-public interface ExcelSheetPatternRole extends PatternRole<ExcelSheet>{
+public interface ExcelSheetPatternRole extends PatternRole<ExcelSheet> {
 
+	public static abstract class ExcelSheetPatternRoleImpl extends PatternRoleImpl<ExcelSheet> implements ExcelSheetPatternRole {
 
-public static abstract  class ExcelSheetPatternRoleImpl extends PatternRole<ExcelSheet>Impl implements ExcelSheetPatternRole
-{
+		@Override
+		public Type getType() {
+			return ExcelSheet.class;
+		}
 
-	public ExcelSheetPatternRoleImpl() {
-		super();
-		// TODO Auto-generated constructor stub
+		@Override
+		public String getPreciseType() {
+			return ExcelSheet.class.getSimpleName();
+		}
+
+		@Override
+		public boolean defaultBehaviourIsToBeDeleted() {
+			return false;
+		}
+
+		@Override
+		public ActorReference<ExcelSheet> makeActorReference(ExcelSheet object, EditionPatternInstance epi) {
+			return new ExcelActorReference(object, this, epi);
+		}
+
 	}
-
-	@Override
-	public Type getType() {
-		return ExcelSheet.class;
-	}
-
-	@Override
-	public String getPreciseType() {
-		return ExcelSheet.class.getSimpleName();
-	}
-
-	/*@Override
-	public boolean getIsPrimaryRole() {
-		return false;
-	}*/
-
-	@Override
-	public boolean defaultBehaviourIsToBeDeleted() {
-		return false;
-	}
-
-	@Override
-	public ActorReference<ExcelSheet> makeActorReference(ExcelSheet object, EditionPatternInstance epi) {
-		return new ExcelActorReference(object, this, epi);
-	}
-
-	/*@Override
-	public void setIsPrimaryRole(boolean isPrimary) {
-
-	}*/
-
-}
 }

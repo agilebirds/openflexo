@@ -32,6 +32,13 @@ import org.openflexo.antar.expr.TypeMismatchException;
 import org.openflexo.foundation.view.action.EditionSchemeAction;
 import org.openflexo.foundation.viewpoint.EditionAction;
 import org.openflexo.foundation.viewpoint.annotations.FIBPanel;
+import org.openflexo.model.annotations.Getter;
+import org.openflexo.model.annotations.ImplementationClass;
+import org.openflexo.model.annotations.ModelEntity;
+import org.openflexo.model.annotations.PropertyIdentifier;
+import org.openflexo.model.annotations.Setter;
+import org.openflexo.model.annotations.XMLAttribute;
+import org.openflexo.model.annotations.XMLElement;
 import org.openflexo.technologyadapter.excel.BasicExcelModelSlot;
 import org.openflexo.technologyadapter.excel.model.ExcelCell;
 import org.openflexo.technologyadapter.excel.model.ExcelCell.CellAlignmentStyleFeature;
@@ -42,318 +49,320 @@ import org.openflexo.technologyadapter.excel.model.ExcelCell.CellStyleFeature;
 @ModelEntity
 @ImplementationClass(CellStyleAction.CellStyleActionImpl.class)
 @XMLElement
-public interface CellStyleAction extends EditionAction<BasicExcelModelSlot, ExcelCell>{
+public interface CellStyleAction extends EditionAction<BasicExcelModelSlot, ExcelCell> {
 
-@PropertyIdentifier(type=DataBinding.class)
-public static final String SUBJECT_KEY = "subject";
-@PropertyIdentifier(type=DataBinding.class)
-public static final String VALUE_KEY = "value";
-@PropertyIdentifier(type=CellStyleFeature.class)
-public static final String CELL_STYLE_KEY = "cellStyle";
+	@PropertyIdentifier(type = DataBinding.class)
+	public static final String SUBJECT_KEY = "subject";
+	@PropertyIdentifier(type = DataBinding.class)
+	public static final String VALUE_KEY = "value";
+	@PropertyIdentifier(type = CellStyleFeature.class)
+	public static final String CELL_STYLE_KEY = "cellStyle";
 
-@Getter(value=SUBJECT_KEY)
-@XMLAttribute
-public DataBinding getSubject();
+	@Getter(value = SUBJECT_KEY)
+	@XMLAttribute
+	public DataBinding<ExcelCell> getSubject();
 
-@Setter(SUBJECT_KEY)
-public void setSubject(DataBinding subject);
+	@Setter(SUBJECT_KEY)
+	public void setSubject(DataBinding<ExcelCell> subject);
 
+	@Getter(value = VALUE_KEY)
+	@XMLAttribute
+	public DataBinding<?> getValue();
 
-@Getter(value=VALUE_KEY)
-@XMLAttribute
-public DataBinding getValue();
+	@Setter(VALUE_KEY)
+	public void setValue(DataBinding<?> value);
 
-@Setter(VALUE_KEY)
-public void setValue(DataBinding value);
+	@Getter(value = CELL_STYLE_KEY)
+	@XMLAttribute
+	public CellStyleFeature getCellStyle();
 
+	@Setter(CELL_STYLE_KEY)
+	public void setCellStyle(CellStyleFeature cellStyle);
 
-@Getter(value=CELL_STYLE_KEY)
-@XMLAttribute
-public CellStyleFeature getCellStyle();
+	public static abstract class CellStyleActionImpl extends EditionActionImpl<BasicExcelModelSlot, ExcelCell> implements CellStyleAction {
 
-@Setter(CELL_STYLE_KEY)
-public void setCellStyle(CellStyleFeature cellStyle);
+		private static final Logger logger = Logger.getLogger(CellStyleAction.class.getPackage().getName());
 
-
-public static abstract  class CellStyleActionImpl extends EditionAction<BasicExcelModelSlot, ExcelCell>Impl implements CellStyleAction
-{
-
-	private static final Logger logger = Logger.getLogger(CellStyleAction.class.getPackage().getName());
-
-	public CellStyleActionImpl() {
-		super();
-	}
-
-	private CellStyleFeature cellStyle = null;
-
-	private CellBorderStyleFeature cellBorderStyle = null;
-
-	private CellAlignmentStyleFeature cellAlignmentStyle = null;
-
-	private DataBinding<Object> value;
-
-	public Object getValue(EditionSchemeAction action) {
-		try {
-			return getValue().getBindingValue(action);
-		} catch (TypeMismatchException e) {
-			e.printStackTrace();
-		} catch (NullReferenceException e) {
-			e.printStackTrace();
-		} catch (InvocationTargetException e) {
-			e.printStackTrace();
+		public CellStyleActionImpl() {
+			super();
 		}
-		return null;
-	}
 
-	public DataBinding<Object> getValue() {
-		if (value == null) {
-			value = new DataBinding<Object>(this, getGraphicalFeatureType(), BindingDefinitionType.GET);
-			value.setBindingName("value");
+		private CellStyleFeature cellStyle = null;
+
+		private CellBorderStyleFeature cellBorderStyle = null;
+
+		private CellAlignmentStyleFeature cellAlignmentStyle = null;
+
+		private DataBinding<?> value;
+
+		public Object getValue(EditionSchemeAction action) {
+			try {
+				return getValue().getBindingValue(action);
+			} catch (TypeMismatchException e) {
+				e.printStackTrace();
+			} catch (NullReferenceException e) {
+				e.printStackTrace();
+			} catch (InvocationTargetException e) {
+				e.printStackTrace();
+			}
+			return null;
 		}
-		return value;
-	}
 
-	public void setValue(DataBinding<Object> value) {
-		if (value != null) {
-			value.setOwner(this);
-			value.setBindingName("value");
-			value.setDeclaredType(getGraphicalFeatureType());
-			value.setBindingDefinitionType(BindingDefinitionType.GET);
+		@Override
+		public DataBinding<?> getValue() {
+			if (value == null) {
+				value = new DataBinding<Object>(this, getGraphicalFeatureType(), BindingDefinitionType.GET);
+				value.setBindingName("value");
+			}
+			return value;
 		}
-		this.value = value;
-	}
 
-	private DataBinding<ExcelCell> subject;
-
-	public DataBinding<ExcelCell> getSubject() {
-		if (subject == null) {
-			subject = new DataBinding<ExcelCell>(this, ExcelCell.class, DataBinding.BindingDefinitionType.GET);
-			subject.setBindingName("subject");
+		@Override
+		public void setValue(DataBinding<?> value) {
+			if (value != null) {
+				value.setOwner(this);
+				value.setBindingName("value");
+				value.setDeclaredType(getGraphicalFeatureType());
+				value.setBindingDefinitionType(BindingDefinitionType.GET);
+			}
+			this.value = value;
 		}
-		return subject;
-	}
 
-	public void setSubject(DataBinding<ExcelCell> subject) {
-		if (subject != null) {
-			subject.setOwner(this);
-			subject.setBindingName("subject");
-			subject.setDeclaredType(ExcelCell.class);
-			subject.setBindingDefinitionType(BindingDefinitionType.GET);
+		private DataBinding<ExcelCell> subject;
+
+		@Override
+		public DataBinding<ExcelCell> getSubject() {
+			if (subject == null) {
+				subject = new DataBinding<ExcelCell>(this, ExcelCell.class, DataBinding.BindingDefinitionType.GET);
+				subject.setBindingName("subject");
+			}
+			return subject;
 		}
-		this.subject = subject;
-	}
 
-	public ExcelCell getSubject(EditionSchemeAction action) {
-		try {
-			return getSubject().getBindingValue(action);
-		} catch (TypeMismatchException e) {
-			e.printStackTrace();
-		} catch (NullReferenceException e) {
-			e.printStackTrace();
-		} catch (InvocationTargetException e) {
-			e.printStackTrace();
+		@Override
+		public void setSubject(DataBinding<ExcelCell> subject) {
+			if (subject != null) {
+				subject.setOwner(this);
+				subject.setBindingName("subject");
+				subject.setDeclaredType(ExcelCell.class);
+				subject.setBindingDefinitionType(BindingDefinitionType.GET);
+			}
+			this.subject = subject;
 		}
-		return null;
-	}
 
-	// MAIN CELL STYLES
-
-	public java.lang.reflect.Type getGraphicalFeatureType() {
-		if (getCellStyle() != null) {
-			return getCellStyle().getClass();
+		public ExcelCell getSubject(EditionSchemeAction action) {
+			try {
+				return getSubject().getBindingValue(action);
+			} catch (TypeMismatchException e) {
+				e.printStackTrace();
+			} catch (NullReferenceException e) {
+				e.printStackTrace();
+			} catch (InvocationTargetException e) {
+				e.printStackTrace();
+			}
+			return null;
 		}
-		return Object.class;
-	}
 
-	public CellStyleFeature getCellStyle() {
-		if (cellStyle == null) {
-			if (_cellStyleName != null) {
-				for (CellStyleFeature cellStyle : getAvailableCellStyles()) {
-					if (cellStyle.name().equals(_cellStyleName)) {
-						return cellStyle;
+		// MAIN CELL STYLES
+
+		public java.lang.reflect.Type getGraphicalFeatureType() {
+			if (getCellStyle() != null) {
+				return getCellStyle().getClass();
+			}
+			return Object.class;
+		}
+
+		@Override
+		public CellStyleFeature getCellStyle() {
+			if (cellStyle == null) {
+				if (_cellStyleName != null) {
+					for (CellStyleFeature cellStyle : getAvailableCellStyles()) {
+						if (cellStyle.name().equals(_cellStyleName)) {
+							return cellStyle;
+						}
 					}
 				}
 			}
+			return cellStyle;
 		}
-		return cellStyle;
-	}
 
-	public void setCellStyle(CellStyleFeature cellStyle) {
-		this.cellStyle = cellStyle;
-		if (cellStyle.equals(CellStyleFeature.BorderBottom) || cellStyle.equals(CellStyleFeature.BorderTop)
-				|| cellStyle.equals(CellStyleFeature.BorderLeft) || cellStyle.equals(CellStyleFeature.BorderRight)) {
-			isBorderStyle = true;
-		} else {
-			isBorderStyle = false;
-		}
-		if (cellStyle.equals(CellStyleFeature.Alignment)) {
-			isAlignmentStyle = true;
-		} else {
-			isAlignmentStyle = false;
-		}
-	}
-
-	private List<CellStyleFeature> availableCellStyles = null;
-
-	public List<CellStyleFeature> getAvailableCellStyles() {
-		if (availableCellStyles == null) {
-			availableCellStyles = new Vector<CellStyleFeature>();
-			for (CellStyleFeature cellStyle : ExcelCell.CellStyleFeature.values()) {
-				availableCellStyles.add(cellStyle);
-			}
-		}
-		return availableCellStyles;
-	}
-
-	private String _cellStyleName = null;
-
-	public String _getGraphicalFeatureName() {
-		if (getCellStyle() == null) {
-			return _cellStyleName;
-		}
-		return getCellStyle().name();
-	}
-
-	public void _setCellStyleName(String cellStyleName) {
-		_cellStyleName = cellStyleName;
-	}
-
-	// SPECIAL BORDER STYLES
-
-	private boolean isBorderStyle = false;
-
-	public boolean isBorderStyle() {
-		return isBorderStyle;
-	}
-
-	public CellBorderStyleFeature getCellBorderStyle() {
-		if (cellBorderStyle == null) {
-			if (_cellBorderStyleName != null) {
-				for (CellBorderStyleFeature cellBorderStyle : getAvailableCellBorderStyles()) {
-					if (cellBorderStyle.name().equals(_cellBorderStyleName)) {
-						return cellBorderStyle;
-					}
-				}
-			}
-		}
-		return cellBorderStyle;
-	}
-
-	public void setCellBorderStyle(CellBorderStyleFeature cellBorderStyle) {
-		this.cellBorderStyle = cellBorderStyle;
-	}
-
-	private List<CellBorderStyleFeature> availableCellBorderStyles = null;
-
-	public List<CellBorderStyleFeature> getAvailableCellBorderStyles() {
-		if (availableCellBorderStyles == null) {
-			availableCellBorderStyles = new Vector<CellBorderStyleFeature>();
-			for (CellBorderStyleFeature cellBorderStyle : ExcelCell.CellBorderStyleFeature.values()) {
-				availableCellBorderStyles.add(cellBorderStyle);
-			}
-		}
-		return availableCellBorderStyles;
-	}
-
-	private String _cellBorderStyleName = null;
-
-	public String _getCellBorderStyleName() {
-		if (getCellBorderStyle() == null) {
-			return _cellBorderStyleName;
-		}
-		return getCellBorderStyle().name();
-	}
-
-	public void _setCellBorderStyleName(String cellBorderStyleName) {
-		_cellBorderStyleName = cellBorderStyleName;
-	}
-
-	// SPECIAL ALIGNMENT STYLES
-
-	private boolean isAlignmentStyle = false;
-
-	public boolean isAlignmentStyle() {
-		return isAlignmentStyle;
-	}
-
-	public CellAlignmentStyleFeature getCellAlignmentStyle() {
-		if (cellAlignmentStyle == null) {
-			if (_cellAlignmentStyleName != null) {
-				for (CellAlignmentStyleFeature cellAlignmentStyle : getAvailableCellAlignmentStyles()) {
-					if (cellAlignmentStyle.name().equals(_cellAlignmentStyleName)) {
-						return cellAlignmentStyle;
-					}
-				}
-			}
-		}
-		return cellAlignmentStyle;
-	}
-
-	public void setCellAlignmentStyle(CellAlignmentStyleFeature cellAlignmentStyle) {
-		this.cellAlignmentStyle = cellAlignmentStyle;
-	}
-
-	private List<CellAlignmentStyleFeature> availableCellAlignmentStyles = null;
-
-	public List<CellAlignmentStyleFeature> getAvailableCellAlignmentStyles() {
-		if (availableCellAlignmentStyles == null) {
-			availableCellAlignmentStyles = new Vector<CellAlignmentStyleFeature>();
-			for (CellAlignmentStyleFeature cellAlignmentStyle : ExcelCell.CellAlignmentStyleFeature.values()) {
-				availableCellAlignmentStyles.add(cellAlignmentStyle);
-			}
-		}
-		return availableCellAlignmentStyles;
-	}
-
-	private String _cellAlignmentStyleName = null;
-
-	public String _getCellAlignmentStyleName() {
-		if (getCellAlignmentStyle() == null) {
-			return _cellAlignmentStyleName;
-		}
-		return getCellAlignmentStyle().name();
-	}
-
-	public void _setCellAlignmentStyleName(String cellAlignmentStyleName) {
-		_cellAlignmentStyleName = cellAlignmentStyleName;
-	}
-
-	// ACTION
-
-	@Override
-	public ExcelCell performAction(EditionSchemeAction action) {
-		logger.info("Perform graphical action " + action);
-		ExcelCell excelCell = getSubject(action);
-		Object value = null;
-		try {
-			if (isAlignmentStyle) {
-				value = getCellAlignmentStyle();
-			} else if (isBorderStyle) {
-				value = getCellBorderStyle();
+		@Override
+		public void setCellStyle(CellStyleFeature cellStyle) {
+			this.cellStyle = cellStyle;
+			if (cellStyle.equals(CellStyleFeature.BorderBottom) || cellStyle.equals(CellStyleFeature.BorderTop)
+					|| cellStyle.equals(CellStyleFeature.BorderLeft) || cellStyle.equals(CellStyleFeature.BorderRight)) {
+				isBorderStyle = true;
 			} else {
-				value = getValue().getBindingValue(action);
+				isBorderStyle = false;
 			}
-		} catch (TypeMismatchException e) {
-			e.printStackTrace();
-		} catch (NullReferenceException e) {
-			e.printStackTrace();
-		} catch (InvocationTargetException e) {
-			e.printStackTrace();
+			if (cellStyle.equals(CellStyleFeature.Alignment)) {
+				isAlignmentStyle = true;
+			} else {
+				isAlignmentStyle = false;
+			}
 		}
-		if (logger.isLoggable(Level.FINE)) {
-			logger.fine("Element is " + excelCell);
-			logger.fine("Feature is " + getCellStyle());
-			logger.fine("Value is " + value);
+
+		private List<CellStyleFeature> availableCellStyles = null;
+
+		public List<CellStyleFeature> getAvailableCellStyles() {
+			if (availableCellStyles == null) {
+				availableCellStyles = new Vector<CellStyleFeature>();
+				for (CellStyleFeature cellStyle : ExcelCell.CellStyleFeature.values()) {
+					availableCellStyles.add(cellStyle);
+				}
+			}
+			return availableCellStyles;
 		}
-		excelCell.setCellStyle(cellStyle, value);
-		return excelCell;
+
+		private String _cellStyleName = null;
+
+		public String _getGraphicalFeatureName() {
+			if (getCellStyle() == null) {
+				return _cellStyleName;
+			}
+			return getCellStyle().name();
+		}
+
+		public void _setCellStyleName(String cellStyleName) {
+			_cellStyleName = cellStyleName;
+		}
+
+		// SPECIAL BORDER STYLES
+
+		private boolean isBorderStyle = false;
+
+		public boolean isBorderStyle() {
+			return isBorderStyle;
+		}
+
+		public CellBorderStyleFeature getCellBorderStyle() {
+			if (cellBorderStyle == null) {
+				if (_cellBorderStyleName != null) {
+					for (CellBorderStyleFeature cellBorderStyle : getAvailableCellBorderStyles()) {
+						if (cellBorderStyle.name().equals(_cellBorderStyleName)) {
+							return cellBorderStyle;
+						}
+					}
+				}
+			}
+			return cellBorderStyle;
+		}
+
+		public void setCellBorderStyle(CellBorderStyleFeature cellBorderStyle) {
+			this.cellBorderStyle = cellBorderStyle;
+		}
+
+		private List<CellBorderStyleFeature> availableCellBorderStyles = null;
+
+		public List<CellBorderStyleFeature> getAvailableCellBorderStyles() {
+			if (availableCellBorderStyles == null) {
+				availableCellBorderStyles = new Vector<CellBorderStyleFeature>();
+				for (CellBorderStyleFeature cellBorderStyle : ExcelCell.CellBorderStyleFeature.values()) {
+					availableCellBorderStyles.add(cellBorderStyle);
+				}
+			}
+			return availableCellBorderStyles;
+		}
+
+		private String _cellBorderStyleName = null;
+
+		public String _getCellBorderStyleName() {
+			if (getCellBorderStyle() == null) {
+				return _cellBorderStyleName;
+			}
+			return getCellBorderStyle().name();
+		}
+
+		public void _setCellBorderStyleName(String cellBorderStyleName) {
+			_cellBorderStyleName = cellBorderStyleName;
+		}
+
+		// SPECIAL ALIGNMENT STYLES
+
+		private boolean isAlignmentStyle = false;
+
+		public boolean isAlignmentStyle() {
+			return isAlignmentStyle;
+		}
+
+		public CellAlignmentStyleFeature getCellAlignmentStyle() {
+			if (cellAlignmentStyle == null) {
+				if (_cellAlignmentStyleName != null) {
+					for (CellAlignmentStyleFeature cellAlignmentStyle : getAvailableCellAlignmentStyles()) {
+						if (cellAlignmentStyle.name().equals(_cellAlignmentStyleName)) {
+							return cellAlignmentStyle;
+						}
+					}
+				}
+			}
+			return cellAlignmentStyle;
+		}
+
+		public void setCellAlignmentStyle(CellAlignmentStyleFeature cellAlignmentStyle) {
+			this.cellAlignmentStyle = cellAlignmentStyle;
+		}
+
+		private List<CellAlignmentStyleFeature> availableCellAlignmentStyles = null;
+
+		public List<CellAlignmentStyleFeature> getAvailableCellAlignmentStyles() {
+			if (availableCellAlignmentStyles == null) {
+				availableCellAlignmentStyles = new Vector<CellAlignmentStyleFeature>();
+				for (CellAlignmentStyleFeature cellAlignmentStyle : ExcelCell.CellAlignmentStyleFeature.values()) {
+					availableCellAlignmentStyles.add(cellAlignmentStyle);
+				}
+			}
+			return availableCellAlignmentStyles;
+		}
+
+		private String _cellAlignmentStyleName = null;
+
+		public String _getCellAlignmentStyleName() {
+			if (getCellAlignmentStyle() == null) {
+				return _cellAlignmentStyleName;
+			}
+			return getCellAlignmentStyle().name();
+		}
+
+		public void _setCellAlignmentStyleName(String cellAlignmentStyleName) {
+			_cellAlignmentStyleName = cellAlignmentStyleName;
+		}
+
+		// ACTION
+
+		@Override
+		public ExcelCell performAction(EditionSchemeAction action) {
+			logger.info("Perform graphical action " + action);
+			ExcelCell excelCell = getSubject(action);
+			Object value = null;
+			try {
+				if (isAlignmentStyle) {
+					value = getCellAlignmentStyle();
+				} else if (isBorderStyle) {
+					value = getCellBorderStyle();
+				} else {
+					value = getValue().getBindingValue(action);
+				}
+			} catch (TypeMismatchException e) {
+				e.printStackTrace();
+			} catch (NullReferenceException e) {
+				e.printStackTrace();
+			} catch (InvocationTargetException e) {
+				e.printStackTrace();
+			}
+			if (logger.isLoggable(Level.FINE)) {
+				logger.fine("Element is " + excelCell);
+				logger.fine("Feature is " + getCellStyle());
+				logger.fine("Value is " + value);
+			}
+			excelCell.setCellStyle(cellStyle, value);
+			return excelCell;
+		}
+
+		@Override
+		public void finalizePerformAction(EditionSchemeAction action, ExcelCell initialContext) {
+			// TODO Auto-generated method stub
+
+		}
+
 	}
-
-	@Override
-	public void finalizePerformAction(EditionSchemeAction action, ExcelCell initialContext) {
-		// TODO Auto-generated method stub
-
-	}
-
-}
 }

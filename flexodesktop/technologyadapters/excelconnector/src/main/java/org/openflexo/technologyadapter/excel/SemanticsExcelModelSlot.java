@@ -35,8 +35,6 @@ import org.openflexo.foundation.view.TypeAwareModelSlotInstance;
 import org.openflexo.foundation.view.View;
 import org.openflexo.foundation.view.action.CreateVirtualModelInstance;
 import org.openflexo.foundation.view.action.ModelSlotInstanceConfiguration;
-import org.openflexo.foundation.viewpoint.EditionAction;
-import org.openflexo.foundation.viewpoint.FetchRequest;
 import org.openflexo.foundation.viewpoint.PatternRole;
 import org.openflexo.foundation.viewpoint.VirtualModel;
 import org.openflexo.technologyadapter.excel.model.semantics.ExcelMetaModel;
@@ -47,9 +45,6 @@ import org.openflexo.technologyadapter.excel.viewpoint.ExcelCellPatternRole;
 import org.openflexo.technologyadapter.excel.viewpoint.ExcelRowPatternRole;
 import org.openflexo.technologyadapter.excel.viewpoint.ExcelSheetPatternRole;
 import org.openflexo.technologyadapter.excel.viewpoint.editionaction.AddBusinessConceptInstance;
-import org.openflexo.technologyadapter.excel.viewpoint.editionaction.AddExcelCell;
-import org.openflexo.technologyadapter.excel.viewpoint.editionaction.AddExcelRow;
-import org.openflexo.technologyadapter.excel.viewpoint.editionaction.AddExcelSheet;
 
 /**
  * Implementation of the ModelSlot class for the Excel technology adapter<br>
@@ -65,127 +60,82 @@ import org.openflexo.technologyadapter.excel.viewpoint.editionaction.AddExcelShe
 @DeclareEditionActions({ // All edition actions available through this model slot
 @DeclareEditionAction(FML = "AddBusinessConceptInstance", editionActionClass = AddBusinessConceptInstance.class) // Add instance of BC
 })
-public class SemanticsExcelModelSlot extends TypeAwareModelSlot<ExcelModel, ExcelMetaModel> {
+public interface SemanticsExcelModelSlot extends TypeAwareModelSlot<ExcelModel, ExcelMetaModel> {
 
-	private static final Logger logger = Logger.getLogger(SemanticsExcelModelSlot.class.getPackage().getName());
+	public abstract static class SemanticsExcelModelSlotImpl extends TypeAwareModelSlotImpl<ExcelModel, ExcelMetaModel> implements
+			SemanticsExcelModelSlot {
 
-	public SemanticsExcelModelSlot(VirtualModel virtualModel, ExcelTechnologyAdapter adapter) {
-		super(virtualModel, adapter);
-	}
+		private static final Logger logger = Logger.getLogger(SemanticsExcelModelSlot.class.getPackage().getName());
 
-	public SemanticsExcelModelSlot() {
-		super();
-	}
-
-	@Override
-	public Class<ExcelTechnologyAdapter> getTechnologyAdapterClass() {
-		return ExcelTechnologyAdapter.class;
-	}
-
-	/**
-	 * Creates and return a new {@link PatternRole} of supplied class.<br>
-	 * This responsability is delegated to the OWL-specific {@link OWLModelSlot} which manages with introspection its own
-	 * {@link PatternRole} types related to OWL technology
-	 * 
-	 * @param patternRoleClass
-	 * @return
-	 */
-	@Override
-	public <PR extends PatternRole<?>> PR makePatternRole(Class<PR> patternRoleClass) {
-		if (ExcelSheetPatternRole.class.isAssignableFrom(patternRoleClass)) {
-			return (PR) new ExcelSheetPatternRole();
-		} else if (ExcelCellPatternRole.class.isAssignableFrom(patternRoleClass)) {
-			return (PR) new ExcelCellPatternRole();
-		} else if (ExcelRowPatternRole.class.isAssignableFrom(patternRoleClass)) {
-			return (PR) new ExcelRowPatternRole();
+		public SemanticsExcelModelSlotImpl(VirtualModel virtualModel, ExcelTechnologyAdapter adapter) {
+			super(virtualModel, adapter);
 		}
-		logger.warning("Unexpected pattern role: " + patternRoleClass.getName());
-		return null;
-	}
 
-	@Override
-	public <PR extends PatternRole<?>> String defaultPatternRoleName(Class<PR> patternRoleClass) {
-		if (ExcelCellPatternRole.class.isAssignableFrom(patternRoleClass)) {
-			return "cell";
-		} else if (ExcelRowPatternRole.class.isAssignableFrom(patternRoleClass)) {
-			return "row";
-		} else if (ExcelSheetPatternRole.class.isAssignableFrom(patternRoleClass)) {
-			return "sheet";
+		@Override
+		public Class<ExcelTechnologyAdapter> getTechnologyAdapterClass() {
+			return ExcelTechnologyAdapter.class;
 		}
-		return super.defaultPatternRoleName(patternRoleClass);
-	}
 
-	/**
-	 * Creates and return a new {@link EditionAction} of supplied class.<br>
-	 * This responsability is delegated to the Excel-specific {@link SemanticsExcelModelSlot} which manages with introspection its own
-	 * {@link EditionAction} types related to Excel technology
-	 * 
-	 * @param editionActionClass
-	 * @return
-	 */
-	@Override
-	public <EA extends EditionAction<?, ?>> EA makeEditionAction(Class<EA> editionActionClass) {
-		if (AddExcelSheet.class.isAssignableFrom(editionActionClass)) {
-			return (EA) new AddExcelSheet();
-		} else if (AddExcelCell.class.isAssignableFrom(editionActionClass)) {
-			return (EA) new AddExcelCell();
-		} else if (AddExcelRow.class.isAssignableFrom(editionActionClass)) {
-			return (EA) new AddExcelRow();
-		} else {
+		@Override
+		public <PR extends PatternRole<?>> String defaultPatternRoleName(Class<PR> patternRoleClass) {
+			if (ExcelCellPatternRole.class.isAssignableFrom(patternRoleClass)) {
+				return "cell";
+			} else if (ExcelRowPatternRole.class.isAssignableFrom(patternRoleClass)) {
+				return "row";
+			} else if (ExcelSheetPatternRole.class.isAssignableFrom(patternRoleClass)) {
+				return "sheet";
+			}
+			return super.defaultPatternRoleName(patternRoleClass);
+		}
+
+		@Override
+		public Type getType() {
+			// TODO Auto-generated method stub
 			return null;
 		}
-	}
 
-	@Override
-	public <FR extends FetchRequest<?, ?>> FR makeFetchRequest(Class<FR> fetchRequestClass) {
-		return null;
-	}
+		@Override
+		public ModelSlotInstanceConfiguration<SemanticsExcelModelSlot, ExcelModel> createConfiguration(CreateVirtualModelInstance<?> action) {
+			// TODO Auto-generated method stub
+			return null;
+		}
 
-	@Override
-	public Type getType() {
-		// TODO Auto-generated method stub
-		return null;
-	}
+		@Override
+		public FlexoModelResource<ExcelModel, ExcelMetaModel, ?> createProjectSpecificEmptyModel(View view, String filename,
+				String modelUri, FlexoMetaModelResource<ExcelModel, ExcelMetaModel, ?> metaModelResource) {
+			// TODO Auto-generated method stub
+			return null;
+		}
 
-	@Override
-	public ModelSlotInstanceConfiguration<SemanticsExcelModelSlot, ExcelModel> createConfiguration(CreateVirtualModelInstance<?> action) {
-		// TODO Auto-generated method stub
-		return null;
-	}
+		@Override
+		public FlexoModelResource<ExcelModel, ExcelMetaModel, ?> createSharedEmptyModel(FlexoResourceCenter<?> resourceCenter,
+				String relativePath, String filename, String modelUri,
+				FlexoMetaModelResource<ExcelModel, ExcelMetaModel, ?> metaModelResource) {
+			// TODO Auto-generated method stub
+			return null;
+		}
 
-	@Override
-	public FlexoModelResource<ExcelModel, ExcelMetaModel, ?> createProjectSpecificEmptyModel(View view, String filename, String modelUri,
-			FlexoMetaModelResource<ExcelModel, ExcelMetaModel, ?> metaModelResource) {
-		// TODO Auto-generated method stub
-		return null;
-	}
+		@Override
+		public String getURIForObject(
+				TypeAwareModelSlotInstance<ExcelModel, ExcelMetaModel, ? extends TypeAwareModelSlot<ExcelModel, ExcelMetaModel>> msInstance,
+				Object o) {
+			// TODO Auto-generated method stub
+			return null;
+		}
 
-	@Override
-	public FlexoModelResource<ExcelModel, ExcelMetaModel, ?> createSharedEmptyModel(FlexoResourceCenter<?> resourceCenter,
-			String relativePath, String filename, String modelUri, FlexoMetaModelResource<ExcelModel, ExcelMetaModel, ?> metaModelResource) {
-		// TODO Auto-generated method stub
-		return null;
-	}
+		@Override
+		public Object retrieveObjectWithURI(
+				TypeAwareModelSlotInstance<ExcelModel, ExcelMetaModel, ? extends TypeAwareModelSlot<ExcelModel, ExcelMetaModel>> msInstance,
+				String objectURI) {
+			// TODO Auto-generated method stub
+			return null;
+		}
 
-	@Override
-	public String getURIForObject(
-			TypeAwareModelSlotInstance<ExcelModel, ExcelMetaModel, ? extends TypeAwareModelSlot<ExcelModel, ExcelMetaModel>> msInstance,
-			Object o) {
-		// TODO Auto-generated method stub
-		return null;
-	}
+		@Override
+		public boolean isStrictMetaModelling() {
+			return true;
+		}
 
-	@Override
-	public Object retrieveObjectWithURI(
-			TypeAwareModelSlotInstance<ExcelModel, ExcelMetaModel, ? extends TypeAwareModelSlot<ExcelModel, ExcelMetaModel>> msInstance,
-			String objectURI) {
-		// TODO Auto-generated method stub
-		return null;
-	}
-
-	@Override
-	public boolean isStrictMetaModelling() {
-		return true;
 	}
 
 }

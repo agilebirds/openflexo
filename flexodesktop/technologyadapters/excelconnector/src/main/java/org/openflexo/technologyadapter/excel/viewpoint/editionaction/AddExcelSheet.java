@@ -14,6 +14,13 @@ import org.openflexo.foundation.view.FreeModelSlotInstance;
 import org.openflexo.foundation.view.action.EditionSchemeAction;
 import org.openflexo.foundation.viewpoint.AssignableAction;
 import org.openflexo.foundation.viewpoint.annotations.FIBPanel;
+import org.openflexo.model.annotations.Getter;
+import org.openflexo.model.annotations.ImplementationClass;
+import org.openflexo.model.annotations.ModelEntity;
+import org.openflexo.model.annotations.PropertyIdentifier;
+import org.openflexo.model.annotations.Setter;
+import org.openflexo.model.annotations.XMLAttribute;
+import org.openflexo.model.annotations.XMLElement;
 import org.openflexo.technologyadapter.excel.BasicExcelModelSlot;
 import org.openflexo.technologyadapter.excel.model.ExcelRow;
 import org.openflexo.technologyadapter.excel.model.ExcelSheet;
@@ -23,132 +30,133 @@ import org.openflexo.technologyadapter.excel.model.ExcelWorkbook;
 @ModelEntity
 @ImplementationClass(AddExcelSheet.AddExcelSheetImpl.class)
 @XMLElement
-public interface AddExcelSheet extends AssignableAction<BasicExcelModelSlot, ExcelSheet>{
+public interface AddExcelSheet extends AssignableAction<BasicExcelModelSlot, ExcelSheet> {
 
-@PropertyIdentifier(type=DataBinding.class)
-public static final String SHEET_NAME_KEY = "sheetName";
-@PropertyIdentifier(type=DataBinding.class)
-public static final String SHEET_ROWS_KEY = "sheetRows";
+	@PropertyIdentifier(type = DataBinding.class)
+	public static final String SHEET_NAME_KEY = "sheetName";
+	@PropertyIdentifier(type = DataBinding.class)
+	public static final String SHEET_ROWS_KEY = "sheetRows";
 
-@Getter(value=SHEET_NAME_KEY)
-@XMLAttribute
-public DataBinding getSheetName();
+	@Getter(value = SHEET_NAME_KEY)
+	@XMLAttribute
+	public DataBinding<String> getSheetName();
 
-@Setter(SHEET_NAME_KEY)
-public void setSheetName(DataBinding sheetName);
+	@Setter(SHEET_NAME_KEY)
+	public void setSheetName(DataBinding<String> sheetName);
 
+	@Getter(value = SHEET_ROWS_KEY)
+	@XMLElement
+	public DataBinding<List<ExcelRow>> getSheetRows();
 
-@Getter(value=SHEET_ROWS_KEY)
-@XMLElement
-public DataBinding getSheetRows();
+	@Setter(SHEET_ROWS_KEY)
+	public void setSheetRows(DataBinding<List<ExcelRow>> sheetRows);
 
-@Setter(SHEET_ROWS_KEY)
-public void setSheetRows(DataBinding sheetRows);
+	public static abstract class AddExcelSheetImpl extends AssignableActionImpl<BasicExcelModelSlot, ExcelSheet> implements AddExcelSheet {
 
+		private static final Logger logger = Logger.getLogger(AddExcelSheet.class.getPackage().getName());
 
-public static abstract  class AddExcelSheetImpl extends AssignableAction<BasicExcelModelSlot, ExcelSheet>Impl implements AddExcelSheet
-{
+		private DataBinding<String> sheetName;
 
-	private static final Logger logger = Logger.getLogger(AddExcelSheet.class.getPackage().getName());
+		private DataBinding<List<ExcelRow>> sheetRows;
 
-	private DataBinding<String> sheetName;
+		public AddExcelSheetImpl() {
+			super();
+		}
 
-	private DataBinding<List<ExcelRow>> sheetRows;
+		@Override
+		public Type getAssignableType() {
+			return ExcelSheet.class;
+		}
 
-	public AddExcelSheetImpl() {
-		super();
-	}
+		@Override
+		public ExcelSheet performAction(EditionSchemeAction action) {
 
-	@Override
-	public Type getAssignableType() {
-		return ExcelSheet.class;
-	}
+			ExcelSheet result = null;
 
-	@Override
-	public ExcelSheet performAction(EditionSchemeAction action) {
-
-		ExcelSheet result = null;
-
-		FreeModelSlotInstance<ExcelWorkbook, BasicExcelModelSlot> modelSlotInstance = getModelSlotInstance(action);
-		if (modelSlotInstance.getResourceData() != null) {
-			Workbook wb = modelSlotInstance.getAccessedResourceData().getWorkbook();
-			Sheet sheet = null;
-			try {
-				if (wb != null) {
-					String name = getSheetName().getBindingValue(action);
-					if (name != null) {
-						// Create an Excel Sheet
-						sheet = wb.createSheet(name);
-						// Instanciate Wrapper.
-						result = modelSlotInstance.getAccessedResourceData().getConverter()
-								.convertExcelSheetToSheet(sheet, modelSlotInstance.getAccessedResourceData(), null);
-						modelSlotInstance.getAccessedResourceData().addToExcelSheets(result);
-						modelSlotInstance.getAccessedResourceData().setIsModified();
+			FreeModelSlotInstance<ExcelWorkbook, BasicExcelModelSlot> modelSlotInstance = getModelSlotInstance(action);
+			if (modelSlotInstance.getResourceData() != null) {
+				Workbook wb = modelSlotInstance.getAccessedResourceData().getWorkbook();
+				Sheet sheet = null;
+				try {
+					if (wb != null) {
+						String name = getSheetName().getBindingValue(action);
+						if (name != null) {
+							// Create an Excel Sheet
+							sheet = wb.createSheet(name);
+							// Instanciate Wrapper.
+							result = modelSlotInstance.getAccessedResourceData().getConverter()
+									.convertExcelSheetToSheet(sheet, modelSlotInstance.getAccessedResourceData(), null);
+							modelSlotInstance.getAccessedResourceData().addToExcelSheets(result);
+							modelSlotInstance.getAccessedResourceData().setIsModified();
+						} else {
+							logger.warning("Create a sheet requires a name");
+						}
 					} else {
-						logger.warning("Create a sheet requires a name");
+						logger.warning("Create a sheet requires a workbook");
 					}
-				} else {
-					logger.warning("Create a sheet requires a workbook");
+				} catch (TypeMismatchException e) {
+					// TODO Auto-generated catch block
+					e.printStackTrace();
+				} catch (NullReferenceException e) {
+					// TODO Auto-generated catch block
+					e.printStackTrace();
+				} catch (InvocationTargetException e) {
+					// TODO Auto-generated catch block
+					e.printStackTrace();
 				}
-			} catch (TypeMismatchException e) {
-				// TODO Auto-generated catch block
-				e.printStackTrace();
-			} catch (NullReferenceException e) {
-				// TODO Auto-generated catch block
-				e.printStackTrace();
-			} catch (InvocationTargetException e) {
-				// TODO Auto-generated catch block
-				e.printStackTrace();
+
+			} else {
+				logger.warning("Model slot not correctly initialised : model is null");
+				return null;
 			}
 
-		} else {
-			logger.warning("Model slot not correctly initialised : model is null");
-			return null;
+			return result;
 		}
 
-		return result;
-	}
-
-	@Override
-	public FreeModelSlotInstance<ExcelWorkbook, BasicExcelModelSlot> getModelSlotInstance(EditionSchemeAction action) {
-		return (FreeModelSlotInstance<ExcelWorkbook, BasicExcelModelSlot>) super.getModelSlotInstance(action);
-	}
-
-	public DataBinding<String> getSheetName() {
-		if (sheetName == null) {
-			sheetName = new DataBinding<String>(this, String.class, DataBinding.BindingDefinitionType.GET);
-			sheetName.setBindingName("sheetName");
+		@Override
+		public FreeModelSlotInstance<ExcelWorkbook, BasicExcelModelSlot> getModelSlotInstance(EditionSchemeAction action) {
+			return (FreeModelSlotInstance<ExcelWorkbook, BasicExcelModelSlot>) super.getModelSlotInstance(action);
 		}
-		return sheetName;
-	}
 
-	public void setSheetName(DataBinding<String> sheetName) {
-		if (sheetName != null) {
-			sheetName.setOwner(this);
-			sheetName.setDeclaredType(String.class);
-			sheetName.setBindingDefinitionType(DataBinding.BindingDefinitionType.GET);
-			sheetName.setBindingName("sheetName");
+		@Override
+		public DataBinding<String> getSheetName() {
+			if (sheetName == null) {
+				sheetName = new DataBinding<String>(this, String.class, DataBinding.BindingDefinitionType.GET);
+				sheetName.setBindingName("sheetName");
+			}
+			return sheetName;
 		}
-		this.sheetName = sheetName;
-	}
 
-	public DataBinding<List<ExcelRow>> getSheetRows() {
-		if (sheetRows == null) {
-			sheetRows = new DataBinding<List<ExcelRow>>(this, List.class, DataBinding.BindingDefinitionType.GET);
-			sheetRows.setBindingName("sheetRows");
+		@Override
+		public void setSheetName(DataBinding<String> sheetName) {
+			if (sheetName != null) {
+				sheetName.setOwner(this);
+				sheetName.setDeclaredType(String.class);
+				sheetName.setBindingDefinitionType(DataBinding.BindingDefinitionType.GET);
+				sheetName.setBindingName("sheetName");
+			}
+			this.sheetName = sheetName;
 		}
-		return sheetRows;
-	}
 
-	public void setSheetRows(DataBinding<List<ExcelRow>> sheetRows) {
-		if (sheetRows != null) {
-			sheetRows.setOwner(this);
-			sheetRows.setDeclaredType(List.class);
-			sheetRows.setBindingDefinitionType(DataBinding.BindingDefinitionType.GET);
-			sheetRows.setBindingName("sheetRows");
+		@Override
+		public DataBinding<List<ExcelRow>> getSheetRows() {
+			if (sheetRows == null) {
+				sheetRows = new DataBinding<List<ExcelRow>>(this, List.class, DataBinding.BindingDefinitionType.GET);
+				sheetRows.setBindingName("sheetRows");
+			}
+			return sheetRows;
 		}
-		this.sheetRows = sheetRows;
-	}
 
-}
+		@Override
+		public void setSheetRows(DataBinding<List<ExcelRow>> sheetRows) {
+			if (sheetRows != null) {
+				sheetRows.setOwner(this);
+				sheetRows.setDeclaredType(List.class);
+				sheetRows.setBindingDefinitionType(DataBinding.BindingDefinitionType.GET);
+				sheetRows.setBindingName("sheetRows");
+			}
+			this.sheetRows = sheetRows;
+		}
+
+	}
 }

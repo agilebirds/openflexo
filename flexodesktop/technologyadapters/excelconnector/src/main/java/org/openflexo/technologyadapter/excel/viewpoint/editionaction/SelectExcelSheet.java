@@ -8,6 +8,9 @@ import java.util.logging.Logger;
 import org.openflexo.foundation.view.action.EditionSchemeAction;
 import org.openflexo.foundation.viewpoint.FetchRequest;
 import org.openflexo.foundation.viewpoint.annotations.FIBPanel;
+import org.openflexo.model.annotations.ImplementationClass;
+import org.openflexo.model.annotations.ModelEntity;
+import org.openflexo.model.annotations.XMLElement;
 import org.openflexo.technologyadapter.excel.BasicExcelModelSlot;
 import org.openflexo.technologyadapter.excel.model.ExcelSheet;
 import org.openflexo.technologyadapter.excel.model.ExcelWorkbook;
@@ -16,45 +19,43 @@ import org.openflexo.technologyadapter.excel.model.ExcelWorkbook;
 @ModelEntity
 @ImplementationClass(SelectExcelSheet.SelectExcelSheetImpl.class)
 @XMLElement
-public interface SelectExcelSheet extends FetchRequest<BasicExcelModelSlot, ExcelSheet>{
+public interface SelectExcelSheet extends FetchRequest<BasicExcelModelSlot, ExcelSheet> {
 
+	public static abstract class SelectExcelSheetImpl extends FetchRequestImpl<BasicExcelModelSlot, ExcelSheet> implements SelectExcelSheet {
 
-public static abstract  class SelectExcelSheetImpl extends FetchRequest<BasicExcelModelSlot, ExcelSheet>Impl implements SelectExcelSheet
-{
+		private static final Logger logger = Logger.getLogger(SelectExcelSheet.class.getPackage().getName());
 
-	private static final Logger logger = Logger.getLogger(SelectExcelSheet.class.getPackage().getName());
-
-	public SelectExcelSheetImpl() {
-		super();
-		// TODO Auto-generated constructor stub
-	}
-
-	@Override
-	public Type getFetchedType() {
-		return ExcelSheet.class;
-	}
-
-	@Override
-	public List<ExcelSheet> performAction(EditionSchemeAction action) {
-
-		if (getModelSlotInstance(action) == null) {
-			logger.warning("Could not access model slot instance. Abort.");
-			return null;
-		}
-		if (getModelSlotInstance(action).getResourceData() == null) {
-			logger.warning("Could not access model adressed by model slot instance. Abort.");
-			return null;
+		public SelectExcelSheetImpl() {
+			super();
+			// TODO Auto-generated constructor stub
 		}
 
-		ExcelWorkbook excelWorkbook = (ExcelWorkbook) getModelSlotInstance(action).getAccessedResourceData();
+		@Override
+		public Type getFetchedType() {
+			return ExcelSheet.class;
+		}
 
-		List<ExcelSheet> selectedExcelSheets = new ArrayList<ExcelSheet>(0);
+		@Override
+		public List<ExcelSheet> performAction(EditionSchemeAction action) {
 
-		selectedExcelSheets.addAll(excelWorkbook.getExcelSheets());
+			if (getModelSlotInstance(action) == null) {
+				logger.warning("Could not access model slot instance. Abort.");
+				return null;
+			}
+			if (getModelSlotInstance(action).getResourceData() == null) {
+				logger.warning("Could not access model adressed by model slot instance. Abort.");
+				return null;
+			}
 
-		List<ExcelSheet> returned = filterWithConditions(selectedExcelSheets, action);
+			ExcelWorkbook excelWorkbook = (ExcelWorkbook) getModelSlotInstance(action).getAccessedResourceData();
 
-		return returned;
+			List<ExcelSheet> selectedExcelSheets = new ArrayList<ExcelSheet>(0);
+
+			selectedExcelSheets.addAll(excelWorkbook.getExcelSheets());
+
+			List<ExcelSheet> returned = filterWithConditions(selectedExcelSheets, action);
+
+			return returned;
+		}
 	}
-}
 }
