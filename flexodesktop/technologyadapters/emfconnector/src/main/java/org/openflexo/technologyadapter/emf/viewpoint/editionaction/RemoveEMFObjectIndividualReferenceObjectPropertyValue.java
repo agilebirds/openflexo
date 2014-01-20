@@ -33,6 +33,9 @@ import java.lang.reflect.Type;
 import org.openflexo.foundation.view.action.EditionSchemeAction;
 import org.openflexo.foundation.viewpoint.AssignableAction;
 import org.openflexo.foundation.viewpoint.annotations.FIBPanel;
+import org.openflexo.model.annotations.ImplementationClass;
+import org.openflexo.model.annotations.ModelEntity;
+import org.openflexo.model.annotations.XMLElement;
 import org.openflexo.technologyadapter.emf.EMFModelSlot;
 import org.openflexo.technologyadapter.emf.model.EMFObjectIndividualReferenceObjectPropertyValue;
 
@@ -43,52 +46,52 @@ import org.openflexo.technologyadapter.emf.model.EMFObjectIndividualReferenceObj
  * 
  */
 @FIBPanel("Fib/RemoveEMFObjectIndividualReferenceObjectPropertyValuePanel.fib")
-public class RemoveEMFObjectIndividualReferenceObjectPropertyValue extends
+@ModelEntity
+@ImplementationClass(RemoveEMFObjectIndividualReferenceObjectPropertyValue.RemoveEMFObjectIndividualReferenceObjectPropertyValueImpl.class)
+@XMLElement
+public interface RemoveEMFObjectIndividualReferenceObjectPropertyValue extends
 		AssignableAction<EMFModelSlot, EMFObjectIndividualReferenceObjectPropertyValue> {
 
-	/**
-	 * Constructor.
-	 * 
-	 * @param builder
-	 */
-	public RemoveEMFObjectIndividualReferenceObjectPropertyValue() {
-		super();
-	}
+	public static abstract class RemoveEMFObjectIndividualReferenceObjectPropertyValueImpl extends
+			AssignableActionImpl<EMFModelSlot, EMFObjectIndividualReferenceObjectPropertyValue> implements
+			RemoveEMFObjectIndividualReferenceObjectPropertyValue {
 
-	/**
-	 * Follow the link.
-	 * 
-	 * @see org.openflexo.foundation.viewpoint.AssignableAction#getAssignableType()
-	 */
-	@Override
-	public Type getAssignableType() {
-		// if (value != null) {
-		// return value.getClass();
-		// }
-		return Object.class;
-	}
+		/**
+		 * Follow the link.
+		 * 
+		 * @see org.openflexo.foundation.viewpoint.AssignableAction#getAssignableType()
+		 */
+		@Override
+		public Type getAssignableType() {
+			// if (value != null) {
+			// return value.getClass();
+			// }
+			return Object.class;
+		}
 
-	/**
-	 * Follow the link.
-	 * 
-	 * @see org.openflexo.foundation.viewpoint.EditionAction#performAction(org.openflexo.foundation.view.action.EditionSchemeAction)
-	 */
-	@Override
-	public EMFObjectIndividualReferenceObjectPropertyValue performAction(EditionSchemeAction action) {
-		EMFObjectIndividualReferenceObjectPropertyValue result = null;
-		// ModelSlotInstance<EMFModel, EMFMetaModel> modelSlotInstance = getModelSlotInstance(action);
-		// EMFModel model = modelSlotInstance.getModel();
-		// // Remove Attribute in EMF
-		// if (referenceObjectProperty.getObject().getUpperBound() != 1) {
-		// List<T> values = (List<T>) objectIndividual.getObject().eGet(referenceObjectProperty.getObject());
-		// values.remove(value);
-		// } else {
-		// objectIndividual.getObject().eUnset(referenceObjectProperty.getObject());
-		// }
-		// // Instanciate Wrapper
-		// result = model.getConverter().convertObjectIndividualReferenceObjectPropertyValue(model, objectIndividual.getObject(),
-		// referenceObjectProperty.getObject());
-		return result;
+		/**
+		 * Follow the link.
+		 * 
+		 * @see org.openflexo.foundation.viewpoint.EditionAction#performAction(org.openflexo.foundation.view.action.EditionSchemeAction)
+		 */
+		@Override
+		public EMFObjectIndividualReferenceObjectPropertyValue performAction(EditionSchemeAction action) {
+			EMFObjectIndividualReferenceObjectPropertyValue result = null;
+			// ModelSlotInstance<EMFModel, EMFMetaModel> modelSlotInstance = getModelSlotInstance(action);
+			// EMFModel model = modelSlotInstance.getModel();
+			// // Remove Attribute in EMF
+			// if (referenceObjectProperty.getObject().getUpperBound() != 1) {
+			// List<T> values = (List<T>) objectIndividual.getObject().eGet(referenceObjectProperty.getObject());
+			// values.remove(value);
+			// } else {
+			// objectIndividual.getObject().eUnset(referenceObjectProperty.getObject());
+			// }
+			// // Instanciate Wrapper
+			// result = model.getConverter().convertObjectIndividualReferenceObjectPropertyValue(model, objectIndividual.getObject(),
+			// referenceObjectProperty.getObject());
+			return result;
+		}
+
 	}
 
 }

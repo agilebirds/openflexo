@@ -35,9 +35,9 @@ public interface SetPropertyValueAction {
 
 	public Type getSubjectType();
 
-	public DataBinding<Object> getSubject();
+	public DataBinding<?> getSubject();
 
-	public void setSubject(DataBinding<Object> subject);
+	public void setSubject(DataBinding<?> subject);
 
 	public IFlexoOntologyStructuralProperty getProperty();
 

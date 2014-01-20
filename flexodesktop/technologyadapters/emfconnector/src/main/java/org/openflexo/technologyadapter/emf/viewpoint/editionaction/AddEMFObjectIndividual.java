@@ -29,6 +29,9 @@ import org.openflexo.foundation.view.action.EditionSchemeAction;
 import org.openflexo.foundation.viewpoint.AddIndividual;
 import org.openflexo.foundation.viewpoint.DataPropertyAssertion;
 import org.openflexo.foundation.viewpoint.ObjectPropertyAssertion;
+import org.openflexo.model.annotations.ImplementationClass;
+import org.openflexo.model.annotations.ModelEntity;
+import org.openflexo.model.annotations.XMLElement;
 import org.openflexo.technologyadapter.emf.EMFModelSlot;
 import org.openflexo.technologyadapter.emf.metamodel.AEMFMetaModelObjectImpl;
 import org.openflexo.technologyadapter.emf.metamodel.EMFAttributeDataProperty;
@@ -48,110 +51,109 @@ import org.openflexo.technologyadapter.emf.model.EMFObjectIndividual;
 @ModelEntity
 @ImplementationClass(AddEMFObjectIndividual.AddEMFObjectIndividualImpl.class)
 @XMLElement
-public interface AddEMFObjectIndividual extends AddIndividual<EMFModelSlot, EMFObjectIndividual>{
+public interface AddEMFObjectIndividual extends AddIndividual<EMFModelSlot, EMFObjectIndividual> {
 
+	public static abstract class AddEMFObjectIndividualImpl extends AddIndividualImpl<EMFModelSlot, EMFObjectIndividual> implements
+			AddEMFObjectIndividual {
 
-public static abstract  class AddEMFObjectIndividualImpl extends AddIndividual<EMFModelSlot, EMFObjectIndividual>Impl implements AddEMFObjectIndividual
-{
+		private static final Logger logger = Logger.getLogger(AddEMFObjectIndividual.class.getPackage().getName());
 
-	private static final Logger logger = Logger.getLogger(AddEMFObjectIndividual.class.getPackage().getName());
+		public AddEMFObjectIndividualImpl() {
+			super();
+		}
 
-	public AddEMFObjectIndividualImpl() {
-		super();
-	}
+		@Override
+		public EMFClassClass getOntologyClass() {
+			return (EMFClassClass) super.getOntologyClass();
+		}
 
-	@Override
-	public EMFClassClass getOntologyClass() {
-		return (EMFClassClass) super.getOntologyClass();
-	}
+		public void setOntologyClass(EMFClassClass ontologyClass) {
+			super.setOntologyClass(ontologyClass);
+		}
 
-	public void setOntologyClass(EMFClassClass ontologyClass) {
-		super.setOntologyClass(ontologyClass);
-	}
+		@Override
+		public Class<EMFObjectIndividual> getOntologyIndividualClass() {
+			return EMFObjectIndividual.class;
+		}
 
-	@Override
-	public Class<EMFObjectIndividual> getOntologyIndividualClass() {
-		return EMFObjectIndividual.class;
-	}
-
-	@Override
-	public EMFObjectIndividual performAction(EditionSchemeAction action) {
-		EMFObjectIndividual result = null;
-		TypeAwareModelSlotInstance<EMFModel, EMFMetaModel, EMFModelSlot> modelSlotInstance = (TypeAwareModelSlotInstance<EMFModel, EMFMetaModel, EMFModelSlot>) getModelSlotInstance(action);
-		if (modelSlotInstance.getResourceData() != null) {
-			IFlexoOntologyClass aClass = getOntologyClass();
-			if (aClass instanceof EMFClassClass) {
-				EMFClassClass emfClassClass = (EMFClassClass) aClass;
-				// Create EMF Object
-				EObject eObject = EcoreUtil.create(emfClassClass.getObject());
-				modelSlotInstance.getAccessedResourceData().getEMFResource().getContents().add(eObject);
-				// Instanciate Wrapper.
-				result = modelSlotInstance.getAccessedResourceData().getConverter()
-						.convertObjectIndividual(modelSlotInstance.getAccessedResourceData(), eObject);
-				for (DataPropertyAssertion dataPropertyAssertion : getDataAssertions()) {
-					if (dataPropertyAssertion.evaluateCondition(action)) {
-						logger.info("DataPropertyAssertion=" + dataPropertyAssertion);
-						EMFAttributeDataProperty property = (EMFAttributeDataProperty) dataPropertyAssertion.getOntologyProperty();
-						logger.info("Property=" + property);
-						Object value = dataPropertyAssertion.getValue(action);
-						logger.info("Value=" + value);
-						// Set Data Attribute in EMF
-						result.getObject().eSet(property.getObject(), value);
+		@Override
+		public EMFObjectIndividual performAction(EditionSchemeAction action) {
+			EMFObjectIndividual result = null;
+			TypeAwareModelSlotInstance<EMFModel, EMFMetaModel, EMFModelSlot> modelSlotInstance = (TypeAwareModelSlotInstance<EMFModel, EMFMetaModel, EMFModelSlot>) getModelSlotInstance(action);
+			if (modelSlotInstance.getResourceData() != null) {
+				IFlexoOntologyClass aClass = getOntologyClass();
+				if (aClass instanceof EMFClassClass) {
+					EMFClassClass emfClassClass = (EMFClassClass) aClass;
+					// Create EMF Object
+					EObject eObject = EcoreUtil.create(emfClassClass.getObject());
+					modelSlotInstance.getAccessedResourceData().getEMFResource().getContents().add(eObject);
+					// Instanciate Wrapper.
+					result = modelSlotInstance.getAccessedResourceData().getConverter()
+							.convertObjectIndividual(modelSlotInstance.getAccessedResourceData(), eObject);
+					for (DataPropertyAssertion dataPropertyAssertion : getDataAssertions()) {
+						if (dataPropertyAssertion.evaluateCondition(action)) {
+							logger.info("DataPropertyAssertion=" + dataPropertyAssertion);
+							EMFAttributeDataProperty property = (EMFAttributeDataProperty) dataPropertyAssertion.getOntologyProperty();
+							logger.info("Property=" + property);
+							Object value = dataPropertyAssertion.getValue(action);
+							logger.info("Value=" + value);
+							// Set Data Attribute in EMF
+							result.getObject().eSet(property.getObject(), value);
+						}
 					}
-				}
-				for (ObjectPropertyAssertion objectPropertyAssertion : getObjectAssertions()) {
-					if (objectPropertyAssertion.evaluateCondition(action)) {
-						logger.info("ObjectPropertyAssertion=" + objectPropertyAssertion);
-						if (objectPropertyAssertion.getOntologyProperty() instanceof EMFAttributeObjectProperty) {
-							EMFAttributeObjectProperty property = (EMFAttributeObjectProperty) objectPropertyAssertion
-									.getOntologyProperty();
-							logger.info("Property=" + property);
-							Object value = objectPropertyAssertion.getValue(action);
-							logger.info("Value=" + value);
-							// Set Data Attribute in EMF
-							if (value instanceof AEMFMetaModelObjectImpl) {
-								result.getObject().eSet(property.getObject(), ((AEMFMetaModelObjectImpl<?>) value).getObject());
-							} else {
-								result.getObject().eSet(property.getObject(), value);
-							}
-						} else if (objectPropertyAssertion.getOntologyProperty() instanceof EMFReferenceObjectProperty) {
-							EMFReferenceObjectProperty property = (EMFReferenceObjectProperty) objectPropertyAssertion
-									.getOntologyProperty();
-							logger.info("Property=" + property);
-							Object value = objectPropertyAssertion.getValue(action);
-							logger.info("Value=" + value);
-							// Set Data Attribute in EMF
-							if (value instanceof AEMFMetaModelObjectImpl) {
-								result.getObject().eSet(property.getObject(), ((AEMFMetaModelObjectImpl<?>) value).getObject());
-							} else {
-								if (value instanceof EMFObjectIndividual) {
-									result.getObject().eSet(property.getObject(), ((EMFObjectIndividual) value).getObject());
+					for (ObjectPropertyAssertion objectPropertyAssertion : getObjectAssertions()) {
+						if (objectPropertyAssertion.evaluateCondition(action)) {
+							logger.info("ObjectPropertyAssertion=" + objectPropertyAssertion);
+							if (objectPropertyAssertion.getOntologyProperty() instanceof EMFAttributeObjectProperty) {
+								EMFAttributeObjectProperty property = (EMFAttributeObjectProperty) objectPropertyAssertion
+										.getOntologyProperty();
+								logger.info("Property=" + property);
+								Object value = objectPropertyAssertion.getValue(action);
+								logger.info("Value=" + value);
+								// Set Data Attribute in EMF
+								if (value instanceof AEMFMetaModelObjectImpl) {
+									result.getObject().eSet(property.getObject(), ((AEMFMetaModelObjectImpl<?>) value).getObject());
 								} else {
 									result.getObject().eSet(property.getObject(), value);
 								}
+							} else if (objectPropertyAssertion.getOntologyProperty() instanceof EMFReferenceObjectProperty) {
+								EMFReferenceObjectProperty property = (EMFReferenceObjectProperty) objectPropertyAssertion
+										.getOntologyProperty();
+								logger.info("Property=" + property);
+								Object value = objectPropertyAssertion.getValue(action);
+								logger.info("Value=" + value);
+								// Set Data Attribute in EMF
+								if (value instanceof AEMFMetaModelObjectImpl) {
+									result.getObject().eSet(property.getObject(), ((AEMFMetaModelObjectImpl<?>) value).getObject());
+								} else {
+									if (value instanceof EMFObjectIndividual) {
+										result.getObject().eSet(property.getObject(), ((EMFObjectIndividual) value).getObject());
+									} else {
+										result.getObject().eSet(property.getObject(), value);
+									}
+								}
+							} else {
+								logger.warning("Unexpected "
+										+ objectPropertyAssertion.getOntologyProperty()
+										+ " of "
+										+ (objectPropertyAssertion.getOntologyProperty() != null ? objectPropertyAssertion
+												.getOntologyProperty().getClass() : null));
 							}
-						} else {
-							logger.warning("Unexpected "
-									+ objectPropertyAssertion.getOntologyProperty()
-									+ " of "
-									+ (objectPropertyAssertion.getOntologyProperty() != null ? objectPropertyAssertion
-											.getOntologyProperty().getClass() : null));
 						}
 					}
+					modelSlotInstance.getResourceData().setIsModified();
+					logger.info("********* Added individual " + result.getName() + " as " + aClass.getName());
+				} else {
+					logger.warning("Not allowed to create new Enum values. getOntologyClass()=" + getOntologyClass());
+					return null;
 				}
-				modelSlotInstance.getResourceData().setIsModified();
-				logger.info("********* Added individual " + result.getName() + " as " + aClass.getName());
 			} else {
-				logger.warning("Not allowed to create new Enum values. getOntologyClass()=" + getOntologyClass());
+				logger.warning("Model slot not correctly initialised : model is null");
 				return null;
 			}
-		} else {
-			logger.warning("Model slot not correctly initialised : model is null");
-			return null;
+
+			return result;
 		}
 
-		return result;
 	}
-
-}
 }

@@ -41,6 +41,7 @@ import org.openflexo.foundation.TestFlexoServiceManager;
 import org.openflexo.foundation.resource.FlexoResourceCenter;
 import org.openflexo.foundation.resource.ResourceLoadingCancelledException;
 import org.openflexo.foundation.resource.SaveResourceException;
+import org.openflexo.foundation.viewpoint.VirtualModelModelFactory;
 import org.openflexo.technologyadapter.emf.EMFTechnologyAdapter;
 import org.openflexo.technologyadapter.emf.rm.EMFMetaModelRepository;
 import org.openflexo.technologyadapter.emf.rm.EMFMetaModelResource;
@@ -87,19 +88,23 @@ public class TestEMFModelEdition {
 				e.printStackTrace();
 			}
 
+			// TODO
+			VirtualModelModelFactory factory = null;
+
 			EMFObjectIndividual intParameter = createIntParameter(emfModelResource, emfMetaModelResource, "BoolParameter Name",
-					Integer.valueOf(12));
+					Integer.valueOf(12), factory);
 
 			EMFObjectIndividual doubleParameter = createDoubleParameter(emfModelResource, emfMetaModelResource, "StringParameter Name",
-					Double.valueOf(42.12));
+					Double.valueOf(42.12), factory);
 
-			EMFObjectIndividual boolParameter = createBoolParameter(emfModelResource, emfMetaModelResource, "BoolParameter Name", true);
+			EMFObjectIndividual boolParameter = createBoolParameter(emfModelResource, emfMetaModelResource, "BoolParameter Name", true,
+					factory);
 
 			EMFObjectIndividual stringParameter = createStringParameter(emfModelResource, emfMetaModelResource, "StringParameter Name",
-					"StringParameter Value");
+					"StringParameter Value", factory);
 
 			EMFObjectIndividual parameterSet = createParameterSet(emfModelResource, emfMetaModelResource, "ParameterSet Name",
-					Arrays.asList(intParameter, doubleParameter, boolParameter, stringParameter));
+					Arrays.asList(intParameter, doubleParameter, boolParameter, stringParameter), factory);
 
 			emfModelResource.save(null);
 		} catch (SaveResourceException e) {
@@ -117,9 +122,10 @@ public class TestEMFModelEdition {
 		}
 	}
 
-	protected EMFObjectIndividual addEMFObjectIndividual(EMFModelResource emfModelResource, String classURI) {
+	protected EMFObjectIndividual addEMFObjectIndividual(EMFModelResource emfModelResource, String classURI,
+			VirtualModelModelFactory factory) {
 		EMFObjectIndividual result = null;
-		AddEMFObjectIndividual addObject = new AddEMFObjectIndividual();
+		AddEMFObjectIndividual addObject = factory.newInstance(AddEMFObjectIndividual.class);
 		// addObject.setEMFModelResource(emfModelResource);
 		// addObject.setEMFClassURI(classURI);
 		result = addObject.performAction(null);
@@ -127,9 +133,10 @@ public class TestEMFModelEdition {
 		return result;
 	}
 
-	protected EMFObjectIndividual removeEMFObjectIndividual(EMFModelResource emfModelResource, EMFObjectIndividual objectIndividual) {
+	protected EMFObjectIndividual removeEMFObjectIndividual(EMFModelResource emfModelResource, EMFObjectIndividual objectIndividual,
+			VirtualModelModelFactory factory) {
 		EMFObjectIndividual result = null;
-		RemoveEMFObjectIndividual removeObject = new RemoveEMFObjectIndividual();
+		RemoveEMFObjectIndividual removeObject = factory.newInstance(RemoveEMFObjectIndividual.class);
 		// removeObject.setEMFModelResource(emfModelResource);
 		// removeObject.setObjectIndividual(objectIndividual);
 		removeObject.performAction(null);
@@ -139,10 +146,11 @@ public class TestEMFModelEdition {
 	}
 
 	protected EMFObjectIndividualAttributeDataPropertyValue addEMFObjectIndividualAttributeDataPropertyValue(
-			EMFMetaModelResource emfMetaModelResource, EMFObjectIndividual objectIndividual, String propertyURI, Object value)
-			throws FileNotFoundException, ResourceLoadingCancelledException, FlexoException {
+			EMFMetaModelResource emfMetaModelResource, EMFObjectIndividual objectIndividual, String propertyURI, Object value,
+			VirtualModelModelFactory factory) throws FileNotFoundException, ResourceLoadingCancelledException, FlexoException {
 		EMFObjectIndividualAttributeDataPropertyValue result = null;
-		AddEMFObjectIndividualAttributeDataPropertyValue addName = new AddEMFObjectIndividualAttributeDataPropertyValue();
+		AddEMFObjectIndividualAttributeDataPropertyValue addName = factory
+				.newInstance(AddEMFObjectIndividualAttributeDataPropertyValue.class);
 		// addName.setObjectIndividual(objectIndividual);
 		// addName.setAttributeDataProperty((EMFAttributeDataProperty)
 		// emfMetaModelResource.getResourceData(null).getDataProperty(propertyURI));
@@ -153,10 +161,11 @@ public class TestEMFModelEdition {
 	}
 
 	protected EMFObjectIndividualAttributeDataPropertyValue removeEMFObjectIndividualAttributeDataPropertyValue(
-			EMFMetaModelResource emfMetaModelResource, EMFObjectIndividual objectIndividual, String propertyURI, Object value)
-			throws FileNotFoundException, ResourceLoadingCancelledException, FlexoException {
+			EMFMetaModelResource emfMetaModelResource, EMFObjectIndividual objectIndividual, String propertyURI, Object value,
+			VirtualModelModelFactory factory) throws FileNotFoundException, ResourceLoadingCancelledException, FlexoException {
 		EMFObjectIndividualAttributeDataPropertyValue result = null;
-		RemoveEMFObjectIndividualAttributeDataPropertyValue addName = new RemoveEMFObjectIndividualAttributeDataPropertyValue();
+		RemoveEMFObjectIndividualAttributeDataPropertyValue addName = factory
+				.newInstance(RemoveEMFObjectIndividualAttributeDataPropertyValue.class);
 		// addName.setObjectIndividual(objectIndividual);
 		// addName.setAttributeDataProperty((EMFAttributeDataProperty)
 		// emfMetaModelResource.getResourceData(null).getDataProperty(propertyURI));
@@ -167,10 +176,11 @@ public class TestEMFModelEdition {
 	}
 
 	protected EMFObjectIndividualAttributeObjectPropertyValue addEMFObjectIndividualAttributeObjectPropertyValue(
-			EMFMetaModelResource emfMetaModelResource, EMFObjectIndividual objectIndividual, String propertyURI, Object value)
-			throws FileNotFoundException, ResourceLoadingCancelledException, FlexoException {
+			EMFMetaModelResource emfMetaModelResource, EMFObjectIndividual objectIndividual, String propertyURI, Object value,
+			VirtualModelModelFactory factory) throws FileNotFoundException, ResourceLoadingCancelledException, FlexoException {
 		EMFObjectIndividualAttributeObjectPropertyValue result = null;
-		AddEMFObjectIndividualAttributeObjectPropertyValue addName = new AddEMFObjectIndividualAttributeObjectPropertyValue();
+		AddEMFObjectIndividualAttributeObjectPropertyValue addName = factory
+				.newInstance(AddEMFObjectIndividualAttributeObjectPropertyValue.class);
 		// addName.setObjectIndividual(objectIndividual);
 		// addName.setAttributeObjectProperty((EMFAttributeObjectProperty) emfMetaModelResource.getResourceData(null).getDataProperty(
 		// propertyURI));
@@ -181,10 +191,11 @@ public class TestEMFModelEdition {
 	}
 
 	protected EMFObjectIndividualAttributeObjectPropertyValue removeEMFObjectIndividualAttributeObjectPropertyValue(
-			EMFMetaModelResource emfMetaModelResource, EMFObjectIndividual objectIndividual, String propertyURI, Object value)
-			throws FileNotFoundException, ResourceLoadingCancelledException, FlexoException {
+			EMFMetaModelResource emfMetaModelResource, EMFObjectIndividual objectIndividual, String propertyURI, Object value,
+			VirtualModelModelFactory factory) throws FileNotFoundException, ResourceLoadingCancelledException, FlexoException {
 		EMFObjectIndividualAttributeObjectPropertyValue result = null;
-		RemoveEMFObjectIndividualAttributeObjectPropertyValue addName = new RemoveEMFObjectIndividualAttributeObjectPropertyValue();
+		RemoveEMFObjectIndividualAttributeObjectPropertyValue addName = factory
+				.newInstance(RemoveEMFObjectIndividualAttributeObjectPropertyValue.class);
 		// addName.setObjectIndividual(objectIndividual);
 		// addName.setAttributeObjectProperty((EMFAttributeObjectProperty) emfMetaModelResource.getResourceData(null).getDataProperty(
 		// propertyURI));
@@ -195,10 +206,11 @@ public class TestEMFModelEdition {
 	}
 
 	protected EMFObjectIndividualReferenceObjectPropertyValue addEMFObjectIndividualReferenceObjectPropertyValue(
-			EMFMetaModelResource emfMetaModelResource, EMFObjectIndividual objectIndividual, String propertyURI, Object value)
-			throws FileNotFoundException, ResourceLoadingCancelledException, FlexoException {
+			EMFMetaModelResource emfMetaModelResource, EMFObjectIndividual objectIndividual, String propertyURI, Object value,
+			VirtualModelModelFactory factory) throws FileNotFoundException, ResourceLoadingCancelledException, FlexoException {
 		EMFObjectIndividualReferenceObjectPropertyValue result = null;
-		AddEMFObjectIndividualReferenceObjectPropertyValue addName = new AddEMFObjectIndividualReferenceObjectPropertyValue();
+		AddEMFObjectIndividualReferenceObjectPropertyValue addName = factory
+				.newInstance(AddEMFObjectIndividualReferenceObjectPropertyValue.class);
 		// addName.setObjectIndividual(objectIndividual);
 		// addName.setReferenceObjectProperty((EMFReferenceObjectProperty) emfMetaModelResource.getResourceData(null).getObjectProperty(
 		// propertyURI));
@@ -209,10 +221,11 @@ public class TestEMFModelEdition {
 	}
 
 	protected EMFObjectIndividualReferenceObjectPropertyValue removeEMFObjectIndividualReferenceObjectPropertyValue(
-			EMFMetaModelResource emfMetaModelResource, EMFObjectIndividual objectIndividual, String propertyURI, Object value)
-			throws FileNotFoundException, ResourceLoadingCancelledException, FlexoException {
+			EMFMetaModelResource emfMetaModelResource, EMFObjectIndividual objectIndividual, String propertyURI, Object value,
+			VirtualModelModelFactory factory) throws FileNotFoundException, ResourceLoadingCancelledException, FlexoException {
 		EMFObjectIndividualReferenceObjectPropertyValue result = null;
-		RemoveEMFObjectIndividualReferenceObjectPropertyValue addName = new RemoveEMFObjectIndividualReferenceObjectPropertyValue();
+		RemoveEMFObjectIndividualReferenceObjectPropertyValue addName = factory
+				.newInstance(RemoveEMFObjectIndividualReferenceObjectPropertyValue.class);
 		// addName.setObjectIndividual(objectIndividual);
 		// addName.setReferenceObjectProperty((EMFReferenceObjectProperty) emfMetaModelResource.getResourceData(null).getObjectProperty(
 		// propertyURI));
@@ -223,75 +236,79 @@ public class TestEMFModelEdition {
 	}
 
 	protected EMFObjectIndividual createParameterSet(EMFModelResource emfModelResource, EMFMetaModelResource emfMetaModelResource,
-			String name, List<EMFObjectIndividual> ownedParameters) throws FileNotFoundException, ResourceLoadingCancelledException,
-			FlexoException {
+			String name, List<EMFObjectIndividual> ownedParameters, VirtualModelModelFactory factory) throws FileNotFoundException,
+			ResourceLoadingCancelledException, FlexoException {
 		EMFObjectIndividual result = null;
 		// ParameterSet object
-		result = addEMFObjectIndividual(emfModelResource, "http://www.thalesgroup.com/parameters/1.0/ParameterSet");
+		result = addEMFObjectIndividual(emfModelResource, "http://www.thalesgroup.com/parameters/1.0/ParameterSet", factory);
 		// Name parameter
 		addEMFObjectIndividualAttributeDataPropertyValue(emfMetaModelResource, result,
-				"http://www.thalesgroup.com/parameters/1.0/ParameterSet/name", name);
+				"http://www.thalesgroup.com/parameters/1.0/ParameterSet/name", name, factory);
 		// OwnedParameters parameter
 		for (EMFObjectIndividual ownedParameter : ownedParameters) {
 			addEMFObjectIndividualReferenceObjectPropertyValue(emfMetaModelResource, result,
-					"http://www.thalesgroup.com/parameters/1.0/ParameterSet/ownedParameters", ownedParameter.getObject());
+					"http://www.thalesgroup.com/parameters/1.0/ParameterSet/ownedParameters", ownedParameter.getObject(), factory);
 		}
 		return result;
 	}
 
 	protected EMFObjectIndividual createIntParameter(EMFModelResource emfModelResource, EMFMetaModelResource emfMetaModelResource,
-			String name, Integer value) throws FileNotFoundException, ResourceLoadingCancelledException, FlexoException {
+			String name, Integer value, VirtualModelModelFactory factory) throws FileNotFoundException, ResourceLoadingCancelledException,
+			FlexoException {
 		EMFObjectIndividual result = null;
 		// IntParameter object
-		result = addEMFObjectIndividual(emfModelResource, "http://www.thalesgroup.com/parameters/1.0/IntParameterValue");
+		result = addEMFObjectIndividual(emfModelResource, "http://www.thalesgroup.com/parameters/1.0/IntParameterValue", factory);
 		// Name parameter
 		addEMFObjectIndividualAttributeDataPropertyValue(emfMetaModelResource, result,
-				"http://www.thalesgroup.com/parameters/1.0/GenericParameter/name", name);
+				"http://www.thalesgroup.com/parameters/1.0/GenericParameter/name", name, factory);
 		// Value parameter.
 		addEMFObjectIndividualAttributeDataPropertyValue(emfMetaModelResource, result,
-				"http://www.thalesgroup.com/parameters/1.0/IntParameterValue/value", value);
+				"http://www.thalesgroup.com/parameters/1.0/IntParameterValue/value", value, factory);
 		return result;
 	}
 
 	protected EMFObjectIndividual createDoubleParameter(EMFModelResource emfModelResource, EMFMetaModelResource emfMetaModelResource,
-			String name, Double value) throws FileNotFoundException, ResourceLoadingCancelledException, FlexoException {
+			String name, Double value, VirtualModelModelFactory factory) throws FileNotFoundException, ResourceLoadingCancelledException,
+			FlexoException {
 		EMFObjectIndividual result = null;
 		// DoubleParameter object
-		result = addEMFObjectIndividual(emfModelResource, "http://www.thalesgroup.com/parameters/1.0/DoubleParameterValue");
+		result = addEMFObjectIndividual(emfModelResource, "http://www.thalesgroup.com/parameters/1.0/DoubleParameterValue", factory);
 		// Name parameter
 		addEMFObjectIndividualAttributeDataPropertyValue(emfMetaModelResource, result,
-				"http://www.thalesgroup.com/parameters/1.0/GenericParameter/name", name);
+				"http://www.thalesgroup.com/parameters/1.0/GenericParameter/name", name, factory);
 		// Value parameter.
 		addEMFObjectIndividualAttributeDataPropertyValue(emfMetaModelResource, result,
-				"http://www.thalesgroup.com/parameters/1.0/DoubleParameterValue/value", value);
+				"http://www.thalesgroup.com/parameters/1.0/DoubleParameterValue/value", value, factory);
 		return result;
 	}
 
 	protected EMFObjectIndividual createBoolParameter(EMFModelResource emfModelResource, EMFMetaModelResource emfMetaModelResource,
-			String name, Boolean value) throws FileNotFoundException, ResourceLoadingCancelledException, FlexoException {
+			String name, Boolean value, VirtualModelModelFactory factory) throws FileNotFoundException, ResourceLoadingCancelledException,
+			FlexoException {
 		EMFObjectIndividual result = null;
 		// BoolParameter object
-		result = addEMFObjectIndividual(emfModelResource, "http://www.thalesgroup.com/parameters/1.0/BoolParameterValue");
+		result = addEMFObjectIndividual(emfModelResource, "http://www.thalesgroup.com/parameters/1.0/BoolParameterValue", factory);
 		// Name parameter
 		addEMFObjectIndividualAttributeDataPropertyValue(emfMetaModelResource, result,
-				"http://www.thalesgroup.com/parameters/1.0/GenericParameter/name", name);
+				"http://www.thalesgroup.com/parameters/1.0/GenericParameter/name", name, factory);
 		// Value parameter.
 		addEMFObjectIndividualAttributeDataPropertyValue(emfMetaModelResource, result,
-				"http://www.thalesgroup.com/parameters/1.0/BoolParameterValue/value", value);
+				"http://www.thalesgroup.com/parameters/1.0/BoolParameterValue/value", value, factory);
 		return result;
 	}
 
 	protected EMFObjectIndividual createStringParameter(EMFModelResource emfModelResource, EMFMetaModelResource emfMetaModelResource,
-			String name, String value) throws FileNotFoundException, ResourceLoadingCancelledException, FlexoException {
+			String name, String value, VirtualModelModelFactory factory) throws FileNotFoundException, ResourceLoadingCancelledException,
+			FlexoException {
 		EMFObjectIndividual result = null;
 		// StringParameter object
-		result = addEMFObjectIndividual(emfModelResource, "http://www.thalesgroup.com/parameters/1.0/StringParameterValue");
+		result = addEMFObjectIndividual(emfModelResource, "http://www.thalesgroup.com/parameters/1.0/StringParameterValue", factory);
 		// Name parameter
 		addEMFObjectIndividualAttributeDataPropertyValue(emfMetaModelResource, result,
-				"http://www.thalesgroup.com/parameters/1.0/GenericParameter/name", name);
+				"http://www.thalesgroup.com/parameters/1.0/GenericParameter/name", name, factory);
 		// Value parameter.
 		addEMFObjectIndividualAttributeDataPropertyValue(emfMetaModelResource, result,
-				"http://www.thalesgroup.com/parameters/1.0/StringParameterValue/value", value);
+				"http://www.thalesgroup.com/parameters/1.0/StringParameterValue/value", value, factory);
 		return result;
 	}
 }

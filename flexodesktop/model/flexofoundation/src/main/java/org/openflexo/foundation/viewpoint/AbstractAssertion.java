@@ -47,6 +47,8 @@ public abstract interface AbstractAssertion extends EditionSchemeObject {
 	@Setter(CONDITIONAL_KEY)
 	public void setConditional(DataBinding<Boolean> conditional);
 
+	public boolean evaluateCondition(EditionSchemeAction action);
+
 	public static abstract class AbstractAssertionImpl extends EditionSchemeObjectImpl implements AbstractAssertion {
 
 		private AddIndividual _action;
@@ -85,6 +87,7 @@ public abstract interface AbstractAssertion extends EditionSchemeObject {
 			return null;
 		}
 
+		@Override
 		public boolean evaluateCondition(EditionSchemeAction action) {
 			if (getConditional().isValid()) {
 				try {

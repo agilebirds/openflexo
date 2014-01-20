@@ -77,6 +77,8 @@ public interface DataPropertyAssertion extends AbstractAssertion {
 
 	public void setOntologyProperty(IFlexoOntologyStructuralProperty p);
 
+	public Object getValue(EditionSchemeAction action);
+
 	public static abstract class DataPropertyAssertionImpl extends AbstractAssertionImpl implements DataPropertyAssertion {
 
 		private String dataPropertyURI;
@@ -109,6 +111,7 @@ public interface DataPropertyAssertion extends AbstractAssertion {
 			_setDataPropertyURI(p != null ? p.getURI() : null);
 		}
 
+		@Override
 		public Object getValue(EditionSchemeAction action) {
 			try {
 				return getValue().getBindingValue(action);

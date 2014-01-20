@@ -82,6 +82,8 @@ public interface ObjectPropertyAssertion extends AbstractAssertion {
 
 	public void setOntologyProperty(IFlexoOntologyStructuralProperty p);
 
+	public Object getValue(EditionSchemeAction action);
+
 	public static abstract class ObjectPropertyAssertionImpl extends AbstractAssertionImpl implements ObjectPropertyAssertion {
 
 		private static final Logger logger = Logger.getLogger(ObjectPropertyAssertion.class.getPackage().getName());
@@ -168,6 +170,7 @@ public interface ObjectPropertyAssertion extends AbstractAssertion {
 			return null;
 		}
 
+		@Override
 		public Object getValue(EditionSchemeAction action) {
 			try {
 				return getObject().getBindingValue(action);

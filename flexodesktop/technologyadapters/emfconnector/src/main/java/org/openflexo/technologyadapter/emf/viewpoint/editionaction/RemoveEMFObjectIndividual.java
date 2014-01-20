@@ -32,6 +32,9 @@ import java.util.logging.Logger;
 
 import org.openflexo.foundation.view.action.EditionSchemeAction;
 import org.openflexo.foundation.viewpoint.DeleteAction;
+import org.openflexo.model.annotations.ImplementationClass;
+import org.openflexo.model.annotations.ModelEntity;
+import org.openflexo.model.annotations.XMLElement;
 import org.openflexo.technologyadapter.emf.EMFModelSlot;
 import org.openflexo.technologyadapter.emf.model.EMFObjectIndividual;
 
@@ -40,52 +43,50 @@ import org.openflexo.technologyadapter.emf.model.EMFObjectIndividual;
  * 
  * @author gbesancon
  */
-public class RemoveEMFObjectIndividual extends DeleteAction<EMFModelSlot, EMFObjectIndividual> {
+@ModelEntity
+@ImplementationClass(RemoveEMFObjectIndividual.RemoveEMFObjectIndividualImpl.class)
+@XMLElement
+public interface RemoveEMFObjectIndividual extends DeleteAction<EMFModelSlot, EMFObjectIndividual> {
 
-	private static final Logger logger = Logger.getLogger(RemoveEMFObjectIndividual.class.getPackage().getName());
+	public static abstract class RemoveEMFObjectIndividualImpl extends DeleteActionImpl<EMFModelSlot, EMFObjectIndividual> implements
+			RemoveEMFObjectIndividual {
 
-	/**
-	 * Constructor.
-	 * 
-	 * @param builder
-	 */
-	public RemoveEMFObjectIndividual() {
-		super();
-	}
+		private static final Logger logger = Logger.getLogger(RemoveEMFObjectIndividual.class.getPackage().getName());
 
-	/**
-	 * Follow the link.
-	 * 
-	 * @see org.openflexo.foundation.viewpoint.DeleteAction#performAction(org.openflexo.foundation.view.action.EditionSchemeAction)
-	 */
-	@Override
-	public EMFObjectIndividual performAction(EditionSchemeAction action) {
-		// ModelSlotInstance<EMFModel, EMFMetaModel> modelSlotInstance = getModelSlotInstance(action);
-		// EObject object = objectIndividual.getObject();
-		// EObject container = object.eContainer();
-		// EStructuralFeature containmentFeature = object.eContainmentFeature();
-		// if (container != null) {
-		// // Model Object not root
-		// if (containmentFeature.getUpperBound() != 1) {
-		// List<EObject> values = (List<EObject>) container.eGet(containmentFeature);
-		// values.remove(object);
-		// } else {
-		// objectIndividual.getObject().eUnset(containmentFeature);
-		// }
-		// } else {
-		// // Root Model Object
-		// modelSlotInstance.getModel().getEMFResource().getContents().remove(object);
-		// }
-		return null;
-	}
+		/**
+		 * Follow the link.
+		 * 
+		 * @see org.openflexo.foundation.viewpoint.DeleteAction#performAction(org.openflexo.foundation.view.action.EditionSchemeAction)
+		 */
+		@Override
+		public EMFObjectIndividual performAction(EditionSchemeAction action) {
+			// ModelSlotInstance<EMFModel, EMFMetaModel> modelSlotInstance = getModelSlotInstance(action);
+			// EObject object = objectIndividual.getObject();
+			// EObject container = object.eContainer();
+			// EStructuralFeature containmentFeature = object.eContainmentFeature();
+			// if (container != null) {
+			// // Model Object not root
+			// if (containmentFeature.getUpperBound() != 1) {
+			// List<EObject> values = (List<EObject>) container.eGet(containmentFeature);
+			// values.remove(object);
+			// } else {
+			// objectIndividual.getObject().eUnset(containmentFeature);
+			// }
+			// } else {
+			// // Root Model Object
+			// modelSlotInstance.getModel().getEMFResource().getContents().remove(object);
+			// }
+			return null;
+		}
 
-	/**
-	 * Follow the link.
-	 * 
-	 * @see org.openflexo.foundation.viewpoint.DeleteAction#finalizePerformAction(org.openflexo.foundation.view.action.EditionSchemeAction,
-	 *      org.openflexo.foundation.FlexoModelObject)
-	 */
-	@Override
-	public void finalizePerformAction(EditionSchemeAction action, EMFObjectIndividual initialContext) {
+		/**
+		 * Follow the link.
+		 * 
+		 * @see org.openflexo.foundation.viewpoint.DeleteAction#finalizePerformAction(org.openflexo.foundation.view.action.EditionSchemeAction,
+		 *      org.openflexo.foundation.FlexoModelObject)
+		 */
+		@Override
+		public void finalizePerformAction(EditionSchemeAction action, EMFObjectIndividual initialContext) {
+		}
 	}
 }

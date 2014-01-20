@@ -30,9 +30,9 @@ import org.openflexo.foundation.ontology.IFlexoOntologyObjectProperty;
  */
 public interface SetObjectPropertyValueAction extends SetPropertyValueAction {
 
-	public DataBinding<Object> getObject();
+	public DataBinding<?> getObject();
 
-	public void setObject(DataBinding<Object> object);
+	public void setObject(DataBinding<?> object);
 
 	public IFlexoOntologyObjectProperty getObjectProperty();
 

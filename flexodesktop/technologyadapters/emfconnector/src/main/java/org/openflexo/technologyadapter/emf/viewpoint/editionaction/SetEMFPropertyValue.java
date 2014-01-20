@@ -34,6 +34,12 @@ import org.openflexo.foundation.view.TypeAwareModelSlotInstance;
 import org.openflexo.foundation.view.action.EditionSchemeAction;
 import org.openflexo.foundation.viewpoint.AssignableAction;
 import org.openflexo.foundation.viewpoint.SetPropertyValueAction;
+import org.openflexo.model.annotations.Getter;
+import org.openflexo.model.annotations.ImplementationClass;
+import org.openflexo.model.annotations.ModelEntity;
+import org.openflexo.model.annotations.PropertyIdentifier;
+import org.openflexo.model.annotations.Setter;
+import org.openflexo.model.annotations.XMLAttribute;
 import org.openflexo.technologyadapter.emf.EMFModelSlot;
 import org.openflexo.technologyadapter.emf.metamodel.EMFMetaModel;
 import org.openflexo.technologyadapter.emf.model.EMFModel;
@@ -41,96 +47,96 @@ import org.openflexo.technologyadapter.emf.model.EMFObjectIndividual;
 
 @ModelEntity(isAbstract = true)
 @ImplementationClass(SetEMFPropertyValue.SetEMFPropertyValueImpl.class)
-public abstract interface SetEMFPropertyValue<T> extends AssignableAction<EMFModelSlot, T>,SetPropertyValueAction{
+public abstract interface SetEMFPropertyValue<T> extends AssignableAction<EMFModelSlot, T>, SetPropertyValueAction {
 
-@PropertyIdentifier(type=DataBinding.class)
-public static final String SUBJECT_KEY = "subject";
-
-@Getter(value=SUBJECT_KEY)
-@XMLAttribute
-public DataBinding getSubject();
-
-@Setter(SUBJECT_KEY)
-public void setSubject(DataBinding subject);
-
-
-public static abstract  abstract class SetEMFPropertyValue<T>Impl extends AssignableAction<EMFModelSlot, T>Impl implements SetEMFPropertyValue<T>
-{
-
-	private static final Logger logger = Logger.getLogger(SetEMFPropertyValue.class.getPackage().getName());
-
-	public SetEMFPropertyValueImpl() {
-		super();
-	}
-
-	private DataBinding<Object> subject;
+	@PropertyIdentifier(type = DataBinding.class)
+	public static final String SUBJECT_KEY = "subject";
 
 	@Override
-	public Type getSubjectType() {
-		if (getProperty() != null && getProperty().getDomain() instanceof IFlexoOntologyClass) {
-			return IndividualOfClass.getIndividualOfClass((IFlexoOntologyClass) getProperty().getDomain());
-		}
-		return IFlexoOntologyConcept.class;
-	}
-
-	public EMFObjectIndividual getSubject(EditionSchemeAction action) {
-		try {
-			return (EMFObjectIndividual) getSubject().getBindingValue(action);
-		} catch (TypeMismatchException e) {
-			e.printStackTrace();
-		} catch (NullReferenceException e) {
-			e.printStackTrace();
-		} catch (InvocationTargetException e) {
-			e.printStackTrace();
-		}
-		return null;
-	}
+	@Getter(value = SUBJECT_KEY)
+	@XMLAttribute
+	public DataBinding<?> getSubject();
 
 	@Override
-	public DataBinding<Object> getSubject() {
-		if (subject == null) {
-			subject = new DataBinding<Object>(this, getSubjectType(), BindingDefinitionType.GET) {
-				@Override
-				public Type getDeclaredType() {
-					return getSubjectType();
-				}
-			};
-			subject.setBindingName("subject");
+	@Setter(SUBJECT_KEY)
+	public void setSubject(DataBinding<?> subject);
+
+	public static abstract class SetEMFPropertyValueImpl<T> extends AssignableActionImpl<EMFModelSlot, T> implements SetEMFPropertyValue<T> {
+
+		private static final Logger logger = Logger.getLogger(SetEMFPropertyValue.class.getPackage().getName());
+
+		public SetEMFPropertyValueImpl() {
+			super();
 		}
-		return subject;
-	}
 
-	@Override
-	public void setSubject(DataBinding<Object> subject) {
-		if (subject != null) {
-			subject = new DataBinding<Object>(subject.toString(), this, getSubjectType(), BindingDefinitionType.GET) {
-				@Override
-				public Type getDeclaredType() {
-					return getSubjectType();
-				}
-			};
-			subject.setBindingName("subject");
+		private DataBinding<?> subject;
+
+		@Override
+		public Type getSubjectType() {
+			if (getProperty() != null && getProperty().getDomain() instanceof IFlexoOntologyClass) {
+				return IndividualOfClass.getIndividualOfClass((IFlexoOntologyClass) getProperty().getDomain());
+			}
+			return IFlexoOntologyConcept.class;
 		}
-		this.subject = subject;
-	}
 
-	@Override
-	public TypeAwareModelSlotInstance<EMFModel, EMFMetaModel, EMFModelSlot> getModelSlotInstance(EditionSchemeAction action) {
-		return (TypeAwareModelSlotInstance<EMFModel, EMFMetaModel, EMFModelSlot>) super.getModelSlotInstance(action);
-
-	}
-
-	public static class SubjectIsRequiredAndMustBeValid extends BindingIsRequiredAndMustBeValid<SetEMFPropertyValue> {
-		public SubjectIsRequiredAndMustBeValid() {
-			super("'subject'_binding_is_required_and_must_be_valid", SetEMFPropertyValue.class);
+		public EMFObjectIndividual getSubject(EditionSchemeAction action) {
+			try {
+				return (EMFObjectIndividual) getSubject().getBindingValue(action);
+			} catch (TypeMismatchException e) {
+				e.printStackTrace();
+			} catch (NullReferenceException e) {
+				e.printStackTrace();
+			} catch (InvocationTargetException e) {
+				e.printStackTrace();
+			}
+			return null;
 		}
 
 		@Override
-		public DataBinding<IFlexoOntologyConcept> getBinding(SetEMFPropertyValue object) {
-			return object.getSubject();
+		public DataBinding<?> getSubject() {
+			if (subject == null) {
+				subject = new DataBinding<Object>(this, getSubjectType(), BindingDefinitionType.GET) {
+					@Override
+					public Type getDeclaredType() {
+						return getSubjectType();
+					}
+				};
+				subject.setBindingName("subject");
+			}
+			return subject;
+		}
+
+		@Override
+		public void setSubject(DataBinding<?> subject) {
+			if (subject != null) {
+				subject = new DataBinding<Object>(subject.toString(), this, getSubjectType(), BindingDefinitionType.GET) {
+					@Override
+					public Type getDeclaredType() {
+						return getSubjectType();
+					}
+				};
+				subject.setBindingName("subject");
+			}
+			this.subject = subject;
+		}
+
+		@Override
+		public TypeAwareModelSlotInstance<EMFModel, EMFMetaModel, EMFModelSlot> getModelSlotInstance(EditionSchemeAction action) {
+			return (TypeAwareModelSlotInstance<EMFModel, EMFMetaModel, EMFModelSlot>) super.getModelSlotInstance(action);
+
+		}
+
+		public static class SubjectIsRequiredAndMustBeValid extends BindingIsRequiredAndMustBeValid<SetEMFPropertyValue> {
+			public SubjectIsRequiredAndMustBeValid() {
+				super("'subject'_binding_is_required_and_must_be_valid", SetEMFPropertyValue.class);
+			}
+
+			@Override
+			public DataBinding<IFlexoOntologyConcept> getBinding(SetEMFPropertyValue object) {
+				return object.getSubject();
+			}
+
 		}
 
 	}
-
-}
 }

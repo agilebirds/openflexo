@@ -31,6 +31,9 @@ import org.openflexo.foundation.view.TypeAwareModelSlotInstance;
 import org.openflexo.foundation.view.action.EditionSchemeAction;
 import org.openflexo.foundation.viewpoint.FetchRequest;
 import org.openflexo.foundation.viewpoint.SelectIndividual;
+import org.openflexo.model.annotations.ImplementationClass;
+import org.openflexo.model.annotations.ModelEntity;
+import org.openflexo.model.annotations.XMLElement;
 import org.openflexo.technologyadapter.emf.EMFModelSlot;
 import org.openflexo.technologyadapter.emf.metamodel.EMFClassClass;
 import org.openflexo.technologyadapter.emf.metamodel.EMFEnumClass;
@@ -47,82 +50,83 @@ import org.openflexo.technologyadapter.emf.model.EMFObjectIndividual;
 @ModelEntity
 @ImplementationClass(SelectEMFObjectIndividual.SelectEMFObjectIndividualImpl.class)
 @XMLElement
-public interface SelectEMFObjectIndividual extends SelectIndividual<EMFModelSlot, EMFObjectIndividual>{
+public interface SelectEMFObjectIndividual extends SelectIndividual<EMFModelSlot, EMFObjectIndividual> {
 
+	public static abstract class SelectEMFObjectIndividualImpl extends SelectIndividualImpl<EMFModelSlot, EMFObjectIndividual> implements
+			SelectEMFObjectIndividual {
 
-public static abstract  class SelectEMFObjectIndividualImpl extends SelectIndividual<EMFModelSlot, EMFObjectIndividual>Impl implements SelectEMFObjectIndividual
-{
+		private static final Logger logger = Logger.getLogger(SelectEMFObjectIndividual.class.getPackage().getName());
 
-	private static final Logger logger = Logger.getLogger(SelectEMFObjectIndividual.class.getPackage().getName());
-
-	public SelectEMFObjectIndividualImpl() {
-		super();
-	}
-
-	@Override
-	public List<EMFObjectIndividual> performAction(EditionSchemeAction action) {
-		if (getModelSlotInstance(action) == null) {
-			logger.warning("Could not access model slot instance. Abort.");
-			return null;
-		}
-		if (getModelSlotInstance(action).getResourceData() == null) {
-			logger.warning("Could not access model adressed by model slot instance. Abort.");
-			return null;
+		public SelectEMFObjectIndividualImpl() {
+			super();
 		}
 
-		// System.out.println("Selecting EMFObjectIndividuals in " + getModelSlotInstance(action).getModel() + " with type=" + getType());
-		List<EMFObjectIndividual> selectedIndividuals = new ArrayList<EMFObjectIndividual>(0);
-		EMFModel emfModel = getModelSlotInstance(action).getAccessedResourceData();
-		Resource resource = emfModel.getEMFResource();
-		IFlexoOntologyClass flexoOntologyClass = getType();
-		List<EObject> selectedEMFIndividuals = new ArrayList<EObject>();
-		if (flexoOntologyClass instanceof EMFClassClass) {
-			TreeIterator<EObject> iterator = resource.getAllContents();
-			while (iterator.hasNext()) {
-				EObject eObject = iterator.next();
-				// FIXME: following commented code was written by gilles
-				// Seems to not working
-				// Replaced by following
-				// Gilles, could you check and explain ?
-				/*selectedEMFIndividuals.addAll(EcoreUtility.getAllContents(eObject, ((EMFClassClass) flexoOntologyClass).getObject()
-						.getClass()));*/
-				EMFClassClass emfObjectIndividualType = emfModel.getMetaModel().getConverter().getClasses().get(eObject.eClass());
-				if (emfObjectIndividualType.equals(flexoOntologyClass)
-						|| ((EMFClassClass) flexoOntologyClass).isSuperClassOf(emfObjectIndividualType)) {
-					selectedEMFIndividuals.add(eObject);
+		@Override
+		public List<EMFObjectIndividual> performAction(EditionSchemeAction action) {
+			if (getModelSlotInstance(action) == null) {
+				logger.warning("Could not access model slot instance. Abort.");
+				return null;
+			}
+			if (getModelSlotInstance(action).getResourceData() == null) {
+				logger.warning("Could not access model adressed by model slot instance. Abort.");
+				return null;
+			}
+
+			// System.out.println("Selecting EMFObjectIndividuals in " + getModelSlotInstance(action).getModel() + " with type=" +
+			// getType());
+			List<EMFObjectIndividual> selectedIndividuals = new ArrayList<EMFObjectIndividual>(0);
+			EMFModel emfModel = getModelSlotInstance(action).getAccessedResourceData();
+			Resource resource = emfModel.getEMFResource();
+			IFlexoOntologyClass flexoOntologyClass = getType();
+			List<EObject> selectedEMFIndividuals = new ArrayList<EObject>();
+			if (flexoOntologyClass instanceof EMFClassClass) {
+				TreeIterator<EObject> iterator = resource.getAllContents();
+				while (iterator.hasNext()) {
+					EObject eObject = iterator.next();
+					// FIXME: following commented code was written by gilles
+					// Seems to not working
+					// Replaced by following
+					// Gilles, could you check and explain ?
+					/*selectedEMFIndividuals.addAll(EcoreUtility.getAllContents(eObject, ((EMFClassClass) flexoOntologyClass).getObject()
+							.getClass()));*/
+					EMFClassClass emfObjectIndividualType = emfModel.getMetaModel().getConverter().getClasses().get(eObject.eClass());
+					if (emfObjectIndividualType.equals(flexoOntologyClass)
+							|| ((EMFClassClass) flexoOntologyClass).isSuperClassOf(emfObjectIndividualType)) {
+						selectedEMFIndividuals.add(eObject);
+					}
+					/*if (eObject.eClass().equals(((EMFClassClass) flexoOntologyClass).getObject())) {
+						selectedEMFIndividuals.add(eObject);
+					}*/
 				}
-				/*if (eObject.eClass().equals(((EMFClassClass) flexoOntologyClass).getObject())) {
-					selectedEMFIndividuals.add(eObject);
-				}*/
+			} else if (flexoOntologyClass instanceof EMFEnumClass) {
+				System.err.println("We shouldn't browse enum individuals of type "
+						+ ((EMFEnumClass) flexoOntologyClass).getObject().getName() + ".");
 			}
-		} else if (flexoOntologyClass instanceof EMFEnumClass) {
-			System.err.println("We shouldn't browse enum individuals of type " + ((EMFEnumClass) flexoOntologyClass).getObject().getName()
-					+ ".");
+
+			// System.out.println("selectedEMFIndividuals=" + selectedEMFIndividuals);
+
+			for (EObject eObject : selectedEMFIndividuals) {
+				EMFObjectIndividual emfObjectIndividual = emfModel.getConverter().getIndividuals().get(eObject);
+				if (emfObjectIndividual != null) {
+					selectedIndividuals.add(emfObjectIndividual);
+				} else {
+					logger.warning("It's weird there shoud be an existing OpenFlexo wrapper existing for EMF Object : "
+							+ eObject.toString());
+					selectedIndividuals.add(emfModel.getConverter().convertObjectIndividual(emfModel, eObject));
+				}
+			}
+
+			List<EMFObjectIndividual> returned = filterWithConditions(selectedIndividuals, action);
+
+			// System.out.println("SelectEMFObjectIndividual, without filtering =" + selectedIndividuals + " after filtering=" + returned);
+
+			return returned;
 		}
 
-		// System.out.println("selectedEMFIndividuals=" + selectedEMFIndividuals);
-
-		for (EObject eObject : selectedEMFIndividuals) {
-			EMFObjectIndividual emfObjectIndividual = emfModel.getConverter().getIndividuals().get(eObject);
-			if (emfObjectIndividual != null) {
-				selectedIndividuals.add(emfObjectIndividual);
-			} else {
-				logger.warning("It's weird there shoud be an existing OpenFlexo wrapper existing for EMF Object : " + eObject.toString());
-				selectedIndividuals.add(emfModel.getConverter().convertObjectIndividual(emfModel, eObject));
-			}
+		@Override
+		public TypeAwareModelSlotInstance<EMFModel, EMFMetaModel, EMFModelSlot> getModelSlotInstance(EditionSchemeAction action) {
+			return (TypeAwareModelSlotInstance<EMFModel, EMFMetaModel, EMFModelSlot>) super.getModelSlotInstance(action);
 		}
 
-		List<EMFObjectIndividual> returned = filterWithConditions(selectedIndividuals, action);
-
-		// System.out.println("SelectEMFObjectIndividual, without filtering =" + selectedIndividuals + " after filtering=" + returned);
-
-		return returned;
 	}
-
-	@Override
-	public TypeAwareModelSlotInstance<EMFModel, EMFMetaModel, EMFModelSlot> getModelSlotInstance(EditionSchemeAction action) {
-		return (TypeAwareModelSlotInstance<EMFModel, EMFMetaModel, EMFModelSlot>) super.getModelSlotInstance(action);
-	}
-
-}
 }

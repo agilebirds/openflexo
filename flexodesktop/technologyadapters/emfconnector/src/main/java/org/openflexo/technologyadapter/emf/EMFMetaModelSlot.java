@@ -31,8 +31,6 @@ import org.openflexo.foundation.technologyadapter.DeclarePatternRoles;
 import org.openflexo.foundation.technologyadapter.ModelSlot;
 import org.openflexo.foundation.view.ModelSlotInstance;
 import org.openflexo.foundation.view.action.CreateVirtualModelInstance;
-import org.openflexo.foundation.viewpoint.EditionAction;
-import org.openflexo.foundation.viewpoint.FetchRequest;
 import org.openflexo.foundation.viewpoint.PatternRole;
 import org.openflexo.foundation.viewpoint.VirtualModel;
 import org.openflexo.technologyadapter.emf.metamodel.EMFMetaModel;
@@ -53,104 +51,68 @@ import org.openflexo.technologyadapter.emf.viewpoint.EMFEnumClassPatternRole;
 })
 @DeclareFetchRequests({ // All requests available through this model slot
 })
-public class EMFMetaModelSlot extends ModelSlot<EMFMetaModel> {
+public interface EMFMetaModelSlot extends ModelSlot<EMFMetaModel> {
 
-	private static final Logger logger = Logger.getLogger(EMFMetaModelSlot.class.getPackage().getName());
+	public abstract static class EMFMetaModelSlotImpl extends ModelSlotImpl<EMFMetaModel> implements EMFMetaModelSlot {
 
-	/**
-	 * 
-	 * Constructor.
-	 * 
-	 * @param virtualModel
-	 * @param adapter
-	 */
-	public EMFMetaModelSlot(VirtualModel virtualModel, EMFTechnologyAdapter adapter) {
-		super(virtualModel, adapter);
-	}
+		private static final Logger logger = Logger.getLogger(EMFMetaModelSlot.class.getPackage().getName());
 
-	/**
-	 * 
-	 * Constructor.
-	 * 
-	 * @param builder
-	 */
-	public EMFMetaModelSlot() {
-		super();
-	}
-
-	@Override
-	public Class<EMFTechnologyAdapter> getTechnologyAdapterClass() {
-		return EMFTechnologyAdapter.class;
-	}
-
-	/**
-	 * Instanciate a new model slot instance configuration for this model slot
-	 */
-	@Override
-	public EMFMetaModelSlotInstanceConfiguration createConfiguration(CreateVirtualModelInstance<?> action) {
-		return new EMFMetaModelSlotInstanceConfiguration(this, action);
-	}
-
-	/**
-	 * Creates and return a new {@link PatternRole} of supplied class.<br>
-	 * This responsability is delegated to the EMF-specific {@link EMFMetaModelSlot} which manages with introspection its own
-	 * {@link PatternRole} types related to EMF technology
-	 * 
-	 * @param patternRoleClass
-	 * @return
-	 */
-	@Override
-	public <PR extends PatternRole<?>> PR makePatternRole(Class<PR> patternRoleClass) {
-		if (EMFClassClassPatternRole.class.isAssignableFrom(patternRoleClass)) {
-			return (PR) new EMFClassClassPatternRole();
-		} else if (EMFEnumClassPatternRole.class.isAssignableFrom(patternRoleClass)) {
-			return (PR) new EMFEnumClassPatternRole();
+		/**
+		 * 
+		 * Constructor.
+		 * 
+		 * @param virtualModel
+		 * @param adapter
+		 */
+		public EMFMetaModelSlotImpl(VirtualModel virtualModel, EMFTechnologyAdapter adapter) {
+			super(virtualModel, adapter);
 		}
-		logger.warning("Unexpected pattern role: " + patternRoleClass.getName());
-		return null;
-	}
 
-	@Override
-	public <PR extends PatternRole<?>> String defaultPatternRoleName(Class<PR> patternRoleClass) {
-		if (EMFClassClassPatternRole.class.isAssignableFrom(patternRoleClass)) {
-			return "class";
-		} else if (EMFEnumClassPatternRole.class.isAssignableFrom(patternRoleClass)) {
-			return "enum";
+		@Override
+		public Class<EMFTechnologyAdapter> getTechnologyAdapterClass() {
+			return EMFTechnologyAdapter.class;
 		}
-		return super.defaultPatternRoleName(patternRoleClass);
-	}
 
-	@Override
-	public <EA extends EditionAction<?, ?>> EA makeEditionAction(Class<EA> editionActionClass) {
+		/**
+		 * Instanciate a new model slot instance configuration for this model slot
+		 */
+		@Override
+		public EMFMetaModelSlotInstanceConfiguration createConfiguration(CreateVirtualModelInstance<?> action) {
+			return new EMFMetaModelSlotInstanceConfiguration(this, action);
+		}
 
-		return null;
-	}
+		@Override
+		public <PR extends PatternRole<?>> String defaultPatternRoleName(Class<PR> patternRoleClass) {
+			if (EMFClassClassPatternRole.class.isAssignableFrom(patternRoleClass)) {
+				return "class";
+			} else if (EMFEnumClassPatternRole.class.isAssignableFrom(patternRoleClass)) {
+				return "enum";
+			}
+			return super.defaultPatternRoleName(patternRoleClass);
+		}
 
-	@Override
-	public <FR extends FetchRequest<?, ?>> FR makeFetchRequest(Class<FR> fetchRequestClass) {
-		return null;
-	}
+		@Override
+		public Type getType() {
+			return EMFMetaModel.class;
+		}
 
-	@Override
-	public Type getType() {
-		return EMFMetaModel.class;
-	}
+		@Override
+		public EMFTechnologyAdapter getTechnologyAdapter() {
+			return (EMFTechnologyAdapter) super.getTechnologyAdapter();
+		}
 
-	@Override
-	public EMFTechnologyAdapter getTechnologyAdapter() {
-		return (EMFTechnologyAdapter) super.getTechnologyAdapter();
-	}
+		@Override
+		public String getURIForObject(ModelSlotInstance<? extends ModelSlot<EMFMetaModel>, EMFMetaModel> msInstance, Object o) {
+			// TODO Auto-generated method stub
+			return null;
+		}
 
-	@Override
-	public String getURIForObject(ModelSlotInstance<? extends ModelSlot<EMFMetaModel>, EMFMetaModel> msInstance, Object o) {
-		// TODO Auto-generated method stub
-		return null;
-	}
+		@Override
+		public Object retrieveObjectWithURI(ModelSlotInstance<? extends ModelSlot<EMFMetaModel>, EMFMetaModel> msInstance, String objectURI) {
+			// TODO Auto-generated method stub
+			return null;
+		}
 
-	@Override
-	public Object retrieveObjectWithURI(ModelSlotInstance<? extends ModelSlot<EMFMetaModel>, EMFMetaModel> msInstance, String objectURI) {
-		// TODO Auto-generated method stub
-		return null;
 	}
 
 }

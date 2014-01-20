@@ -33,6 +33,9 @@ import java.lang.reflect.Type;
 import org.openflexo.foundation.view.action.EditionSchemeAction;
 import org.openflexo.foundation.viewpoint.AssignableAction;
 import org.openflexo.foundation.viewpoint.annotations.FIBPanel;
+import org.openflexo.model.annotations.ImplementationClass;
+import org.openflexo.model.annotations.ModelEntity;
+import org.openflexo.model.annotations.XMLElement;
 import org.openflexo.technologyadapter.emf.EMFModelSlot;
 import org.openflexo.technologyadapter.emf.model.EMFObjectIndividualAttributeDataPropertyValue;
 
@@ -43,52 +46,52 @@ import org.openflexo.technologyadapter.emf.model.EMFObjectIndividualAttributeDat
  * 
  */
 @FIBPanel("Fib/RemoveEMFObjectIndividualAttributeDataPropertyValuePanel.fib")
-public class RemoveEMFObjectIndividualAttributeDataPropertyValue extends
+@ModelEntity
+@ImplementationClass(RemoveEMFObjectIndividualAttributeDataPropertyValue.RemoveEMFObjectIndividualAttributeDataPropertyValueImpl.class)
+@XMLElement
+public interface RemoveEMFObjectIndividualAttributeDataPropertyValue extends
 		AssignableAction<EMFModelSlot, EMFObjectIndividualAttributeDataPropertyValue> {
 
-	/**
-	 * Constructor.
-	 * 
-	 * @param builder
-	 */
-	public RemoveEMFObjectIndividualAttributeDataPropertyValue() {
-		super();
-	}
+	public static abstract class RemoveEMFObjectIndividualAttributeDataPropertyValueImpl extends
+			AssignableActionImpl<EMFModelSlot, EMFObjectIndividualAttributeDataPropertyValue> implements
+			RemoveEMFObjectIndividualAttributeDataPropertyValue {
 
-	/**
-	 * Follow the link.
-	 * 
-	 * @see org.openflexo.foundation.viewpoint.AssignableAction#getAssignableType()
-	 */
-	@Override
-	public Type getAssignableType() {
-		// if (value != null) {
-		// return value.getClass();
-		// }
-		return Object.class;
-	}
+		/**
+		 * Follow the link.
+		 * 
+		 * @see org.openflexo.foundation.viewpoint.AssignableAction#getAssignableType()
+		 */
+		@Override
+		public Type getAssignableType() {
+			// if (value != null) {
+			// return value.getClass();
+			// }
+			return Object.class;
+		}
 
-	/**
-	 * Follow the link.
-	 * 
-	 * @see org.openflexo.foundation.viewpoint.EditionAction#performAction(org.openflexo.foundation.view.action.EditionSchemeAction)
-	 */
-	@Override
-	public EMFObjectIndividualAttributeDataPropertyValue performAction(EditionSchemeAction action) {
-		EMFObjectIndividualAttributeDataPropertyValue result = null;
-		// ModelSlotInstance<EMFModel, EMFMetaModel> modelSlotInstance = getModelSlotInstance(action);
-		// EMFModel model = modelSlotInstance.getModel();
-		// // Remove Attribute in EMF
-		// if (attributeDataProperty.getObject().getUpperBound() != 1) {
-		// List<T> values = (List<T>) objectIndividual.getObject().eGet(attributeDataProperty.getObject());
-		// values.remove(value);
-		// } else {
-		// objectIndividual.getObject().eUnset(attributeDataProperty.getObject());
-		// }
-		// // Instanciate Wrapper
-		// result = model.getConverter().convertObjectIndividualAttributeDataPropertyValue(model, objectIndividual.getObject(),
-		// attributeDataProperty.getObject());
-		return result;
+		/**
+		 * Follow the link.
+		 * 
+		 * @see org.openflexo.foundation.viewpoint.EditionAction#performAction(org.openflexo.foundation.view.action.EditionSchemeAction)
+		 */
+		@Override
+		public EMFObjectIndividualAttributeDataPropertyValue performAction(EditionSchemeAction action) {
+			EMFObjectIndividualAttributeDataPropertyValue result = null;
+			// ModelSlotInstance<EMFModel, EMFMetaModel> modelSlotInstance = getModelSlotInstance(action);
+			// EMFModel model = modelSlotInstance.getModel();
+			// // Remove Attribute in EMF
+			// if (attributeDataProperty.getObject().getUpperBound() != 1) {
+			// List<T> values = (List<T>) objectIndividual.getObject().eGet(attributeDataProperty.getObject());
+			// values.remove(value);
+			// } else {
+			// objectIndividual.getObject().eUnset(attributeDataProperty.getObject());
+			// }
+			// // Instanciate Wrapper
+			// result = model.getConverter().convertObjectIndividualAttributeDataPropertyValue(model, objectIndividual.getObject(),
+			// attributeDataProperty.getObject());
+			return result;
+		}
+
 	}
 
 }

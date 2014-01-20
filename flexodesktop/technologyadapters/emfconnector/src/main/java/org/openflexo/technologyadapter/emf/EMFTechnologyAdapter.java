@@ -43,10 +43,8 @@ import org.openflexo.foundation.resource.SaveResourceException;
 import org.openflexo.foundation.technologyadapter.DeclareModelSlot;
 import org.openflexo.foundation.technologyadapter.DeclareModelSlots;
 import org.openflexo.foundation.technologyadapter.DeclareRepositoryType;
-import org.openflexo.foundation.technologyadapter.ModelSlot;
 import org.openflexo.foundation.technologyadapter.TechnologyAdapter;
 import org.openflexo.foundation.technologyadapter.TechnologyAdapterInitializationException;
-import org.openflexo.foundation.viewpoint.VirtualModel;
 import org.openflexo.model.exceptions.ModelDefinitionException;
 import org.openflexo.model.factory.ModelFactory;
 import org.openflexo.technologyadapter.emf.metamodel.EMFMetaModel;
@@ -102,24 +100,6 @@ public class EMFTechnologyAdapter extends TechnologyAdapter {
 	@Override
 	public String getName() {
 		return "EMF technology adapter";
-	}
-
-	/**
-	 * Creates and return a new {@link ModelSlot} of supplied class.<br>
-	 * This responsability is delegated to the {@link TechnologyAdapter} which manages with introspection its own {@link ModelSlot} types
-	 * 
-	 * @param modelSlotClass
-	 * @return
-	 */
-	@Override
-	public <MS extends ModelSlot<?>> MS makeModelSlot(Class<MS> modelSlotClass, VirtualModel virtualModel) {
-		if (EMFModelSlot.class.isAssignableFrom(modelSlotClass)) {
-			return (MS) new EMFModelSlot(virtualModel, this);
-		} else if (EMFMetaModelSlot.class.isAssignableFrom(modelSlotClass)) {
-			return (MS) new EMFMetaModelSlot(virtualModel, this);
-		}
-		logger.warning("Unexpected model slot: " + modelSlotClass.getName());
-		return null;
 	}
 
 	/**
