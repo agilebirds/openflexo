@@ -115,23 +115,32 @@ public interface FMLDiagramPaletteElementBinding extends NamedViewPointObject {
 			cardinality = Cardinality.LIST,
 			inverse = OverridingGraphicalRepresentation.PALETTE_ELEMENT_BINDING_KEY)
 	@XMLElement
-	public List<OverridingGraphicalRepresentation> getOverridingGraphicalRepresentations();
+	public List<OverridingGraphicalRepresentation<?>> getOverridingGraphicalRepresentations();
 
 	@Setter(OVERRIDING_GRAPHICAL_REPRESENTATIONS_KEY)
-	public void setOverridingGraphicalRepresentations(List<OverridingGraphicalRepresentation> overridingGraphicalRepresentations);
+	public void setOverridingGraphicalRepresentations(List<OverridingGraphicalRepresentation<?>> overridingGraphicalRepresentations);
 
 	@Adder(OVERRIDING_GRAPHICAL_REPRESENTATIONS_KEY)
-	public void addToOverridingGraphicalRepresentations(OverridingGraphicalRepresentation anOverridingGraphicalRepresentation);
+	public void addToOverridingGraphicalRepresentations(OverridingGraphicalRepresentation<?> anOverridingGraphicalRepresentation);
 
 	@Remover(OVERRIDING_GRAPHICAL_REPRESENTATIONS_KEY)
-	public void removeFromOverridingGraphicalRepresentations(OverridingGraphicalRepresentation anOverridingGraphicalRepresentation);
+	public void removeFromOverridingGraphicalRepresentations(OverridingGraphicalRepresentation<?> anOverridingGraphicalRepresentation);
 
 	public GraphicalRepresentation getOverridingGraphicalRepresentation(GraphicalElementPatternRole<?, ?> patternRole);
 
 	public VirtualModel getVirtualModel();
 
+	public EditionPattern getEditionPattern();
+
+	public void setEditionPattern(EditionPattern anEditionPattern);
+
+	public boolean getBoundLabelToElementName();
+
+	public void setBoundLabelToElementName(boolean boundLabelToElementName);
+
 	public abstract class FMLDiagramPaletteElementBindingImpl extends NamedViewPointObjectImpl implements FMLDiagramPaletteElementBinding {
 
+		@SuppressWarnings("unused")
 		private static final Logger logger = Logger.getLogger(FMLDiagramPaletteElementBinding.class.getPackage().getName());
 
 		/**
@@ -219,6 +228,7 @@ public interface FMLDiagramPaletteElementBinding extends NamedViewPointObject {
 			this.paletteElement = paletteElement;
 		}
 
+		@Override
 		public EditionPattern getEditionPattern() {
 			if (editionPattern != null) {
 				return editionPattern;
@@ -230,6 +240,7 @@ public interface FMLDiagramPaletteElementBinding extends NamedViewPointObject {
 			return editionPattern;
 		}
 
+		@Override
 		public void setEditionPattern(EditionPattern anEditionPattern) {
 			if (anEditionPattern != editionPattern) {
 				editionPattern = anEditionPattern;
@@ -341,9 +352,9 @@ public interface FMLDiagramPaletteElementBinding extends NamedViewPointObject {
 		}*/
 
 		@Override
-		public GraphicalRepresentation getOverridingGraphicalRepresentation(GraphicalElementPatternRole patternRole) {
-			for (OverridingGraphicalRepresentation ogr : getOverridingGraphicalRepresentations()) {
-				if (ogr.getPatternRoleName().equals(patternRole.getPatternRoleName())) {
+		public GraphicalRepresentation getOverridingGraphicalRepresentation(GraphicalElementPatternRole<?, ?> patternRole) {
+			for (OverridingGraphicalRepresentation<?> ogr : getOverridingGraphicalRepresentations()) {
+				if (ogr.getPatternRole() == patternRole) {
 					return ogr.getGraphicalRepresentation();
 				}
 			}
@@ -399,10 +410,12 @@ public interface FMLDiagramPaletteElementBinding extends NamedViewPointObject {
 			this.patternRoleName = patternRoleName;
 		}
 
+		@Override
 		public boolean getBoundLabelToElementName() {
 			return boundLabelToElementName;
 		}
 
+		@Override
 		public void setBoundLabelToElementName(boolean boundLabelToElementName) {
 			if (this.boundLabelToElementName != boundLabelToElementName) {
 				this.boundLabelToElementName = boundLabelToElementName;

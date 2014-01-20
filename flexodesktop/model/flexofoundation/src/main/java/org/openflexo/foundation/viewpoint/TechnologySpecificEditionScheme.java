@@ -20,6 +20,7 @@
 package org.openflexo.foundation.viewpoint;
 
 import org.openflexo.foundation.technologyadapter.TechnologyAdapter;
+import org.openflexo.model.annotations.ModelEntity;
 
 /**
  * Implemented by all {@link EditionScheme} specific to a technology
@@ -27,7 +28,8 @@ import org.openflexo.foundation.technologyadapter.TechnologyAdapter;
  * @author sylvain
  * 
  */
-public interface TechnologySpecificEditionScheme {
+@ModelEntity(isAbstract = true)
+public interface TechnologySpecificEditionScheme extends EditionScheme {
 
 	/**
 	 * Return the {@link TechnologyAdapter} of technical space where this concept exists

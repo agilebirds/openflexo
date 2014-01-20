@@ -38,6 +38,7 @@ import org.openflexo.foundation.action.FlexoActionType;
 import org.openflexo.foundation.resource.ScreenshotBuilder.ScreenshotImage;
 import org.openflexo.foundation.viewpoint.EditionPattern;
 import org.openflexo.foundation.viewpoint.VirtualModel;
+import org.openflexo.foundation.viewpoint.VirtualModelModelFactory;
 import org.openflexo.swing.ImageUtils;
 import org.openflexo.swing.ImageUtils.ImageType;
 import org.openflexo.technologyadapter.diagram.TypedDiagramModelSlot;
@@ -171,7 +172,7 @@ public class PushToPalette extends FlexoAction<PushToPalette, DiagramShape, Diag
 
 			_newPaletteElement = palette.addPaletteElement(newElementName, graphicalRepresentation);
 
-			FMLDiagramPaletteElementBinding newBinding = new FMLDiagramPaletteElementBinding();
+			FMLDiagramPaletteElementBinding newBinding = getFactory().newInstance(FMLDiagramPaletteElementBinding.class);
 			newBinding.setPaletteElement(_newPaletteElement);
 			newBinding.setEditionPattern(editionPattern);
 			newBinding.setDropScheme(dropScheme);
@@ -378,4 +379,10 @@ public class PushToPalette extends FlexoAction<PushToPalette, DiagramShape, Diag
 	public DiagramSpecification getDiagramSpecification() {
 		return diagramModelSlot.getMetaModelResource().getLoadedResourceData();
 	}
+
+	// TODO
+	public VirtualModelModelFactory getFactory() {
+		return null;
+	}
+
 }

@@ -40,6 +40,47 @@ import org.openflexo.technologyadapter.diagram.model.dm.GraphicalRepresentationM
 public abstract interface GraphicalElementPatternRole<T extends DiagramElement<GR>, GR extends GraphicalRepresentation> extends
 		PatternRole<T>, Bindable {
 
+	public static GraphicalFeature<String, GraphicalRepresentation> LABEL_FEATURE = new GraphicalFeature<String, GraphicalRepresentation>(
+			"label", GraphicalRepresentation.TEXT) {
+		@Override
+		public String retrieveFromGraphicalRepresentation(GraphicalRepresentation gr) {
+			return gr.getText();
+		}
+
+		@Override
+		public void applyToGraphicalRepresentation(GraphicalRepresentation gr, String value) {
+			gr.setText(value);
+		}
+	};
+
+	public static GraphicalFeature<Boolean, GraphicalRepresentation> VISIBLE_FEATURE = new GraphicalFeature<Boolean, GraphicalRepresentation>(
+			"visible", GraphicalRepresentation.IS_VISIBLE) {
+		@Override
+		public Boolean retrieveFromGraphicalRepresentation(GraphicalRepresentation gr) {
+			return gr.getIsVisible();
+		}
+
+		@Override
+		public void applyToGraphicalRepresentation(GraphicalRepresentation gr, Boolean value) {
+			gr.setIsVisible(value);
+		}
+	};
+
+	public static GraphicalFeature<Double, GraphicalRepresentation> TRANSPARENCY_FEATURE = new GraphicalFeature<Double, GraphicalRepresentation>(
+			"transparency", GraphicalRepresentation.TRANSPARENCY) {
+		@Override
+		public Double retrieveFromGraphicalRepresentation(GraphicalRepresentation gr) {
+			return gr.getTransparency();
+		}
+
+		@Override
+		public void applyToGraphicalRepresentation(GraphicalRepresentation gr, Double value) {
+			gr.setTransparency(value);
+		}
+	};
+
+	public static GraphicalFeature<?, ?>[] AVAILABLE_FEATURES = { LABEL_FEATURE, VISIBLE_FEATURE, TRANSPARENCY_FEATURE };
+
 	@PropertyIdentifier(type = String.class)
 	public static final String EXAMPLE_LABEL_KEY = "exampleLabel";
 	@PropertyIdentifier(type = Vector.class)
@@ -79,6 +120,28 @@ public abstract interface GraphicalElementPatternRole<T extends DiagramElement<G
 
 	@Remover(DECLARED_GRSPECIFICATIONS_KEY)
 	public void _removeFromDeclaredGRSpecifications(GraphicalElementSpecification<?, GR> aDeclaredGRSpecification);
+
+	public void updateGraphicalRepresentation(GR graphicalRepresentation);
+
+	// Convenient method to access spec for label feature
+	public DataBinding<String> getLabel();
+
+	// Convenient method to access spec for label feature
+	public void setLabel(DataBinding<String> label);
+
+	// Convenient method to access read-only property for spec for label feature
+	public boolean getReadOnlyLabel();
+
+	// Convenient method to access read-only property for spec for label feature
+	public void setReadOnlyLabel(boolean readOnlyLabel);
+
+	public List<GraphicalElementSpecification<?, ?>> getGrSpecifications();
+
+	public GraphicalElementSpecification<?, ?> getGraphicalElementSpecification(String featureName);
+
+	public GraphicalElementSpecification<?, ?> getGraphicalElementSpecification(GraphicalFeature<?, ?> feature);
+
+	public boolean containsShapes();
 
 	public static abstract class GraphicalElementPatternRoleImpl<T extends DiagramElement<GR>, GR extends GraphicalRepresentation> extends
 			PatternRoleImpl<T> implements GraphicalElementPatternRole<T, GR> {
@@ -148,6 +211,7 @@ public abstract interface GraphicalElementPatternRole<T extends DiagramElement<G
 			}
 		}
 
+		@Override
 		public final void updateGraphicalRepresentation(GR graphicalRepresentation) {
 			if (getGraphicalRepresentation() != null) {
 				getGraphicalRepresentation().setsWith(graphicalRepresentation);
@@ -181,21 +245,25 @@ public abstract interface GraphicalElementPatternRole<T extends DiagramElement<G
 		}
 
 		// Convenient method to access spec for label feature
+		@Override
 		public DataBinding<String> getLabel() {
 			return getGraphicalElementSpecification(LABEL_FEATURE).getValue();
 		}
 
 		// Convenient method to access spec for label feature
+		@Override
 		public void setLabel(DataBinding<String> label) {
 			getGraphicalElementSpecification(LABEL_FEATURE).setValue(label);
 		}
 
 		// Convenient method to access read-only property for spec for label feature
+		@Override
 		public boolean getReadOnlyLabel() {
 			return getGraphicalElementSpecification(LABEL_FEATURE).getReadOnly();
 		}
 
 		// Convenient method to access read-only property for spec for label feature
+		@Override
 		public void setReadOnlyLabel(boolean readOnlyLabel) {
 			getGraphicalElementSpecification(LABEL_FEATURE).setReadOnly(readOnlyLabel);
 		}
@@ -243,6 +311,7 @@ public abstract interface GraphicalElementPatternRole<T extends DiagramElement<G
 		}
 		*/
 
+		@Override
 		public boolean containsShapes() {
 			for (ShapePatternRole role : getEditionPattern().getPatternRoles(ShapePatternRole.class)) {
 				if (role.getParentShapePatternRole() == this) {
@@ -322,10 +391,12 @@ public abstract interface GraphicalElementPatternRole<T extends DiagramElement<G
 			return anAction;
 		}
 
+		@Override
 		public List<GraphicalElementSpecification<?, ?>> getGrSpecifications() {
 			return grSpecifications;
 		}
 
+		@Override
 		public GraphicalElementSpecification<?, ?> getGraphicalElementSpecification(String featureName) {
 			for (GraphicalElementSpecification<?, ?> spec : grSpecifications) {
 				if (spec.getFeatureName().equals(featureName)) {
@@ -335,6 +406,7 @@ public abstract interface GraphicalElementPatternRole<T extends DiagramElement<G
 			return null;
 		}
 
+		@Override
 		public GraphicalElementSpecification<?, ?> getGraphicalElementSpecification(GraphicalFeature<?, ?> feature) {
 			if (feature != null) {
 				return getGraphicalElementSpecification(feature.getName());
@@ -380,47 +452,6 @@ public abstract interface GraphicalElementPatternRole<T extends DiagramElement<G
 				existingSpec.setValue(null);
 			}
 		}
-
-		public static GraphicalFeature<String, GraphicalRepresentation> LABEL_FEATURE = new GraphicalFeature<String, GraphicalRepresentation>(
-				"label", GraphicalRepresentation.TEXT) {
-			@Override
-			public String retrieveFromGraphicalRepresentation(GraphicalRepresentation gr) {
-				return gr.getText();
-			}
-
-			@Override
-			public void applyToGraphicalRepresentation(GraphicalRepresentation gr, String value) {
-				gr.setText(value);
-			}
-		};
-
-		public static GraphicalFeature<Boolean, GraphicalRepresentation> VISIBLE_FEATURE = new GraphicalFeature<Boolean, GraphicalRepresentation>(
-				"visible", GraphicalRepresentation.IS_VISIBLE) {
-			@Override
-			public Boolean retrieveFromGraphicalRepresentation(GraphicalRepresentation gr) {
-				return gr.getIsVisible();
-			}
-
-			@Override
-			public void applyToGraphicalRepresentation(GraphicalRepresentation gr, Boolean value) {
-				gr.setIsVisible(value);
-			}
-		};
-
-		public static GraphicalFeature<Double, GraphicalRepresentation> TRANSPARENCY_FEATURE = new GraphicalFeature<Double, GraphicalRepresentation>(
-				"transparency", GraphicalRepresentation.TRANSPARENCY) {
-			@Override
-			public Double retrieveFromGraphicalRepresentation(GraphicalRepresentation gr) {
-				return gr.getTransparency();
-			}
-
-			@Override
-			public void applyToGraphicalRepresentation(GraphicalRepresentation gr, Double value) {
-				gr.setTransparency(value);
-			}
-		};
-
-		public static GraphicalFeature<?, ?>[] AVAILABLE_FEATURES = { LABEL_FEATURE, VISIBLE_FEATURE, TRANSPARENCY_FEATURE };
 
 		@Override
 		public ModelObjectActorReference makeActorReference(T object, EditionPatternInstance epi) {

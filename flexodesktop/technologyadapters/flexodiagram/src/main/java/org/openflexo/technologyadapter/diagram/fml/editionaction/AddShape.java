@@ -42,7 +42,13 @@ import org.openflexo.foundation.viewpoint.FMLRepresentationContext;
 import org.openflexo.foundation.viewpoint.FMLRepresentationContext.FMLRepresentationOutput;
 import org.openflexo.foundation.viewpoint.PatternRole;
 import org.openflexo.foundation.viewpoint.annotations.FIBPanel;
-import org.openflexo.model.annotations.*;
+import org.openflexo.model.annotations.Getter;
+import org.openflexo.model.annotations.ImplementationClass;
+import org.openflexo.model.annotations.ModelEntity;
+import org.openflexo.model.annotations.PropertyIdentifier;
+import org.openflexo.model.annotations.Setter;
+import org.openflexo.model.annotations.XMLAttribute;
+import org.openflexo.model.annotations.XMLElement;
 import org.openflexo.technologyadapter.diagram.fml.DiagramEditionScheme;
 import org.openflexo.technologyadapter.diagram.fml.DropScheme;
 import org.openflexo.technologyadapter.diagram.fml.ShapePatternRole;
@@ -71,10 +77,10 @@ public interface AddShape extends AddDiagramElementAction<DiagramShape> {
 
 	@Getter(value = CONTAINER_KEY)
 	@XMLAttribute
-	public DataBinding getContainer();
+	public DataBinding<DiagramContainerElement<?>> getContainer();
 
 	@Setter(CONTAINER_KEY)
-	public void setContainer(DataBinding container);
+	public void setContainer(DataBinding<DiagramContainerElement<?>> container);
 
 	@Getter(value = EXTEND_PARENT_BOUNDS_TO_HOST_THIS_SHAPE_KEY, defaultValue = "false")
 	@XMLAttribute
@@ -82,6 +88,9 @@ public interface AddShape extends AddDiagramElementAction<DiagramShape> {
 
 	@Setter(EXTEND_PARENT_BOUNDS_TO_HOST_THIS_SHAPE_KEY)
 	public void setExtendParentBoundsToHostThisShape(boolean extendParentBoundsToHostThisShape);
+
+	@Override
+	public ShapePatternRole getPatternRole();
 
 	public static abstract class AddShapeImpl extends AddDiagramElementActionImpl<DiagramShape> implements AddShape {
 
@@ -150,6 +159,7 @@ public interface AddShape extends AddDiagramElementAction<DiagramShape> {
 			return container;
 		}
 
+		@Override
 		public void setContainer(DataBinding<DiagramContainerElement<?>> container) {
 			if (container != null) {
 				container.setOwner(this);
@@ -231,7 +241,7 @@ public interface AddShape extends AddDiagramElementAction<DiagramShape> {
 
 	public static class AddShapeActionMustAdressAValidShapePatternRole extends
 			ValidationRule<AddShapeActionMustAdressAValidShapePatternRole, AddShape> {
-		public AddShapeImplActionMustAdressAValidShapePatternRole() {
+		public AddShapeActionMustAdressAValidShapePatternRole() {
 			super(AddShape.class, "add_shape_action_must_address_a_valid_shape_pattern_role");
 		}
 
@@ -360,5 +370,4 @@ public interface AddShape extends AddDiagramElementAction<DiagramShape> {
 		}
 
 	}
-
 }

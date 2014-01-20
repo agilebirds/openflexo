@@ -351,7 +351,7 @@ public class DeclareShapeInEditionPattern extends DeclareInEditionPattern<Declar
 				case BLANK_EDITION_PATTERN:
 
 					// Create new edition pattern
-					newEditionPattern = new EditionPattern(/*builder*/);
+					newEditionPattern = getFactory().newEditionPattern();
 					newEditionPattern.setName(getEditionPatternName());
 
 					// And add the newly created edition pattern
@@ -393,7 +393,7 @@ public class DeclareShapeInEditionPattern extends DeclareInEditionPattern<Declar
 						if (entry.getSelectThis()) {
 							if (entry.graphicalObject instanceof DiagramShape) {
 								DiagramShape grShape = (DiagramShape) entry.graphicalObject;
-								ShapePatternRole newShapePatternRole = new ShapePatternRole(/*builder*/);
+								ShapePatternRole newShapePatternRole = getFactory().newInstance(ShapePatternRole.class);
 								newShapePatternRole.setPatternRoleName(entry.patternRoleName);
 								/*if (mainPropertyDescriptor != null && entry.isMainEntry()) {
 									newShapePatternRole.setLabel(new DataBinding<String>(getIndividualPatternRoleName() + "."
@@ -422,7 +422,7 @@ public class DeclareShapeInEditionPattern extends DeclareInEditionPattern<Declar
 							}
 							if (entry.graphicalObject instanceof DiagramConnector) {
 								DiagramConnector grConnector = (DiagramConnector) entry.graphicalObject;
-								ConnectorPatternRole newConnectorPatternRole = new ConnectorPatternRole(/*builder*/);
+								ConnectorPatternRole newConnectorPatternRole = getFactory().newInstance(ConnectorPatternRole.class);
 								newConnectorPatternRole.setPatternRoleName(entry.patternRoleName);
 								newConnectorPatternRole.setReadOnlyLabel(true);
 								if (StringUtils.isNotEmpty(entry.graphicalObject.getName())) {
@@ -471,7 +471,7 @@ public class DeclareShapeInEditionPattern extends DeclareInEditionPattern<Declar
 					}*/
 
 					// Create new drop scheme
-					DropScheme newDropScheme = new DropScheme(/*builder*/);
+					DropScheme newDropScheme = getFactory().newInstance(DropScheme.class);
 					newDropScheme.setName(getDropSchemeName());
 
 					// Add new drop scheme
@@ -534,7 +534,7 @@ public class DeclareShapeInEditionPattern extends DeclareInEditionPattern<Declar
 								}
 							}*/
 
-							URIParameter uriParameter = new URIParameter(/*builder*/);
+							URIParameter uriParameter = getFactory().newURIParameter();
 							uriParameter.setName("uri");
 							uriParameter.setLabel("uri");
 							/*if (mainPropertyDescriptor != null) {
@@ -598,7 +598,7 @@ public class DeclareShapeInEditionPattern extends DeclareInEditionPattern<Declar
 						if (graphicalElementPatternRole instanceof ShapePatternRole) {
 							ShapePatternRole grPatternRole = (ShapePatternRole) graphicalElementPatternRole;
 							// Add shape action
-							AddShape newAddShape = new AddShape(/*builder*/);
+							AddShape newAddShape = getFactory().newInstance(AddShape.class);
 							newDropScheme.addToActions(newAddShape);
 							newAddShape.setAssignation(new DataBinding<Object>(graphicalElementPatternRole.getPatternRoleName()));
 							if (mainPatternRole) {

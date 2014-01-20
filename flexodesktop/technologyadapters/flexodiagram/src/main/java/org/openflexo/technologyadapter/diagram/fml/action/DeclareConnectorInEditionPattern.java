@@ -57,8 +57,7 @@ import org.openflexo.toolbox.StringUtils;
  * 
  * @param <T1>
  */
-public class DeclareConnectorInEditionPattern extends
-		DeclareInEditionPattern<DeclareConnectorInEditionPattern, DiagramConnector> {
+public class DeclareConnectorInEditionPattern extends DeclareInEditionPattern<DeclareConnectorInEditionPattern, DiagramConnector> {
 
 	private static final Logger logger = Logger.getLogger(DeclareConnectorInEditionPattern.class.getPackage().getName());
 
@@ -69,8 +68,8 @@ public class DeclareConnectorInEditionPattern extends
 		 * Factory method
 		 */
 		@Override
-		public DeclareConnectorInEditionPattern makeNewAction(DiagramConnector focusedObject,
-				Vector<DiagramElement<?>> globalSelection, FlexoEditor editor) {
+		public DeclareConnectorInEditionPattern makeNewAction(DiagramConnector focusedObject, Vector<DiagramElement<?>> globalSelection,
+				FlexoEditor editor) {
 			return new DeclareConnectorInEditionPattern(focusedObject, globalSelection, editor);
 		}
 
@@ -138,7 +137,7 @@ public class DeclareConnectorInEditionPattern extends
 						getFocusedObject().getDiagramSpecification().getResource());*/
 
 				// Create new edition pattern
-				newEditionPattern = new EditionPattern(/*builder*/);
+				newEditionPattern = getFactory().newEditionPattern();
 				newEditionPattern.setName(getEditionPatternName());
 
 				// And add the newly created edition pattern
@@ -182,7 +181,7 @@ public class DeclareConnectorInEditionPattern extends
 				}*/
 
 				// Create connector pattern role
-				newConnectorPatternRole = new ConnectorPatternRole(/*builder*/);
+				newConnectorPatternRole = getFactory().newInstance(ConnectorPatternRole.class);
 				newConnectorPatternRole.setPatternRoleName(getConnectorPatternRoleName());
 				/*if (mainPropertyDescriptor != null) {
 					newConnectorPatternRole.setLabel(new DataBinding<String>(getIndividualPatternRoleName() + "."
@@ -218,7 +217,7 @@ public class DeclareConnectorInEditionPattern extends
 				}*/
 
 				// Create new link scheme
-				LinkScheme newLinkScheme = new LinkScheme(/*builder*/);
+				LinkScheme newLinkScheme = getFactory().newInstance(LinkScheme.class);
 				newLinkScheme.setName(getLinkSchemeName());
 				newLinkScheme.setFromTargetEditionPattern(fromEditionPattern);
 				newLinkScheme.setToTargetEditionPattern(toEditionPattern);
@@ -275,7 +274,7 @@ public class DeclareConnectorInEditionPattern extends
 							}
 						}*/
 
-						URIParameter uriParameter = new URIParameter(/*builder*/);
+						URIParameter uriParameter = getFactory().newURIParameter();
 						uriParameter.setName("uri");
 						uriParameter.setLabel("uri");
 						/*if (mainPropertyDescriptor != null) {
@@ -285,7 +284,7 @@ public class DeclareConnectorInEditionPattern extends
 
 						// Declare pattern role
 						for (IndividualPatternRole r : otherRoles) {
-							DeclarePatternRole action = new DeclarePatternRole(/*builder*/);
+							DeclarePatternRole action = getFactory().newDeclarePatternRole();
 							action.setAssignation(new DataBinding<Object>(r.getPatternRoleName()));
 							action.setObject(new DataBinding<Object>("parameters." + r.getName()));
 							newLinkScheme.addToActions(action);
@@ -326,7 +325,7 @@ public class DeclareConnectorInEditionPattern extends
 				}
 
 				// Add connector action
-				AddConnector newAddConnector = new AddConnector(/*builder*/);
+				AddConnector newAddConnector = getFactory().newInstance(AddConnector.class);
 				newAddConnector.setAssignation(new DataBinding<Object>(newConnectorPatternRole.getPatternRoleName()));
 				ShapePatternRole fromPatternRole = fromEditionPattern.getPatternRoles(ShapePatternRole.class).get(0);
 				ShapePatternRole toPatternRole = toEditionPattern.getPatternRoles(ShapePatternRole.class).get(0);

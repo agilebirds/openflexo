@@ -19,16 +19,18 @@
  */
 package org.openflexo.technologyadapter.diagram.fml;
 
-import org.openflexo.foundation.view.VirtualModelInstance;
 import org.openflexo.foundation.viewpoint.TechnologySpecificEditionScheme;
-import org.openflexo.technologyadapter.diagram.model.Diagram;
+import org.openflexo.model.annotations.Implementation;
+import org.openflexo.model.annotations.ModelEntity;
+import org.openflexo.technologyadapter.diagram.DiagramTechnologyAdapter;
 
 /**
- * An GraphicalEditionScheme represents a behavioural feature which apply to a {@link Diagram} (as a {@link VirtualModelInstance}
+ * Represents a behavioural feature which triggers in the context of a diagram edition (interaction)
  * 
  * @author sylvain
  * 
  */
+@ModelEntity(isAbstract = true)
 public interface DiagramEditionScheme extends TechnologySpecificEditionScheme {
 
 	public static final String TOP_LEVEL = "topLevel";
@@ -36,4 +38,17 @@ public interface DiagramEditionScheme extends TechnologySpecificEditionScheme {
 	public static final String FROM_TARGET = "fromTarget";
 	public static final String TO_TARGET = "toTarget";
 	public static final String DIAGRAM = "diagram";
+
+	@Override
+	public DiagramTechnologyAdapter getTechnologyAdapter();
+
+	@Implementation
+	public static abstract class DiagramEditionSchemeImpl implements DiagramEditionScheme {
+
+		@Override
+		public DiagramTechnologyAdapter getTechnologyAdapter() {
+			return getServiceManager().getTechnologyAdapterService().getTechnologyAdapter(DiagramTechnologyAdapter.class);
+		}
+	}
+
 }

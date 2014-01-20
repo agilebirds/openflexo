@@ -43,6 +43,20 @@ public interface ShapePatternRole extends GraphicalElementPatternRole<DiagramSha
 	@Setter(PARENT_SHAPE_PATTERN_ROLE_KEY)
 	public void setParentShapePatternRole(ShapePatternRole parentShapePatternRole);
 
+	public boolean isContainedIn(ShapePatternRole container);
+
+	public boolean getParentShapeAsDefinedInAction();
+
+	public void setParentShapeAsDefinedInAction(boolean flag);
+
+	/**
+	 * Get the list of shape pattern roles that can be set as parent shape pattern role. This list contains all other shape pattern roles of
+	 * current edition pattern which are not already in the containment subtree
+	 * 
+	 * @return
+	 */
+	public List<ShapePatternRole> getPossibleParentShapePatternRoles();
+
 	public static abstract class ShapePatternRoleImpl extends GraphicalElementPatternRoleImpl<DiagramShape, ShapeGraphicalRepresentation>
 			implements ShapePatternRole {
 
@@ -114,7 +128,7 @@ public interface ShapePatternRole extends GraphicalElementPatternRole<DiagramSha
 		}
 
 		@Override
-		public ShapePatternRoleImpl getParentShapePatternRole() {
+		public ShapePatternRole getParentShapePatternRole() {
 			return parentShapePatternRole;
 		}
 
@@ -133,10 +147,12 @@ public interface ShapePatternRole extends GraphicalElementPatternRole<DiagramSha
 			}
 		}
 
+		@Override
 		public boolean getParentShapeAsDefinedInAction() {
 			return getParentShapePatternRole() == null;
 		}
 
+		@Override
 		public void setParentShapeAsDefinedInAction(boolean flag) {
 			// System.out.println(">>>> setParentShapeAsDefinedInAction() with " + flag);
 			List<ShapePatternRole> possibleParentPatternRole = getPossibleParentShapePatternRoles();
@@ -151,7 +167,8 @@ public interface ShapePatternRole extends GraphicalElementPatternRole<DiagramSha
 			}
 		}
 
-		private boolean isContainedIn(ShapePatternRole container) {
+		@Override
+		public boolean isContainedIn(ShapePatternRole container) {
 			if (container == this) {
 				return true;
 			}
@@ -167,6 +184,7 @@ public interface ShapePatternRole extends GraphicalElementPatternRole<DiagramSha
 		 * 
 		 * @return
 		 */
+		@Override
 		public List<ShapePatternRole> getPossibleParentShapePatternRoles() {
 			List<ShapePatternRole> returned = new ArrayList<ShapePatternRole>();
 			List<ShapePatternRole> shapesPatternRoles = getEditionPattern().getPatternRoles(ShapePatternRole.class);
@@ -178,6 +196,7 @@ public interface ShapePatternRole extends GraphicalElementPatternRole<DiagramSha
 			return returned;
 		}
 
+		/*@Override
 		public boolean isEmbeddedIn(ShapePatternRole aPR) {
 			if (getParentShapePatternRole() != null) {
 				if (getParentShapePatternRole() == aPR) {
@@ -187,7 +206,7 @@ public interface ShapePatternRole extends GraphicalElementPatternRole<DiagramSha
 				}
 			}
 			return false;
-		}
+		}*/
 
 		public static GraphicalFeature<Double, ShapeGraphicalRepresentation> POS_X_FEATURE = new GraphicalFeature<Double, ShapeGraphicalRepresentation>(
 				"x", ShapeGraphicalRepresentation.X) {

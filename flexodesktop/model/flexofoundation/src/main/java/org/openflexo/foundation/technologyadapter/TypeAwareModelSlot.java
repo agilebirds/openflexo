@@ -80,6 +80,17 @@ public interface TypeAwareModelSlot<M extends FlexoModel<M, MM>, MM extends Flex
 
 	public String generateUniqueURIName(TypeAwareModelSlotInstance msInstance, String proposedName, String uriPrefix);
 
+	/**
+	 * Instantiate a new IndividualPatternRole
+	 * 
+	 * @param ontClass
+	 * @return
+	 */
+	public IndividualPatternRole<?> makeIndividualPatternRole(IFlexoOntologyClass ontClass);
+
+	public AddIndividual<? extends TypeAwareModelSlot, ?> makeAddIndividualAction(IndividualPatternRole<?> patternRole,
+			AbstractCreationScheme creationScheme);
+
 	public static abstract class TypeAwareModelSlotImpl<M extends FlexoModel<M, MM>, MM extends FlexoMetaModel<MM>> extends
 			ModelSlotImpl<M> implements TypeAwareModelSlot<M, MM> {
 
@@ -105,6 +116,7 @@ public interface TypeAwareModelSlot<M extends FlexoModel<M, MM>, MM extends Flex
 		 * @param ontClass
 		 * @return
 		 */
+		@Override
 		public IndividualPatternRole<?> makeIndividualPatternRole(IFlexoOntologyClass ontClass) {
 			Class<? extends IndividualPatternRole> individualPRClass = getPatternRoleClass(IndividualPatternRole.class);
 			IndividualPatternRole<?> returned = makePatternRole(individualPRClass);
@@ -112,6 +124,7 @@ public interface TypeAwareModelSlot<M extends FlexoModel<M, MM>, MM extends Flex
 			return returned;
 		}
 
+		@Override
 		public AddIndividual<? extends TypeAwareModelSlot, ?> makeAddIndividualAction(IndividualPatternRole<?> patternRole,
 				AbstractCreationScheme creationScheme) {
 			Class<? extends AddIndividual<? extends TypeAwareModelSlot, ?>> addIndividualClass = (Class<? extends AddIndividual<? extends TypeAwareModelSlot, ?>>) getEditionActionClass(AddIndividual.class);

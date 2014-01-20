@@ -83,6 +83,8 @@ public interface VirtualModelModelSlot extends ModelSlot<VirtualModelInstance> {
 
 	public boolean isReflexiveModelSlot();
 
+	public EditionPatternInstancePatternRole makeEditionPatternInstancePatternRole(EditionPattern editionPattern);
+
 	public static abstract class VirtualModelModelSlotImpl extends ModelSlotImpl<VirtualModelInstance> implements VirtualModelModelSlot {
 
 		private static final Logger logger = Logger.getLogger(VirtualModelModelSlot.class.getPackage().getName());
@@ -114,14 +116,6 @@ public interface VirtualModelModelSlot extends ModelSlot<VirtualModelInstance> {
 		}
 
 		@Override
-		public <PR extends PatternRole<?>> PR makePatternRole(Class<PR> patternRoleClass) {
-			if (EditionPatternInstancePatternRole.class.isAssignableFrom(patternRoleClass)) {
-				return (PR) getVirtualModelFactory().newEditionPatternInstancePatternRole();
-			}
-			logger.warning("Unexpected pattern role: " + patternRoleClass.getName());
-			return null;
-		}
-
 		public EditionPatternInstancePatternRole makeEditionPatternInstancePatternRole(EditionPattern editionPattern) {
 			EditionPatternInstancePatternRole returned = makePatternRole(EditionPatternInstancePatternRole.class);
 			returned.setEditionPatternType(editionPattern);
@@ -135,22 +129,6 @@ public interface VirtualModelModelSlot extends ModelSlot<VirtualModelInstance> {
 				return "editionPatternInstance";
 			}
 			logger.warning("Unexpected pattern role: " + patternRoleClass.getName());
-			return null;
-		}
-
-		@Override
-		public <EA extends EditionAction<?, ?>> EA makeEditionAction(Class<EA> editionActionClass) {
-			if (AddEditionPatternInstance.class.isAssignableFrom(editionActionClass)) {
-				return (EA) getVirtualModelFactory().newAddEditionPatternInstance();
-			}
-			return null;
-		}
-
-		@Override
-		public <FR extends FetchRequest<?, ?>> FR makeFetchRequest(Class<FR> fetchRequestClass) {
-			if (SelectEditionPatternInstance.class.isAssignableFrom(fetchRequestClass)) {
-				return (FR) getVirtualModelFactory().newSelectEditionPatternInstance();
-			}
 			return null;
 		}
 

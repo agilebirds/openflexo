@@ -69,6 +69,14 @@ public interface ConnectorPatternRole extends GraphicalElementPatternRole<Diagra
 	@Setter(END_SHAPE_PATTERN_ROLE_KEY)
 	public void setEndShapePatternRole(ShapePatternRole endShapePatternRole);
 
+	public boolean getStartShapeAsDefinedInAction();
+
+	public void setStartShapeAsDefinedInAction(boolean flag);
+
+	public boolean getEndShapeAsDefinedInAction();
+
+	public void setEndShapeAsDefinedInAction(boolean flag);
+
 	public static abstract class ConnectorPatternRoleImpl extends
 			GraphicalElementPatternRoleImpl<DiagramConnector, ConnectorGraphicalRepresentation> implements ConnectorPatternRole {
 
@@ -147,10 +155,12 @@ public interface ConnectorPatternRole extends GraphicalElementPatternRole<Diagra
 							: artifactFromGraphicalRepresentation));
 		}
 
+		@Override
 		public boolean getStartShapeAsDefinedInAction() {
 			return getStartShapePatternRole() == null;
 		}
 
+		@Override
 		public void setStartShapeAsDefinedInAction(boolean flag) {
 			if (!flag && getEditionPattern().getPatternRoles(ShapePatternRole.class).size() > 0) {
 				setStartShapePatternRole(getEditionPattern().getPatternRoles(ShapePatternRole.class).get(0));
@@ -173,10 +183,12 @@ public interface ConnectorPatternRole extends GraphicalElementPatternRole<Diagra
 					endShapePatternRole != null ? endShapePatternRole.getGraphicalRepresentation() : artifactToGraphicalRepresentation));
 		}
 
+		@Override
 		public boolean getEndShapeAsDefinedInAction() {
 			return getEndShapePatternRole() == null;
 		}
 
+		@Override
 		public void setEndShapeAsDefinedInAction(boolean flag) {
 			if (!flag && getEditionPattern().getPatternRoles(ShapePatternRole.class).size() > 0) {
 				setEndShapePatternRole(getEditionPattern().getPatternRoles(ShapePatternRole.class).get(0));

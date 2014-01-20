@@ -37,6 +37,10 @@ public interface DiagramPatternRole extends PatternRole<View> {
 	@Setter(DIAGRAM_SPECIFICATION_URI_KEY)
 	public void setDiagramSpecificationURI(String diagramSpecificationURI);
 
+	public DiagramSpecification getDiagramSpecification();
+
+	public void setDiagramSpecification(DiagramSpecification diagramSpecification);
+
 	public static abstract class DiagramPatternRoleImpl extends PatternRoleImpl<View> implements DiagramPatternRole {
 
 		private static final Logger logger = Logger.getLogger(DiagramPatternRole.class.getPackage().getName());
@@ -94,6 +98,7 @@ public interface DiagramPatternRole extends PatternRole<View> {
 			this.diagramSpecificationURI = diagramSpecificationURI;
 		}
 
+		@Override
 		public DiagramSpecification getDiagramSpecification() {
 			if (getDiagramSpecificationResource() != null) {
 				return getDiagramSpecificationResource().getDiagramSpecification();
@@ -101,6 +106,7 @@ public interface DiagramPatternRole extends PatternRole<View> {
 			return null;
 		}
 
+		@Override
 		public void setDiagramSpecification(DiagramSpecification diagramSpecification) {
 			diagramSpecificationResource = diagramSpecification.getResource();
 		}

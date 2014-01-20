@@ -19,23 +19,14 @@
  */
 package org.openflexo.technologyadapter.diagram.fml;
 
-import org.openflexo.antar.binding.DataBinding;
 import org.openflexo.foundation.viewpoint.NavigationScheme;
 import org.openflexo.foundation.viewpoint.annotations.FIBPanel;
-import org.openflexo.technologyadapter.diagram.DiagramTechnologyAdapter;
+import org.openflexo.model.annotations.ModelEntity;
+import org.openflexo.model.annotations.XMLElement;
 
 @FIBPanel("Fib/NavigationSchemePanel.fib")
-public class DiagramNavigationScheme extends NavigationScheme implements DiagramEditionScheme {
-
-	private DataBinding<Object> targetObject;
-
-	public DiagramNavigationScheme() {
-		super();
-	}
-
-	@Override
-	public DiagramTechnologyAdapter getTechnologyAdapter() {
-		return getServiceManager().getTechnologyAdapterService().getTechnologyAdapter(DiagramTechnologyAdapter.class);
-	}
+@ModelEntity
+@XMLElement
+public interface DiagramNavigationScheme extends NavigationScheme, DiagramEditionScheme {
 
 }

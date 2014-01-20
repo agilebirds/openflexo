@@ -29,7 +29,13 @@ import org.openflexo.foundation.viewpoint.EditionPattern;
 import org.openflexo.foundation.viewpoint.EditionPatternInstanceType;
 import org.openflexo.foundation.viewpoint.PatternRole;
 import org.openflexo.foundation.viewpoint.annotations.FIBPanel;
-import org.openflexo.technologyadapter.diagram.DiagramTechnologyAdapter;
+import org.openflexo.model.annotations.Getter;
+import org.openflexo.model.annotations.ImplementationClass;
+import org.openflexo.model.annotations.ModelEntity;
+import org.openflexo.model.annotations.PropertyIdentifier;
+import org.openflexo.model.annotations.Setter;
+import org.openflexo.model.annotations.XMLAttribute;
+import org.openflexo.model.annotations.XMLElement;
 import org.openflexo.technologyadapter.diagram.fml.editionaction.AddShape;
 import org.openflexo.technologyadapter.diagram.model.DiagramContainerElement;
 import org.openflexo.toolbox.StringUtils;
@@ -38,164 +44,180 @@ import org.openflexo.toolbox.StringUtils;
 @ModelEntity
 @ImplementationClass(DropScheme.DropSchemeImpl.class)
 @XMLElement
-public interface DropScheme extends AbstractCreationScheme,DiagramEditionScheme{
+public interface DropScheme extends AbstractCreationScheme, DiagramEditionScheme {
 
-@PropertyIdentifier(type=String.class)
-public static final String TARGET_KEY = "target";
-@PropertyIdentifier(type=ShapePatternRole.class)
-public static final String TARGET_PATTERN_ROLE_KEY = "targetPatternRole";
+	@PropertyIdentifier(type = String.class)
+	public static final String TARGET_KEY = "target";
+	@PropertyIdentifier(type = ShapePatternRole.class)
+	public static final String TARGET_PATTERN_ROLE_KEY = "targetPatternRole";
 
-@Getter(value=TARGET_KEY)
-@XMLAttribute
-public String _getTarget();
+	@Getter(value = TARGET_KEY)
+	@XMLAttribute
+	public String _getTarget();
 
-@Setter(TARGET_KEY)
-public void _setTarget(String target);
+	@Setter(TARGET_KEY)
+	public void _setTarget(String target);
 
+	@Getter(value = TARGET_PATTERN_ROLE_KEY)
+	@XMLElement
+	public ShapePatternRole getTargetPatternRole();
 
-@Getter(value=TARGET_PATTERN_ROLE_KEY)
-@XMLElement
-public ShapePatternRole getTargetPatternRole();
+	@Setter(TARGET_PATTERN_ROLE_KEY)
+	public void setTargetPatternRole(ShapePatternRole targetPatternRole);
 
-@Setter(TARGET_PATTERN_ROLE_KEY)
-public void setTargetPatternRole(ShapePatternRole targetPatternRole);
+	public boolean isTopTarget();
 
+	public boolean getTopTarget();
 
-public static abstract  class DropSchemeImpl extends AbstractCreationSchemeImpl implements DropScheme
-{
+	public void setTopTarget(boolean flag);
 
-	private String target;
-	private ShapePatternRole targetPatternRole;
+	public EditionPattern getTargetEditionPattern();
 
-	public DropSchemeImpl() {
-		super();
-	}
+	public void setTargetEditionPattern(EditionPattern targetEditionPattern);
 
-	public String _getTarget() {
-		return target;
-	}
+	public static abstract class DropSchemeImpl extends AbstractCreationSchemeImpl implements DropScheme {
 
-	public void _setTarget(String target) {
-		this.target = target;
-	}
+		private String target;
+		private ShapePatternRole targetPatternRole;
 
-	public EditionPattern getTargetEditionPattern() {
-		if (StringUtils.isEmpty(_getTarget())) {
+		public DropSchemeImpl() {
+			super();
+		}
+
+		@Override
+		public String _getTarget() {
+			return target;
+		}
+
+		@Override
+		public void _setTarget(String target) {
+			this.target = target;
+		}
+
+		@Override
+		public EditionPattern getTargetEditionPattern() {
+			if (StringUtils.isEmpty(_getTarget())) {
+				return null;
+			}
+			if (isTopTarget()) {
+				return null;
+			}
+			if (getVirtualModel() != null) {
+				return getVirtualModel().getEditionPattern(_getTarget());
+			}
 			return null;
 		}
-		if (isTopTarget()) {
-			return null;
+
+		@Override
+		public void setTargetEditionPattern(EditionPattern targetEditionPattern) {
+			_setTarget(targetEditionPattern != null ? targetEditionPattern.getURI() : null);
+			updateBindingModels();
 		}
-		if (getVirtualModel() != null) {
-			return getVirtualModel().getEditionPattern(_getTarget());
+
+		@Override
+		public boolean isTopTarget() {
+			return getTopTarget();
 		}
-		return null;
-	}
 
-	public void setTargetEditionPattern(EditionPattern targetEditionPattern) {
-		_setTarget(targetEditionPattern != null ? targetEditionPattern.getURI() : null);
-		updateBindingModels();
-	}
+		@Override
+		public boolean getTopTarget() {
+			if (StringUtils.isEmpty(_getTarget())) {
+				return false;
+			}
+			return _getTarget().equalsIgnoreCase("top");
+		}
 
-	public boolean isTopTarget() {
-		return getTopTarget();
-	}
+		@Override
+		public void setTopTarget(boolean flag) {
+			if (flag) {
+				_setTarget("top");
+			} else {
+				_setTarget("");
+			}
+		}
 
-	public boolean getTopTarget() {
-		if (StringUtils.isEmpty(_getTarget())) {
+		@Deprecated
+		public boolean targetHasMultipleRoles() {
+			// return getTargetEditionPattern() != null && getTargetEditionPattern().getShapePatternRoles().size() > 1;
 			return false;
 		}
-		return _getTarget().equalsIgnoreCase("top");
-	}
 
-	public void setTopTarget(boolean flag) {
-		if (flag) {
-			_setTarget("top");
-		} else {
-			_setTarget("");
+		@Override
+		public ShapePatternRole getTargetPatternRole() {
+			return targetPatternRole;
 		}
-	}
 
-	@Deprecated
-	public boolean targetHasMultipleRoles() {
-		// return getTargetEditionPattern() != null && getTargetEditionPattern().getShapePatternRoles().size() > 1;
-		return false;
-	}
+		@Override
+		public void setTargetPatternRole(ShapePatternRole targetPatternRole) {
+			this.targetPatternRole = targetPatternRole;
+		}
 
-	public ShapePatternRole getTargetPatternRole() {
-		return targetPatternRole;
-	}
-
-	public void setTargetPatternRole(ShapePatternRole targetPatternRole) {
-		this.targetPatternRole = targetPatternRole;
-	}
-
-	public boolean isValidTarget(EditionPattern aTarget, PatternRole contextRole) {
-		if (getTargetEditionPattern() != null && getTargetEditionPattern().isAssignableFrom(aTarget)) {
-			if (targetHasMultipleRoles()) {
-				// TODO make proper implementation when role inheritance will be in use !!!
-				return getTargetPatternRole() == null
-						|| getTargetPatternRole().getPatternRoleName().equals(contextRole.getPatternRoleName());
-			} else {
-				return true;
+		public boolean isValidTarget(EditionPattern aTarget, PatternRole contextRole) {
+			if (getTargetEditionPattern() != null && getTargetEditionPattern().isAssignableFrom(aTarget)) {
+				if (targetHasMultipleRoles()) {
+					// TODO make proper implementation when role inheritance will be in use !!!
+					return getTargetPatternRole() == null
+							|| getTargetPatternRole().getPatternRoleName().equals(contextRole.getPatternRoleName());
+				} else {
+					return true;
+				}
 			}
+			return false;
 		}
-		return false;
-	}
 
-	@Override
-	protected void appendContextualBindingVariables(BindingModel bindingModel) {
-		super.appendContextualBindingVariables(bindingModel);
-		bindingModelNeedToBeRecomputed = false;
-		if (getTargetEditionPattern() != null) {
-			bindingModel.addToBindingVariables(new BindingVariable(DiagramEditionScheme.TARGET, EditionPatternInstanceType
-					.getEditionPatternInstanceType(getTargetEditionPattern())));
-		} else if (_getTarget() != null && !_getTarget().equals("top")) {
-			// logger.warning("Cannot find edition pattern " + _getTarget() + " !!!!!!!!!!!!!!");
-			bindingModelNeedToBeRecomputed = true;
-		}
-	}
-
-	private boolean bindingModelNeedToBeRecomputed = false;
-	private boolean isUpdatingBindingModel = false;
-
-	@Override
-	public BindingModel getBindingModel() {
-		if (bindingModelNeedToBeRecomputed && !isUpdatingBindingModel) {
-			isUpdatingBindingModel = true;
+		@Override
+		protected void appendContextualBindingVariables(BindingModel bindingModel) {
+			super.appendContextualBindingVariables(bindingModel);
 			bindingModelNeedToBeRecomputed = false;
-			updateBindingModels();
-			isUpdatingBindingModel = false;
-		}
-		return super.getBindingModel();
-	}
-
-	@Override
-	protected void rebuildActionsBindingModel() {
-		if (!bindingModelNeedToBeRecomputed) {
-			super.rebuildActionsBindingModel();
-		}
-	}
-
-	/**
-	 * Overrides {@link #createAction(Class, ModelSlot)} by providing default value for top level container
-	 * 
-	 * @return newly created {@link EditionAction}
-	 */
-	@Override
-	public <A extends EditionAction<?, ?>> A createAction(Class<A> actionClass, ModelSlot<?> modelSlot) {
-		A newAction = super.createAction(actionClass, modelSlot);
-		if (newAction instanceof AddShape) {
-			if (isTopTarget()) {
-				((AddShape) newAction).setContainer(new DataBinding<DiagramContainerElement<?>>(DiagramEditionScheme.TOP_LEVEL));
+			if (getTargetEditionPattern() != null) {
+				bindingModel.addToBindingVariables(new BindingVariable(DiagramEditionScheme.TARGET, EditionPatternInstanceType
+						.getEditionPatternInstanceType(getTargetEditionPattern())));
+			} else if (_getTarget() != null && !_getTarget().equals("top")) {
+				// logger.warning("Cannot find edition pattern " + _getTarget() + " !!!!!!!!!!!!!!");
+				bindingModelNeedToBeRecomputed = true;
 			}
 		}
-		return newAction;
-	}
 
-	@Override
-	public DiagramTechnologyAdapter getTechnologyAdapter() {
-		return getServiceManager().getTechnologyAdapterService().getTechnologyAdapter(DiagramTechnologyAdapter.class);
+		private boolean bindingModelNeedToBeRecomputed = false;
+		private boolean isUpdatingBindingModel = false;
+
+		@Override
+		public BindingModel getBindingModel() {
+			if (bindingModelNeedToBeRecomputed && !isUpdatingBindingModel) {
+				isUpdatingBindingModel = true;
+				bindingModelNeedToBeRecomputed = false;
+				updateBindingModels();
+				isUpdatingBindingModel = false;
+			}
+			return super.getBindingModel();
+		}
+
+		@Override
+		protected void rebuildActionsBindingModel() {
+			if (!bindingModelNeedToBeRecomputed) {
+				super.rebuildActionsBindingModel();
+			}
+		}
+
+		/**
+		 * Overrides {@link #createAction(Class, ModelSlot)} by providing default value for top level container
+		 * 
+		 * @return newly created {@link EditionAction}
+		 */
+		@Override
+		public <A extends EditionAction<?, ?>> A createAction(Class<A> actionClass, ModelSlot<?> modelSlot) {
+			A newAction = super.createAction(actionClass, modelSlot);
+			if (newAction instanceof AddShape) {
+				if (isTopTarget()) {
+					((AddShape) newAction).setContainer(new DataBinding<DiagramContainerElement<?>>(DiagramEditionScheme.TOP_LEVEL));
+				}
+			}
+			return newAction;
+		}
+
+		/*@Override
+		public DiagramTechnologyAdapter getTechnologyAdapter() {
+			return getServiceManager().getTechnologyAdapterService().getTechnologyAdapter(DiagramTechnologyAdapter.class);
+		}*/
 	}
-}
 }

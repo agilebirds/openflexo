@@ -28,7 +28,13 @@ import org.openflexo.foundation.viewpoint.EditionAction;
 import org.openflexo.foundation.viewpoint.EditionPattern;
 import org.openflexo.foundation.viewpoint.EditionPatternInstanceType;
 import org.openflexo.foundation.viewpoint.annotations.FIBPanel;
-import org.openflexo.technologyadapter.diagram.DiagramTechnologyAdapter;
+import org.openflexo.model.annotations.Getter;
+import org.openflexo.model.annotations.ImplementationClass;
+import org.openflexo.model.annotations.ModelEntity;
+import org.openflexo.model.annotations.PropertyIdentifier;
+import org.openflexo.model.annotations.Setter;
+import org.openflexo.model.annotations.XMLAttribute;
+import org.openflexo.model.annotations.XMLElement;
 import org.openflexo.technologyadapter.diagram.fml.editionaction.AddConnector;
 import org.openflexo.technologyadapter.diagram.model.DiagramShape;
 import org.openflexo.toolbox.StringUtils;
@@ -37,270 +43,288 @@ import org.openflexo.toolbox.StringUtils;
 @ModelEntity
 @ImplementationClass(LinkScheme.LinkSchemeImpl.class)
 @XMLElement
-public interface LinkScheme extends AbstractCreationScheme,DiagramEditionScheme{
+public interface LinkScheme extends AbstractCreationScheme, DiagramEditionScheme {
 
-@PropertyIdentifier(type=String.class)
-public static final String FROM_TARGET_KEY = "fromTarget";
-@PropertyIdentifier(type=String.class)
-public static final String TO_TARGET_KEY = "toTarget";
-@PropertyIdentifier(type=boolean.class)
-public static final String IS_AVAILABLE_WITH_FLOATING_PALETTE_KEY = "isAvailableWithFloatingPalette";
-@PropertyIdentifier(type=boolean.class)
-public static final String NORTH_DIRECTION_SUPPORTED_KEY = "northDirectionSupported";
-@PropertyIdentifier(type=boolean.class)
-public static final String EAST_DIRECTION_SUPPORTED_KEY = "eastDirectionSupported";
-@PropertyIdentifier(type=boolean.class)
-public static final String SOUTH_DIRECTION_SUPPORTED_KEY = "southDirectionSupported";
-@PropertyIdentifier(type=boolean.class)
-public static final String WEST_DIRECTION_SUPPORTED_KEY = "westDirectionSupported";
+	@PropertyIdentifier(type = String.class)
+	public static final String FROM_TARGET_KEY = "fromTarget";
+	@PropertyIdentifier(type = String.class)
+	public static final String TO_TARGET_KEY = "toTarget";
+	@PropertyIdentifier(type = boolean.class)
+	public static final String IS_AVAILABLE_WITH_FLOATING_PALETTE_KEY = "isAvailableWithFloatingPalette";
+	@PropertyIdentifier(type = boolean.class)
+	public static final String NORTH_DIRECTION_SUPPORTED_KEY = "northDirectionSupported";
+	@PropertyIdentifier(type = boolean.class)
+	public static final String EAST_DIRECTION_SUPPORTED_KEY = "eastDirectionSupported";
+	@PropertyIdentifier(type = boolean.class)
+	public static final String SOUTH_DIRECTION_SUPPORTED_KEY = "southDirectionSupported";
+	@PropertyIdentifier(type = boolean.class)
+	public static final String WEST_DIRECTION_SUPPORTED_KEY = "westDirectionSupported";
 
-@Getter(value=FROM_TARGET_KEY)
-@XMLAttribute
-public String _getFromTarget();
+	@Getter(value = FROM_TARGET_KEY)
+	@XMLAttribute
+	public String _getFromTarget();
 
-@Setter(FROM_TARGET_KEY)
-public void _setFromTarget(String fromTarget);
+	@Setter(FROM_TARGET_KEY)
+	public void _setFromTarget(String fromTarget);
 
+	@Getter(value = TO_TARGET_KEY)
+	@XMLAttribute
+	public String _getToTarget();
 
-@Getter(value=TO_TARGET_KEY)
-@XMLAttribute
-public String _getToTarget();
+	@Setter(TO_TARGET_KEY)
+	public void _setToTarget(String toTarget);
 
-@Setter(TO_TARGET_KEY)
-public void _setToTarget(String toTarget);
+	@Getter(value = IS_AVAILABLE_WITH_FLOATING_PALETTE_KEY, defaultValue = "false")
+	@XMLAttribute
+	public boolean getIsAvailableWithFloatingPalette();
 
+	@Setter(IS_AVAILABLE_WITH_FLOATING_PALETTE_KEY)
+	public void setIsAvailableWithFloatingPalette(boolean isAvailableWithFloatingPalette);
 
-@Getter(value=IS_AVAILABLE_WITH_FLOATING_PALETTE_KEY,defaultValue = "false")
-@XMLAttribute
-public boolean getIsAvailableWithFloatingPalette();
+	@Getter(value = NORTH_DIRECTION_SUPPORTED_KEY, defaultValue = "false")
+	@XMLAttribute
+	public boolean getNorthDirectionSupported();
 
-@Setter(IS_AVAILABLE_WITH_FLOATING_PALETTE_KEY)
-public void setIsAvailableWithFloatingPalette(boolean isAvailableWithFloatingPalette);
+	@Setter(NORTH_DIRECTION_SUPPORTED_KEY)
+	public void setNorthDirectionSupported(boolean northDirectionSupported);
 
+	@Getter(value = EAST_DIRECTION_SUPPORTED_KEY, defaultValue = "false")
+	@XMLAttribute
+	public boolean getEastDirectionSupported();
 
-@Getter(value=NORTH_DIRECTION_SUPPORTED_KEY,defaultValue = "false")
-@XMLAttribute
-public boolean getNorthDirectionSupported();
+	@Setter(EAST_DIRECTION_SUPPORTED_KEY)
+	public void setEastDirectionSupported(boolean eastDirectionSupported);
 
-@Setter(NORTH_DIRECTION_SUPPORTED_KEY)
-public void setNorthDirectionSupported(boolean northDirectionSupported);
+	@Getter(value = SOUTH_DIRECTION_SUPPORTED_KEY, defaultValue = "false")
+	@XMLAttribute
+	public boolean getSouthDirectionSupported();
 
+	@Setter(SOUTH_DIRECTION_SUPPORTED_KEY)
+	public void setSouthDirectionSupported(boolean southDirectionSupported);
 
-@Getter(value=EAST_DIRECTION_SUPPORTED_KEY,defaultValue = "false")
-@XMLAttribute
-public boolean getEastDirectionSupported();
+	@Getter(value = WEST_DIRECTION_SUPPORTED_KEY, defaultValue = "false")
+	@XMLAttribute
+	public boolean getWestDirectionSupported();
 
-@Setter(EAST_DIRECTION_SUPPORTED_KEY)
-public void setEastDirectionSupported(boolean eastDirectionSupported);
+	@Setter(WEST_DIRECTION_SUPPORTED_KEY)
+	public void setWestDirectionSupported(boolean westDirectionSupported);
 
+	public EditionPattern getFromTargetEditionPattern();
 
-@Getter(value=SOUTH_DIRECTION_SUPPORTED_KEY,defaultValue = "false")
-@XMLAttribute
-public boolean getSouthDirectionSupported();
+	public void setFromTargetEditionPattern(EditionPattern targetEditionPattern);
 
-@Setter(SOUTH_DIRECTION_SUPPORTED_KEY)
-public void setSouthDirectionSupported(boolean southDirectionSupported);
+	public EditionPattern getToTargetEditionPattern();
 
+	public void setToTargetEditionPattern(EditionPattern targetEditionPattern);
 
-@Getter(value=WEST_DIRECTION_SUPPORTED_KEY,defaultValue = "false")
-@XMLAttribute
-public boolean getWestDirectionSupported();
+	public static abstract class LinkSchemeImpl extends AbstractCreationSchemeImpl implements LinkScheme {
 
-@Setter(WEST_DIRECTION_SUPPORTED_KEY)
-public void setWestDirectionSupported(boolean westDirectionSupported);
+		private String fromTarget;
+		private String toTarget;
 
+		private boolean northDirectionSupported = true;
+		private boolean eastDirectionSupported = true;
+		private boolean southDirectionSupported = true;
+		private boolean westDirectionSupported = true;
 
-public static abstract  class LinkSchemeImpl extends AbstractCreationSchemeImpl implements LinkScheme
-{
+		private boolean isAvailableWithFloatingPalette = true;
 
-	private String fromTarget;
-	private String toTarget;
+		public LinkSchemeImpl() {
+			super();
+		}
 
-	private boolean northDirectionSupported = true;
-	private boolean eastDirectionSupported = true;
-	private boolean southDirectionSupported = true;
-	private boolean westDirectionSupported = true;
+		@Override
+		public String _getFromTarget() {
+			return fromTarget;
+		}
 
-	private boolean isAvailableWithFloatingPalette = true;
+		@Override
+		public void _setFromTarget(String fromTarget) {
+			this.fromTarget = fromTarget;
+		}
 
-	public LinkSchemeImpl() {
-		super();
-	}
+		@Override
+		public String _getToTarget() {
+			return toTarget;
+		}
 
-	public String _getFromTarget() {
-		return fromTarget;
-	}
+		@Override
+		public void _setToTarget(String toTarget) {
+			this.toTarget = toTarget;
+		}
 
-	public void _setFromTarget(String fromTarget) {
-		this.fromTarget = fromTarget;
-	}
-
-	public String _getToTarget() {
-		return toTarget;
-	}
-
-	public void _setToTarget(String toTarget) {
-		this.toTarget = toTarget;
-	}
-
-	public EditionPattern getFromTargetEditionPattern() {
-		if (StringUtils.isEmpty(_getFromTarget())) {
+		@Override
+		public EditionPattern getFromTargetEditionPattern() {
+			if (StringUtils.isEmpty(_getFromTarget())) {
+				return null;
+			}
+			if (getVirtualModel() != null) {
+				return getVirtualModel().getEditionPattern(_getFromTarget());
+			}
 			return null;
 		}
-		if (getVirtualModel() != null) {
-			return getVirtualModel().getEditionPattern(_getFromTarget());
-		}
-		return null;
-	}
 
-	public void setFromTargetEditionPattern(EditionPattern targetEditionPattern) {
-		_setFromTarget(targetEditionPattern != null ? targetEditionPattern.getURI() : null);
-		updateBindingModels();
-	}
-
-	public EditionPattern getToTargetEditionPattern() {
-		if (StringUtils.isEmpty(_getToTarget())) {
-			return null;
-		}
-		if (getVirtualModel() != null) {
-			return getVirtualModel().getEditionPattern(_getToTarget());
-		}
-		if (getViewPointLibrary() != null) {
-			return getViewPointLibrary().getEditionPattern(_getToTarget());
-		}
-		return null;
-	}
-
-	public void setToTargetEditionPattern(EditionPattern targetEditionPattern) {
-		_setToTarget(targetEditionPattern != null ? targetEditionPattern.getURI() : null);
-		updateBindingModels();
-	}
-
-	public boolean isValidTarget(EditionPattern actualFromTarget, EditionPattern actualToTarget) {
-		// TODO: improved this so that we can take into account adressed models restrictions. See also
-		// LinkScheme.isValidTarget on branch 1.5.1
-		return getFromTargetEditionPattern().isAssignableFrom(actualFromTarget)
-				&& getToTargetEditionPattern().isAssignableFrom(actualToTarget);
-	}
-
-	@Override
-	protected void appendContextualBindingVariables(BindingModel bindingModel) {
-		super.appendContextualBindingVariables(bindingModel);
-		bindingModelNeedToBeRecomputed = false;
-		if (getFromTargetEditionPattern() != null) {
-			bindingModel.addToBindingVariables(new BindingVariable(DiagramEditionScheme.FROM_TARGET, EditionPatternInstanceType
-					.getEditionPatternInstanceType(getFromTargetEditionPattern())));
-		} else if (_getFromTarget() != null && !StringUtils.isEmpty(_getFromTarget())) {
-			bindingModelNeedToBeRecomputed = true;
-		}
-		if (getToTargetEditionPattern() != null) {
-			bindingModel.addToBindingVariables(new BindingVariable(DiagramEditionScheme.TO_TARGET, EditionPatternInstanceType
-					.getEditionPatternInstanceType(getToTargetEditionPattern())));
-		} else if (_getToTarget() != null && !StringUtils.isEmpty(_getToTarget())) {
-			bindingModelNeedToBeRecomputed = true;
-		}
-	}
-
-	private boolean bindingModelNeedToBeRecomputed = false;
-	private boolean isUpdatingBindingModel = false;
-
-	@Override
-	public BindingModel getBindingModel() {
-		if (bindingModelNeedToBeRecomputed && !isUpdatingBindingModel) {
-			isUpdatingBindingModel = true;
-			bindingModelNeedToBeRecomputed = false;
+		@Override
+		public void setFromTargetEditionPattern(EditionPattern targetEditionPattern) {
+			_setFromTarget(targetEditionPattern != null ? targetEditionPattern.getURI() : null);
 			updateBindingModels();
-			isUpdatingBindingModel = false;
 		}
-		return super.getBindingModel();
-	}
 
-	@Override
-	protected void rebuildActionsBindingModel() {
-		if (!bindingModelNeedToBeRecomputed) {
-			super.rebuildActionsBindingModel();
+		@Override
+		public EditionPattern getToTargetEditionPattern() {
+			if (StringUtils.isEmpty(_getToTarget())) {
+				return null;
+			}
+			if (getVirtualModel() != null) {
+				return getVirtualModel().getEditionPattern(_getToTarget());
+			}
+			if (getViewPointLibrary() != null) {
+				return getViewPointLibrary().getEditionPattern(_getToTarget());
+			}
+			return null;
 		}
-	}
 
-	/**
-	 * Overrides {@link #createAction(Class, ModelSlot)} by providing default value for from and to targets
-	 * 
-	 * @return newly created {@link EditionAction}
-	 */
-	@Override
-	public <A extends EditionAction<?, ?>> A createAction(Class<A> actionClass, ModelSlot<?> modelSlot) {
-		A returned = super.createAction(actionClass, modelSlot);
-		if (returned instanceof AddConnector) {
-			AddConnector newAction = (AddConnector) returned;
-			EditionPattern fromEditionPattern = this.getFromTargetEditionPattern();
-			if (fromEditionPattern != null) {
-				ShapePatternRole fromShapePatternRole = getDefaultShapePatternRole(fromEditionPattern);
-				if (fromShapePatternRole != null) {
-					newAction.setFromShape(new DataBinding<DiagramShape>("fromTarget." + fromShapePatternRole.getName()));
+		@Override
+		public void setToTargetEditionPattern(EditionPattern targetEditionPattern) {
+			_setToTarget(targetEditionPattern != null ? targetEditionPattern.getURI() : null);
+			updateBindingModels();
+		}
+
+		public boolean isValidTarget(EditionPattern actualFromTarget, EditionPattern actualToTarget) {
+			// TODO: improved this so that we can take into account adressed models restrictions. See also
+			// LinkScheme.isValidTarget on branch 1.5.1
+			return getFromTargetEditionPattern().isAssignableFrom(actualFromTarget)
+					&& getToTargetEditionPattern().isAssignableFrom(actualToTarget);
+		}
+
+		@Override
+		protected void appendContextualBindingVariables(BindingModel bindingModel) {
+			super.appendContextualBindingVariables(bindingModel);
+			bindingModelNeedToBeRecomputed = false;
+			if (getFromTargetEditionPattern() != null) {
+				bindingModel.addToBindingVariables(new BindingVariable(DiagramEditionScheme.FROM_TARGET, EditionPatternInstanceType
+						.getEditionPatternInstanceType(getFromTargetEditionPattern())));
+			} else if (_getFromTarget() != null && !StringUtils.isEmpty(_getFromTarget())) {
+				bindingModelNeedToBeRecomputed = true;
+			}
+			if (getToTargetEditionPattern() != null) {
+				bindingModel.addToBindingVariables(new BindingVariable(DiagramEditionScheme.TO_TARGET, EditionPatternInstanceType
+						.getEditionPatternInstanceType(getToTargetEditionPattern())));
+			} else if (_getToTarget() != null && !StringUtils.isEmpty(_getToTarget())) {
+				bindingModelNeedToBeRecomputed = true;
+			}
+		}
+
+		private boolean bindingModelNeedToBeRecomputed = false;
+		private boolean isUpdatingBindingModel = false;
+
+		@Override
+		public BindingModel getBindingModel() {
+			if (bindingModelNeedToBeRecomputed && !isUpdatingBindingModel) {
+				isUpdatingBindingModel = true;
+				bindingModelNeedToBeRecomputed = false;
+				updateBindingModels();
+				isUpdatingBindingModel = false;
+			}
+			return super.getBindingModel();
+		}
+
+		@Override
+		protected void rebuildActionsBindingModel() {
+			if (!bindingModelNeedToBeRecomputed) {
+				super.rebuildActionsBindingModel();
+			}
+		}
+
+		/**
+		 * Overrides {@link #createAction(Class, ModelSlot)} by providing default value for from and to targets
+		 * 
+		 * @return newly created {@link EditionAction}
+		 */
+		@Override
+		public <A extends EditionAction<?, ?>> A createAction(Class<A> actionClass, ModelSlot<?> modelSlot) {
+			A returned = super.createAction(actionClass, modelSlot);
+			if (returned instanceof AddConnector) {
+				AddConnector newAction = (AddConnector) returned;
+				EditionPattern fromEditionPattern = this.getFromTargetEditionPattern();
+				if (fromEditionPattern != null) {
+					ShapePatternRole fromShapePatternRole = getDefaultShapePatternRole(fromEditionPattern);
+					if (fromShapePatternRole != null) {
+						newAction.setFromShape(new DataBinding<DiagramShape>("fromTarget." + fromShapePatternRole.getName()));
+					}
+				}
+				EditionPattern toEditionPattern = this.getToTargetEditionPattern();
+				if (toEditionPattern != null) {
+					ShapePatternRole toShapePatternRole = getDefaultShapePatternRole(toEditionPattern);
+					if (toShapePatternRole != null) {
+						newAction.setToShape(new DataBinding<DiagramShape>("toTarget." + toShapePatternRole.getName()));
+					}
 				}
 			}
-			EditionPattern toEditionPattern = this.getToTargetEditionPattern();
-			if (toEditionPattern != null) {
-				ShapePatternRole toShapePatternRole = getDefaultShapePatternRole(toEditionPattern);
-				if (toShapePatternRole != null) {
-					newAction.setToShape(new DataBinding<DiagramShape>("toTarget." + toShapePatternRole.getName()));
-				}
+			return returned;
+		}
+
+		private ShapePatternRole getDefaultShapePatternRole(EditionPattern ep) {
+			if (ep.getPatternRoles(ShapePatternRole.class).size() > 0) {
+				return ep.getPatternRoles(ShapePatternRole.class).get(0);
 			}
+			return null;
 		}
-		return returned;
-	}
 
-	private ShapePatternRole getDefaultShapePatternRole(EditionPattern ep) {
-		if (ep.getPatternRoles(ShapePatternRole.class).size() > 0) {
-			return ep.getPatternRoles(ShapePatternRole.class).get(0);
+		@Override
+		public boolean getIsAvailableWithFloatingPalette() {
+			return isAvailableWithFloatingPalette;
 		}
-		return null;
-	}
 
-	public boolean getIsAvailableWithFloatingPalette() {
-		return isAvailableWithFloatingPalette;
-	}
+		@Override
+		public void setIsAvailableWithFloatingPalette(boolean isAvailableWithFloatingPalette) {
+			this.isAvailableWithFloatingPalette = isAvailableWithFloatingPalette;
+		}
 
-	public void setIsAvailableWithFloatingPalette(boolean isAvailableWithFloatingPalette) {
-		this.isAvailableWithFloatingPalette = isAvailableWithFloatingPalette;
-	}
+		@Override
+		public boolean getNorthDirectionSupported() {
+			return northDirectionSupported;
+		}
 
-	public boolean getNorthDirectionSupported() {
-		return northDirectionSupported;
-	}
+		@Override
+		public void setNorthDirectionSupported(boolean northDirectionSupported) {
+			this.northDirectionSupported = northDirectionSupported;
+		}
 
-	public void setNorthDirectionSupported(boolean northDirectionSupported) {
-		this.northDirectionSupported = northDirectionSupported;
-	}
+		@Override
+		public boolean getEastDirectionSupported() {
+			return eastDirectionSupported;
+		}
 
-	public boolean getEastDirectionSupported() {
-		return eastDirectionSupported;
-	}
+		@Override
+		public void setEastDirectionSupported(boolean eastDirectionSupported) {
+			this.eastDirectionSupported = eastDirectionSupported;
+		}
 
-	public void setEastDirectionSupported(boolean eastDirectionSupported) {
-		this.eastDirectionSupported = eastDirectionSupported;
-	}
+		@Override
+		public boolean getSouthDirectionSupported() {
+			return southDirectionSupported;
+		}
 
-	public boolean getSouthDirectionSupported() {
-		return southDirectionSupported;
-	}
+		@Override
+		public void setSouthDirectionSupported(boolean southDirectionSupported) {
+			this.southDirectionSupported = southDirectionSupported;
+		}
 
-	public void setSouthDirectionSupported(boolean southDirectionSupported) {
-		this.southDirectionSupported = southDirectionSupported;
-	}
+		@Override
+		public boolean getWestDirectionSupported() {
+			return westDirectionSupported;
+		}
 
-	public boolean getWestDirectionSupported() {
-		return westDirectionSupported;
-	}
+		@Override
+		public void setWestDirectionSupported(boolean westDirectionSupported) {
+			this.westDirectionSupported = westDirectionSupported;
+		}
 
-	public void setWestDirectionSupported(boolean westDirectionSupported) {
-		this.westDirectionSupported = westDirectionSupported;
-	}
+		/*@Override
+		public DiagramTechnologyAdapter getTechnologyAdapter() {
+			return getServiceManager().getTechnologyAdapterService().getTechnologyAdapter(DiagramTechnologyAdapter.class);
+		}*/
 
-	@Override
-	public DiagramTechnologyAdapter getTechnologyAdapter() {
-		return getServiceManager().getTechnologyAdapterService().getTechnologyAdapter(DiagramTechnologyAdapter.class);
 	}
-
-}
 }

@@ -68,17 +68,17 @@ public interface GraphicalAction extends EditionAction<TypedDiagramModelSlot, Di
 
 	@Getter(value = SUBJECT_KEY)
 	@XMLAttribute
-	public DataBinding getSubject();
+	public DataBinding<DiagramElement<?>> getSubject();
 
 	@Setter(SUBJECT_KEY)
-	public void setSubject(DataBinding subject);
+	public void setSubject(DataBinding<DiagramElement<?>> subject);
 
 	@Getter(value = VALUE_KEY)
 	@XMLAttribute
-	public DataBinding getValue();
+	public DataBinding<Object> getValue();
 
 	@Setter(VALUE_KEY)
-	public void setValue(DataBinding value);
+	public void setValue(DataBinding<Object> value);
 
 	@Getter(value = GRAPHICAL_FEATURE_NAME_KEY)
 	@XMLAttribute(xmlTag = "feature")
@@ -128,6 +128,7 @@ public interface GraphicalAction extends EditionAction<TypedDiagramModelSlot, Di
 			return value;
 		}
 
+		@Override
 		public void setValue(DataBinding<Object> value) {
 			if (value != null) {
 				value.setOwner(this);
@@ -215,18 +216,19 @@ public interface GraphicalAction extends EditionAction<TypedDiagramModelSlot, Di
 			_graphicalFeatureName = featureName;
 		}
 
-		private DataBinding<DiagramElement> subject;
+		private DataBinding<DiagramElement<?>> subject;
 
 		@Override
-		public DataBinding<DiagramElement> getSubject() {
+		public DataBinding<DiagramElement<?>> getSubject() {
 			if (subject == null) {
-				subject = new DataBinding<DiagramElement>(this, DiagramElement.class, DataBinding.BindingDefinitionType.GET);
+				subject = new DataBinding<DiagramElement<?>>(this, DiagramElement.class, DataBinding.BindingDefinitionType.GET);
 				subject.setBindingName("subject");
 			}
 			return subject;
 		}
 
-		public void setSubject(DataBinding<DiagramElement> subject) {
+		@Override
+		public void setSubject(DataBinding<DiagramElement<?>> subject) {
 			if (subject != null) {
 				subject.setOwner(this);
 				subject.setBindingName("subject");
@@ -329,7 +331,7 @@ public interface GraphicalAction extends EditionAction<TypedDiagramModelSlot, Di
 			@Override
 			protected void fixAction() {
 				GraphicalAction graphicalAction = getObject();
-				graphicalAction.setSubject(new DataBinding<DiagramElement>(patternRole.getPatternRoleName()));
+				graphicalAction.setSubject(new DataBinding<DiagramElement<?>>(patternRole.getPatternRoleName()));
 			}
 
 		}

@@ -33,6 +33,7 @@ import org.openflexo.foundation.technologyadapter.ModelSlot;
 import org.openflexo.foundation.technologyadapter.TypeAwareModelSlot;
 import org.openflexo.foundation.viewpoint.EditionPattern;
 import org.openflexo.foundation.viewpoint.VirtualModel;
+import org.openflexo.foundation.viewpoint.VirtualModelModelFactory;
 import org.openflexo.foundation.viewpoint.VirtualModelModelSlot;
 import org.openflexo.technologyadapter.diagram.TypedDiagramModelSlot;
 import org.openflexo.technologyadapter.diagram.fml.GraphicalElementPatternRole;
@@ -315,6 +316,14 @@ public abstract class DeclareInEditionPattern<A extends DeclareInEditionPattern<
 			return true;
 		}
 		return false;
+	}
+
+	// TODO: i think that sometimes EditionPattern is null !!!
+	public VirtualModelModelFactory getFactory() {
+		if (getEditionPattern() != null) {
+			return getEditionPattern().getVirtualModelFactory();
+		}
+		return null;
 	}
 
 }

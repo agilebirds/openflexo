@@ -55,10 +55,10 @@ public interface AddDiagram extends DiagramAction<Diagram> {
 
 	@Getter(value = DIAGRAM_NAME_KEY)
 	@XMLAttribute
-	public DataBinding getDiagramName();
+	public DataBinding<String> getDiagramName();
 
 	@Setter(DIAGRAM_NAME_KEY)
-	public void setDiagramName(DataBinding diagramName);
+	public void setDiagramName(DataBinding<String> diagramName);
 
 	public static abstract class AddDiagramImpl extends DiagramActionImpl<Diagram> implements AddDiagram {
 
@@ -119,6 +119,7 @@ public interface AddDiagram extends DiagramAction<Diagram> {
 			return diagramName;
 		}
 
+		@Override
 		public void setDiagramName(DataBinding<String> diagramName) {
 			if (diagramName != null) {
 				diagramName.setOwner(this);
