@@ -28,6 +28,9 @@ import org.openflexo.foundation.ontology.DuplicateURIException;
 import org.openflexo.foundation.view.TypeAwareModelSlotInstance;
 import org.openflexo.foundation.view.action.EditionSchemeAction;
 import org.openflexo.foundation.viewpoint.AddClass;
+import org.openflexo.model.annotations.ImplementationClass;
+import org.openflexo.model.annotations.ModelEntity;
+import org.openflexo.model.annotations.XMLElement;
 import org.openflexo.technologyadapter.owl.OWLModelSlot;
 import org.openflexo.technologyadapter.owl.model.OWLClass;
 import org.openflexo.technologyadapter.owl.model.OWLOntology;
@@ -35,58 +38,56 @@ import org.openflexo.technologyadapter.owl.model.OWLOntology;
 @ModelEntity
 @ImplementationClass(AddOWLClass.AddOWLClassImpl.class)
 @XMLElement
-public interface AddOWLClass extends AddClass<OWLModelSlot, OWLClass>{
+public interface AddOWLClass extends AddClass<OWLModelSlot, OWLClass> {
 
+	public static abstract class AddOWLClassImpl extends AddClassImpl<OWLModelSlot, OWLClass> implements AddOWLClass {
 
-public static abstract  class AddOWLClassImpl extends AddClass<OWLModelSlot, OWLClass>Impl implements AddOWLClass
-{
+		private static final Logger logger = Logger.getLogger(AddOWLClass.class.getPackage().getName());
 
-	private static final Logger logger = Logger.getLogger(AddOWLClass.class.getPackage().getName());
+		private final String dataPropertyURI = null;
 
-	private final String dataPropertyURI = null;
-
-	public AddOWLClassImpl() {
-		super();
-	}
-
-	@Override
-	public OWLClass getOntologyClass() {
-		return (OWLClass) super.getOntologyClass();
-	}
-
-	@Override
-	public Class<OWLClass> getOntologyClassClass() {
-		return OWLClass.class;
-	}
-
-	@Override
-	public OWLClass performAction(EditionSchemeAction action) {
-		OWLClass father = getOntologyClass();
-		String newClassName = null;
-		try {
-			newClassName = getClassName().getBindingValue(action);
-		} catch (TypeMismatchException e1) {
-			e1.printStackTrace();
-		} catch (NullReferenceException e1) {
-			e1.printStackTrace();
-		} catch (InvocationTargetException e) {
-			e.printStackTrace();
+		public AddOWLClassImpl() {
+			super();
 		}
-		OWLClass newClass = null;
-		try {
-			logger.info("Adding class " + newClassName + " as " + father);
-			newClass = getModelSlotInstance(action).getAccessedResourceData().createOntologyClass(newClassName, father);
-			logger.info("Added class " + newClass.getName() + " as " + father);
-		} catch (DuplicateURIException e) {
-			e.printStackTrace();
+
+		@Override
+		public OWLClass getOntologyClass() {
+			return (OWLClass) super.getOntologyClass();
 		}
-		return newClass;
-	}
 
-	@Override
-	public TypeAwareModelSlotInstance<OWLOntology, OWLOntology, OWLModelSlot> getModelSlotInstance(EditionSchemeAction action) {
-		return (TypeAwareModelSlotInstance<OWLOntology, OWLOntology, OWLModelSlot>) super.getModelSlotInstance(action);
-	}
+		@Override
+		public Class<OWLClass> getOntologyClassClass() {
+			return OWLClass.class;
+		}
 
-}
+		@Override
+		public OWLClass performAction(EditionSchemeAction action) {
+			OWLClass father = getOntologyClass();
+			String newClassName = null;
+			try {
+				newClassName = getClassName().getBindingValue(action);
+			} catch (TypeMismatchException e1) {
+				e1.printStackTrace();
+			} catch (NullReferenceException e1) {
+				e1.printStackTrace();
+			} catch (InvocationTargetException e) {
+				e.printStackTrace();
+			}
+			OWLClass newClass = null;
+			try {
+				logger.info("Adding class " + newClassName + " as " + father);
+				newClass = getModelSlotInstance(action).getAccessedResourceData().createOntologyClass(newClassName, father);
+				logger.info("Added class " + newClass.getName() + " as " + father);
+			} catch (DuplicateURIException e) {
+				e.printStackTrace();
+			}
+			return newClass;
+		}
+
+		@Override
+		public TypeAwareModelSlotInstance<OWLOntology, OWLOntology, OWLModelSlot> getModelSlotInstance(EditionSchemeAction action) {
+			return (TypeAwareModelSlotInstance<OWLOntology, OWLOntology, OWLModelSlot>) super.getModelSlotInstance(action);
+		}
+
+	}
 }

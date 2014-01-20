@@ -32,6 +32,12 @@ import org.openflexo.foundation.view.TypeAwareModelSlotInstance;
 import org.openflexo.foundation.view.action.EditionSchemeAction;
 import org.openflexo.foundation.viewpoint.AssignableAction;
 import org.openflexo.foundation.viewpoint.SetPropertyValueAction;
+import org.openflexo.model.annotations.Getter;
+import org.openflexo.model.annotations.ImplementationClass;
+import org.openflexo.model.annotations.ModelEntity;
+import org.openflexo.model.annotations.PropertyIdentifier;
+import org.openflexo.model.annotations.Setter;
+import org.openflexo.model.annotations.XMLAttribute;
 import org.openflexo.technologyadapter.owl.OWLModelSlot;
 import org.openflexo.technologyadapter.owl.model.OWLConcept;
 import org.openflexo.technologyadapter.owl.model.OWLOntology;
@@ -39,110 +45,111 @@ import org.openflexo.technologyadapter.owl.model.OWLStatement;
 
 @ModelEntity(isAbstract = true)
 @ImplementationClass(AddStatement.AddStatementImpl.class)
-public abstract interface AddStatement<S extends OWLStatement> extends AssignableAction<OWLModelSlot, S>,SetPropertyValueAction{
+public abstract interface AddStatement<S extends OWLStatement> extends AssignableAction<OWLModelSlot, S>, SetPropertyValueAction {
 
-@PropertyIdentifier(type=DataBinding.class)
-public static final String SUBJECT_KEY = "subject";
+	@PropertyIdentifier(type = DataBinding.class)
+	public static final String SUBJECT_KEY = "subject";
 
-@Getter(value=SUBJECT_KEY)
-@XMLAttribute
-public DataBinding getSubject();
+	@Override
+	@Getter(value = SUBJECT_KEY)
+	@XMLAttribute
+	public DataBinding<?> getSubject();
 
-@Setter(SUBJECT_KEY)
-public void setSubject(DataBinding subject);
+	@Override
+	@Setter(SUBJECT_KEY)
+	public void setSubject(DataBinding<?> subject);
 
+	public static abstract class AddStatementImpl<S extends OWLStatement> extends AssignableActionImpl<OWLModelSlot, S> implements
+			AddStatement<S> {
 
-public static abstract  abstract class AddStatement<SImpl extends OWLStatement> extends AssignableAction<OWLModelSlot, S>Impl implements AddStatement<S
-{
+		private static final Logger logger = Logger.getLogger(AddStatement.class.getPackage().getName());
 
-	private static final Logger logger = Logger.getLogger(AddStatement.class.getPackage().getName());
-
-	public AddStatementImpl() {
-		super();
-	}
-
-	public OWLConcept<?> getPropertySubject(EditionSchemeAction action) {
-		try {
-			return (OWLConcept<?>) getSubject().getBindingValue(action);
-		} catch (TypeMismatchException e) {
-			e.printStackTrace();
-		} catch (NullReferenceException e) {
-			e.printStackTrace();
-		} catch (InvocationTargetException e) {
-			e.printStackTrace();
+		public AddStatementImpl() {
+			super();
 		}
-		return null;
-	}
 
-	/*@Override
-	public R getPatternRole() {
-		try {
-			return super.getPatternRole();
-		} catch (ClassCastException e) {
-			logger.warning("Unexpected pattern role type");
-			setPatternRole(null);
+		public OWLConcept<?> getPropertySubject(EditionSchemeAction action) {
+			try {
+				return (OWLConcept<?>) getSubject().getBindingValue(action);
+			} catch (TypeMismatchException e) {
+				e.printStackTrace();
+			} catch (NullReferenceException e) {
+				e.printStackTrace();
+			} catch (InvocationTargetException e) {
+				e.printStackTrace();
+			}
 			return null;
 		}
-	}*/
 
-	// FIXME: if we remove this useless code, some FIB won't work (see EditionPatternView.fib, inspect an AddIndividual)
-	// Need to be fixed in KeyValueProperty.java
-	/*@Override
-	public void setPatternRole(R patternRole) {
-		super.setPatternRole(patternRole);
-	}*/
+		/*@Override
+		public R getPatternRole() {
+			try {
+				return super.getPatternRole();
+			} catch (ClassCastException e) {
+				logger.warning("Unexpected pattern role type");
+				setPatternRole(null);
+				return null;
+			}
+		}*/
 
-	private DataBinding<Object> subject;
+		// FIXME: if we remove this useless code, some FIB won't work (see EditionPatternView.fib, inspect an AddIndividual)
+		// Need to be fixed in KeyValueProperty.java
+		/*@Override
+		public void setPatternRole(R patternRole) {
+			super.setPatternRole(patternRole);
+		}*/
 
-	@Override
-	public Type getSubjectType() {
-		return IFlexoOntologyConcept.class;
-	}
+		private DataBinding<?> subject;
 
-	@Override
-	public DataBinding<Object> getSubject() {
-		if (subject == null) {
-			subject = new DataBinding<Object>(this, getSubjectType(), BindingDefinitionType.GET) {
-				@Override
-				public Type getDeclaredType() {
-					return getSubjectType();
-				}
-			};
-			subject.setBindingName("subject");
-		}
-		return subject;
-	}
-
-	@Override
-	public void setSubject(DataBinding<Object> subject) {
-		if (subject != null) {
-			subject = new DataBinding<Object>(subject.toString(), this, getSubjectType(), BindingDefinitionType.GET) {
-				@Override
-				public Type getDeclaredType() {
-					return getSubjectType();
-				}
-			};
-			subject.setBindingName("subject");
-		}
-		this.subject = subject;
-	}
-
-	public static class SubjectIsRequiredAndMustBeValid extends BindingIsRequiredAndMustBeValid<AddStatement> {
-		public SubjectIsRequiredAndMustBeValid() {
-			super("'subject'_binding_is_required_and_must_be_valid", AddStatement.class);
+		@Override
+		public Type getSubjectType() {
+			return IFlexoOntologyConcept.class;
 		}
 
 		@Override
-		public DataBinding<IFlexoOntologyConcept> getBinding(AddStatement object) {
-			return object.getSubject();
+		public DataBinding<?> getSubject() {
+			if (subject == null) {
+				subject = new DataBinding<Object>(this, getSubjectType(), BindingDefinitionType.GET) {
+					@Override
+					public Type getDeclaredType() {
+						return getSubjectType();
+					}
+				};
+				subject.setBindingName("subject");
+			}
+			return subject;
+		}
+
+		@Override
+		public void setSubject(DataBinding<?> subject) {
+			if (subject != null) {
+				subject = new DataBinding<Object>(subject.toString(), this, getSubjectType(), BindingDefinitionType.GET) {
+					@Override
+					public Type getDeclaredType() {
+						return getSubjectType();
+					}
+				};
+				subject.setBindingName("subject");
+			}
+			this.subject = subject;
+		}
+
+		public static class SubjectIsRequiredAndMustBeValid extends BindingIsRequiredAndMustBeValid<AddStatement> {
+			public SubjectIsRequiredAndMustBeValid() {
+				super("'subject'_binding_is_required_and_must_be_valid", AddStatement.class);
+			}
+
+			@Override
+			public DataBinding<IFlexoOntologyConcept> getBinding(AddStatement object) {
+				return object.getSubject();
+			}
+
+		}
+
+		@Override
+		public TypeAwareModelSlotInstance<OWLOntology, OWLOntology, OWLModelSlot> getModelSlotInstance(EditionSchemeAction action) {
+			return (TypeAwareModelSlotInstance<OWLOntology, OWLOntology, OWLModelSlot>) super.getModelSlotInstance(action);
 		}
 
 	}
-
-	@Override
-	public TypeAwareModelSlotInstance<OWLOntology, OWLOntology, OWLModelSlot> getModelSlotInstance(EditionSchemeAction action) {
-		return (TypeAwareModelSlotInstance<OWLOntology, OWLOntology, OWLModelSlot>) super.getModelSlotInstance(action);
-	}
-
-}
 }

@@ -84,6 +84,8 @@ public interface ObjectPropertyAssertion extends AbstractAssertion {
 
 	public Object getValue(EditionSchemeAction action);
 
+	public IFlexoOntologyConcept getAssertionObject(EditionSchemeAction action);
+
 	public static abstract class ObjectPropertyAssertionImpl extends AbstractAssertionImpl implements ObjectPropertyAssertion {
 
 		private static final Logger logger = Logger.getLogger(ObjectPropertyAssertion.class.getPackage().getName());
@@ -153,6 +155,7 @@ public interface ObjectPropertyAssertion extends AbstractAssertion {
 			this.object = object;
 		}
 
+		@Override
 		public IFlexoOntologyConcept getAssertionObject(EditionSchemeAction action) {
 			Object value = null;
 			try {

@@ -43,6 +43,13 @@ import org.openflexo.foundation.viewpoint.FMLRepresentationContext.FMLRepresenta
 import org.openflexo.foundation.viewpoint.PatternRole;
 import org.openflexo.foundation.viewpoint.SetObjectPropertyValueAction;
 import org.openflexo.foundation.viewpoint.annotations.FIBPanel;
+import org.openflexo.model.annotations.Getter;
+import org.openflexo.model.annotations.ImplementationClass;
+import org.openflexo.model.annotations.ModelEntity;
+import org.openflexo.model.annotations.PropertyIdentifier;
+import org.openflexo.model.annotations.Setter;
+import org.openflexo.model.annotations.XMLAttribute;
+import org.openflexo.model.annotations.XMLElement;
 import org.openflexo.technologyadapter.owl.model.OWLConcept;
 import org.openflexo.technologyadapter.owl.model.OWLObjectProperty;
 import org.openflexo.technologyadapter.owl.model.ObjectPropertyStatement;
@@ -54,211 +61,216 @@ import org.openflexo.toolbox.StringUtils;
 @ModelEntity
 @ImplementationClass(AddObjectPropertyStatement.AddObjectPropertyStatementImpl.class)
 @XMLElement
-public interface AddObjectPropertyStatement extends AddStatement<ObjectPropertyStatement>,SetObjectPropertyValueAction{
+public interface AddObjectPropertyStatement extends AddStatement<ObjectPropertyStatement>, SetObjectPropertyValueAction {
 
-@PropertyIdentifier(type=DataBinding.class)
-public static final String OBJECT_KEY = "object";
-@PropertyIdentifier(type=String.class)
-public static final String OBJECT_PROPERTY_URI_KEY = "objectPropertyURI";
-
-@Getter(value=OBJECT_KEY)
-@XMLAttribute
-public DataBinding getObject();
-
-@Setter(OBJECT_KEY)
-public void setObject(DataBinding object);
-
-
-@Getter(value=OBJECT_PROPERTY_URI_KEY)
-@XMLAttribute
-public String _getObjectPropertyURI();
-
-@Setter(OBJECT_PROPERTY_URI_KEY)
-public void _setObjectPropertyURI(String objectPropertyURI);
-
-
-public static abstract  class AddObjectPropertyStatementImpl extends AddStatement<ObjectPropertyStatement>Impl implements AddObjectPropertyStatement
-{
-
-	private static final Logger logger = Logger.getLogger(AddObjectPropertyStatement.class.getPackage().getName());
-
-	private String objectPropertyURI = null;
-	private DataBinding<Object> object;
-
-	public AddObjectPropertyStatementImpl() {
-		super();
-	}
+	@PropertyIdentifier(type = DataBinding.class)
+	public static final String OBJECT_KEY = "object";
+	@PropertyIdentifier(type = String.class)
+	public static final String OBJECT_PROPERTY_URI_KEY = "objectPropertyURI";
 
 	@Override
-	public ObjectPropertyStatementPatternRole getPatternRole() {
-		PatternRole superPatternRole = super.getPatternRole();
-		if (superPatternRole instanceof ObjectPropertyStatementPatternRole) {
-			return (ObjectPropertyStatementPatternRole) superPatternRole;
-		} else if (superPatternRole != null) {
-			// logger.warning("Unexpected pattern role of type " + superPatternRole.getClass().getSimpleName());
-			return null;
+	@Getter(value = OBJECT_KEY)
+	@XMLAttribute
+	public DataBinding<?> getObject();
+
+	@Override
+	@Setter(OBJECT_KEY)
+	public void setObject(DataBinding<?> object);
+
+	@Getter(value = OBJECT_PROPERTY_URI_KEY)
+	@XMLAttribute
+	public String _getObjectPropertyURI();
+
+	@Setter(OBJECT_PROPERTY_URI_KEY)
+	public void _setObjectPropertyURI(String objectPropertyURI);
+
+	public static abstract class AddObjectPropertyStatementImpl extends AddStatementImpl<ObjectPropertyStatement> implements
+			AddObjectPropertyStatement {
+
+		private static final Logger logger = Logger.getLogger(AddObjectPropertyStatement.class.getPackage().getName());
+
+		private String objectPropertyURI = null;
+		private DataBinding<?> object;
+
+		public AddObjectPropertyStatementImpl() {
+			super();
 		}
-		return null;
-	}
 
-	@Override
-	public String getFMLRepresentation(FMLRepresentationContext context) {
-		FMLRepresentationOutput out = new FMLRepresentationOutput(context);
-		out.append(getSubject().toString() + "." + getObjectProperty().getName() + " = " + getObject().toString() + ";", context);
-		return out.toString();
-	}
-
-	@Override
-	public Type getSubjectType() {
-		if (getObjectProperty() != null && getObjectProperty().getDomain() instanceof IFlexoOntologyClass) {
-			return IndividualOfClass.getIndividualOfClass((IFlexoOntologyClass) getObjectProperty().getDomain());
-		}
-		return super.getSubjectType();
-	}
-
-	/*@Override
-	public List<ObjectPropertyStatementPatternRole> getAvailablePatternRoles() {
-		return getEditionPattern().getPatternRoles(ObjectPropertyStatementPatternRole.class);
-	}*/
-
-	@Override
-	public IFlexoOntologyStructuralProperty getProperty() {
-		return getObjectProperty();
-	}
-
-	@Override
-	public void setProperty(IFlexoOntologyStructuralProperty aProperty) {
-		setObjectProperty((OWLObjectProperty) aProperty);
-	}
-
-	@Override
-	public IFlexoOntologyObjectProperty getObjectProperty() {
-		if (getVirtualModel() != null && StringUtils.isNotEmpty(objectPropertyURI)) {
-			return getVirtualModel().getOntologyObjectProperty(objectPropertyURI);
-		} else {
-			if (getPatternRole() != null) {
-				return (OWLObjectProperty) getPatternRole().getObjectProperty();
-			}
-		}
-		return null;
-	}
-
-	@Override
-	public void setObjectProperty(IFlexoOntologyObjectProperty ontologyProperty) {
-		if (ontologyProperty != null) {
-			if (getPatternRole() != null) {
-				if (getPatternRole().getObjectProperty().isSuperConceptOf(ontologyProperty)) {
-					objectPropertyURI = ontologyProperty.getURI();
-				} else {
-					getPatternRole().setObjectProperty(ontologyProperty);
-				}
-			} else {
-				objectPropertyURI = ontologyProperty.getURI();
-			}
-		} else {
-			objectPropertyURI = null;
-		}
-	}
-
-	public String _getObjectPropertyURI() {
-		if (getObjectProperty() != null) {
-			if (getPatternRole() != null && getPatternRole().getObjectProperty() == getObjectProperty()) {
-				// No need to store an overriding type, just use default provided by pattern role
+		@Override
+		public ObjectPropertyStatementPatternRole getPatternRole() {
+			PatternRole superPatternRole = super.getPatternRole();
+			if (superPatternRole instanceof ObjectPropertyStatementPatternRole) {
+				return (ObjectPropertyStatementPatternRole) superPatternRole;
+			} else if (superPatternRole != null) {
+				// logger.warning("Unexpected pattern role of type " + superPatternRole.getClass().getSimpleName());
 				return null;
 			}
-			return getObjectProperty().getURI();
+			return null;
 		}
-		return objectPropertyURI;
-	}
 
-	public void _setObjectPropertyURI(String objectPropertyURI) {
-		this.objectPropertyURI = objectPropertyURI;
-	}
-
-	public OWLConcept<?> getPropertyObject(EditionSchemeAction action) {
-		try {
-			return (OWLConcept<?>) getObject().getBindingValue(action);
-		} catch (TypeMismatchException e) {
-			e.printStackTrace();
-		} catch (NullReferenceException e) {
-			e.printStackTrace();
-		} catch (InvocationTargetException e) {
-			e.printStackTrace();
+		@Override
+		public String getFMLRepresentation(FMLRepresentationContext context) {
+			FMLRepresentationOutput out = new FMLRepresentationOutput(context);
+			out.append(getSubject().toString() + "." + getObjectProperty().getName() + " = " + getObject().toString() + ";", context);
+			return out.toString();
 		}
-		return null;
-	}
 
-	public Type getObjectType() {
-		if (getObjectProperty() instanceof IFlexoOntologyObjectProperty && getObjectProperty().getRange() instanceof IFlexoOntologyClass) {
-			return IndividualOfClass.getIndividualOfClass((IFlexoOntologyClass) getObjectProperty().getRange());
+		@Override
+		public Type getSubjectType() {
+			if (getObjectProperty() != null && getObjectProperty().getDomain() instanceof IFlexoOntologyClass) {
+				return IndividualOfClass.getIndividualOfClass((IFlexoOntologyClass) getObjectProperty().getDomain());
+			}
+			return super.getSubjectType();
 		}
-		return IFlexoOntologyConcept.class;
-	}
 
-	@Override
-	public DataBinding<Object> getObject() {
-		if (object == null) {
-			object = new DataBinding<Object>(this, getObjectType(), BindingDefinitionType.GET) {
-				@Override
-				public Type getDeclaredType() {
-					return getObjectType();
+		/*@Override
+		public List<ObjectPropertyStatementPatternRole> getAvailablePatternRoles() {
+			return getEditionPattern().getPatternRoles(ObjectPropertyStatementPatternRole.class);
+		}*/
+
+		@Override
+		public IFlexoOntologyStructuralProperty getProperty() {
+			return getObjectProperty();
+		}
+
+		@Override
+		public void setProperty(IFlexoOntologyStructuralProperty aProperty) {
+			setObjectProperty((OWLObjectProperty) aProperty);
+		}
+
+		@Override
+		public IFlexoOntologyObjectProperty getObjectProperty() {
+			if (getVirtualModel() != null && StringUtils.isNotEmpty(objectPropertyURI)) {
+				return getVirtualModel().getOntologyObjectProperty(objectPropertyURI);
+			} else {
+				if (getPatternRole() != null) {
+					return (OWLObjectProperty) getPatternRole().getObjectProperty();
 				}
-			};
-			object.setBindingName("object");
+			}
+			return null;
 		}
-		return object;
-	}
 
-	@Override
-	public void setObject(DataBinding<Object> object) {
-		if (object != null) {
-			object = new DataBinding<Object>(object.toString(), this, getObjectType(), BindingDefinitionType.GET) {
-				@Override
-				public Type getDeclaredType() {
-					return getObjectType();
+		@Override
+		public void setObjectProperty(IFlexoOntologyObjectProperty ontologyProperty) {
+			if (ontologyProperty != null) {
+				if (getPatternRole() != null) {
+					if (getPatternRole().getObjectProperty().isSuperConceptOf(ontologyProperty)) {
+						objectPropertyURI = ontologyProperty.getURI();
+					} else {
+						getPatternRole().setObjectProperty(ontologyProperty);
+					}
+				} else {
+					objectPropertyURI = ontologyProperty.getURI();
 				}
-			};
-			object.setBindingName("object");
+			} else {
+				objectPropertyURI = null;
+			}
 		}
-		this.object = object;
-	}
 
-	@Override
-	public Type getAssignableType() {
-		if (getObjectProperty() == null) {
-			return ObjectPropertyStatement.class;
+		@Override
+		public String _getObjectPropertyURI() {
+			if (getObjectProperty() != null) {
+				if (getPatternRole() != null && getPatternRole().getObjectProperty() == getObjectProperty()) {
+					// No need to store an overriding type, just use default provided by pattern role
+					return null;
+				}
+				return getObjectProperty().getURI();
+			}
+			return objectPropertyURI;
 		}
-		return StatementWithProperty.getStatementWithProperty(getObjectProperty());
-	}
 
-	@Override
-	public String getStringRepresentation() {
-		if (getSubject() == null || getObjectProperty() == null || getObject() == null) {
-			return "Add ObjectPropertyStatement";
+		@Override
+		public void _setObjectPropertyURI(String objectPropertyURI) {
+			this.objectPropertyURI = objectPropertyURI;
 		}
-		return getSubject() + " " + (getObjectProperty() != null ? getObjectProperty().getName() : "null") + " " + getObject();
-	}
 
-	@Override
-	public ObjectPropertyStatement performAction(EditionSchemeAction action) {
-		OWLObjectProperty property = (OWLObjectProperty) getObjectProperty();
-		OWLConcept<?> subject = getPropertySubject(action);
-		OWLConcept<?> object = getPropertyObject(action);
-		if (property == null) {
+		public OWLConcept<?> getPropertyObject(EditionSchemeAction action) {
+			try {
+				return (OWLConcept<?>) getObject().getBindingValue(action);
+			} catch (TypeMismatchException e) {
+				e.printStackTrace();
+			} catch (NullReferenceException e) {
+				e.printStackTrace();
+			} catch (InvocationTargetException e) {
+				e.printStackTrace();
+			}
 			return null;
 		}
-		if (subject == null) {
-			return null;
+
+		public Type getObjectType() {
+			if (getObjectProperty() instanceof IFlexoOntologyObjectProperty
+					&& getObjectProperty().getRange() instanceof IFlexoOntologyClass) {
+				return IndividualOfClass.getIndividualOfClass((IFlexoOntologyClass) getObjectProperty().getRange());
+			}
+			return IFlexoOntologyConcept.class;
 		}
-		if (object == null) {
-			return null;
+
+		@Override
+		public DataBinding<?> getObject() {
+			if (object == null) {
+				object = new DataBinding<Object>(this, getObjectType(), BindingDefinitionType.GET) {
+					@Override
+					public Type getDeclaredType() {
+						return getObjectType();
+					}
+				};
+				object.setBindingName("object");
+			}
+			return object;
 		}
-		return subject.addPropertyStatement(property, object);
+
+		@Override
+		public void setObject(DataBinding<?> object) {
+			if (object != null) {
+				object = new DataBinding<Object>(object.toString(), this, getObjectType(), BindingDefinitionType.GET) {
+					@Override
+					public Type getDeclaredType() {
+						return getObjectType();
+					}
+				};
+				object.setBindingName("object");
+			}
+			this.object = object;
+		}
+
+		@Override
+		public Type getAssignableType() {
+			if (getObjectProperty() == null) {
+				return ObjectPropertyStatement.class;
+			}
+			return StatementWithProperty.getStatementWithProperty(getObjectProperty());
+		}
+
+		@Override
+		public String getStringRepresentation() {
+			if (getSubject() == null || getObjectProperty() == null || getObject() == null) {
+				return "Add ObjectPropertyStatement";
+			}
+			return getSubject() + " " + (getObjectProperty() != null ? getObjectProperty().getName() : "null") + " " + getObject();
+		}
+
+		@Override
+		public ObjectPropertyStatement performAction(EditionSchemeAction action) {
+			OWLObjectProperty property = (OWLObjectProperty) getObjectProperty();
+			OWLConcept<?> subject = getPropertySubject(action);
+			OWLConcept<?> object = getPropertyObject(action);
+			if (property == null) {
+				return null;
+			}
+			if (subject == null) {
+				return null;
+			}
+			if (object == null) {
+				return null;
+			}
+			return subject.addPropertyStatement(property, object);
+		}
+
 	}
 
 	public static class AddObjectPropertyStatementActionMustDefineAnObjectProperty extends
 			ValidationRule<AddObjectPropertyStatementActionMustDefineAnObjectProperty, AddObjectPropertyStatement> {
-		public AddObjectPropertyStatementImplActionMustDefineAnObjectProperty() {
+		public AddObjectPropertyStatementActionMustDefineAnObjectProperty() {
 			super(AddObjectPropertyStatement.class, "add_object_property_statement_action_must_define_an_object_property");
 		}
 
@@ -306,11 +318,10 @@ public static abstract  class AddObjectPropertyStatementImpl extends AddStatemen
 		}
 
 		@Override
-		public DataBinding<Object> getBinding(AddObjectPropertyStatement object) {
+		public DataBinding<?> getBinding(AddObjectPropertyStatement object) {
 			return object.getObject();
 		}
 
 	}
 
-}
 }

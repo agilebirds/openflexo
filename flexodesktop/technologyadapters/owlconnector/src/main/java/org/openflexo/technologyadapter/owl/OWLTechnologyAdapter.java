@@ -38,11 +38,9 @@ import org.openflexo.foundation.resource.ResourceRepository;
 import org.openflexo.foundation.technologyadapter.DeclareModelSlot;
 import org.openflexo.foundation.technologyadapter.DeclareModelSlots;
 import org.openflexo.foundation.technologyadapter.DeclareRepositoryType;
-import org.openflexo.foundation.technologyadapter.ModelSlot;
 import org.openflexo.foundation.technologyadapter.TechnologyAdapter;
 import org.openflexo.foundation.technologyadapter.TechnologyAdapterInitializationException;
 import org.openflexo.foundation.technologyadapter.TechnologyContextManager;
-import org.openflexo.foundation.viewpoint.VirtualModel;
 import org.openflexo.technologyadapter.owl.model.OWLOntology;
 import org.openflexo.technologyadapter.owl.model.OWLOntology.OntologyNotFoundException;
 import org.openflexo.technologyadapter.owl.model.OWLOntologyLibrary;
@@ -73,22 +71,6 @@ public class OWLTechnologyAdapter extends TechnologyAdapter {
 	@Override
 	public String getName() {
 		return "OWL technology adapter";
-	}
-
-	/**
-	 * Creates and return a new {@link ModelSlot} of supplied class.<br>
-	 * This responsability is delegated to the {@link TechnologyAdapter} which manages with introspection its own {@link ModelSlot} types
-	 * 
-	 * @param modelSlotClass
-	 * @return
-	 */
-	@Override
-	public <MS extends ModelSlot<?>> MS makeModelSlot(Class<MS> modelSlotClass, VirtualModel virtualModel) {
-		if (OWLModelSlot.class.isAssignableFrom(modelSlotClass)) {
-			return (MS) new OWLModelSlot(virtualModel, this);
-		}
-		logger.warning("Unexpected model slot: " + modelSlotClass.getName());
-		return null;
 	}
 
 	/**

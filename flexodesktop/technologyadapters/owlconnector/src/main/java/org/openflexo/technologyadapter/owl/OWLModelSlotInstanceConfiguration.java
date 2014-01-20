@@ -38,7 +38,7 @@ public class OWLModelSlotInstanceConfiguration extends TypeAwareModelSlotInstanc
 
 	private OWLOntologyResource createSharedEmptyModel(TypeAwareModelSlotInstance<OWLOntology, OWLOntology, OWLModelSlot> msInstance,
 			OWLModelSlot modelSlot) {
-		return modelSlot.createSharedEmptyModel(getResourceCenter(), getRelativePath(), getFilename(), getModelUri(),
+		return (OWLOntologyResource) modelSlot.createSharedEmptyModel(getResourceCenter(), getRelativePath(), getFilename(), getModelUri(),
 				modelSlot.getMetaModelResource());
 	}
 

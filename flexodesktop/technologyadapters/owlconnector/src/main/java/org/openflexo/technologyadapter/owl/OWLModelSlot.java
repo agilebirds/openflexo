@@ -14,10 +14,11 @@ import org.openflexo.foundation.technologyadapter.TypeAwareModelSlot;
 import org.openflexo.foundation.view.TypeAwareModelSlotInstance;
 import org.openflexo.foundation.view.View;
 import org.openflexo.foundation.view.action.CreateVirtualModelInstance;
-import org.openflexo.foundation.viewpoint.EditionAction;
-import org.openflexo.foundation.viewpoint.FetchRequest;
 import org.openflexo.foundation.viewpoint.PatternRole;
 import org.openflexo.foundation.viewpoint.VirtualModel;
+import org.openflexo.model.annotations.ImplementationClass;
+import org.openflexo.model.annotations.ModelEntity;
+import org.openflexo.model.annotations.XMLElement;
 import org.openflexo.technologyadapter.owl.model.OWLObject;
 import org.openflexo.technologyadapter.owl.model.OWLOntology;
 import org.openflexo.technologyadapter.owl.rm.OWLOntologyResource;
@@ -65,180 +66,105 @@ import org.openflexo.technologyadapter.owl.viewpoint.editionaction.AddSubClassSt
 @ModelEntity
 @ImplementationClass(OWLModelSlot.OWLModelSlotImpl.class)
 @XMLElement
-public interface OWLModelSlot extends TypeAwareModelSlot<OWLOntology, OWLOntology>{
-
-
-public static abstract  class OWLModelSlotImpl extends TypeAwareModelSlot<OWLOntology, OWLOntology>Impl implements OWLModelSlot
-{
-
-	private static final Logger logger = Logger.getLogger(OWLModelSlot.class.getPackage().getName());
-
-	/*public OWLModelSlotImpl(ViewPoint viewPoint, OWLTechnologyAdapter adapter) {
-		super(viewPoint, adapter);
-	}*/
-
-	public OWLModelSlotImpl(VirtualModel virtualModel, OWLTechnologyAdapter adapter) {
-		super(virtualModel, adapter);
-	}
-
-	public OWLModelSlotImpl() {
-		super();
-	}
-
-	/*public OWLModelSlotImpl(ViewPointBuilder builder) {
-		super(builder);
-	}*/
+public interface OWLModelSlot extends TypeAwareModelSlot<OWLOntology, OWLOntology> {
 
 	@Override
-	public Class<OWLTechnologyAdapter> getTechnologyAdapterClass() {
-		return OWLTechnologyAdapter.class;
-	}
+	public OWLTechnologyAdapter getTechnologyAdapter();
 
-	/**
-	 * Instanciate a new model slot instance configuration for this model slot
-	 */
-	@Override
-	public OWLModelSlotImplInstanceConfiguration createConfiguration(CreateVirtualModelInstance<?> action) {
-		return new OWLModelSlotInstanceConfiguration(this, action);
-	}
+	public static abstract class OWLModelSlotImpl extends TypeAwareModelSlotImpl<OWLOntology, OWLOntology> implements OWLModelSlot {
 
-	/**
-	 * Creates and return a new {@link PatternRole} of supplied class.<br>
-	 * This responsability is delegated to the OWL-specific {@link OWLModelSlot} which manages with introspection its own
-	 * {@link PatternRole} types related to OWL technology
-	 * 
-	 * @param patternRoleClass
-	 * @return
-	 */
-	@Override
-	public <PR extends PatternRole<?>> PR makePatternRole(Class<PR> patternRoleClass) {
-		if (OWLClassPatternRole.class.isAssignableFrom(patternRoleClass)) {
-			return (PR) new OWLClassPatternRole();
-		} else if (OWLIndividualPatternRole.class.isAssignableFrom(patternRoleClass)) {
-			return (PR) new OWLIndividualPatternRole();
-		} else if (OWLPropertyPatternRole.class.isAssignableFrom(patternRoleClass)) {
-			return (PR) new OWLPropertyPatternRole();
-		} else if (OWLDataPropertyPatternRole.class.isAssignableFrom(patternRoleClass)) {
-			return (PR) new OWLDataPropertyPatternRole();
-		} else if (OWLObjectPropertyPatternRole.class.isAssignableFrom(patternRoleClass)) {
-			return (PR) new OWLObjectPropertyPatternRole();
-		} else if (DataPropertyStatementPatternRole.class.isAssignableFrom(patternRoleClass)) {
-			return (PR) new DataPropertyStatementPatternRole();
-		} else if (ObjectPropertyStatementPatternRole.class.isAssignableFrom(patternRoleClass)) {
-			return (PR) new ObjectPropertyStatementPatternRole();
-		} else if (RestrictionStatementPatternRole.class.isAssignableFrom(patternRoleClass)) {
-			return (PR) new RestrictionStatementPatternRole();
-		} else if (SubClassStatementPatternRole.class.isAssignableFrom(patternRoleClass)) {
-			return (PR) new SubClassStatementPatternRole();
+		private static final Logger logger = Logger.getLogger(OWLModelSlot.class.getPackage().getName());
+
+		public OWLModelSlotImpl(VirtualModel virtualModel, OWLTechnologyAdapter adapter) {
+			super(virtualModel, adapter);
 		}
-		logger.warning("Unexpected pattern role: " + patternRoleClass.getName());
-		return null;
-	}
 
-	@Override
-	public <PR extends PatternRole<?>> String defaultPatternRoleName(Class<PR> patternRoleClass) {
-		if (OWLClassPatternRole.class.isAssignableFrom(patternRoleClass)) {
-			return "class";
-		} else if (OWLIndividualPatternRole.class.isAssignableFrom(patternRoleClass)) {
-			return "individual";
-		} else if (OWLPropertyPatternRole.class.isAssignableFrom(patternRoleClass)) {
-			return "property";
-		} else if (OWLDataPropertyPatternRole.class.isAssignableFrom(patternRoleClass)) {
-			return "dataProperty";
-		} else if (OWLObjectPropertyPatternRole.class.isAssignableFrom(patternRoleClass)) {
-			return "objectProperty";
-		} else if (DataPropertyStatementPatternRole.class.isAssignableFrom(patternRoleClass)) {
-			return "fact";
-		} else if (ObjectPropertyStatementPatternRole.class.isAssignableFrom(patternRoleClass)) {
-			return "fact";
-		} else if (RestrictionStatementPatternRole.class.isAssignableFrom(patternRoleClass)) {
-			return "restriction";
-		} else if (SubClassStatementPatternRole.class.isAssignableFrom(patternRoleClass)) {
-			return "fact";
+		@Override
+		public Class<OWLTechnologyAdapter> getTechnologyAdapterClass() {
+			return OWLTechnologyAdapter.class;
 		}
-		return super.defaultPatternRoleName(patternRoleClass);
-	}
 
-	/**
-	 * Creates and return a new {@link EditionAction} of supplied class.<br>
-	 * This responsability is delegated to the OWL-specific {@link OWLModelSlot} which manages with introspection its own
-	 * {@link EditionAction} types related to OWL technology
-	 * 
-	 * @param editionActionClass
-	 * @return
-	 */
-	@Override
-	public <EA extends EditionAction<?, ?>> EA makeEditionAction(Class<EA> editionActionClass) {
-		if (AddOWLIndividual.class.isAssignableFrom(editionActionClass)) {
-			return (EA) new AddOWLIndividual();
-		} else if (AddOWLClass.class.isAssignableFrom(editionActionClass)) {
-			return (EA) new AddOWLClass();
-		} else if (AddDataPropertyStatement.class.isAssignableFrom(editionActionClass)) {
-			return (EA) new AddDataPropertyStatement();
-		} else if (AddObjectPropertyStatement.class.isAssignableFrom(editionActionClass)) {
-			return (EA) new AddObjectPropertyStatement();
-		} else if (AddRestrictionStatement.class.isAssignableFrom(editionActionClass)) {
-			return (EA) new AddRestrictionStatement();
-		} else if (AddSubClassStatement.class.isAssignableFrom(editionActionClass)) {
-			return (EA) new AddSubClassStatement();
+		/**
+		 * Instanciate a new model slot instance configuration for this model slot
+		 */
+		@Override
+		public OWLModelSlotInstanceConfiguration createConfiguration(CreateVirtualModelInstance<?> action) {
+			return new OWLModelSlotInstanceConfiguration(this, action);
 		}
-		return null;
-	}
 
-	@Override
-	public <FR extends FetchRequest<?, ?>> FR makeFetchRequest(Class<FR> fetchRequestClass) {
-		return null;
-	}
+		@Override
+		public <PR extends PatternRole<?>> String defaultPatternRoleName(Class<PR> patternRoleClass) {
+			if (OWLClassPatternRole.class.isAssignableFrom(patternRoleClass)) {
+				return "class";
+			} else if (OWLIndividualPatternRole.class.isAssignableFrom(patternRoleClass)) {
+				return "individual";
+			} else if (OWLPropertyPatternRole.class.isAssignableFrom(patternRoleClass)) {
+				return "property";
+			} else if (OWLDataPropertyPatternRole.class.isAssignableFrom(patternRoleClass)) {
+				return "dataProperty";
+			} else if (OWLObjectPropertyPatternRole.class.isAssignableFrom(patternRoleClass)) {
+				return "objectProperty";
+			} else if (DataPropertyStatementPatternRole.class.isAssignableFrom(patternRoleClass)) {
+				return "fact";
+			} else if (ObjectPropertyStatementPatternRole.class.isAssignableFrom(patternRoleClass)) {
+				return "fact";
+			} else if (RestrictionStatementPatternRole.class.isAssignableFrom(patternRoleClass)) {
+				return "restriction";
+			} else if (SubClassStatementPatternRole.class.isAssignableFrom(patternRoleClass)) {
+				return "fact";
+			}
+			return super.defaultPatternRoleName(patternRoleClass);
+		}
 
-	@Override
-	public String getURIForObject(
-			TypeAwareModelSlotInstance<OWLOntology, OWLOntology, ? extends TypeAwareModelSlot<OWLOntology, OWLOntology>> msInstance,
-			Object o) {
-		return ((OWLObject) o).getURI();
-	}
+		@Override
+		public String getURIForObject(
+				TypeAwareModelSlotInstance<OWLOntology, OWLOntology, ? extends TypeAwareModelSlot<OWLOntology, OWLOntology>> msInstance,
+				Object o) {
+			return ((OWLObject) o).getURI();
+		}
 
-	@Override
-	public Object retrieveObjectWithURI(
-			TypeAwareModelSlotInstance<OWLOntology, OWLOntology, ? extends TypeAwareModelSlot<OWLOntology, OWLOntology>> msInstance,
-			String objectURI) {
-		return msInstance.getResourceData().getObject(objectURI);
-	}
+		@Override
+		public Object retrieveObjectWithURI(
+				TypeAwareModelSlotInstance<OWLOntology, OWLOntology, ? extends TypeAwareModelSlot<OWLOntology, OWLOntology>> msInstance,
+				String objectURI) {
+			return msInstance.getResourceData().getObject(objectURI);
+		}
 
-	@Override
-	public Type getType() {
-		return OWLOntology.class;
-	}
+		@Override
+		public Type getType() {
+			return OWLOntology.class;
+		}
 
-	@Override
-	public OWLTechnologyAdapter getTechnologyAdapter() {
-		return (OWLTechnologyAdapter) super.getTechnologyAdapter();
-	}
+		@Override
+		public OWLTechnologyAdapter getTechnologyAdapter() {
+			return (OWLTechnologyAdapter) super.getTechnologyAdapter();
+		}
 
-	@Override
-	public OWLOntologyResource createProjectSpecificEmptyModel(View view, String filename, String modelUri,
-			FlexoMetaModelResource<OWLOntology, OWLOntology, ?> metaModelResource) {
-		return getTechnologyAdapter().createNewOntology(view.getProject(), filename, modelUri, metaModelResource);
-	}
+		@Override
+		public OWLOntologyResource createProjectSpecificEmptyModel(View view, String filename, String modelUri,
+				FlexoMetaModelResource<OWLOntology, OWLOntology, ?> metaModelResource) {
+			return getTechnologyAdapter().createNewOntology(view.getProject(), filename, modelUri, metaModelResource);
+		}
 
-	@Override
-	public OWLOntologyResource createSharedEmptyModel(FlexoResourceCenter<?> resourceCenter, String relativePath, String filename,
-			String modelUri, FlexoMetaModelResource<OWLOntology, OWLOntology, ?> metaModelResource) {
-		return getTechnologyAdapter().createNewOntology((FileSystemBasedResourceCenter) resourceCenter, relativePath, filename, modelUri,
-				(OWLOntologyResource) metaModelResource);
-	}
+		@Override
+		public OWLOntologyResource createSharedEmptyModel(FlexoResourceCenter<?> resourceCenter, String relativePath, String filename,
+				String modelUri, FlexoMetaModelResource<OWLOntology, OWLOntology, ?> metaModelResource) {
+			return getTechnologyAdapter().createNewOntology((FileSystemBasedResourceCenter) resourceCenter, relativePath, filename,
+					modelUri, (OWLOntologyResource) metaModelResource);
+		}
 
-	/**
-	 * OWL ontologies conformity is not strict (an ontology might import many other ontologies)
-	 */
-	@Override
-	public boolean isStrictMetaModelling() {
-		return false;
-	}
+		/**
+		 * OWL ontologies conformity is not strict (an ontology might import many other ontologies)
+		 */
+		@Override
+		public boolean isStrictMetaModelling() {
+			return false;
+		}
 
-	@Override
-	public String getModelSlotDescription() {
-		return "Ontology importing " + getMetaModelURI();
-	}
+		@Override
+		public String getModelSlotDescription() {
+			return "Ontology importing " + getMetaModelURI();
+		}
 
-}
+	}
 }
