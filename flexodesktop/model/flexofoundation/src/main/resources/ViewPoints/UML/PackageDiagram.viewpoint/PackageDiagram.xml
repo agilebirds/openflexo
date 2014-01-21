@@ -1,8 +1,0 @@
-<?xml version="1.0" encoding="UTF-8"?>
-<ViewPoint id="1" uri="http://www.agilebirds.com/openflexo/ViewPoints/UML/PackageDiagram.owl" modelVersion="1.0" name="PackageDiagram.owl">
-  <LocalizedDictionary id="2" />
-  <OWLModelSlot id="3" isRequired="false" isReadOnly="false" metaModelURI="http://www.agilebirds.com/openflexo/ontologies/UML/UML2.owl" name="owl" />
-  <description>Package diagrams allows to define a graph of packages.
-To simplify complex class diagrams, you can group classes into packages. 
-A package is a collection of logically related UML elements.</description>
-</ViewPoint>

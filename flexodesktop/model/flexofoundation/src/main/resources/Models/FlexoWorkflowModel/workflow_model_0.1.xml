@@ -1,7 +1,0 @@
-<?xml version="1.0" encoding="UTF-8"?>
-
-<model builder="org.openflexo.foundation.xml.FlexoWorkflowBuilder" > 
-
-  <entity name="org.openflexo.foundation.wkf.FlexoWorkflow" xmlTag="flexoprocess"/>
-  
-</model>

@@ -1,5 +1,0 @@
-<?xml version="1.0" encoding="UTF-8"?>
-<MailIn id="SYL_9588" nodeType="NORMAL" isWaiting="false" isSelfActivated="false" posiX="129" posiY="2" width="64" height="67" textColor="0,0,0" backColor="255,255,255" userID="SYL" flexoID="9588" dontEscapeLatex="false" dontGenerate="false" nodeName="RECEIVE" displayLabel="true" nodeLabelPosX="0" nodeLabelPosY="0">
-  <NodeProperties />
-</MailIn>
-

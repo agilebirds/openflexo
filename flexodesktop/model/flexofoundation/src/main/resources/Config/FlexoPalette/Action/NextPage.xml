@@ -1,5 +1,0 @@
-<?xml version="1.0" encoding="UTF-8"?>
-<ActionNode id="SYL_9579" actionType="DISPLAY_ACTION" associatedButtonFlexoID="-1" displayProcessFlexoID="-1" displayOperationFlexoID="-1" docIndex="-1" nodeType="NORMAL" isWaiting="false" isSelfActivated="false" posiX="72" posiY="0" width="51" height="67" textColor="0,0,0" backColor="255,255,255" userID="SYL" flexoID="9579" dontEscapeLatex="false" dontGenerate="false" nodeName="DISPLAY" displayLabel="true" nodeLabelPosX="0" nodeLabelPosY="0">
-  <NodeProperties />
-</ActionNode>
-

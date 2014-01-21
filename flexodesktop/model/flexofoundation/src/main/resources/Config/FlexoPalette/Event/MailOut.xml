@@ -1,5 +1,0 @@
-<?xml version="1.0" encoding="UTF-8"?>
-<MailOut id="SYL_9589" nodeType="NORMAL" isWaiting="false" isSelfActivated="false" posiX="188" posiY="2" width="50" height="69" textColor="0,0,0" backColor="255,255,255" userID="SYL" flexoID="9589" dontEscapeLatex="false" dontGenerate="false" nodeName="SEND" displayLabel="true" nodeLabelPosX="0" nodeLabelPosY="0">
-  <NodeProperties />
-</MailOut>
-

@@ -432,19 +432,19 @@
 			</dependency>
 			<dependency>
 				<groupId>org.openflexo</groupId>
-				<artifactId>flexofoundation</artifactId>
+				<artifactId>flexo-foundation</artifactId>
 				<version>${project.version}</version>
 			</dependency>
 			<dependency>
 				<groupId>org.openflexo</groupId>
-				<artifactId>flexofoundation</artifactId>
+				<artifactId>flexo-foundation</artifactId>
 				<version>${project.version}</version>
 				<classifier>resources</classifier>
 				<type>zip</type>
 			</dependency>
 			<dependency>
 				<groupId>org.openflexo</groupId>
-				<artifactId>flexofoundation</artifactId>
+				<artifactId>flexo-foundation</artifactId>
 				<version>${project.version}</version>
 				<classifier>tests</classifier>
 			</dependency>
@@ -502,7 +502,7 @@
 			</dependency>
 			<dependency>
 				<groupId>org.openflexo</groupId>
-				<artifactId>flexo</artifactId>
+				<artifactId>flexo-ui</artifactId>
 				<version>${project.version}</version>
 			</dependency>
 			<dependency>
@@ -512,13 +512,13 @@
 			</dependency>
 			<dependency>
 				<groupId>org.openflexo</groupId>
-				<artifactId>flexo</artifactId>
+				<artifactId>flexo-ui</artifactId>
 				<version>${project.version}</version>
 				<classifier>tests</classifier>
 			</dependency>
 			<dependency>
 				<groupId>org.openflexo</groupId>
-				<artifactId>flexo</artifactId>
+				<artifactId>flexo-ui</artifactId>
 				<version>${project.version}</version>
 				<classifier>resources</classifier>
 				<type>zip</type>

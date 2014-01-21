@@ -1,7 +1,0 @@
-<?xml version="1.0" encoding="UTF-8"?>
-<SubProcessNode id="SYL_9507" type="SINGLE" nodeType="NORMAL" isWaiting="false" isSelfActivated="false" posiX="0" posiY="146" width="125" height="81" textColor="0,0,0" backColor="255,255,255" userID="SYL" flexoID="9507" dontEscapeLatex="false" dontGenerate="false" useSpecificDescriptions="false" nodeName="Single S/P" displayLabel="true" nodeLabelPosX="0" nodeLabelPosY="0" docIndex="-1" roleTextColor="128,128,128">
-  <NodeProperties>
-    <reinitialisation className="java.lang.Boolean">false</reinitialisation>
-  </NodeProperties>
-</SubProcessNode>
-

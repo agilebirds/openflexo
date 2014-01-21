@@ -14,7 +14,7 @@
 	<dependencies>
 		<dependency>
 			<groupId>org.openflexo</groupId>
-			<artifactId>flexofoundation</artifactId>
+			<artifactId>flexo-foundation</artifactId>
 		</dependency>
 	</dependencies>
 </project>

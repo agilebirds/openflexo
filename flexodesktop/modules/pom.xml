@@ -27,11 +27,11 @@
 	<dependencies>
 		<dependency>
 			<groupId>org.openflexo</groupId>
-			<artifactId>flexo</artifactId>
+			<artifactId>flexo-ui</artifactId>
 		</dependency>
 		<dependency>
 			<groupId>org.openflexo</groupId>
-			<artifactId>flexo</artifactId>
+			<artifactId>flexo-ui</artifactId>
 			<classifier>resources</classifier>
 			<type>zip</type>
 		</dependency>
