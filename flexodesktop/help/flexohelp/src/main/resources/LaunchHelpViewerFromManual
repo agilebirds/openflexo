@@ -1,6 +1,0 @@
-#!/bin/bash
-
-dossierCourant=`pwd`
-echo "Launching help viewer from manual on "$dossierCourant
-java -jar /Developer/jh2.0/demos/bin/hsviewer.jar -helpset $dossierCourant/Help/FlexoManual.jar
-
