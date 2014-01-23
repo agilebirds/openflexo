@@ -1,8 +1,0 @@
-<?xml version="1.0" encoding="UTF-8"?>
-<DKVModel id="SYL_389" userID="SYL" flexoID="389" dontGenerate="false" useSpecificDescriptions="false">
-  <Language id="SYL_390" name="English" userID="SYL" flexoID="390" dontGenerate="false" useSpecificDescriptions="false">
-    <isoCode>EN</isoCode>
-    <isMain>true</isMain>
-  </Language>
-</DKVModel>
-

@@ -1,6 +1,0 @@
-<?xml version="1.0" encoding="UTF-8"?>
-
-<tab layout="DEFAULT">
-    	<property name="screenshotQuality" label="screenshotQuality (100=top quality)" widget="INTEGER" constraint="22"/>
-</tab>
-	
