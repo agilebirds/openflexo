@@ -1,5 +1,0 @@
-<?xml version="1.0" encoding="UTF-8"?>
-<city1:City xmi:version="2.0" xmlns:xmi="http://www.omg.org/XMI" xmlns:city1="http://www.thalesgroup.com/openflexo/emf/model/city1" name="Lampaul-Plouarzel" zipcode="29810">
-  <houses owner="//@residents.0" info="La maison tout en haut de la colline"/>
-  <residents name="Sylvain Le Lapin"/>
-</city1:City>

@@ -14,7 +14,7 @@
 		<module>flexodiagram</module>
 		<module>flexodiagram-ui</module>
 	
-		<module>owlconnector</module>
+		<!--  <module>owlconnector</module>-->
 		<module>xsdconnector</module>
 		<module>emfconnector</module>
 		
@@ -23,7 +23,7 @@
 		<module>excelconnector</module>
 		<module>powerpointconnector</module>
 		
-		<module>owlconnector-ui</module>
+		<!--  <module>owlconnector-ui</module> -->
 		<module>xsdconnector-ui</module>
 		<module>emfconnector-ui</module>
 		
