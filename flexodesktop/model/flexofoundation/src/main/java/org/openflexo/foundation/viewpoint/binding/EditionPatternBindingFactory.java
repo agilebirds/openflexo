@@ -104,7 +104,7 @@ public final class EditionPatternBindingFactory extends JavaBindingFactory {
 	public List<? extends SimplePathElement> getAccessibleSimplePathElements(BindingPathElement parent) {
 
 		Type pType = parent.getType();
-		
+
 		if (pType instanceof TechnologySpecificCustomType) {
 			TechnologySpecificCustomType parentType = (TechnologySpecificCustomType) pType;
 			TechnologyAdapter ta = parentType.getTechnologyAdapter();
@@ -124,8 +124,7 @@ public final class EditionPatternBindingFactory extends JavaBindingFactory {
 			}
 			Collections.sort(returned, BindingPathElement.COMPARATOR);
 			return returned;
-		}
-		else if (pType instanceof EditionSchemeParametersValuesType) {
+		} else if (pType instanceof EditionSchemeParametersValuesType) {
 			List<SimplePathElement> returned = new ArrayList<SimplePathElement>();
 			EditionScheme es = ((EditionSchemeParametersValuesType) pType).getEditionScheme();
 			for (EditionSchemeParameter p : es.getParameters()) {
@@ -169,7 +168,7 @@ public final class EditionPatternBindingFactory extends JavaBindingFactory {
 		else if (pType instanceof EditionPatternInstanceType) {
 			List<SimplePathElement> returned = new ArrayList<SimplePathElement>();
 			EditionPattern ep = ((EditionPatternInstanceType) pType).getEditionPattern();
-			
+
 			if (ep instanceof VirtualModel) {
 				VirtualModel<?> vm = (VirtualModel<?>) ep;
 				for (ModelSlot ms : vm.getModelSlots()) {
@@ -263,7 +262,7 @@ public final class EditionPatternBindingFactory extends JavaBindingFactory {
 			return null;
 		}
 		if (parent.getType() instanceof EditionPatternInstanceType && function instanceof EditionScheme) {
-			return new EditionSchemePathElement(parent, (EditionScheme) function, null);
+			return new EditionSchemePathElement(parent, (EditionScheme) function, args);
 		}
 		FunctionPathElement returned = super.makeFunctionPathElement(parent, function, args);
 		// Hook to specialize type returned by getEditionPatternInstance(String)
