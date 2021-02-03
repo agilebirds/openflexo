@@ -26,7 +26,7 @@
 		<organization.url>http://www.agilebirds.com/</organization.url>
 		<organization.logo>http://www.agilebirds.com/_Ressources/img/header_Logo.gif</organization.logo>
 		<swingx.version>1.6.3</swingx.version>
-		<ant.version>1.9.0</ant.version>
+		<ant.version>1.10.9</ant.version>
 	</properties>
 	<scm>
 		<connection>scm:git:ssh://git@github.com:agilebirds/openflexo.git</connection>
